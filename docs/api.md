@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.214.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.215.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1008,6 +1008,15 @@ Auto-generated from `quantforge` v1.214.0 by `docs/gen_api.py` — do not edit b
 > S_T^power is lognormal, so this has a closed form: an adjusted-drift,
 > adjusted-vol Black-Scholes on the transformed underlying. ``power = 1``
 > recovers the vanilla option.
+
+### `power_option_greeks(S, K, t, r, sigma, power, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> Greeks of a power option (payoff ``max(S_T^power - K, 0)``) by FD.
+>
+> Central finite differences of the closed-form :func:`power_option` for
+> ``delta`` (dV/dS), ``gamma`` (d2V/dS2), ``vega`` (dV/dsigma), and ``theta``
+> (calendar decay, ``-dV/dt``). At ``power = 1`` these reduce to the vanilla
+> Black-Scholes Greeks. Returns a dict with ``price`` and those fields.
 
 ## forward
 

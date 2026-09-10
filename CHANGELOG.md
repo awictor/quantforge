@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.215.0] - 2026-09-10
+
+### Added
+- `power_option_greeks` (in `exotics.py`): delta, gamma, vega, and theta of a
+  power option (`max(S_T^power - K, 0)`) by central finite differences on the
+  closed-form `power_option`.
+- Verified: at `power = 1` the Greeks reduce exactly to the vanilla
+  Black-Scholes Greeks; at `power = 2` delta matches a finite difference and the
+  call gamma/vega are positive; the put delta is negative.
+
 ## [1.214.0] - 2026-09-10
 
 ### Added

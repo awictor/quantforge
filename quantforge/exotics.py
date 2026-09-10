@@ -480,6 +480,38 @@ def power_option(S, K, t, r, sigma, power, option_type=OptionType.CALL, b=None):
     return disc * (K * norm_cdf(-d2) - fwd * norm_cdf(-d1))
 
 
+def power_option_greeks(S, K, t, r, sigma, power, option_type=OptionType.CALL,
+                        b=None):
+    """Greeks of a power option (payoff ``max(S_T^power - K, 0)``) by FD.
+
+    Central finite differences of the closed-form :func:`power_option` for
+    ``delta`` (dV/dS), ``gamma`` (d2V/dS2), ``vega`` (dV/dsigma), and ``theta``
+    (calendar decay, ``-dV/dt``). At ``power = 1`` these reduce to the vanilla
+    Black-Scholes Greeks. Returns a dict with ``price`` and those fields.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if b is None:
+        b = r
+    if power <= 0:
+        raise ValueError("power must be positive")
+
+    def px(S_=S, t_=t, sigma_=sigma):
+        return power_option(S_, K, t_, r, sigma_, power, ot, b=b)
+
+    base = px()
+    hS = 1e-4 * S
+    up, dn = px(S_=S + hS), px(S_=S - hS)
+    delta = (up - dn) / (2.0 * hS)
+    gamma = (up - 2.0 * base + dn) / (hS * hS)
+    hv = 1e-4
+    vega = (px(sigma_=sigma + hv) - px(sigma_=sigma - hv)) / (2.0 * hv)
+    ht = min(1e-4, 0.25 * t)
+    theta = -(px(t_=t + ht) - px(t_=t - ht)) / (2.0 * ht)
+    return {"price": base, "delta": delta, "gamma": gamma, "vega": vega,
+            "theta": theta}
+
+
 def barrier_rebate(S, H, t, r, sigma, knock="out", b=None, cash=1.0,
                    payoff_at_hit=True):
     """Standalone rebate cashflow attached to a barrier.
