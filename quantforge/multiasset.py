@@ -291,3 +291,37 @@ def basket_greeks(spots, weights, K, t, r, sigmas, corr, q=None,
     return {"price": base, "delta1": delta1, "delta2": delta2,
             "gamma1": gamma1, "gamma2": gamma2, "cross": cross,
             "corr_vega": corr_vega}
+
+
+def implied_spread_correlation(target_price, S1, S2, K, t, r, sigma1, sigma2,
+                               q1=0.0, q2=0.0, option_type=OptionType.CALL,
+                               tol=1e-8, max_iter=100):
+    """Back out the correlation implied by a spread-option market price (Kirk).
+
+    The Kirk spread price is monotone decreasing in ``rho`` (higher correlation
+    lowers the spread volatility), so a bisection on ``rho in (-1, 1)`` recovers
+    the correlation consistent with the quote. Raises if the quote lies outside
+    the price range spanned by ``rho = -1 .. 1``.
+    """
+    ot = _coerce_type(option_type)
+
+    def px(rho):
+        return spread_option(S1, S2, K, t, r, sigma1, sigma2, rho, q1, q2, ot)
+
+    lo, hi = -0.999999, 0.999999
+    p_lo, p_hi = px(lo), px(hi)      # p_lo is the highest price (rho=-1)
+    if not (min(p_lo, p_hi) - 1e-10 <= target_price <= max(p_lo, p_hi) + 1e-10):
+        raise ValueError(
+            f"price {target_price} outside the rho-range [{p_hi:.6g}, {p_lo:.6g}]"
+        )
+    for _ in range(max_iter):
+        mid = 0.5 * (lo + hi)
+        pm = px(mid)
+        if abs(pm - target_price) < tol:
+            return mid
+        # Price decreases in rho: if model price too high, raise rho.
+        if pm > target_price:
+            lo = mid
+        else:
+            hi = mid
+    return 0.5 * (lo + hi)

@@ -522,6 +522,11 @@ exchange_greeks(S1=100, S2=95, t=1.0, sigma1=0.2, sigma2=0.25, rho=0.3)
 # Spread: max(S1 - S2 - K, 0) via Kirk's approximation.
 spread_option(S1=100, S2=95, K=5, t=1.0, r=0.05, sigma1=0.2, sigma2=0.25, rho=0.5)
 
+# Back out the correlation implied by a spread-option quote.
+from quantforge import implied_spread_correlation
+implied_spread_correlation(target_price=10.5, S1=100, S2=95, K=5, t=1.0, r=0.05,
+                           sigma1=0.2, sigma2=0.25)
+
 # Basket call on w1 S1 + w2 S2 (lognormal moment-match).
 basket_option(spots=(100, 100), weights=(0.5, 0.5), K=100, t=1.0, r=0.05,
               sigmas=(0.2, 0.3), corr=0.4)

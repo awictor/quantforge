@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.83.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.84.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1057,6 +1057,15 @@ Auto-generated from `quantforge` v1.83.0 by `docs/gen_api.py` — do not edit by
 >
 > Exact closed form; independent of the risk-free rate (the two assets'
 > financing cancels), depending only on the dividend yields.
+
+### `implied_spread_correlation(target_price, S1, S2, K, t, r, sigma1, sigma2, q1=0.0, q2=0.0, option_type=<OptionType.CALL: 'call'>, tol=1e-08, max_iter=100)`  _function_
+
+> Back out the correlation implied by a spread-option market price (Kirk).
+>
+> The Kirk spread price is monotone decreasing in ``rho`` (higher correlation
+> lowers the spread volatility), so a bisection on ``rho in (-1, 1)`` recovers
+> the correlation consistent with the quote. Raises if the quote lies outside
+> the price range spanned by ``rho = -1 .. 1``.
 
 ### `spread_greeks(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0, option_type=<OptionType.CALL: 'call'>)`  _function_
 

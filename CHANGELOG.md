@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.84.0] - 2026-09-10
+
+### Added
+- `implied_spread_correlation` (in `multiasset.py`): back out the correlation
+  implied by a spread-option market price, bisecting the Kirk price (monotone
+  decreasing in rho) over `(-1, 1)`. Round-trips exactly and raises for quotes
+  outside the rho-spanned price range.
+
 ## [1.83.0] - 2026-09-10
 
 ### Added
