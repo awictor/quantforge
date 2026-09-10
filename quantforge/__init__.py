@@ -21,7 +21,7 @@ from .bsm import (
     greeks,
     Greeks,
 )
-from .implied import implied_volatility
+from .implied import implied_volatility, implied_vol_smile
 from .binomial import american_price
 from .trinomial import trinomial_price, richardson_american
 from .lsm import bermudan_lsm
@@ -122,7 +122,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.66.0"
+__version__ = "1.67.0"
 
 __all__ = [
     "OptionType",
@@ -138,6 +138,7 @@ __all__ = [
     "greeks",
     "Greeks",
     "implied_volatility",
+    "implied_vol_smile",
     "american_price",
     "trinomial_price",
     "richardson_american",

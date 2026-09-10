@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.67.0] - 2026-09-10
+
+### Added
+- `implied_vol_smile` (in `implied.py`): invert a whole option chain to an
+  implied-vol smile in one call, returning `(log_moneyness, vol)` pairs sorted
+  by strike and dropping any quote outside the no-arbitrage band.
+
+### Changed
+- Marked several heavy Monte Carlo tests `slow`, cutting the default
+  (`pytest -m "not slow"`) run back to ~12s.
+
 ## [1.66.0] - 2026-09-10
 
 ### Added

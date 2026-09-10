@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.66.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.67.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -688,6 +688,19 @@ Auto-generated from `quantforge` v1.66.0 by `docs/gen_api.py` — do not edit by
 > Returns the option price. Puts are obtained from put-call parity.
 
 ## implied
+
+### `implied_vol_smile(strikes, prices, S, t, r, option_type=<OptionType.CALL: 'call'>, b=None, forward=None)`  _function_
+
+> Invert a whole chain of quotes to an implied-vol smile in one call.
+>
+> Args:
+>     strikes, prices: equal-length option-quote arrays at one expiry.
+>     forward: optional forward for the log-moneyness output; defaults to the
+>         carry-implied forward ``S e^{b t}``.
+>
+> Returns a list of ``(log_moneyness, implied_vol)`` pairs sorted by strike,
+> skipping any quote outside the no-arbitrage band (those cannot be inverted).
+> ``log_moneyness = ln(K / forward)``, the standard smile x-axis.
 
 ### `implied_volatility(target_price, S, K, t, r, option_type=<OptionType.CALL: 'call'>, b=None, tol=1e-08, max_iter=100, lo=1e-09, hi=10.0)`  _function_
 

@@ -53,6 +53,10 @@ print(g.delta, g.gamma, g.vega, g.theta, g.rho)
 iv = implied_volatility(target_price=6.12, S=100, K=105, t=0.5, r=0.04)
 print(iv)
 
+# Invert a whole chain to a smile in one call: [(log-moneyness, vol), ...].
+from quantforge import implied_vol_smile
+print(implied_vol_smile(strikes, prices, S=100, t=0.5, r=0.04))
+
 # American put with a 3% dividend yield (carry b = r - q).
 print(american_price(S=100, K=100, t=1.0, r=0.05, sigma=0.2,
                      option_type="put", b=0.05 - 0.03, steps=500))

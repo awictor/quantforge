@@ -26,6 +26,7 @@ def test_price_within_discounted_cash():
     assert 0.0 <= res.price <= math.exp(-r * 1.0) + 1e-9
 
 
+@pytest.mark.slow
 def test_far_knock_in_is_cheap():
     # A very high up-in barrier is rarely touched -> the KI digital is cheap.
     near = barrier_digital_mc(100, 100, 105, 1.0, 0.05, 0.3, OptionType.CALL,

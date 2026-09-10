@@ -42,6 +42,7 @@ def test_put_also_replicates():
     assert abs(res.mean_pnl) < 5 * se
 
 
+@pytest.mark.slow
 def test_hedging_at_low_vol_loses_when_realized_is_high():
     # Short an option priced/hedged at 15% vol but the world realizes 30%:
     # a short gamma position bleeds, so mean P&L is negative.
@@ -51,6 +52,7 @@ def test_hedging_at_low_vol_loses_when_realized_is_high():
     assert res.mean_pnl < 0
 
 
+@pytest.mark.slow
 def test_hedging_at_high_vol_profits_when_realized_is_low():
     # Sell rich (30% priced) and realize cheap (15%): short gamma wins.
     res = simulate_delta_hedge(100, 100, 1.0, 0.03, 0.30, OptionType.CALL,

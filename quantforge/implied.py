@@ -100,3 +100,34 @@ def implied_volatility(
             sigma = 0.5 * (a + bb)  # bisection fallback
 
     return sigma
+
+
+def implied_vol_smile(strikes, prices, S, t, r, option_type=OptionType.CALL,
+                      b=None, forward=None):
+    """Invert a whole chain of quotes to an implied-vol smile in one call.
+
+    Args:
+        strikes, prices: equal-length option-quote arrays at one expiry.
+        forward: optional forward for the log-moneyness output; defaults to the
+            carry-implied forward ``S e^{b t}``.
+
+    Returns a list of ``(log_moneyness, implied_vol)`` pairs sorted by strike,
+    skipping any quote outside the no-arbitrage band (those cannot be inverted).
+    ``log_moneyness = ln(K / forward)``, the standard smile x-axis.
+    """
+    ot = _coerce_type(option_type)
+    if b is None:
+        b = r
+    if len(strikes) != len(prices):
+        raise ValueError("strikes and prices must be the same length")
+    if forward is None:
+        forward = S * math.exp(b * t)
+
+    out = []
+    for K, px in sorted(zip(strikes, prices)):
+        try:
+            iv = implied_volatility(px, S, K, t, r, ot, b)
+        except ValueError:
+            continue   # quote outside the no-arbitrage band; drop it
+        out.append((math.log(K / forward), iv))
+    return out

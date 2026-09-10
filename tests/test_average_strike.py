@@ -5,6 +5,7 @@ import pytest
 from quantforge import average_strike_asian_mc, OptionType
 
 
+@pytest.mark.slow
 def test_call_and_put_positive():
     c = average_strike_asian_mc(100, 1.0, 0.05, 0.3, OptionType.CALL,
                                 n_steps=50, n_paths=60_000, seed=1)
