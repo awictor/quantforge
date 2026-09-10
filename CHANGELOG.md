@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.229.0] - 2026-09-10
+
+### Added
+- `cgmy_greeks` (in `cgmy.py`): spot Greeks (`delta`, `gamma`, `theta`) plus the
+  tail-activity sensitivity `d_Y` (dV/dY) of a CGMY option by central finite
+  differences on `cgmy_price` (`d_Y` falls back to a one-sided bump near `Y = 2`).
+- Verified: delta matches a finite difference; call delta in (0,1) with positive
+  gamma, put delta negative; the tail sensitivity is finite.
+
 ## [1.228.0] - 2026-09-10
 
 ### Added

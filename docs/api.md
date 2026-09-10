@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.228.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.229.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -466,6 +466,16 @@ Auto-generated from `quantforge` v1.228.0 by `docs/gen_api.py` — do not edit b
 > underflows because ``e^{-lam/2}`` is zero to machine precision).
 
 ## cgmy
+
+### `cgmy_greeks(S, K, t, r, C, G, M, Y, option_type=<OptionType.CALL: 'call'>, q=0.0, alpha=1.5)`  _function_
+
+> Greeks of a CGMY option by central finite differences.
+>
+> Central differences of :func:`cgmy_price` for the spot Greeks ``delta``
+> (dV/dS), ``gamma`` (d2V/dS2), and ``theta`` (calendar decay), plus the
+> tail-activity sensitivity ``d_Y`` (dV/dY). ``d_Y`` uses a one-sided bump if a
+> central one would push ``Y`` to or past 2. Returns a dict with ``price``,
+> ``delta``, ``gamma``, ``theta``, ``d_Y``.
 
 ### `cgmy_price(S, K, t, r, C, G, M, Y, option_type=<OptionType.CALL: 'call'>, q=0.0, alpha=1.5, upper=200.0) -> float`  _function_
 

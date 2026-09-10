@@ -75,6 +75,45 @@ def cgmy_price(S, K, t, r, C, G, M, Y, option_type=OptionType.CALL, q=0.0,
                       option_type, alpha=alpha, upper=upper)
 
 
+def cgmy_greeks(S, K, t, r, C, G, M, Y, option_type=OptionType.CALL, q=0.0,
+                alpha=1.5):
+    """Greeks of a CGMY option by central finite differences.
+
+    Central differences of :func:`cgmy_price` for the spot Greeks ``delta``
+    (dV/dS), ``gamma`` (d2V/dS2), and ``theta`` (calendar decay), plus the
+    tail-activity sensitivity ``d_Y`` (dV/dY). ``d_Y`` uses a one-sided bump if a
+    central one would push ``Y`` to or past 2. Returns a dict with ``price``,
+    ``delta``, ``gamma``, ``theta``, ``d_Y``.
+    """
+    if S <= 0 or K <= 0:
+        raise ValueError("S and K must be positive")
+    if t <= 0:
+        raise ValueError("t must be positive")
+    if C < 0 or G <= 0 or M <= 0:
+        raise ValueError("need C >= 0, G > 0, M > 0")
+    if Y >= 2.0:
+        raise ValueError("Y must be < 2")
+
+    def px(S_=S, t_=t, Y_=Y):
+        return cgmy_price(S_, K, t_, r, C, G, M, Y_, option_type, q=q,
+                          alpha=alpha)
+
+    base = px()
+    hS = 1e-3 * S
+    up, dn = px(S_=S + hS), px(S_=S - hS)
+    delta = (up - dn) / (2.0 * hS)
+    gamma = (up - 2.0 * base + dn) / (hS * hS)
+    ht = min(1e-4, 0.25 * t)
+    theta = -(px(t_=t + ht) - px(t_=t - ht)) / (2.0 * ht)
+    hy = 1e-3
+    if Y + hy < 2.0:
+        d_Y = (px(Y_=Y + hy) - px(Y_=Y - hy)) / (2.0 * hy)
+    else:
+        d_Y = (base - px(Y_=Y - hy)) / hy
+    return {"price": base, "delta": delta, "gamma": gamma, "theta": theta,
+            "d_Y": d_Y}
+
+
 def cgmy_smile(S, strikes, t, r, C, G, M, Y, q=0.0, alpha=1.5):
     """Black-Scholes implied-vol smile the CGMY model produces.
 
