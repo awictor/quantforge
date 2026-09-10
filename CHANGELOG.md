@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.192.0] - 2026-09-10
+
+### Added
+- `bermudan_max_call_lsm_greeks` (in `lsm.py`): deltas, own-gammas, and
+  cross-gamma of an American max-call by common-random-number bumps on
+  `bermudan_max_call_lsm`. Repricing at bumped spots with the same seed shares
+  the Brownian shocks, so the finite differences are low-variance; the LSM
+  regression is re-fit at each bump. Deltas are reliable; the gammas (second
+  differences over a re-fit regression) are indicative and need many paths.
+- Verified: without dividends the two spot deltas match the exact European
+  `rainbow_greeks` deltas within noise; both deltas stay in `(0,1)`; the
+  cross-gamma is robustly negative across seeds (the two spots are substitutes
+  in a max payoff); reproducible under a fixed seed.
+
 ## [1.191.1] - 2026-09-10
 
 ### Tests
