@@ -668,3 +668,46 @@ def bermudan_min_put_lsm_greeks(S1, S2, K, t, r, sigma1, sigma2, rho,
     cross = (pp - pm - mp + mm) / (4.0 * h1 * h2)
     return {"price": base, "delta1": delta1, "delta2": delta2,
             "gamma1": gamma1, "gamma2": gamma2, "cross": cross}
+
+
+def bermudan_basket_lsm_greeks(S1, S2, w1, w2, K, t, r, sigma1, sigma2, rho,
+                               q1=0.0, q2=0.0, option_type=OptionType.CALL,
+                               n_steps=50, n_paths=40_000, seed=None,
+                               h_rel=0.01):
+    """Deltas and cross-gamma of an American basket option by common-random bumps.
+
+    Reprices :func:`bermudan_basket_lsm` at bumped spots on the *same* seed, so
+    the two simulations share their Brownian shocks and the finite differences
+    are low-variance. Returns a dict with ``price``, the two spot deltas
+    (``delta1`` = dV/dS1, ``delta2`` = dV/dS2), the two own-gammas
+    (``gamma1``, ``gamma2``), and the cross-gamma (``cross`` = d2V/dS1 dS2).
+
+    For a basket *call* both spot deltas are positive (a higher spot lifts the
+    weighted basket); the regression is re-fit at each bump. Deltas are reliable;
+    the gammas (second differences over a re-fit regression) are indicative and
+    need many paths.
+    """
+    if seed is None:
+        seed = 0
+    h1 = h_rel * S1
+    h2 = h_rel * S2
+
+    def px(s1, s2):
+        return bermudan_basket_lsm(s1, s2, w1, w2, K, t, r, sigma1, sigma2, rho,
+                                   q1, q2, option_type=option_type,
+                                   n_steps=n_steps, n_paths=n_paths, seed=seed)
+
+    base = px(S1, S2)
+    u1, d1 = px(S1 + h1, S2), px(S1 - h1, S2)
+    u2, d2 = px(S1, S2 + h2), px(S1, S2 - h2)
+    delta1 = (u1 - d1) / (2.0 * h1)
+    delta2 = (u2 - d2) / (2.0 * h2)
+    gamma1 = (u1 - 2.0 * base + d1) / (h1 * h1)
+    gamma2 = (u2 - 2.0 * base + d2) / (h2 * h2)
+    pp = px(S1 + h1, S2 + h2)
+    pm = px(S1 + h1, S2 - h2)
+    mp = px(S1 - h1, S2 + h2)
+    mm = px(S1 - h1, S2 - h2)
+    cross = (pp - pm - mp + mm) / (4.0 * h1 * h2)
+    return {"price": base, "delta1": delta1, "delta2": delta2,
+            "gamma1": gamma1, "gamma2": gamma2, "cross": cross}

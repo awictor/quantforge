@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.210.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.211.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1618,6 +1618,21 @@ Auto-generated from `quantforge` v1.210.0 by `docs/gen_api.py` — do not edit b
 > above the European moment-matched :func:`quantforge.basket_option`;
 > dividends create an early-exercise premium (and American puts carry one even
 > without).
+
+### `bermudan_basket_lsm_greeks(S1, S2, w1, w2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0, option_type=<OptionType.CALL: 'call'>, n_steps=50, n_paths=40000, seed=None, h_rel=0.01)`  _function_
+
+> Deltas and cross-gamma of an American basket option by common-random bumps.
+>
+> Reprices :func:`bermudan_basket_lsm` at bumped spots on the *same* seed, so
+> the two simulations share their Brownian shocks and the finite differences
+> are low-variance. Returns a dict with ``price``, the two spot deltas
+> (``delta1`` = dV/dS1, ``delta2`` = dV/dS2), the two own-gammas
+> (``gamma1``, ``gamma2``), and the cross-gamma (``cross`` = d2V/dS1 dS2).
+>
+> For a basket *call* both spot deltas are positive (a higher spot lifts the
+> weighted basket); the regression is re-fit at each bump. Deltas are reliable;
+> the gammas (second differences over a re-fit regression) are indicative and
+> need many paths.
 
 ### `bermudan_lsm(S, K, t, r, sigma, option_type=<OptionType.PUT: 'put'>, b=None, n_steps=50, n_paths=20000, degree=3, seed=None) -> float`  _function_
 

@@ -32,6 +32,7 @@ from .lsm import (
     bermudan_max_call_lsm, bermudan_max_call_lsm_greeks, bermudan_spread_lsm,
     bermudan_spread_lsm_greeks, bermudan_min_put_lsm,
     bermudan_min_put_lsm_greeks, bermudan_basket_lsm,
+    bermudan_basket_lsm_greeks,
 )
 from .mlmc import mlmc_asian
 from .perpetual import perpetual_american, perpetual_exercise_boundary
@@ -250,7 +251,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.210.0"
+__version__ = "1.211.0"
 
 __all__ = [
     "OptionType",
@@ -283,6 +284,7 @@ __all__ = [
     "bermudan_min_put_lsm",
     "bermudan_min_put_lsm_greeks",
     "bermudan_basket_lsm",
+    "bermudan_basket_lsm_greeks",
     "mlmc_asian",
     "perpetual_american",
     "perpetual_exercise_boundary",

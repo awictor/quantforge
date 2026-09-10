@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.211.0] - 2026-09-10
+
+### Added
+- `bermudan_basket_lsm_greeks` (in `lsm.py`): deltas, own-gammas, and
+  cross-gamma of an American basket option by common-random-number bumps on
+  `bermudan_basket_lsm`. Same-seed repricing shares the Brownian shocks so the
+  finite differences are low-variance; the regression is re-fit at each bump.
+  Completes the two-asset LSM Greek family (max-call, spread, min-put, basket).
+- Verified: without dividends the two spot deltas match the European
+  `basket_greeks` deltas within noise; the call deltas are positive and the
+  larger-weight asset carries the larger delta; the put deltas are negative;
+  reproducible.
+
 ## [1.210.0] - 2026-09-10
 
 ### Added
