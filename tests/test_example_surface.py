@@ -9,6 +9,8 @@ import sys
 import os
 import math
 
+import pytest
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "examples"))
 
 import vol_surface as ex  # noqa: E402
@@ -32,14 +34,20 @@ def _build_surface():
     return slices
 
 
-def test_every_slice_fits_well():
-    for T, _slice, rmse in _build_surface():
+@pytest.fixture(scope="module")
+def surface_slices():
+    # SVI calibration is the expensive step; build it once for the module.
+    return _build_surface()
+
+
+def test_every_slice_fits_well(surface_slices):
+    for T, _slice, rmse in surface_slices:
         # Multi-start calibration should fit the smooth synthetic smile tightly.
         assert rmse < 1e-4, f"expiry {T} fit poorly: rmse={rmse}"
 
 
-def test_surface_is_calendar_arbitrage_free():
-    surface = VolSurface([s for _, s, _ in _build_surface()])
+def test_surface_is_calendar_arbitrage_free(surface_slices):
+    surface = VolSurface([s for _, s, _ in surface_slices])
     assert surface.is_calendar_arbitrage_free()
 
 

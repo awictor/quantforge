@@ -14,18 +14,18 @@ S, K, T, R, SIG, NS = 100.0, 100.0, 1.0, 0.05, 0.2, 6
 
 def test_call_matches_control_variate_mc():
     ref = arithmetic_asian_mc(S, K, T, R, SIG, OptionType.CALL, n_steps=NS,
-                              n_paths=400_000, control_variate=True, seed=9)
+                              n_paths=120_000, control_variate=True, seed=9)
     rq = sobol_asian_rqmc(S, K, T, R, SIG, OptionType.CALL, n_steps=NS,
-                          n_paths=4096, n_rand=24, seed=1)
+                          n_paths=4096, n_rand=16, seed=1)
     assert rq.price == pytest.approx(ref.price,
                                      abs=3.0 * (ref.std_error + rq.std_error))
 
 
 def test_put_matches_control_variate_mc():
     ref = arithmetic_asian_mc(S, K, T, R, SIG, OptionType.PUT, n_steps=NS,
-                              n_paths=400_000, control_variate=True, seed=9)
+                              n_paths=120_000, control_variate=True, seed=9)
     rq = sobol_asian_rqmc(S, K, T, R, SIG, OptionType.PUT, n_steps=NS,
-                          n_paths=4096, n_rand=24, seed=2)
+                          n_paths=4096, n_rand=16, seed=2)
     assert rq.price == pytest.approx(ref.price,
                                      abs=3.0 * (ref.std_error + rq.std_error))
 

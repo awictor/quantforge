@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.180.1] - 2026-09-10
+
+### Tests
+- Trimmed the fast suite ~50s -> ~46s. The two RQMC-Asian cross-checks use a
+  120000-path (was 400000) control-variate reference and n_rand=16 (was 24); the
+  vol-surface example builds its SVI calibration once via a module-scoped fixture
+  instead of three times; and the local-vol-MC positivity/smoke checks drop from
+  100 steps / 20000 paths to 40 / 8000. Accuracy cross-checks stay under `-m slow`.
+
 ## [1.180.0] - 2026-09-10
 
 ### Fixed

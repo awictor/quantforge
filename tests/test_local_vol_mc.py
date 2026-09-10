@@ -27,14 +27,14 @@ def test_flat_local_vol_put():
 def test_skewed_local_vol_positive():
     # A downward-sloping local vol (leverage) gives a finite, positive price.
     r = local_vol_mc(100, 100, 1.0, 0.05, lambda S, tau: 0.2 * (100 / S) ** 0.5,
-                     OptionType.CALL, n_steps=100, n_paths=20_000, seed=3)
+                     OptionType.CALL, n_steps=40, n_paths=8_000, seed=3)
     assert r.price > 0 and math.isfinite(r.price)
 
 
 def test_time_dependent_local_vol_runs():
     # Vol rising with time should still price finitely.
     r = local_vol_mc(100, 100, 1.0, 0.05, lambda S, tau: 0.15 + 0.1 * tau,
-                     OptionType.CALL, n_steps=100, n_paths=20_000, seed=4)
+                     OptionType.CALL, n_steps=40, n_paths=8_000, seed=4)
     assert r.price > 0
 
 
