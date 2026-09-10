@@ -69,3 +69,32 @@ def dispersion_basket_vol(weights: Sequence[float], vols: Sequence[float]) -> fl
     """
     _validate(weights, vols)
     return math.sqrt(sum(w * w * s * s for w, s in zip(weights, vols)))
+
+
+def correlation_term_structure(weights, member_vol_curves, index_vol_curve,
+                               expiries):
+    """Implied correlation at each expiry across a term structure.
+
+    Args:
+        weights: index member weights (constant across expiries).
+        member_vol_curves: list per member of that member's vol at each expiry,
+            i.e. member_vol_curves[i][j] is member i's vol at expiries[j].
+        index_vol_curve: the index's implied vol at each expiry.
+        expiries: the tenors (used only as labels in the returned pairs).
+
+    Returns a list of ``(expiry, implied_correlation)`` pairs, applying
+    :func:`implied_correlation` slice by slice.
+    """
+    n_exp = len(expiries)
+    if len(index_vol_curve) != n_exp:
+        raise ValueError("index_vol_curve must match expiries length")
+    for curve in member_vol_curves:
+        if len(curve) != n_exp:
+            raise ValueError("each member vol curve must match expiries length")
+
+    out = []
+    for j in range(n_exp):
+        vols_j = [member_vol_curves[i][j] for i in range(len(weights))]
+        rho = implied_correlation(weights, vols_j, index_vol_curve[j])
+        out.append((expiries[j], rho))
+    return out

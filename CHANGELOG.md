@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.43.0] - 2026-09-09
+
+### Added
+- `correlation_term_structure` (in `correlation.py`): implied correlation at each
+  expiry from index and member vol term structures, returning
+  `(expiry, rho)` pairs. Recovers a constant or maturity-varying correlation
+  exactly.
+
 ## [1.42.0] - 2026-09-09
 
 ### Added

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.42.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.43.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -211,6 +211,20 @@ Auto-generated from `quantforge` v1.42.0 by `docs/gen_api.py` — do not edit by
 >     b: cost of carry (defaults to r).
 
 ## correlation
+
+### `correlation_term_structure(weights, member_vol_curves, index_vol_curve, expiries)`  _function_
+
+> Implied correlation at each expiry across a term structure.
+>
+> Args:
+>     weights: index member weights (constant across expiries).
+>     member_vol_curves: list per member of that member's vol at each expiry,
+>         i.e. member_vol_curves[i][j] is member i's vol at expiries[j].
+>     index_vol_curve: the index's implied vol at each expiry.
+>     expiries: the tenors (used only as labels in the returned pairs).
+>
+> Returns a list of ``(expiry, implied_correlation)`` pairs, applying
+> :func:`implied_correlation` slice by slice.
 
 ### `dispersion_basket_vol(weights: Sequence[float], vols: Sequence[float]) -> float`  _function_
 

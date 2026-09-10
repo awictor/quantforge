@@ -64,6 +64,7 @@ from .vegabucket import VegaBuckets, vega_buckets
 from .qmc import halton, european_qmc
 from .correlation import (
     implied_correlation, index_vol_from_correlation, dispersion_basket_vol,
+    correlation_term_structure,
 )
 from .cev import cev_price, noncentral_chisq_cdf
 from .sizing import (
@@ -102,7 +103,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.42.0"
+__version__ = "1.43.0"
 
 __all__ = [
     "OptionType",
@@ -192,6 +193,7 @@ __all__ = [
     "implied_correlation",
     "index_vol_from_correlation",
     "dispersion_basket_vol",
+    "correlation_term_structure",
     "cev_price",
     "noncentral_chisq_cdf",
     "delta_hedge_shares",

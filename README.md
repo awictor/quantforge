@@ -288,6 +288,16 @@ index_vol_from_correlation(weights, vols, rho=0.3)   # forward map
 `rho=0` gives the fully-diversified `dispersion_basket_vol`; `rho=1` gives the
 weighted-average vol.
 
+`correlation_term_structure` implies the correlation at each expiry from index
+and member vol curves:
+
+```python
+from quantforge import correlation_term_structure
+
+correlation_term_structure(weights, member_vol_curves, index_vol_curve,
+                           expiries=[0.5, 1.0, 2.0])   # [(expiry, rho), ...]
+```
+
 ## Realized volatility
 
 Estimate historical vol from a price series — close-to-close, EWMA, and the
