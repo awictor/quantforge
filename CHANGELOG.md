@@ -4,6 +4,25 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.98.0] - 2026-09-10
+
+### Added
+- `ssvi_local_vol_fn` and `ssvi_reprice_mc` (in `ssvi.py`): close the calibrate
+  -> local-vol -> reprice loop. `ssvi_local_vol_fn` turns a fitted SSVI surface
+  into a `(spot, tau) -> local vol` callable (mapping spot to SSVI log-moneyness
+  on the forward), and `ssvi_reprice_mc` simulates that surface through
+  `local_vol_mc`. A correct local-vol construction reprices the SSVI *implied*
+  smile, and it does: the Monte Carlo price matches the closed-form price at the
+  SSVI implied vol across the smile to within ~1.2 standard errors, provided the
+  fitted surface includes short maturities.
+
+### Fixed
+- `ssvi_local_vol_from_params` / `ssvi_local_vol_fn` froze the ATM variance below
+  the shortest fitted expiry, which biased the local-vol Monte Carlo more as the
+  step count grew (the path integrates `tau` from 0 but saw a frozen short-end
+  vol). The short end now linearly extrapolates `theta -> 0` toward the origin,
+  matching SSVI's small-time behaviour; the bias-vs-steps drift is gone.
+
 ## [1.97.0] - 2026-09-10
 
 ### Added

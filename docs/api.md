@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.97.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.98.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1650,6 +1650,21 @@ Auto-generated from `quantforge` v1.97.0 by `docs/gen_api.py` — do not edit by
 > with all ``w`` derivatives taken in closed form from the SSVI parametrization
 > (no finite differences). ``dw/dt = (dw/dtheta) * theta'(t)``.
 
+### `ssvi_local_vol_fn(params: quantforge.ssvi.SSVIParams, S0, r, q=0.0)`  _function_
+
+> Build a ``(spot, tau) -> local vol`` callable from a fitted SSVI surface.
+>
+> Converts the running spot and elapsed time into the SSVI log-moneyness
+> ``k = log(spot / F_tau)`` on the forward ``F_tau = S0 e^{(r - q) tau}`` and
+> returns the analytic Dupire local vol there. Suitable as the ``local_vol_fn``
+> argument of :func:`quantforge.local_vol_mc`, which simulates the surface.
+>
+> Below the shortest fitted expiry the ATM total variance is linearly
+> extrapolated toward the origin (``theta -> 0`` as ``tau -> 0``, matching
+> SSVI's small-time behaviour) rather than frozen, which is what a Monte Carlo
+> path integrating ``tau`` from 0 needs; the long end is clamped to the last
+> fitted maturity.
+
 ### `ssvi_local_vol_from_params(params: quantforge.ssvi.SSVIParams, k, t)`  _function_
 
 > Local volatility of a fitted SSVI surface at ``(k, t)``.
@@ -1662,6 +1677,16 @@ Auto-generated from `quantforge` v1.97.0 by `docs/gen_api.py` — do not edit by
 ### `ssvi_phi(theta: float, eta: float, gamma: float) -> float`  _function_
 
 > Power-law SSVI skew function phi(theta).
+
+### `ssvi_reprice_mc(params: quantforge.ssvi.SSVIParams, S0, K, t, r, q=0.0, option_type=None, n_steps=100, n_paths=60000, antithetic=True, seed=None)`  _function_
+
+> Monte Carlo a vanilla under the SSVI local-vol surface it calibrates to.
+>
+> Closes the calibrate -> local-vol -> reprice loop: simulates the analytic
+> SSVI Dupire surface (via :func:`quantforge.local_vol_mc`) and returns the
+> option's :class:`~quantforge.MCResult`. A correct local-vol construction
+> reprices the SSVI *implied* smile, so this Monte Carlo price should match the
+> closed-form Black-Scholes price at the SSVI implied vol for that strike.
 
 ### `ssvi_total_variance(k: float, theta: float, rho: float, eta: float, gamma: float) -> float`  _function_
 

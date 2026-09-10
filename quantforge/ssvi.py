@@ -163,8 +163,10 @@ def ssvi_local_vol_from_params(params: SSVIParams, k, t):
     range.
     """
     ts = sorted(params.thetas)
-    if t < ts[0] - 1e-12 or t > ts[-1] + 1e-12:
-        raise ValueError("t outside the fitted expiry range")
+    if t <= 0.0:
+        raise ValueError("t must be positive")
+    if t > ts[-1] + 1e-12:
+        raise ValueError("t beyond the longest fitted expiry")
     # Locate the bracketing pillars for a linear theta(t) and its slope.
     if t <= ts[0]:
         i = 0
@@ -178,6 +180,58 @@ def ssvi_local_vol_from_params(params: SSVIParams, k, t):
     theta = th0 + slope * (t - t0)
     return math.sqrt(ssvi_local_variance(k, t, theta, slope,
                                          params.rho, params.eta, params.gamma))
+
+
+def ssvi_local_vol_fn(params: SSVIParams, S0, r, q=0.0):
+    """Build a ``(spot, tau) -> local vol`` callable from a fitted SSVI surface.
+
+    Converts the running spot and elapsed time into the SSVI log-moneyness
+    ``k = log(spot / F_tau)`` on the forward ``F_tau = S0 e^{(r - q) tau}`` and
+    returns the analytic Dupire local vol there. Suitable as the ``local_vol_fn``
+    argument of :func:`quantforge.local_vol_mc`, which simulates the surface.
+
+    Below the shortest fitted expiry the ATM total variance is linearly
+    extrapolated toward the origin (``theta -> 0`` as ``tau -> 0``, matching
+    SSVI's small-time behaviour) rather than frozen, which is what a Monte Carlo
+    path integrating ``tau`` from 0 needs; the long end is clamped to the last
+    fitted maturity.
+    """
+    ts = sorted(params.thetas)
+    t_max = ts[-1]
+
+    def lv(spot, tau):
+        tt = min(max(tau, 1e-6), t_max)
+        F = S0 * math.exp((r - q) * tt)
+        k = math.log(spot / F)
+        try:
+            return ssvi_local_vol_from_params(params, k, tt)
+        except ValueError:
+            # Degenerate denominator far in the wing: fall back to the local ATM
+            # vol so the simulation stays finite.
+            return ssvi_local_vol_from_params(params, 0.0, tt)
+
+    return lv
+
+
+def ssvi_reprice_mc(params: SSVIParams, S0, K, t, r, q=0.0,
+                    option_type=None, n_steps=100, n_paths=60_000,
+                    antithetic=True, seed=None):
+    """Monte Carlo a vanilla under the SSVI local-vol surface it calibrates to.
+
+    Closes the calibrate -> local-vol -> reprice loop: simulates the analytic
+    SSVI Dupire surface (via :func:`quantforge.local_vol_mc`) and returns the
+    option's :class:`~quantforge.MCResult`. A correct local-vol construction
+    reprices the SSVI *implied* smile, so this Monte Carlo price should match the
+    closed-form Black-Scholes price at the SSVI implied vol for that strike.
+    """
+    from .montecarlo import local_vol_mc
+    from .bsm import OptionType as _OT
+
+    ot = _OT.CALL if option_type is None else option_type
+    lv = ssvi_local_vol_fn(params, S0, r, q)
+    return local_vol_mc(S0, K, t, r, lv, option_type=ot, q=q,
+                        n_steps=n_steps, n_paths=n_paths,
+                        antithetic=antithetic, seed=seed)
 
 
 def calibrate_ssvi(
