@@ -171,3 +171,28 @@ def svi_butterfly_arbitrage(p: SVIParams, ks=None, tol=1e-10):
 
 def svi_is_butterfly_free(p: SVIParams, ks=None) -> bool:
     return not svi_butterfly_arbitrage(p, ks)
+
+
+def lee_wing_slopes(p: SVIParams):
+    """Asymptotic wing slopes of total variance for a raw-SVI slice.
+
+    As ``k -> +/- inf`` the SVI total variance ``w(k)`` is linear with slopes
+
+        right (k -> +inf):  b (1 + rho)
+        left  (k -> -inf):  b (1 - rho)
+
+    Lee's moment formula caps the slope of *total variance* at 2 for a valid
+    (arbitrage-free-wing) surface, so both slopes must be <= 2. Returns
+    ``(left_slope, right_slope)``.
+    """
+    return (p.b * (1.0 - p.rho), p.b * (1.0 + p.rho))
+
+
+def lee_bounds_ok(p: SVIParams, tol=1e-9):
+    """True if both SVI wing slopes satisfy Lee's ``slope <= 2`` moment bound.
+
+    Equivalent to :meth:`SVIParams.is_arbitrage_free_wings` but exposes the two
+    directional slopes explicitly via :func:`lee_wing_slopes`.
+    """
+    left, right = lee_wing_slopes(p)
+    return left <= 2.0 + tol and right <= 2.0 + tol

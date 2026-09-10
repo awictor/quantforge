@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.77.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.78.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1469,6 +1469,26 @@ Auto-generated from `quantforge` v1.77.0 by `docs/gen_api.py` — do not edit by
 > Returns ``(params, rmse)`` where rmse is the root-mean-square total-variance
 > error. Uses an unconstrained Nelder-Mead over a smooth reparametrization
 > that enforces ``b >= 0``, ``s > 0``, and ``rho in (-1, 1)``.
+
+### `lee_bounds_ok(p: quantforge.svi.SVIParams, tol=1e-09)`  _function_
+
+> True if both SVI wing slopes satisfy Lee's ``slope <= 2`` moment bound.
+>
+> Equivalent to :meth:`SVIParams.is_arbitrage_free_wings` but exposes the two
+> directional slopes explicitly via :func:`lee_wing_slopes`.
+
+### `lee_wing_slopes(p: quantforge.svi.SVIParams)`  _function_
+
+> Asymptotic wing slopes of total variance for a raw-SVI slice.
+>
+> As ``k -> +/- inf`` the SVI total variance ``w(k)`` is linear with slopes
+>
+>     right (k -> +inf):  b (1 + rho)
+>     left  (k -> -inf):  b (1 - rho)
+>
+> Lee's moment formula caps the slope of *total variance* at 2 for a valid
+> (arbitrage-free-wing) surface, so both slopes must be <= 2. Returns
+> ``(left_slope, right_slope)``.
 
 ### `svi_butterfly_arbitrage(p: quantforge.svi.SVIParams, ks=None, tol=1e-10)`  _function_
 

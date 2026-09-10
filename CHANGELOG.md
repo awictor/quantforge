@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.78.0] - 2026-09-10
+
+### Added
+- `lee_wing_slopes` and `lee_bounds_ok` (in `svi.py`): the asymptotic total-
+  variance wing slopes of an SVI slice, `b(1-rho)` (left) and `b(1+rho)`
+  (right), and a check that both satisfy Lee's moment bound (slope <= 2). Agrees
+  with `SVIParams.is_arbitrage_free_wings` and matches the empirical
+  large-|k| slope.
+
 ## [1.77.0] - 2026-09-10
 
 ### Added
