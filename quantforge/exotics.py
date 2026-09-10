@@ -445,6 +445,38 @@ def gap_option(S, K_trigger, K_payoff, t, r, sigma, option_type=OptionType.CALL,
     return K_payoff * disc * norm_cdf(-d2) - S * carry * norm_cdf(-d1)
 
 
+def gap_option_greeks(S, K_trigger, K_payoff, t, r, sigma,
+                      option_type=OptionType.CALL, b=None):
+    """Greeks of a gap option (Reiner-Rubinstein) by central finite differences.
+
+    Differentiates :func:`gap_option` for ``delta`` (dV/dS), ``gamma``
+    (d2V/dS2), ``vega`` (dV/dsigma), and ``theta`` (calendar decay). Setting
+    ``K_trigger = K_payoff`` recovers the vanilla Greeks. Returns a dict with
+    ``price`` and those fields.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K_trigger, t, sigma)
+    if K_payoff <= 0:
+        raise ValueError("payoff strike must be positive")
+    if b is None:
+        b = r
+
+    def px(S_=S, t_=t, sigma_=sigma):
+        return gap_option(S_, K_trigger, K_payoff, t_, r, sigma_, ot, b=b)
+
+    base = px()
+    hS = 1e-4 * S
+    up, dn = px(S_=S + hS), px(S_=S - hS)
+    delta = (up - dn) / (2.0 * hS)
+    gamma = (up - 2.0 * base + dn) / (hS * hS)
+    hv = 1e-4
+    vega = (px(sigma_=sigma + hv) - px(sigma_=sigma - hv)) / (2.0 * hv)
+    ht = min(1e-4, 0.25 * t)
+    theta = -(px(t_=t + ht) - px(t_=t - ht)) / (2.0 * ht)
+    return {"price": base, "delta": delta, "gamma": gamma, "vega": vega,
+            "theta": theta}
+
+
 # --------------------------------------------------------------------------
 # Power options: payoff on S^power
 # --------------------------------------------------------------------------

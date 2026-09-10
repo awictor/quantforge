@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.218.0] - 2026-09-10
+
+### Added
+- `gap_option_greeks` (in `exotics.py`): delta, gamma, vega, and theta of a gap
+  option (Reiner-Rubinstein) by central finite differences on `gap_option`.
+- Verified: setting `K_trigger = K_payoff` reduces the Greeks exactly to the
+  vanilla Black-Scholes Greeks; the gap delta matches a finite difference for
+  both call (trigger above payoff) and put.
+
 ## [1.217.0] - 2026-09-10
 
 ### Added

@@ -200,7 +200,8 @@ from .exotics import (
     cash_or_nothing, asset_or_nothing, digital_greeks, barrier_option, barrier_greeks,
     geometric_asian, geometric_asian_greeks, arithmetic_asian, asian_greeks,
     one_touch, no_touch,
-    gap_option, power_option, power_option_greeks, barrier_rebate, Barrier,
+    gap_option, gap_option_greeks, power_option, power_option_greeks,
+    barrier_rebate, Barrier,
 )
 from .montecarlo import (
     MCResult, european_mc, european_cv_mc, european_is_mc,
@@ -254,7 +255,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.217.0"
+__version__ = "1.218.0"
 
 __all__ = [
     "OptionType",
@@ -579,6 +580,7 @@ __all__ = [
     "one_touch",
     "no_touch",
     "gap_option",
+    "gap_option_greeks",
     "power_option",
     "power_option_greeks",
     "barrier_rebate",

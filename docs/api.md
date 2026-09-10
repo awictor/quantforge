@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.217.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.218.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -956,6 +956,15 @@ Auto-generated from `quantforge` v1.217.0 by `docs/gen_api.py` — do not edit b
 > ``S_T > K_trigger``; a gap put pays ``K_payoff - S_T`` whenever
 > ``S_T < K_trigger``. Setting the two strikes equal recovers the vanilla
 > option. Closed form (Reiner-Rubinstein).
+
+### `gap_option_greeks(S, K_trigger, K_payoff, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> Greeks of a gap option (Reiner-Rubinstein) by central finite differences.
+>
+> Differentiates :func:`gap_option` for ``delta`` (dV/dS), ``gamma``
+> (d2V/dS2), ``vega`` (dV/dsigma), and ``theta`` (calendar decay). Setting
+> ``K_trigger = K_payoff`` recovers the vanilla Greeks. Returns a dict with
+> ``price`` and those fields.
 
 ### `geometric_asian(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
 
