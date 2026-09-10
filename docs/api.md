@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.36.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.37.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -567,6 +567,16 @@ Auto-generated from `quantforge` v1.36.0 by `docs/gen_api.py` — do not edit by
 >
 > Wraps :func:`dupire_local_vol` by turning the implied-vol surface into a
 > call-price surface with the Black-Scholes-Merton formula (carry ``b = r-q``).
+
+### `sabr_local_vol(S, K, T, r, alpha, beta, rho, nu, q=0.0, dK=None)`  _function_
+
+> Dupire local volatility of a single SABR smile at expiry ``T``.
+>
+> Builds the SABR implied-vol smile (Hagan) at maturity ``T`` on the forward
+> ``F = S e^{(r-q)T}`` and feeds it into the Dupire formula. Only the strike
+> derivatives are needed at a fixed expiry, so this reads the SABR smile in
+> strike and holds ``T`` fixed for the maturity bump (a flat local term
+> structure across the single slice).
 
 ## lookback
 

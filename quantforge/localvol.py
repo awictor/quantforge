@@ -85,3 +85,24 @@ def local_vol_from_implied(implied_vol_fn: Callable[[float, float], float],
         return call_price(S, k, t, r, sig, b=r - q)
 
     return dupire_local_vol(call_fn, K, T, r, q, dK, dT)
+
+
+def sabr_local_vol(S, K, T, r, alpha, beta, rho, nu, q=0.0, dK=None):
+    """Dupire local volatility of a single SABR smile at expiry ``T``.
+
+    Builds the SABR implied-vol smile (Hagan) at maturity ``T`` on the forward
+    ``F = S e^{(r-q)T}`` and feeds it into the Dupire formula. Only the strike
+    derivatives are needed at a fixed expiry, so this reads the SABR smile in
+    strike and holds ``T`` fixed for the maturity bump (a flat local term
+    structure across the single slice).
+    """
+    from .sabr import sabr_vol
+
+    F = S * math.exp((r - q) * T)
+
+    def implied(k, t):
+        # SABR smile in strike; ``t`` fed through so the T-derivative sees the
+        # same smile (single-slice: local vol from the strike curvature).
+        return sabr_vol(F, k, t, alpha, beta, rho, nu)
+
+    return local_vol_from_implied(implied, S, K, T, r, q, dK=dK)

@@ -45,7 +45,7 @@ from .strategy import (
     payoff_at_expiry, payoff_profile, break_evens,
     vertical_spread, straddle, strangle, risk_reversal, butterfly, iron_condor,
 )
-from .localvol import dupire_local_vol, local_vol_from_implied
+from .localvol import dupire_local_vol, local_vol_from_implied, sabr_local_vol
 from .spline import CubicSpline, SmileSpline
 from .rates import (
     CapletPeriod, caplet_price, cap_price, floor_price, collar_price,
@@ -97,7 +97,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.36.0"
+__version__ = "1.37.0"
 
 __all__ = [
     "OptionType",
@@ -156,6 +156,7 @@ __all__ = [
     "iron_condor",
     "dupire_local_vol",
     "local_vol_from_implied",
+    "sabr_local_vol",
     "CubicSpline",
     "SmileSpline",
     "CapletPeriod",

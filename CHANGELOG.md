@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.37.0] - 2026-09-09
+
+### Added
+- `sabr_local_vol` (in `localvol.py`): Dupire local volatility of a single SABR
+  smile — builds the Hagan implied-vol smile on the forward and feeds it through
+  the Dupire formula. A flat (nu->0, beta=1) SABR gives a constant local vol =
+  alpha; a skewed smile gives the steeper-than-implied local skew.
+
 ## [1.36.0] - 2026-09-09
 
 ### Added

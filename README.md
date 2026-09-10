@@ -538,6 +538,15 @@ dupire_local_vol(call_fn, K=100, T=1.0, r=0.03, q=0.0)
 A flat implied surface returns a constant local vol; a pure term structure
 returns the analytic `sqrt(dw/dT)`.
 
+`sabr_local_vol` feeds a SABR smile straight into Dupire at one expiry:
+
+```python
+from quantforge import sabr_local_vol
+
+sabr_local_vol(S=100, K=90, T=1.0, r=0.05,
+               alpha=0.25, beta=0.5, rho=-0.4, nu=0.5)
+```
+
 ## Term-structure surface (calendar-arbitrage aware)
 
 Stitch per-expiry SVI smiles into a full surface, interpolate vol at any
