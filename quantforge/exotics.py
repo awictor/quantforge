@@ -223,3 +223,67 @@ def arithmetic_asian(S, K, t, r, sigma, option_type=OptionType.CALL, b=None):
     sigma_a = math.sqrt(math.log(M2 / (M1 * M1)) / t)
     b_a = math.log(M1 / S) / t
     return bsm_price(S, K, t, r, sigma_a, ot, b=b_a)
+
+
+# --------------------------------------------------------------------------
+# One-touch / no-touch binaries (touch options)
+# --------------------------------------------------------------------------
+def one_touch(S, H, t, r, sigma, b=None, cash=1.0, payoff_at_hit=True):
+    """One-touch binary: pays ``cash`` if the spot ever reaches barrier ``H``.
+
+    A continuously-monitored American digital. ``payoff_at_hit=True`` pays the
+    cash immediately when the barrier is touched (the FX-market convention);
+    ``False`` defers the payment to expiry. Works for an upper barrier
+    (``H > S``) or a lower barrier (``H < S``); the direction is inferred.
+
+    Uses the standard Rubinstein-Reiner touch formulas.
+    """
+    _validate(S, H, t, sigma)
+    if H <= 0:
+        raise ValueError("barrier H must be positive")
+    if b is None:
+        b = r
+    if t == 0 or sigma == 0:
+        return 0.0  # cannot touch in zero time unless already there
+
+    # eta = -1 for an up-barrier (H > S), +1 for a down-barrier (H < S).
+    eta = 1.0 if H < S else -1.0
+    vsqrt = sigma * math.sqrt(t)
+    mu = (b - 0.5 * sigma * sigma) / (sigma * sigma)
+
+    if payoff_at_hit:
+        # Pays cash immediately on touch: lambda uses the full discount rate.
+        lam = math.sqrt(mu * mu + 2.0 * r / (sigma * sigma))
+        z = math.log(H / S) / vsqrt + lam * vsqrt
+        HS = H / S
+        return cash * (HS ** (mu + lam) * norm_cdf(eta * z)
+                       + HS ** (mu - lam) * norm_cdf(eta * z - 2.0 * eta * lam * vsqrt))
+    else:
+        # Pays cash at expiry if touched: discount the barrier hit probability.
+        # P(hit) = N(eta(-a + m)/v) + (H/S)^{2 mu} N(eta(-a - m)/v), with
+        # a = ln(H/S), m = (b - sigma^2/2) t, eta = +1 up / -1 down barrier.
+        disc = math.exp(-r * t)
+        a = math.log(H / S)
+        m = (b - 0.5 * sigma * sigma) * t
+        # eta_dir = +1 for up-barrier (H > S), -1 for down-barrier.
+        eta_dir = 1.0 if H > S else -1.0
+        HS = H / S
+        p_hit = (norm_cdf(eta_dir * (-a + m) / vsqrt)
+                 + HS ** (2.0 * mu) * norm_cdf(eta_dir * (-a - m) / vsqrt))
+        return cash * disc * p_hit
+
+
+def no_touch(S, H, t, r, sigma, b=None, cash=1.0):
+    """No-touch binary: pays ``cash`` at expiry if the barrier is never reached.
+
+    Complementary to :func:`one_touch` with payment at expiry:
+    ``no_touch = cash * e^{-rt} - one_touch(payoff_at_hit=False)``.
+    """
+    _validate(S, H, t, sigma)
+    if b is None:
+        b = r
+    disc = math.exp(-r * t)
+    if t == 0 or sigma == 0:
+        return cash * disc  # never touches in zero time
+    hit = one_touch(S, H, t, r, sigma, b=b, cash=cash, payoff_at_hit=False)
+    return cash * disc - hit

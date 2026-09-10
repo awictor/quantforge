@@ -393,6 +393,19 @@ arithmetic_asian(S=100, K=100, t=1, r=0.05, sigma=0.3, option_type="call")
 Barrier kinds: `Barrier.DOWN_IN`, `DOWN_OUT`, `UP_IN`, `UP_OUT`. In/out parity
 (`in + out = vanilla`) holds exactly and is enforced by the tests.
 
+One-touch / no-touch binaries pay a fixed cash on (or against) a barrier being
+hit:
+
+```python
+from quantforge import one_touch, no_touch
+
+# Pays $1 the moment spot touches 120 (FX pay-at-hit convention).
+one_touch(S=100, H=120, t=1.0, r=0.05, sigma=0.2, cash=1.0, payoff_at_hit=True)
+
+# Pays $1 at expiry only if 80 is never touched.
+no_touch(S=100, H=80, t=1.0, r=0.05, sigma=0.2, cash=1.0)
+```
+
 Lookbacks (against the realized path extreme) have closed forms too:
 
 ```python

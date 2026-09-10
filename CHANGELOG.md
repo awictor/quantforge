@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.18.0] - 2026-09-09
+
+### Added
+- `one_touch` / `no_touch` (in `exotics.py`): continuously-monitored touch
+  binaries. `one_touch` pays cash if the barrier is ever reached (immediately
+  on hit, the FX convention, or deferred to expiry); `no_touch` pays if it
+  never is. Direction (up/down barrier) is inferred from `H` vs `S`.
+  Cross-checked against a barrier-crossing Monte Carlo; touch + no-touch (paid
+  at expiry) sum to the discounted cash.
+
 ## [1.17.0] - 2026-09-09
 
 ### Added
