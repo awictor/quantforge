@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.16.1] - 2026-09-09
+
+### Changed
+- `calibrate_svi` now uses a deterministic multi-start (several fixed seeds,
+  keep the best) so it no longer stalls in the degenerate huge-`b` valley of
+  the raw-SVI objective. On the example chain the worst per-expiry fit improved
+  from rmse ~9e-4 to ~5e-6 and the assembled surface is calendar-arbitrage free.
+
+### Added
+- `examples/vol_surface.py`: end-to-end surface workflow (invert quotes -> fit
+  SVI per expiry -> assemble `VolSurface` -> calendar check -> interpolate vol
+  and extract Dupire local vol), with a smoke test.
+
 ## [1.16.0] - 2026-09-09
 
 ### Added

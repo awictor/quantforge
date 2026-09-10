@@ -108,8 +108,24 @@ def calibrate_svi(
             err += weights[i] * diff * diff
         return err
 
-    x0 = pack(initial)
-    best_p, best_f = nelder_mead(objective, x0, step=0.2, max_iter=max_iter, tol=1e-14)
+    # Multi-start: raw SVI has flat valleys where Nelder-Mead can stall on a
+    # degenerate (huge-b) fit, so try several seeds and keep the best. Seeds are
+    # fixed (no RNG) to stay deterministic across runs.
+    w_min = min(tv)
+    k_at_min = ks[tv.index(w_min)]
+    seeds = [initial]
+    for b0 in (0.05, 0.2, 0.5):
+        for rho0 in (-0.5, 0.0, 0.3):
+            seeds.append(SVIParams(a=max(w_min * 0.5, 1e-6), b=b0, rho=rho0,
+                                   m=k_at_min, s=0.2))
+
+    best_p, best_f = None, float("inf")
+    for seed in seeds:
+        p, f = nelder_mead(objective, pack(seed), step=0.2,
+                           max_iter=max_iter, tol=1e-14)
+        if f < best_f:
+            best_p, best_f = p, f
+
     params = unpack(best_p)
     rmse = math.sqrt(best_f / wsum)
     return params, rmse
