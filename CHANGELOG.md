@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.111.0] - 2026-09-10
+
+### Added
+- `calibrate_levy_smile` (new `levycalib.py`): fit an exponential-Levy model
+  (`vg`, `nig`, `meixner`, `cgmy`) to a one-expiry market implied-vol smile by
+  least squares on vol. Each candidate smile is priced with a single Carr-Madan
+  FFT strip (interpolated to the market strikes) rather than an integral per
+  strike, and a per-model smooth parameter transform keeps the optimiser
+  unconstrained while the raw parameters stay in their valid region.
+- Verified: recovers synthetic VG, NIG and Meixner parameters to <1e-3 RMSE;
+  CGMY (weakly identified from few strikes) is checked on fit quality (RMSE
+  < 5e-3); a cross-model NIG fit to a VG smile is close (RMSE ~1e-3).
+
 ## [1.110.0] - 2026-09-10
 
 ### Added

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.110.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.111.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1041,6 +1041,21 @@ Auto-generated from `quantforge` v1.110.0 by `docs/gen_api.py` — do not edit b
 >         otherwise price the European payoff.
 >     b: cost of carry (defaults to ``r``); dividend yield ``q`` enters as
 >         ``b = r - q``.
+
+## levycalib
+
+### `calibrate_levy_smile(model, S, t, r, strikes, market_vols, q=0.0, cm_alpha=1.5, max_iter=4000)`  _function_
+
+> Fit a Levy model to a one-expiry market smile by least squares on vol.
+>
+> Args:
+>     model: one of ``"vg"``, ``"nig"``, ``"meixner"``, ``"cgmy"``.
+>     strikes, market_vols: matching sequences of strikes and Black-Scholes
+>         implied vols at expiry ``t``.
+>     cm_alpha: Carr-Madan damping used when pricing each candidate.
+>
+> Returns ``(params, rmse)`` where ``params`` is the fitted raw-parameter tuple
+> for the chosen model and ``rmse`` is the root-mean-square implied-vol error.
 
 ## localvol
 
