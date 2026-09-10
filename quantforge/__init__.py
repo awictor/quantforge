@@ -163,6 +163,10 @@ from .cheyette import (
     cheyette_G, cheyette_y, zero_bond as cheyette_zero_bond,
     bond_option as cheyette_bond_option, caplet as cheyette_caplet,
 )
+from .g2pp import (
+    g2pp_V, zero_bond as g2pp_zero_bond, bond_option as g2pp_bond_option,
+    caplet as g2pp_caplet,
+)
 
 # Vectorized NumPy fast path is optional; only expose it if NumPy is present.
 try:  # pragma: no cover - trivial availability branch
@@ -173,7 +177,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.119.0"
+__version__ = "1.120.0"
 
 __all__ = [
     "OptionType",
@@ -459,5 +463,9 @@ __all__ = [
     "cheyette_zero_bond",
     "cheyette_bond_option",
     "cheyette_caplet",
+    "g2pp_V",
+    "g2pp_zero_bond",
+    "g2pp_bond_option",
+    "g2pp_caplet",
     "__version__",
 ]

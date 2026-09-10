@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.119.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.120.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -818,6 +818,29 @@ Auto-generated from `quantforge` v1.119.0 by `docs/gen_api.py` — do not edit b
 >     b: cost of carry (defaults to r).
 >
 > Returns the present value.
+
+## g2pp
+
+### `g2pp_V(a, b, sigma, eta, rho, t, T)`  _function_
+
+> The G2++ variance term V(t,T) (Brigo-Mercurio eq. 4.10).
+
+### `g2pp_bond_option(P0S, P0T, a, b, sigma, eta, rho, expiry, maturity, strike, is_call=True)`  _function_
+
+> European option on a zero-coupon bond under G2++ (exact).
+>
+> Option expires at ``expiry`` on a bond maturing at ``maturity``, struck at
+> ``strike``. ``P0S = P(0, expiry)``, ``P0T = P(0, maturity)``. Since
+> ``ln P(expiry, maturity)`` is Gaussian the price is a Black-style formula on
+> the forward bond ``P0T / P0S`` with the G2++ bond volatility.
+
+### `g2pp_caplet(P0_reset, P0_pay, a, b, sigma, eta, rho, reset, pay, strike, notional=1.0)`  _function_
+
+> Caplet on ``[reset, pay]`` under G2++ via the bond-put identity.
+
+### `g2pp_zero_bond(P0T, P0t, x, y, a, b, sigma, eta, rho, t, T)`  _function_
+
+> G2++ zero-coupon bond ``P(t,T)`` given the factor state ``(x, y)``.
 
 ## gramcharlier
 

@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.120.0] - 2026-09-10
+
+### Added
+- Two-factor G2++ Gaussian short-rate model (new `g2pp.py`): two correlated
+  mean-reverting factors, `r = x + y + phi(t)`. `g2pp_zero_bond` is the
+  exponential-affine bond off the initial curve (with the closed-form variance
+  `g2pp_V`), `g2pp_bond_option` the exact Gaussian bond-option price, and
+  `g2pp_caplet` via the bond-put identity.
+- Verified: the bond option matches a forward-measure Monte Carlo to ~1e-5,
+  put-call parity holds, turning the second factor off (`eta -> 0`, `rho = 0`)
+  reproduces the single-factor Cheyette price exactly, factor correlation raises
+  the bond vol and option price monotonically, and `sigma = eta = 0` gives the
+  discounted intrinsic.
+
 ## [1.119.0] - 2026-09-10
 
 ### Added
