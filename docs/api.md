@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.109.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.110.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2133,7 +2133,7 @@ Auto-generated from `quantforge` v1.109.0 by `docs/gen_api.py` — do not edit b
 
 ## variancegamma
 
-### `variance_gamma_price(S, K, t, r, sigma, nu, theta, option_type=<OptionType.CALL: 'call'>, q=0.0, upper=200.0)`  _function_
+### `variance_gamma_price(S, K, t, r, sigma, nu, theta, option_type=<OptionType.CALL: 'call'>, q=0.0, cm_alpha=1.5, upper=200.0)`  _function_
 
 > Price a European option under the Variance-Gamma model.
 >
@@ -2141,9 +2141,20 @@ Auto-generated from `quantforge` v1.109.0 by `docs/gen_api.py` — do not edit b
 >     sigma: Brownian volatility. nu: gamma-time variance rate (> 0).
 >     theta: Brownian drift (skew; negative for an equity left skew).
 >     q: continuous dividend yield.
+>     cm_alpha: Carr-Madan damping; the transform needs
+>         ``1 - theta nu (cm_alpha+1) - 0.5 sigma^2 nu (cm_alpha+1)^2 > 0``.
 >
 > Puts follow from put-call parity. As ``nu -> 0`` the price approaches the
 > Black-Scholes value.
+
+### `variance_gamma_smile(S, strikes, t, r, sigma, nu, theta, q=0.0, cm_alpha=1.5)`  _function_
+
+> Black-Scholes implied-vol smile the Variance-Gamma model produces.
+>
+> Prices a call at each strike and inverts to a Black-Scholes implied vol,
+> returning ``(log_moneyness, vol)`` pairs sorted by strike on the forward
+> ``F = S e^{(r-q) t}``. ``theta < 0`` tilts the smile into a downward skew;
+> larger ``nu`` fattens the wings.
 
 ## varswap
 

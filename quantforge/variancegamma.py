@@ -9,81 +9,81 @@ process with three parameters:
     theta : drift of the Brownian component (controls skew; theta < 0 -> the
             equity-style left skew)
 
-As ``nu -> 0`` the model collapses to Black-Scholes. Pricing uses the VG
-characteristic function integrated with the same probability decomposition and
-Gauss-Legendre quadrature as :mod:`quantforge.heston` (no SciPy).
+As ``nu -> 0`` the model collapses to Black-Scholes. The characteristic exponent
+is closed form,
+
+    psi(u) = -(1/nu) * log(1 - i theta nu u + 0.5 sigma^2 nu u^2),
+
+so VG is priced through the shared Carr-Madan engine (:mod:`quantforge.carrmadan`)
+and gets the COS-method cross-check for free, like the other Levy models.
 """
 
 import cmath
 import math
 
-from .bsm import OptionType, _coerce_type
-from .heston import _GL_NODES, _GL_WEIGHTS
+from .bsm import OptionType
+from .carrmadan import levy_price
 
 
-def _vg_char(u, S, K, t, r, q, sigma, nu, theta):
-    """VG characteristic function of log(S_t), evaluated at complex ``u``."""
-    x = math.log(S)
-    # Martingale drift correction so E[S_t] = S e^{(r-q)t}.
-    omega = math.log(1.0 - theta * nu - 0.5 * sigma * sigma * nu) / nu
-    mu = (r - q + omega)
-    # phi(u) = exp(i u (x + mu t)) * (1 - i theta nu u + 0.5 sigma^2 nu u^2)^{-t/nu}
-    drift = cmath.exp(1j * u * (x + mu * t))
-    base = 1.0 - 1j * theta * nu * u + 0.5 * sigma * sigma * nu * u * u
-    return drift * base ** (-t / nu)
-
-
-def _probability(S, K, t, r, q, sigma, nu, theta, j, upper=200.0):
-    """P_j via the Heston-style characteristic-function integral for VG."""
-    x = math.log(S)
-    lnK = math.log(K)
-    half = 0.5 * upper
-    total = 0.0
-    for node, w in zip(_GL_NODES, _GL_WEIGHTS):
-        phi = half * (node + 1.0)
-        if phi <= 0:
-            phi = 1e-8
-        if j == 1:
-            # Share measure: divide the cf by the forward E[S_t].
-            cf = (_vg_char(phi - 1j, S, K, t, r, q, sigma, nu, theta)
-                  / _vg_char(-1j, S, K, t, r, q, sigma, nu, theta))
-        else:
-            cf = _vg_char(phi, S, K, t, r, q, sigma, nu, theta)
-        integrand = (cmath.exp(-1j * phi * lnK) * cf / (1j * phi)).real
-        total += w * integrand
-    return 0.5 + half * total / math.pi
+def _vg_psi(u, sigma, nu, theta):
+    """Variance-Gamma characteristic exponent psi(u) (u complex)."""
+    return -(1.0 / nu) * cmath.log(
+        1.0 - 1j * theta * nu * u + 0.5 * sigma * sigma * nu * u * u)
 
 
 def variance_gamma_price(S, K, t, r, sigma, nu, theta,
-                         option_type=OptionType.CALL, q=0.0, upper=200.0):
+                         option_type=OptionType.CALL, q=0.0, cm_alpha=1.5,
+                         upper=200.0):
     """Price a European option under the Variance-Gamma model.
 
     Args:
         sigma: Brownian volatility. nu: gamma-time variance rate (> 0).
         theta: Brownian drift (skew; negative for an equity left skew).
         q: continuous dividend yield.
+        cm_alpha: Carr-Madan damping; the transform needs
+            ``1 - theta nu (cm_alpha+1) - 0.5 sigma^2 nu (cm_alpha+1)^2 > 0``.
 
     Puts follow from put-call parity. As ``nu -> 0`` the price approaches the
     Black-Scholes value.
     """
-    ot = _coerce_type(option_type)
     if S <= 0 or K <= 0:
         raise ValueError("S and K must be positive")
     if t < 0:
         raise ValueError("t must be non-negative")
     if nu <= 0 or sigma <= 0:
         raise ValueError("nu and sigma must be positive")
-    # The gamma time-change requires 1 - theta nu - 0.5 sigma^2 nu > 0.
+    # Martingale time-change condition: 1 - theta nu - 0.5 sigma^2 nu > 0.
     if 1.0 - theta * nu - 0.5 * sigma * sigma * nu <= 0:
         raise ValueError("parameters violate the VG martingale condition")
+    # Carr-Madan damping needs the MGF finite at s = cm_alpha + 1.
+    s = cm_alpha + 1.0
+    if 1.0 - theta * nu * s - 0.5 * sigma * sigma * nu * s * s <= 0:
+        raise ValueError("need a smaller cm_alpha: MGF diverges at cm_alpha + 1")
 
-    if t == 0:
-        intrinsic = max(S - K, 0.0) if ot is OptionType.CALL else max(K - S, 0.0)
-        return intrinsic
+    return levy_price(S, K, t, r, q,
+                      lambda u: _vg_psi(u, sigma, nu, theta),
+                      option_type, alpha=cm_alpha, upper=upper)
 
-    P1 = _probability(S, K, t, r, q, sigma, nu, theta, 1, upper)
-    P2 = _probability(S, K, t, r, q, sigma, nu, theta, 2, upper)
-    call = S * math.exp(-q * t) * P1 - K * math.exp(-r * t) * P2
-    if ot is OptionType.CALL:
-        return call
-    return call - S * math.exp(-q * t) + K * math.exp(-r * t)
+
+def variance_gamma_smile(S, strikes, t, r, sigma, nu, theta, q=0.0,
+                         cm_alpha=1.5):
+    """Black-Scholes implied-vol smile the Variance-Gamma model produces.
+
+    Prices a call at each strike and inverts to a Black-Scholes implied vol,
+    returning ``(log_moneyness, vol)`` pairs sorted by strike on the forward
+    ``F = S e^{(r-q) t}``. ``theta < 0`` tilts the smile into a downward skew;
+    larger ``nu`` fattens the wings.
+    """
+    from .implied import implied_volatility
+
+    F = S * math.exp((r - q) * t)
+    out = []
+    for K in sorted(strikes):
+        c = variance_gamma_price(S, K, t, r, sigma, nu, theta,
+                                 OptionType.CALL, q=q, cm_alpha=cm_alpha)
+        try:
+            iv = implied_volatility(c, S, K, t, r, OptionType.CALL, b=r - q)
+        except ValueError:
+            continue
+        out.append((math.log(K / F), iv))
+    return out

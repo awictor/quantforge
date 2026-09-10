@@ -4,6 +4,21 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.110.0] - 2026-09-10
+
+### Added
+- `variance_gamma_smile` (in `variancegamma.py`): the Black-Scholes implied-vol
+  smile the VG model produces, `theta < 0` giving a downward skew.
+
+### Changed
+- `variance_gamma_price` refactored onto the shared `carrmadan.levy_price`
+  engine via the closed-form VG exponent
+  `psi(u) = -(1/nu) log(1 - i theta nu u + 0.5 sigma^2 nu u^2)`, replacing its
+  own two-probability Gauss-Legendre loop. Same prices, and it now inherits the
+  COS-method cross-check like the other Levy models. Verified: Carr-Madan and
+  COS agree to ~4.5e-6 on three parameter sets, the existing VG tests still
+  pass, parity holds, and small `nu` recovers Black-Scholes.
+
 ## [1.109.0] - 2026-09-10
 
 ### Added
