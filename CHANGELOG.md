@@ -4,6 +4,21 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.181.0] - 2026-09-10
+
+### Added
+- `heston_cv_mc` (in `heston_mc.py`): Heston QE Monte Carlo with the underlying
+  as a control variate. Andersen's QE step is martingale-corrected, so the
+  discounted terminal spot `Y = e^{-rt} S_T` has the known mean `S0 e^{-qt}`;
+  the controlled estimator `X - beta (Y - E[Y])` with the regression-optimal
+  `beta = Cov(X,Y)/Var(Y)` cuts the standard error at no bias. Same QE variance
+  step, `K0..K4` asset constants, and antithetic draws as `heston_qe_mc`.
+- Verified: matches the Fourier `heston_price` for call and put (also under a
+  dividend yield) within MC error; at equal path count the standard error is
+  ~0.56x the plain `heston_qe_mc` (the spot/payoff correlation is weaker under
+  stochastic vol than in Black-Scholes, so the reduction is milder than the
+  lognormal `european_cv_mc`).
+
 ## [1.180.1] - 2026-09-10
 
 ### Tests

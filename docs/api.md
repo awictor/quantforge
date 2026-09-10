@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.180.1 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.181.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1270,6 +1270,21 @@ Auto-generated from `quantforge` v1.180.1 by `docs/gen_api.py` — do not edit b
 > implied-vol error over the quotes.
 
 ## heston_mc
+
+### `heston_cv_mc(S, K, t, r, v0, kappa, theta, xi, rho, option_type=<OptionType.CALL: 'call'>, q=0.0, n_steps=100, n_paths=50000, antithetic=True, seed=None, gamma1=0.5) -> quantforge.montecarlo.MCResult`  _function_
+
+> Heston QE Monte Carlo with the underlying as a control variate.
+>
+> Andersen's QE step is martingale-corrected, so the discounted terminal spot
+> ``Y = e^{-r t} S_T`` has the *known* mean ``E[Y] = S0 e^{-q t}`` (the
+> discounted forward). ``Y`` is strongly correlated with the option payoff, so
+> the controlled estimator ``X - beta (Y - E[Y])`` with the regression-optimal
+> ``beta = Cov(X, Y) / Var(Y)`` sharply cuts the standard error at no bias.
+> Everything else matches :func:`heston_qe_mc` (same QE variance step,
+> ``K0..K4`` asset constants, antithetic draws).
+>
+> Cross-checks the Fourier :func:`quantforge.heston_price` and reports a
+> standard error well below :func:`heston_qe_mc` at equal path count.
 
 ### `heston_pathwise_delta(S, K, t, r, v0, kappa, theta, xi, rho, option_type=<OptionType.CALL: 'call'>, q=0.0, n_steps=100, n_paths=50000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
 

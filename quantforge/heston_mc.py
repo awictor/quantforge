@@ -131,6 +131,106 @@ def heston_qe_mc(S, K, t, r, v0, kappa, theta, xi, rho,
     return MCResult(price=price, std_error=se, n_paths=len(samples))
 
 
+def heston_cv_mc(S, K, t, r, v0, kappa, theta, xi, rho,
+                 option_type=OptionType.CALL, q=0.0, n_steps=100,
+                 n_paths=50_000, antithetic=True, seed=None,
+                 gamma1=0.5) -> MCResult:
+    """Heston QE Monte Carlo with the underlying as a control variate.
+
+    Andersen's QE step is martingale-corrected, so the discounted terminal spot
+    ``Y = e^{-r t} S_T`` has the *known* mean ``E[Y] = S0 e^{-q t}`` (the
+    discounted forward). ``Y`` is strongly correlated with the option payoff, so
+    the controlled estimator ``X - beta (Y - E[Y])`` with the regression-optimal
+    ``beta = Cov(X, Y) / Var(Y)`` sharply cuts the standard error at no bias.
+    Everything else matches :func:`heston_qe_mc` (same QE variance step,
+    ``K0..K4`` asset constants, antithetic draws).
+
+    Cross-checks the Fourier :func:`quantforge.heston_price` and reports a
+    standard error well below :func:`heston_qe_mc` at equal path count.
+    """
+    ot = _coerce_type(option_type)
+    if S <= 0 or K <= 0:
+        raise ValueError("S and K must be positive")
+    if t < 0:
+        raise ValueError("t must be non-negative")
+    if v0 < 0 or theta < 0 or xi < 0:
+        raise ValueError("variance parameters must be non-negative")
+    if n_steps < 1:
+        raise ValueError("n_steps must be >= 1")
+
+    dt = t / n_steps
+    sign = 1.0 if ot is OptionType.CALL else -1.0
+    disc = math.exp(-r * t)
+    ekt = math.exp(-kappa * dt)
+    gamma2 = 1.0 - gamma1
+
+    K0 = -rho * kappa * theta * dt / xi
+    K1 = gamma1 * dt * (kappa * rho / xi - 0.5) - rho / xi
+    K2 = gamma2 * dt * (kappa * rho / xi - 0.5) + rho / xi
+    K3 = gamma1 * dt * (1.0 - rho * rho)
+    K4 = gamma2 * dt * (1.0 - rho * rho)
+    K0d = K0 + (r - q) * dt
+    ey = S * math.exp(-q * t)                 # E[disc * S_T] under Heston
+
+    rng = random.Random(seed)
+
+    def next_var(v, uz):
+        m = theta + (v - theta) * ekt
+        s2 = (v * xi * xi * ekt / kappa) * (1.0 - ekt) \
+            + (theta * xi * xi / (2.0 * kappa)) * (1.0 - ekt) ** 2
+        if m <= 0.0:
+            return 0.0
+        psi = s2 / (m * m)
+        if psi <= PSI_C:
+            inv = 2.0 / psi
+            b2 = inv - 1.0 + math.sqrt(inv) * math.sqrt(max(inv - 1.0, 0.0))
+            a = m / (1.0 + b2)
+            zv = _norm_ppf(uz)
+            b = math.sqrt(b2)
+            return a * (b + zv) ** 2
+        p = (psi - 1.0) / (psi + 1.0)
+        beta = (1.0 - p) / m
+        if uz <= p:
+            return 0.0
+        return math.log((1.0 - p) / (1.0 - uz)) / beta
+
+    def one_path(norms, unis):
+        x = math.log(S)
+        v = v0
+        for z, u in zip(norms, unis):
+            v_next = next_var(v, u)
+            vol = math.sqrt(max(K3 * v + K4 * v_next, 0.0))
+            x += K0d + K1 * v + K2 * v_next + vol * z
+            v = v_next
+        sT = math.exp(x)
+        return disc * max(sign * (sT - K), 0.0), disc * sT
+
+    xs, ys = [], []
+    n = n_paths // 2 if antithetic else n_paths
+    for _ in range(n):
+        norms = [rng.gauss(0.0, 1.0) for _ in range(n_steps)]
+        unis = [rng.random() for _ in range(n_steps)]
+        xp, yp = one_path(norms, unis)
+        if antithetic:
+            xm, ym = one_path([-z for z in norms], [1.0 - u for u in unis])
+            xs.append(0.5 * (xp + xm))
+            ys.append(0.5 * (yp + ym))
+        else:
+            xs.append(xp)
+            ys.append(yp)
+
+    m = len(xs)
+    xbar = sum(xs) / m
+    ybar = sum(ys) / m
+    cov = sum((xx - xbar) * (yy - ybar) for xx, yy in zip(xs, ys))
+    vary = sum((yy - ybar) ** 2 for yy in ys)
+    beta = cov / vary if vary > 0.0 else 0.0
+
+    controlled = [xx - beta * (yy - ey) for xx, yy in zip(xs, ys)]
+    price, se = _summarize(controlled)
+    return MCResult(price=price, std_error=se, n_paths=len(controlled))
+
+
 def _norm_ppf(u):
     """Inverse standard-normal CDF (Acklam's rational approximation).
 
