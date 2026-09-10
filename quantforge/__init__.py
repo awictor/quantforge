@@ -67,6 +67,7 @@ from .vasicek import (
     zero_coupon_bond, zero_coupon_yield, bond_option,
 )
 from .cir import cir_zero_coupon_bond, cir_zero_coupon_yield
+from .holee import holee_zero_coupon_bond, holee_zero_coupon_yield
 from .overhedge import (
     Overhedge, digital_call_overhedge, digital_put_overhedge, overhedge_payoff,
 )
@@ -131,7 +132,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.80.0"
+__version__ = "1.81.0"
 
 __all__ = [
     "OptionType",
@@ -225,6 +226,8 @@ __all__ = [
     "bond_option",
     "cir_zero_coupon_bond",
     "cir_zero_coupon_yield",
+    "holee_zero_coupon_bond",
+    "holee_zero_coupon_yield",
     "Overhedge",
     "digital_call_overhedge",
     "digital_put_overhedge",

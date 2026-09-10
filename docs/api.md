@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.80.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.81.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -740,6 +740,21 @@ Auto-generated from `quantforge` v1.80.0 by `docs/gen_api.py` — do not edit by
 >         parameters; raise for very long maturities or large xi).
 >
 > Returns the option price. Puts are obtained from put-call parity.
+
+## holee
+
+### `holee_zero_coupon_bond(r0, t, theta, sigma)`  _function_
+
+> Ho-Lee zero-coupon bond price P(0, t) with constant drift ``theta``.
+>
+> ``P = exp(-r0 t - 0.5 theta t^2 + sigma^2 t^3 / 6)``.
+
+### `holee_zero_coupon_yield(r0, t, theta, sigma)`  _function_
+
+> Continuously-compounded yield of the Ho-Lee zero-coupon bond to ``t``.
+>
+> ``y(t) = r0 + 0.5 theta t - sigma^2 t^2 / 6`` (linear-in-t drift, quadratic
+> convexity pull-down).
 
 ## implied
 

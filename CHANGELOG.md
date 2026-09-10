@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.81.0] - 2026-09-10
+
+### Added
+- `holee.py`: the Ho-Lee (1986) short-rate model — `holee_zero_coupon_bond` and
+  `holee_zero_coupon_yield` via the affine closed form (constant-drift case),
+  the simplest no-mean-reversion model. Yield is linear in drift with a
+  `sigma^2 t^2 / 6` convexity pull-down; MC-verified.
+
 ## [1.80.0] - 2026-09-10
 
 ### Added
