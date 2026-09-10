@@ -535,6 +535,18 @@ params, rmse = calibrate_sabr(F=100, t=0.5, strikes=strikes,
 print(params, rmse)
 ```
 
+For a model-free single smile, `SmileSpline` fits a natural cubic spline
+through the quoted vols with flat extrapolation:
+
+```python
+from quantforge import SmileSpline
+
+sm = SmileSpline(strikes=[80, 90, 100, 110, 120],
+                 vols=[0.28, 0.24, 0.22, 0.225, 0.24])
+sm.vol(95)    # smoothly interpolated
+sm.vol(200)   # flat beyond the quoted range
+```
+
 SABR is the standard for interest-rate and FX smiles; SVI (below) is the
 common equity-index parametrization. Both interpolate/extrapolate a smile and
 plug into `implied_volatility`/`price` for consistent surface pricing.

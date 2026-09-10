@@ -44,6 +44,7 @@ from .strategy import (
     vertical_spread, straddle, strangle, risk_reversal, butterfly, iron_condor,
 )
 from .localvol import dupire_local_vol, local_vol_from_implied
+from .spline import CubicSpline, SmileSpline
 from .portfolio import Contract, Position, BookRisk, Book, price_book
 from .svi import SVIParams, calibrate_svi
 from .sabr import SABRParams, sabr_vol, calibrate_sabr
@@ -71,7 +72,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.18.0"
+__version__ = "1.19.0"
 
 __all__ = [
     "OptionType",
@@ -128,6 +129,8 @@ __all__ = [
     "iron_condor",
     "dupire_local_vol",
     "local_vol_from_implied",
+    "CubicSpline",
+    "SmileSpline",
     "Contract",
     "Position",
     "BookRisk",

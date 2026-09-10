@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.19.0] - 2026-09-09
+
+### Added
+- `spline.py`: a pure-stdlib natural cubic spline (`CubicSpline`, Thomas-solved
+  tridiagonal moments, C2-continuous, clamped outside its range) and
+  `SmileSpline`, a strike->implied-vol interpolator with flat extrapolation — a
+  model-free alternative to SVI/SABR for a single smile.
+
 ## [1.18.0] - 2026-09-09
 
 ### Added
