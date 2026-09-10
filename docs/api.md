@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.150.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.151.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -199,6 +199,21 @@ Auto-generated from `quantforge` v1.150.0 by `docs/gen_api.py` — do not edit b
 > Args:
 >     steps: number of time steps. Higher = more accurate, O(steps^2) work.
 >     b: cost of carry (defaults to r). Dividend yield q enters as b = r - q.
+
+## bkm
+
+### `bkm_moments_from_smile(S0, t, r, vol_fn, q=0.0, n_strikes=401, width=8.0)`  _function_
+
+> Risk-neutral (variance, skewness, excess kurtosis) via Bakshi-Kapadia-Madan.
+>
+> ``vol_fn(K)`` is the implied-vol smile; OTM options are priced with
+> Black-Scholes and the three moment contracts integrated by the trapezoidal
+> rule. Returns ``(variance, skewness, excess_kurtosis)`` of the ``t``-horizon
+> log-return under the risk-neutral measure.
+
+### `skew_swap_from_smile(S0, t, r, vol_fn, q=0.0, n_strikes=401, width=8.0)`  _function_
+
+> Fair skew-swap value: the risk-neutral skewness from the BKM moments.
 
 ## bookgreeks
 

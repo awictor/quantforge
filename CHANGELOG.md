@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.151.0] - 2026-09-10
+
+### Added
+- Bakshi-Kapadia-Madan risk-neutral moments (new `bkm.py`):
+  `bkm_moments_from_smile` extracts the model-free risk-neutral variance,
+  skewness and excess kurtosis of the log-return from a smile `vol_fn(K)` via the
+  quadratic/cubic/quartic option-spanning contracts (strike-weighted OTM
+  strips). `skew_swap_from_smile` returns the risk-neutral skewness (a skew
+  swap's fair value).
+- Verified: a flat smile gives variance `sigma^2 t`, zero skewness and zero
+  excess kurtosis; a downward (equity) skew gives negative skewness and positive
+  excess kurtosis; an upward skew gives positive skewness; a steeper skew is more
+  negative.
+
 ## [1.150.0] - 2026-09-10
 
 ### Added
