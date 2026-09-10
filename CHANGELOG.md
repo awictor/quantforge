@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.85.1] - 2026-09-10
+
+### Added
+- Benchmark suite now reports implied-vol solver iterations — Newton with the
+  Corrado-Miller seed (~4-5 per quote) vs pure bisection (~29), quantifying the
+  seed's benefit. Covered by a smoke test.
+
 ## [1.85.0] - 2026-09-10
 
 ### Added

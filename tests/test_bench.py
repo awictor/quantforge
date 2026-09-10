@@ -24,6 +24,18 @@ def test_bench_runs_small(capsys):
     out = capsys.readouterr().out
     assert "ops/sec" in out
     assert "round-trip" in out
+    assert "solver iterations" in out
+
+
+def test_newton_beats_bisection_iterations(capsys):
+    # The Newton + Corrado-Miller solver should need far fewer iterations than
+    # pure bisection; print both and check Newton is well under bisection.
+    bench._iv_solver_iterations(bench._sample_inputs(2000, seed=3))
+    out = capsys.readouterr().out
+    lines = [ln for ln in out.splitlines() if "  " in ln and "." in ln]
+    newton = float([ln for ln in lines if "Newton" in ln][0].split()[-1])
+    bisect = float([ln for ln in lines if "bisection" in ln][0].split()[-1])
+    assert newton < bisect / 2
 
 
 def test_main_entrypoint(capsys):

@@ -1158,7 +1158,9 @@ Pure-Python, but fast enough for interactive risk work. On a typical laptop
 | Implied vol (Newton+bisect)   | ~110K / sec       |
 | American (200-step tree)      | ~220 / sec        |
 
-Implied-vol round-trips to a max price error of `1e-8`. Reproduce with:
+Implied-vol round-trips to a max price error of `1e-8`, and the
+Newton + Corrado-Miller solver needs ~4-5 iterations vs ~29 for pure bisection.
+Reproduce with:
 
 ```bash
 python benchmarks/bench.py --n 100000

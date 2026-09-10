@@ -83,8 +83,55 @@ def run(n, compare_vollib):
     print(f"  max  {max(errs):.2e}")
     print(f"  mean {statistics.fmean(errs):.2e}")
 
+    _iv_solver_iterations(inputs)
+
     if compare_vollib:
         _compare_vollib(inputs)
+
+
+def _iv_solver_iterations(inputs):
+    """Compare Newton-with-vega vs pure bisection iteration counts for IV."""
+    from quantforge.bsm import price as bs_price, vega as bs_vega
+
+    def newton_iters(target, S, K, t, r, sigma_true):
+        # Corrado-Miller seed (same as the library solver).
+        X = K * math.exp(-r * t)
+        a = target - 0.5 * (S - X)
+        rad = max(a * a - (S - X) ** 2 / math.pi, 0.0)
+        sig = ((math.sqrt(2 * math.pi / t) / (S + X)) * (a + math.sqrt(rad))
+               if (S + X) > 0 else 0.2)
+        sig = min(max(sig, 1e-6), 10.0)
+        for i in range(100):
+            v = bs_price(S, K, t, r, sig, OptionType.CALL) - target
+            if abs(v) < 1e-8:
+                return i
+            vg = bs_vega(S, K, t, r, sig)
+            step = sig - v / vg if vg > 1e-12 else sig * 1.1
+            sig = max(min(step, 10.0), 1e-6)
+        return 100
+
+    def bisect_iters(target, S, K, t, r, sigma_true):
+        lo, hi = 1e-6, 10.0
+        for i in range(100):
+            mid = 0.5 * (lo + hi)
+            v = bs_price(S, K, t, r, mid, OptionType.CALL) - target
+            if abs(v) < 1e-8:
+                return i
+            if v > 0:
+                hi = mid
+            else:
+                lo = mid
+        return 100
+
+    sample = inputs[: min(len(inputs), 5000)]
+    nt = bt = 0
+    for (S, K, t, r, sigma) in sample:
+        p = call_price(S, K, t, r, sigma)
+        nt += newton_iters(p, S, K, t, r, sigma)
+        bt += bisect_iters(p, S, K, t, r, sigma)
+    print("\nImplied-vol solver iterations (avg per quote):")
+    print(f"  Newton + Corrado-Miller seed  {nt / len(sample):.2f}")
+    print(f"  pure bisection                {bt / len(sample):.2f}")
 
 
 def _compare_vollib(inputs):
