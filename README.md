@@ -182,6 +182,16 @@ for pos in book.positions:
 `qty` is signed (short = negative) and `multiplier` scales to notional
 (e.g. 100 for US equity options). Net Greeks are position-scaled sums.
 
+`book_second_order` aggregates the net second-order Greeks (vanna, vomma,
+charm, veta, speed, zomma, color) the same way:
+
+```python
+from quantforge import book_second_order
+
+bk = book_second_order(positions)
+print(bk.vanna, bk.vomma, bk.charm)
+```
+
 ## Variance / volatility swaps
 
 Model-free fair strike of a variance swap from an option strip (the log-contract

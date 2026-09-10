@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.26.0] - 2026-09-09
+
+### Added
+- `book_second_order` (in `bookgreeks.py`): position-scaled net second-order
+  Greeks across a book — vanna, vomma/volga, charm, veta, speed, zomma, color —
+  returned as a `BookSecondOrder`. Complements the first-order net Greeks from
+  `price_book`.
+
 ## [1.25.0] - 2026-09-09
 
 ### Added

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.25.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.26.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -62,6 +62,19 @@ Auto-generated from `quantforge` v1.25.0 by `docs/gen_api.py` — do not edit by
 > Args:
 >     steps: number of time steps. Higher = more accurate, O(steps^2) work.
 >     b: cost of carry (defaults to r). Dividend yield q enters as b = r - q.
+
+## bookgreeks
+
+### `BookSecondOrder(vanna: float = 0.0, vomma: float = 0.0, charm: float = 0.0, veta: float = 0.0, speed: float = 0.0, zomma: float = 0.0, color: float = 0.0) -> None`  _class_
+
+> BookSecondOrder(vanna: float = 0.0, vomma: float = 0.0, charm: float = 0.0, veta: float = 0.0, speed: float = 0.0, zomma: float = 0.0, color: float = 0.0)
+
+### `book_second_order(contracts: Iterable[quantforge.portfolio.Contract]) -> quantforge.bookgreeks.BookSecondOrder`  _function_
+
+> Aggregate position-scaled second-order Greeks across a book.
+>
+> charm/veta/color are calendar-convention (per year), matching the scalar
+> functions in :mod:`quantforge.greeks2`.
 
 ## bsm
 

@@ -54,6 +54,7 @@ from .overhedge import (
     Overhedge, digital_call_overhedge, digital_put_overhedge, overhedge_payoff,
 )
 from .dv01 import KeyRateDV01, key_rate_dv01
+from .bookgreeks import BookSecondOrder, book_second_order
 from .portfolio import Contract, Position, BookRisk, Book, price_book
 from .svi import SVIParams, calibrate_svi
 from .sabr import SABRParams, sabr_vol, calibrate_sabr
@@ -81,7 +82,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.25.0"
+__version__ = "1.26.0"
 
 __all__ = [
     "OptionType",
@@ -156,6 +157,8 @@ __all__ = [
     "overhedge_payoff",
     "KeyRateDV01",
     "key_rate_dv01",
+    "BookSecondOrder",
+    "book_second_order",
     "Contract",
     "Position",
     "BookRisk",
