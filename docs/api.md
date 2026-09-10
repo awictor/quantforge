@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.35.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.36.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1078,6 +1078,25 @@ Auto-generated from `quantforge` v1.35.0 by `docs/gen_api.py` — do not edit by
 ### `vega_array(S, K, t, r, sigma, b=None)`  _function_
 
 > (no docstring)
+
+## vegabucket
+
+### `VegaBuckets(buckets: Dict[str, float], total: float) -> None`  _class_
+
+> VegaBuckets(buckets: Dict[str, float], total: float)
+
+### `vega_buckets(contracts: Sequence[quantforge.portfolio.Contract], edges: Sequence[float] = (0.25, 0.5, 1.0, 2.0, 5.0)) -> quantforge.vegabucket.VegaBuckets`  _function_
+
+> Bucket a book's position-scaled vega by expiry.
+>
+> Args:
+>     contracts: the book's legs (signed qty, multiplier as in ``price_book``).
+>     edges: sorted upper-edge tenors in years. A contract with expiry ``t``
+>         falls in the first bucket whose edge is >= ``t``; longer expiries go
+>         to the final ">last" bucket.
+>
+> Returns a :class:`VegaBuckets`. Vega is per 1.0 change in vol (divide by 100
+> for per-vol-point), scaled by ``qty * multiplier``.
 
 ## volatility
 

@@ -197,6 +197,15 @@ bk = book_second_order(positions)
 print(bk.vanna, bk.vomma, bk.charm)
 ```
 
+See where the book's vol risk sits along the curve with `vega_buckets`:
+
+```python
+from quantforge import vega_buckets
+
+vb = vega_buckets(positions, edges=(0.25, 0.5, 1.0, 2.0, 5.0))
+print(vb.buckets)   # net vega per maturity bucket; sums to the net book vega
+```
+
 Size a hedge to a target Greek off the book's net exposures:
 
 ```python

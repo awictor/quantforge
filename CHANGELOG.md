@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.36.0] - 2026-09-09
+
+### Added
+- `vegabucket.py`: `vega_buckets` groups a multi-expiry book's position-scaled
+  vega into maturity buckets defined by upper-edge tenors, returning a
+  `VegaBuckets` whose buckets sum to the net book vega — so a desk can see where
+  its vol risk sits along the curve.
+
 ## [1.35.0] - 2026-09-09
 
 ### Added
