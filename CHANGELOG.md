@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.169.1] - 2026-09-10
+
+### Tests
+- Trimmed the fast suite ~49s -> ~35s: the two Heston pathwise-delta
+  sign/range checks run at n_steps=40 / n_paths=6000 instead of 50/20000 (1.8s
+  each -> under 0.7s). The Fourier-FD accuracy cross-checks stay under `-m slow`.
+
 ## [1.169.0] - 2026-09-10
 
 ### Added

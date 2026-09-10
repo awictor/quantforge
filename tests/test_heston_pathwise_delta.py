@@ -40,14 +40,14 @@ def test_put_delta_matches_fourier_fd():
 
 def test_call_delta_in_unit_interval():
     pw = heston_pathwise_delta(S, K, T, R, V0, KAPPA, THETA, XI, RHO,
-                               OptionType.CALL, n_steps=50, n_paths=20_000,
+                               OptionType.CALL, n_steps=40, n_paths=6_000,
                                seed=3)
     assert 0.0 < pw.price < 1.0
 
 
 def test_put_delta_negative():
     pw = heston_pathwise_delta(S, K, T, R, V0, KAPPA, THETA, XI, RHO,
-                               OptionType.PUT, n_steps=50, n_paths=20_000,
+                               OptionType.PUT, n_steps=40, n_paths=6_000,
                                seed=4)
     assert pw.price < 0.0
 
