@@ -152,6 +152,7 @@ from .sobol import (
     sobol_barrier_rqmc, sobol_barrier_digital_rqmc, sobol_autocallable_rqmc,
     sobol_double_knockout_rqmc, sobol_cliquet_rqmc, sobol_average_strike_rqmc,
     sobol_geometric_asian_rqmc, sobol_parisian_rqmc,
+    sobol_arithmetic_asian_rqmc,
 )
 from .correlation import (
     implied_correlation, index_vol_from_correlation, dispersion_basket_vol,
@@ -249,7 +250,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.209.0"
+__version__ = "1.210.0"
 
 __all__ = [
     "OptionType",
@@ -488,6 +489,7 @@ __all__ = [
     "sobol_average_strike_rqmc",
     "sobol_geometric_asian_rqmc",
     "sobol_parisian_rqmc",
+    "sobol_arithmetic_asian_rqmc",
     "implied_correlation",
     "index_vol_from_correlation",
     "dispersion_basket_vol",

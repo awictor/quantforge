@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.209.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.210.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3116,6 +3116,23 @@ Auto-generated from `quantforge` v1.209.0 by `docs/gen_api.py` — do not edit b
 > the first coordinate, then successive midpoints from the rest -- so the
 > leading (most uniform) Sobol dimensions carry the dominant variance.
 > Returns the list ``[W_1, ..., W_n]`` (W_0 = 0).
+
+### `sobol_arithmetic_asian_rqmc(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, control_variate=True, n_steps=6, n_paths=4096, n_rand=24, seed=None) -> quantforge.montecarlo.MCResult`  _function_
+
+> Randomized-QMC arithmetic Asian with a geometric control variate.
+>
+> Combines the two strongest variance-reduction techniques available here for a
+> path-dependent payoff: low-discrepancy (randomized-QMC) sampling *and* the
+> exact discrete-geometric-Asian control variate. With ``control_variate=True``
+> each path's estimator is ``arith - geo + E[geo]``, where ``E[geo]`` is the
+> closed-form :func:`quantforge.montecarlo._discrete_geometric_asian` over the
+> same ``n_steps`` dates and the arithmetic and geometric averages (almost
+> perfectly correlated) share the path. Normals come from one Sobol point
+> through the Brownian bridge, randomized by a per-dimension Cranley-Patterson
+> rotation, so ``n_rand`` shifts give a genuine SE.
+>
+> Cross-checks the control-variate :func:`quantforge.arithmetic_asian_mc`.
+> ``n_steps`` is capped by the Sobol generator's dimension.
 
 ### `sobol_asian(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, n_steps=6, n_paths=8192)`  _function_
 

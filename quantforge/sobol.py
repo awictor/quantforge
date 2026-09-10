@@ -20,7 +20,7 @@ from typing import List
 
 from .mathfns import norm_ppf
 from .bsm import OptionType, _coerce_type, _validate
-from .montecarlo import MCResult, _summarize
+from .montecarlo import MCResult, _summarize, _discrete_geometric_asian
 
 _BITS = 30
 _SCALE = float(1 << _BITS)
@@ -408,6 +408,69 @@ def sobol_parisian_rqmc(S, K, H, t, r, sigma, window,
             if alive:
                 total += max(sign * (s - K), 0.0)
         estimates.append(disc * total / n_paths)
+
+    price, se = _summarize(estimates)
+    return MCResult(price=price, std_error=se, n_paths=n_rand * n_paths)
+
+
+def sobol_arithmetic_asian_rqmc(S, K, t, r, sigma, option_type=OptionType.CALL,
+                                b=None, control_variate=True, n_steps=6,
+                                n_paths=4096, n_rand=24, seed=None) -> MCResult:
+    """Randomized-QMC arithmetic Asian with a geometric control variate.
+
+    Combines the two strongest variance-reduction techniques available here for a
+    path-dependent payoff: low-discrepancy (randomized-QMC) sampling *and* the
+    exact discrete-geometric-Asian control variate. With ``control_variate=True``
+    each path's estimator is ``arith - geo + E[geo]``, where ``E[geo]`` is the
+    closed-form :func:`quantforge.montecarlo._discrete_geometric_asian` over the
+    same ``n_steps`` dates and the arithmetic and geometric averages (almost
+    perfectly correlated) share the path. Normals come from one Sobol point
+    through the Brownian bridge, randomized by a per-dimension Cranley-Patterson
+    rotation, so ``n_rand`` shifts give a genuine SE.
+
+    Cross-checks the control-variate :func:`quantforge.arithmetic_asian_mc`.
+    ``n_steps`` is capped by the Sobol generator's dimension.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if b is None:
+        b = r
+    if n_steps < 1 or n_steps > len(_MINIT):
+        raise ValueError(f"n_steps must be in 1..{len(_MINIT)}")
+    if n_rand < 2:
+        raise ValueError("n_rand must be >= 2 to estimate a standard error")
+    dt = t / n_steps
+    disc = math.exp(-r * t)
+    sign = 1.0 if ot is OptionType.CALL else -1.0
+    geo_closed = (_discrete_geometric_asian(S, K, t, r, sigma, ot, b, n_steps)
+                  if control_variate else 0.0)
+    rng = random.Random(seed)
+
+    estimates = []
+    for _ in range(n_rand):
+        shift = [rng.random() for _ in range(n_steps)]
+        sob = Sobol(n_steps)
+        total = 0.0
+        for _ in range(n_paths):
+            pt = sob.next()
+            u = [(pt[d] + shift[d]) % 1.0 for d in range(n_steps)]
+            W = brownian_bridge_path(u, t)
+            arith_sum = 0.0
+            log_sum = 0.0
+            for i in range(n_steps):
+                lp = (math.log(S) + (b - 0.5 * sigma * sigma) * ((i + 1) * dt)
+                      + sigma * W[i])
+                arith_sum += math.exp(lp)
+                log_sum += lp
+            a = arith_sum / n_steps
+            arith = disc * max(sign * (a - K), 0.0)
+            if control_variate:
+                g = math.exp(log_sum / n_steps)
+                geo = disc * max(sign * (g - K), 0.0)
+                total += arith - geo + geo_closed
+            else:
+                total += arith
+        estimates.append(total / n_paths)
 
     price, se = _summarize(estimates)
     return MCResult(price=price, std_error=se, n_paths=n_rand * n_paths)
