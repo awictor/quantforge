@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.99.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.100.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1861,6 +1861,23 @@ Auto-generated from `quantforge` v1.99.0 by `docs/gen_api.py` — do not edit by
 
 > (no docstring)
 
+### `svi_local_variance(p: quantforge.svi.SVIParams, k, dw_dt)`  _function_
+
+> Dupire local variance of a single SVI slice, analytic in strike.
+>
+> Given the slice ``p`` and the total-variance time derivative ``dw_dt =
+> dw/dt`` at log-moneyness ``k`` (supplied by the caller, since one slice
+> carries no maturity information), the Gatheral total-variance Dupire formula
+> gives
+>
+>     sigma_loc^2 = dw/dt
+>         / [ 1 - (k/w) w_k + (1/4)(-1/4 - 1/w + k^2/w^2) w_k^2 + (1/2) w_kk ]
+>
+> with ``w``, ``w_k = w'(k)`` and ``w_kk = w''(k)`` taken in closed form from
+> the SVI parametrization (no finite differences in strike). Raises if the
+> Dupire denominator is non-positive (a butterfly-arbitrage flag: the slice's
+> ``svi_g`` is negative there).
+
 ### `svi_repair_butterfly(p: quantforge.svi.SVIParams, ks=None, max_iter=200, factor=0.98)`  _function_
 
 > Repair a single SVI slice's butterfly arbitrage by shrinking the wings.
@@ -1871,6 +1888,18 @@ Auto-generated from `quantforge` v1.99.0 by `docs/gen_api.py` — do not edit by
 > reached. Returns a new :class:`SVIParams`; the ATM level, skew, shift and
 > curvature are preserved. If already arbitrage-free the input is returned
 > unchanged.
+
+### `svi_surface_local_vol(slices, k, t)`  _function_
+
+> Local volatility from a term structure of SVI slices at ``(k, t)``.
+>
+> ``slices`` maps expiry ``t_i`` (years) to a fitted :class:`SVIParams`. Total
+> variance is interpolated *linearly in t* at fixed ``k`` to supply the
+> Dupire ``dw/dt`` (the piecewise-constant slope of the bracketing slices),
+> while the strike derivatives come analytically from the slice active at
+> ``t``. ``t`` must lie within the fitted expiry range.
+>
+> Returns the local volatility ``sqrt(sigma_loc^2)``.
 
 ## trinomial
 

@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.100.0] - 2026-09-10
+
+### Added
+- `svi_local_variance` and `svi_surface_local_vol` (in `svi.py`): analytic
+  Dupire local volatility for raw SVI, mirroring the SSVI local-vol pair. The
+  strike derivatives w_k, w_kk come in closed form from the SVI parametrization
+  (reusing `_svi_derivs`); `svi_local_variance` takes a caller-supplied dw/dt
+  (one slice carries no maturity), while `svi_surface_local_vol` interpolates
+  total variance linearly across a term structure of slices to supply dw/dt.
+  Both raise on a non-positive Dupire denominator (butterfly-arbitrage flag).
+- Verified: the surface local vol matches a finite-difference Dupire on the same
+  slice term structure to ~1e-7 across strikes and maturities.
+
 ## [1.99.0] - 2026-09-10
 
 ### Added

@@ -198,6 +198,83 @@ def lee_bounds_ok(p: SVIParams, tol=1e-9):
     return left <= 2.0 + tol and right <= 2.0 + tol
 
 
+def svi_local_variance(p: SVIParams, k, dw_dt):
+    """Dupire local variance of a single SVI slice, analytic in strike.
+
+    Given the slice ``p`` and the total-variance time derivative ``dw_dt =
+    dw/dt`` at log-moneyness ``k`` (supplied by the caller, since one slice
+    carries no maturity information), the Gatheral total-variance Dupire formula
+    gives
+
+        sigma_loc^2 = dw/dt
+            / [ 1 - (k/w) w_k + (1/4)(-1/4 - 1/w + k^2/w^2) w_k^2 + (1/2) w_kk ]
+
+    with ``w``, ``w_k = w'(k)`` and ``w_kk = w''(k)`` taken in closed form from
+    the SVI parametrization (no finite differences in strike). Raises if the
+    Dupire denominator is non-positive (a butterfly-arbitrage flag: the slice's
+    ``svi_g`` is negative there).
+    """
+    w, wp, wpp = _svi_derivs(p, k)
+    if w <= 0.0:
+        raise ValueError("total variance must be positive")
+    denom = (1.0
+             - (k / w) * wp
+             + 0.25 * (-0.25 - 1.0 / w + k * k / (w * w)) * wp * wp
+             + 0.5 * wpp)
+    if denom <= 0.0:
+        raise ValueError("non-positive Dupire denominator (butterfly arbitrage)")
+    return dw_dt / denom
+
+
+def svi_surface_local_vol(slices, k, t):
+    """Local volatility from a term structure of SVI slices at ``(k, t)``.
+
+    ``slices`` maps expiry ``t_i`` (years) to a fitted :class:`SVIParams`. Total
+    variance is interpolated *linearly in t* at fixed ``k`` to supply the
+    Dupire ``dw/dt`` (the piecewise-constant slope of the bracketing slices),
+    while the strike derivatives come analytically from the slice active at
+    ``t``. ``t`` must lie within the fitted expiry range.
+
+    Returns the local volatility ``sqrt(sigma_loc^2)``.
+    """
+    ts = sorted(slices)
+    if not ts:
+        raise ValueError("need at least one SVI slice")
+    if t < ts[0] - 1e-12 or t > ts[-1] + 1e-12:
+        raise ValueError("t outside the fitted expiry range")
+    # Bracketing slices for the linear w(k, .) slope.
+    if len(ts) == 1:
+        raise ValueError("need at least two slices for a time derivative")
+    if t <= ts[0]:
+        i = 0
+    elif t >= ts[-1]:
+        i = len(ts) - 2
+    else:
+        i = max(j for j in range(len(ts) - 1) if ts[j] <= t)
+    t0, t1 = ts[i], ts[i + 1]
+    p0, p1 = slices[t0], slices[t1]
+    w0 = p0.total_variance(k)
+    w1 = p1.total_variance(k)
+    dw_dt = (w1 - w0) / (t1 - t0)
+    # Interpolate the slice-local strike derivatives at t using the same linear
+    # weight, so w and its k-derivatives are consistent with the interpolated w.
+    lam = (t - t0) / (t1 - t0)
+    w_a, wp_a, wpp_a = _svi_derivs(p0, k)
+    w_b, wp_b, wpp_b = _svi_derivs(p1, k)
+    w = (1 - lam) * w_a + lam * w_b
+    wp = (1 - lam) * wp_a + lam * wp_b
+    wpp = (1 - lam) * wpp_a + lam * wpp_b
+    if w <= 0.0:
+        raise ValueError("total variance must be positive")
+    denom = (1.0
+             - (k / w) * wp
+             + 0.25 * (-0.25 - 1.0 / w + k * k / (w * w)) * wp * wp
+             + 0.5 * wpp)
+    if denom <= 0.0:
+        raise ValueError("non-positive Dupire denominator (butterfly arbitrage)")
+    return math.sqrt(dw_dt / denom)
+
+
 def svi_repair_butterfly(p: SVIParams, ks=None, max_iter=200, factor=0.98):
     """Repair a single SVI slice's butterfly arbitrage by shrinking the wings.
 
