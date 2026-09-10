@@ -4,6 +4,21 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.131.0] - 2026-09-10
+
+### Added
+- LSV leverage-function calibration (new `lsv.py`): `calibrate_lsv_leverage`
+  calibrates a local-stochastic-volatility leverage surface `L(S, t)` by the
+  Guyon-Henry-Labordere particle method -- Gyongy's condition
+  `L(K,t)^2 = sigma_Dupire(K,t)^2 / E[V_t | S_t = K]`, with the conditional
+  expectation estimated by simulating the Heston variance and binning `V_t` by
+  the spot level, marched forward with Euler sub-steps between the calibration
+  expiries. Returns the leverage grid and an interpolating `lev_fn(spot, t)`.
+- Verified: the front-expiry ATM leverage equals `sigma_local / sqrt(v0)`
+  exactly (Gyongy at `t -> 0`, `E[V|S] = v0`); leverage is positive everywhere;
+  a higher target vol scales it up; and the flat-target front-expiry leverage is
+  uniform at `sigma_local / sqrt(v0)`.
+
 ## [1.130.0] - 2026-09-10
 
 ### Added

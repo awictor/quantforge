@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.130.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.131.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1446,6 +1446,23 @@ Auto-generated from `quantforge` v1.130.0 by `docs/gen_api.py` — do not edit b
 >     b: cost of carry (defaults to r). Dividend yield q enters as b = r - q.
 >
 > Returns the option price (in-sample LSM estimate, mildly biased low).
+
+## lsv
+
+### `calibrate_lsv_leverage(S0, r, local_vol_fn, kappa, theta, xi, rho, v0, expiries, k_grid, q=0.0, n_paths=20000, seed=None, sub_steps=20)`  _function_
+
+> Calibrate the LSV leverage surface by the particle method.
+>
+> Args:
+>     local_vol_fn: target Dupire local vol ``sigma(K, t)``.
+>     kappa, theta, xi, rho, v0: the backbone Heston variance parameters.
+>     expiries: increasing calibration times (the leverage is piecewise
+>         constant in time between them; ``t=0`` implied at the front).
+>     k_grid: log-moneyness bin edges (relative to the forward) for the
+>         conditional-expectation binning.
+>
+> Returns ``leverage`` -- a dict ``{t: {k_center: L}}`` -- and the callable
+> ``lev_fn(spot, t)`` that interpolates it, suitable for an LSV Monte Carlo.
 
 ## meixner
 
