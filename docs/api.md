@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.145.1 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.146.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2768,6 +2768,23 @@ Auto-generated from `quantforge` v1.145.1 by `docs/gen_api.py` — do not edit b
 > larger ``nu`` fattens the wings.
 
 ## varswap
+
+### `variance_swap_from_smile(S0, t, r, vol_fn, q=0.0, n_strikes=401, width=8.0, split=None)`  _function_
+
+> Fair variance-swap strike from a volatility *smile* ``vol_fn(K)``.
+>
+> Builds the OTM option strip -- puts below the forward split, calls above --
+> by pricing each strike at its smile vol ``vol_fn(K)`` with Black-Scholes,
+> then feeds them to :func:`variance_swap_strike`. Convenient for marking a
+> variance swap directly off a fitted smile (SVI, SABR, vanna-volga, ...).
+>
+> Args:
+>     vol_fn: callable ``vol_fn(K)`` returning the Black implied vol at strike.
+>     q: dividend yield (carry ``b = r - q``).
+>     n_strikes: number of strikes on each side; strikes span ``width``
+>         standard deviations of log-moneyness around the split.
+>
+> A flat smile returns exactly that flat variance (the model-free result).
 
 ### `variance_swap_strike(S0, t, r, put_strikes: Sequence[float], put_prices: Sequence[float], call_strikes: Sequence[float], call_prices: Sequence[float], split: float = None) -> float`  _function_
 

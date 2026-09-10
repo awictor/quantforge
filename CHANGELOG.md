@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.146.0] - 2026-09-10
+
+### Added
+- `variance_swap_from_smile` (in `varswap.py`): fair variance-swap strike
+  replicated directly from a volatility smile `vol_fn(K)`. Builds the OTM
+  option strip (puts below the forward split, calls above) by pricing each
+  strike at its smile vol with Black-Scholes and delegates to
+  `variance_swap_strike`. Convenient for marking a swap off a fitted smile
+  (SVI/SABR/vanna-volga).
+- Verified: a flat smile returns its variance `sigma^2` (to ~3e-3, converging as
+  the strip widens/densifies -- the residual is finite-strip truncation); a
+  downward skew adds convexity variance over the same-grid flat level; and it
+  agrees with a manually-built flat-vol chain.
+
 ## [1.145.1] - 2026-09-10
 
 ### Tests

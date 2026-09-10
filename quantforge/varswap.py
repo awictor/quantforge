@@ -85,3 +85,45 @@ def volatility_swap_strike(S0, t, r, put_strikes, put_prices,
     var = variance_swap_strike(S0, t, r, put_strikes, put_prices,
                                call_strikes, call_prices, split)
     return math.sqrt(max(var, 0.0))
+
+
+def variance_swap_from_smile(S0, t, r, vol_fn, q=0.0, n_strikes=401,
+                             width=8.0, split=None):
+    """Fair variance-swap strike from a volatility *smile* ``vol_fn(K)``.
+
+    Builds the OTM option strip -- puts below the forward split, calls above --
+    by pricing each strike at its smile vol ``vol_fn(K)`` with Black-Scholes,
+    then feeds them to :func:`variance_swap_strike`. Convenient for marking a
+    variance swap directly off a fitted smile (SVI, SABR, vanna-volga, ...).
+
+    Args:
+        vol_fn: callable ``vol_fn(K)`` returning the Black implied vol at strike.
+        q: dividend yield (carry ``b = r - q``).
+        n_strikes: number of strikes on each side; strikes span ``width``
+            standard deviations of log-moneyness around the split.
+
+    A flat smile returns exactly that flat variance (the model-free result).
+    """
+    from .bsm import call_price, put_price
+
+    if t <= 0:
+        raise ValueError("t must be positive")
+    F = S0 * math.exp((r - q) * t)
+    if split is None:
+        split = F
+    atm_vol = vol_fn(split)
+    sd = atm_vol * math.sqrt(t)
+    # Log-moneyness grid around the split, converted to strikes.
+    put_ks, put_px, call_ks, call_px = [], [], [], []
+    for i in range(n_strikes):
+        x = -width * sd + 2.0 * width * sd * i / (n_strikes - 1)
+        K = split * math.exp(x)
+        v = vol_fn(K)
+        if K < split:
+            put_ks.append(K)
+            put_px.append(put_price(S0, K, t, r, v, b=r - q))
+        else:
+            call_ks.append(K)
+            call_px.append(call_price(S0, K, t, r, v, b=r - q))
+    return variance_swap_strike(S0, t, r, put_ks, put_px, call_ks, call_px,
+                                split=split)

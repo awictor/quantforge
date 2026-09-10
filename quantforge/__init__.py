@@ -77,7 +77,9 @@ from .merton import merton_jump_price, merton_smile
 from .density import (
     risk_neutral_density, risk_neutral_cdf, price_from_density, density_total_mass,
 )
-from .varswap import variance_swap_strike, volatility_swap_strike
+from .varswap import (
+    variance_swap_strike, volatility_swap_strike, variance_swap_from_smile,
+)
 from .multiasset import (
     exchange_option, spread_option, basket_option, best_of_call, worst_of_call,
     exchange_greeks, spread_greeks, basket_greeks, implied_spread_correlation,
@@ -206,7 +208,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.145.1"
+__version__ = "1.146.0"
 
 __all__ = [
     "OptionType",
@@ -310,6 +312,7 @@ __all__ = [
     "density_total_mass",
     "variance_swap_strike",
     "volatility_swap_strike",
+    "variance_swap_from_smile",
     "exchange_option",
     "spread_option",
     "basket_option",
