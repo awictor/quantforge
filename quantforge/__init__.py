@@ -37,6 +37,7 @@ from .lookback import (
     floating_strike_lookback, fixed_strike_lookback, lookback_greeks,
 )
 from .heston import heston_price, heston_smile
+from .heston_mc import heston_qe_mc
 from .bachelier import (
     bachelier_price, bachelier_delta, bachelier_gamma, bachelier_vega,
     bachelier_implied_vol,
@@ -132,7 +133,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.89.0"
+__version__ = "1.90.0"
 
 __all__ = [
     "OptionType",
@@ -175,6 +176,7 @@ __all__ = [
     "lookback_greeks",
     "heston_price",
     "heston_smile",
+    "heston_qe_mc",
     "bachelier_price",
     "bachelier_delta",
     "bachelier_gamma",

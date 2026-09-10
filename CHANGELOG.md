@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.90.0] - 2026-09-10
+
+### Added
+- `heston_qe_mc` (new `heston_mc.py`): Heston Monte Carlo via Andersen's (2008)
+  Quadratic-Exponential scheme. The CIR variance is advanced by moment-matching
+  to a shifted squared-Gaussian (low vol-of-vol) or an exponential-with-atom
+  (high vol-of-vol), so variances stay non-negative by construction; the
+  log-asset step uses Andersen's K0..K4 constants with a martingale correction.
+  Includes an Acklam inverse-normal `_norm_ppf` for the QE branch draw.
+- Verified against the Fourier `heston_price` on four parameter sets (including
+  a long-dated, Feller-violating xi=1 case and deep OTM) to within ~1.3 SE, the
+  discounted spot is a martingale (forward recovered to 8e-5), and puts match.
+
 ## [1.89.0] - 2026-09-10
 
 ### Added

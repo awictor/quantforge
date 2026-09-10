@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.89.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.90.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -782,6 +782,25 @@ Auto-generated from `quantforge` v1.89.0 by `docs/gen_api.py` — do not edit by
 > pairs sorted by strike (``log_moneyness = ln(K / F)`` on the forward
 > ``F = S e^{(r-q)t}``). This exposes the skew/smile the stochastic-vol
 > parameters imply; a negative ``rho`` gives the usual downward equity skew.
+
+## heston_mc
+
+### `heston_qe_mc(S, K, t, r, v0, kappa, theta, xi, rho, option_type=<OptionType.CALL: 'call'>, q=0.0, n_steps=100, n_paths=50000, antithetic=True, seed=None, gamma1=0.5) -> quantforge.montecarlo.MCResult`  _function_
+
+> Price a European option under Heston by Andersen's QE Monte Carlo.
+>
+> Args:
+>     v0, kappa, theta, xi, rho: Heston parameters (initial variance, mean
+>         reversion speed, long variance, vol-of-vol, spot/vol correlation).
+>     q: continuous dividend yield.
+>     n_steps: time steps (the QE variance update is exact in its moments, so
+>         the residual bias is only in the asset integral; ~50-200 is plenty).
+>     gamma1: weight on the left variance endpoint in the variance integral
+>         (``gamma1 = 0.5`` is the central discretisation; ``gamma2`` is set
+>         to ``1 - gamma1``).
+>
+> Returns an :class:`MCResult`. Puts come from simulating the same paths and
+> taking the put payoff (parity holds path-by-path at the terminal spot).
 
 ## holee
 
