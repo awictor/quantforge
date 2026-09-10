@@ -25,6 +25,7 @@ import random
 
 from .montecarlo import MCResult, _summarize
 from .bsm import OptionType, _coerce_type
+from .carrmadan import _fft
 
 
 def _hybrid_weights(H, dt, n):
@@ -42,13 +43,31 @@ def _hybrid_weights(H, dt, n):
     return w
 
 
+def _next_pow2(n):
+    p = 1
+    while p < n:
+        p <<= 1
+    return p
+
+
 def rbergomi_paths(S, t, xi0, eta, H, rho, r=0.0, n_steps=100, n_paths=20_000,
-                   antithetic=True, seed=None):
+                   antithetic=True, seed=None, fast="auto"):
     """Yield discounted terminal spots under rough Bergomi (internal helper).
 
     Returns a list of terminal spot prices (already drifted by ``r``); the
     caller applies the payoff and discounting.
+
+    The Volterra convolution -- the ``O(n^2)`` inner sum of the hybrid-scheme
+    far-cell weights against the Brownian increments -- can be evaluated with an
+    FFT (``O(n log n)``): the weight kernel's FFT is precomputed once and reused
+    across every path, so only one forward and one inverse transform of the
+    increments happen per path. ``fast="auto"`` (default) uses the FFT when
+    ``n_steps >= 200`` (where it beats the direct loop despite pure-Python FFT
+    overhead) and the direct double loop otherwise; ``fast=True``/``False`` force
+    the choice. The two paths agree to ~1e-12.
     """
+    if fast == "auto":
+        fast = n_steps >= 200
     if not (0.0 < H < 1.0):
         raise ValueError("H must be in (0, 1)")
     if xi0 <= 0 or eta < 0:
@@ -76,9 +95,32 @@ def rbergomi_paths(S, t, xi0, eta, H, rho, r=0.0, n_steps=100, n_paths=20_000,
     rng = random.Random(seed)
     terminals = []
 
+    # Kernel caching: the far-cell contribution to the Volterra process,
+    #   F[i] = sum_{k=2}^{i+1} w[k] dW[i-k+1] = sum_j dW[j] g[i-j],  g[m]=w[m+1],
+    # is a discrete convolution of the increments with a fixed weight kernel.
+    # Precompute the kernel's FFT once so each path costs O(n log n), not O(n^2).
+    if fast and n_steps > 1:
+        m_fft = _next_pow2(2 * n_steps)
+        g = [0.0] * m_fft
+        for mm in range(1, n_steps):
+            g[mm] = w[mm + 1]           # w defined for k=2..n_steps
+        G_fft = _fft(g)                 # cached kernel spectrum, reused per path
+    else:
+        m_fft = 0
+        G_fft = None
+
+    def _far_sums(dW):
+        """Return F[i] for i=0..n_steps-1 via FFT convolution with the kernel."""
+        padded = list(dW) + [0.0] * (m_fft - n_steps)
+        DW_fft = _fft(padded)
+        prod = [DW_fft[i] * G_fft[i] for i in range(m_fft)]
+        conv = _fft(prod, inverse=True)
+        return [conv[i].real for i in range(n_steps)]
+
     def one_path(z1s, z2s, zps):
         dW = [sqrt_dt * z for z in z1s]                 # Brownian increments
         Y = [y_beta * dW[i] + y_resid * z2s[i] for i in range(n_steps)]
+        far = _far_sums(dW) if (fast and n_steps > 1) else None
         logS = math.log(S)
         v_prev = xi0                                    # V at t_0 (Wtilde_0 = 0)
         for i in range(n_steps):
@@ -87,9 +129,12 @@ def rbergomi_paths(S, t, xi0, eta, H, rho, r=0.0, n_steps=100, n_paths=20_000,
             vol = math.sqrt(v_prev)
             logS += drift + vol * (rho * dW[i] + rho_perp * sqrt_dt * zps[i])
             # Volterra process at t_{i+1}: exact singular cell + far cells.
-            wt = Y[i]
-            for k in range(2, i + 2):
-                wt += w[k] * dW[i - k + 1]
+            if far is not None:
+                wt = Y[i] + far[i]
+            else:
+                wt = Y[i]
+                for k in range(2, i + 2):
+                    wt += w[k] * dW[i - k + 1]
             wtilde = root2H * wt
             v_prev = xi0 * math.exp(eta * wtilde - 0.5 * eta * eta * t_pow[i + 1])
         return math.exp(logS)

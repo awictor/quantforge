@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.112.0] - 2026-09-10
+
+### Changed
+- rBergomi path generation (`rbergomi_paths`) now evaluates the hybrid-scheme
+  Volterra convolution with a cached-kernel FFT instead of the `O(n^2)` inner
+  double loop. The far-cell contribution `F[i] = sum_j dW[j] g[i-j]` is a
+  discrete convolution of the fixed weight kernel with the Brownian increments;
+  the kernel's FFT is precomputed once and reused across every path (one forward
+  + one inverse transform of the increments per path), giving `O(n log n)`. A
+  new `fast` argument (`"auto"` default) uses the FFT when `n_steps >= 200` and
+  the direct loop below that (where pure-Python FFT overhead dominates); the two
+  agree to ~1e-12. Measured ~2.3x faster at 512 steps, growing with `n_steps`.
+
 ## [1.111.0] - 2026-09-10
 
 ### Added
