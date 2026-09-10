@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.220.0] - 2026-09-10
+
+### Added
+- `forward_start_greeks` (in `forwardstart.py`): Greeks of a forward-start
+  option. Since the Rubinstein price `S e^{(b-r) t_start} u` is exactly linear in
+  the spot (the unit price `u` does not depend on `S`), `delta = e^{(b-r) t_start} u`
+  is constant in the spot and `gamma = 0` -- a forward-start has no spot gamma
+  until its strike is fixed. `vega` and `theta` are central finite differences of
+  the closed form.
+- Verified: delta matches a finite difference and is constant across spot levels;
+  gamma is exactly zero; vega matches a finite difference; theta is zero at
+  `b = r` (only the maturity gap matters) and nonzero under a carry.
+
 ## [1.219.0] - 2026-09-10
 
 ### Added

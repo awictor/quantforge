@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.219.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.220.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1083,6 +1083,19 @@ Auto-generated from `quantforge` v1.219.0 by `docs/gen_api.py` — do not edit b
 >         first period starts now (t=0) and ends at reset_times[0].
 >
 > Returns the total present value of the strip.
+
+### `forward_start_greeks(S, t_start, t_expiry, r, sigma, alpha=1.0, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> Greeks of a forward-start option (Rubinstein), exact where possible.
+>
+> The price is ``FS = S e^{(b-r) t_start} * u`` where ``u`` is a unit
+> Black-Scholes price on a unit underlying and does **not** depend on ``S``.
+> So the value is exactly linear in the spot: ``delta = e^{(b-r) t_start} u``
+> (constant in ``S``) and ``gamma = 0`` -- a forward-start has no spot gamma
+> until its strike is fixed. ``vega`` and ``theta`` (calendar decay, both
+> ``t_start`` and ``t_expiry`` shifting together) are central finite
+> differences of the closed form. Returns a dict with ``price``, ``delta``,
+> ``gamma``, ``vega``, ``theta``.
 
 ### `forward_start_price(S, t_start, t_expiry, r, sigma, alpha=1.0, option_type=<OptionType.CALL: 'call'>, b=None) -> float`  _function_
 

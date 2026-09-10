@@ -53,6 +53,48 @@ def forward_start_price(S, t_start, t_expiry, r, sigma, alpha=1.0,
     return S * math.exp((b - r) * t_start) * unit
 
 
+def forward_start_greeks(S, t_start, t_expiry, r, sigma, alpha=1.0,
+                         option_type=OptionType.CALL, b=None):
+    """Greeks of a forward-start option (Rubinstein), exact where possible.
+
+    The price is ``FS = S e^{(b-r) t_start} * u`` where ``u`` is a unit
+    Black-Scholes price on a unit underlying and does **not** depend on ``S``.
+    So the value is exactly linear in the spot: ``delta = e^{(b-r) t_start} u``
+    (constant in ``S``) and ``gamma = 0`` -- a forward-start has no spot gamma
+    until its strike is fixed. ``vega`` and ``theta`` (calendar decay, both
+    ``t_start`` and ``t_expiry`` shifting together) are central finite
+    differences of the closed form. Returns a dict with ``price``, ``delta``,
+    ``gamma``, ``vega``, ``theta``.
+    """
+    ot = _coerce_type(option_type)
+    if alpha <= 0:
+        raise ValueError("alpha (moneyness multiple) must be positive")
+    if t_start < 0 or t_expiry <= 0:
+        raise ValueError("need t_start >= 0 and t_expiry > 0")
+    if t_start >= t_expiry:
+        raise ValueError("t_start must be before t_expiry")
+    if b is None:
+        b = r
+
+    tau = t_expiry - t_start
+    unit = bsm_price(1.0, alpha, tau, r, sigma, ot, b=b)
+    scale = math.exp((b - r) * t_start)
+    price = S * scale * unit
+    delta = scale * unit          # exact: price is linear in S
+    gamma = 0.0                   # no spot convexity before the strike is set
+
+    def px(sigma_=sigma, dt=0.0):
+        return forward_start_price(S, t_start - dt, t_expiry - dt, r, sigma_,
+                                   alpha, ot, b=b)
+
+    hv = 1e-4
+    vega = (px(sigma_=sigma + hv) - px(sigma_=sigma - hv)) / (2.0 * hv)
+    ht = min(1e-4, 0.25 * t_start) if t_start > 0 else 1e-4
+    theta = -(px(dt=-ht) - px(dt=ht)) / (2.0 * ht)
+    return {"price": price, "delta": delta, "gamma": gamma, "vega": vega,
+            "theta": theta}
+
+
 def cliquet_price(S, reset_times: Sequence[float], r, sigma, alpha=1.0,
                   option_type=OptionType.CALL, b=None) -> float:
     """Price a cliquet (ratchet) as a strip of forward-start options.
