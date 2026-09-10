@@ -190,3 +190,48 @@ def asian_pathwise_vega(S, K, t, r, sigma, option_type=OptionType.CALL, b=None,
             samples.append(one([-z for z in zs]))
     m, se = _summarize(samples)
     return MCResult(price=m, std_error=se, n_paths=len(samples))
+
+
+def mixed_gamma(S, K, t, r, sigma, option_type=OptionType.CALL, b=None,
+                n_paths=200_000, antithetic=True, seed=None) -> MCResult:
+    """European gamma by the mixed pathwise-likelihood-ratio estimator.
+
+    Gamma is ``d(delta)/dS0``. The pathwise delta payoff is
+    ``D = e^{-r t} 1_{S_T > K} S_T / S0`` (a call), which depends on ``S0`` both
+    through ``S_T`` (density -> LR weight ``Z/(S0 sigma sqrt t)``) and the
+    explicit ``1/S0`` factor. Differentiating,
+
+        gamma = E[ D * ( Z/(S0 sigma sqrt t) - 1/S0 ) ].
+
+    This "pathwise-then-LR" combination is well-defined even though the pure
+    pathwise gamma is not (the delta payoff has an indicator), and it is lower
+    variance than a double likelihood-ratio. Cross-checks the Black-Scholes
+    gamma.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if b is None:
+        b = r
+    disc = math.exp(-r * t)
+    vsqrt = sigma * math.sqrt(t)
+    call = ot is OptionType.CALL
+    rng = random.Random(seed)
+    samples = []
+
+    def one(z):
+        sT = S * math.exp((b - 0.5 * sigma * sigma) * t + vsqrt * z)
+        itm = (sT > K) if call else (sT < K)
+        if not itm:
+            return 0.0
+        # Pathwise delta payoff D = disc * (+/-) S_T / S0 ; its S0-derivative.
+        pw = disc * (sT / S) if call else -disc * (sT / S)
+        return pw * (z / (S * vsqrt) - 1.0 / S)
+
+    n = n_paths // 2 if antithetic else n_paths
+    for _ in range(n):
+        z = rng.gauss(0.0, 1.0)
+        samples.append(one(z))
+        if antithetic:
+            samples.append(one(-z))
+    m, se = _summarize(samples)
+    return MCResult(price=m, std_error=se, n_paths=len(samples))

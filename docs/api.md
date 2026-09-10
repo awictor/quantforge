@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.165.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.166.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1623,6 +1623,22 @@ Auto-generated from `quantforge` v1.165.0 by `docs/gen_api.py` — do not edit b
 > Returns a dict with ``price``, ``delta``, ``gamma``, ``vega`` (each a Monte
 > Carlo mean) plus their ``*_se`` standard errors. Works for the discontinuous
 > digital payoff too (the LR weights do not touch the payoff).
+
+### `mixed_gamma(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, n_paths=200000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
+
+> European gamma by the mixed pathwise-likelihood-ratio estimator.
+>
+> Gamma is ``d(delta)/dS0``. The pathwise delta payoff is
+> ``D = e^{-r t} 1_{S_T > K} S_T / S0`` (a call), which depends on ``S0`` both
+> through ``S_T`` (density -> LR weight ``Z/(S0 sigma sqrt t)``) and the
+> explicit ``1/S0`` factor. Differentiating,
+>
+>     gamma = E[ D * ( Z/(S0 sigma sqrt t) - 1/S0 ) ].
+>
+> This "pathwise-then-LR" combination is well-defined even though the pure
+> pathwise gamma is not (the delta payoff has an indicator), and it is lower
+> variance than a double likelihood-ratio. Cross-checks the Black-Scholes
+> gamma.
 
 ### `pathwise_delta(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, n_paths=100000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
 

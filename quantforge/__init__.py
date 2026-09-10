@@ -90,6 +90,7 @@ from .bkm import bkm_moments_from_smile, skew_swap_from_smile
 from .vrp import realized_variance, variance_risk_premium
 from .mc_greeks import (
     lr_greeks, pathwise_delta, lr_digital_delta, asian_pathwise_vega,
+    mixed_gamma,
 )
 from .moment_premium import moment_risk_premia
 from .rnd import (
@@ -229,7 +230,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.165.0"
+__version__ = "1.166.0"
 
 __all__ = [
     "OptionType",
@@ -352,6 +353,7 @@ __all__ = [
     "pathwise_delta",
     "lr_digital_delta",
     "asian_pathwise_vega",
+    "mixed_gamma",
     "moment_risk_premia",
     "risk_neutral_density_from_smile",
     "density_grid_from_smile",
