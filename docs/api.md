@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.121.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.122.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -616,6 +616,25 @@ Auto-generated from `quantforge` v1.121.0 by `docs/gen_api.py` — do not edit b
 > across the quotes. Minimises the squared vol error over the shift by
 > golden-section search on ``[shift_lo, shift_hi]`` (defaults scale with spot:
 > ``[-0.9 S, 20 S]``, staying above the ``-shift`` floor).
+
+## double_heston
+
+### `double_heston_price(S, K, t, r, v01, kappa1, theta1, xi1, rho1, v02, kappa2, theta2, xi2, rho2, option_type=<OptionType.CALL: 'call'>, q=0.0, upper=200.0) -> float`  _function_
+
+> Price a European option under the double-Heston model.
+>
+> Factor 1 is ``(v01, kappa1, theta1, xi1, rho1)`` and factor 2
+> ``(v02, kappa2, theta2, xi2, rho2)`` -- typically a fast- and a slow-reverting
+> variance. ``q`` is the dividend yield. Zeroing the second factor's ``xi2``
+> and ``v02`` recovers single-factor Heston. Puts use put-call parity.
+
+### `double_heston_smile(S, strikes, t, r, v01, kappa1, theta1, xi1, rho1, v02, kappa2, theta2, xi2, rho2, q=0.0)`  _function_
+
+> Black-Scholes implied-vol smile the double-Heston model produces.
+>
+> Returns ``(log_moneyness, vol)`` pairs sorted by strike on the forward
+> ``F = S e^{(r-q) t}``. The two mean-reversion speeds let the short- and
+> long-dated skew move more independently than single-factor Heston allows.
 
 ## dv01
 

@@ -4,6 +4,22 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.122.0] - 2026-09-10
+
+### Added
+- Double-Heston two-factor stochastic-volatility model (new `double_heston.py`):
+  `double_heston_price` and `double_heston_smile`. Two independent Heston
+  variance factors (a fast- and a slow-reverting one) let the short- and
+  long-dated skew move more independently than single-factor Heston allows.
+  Since the factors are independent, the log-spot characteristic function is the
+  product of the two single-factor pieces; priced by the same Gil-Pelaez
+  two-probability Gauss-Legendre integral as Heston. The `xi -> 0` factor limit
+  is handled analytically (deterministic-variance contribution).
+- Verified: zeroing the second factor recovers single-factor Heston exactly,
+  put-call parity holds, two factors are worth more than one, negative
+  correlations give a downward skew, and the Fourier price matches an
+  independent two-factor QE Monte Carlo to ~0.6 SE.
+
 ## [1.121.0] - 2026-09-10
 
 ### Added
