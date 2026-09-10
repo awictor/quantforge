@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.10.0] - 2026-09-09
+
+### Added
+- `merton.py`: `merton_jump_price` prices European options under Merton (1976)
+  jump-diffusion as a Poisson-weighted sum of Black-Scholes prices with
+  jump-adjusted volatility and carry. Collapses to Black-Scholes at zero jump
+  intensity; the compensated drift keeps the forward a martingale so put-call
+  parity holds exactly. Cross-checked against Monte Carlo.
+
 ## [1.9.0] - 2026-09-09
 
 ### Added

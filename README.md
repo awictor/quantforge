@@ -366,6 +366,22 @@ bachelier_implied_vol(target_price=6.12, F=100, K=100, t=1.0, r=0.02)
 
 Includes analytic `bachelier_delta`, `bachelier_gamma`, and `bachelier_vega`.
 
+## Merton jump-diffusion
+
+Adds lognormal jumps to the diffusion; priced as a Poisson-weighted series of
+Black-Scholes values:
+
+```python
+from quantforge import merton_jump_price
+
+merton_jump_price(S=100, K=100, t=1.0, r=0.05, sigma=0.2,
+                  lam=1.0, mu_j=-0.1, sigma_j=0.15, option_type="call")
+```
+
+`lam` is the jump intensity (jumps per year), `mu_j`/`sigma_j` the log-jump
+mean/std. At `lam=0` it is exactly Black-Scholes; the drift is compensated so
+put-call parity holds.
+
 ## Heston stochastic volatility
 
 Full stochastic-variance pricing via the characteristic function, integrated
