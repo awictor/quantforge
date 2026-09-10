@@ -491,6 +491,17 @@ print(oh.cost, oh.digital_value, oh.cushion)   # spread cost >= fair value
 The spread payoff dominates the digital everywhere and its cost converges to
 the fair digital value as `width -> 0`; the cushion is the pin-risk buffer.
 
+A barrier-contingent digital pays cash only if it finishes ITM *and* the
+barrier condition holds (Monte Carlo):
+
+```python
+from quantforge import barrier_digital_mc
+
+# Pays $1 if S_T > 100 and 120 was touched over the path.
+barrier_digital_mc(S=100, K=100, H=120, t=1.0, r=0.05, sigma=0.2,
+                   option_type="call", barrier="up-in", cash=1.0)
+```
+
 One-touch / no-touch binaries pay a fixed cash on (or against) a barrier being
 hit:
 

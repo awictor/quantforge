@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.38.0] - 2026-09-09
+
+### Added
+- `barrier_digital_mc` (in `montecarlo.py`): Monte Carlo for a cash-or-nothing
+  digital contingent on a barrier condition (up/down, knock-in/knock-out) — pays
+  the cash only if the option finishes in the money AND the barrier condition
+  holds over the path. Knock-in + knock-out sums to the plain digital.
+
 ## [1.37.0] - 2026-09-09
 
 ### Added

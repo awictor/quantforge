@@ -195,3 +195,61 @@ def capped_cliquet_mc(S, t, r, sigma, reset_times, local_cap=None,
 
     price, se = _summarize(samples)
     return MCResult(price=price, std_error=se, n_paths=len(samples))
+
+
+def barrier_digital_mc(S, K, H, t, r, sigma, option_type=OptionType.CALL,
+                       barrier="up-in", b=None, cash=1.0, n_steps=100,
+                       n_paths=50_000, antithetic=True, seed=None) -> MCResult:
+    """Monte Carlo a cash-or-nothing digital contingent on a barrier condition.
+
+    Pays ``cash`` at expiry if the option finishes in the money (call: S_T > K;
+    put: S_T < K) AND the barrier condition holds over the monitored path:
+
+      * ``"up-in"``   / ``"down-in"``   : the barrier H must be touched;
+      * ``"up-out"``  / ``"down-out"``  : the barrier H must NOT be touched.
+
+    "up" barriers watch for S >= H, "down" for S <= H. This is the standard
+    barrier-contingent binary; the path dependence has no simple closed form.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if b is None:
+        b = r
+    barrier = str(barrier).lower()
+    if barrier not in ("up-in", "down-in", "up-out", "down-out"):
+        raise ValueError("barrier must be up-in/down-in/up-out/down-out")
+    if n_steps < 1:
+        raise ValueError("n_steps must be >= 1")
+
+    up = barrier.startswith("up")
+    knock_in = barrier.endswith("in")
+    itm = (lambda s: s > K) if ot is OptionType.CALL else (lambda s: s < K)
+
+    dt = t / n_steps
+    drift = (b - 0.5 * sigma * sigma) * dt
+    vol = sigma * math.sqrt(dt)
+    disc = math.exp(-r * t)
+    rng = random.Random(seed)
+
+    def one_path(zs):
+        s = S
+        touched = (up and S >= H) or (not up and S <= H)
+        for z in zs:
+            s *= math.exp(drift + vol * z)
+            if up and s >= H:
+                touched = True
+            elif not up and s <= H:
+                touched = True
+        barrier_ok = touched if knock_in else not touched
+        return disc * cash if (barrier_ok and itm(s)) else 0.0
+
+    samples = []
+    n = n_paths // 2 if antithetic else n_paths
+    for _ in range(n):
+        zs = [rng.gauss(0.0, 1.0) for _ in range(n_steps)]
+        samples.append(one_path(zs))
+        if antithetic:
+            samples.append(one_path([-z for z in zs]))
+
+    price, se = _summarize(samples)
+    return MCResult(price=price, std_error=se, n_paths=len(samples))

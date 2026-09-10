@@ -78,6 +78,7 @@ from .exotics import (
 )
 from .montecarlo import (
     MCResult, european_mc, arithmetic_asian_mc, capped_cliquet_mc,
+    barrier_digital_mc,
 )
 from .risk import VaRResult, parametric_var, historical_var, montecarlo_var
 from .volatility import (
@@ -97,7 +98,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.37.0"
+__version__ = "1.38.0"
 
 __all__ = [
     "OptionType",
@@ -219,6 +220,7 @@ __all__ = [
     "european_mc",
     "arithmetic_asian_mc",
     "capped_cliquet_mc",
+    "barrier_digital_mc",
     "VaRResult",
     "parametric_var",
     "historical_var",

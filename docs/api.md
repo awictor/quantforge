@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.37.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.38.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -644,6 +644,19 @@ Auto-generated from `quantforge` v1.37.0 by `docs/gen_api.py` — do not edit by
 > With ``control_variate=True`` the geometric-average Asian (known in closed
 > form) is used as a control, dramatically reducing the standard error since
 > the two averages are almost perfectly correlated.
+
+### `barrier_digital_mc(S, K, H, t, r, sigma, option_type=<OptionType.CALL: 'call'>, barrier='up-in', b=None, cash=1.0, n_steps=100, n_paths=50000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
+
+> Monte Carlo a cash-or-nothing digital contingent on a barrier condition.
+>
+> Pays ``cash`` at expiry if the option finishes in the money (call: S_T > K;
+> put: S_T < K) AND the barrier condition holds over the monitored path:
+>
+>   * ``"up-in"``   / ``"down-in"``   : the barrier H must be touched;
+>   * ``"up-out"``  / ``"down-out"``  : the barrier H must NOT be touched.
+>
+> "up" barriers watch for S >= H, "down" for S <= H. This is the standard
+> barrier-contingent binary; the path dependence has no simple closed form.
 
 ### `capped_cliquet_mc(S, t, r, sigma, reset_times, local_cap=None, local_floor=0.0, global_cap=None, global_floor=0.0, b=None, n_paths=50000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
 
