@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.34.0] - 2026-09-09
+
+### Added
+- `gramcharlier.py`: Corrado-Su skew/kurtosis-adjusted pricing. `corrado_su_call`
+  / `corrado_su_price` add the first skewness and excess-kurtosis corrections to
+  Black-Scholes via a Gram-Charlier expansion (skew=kurt=0 recovers BSM;
+  kurtosis fattens the tails). `realized_skewness` and
+  `realized_excess_kurtosis` estimate those moments from a return series.
+
 ## [1.33.0] - 2026-09-09
 
 ### Added

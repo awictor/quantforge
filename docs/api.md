@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.33.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.34.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -392,6 +392,29 @@ Auto-generated from `quantforge` v1.33.0 by `docs/gen_api.py` — do not edit by
 >     b: cost of carry (defaults to r).
 >
 > Returns the present value.
+
+## gramcharlier
+
+### `corrado_su_call(S, K, t, r, sigma, skew=0.0, excess_kurt=0.0, b=None) -> float`  _function_
+
+> Corrado-Su (1996) skew/kurtosis-adjusted European call price.
+>
+> Args:
+>     skew: skewness of the (log) return distribution.
+>     excess_kurt: excess kurtosis (kurtosis - 3).
+>     b: cost of carry (defaults to r). skew=kurt=0 => Black-Scholes.
+
+### `corrado_su_price(S, K, t, r, sigma, skew=0.0, excess_kurt=0.0, option_type=<OptionType.CALL: 'call'>, b=None) -> float`  _function_
+
+> Corrado-Su price for a call or put (put via put-call parity).
+
+### `realized_excess_kurtosis(returns: Sequence[float]) -> float`  _function_
+
+> Sample excess kurtosis (kurtosis - 3) of a return series.
+
+### `realized_skewness(returns: Sequence[float]) -> float`  _function_
+
+> Sample skewness of a return series (bias-corrected denominator n).
 
 ## greeks2
 

@@ -63,6 +63,9 @@ from .cev import cev_price, noncentral_chisq_cdf
 from .sizing import (
     delta_hedge_shares, neutralize, vega_neutral_quantity, gamma_neutral_quantity,
 )
+from .gramcharlier import (
+    corrado_su_call, corrado_su_price, realized_skewness, realized_excess_kurtosis,
+)
 from .portfolio import Contract, Position, BookRisk, Book, price_book
 from .svi import SVIParams, calibrate_svi
 from .sabr import SABRParams, sabr_vol, calibrate_sabr
@@ -92,7 +95,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.33.0"
+__version__ = "1.34.0"
 
 __all__ = [
     "OptionType",
@@ -180,6 +183,10 @@ __all__ = [
     "neutralize",
     "vega_neutral_quantity",
     "gamma_neutral_quantity",
+    "corrado_su_call",
+    "corrado_su_price",
+    "realized_skewness",
+    "realized_excess_kurtosis",
     "Contract",
     "Position",
     "BookRisk",

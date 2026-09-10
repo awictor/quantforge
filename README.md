@@ -557,6 +557,25 @@ sees) comes straight off the surface:
 surf.forward_vol(k=0.0, t1=1.0, t2=2.0)   # sqrt of the forward variance
 ```
 
+## Skew/kurtosis-adjusted pricing (Corrado-Su)
+
+Add the first skewness and kurtosis corrections to Black-Scholes via a
+Gram-Charlier expansion, and estimate the moments from history:
+
+```python
+from quantforge import (
+    corrado_su_price, realized_skewness, realized_excess_kurtosis,
+)
+
+corrado_su_price(S=100, K=110, t=1.0, r=0.05, sigma=0.2,
+                 skew=-0.5, excess_kurt=2.0, option_type="call")
+
+skew = realized_skewness(returns)
+xk = realized_excess_kurtosis(returns)
+```
+
+`skew=0, excess_kurt=0` recovers Black-Scholes exactly.
+
 ## CEV (constant elasticity of variance)
 
 Local vol that scales with the spot level (the leverage effect), priced in
