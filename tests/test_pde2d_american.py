@@ -4,8 +4,8 @@ import pytest
 
 from quantforge import (
     adi_two_asset_american,
-    best_of_call,
-    worst_of_call,
+    best_of_call_closed,
+    worst_of_call_closed,
 )
 
 
@@ -25,13 +25,15 @@ def _worst(s1, s2):
 def test_european_best_of_matches_closed_form():
     eu = adi_two_asset_american(_best, S1, S2, T, R, SIG1, SIG2, RHO,
                                 n1=100, n2=100, n_time=60, american=False)
-    cf = best_of_call(S1, S2, K, T, R, SIG1, SIG2, RHO)
+    cf = best_of_call_closed(S1, S2, K, T, R, SIG1, SIG2, RHO)
     assert eu == pytest.approx(cf, abs=8e-2)
 
 
-@pytest.mark.slow
 def test_european_worst_of_converges_to_closed_form():
-    cf = worst_of_call(S1, S2, K, T, R, SIG1, SIG2, RHO)
+    # Exact Stulz closed form (deterministic) as the PDE reference -- was
+    # previously the Monte Carlo worst_of_call, whose noise occasionally exceeded
+    # the 3e-2 band.
+    cf = worst_of_call_closed(S1, S2, K, T, R, SIG1, SIG2, RHO)
     eu = adi_two_asset_american(_worst, S1, S2, T, R, SIG1, SIG2, RHO,
                                 n1=100, n2=100, n_time=100, american=False)
     assert eu == pytest.approx(cf, abs=3e-2)

@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.196.1] - 2026-09-10
+
+### Fixed
+- `test_pde2d_american.py` compared the deterministic two-asset ADI price to the
+  *Monte Carlo* `best_of_call` / `worst_of_call` (seed unset), so the reference
+  itself was random and its noise occasionally breached the tolerance -- the
+  source of the rare "1 failed" seen in full-suite runs. Switched both to the
+  exact Stulz `best_of_call_closed` / `worst_of_call_closed`; the checks are now
+  deterministic (and the worst-of one no longer needs `-m slow`).
+
 ## [1.196.0] - 2026-09-10
 
 ### Changed
