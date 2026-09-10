@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.227.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.228.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -150,6 +150,17 @@ Auto-generated from `quantforge` v1.227.0 by `docs/gen_api.py` — do not edit b
 > dPrice/dsigma_N (per unit of normal vol). Same for calls and puts.
 
 ## bates
+
+### `bates_greeks(S, K, t, r, v0, kappa, theta, xi, rho, lam, mu_j, sigma_j, option_type=<OptionType.CALL: 'call'>, q=0.0)`  _function_
+
+> Greeks of a Bates (Heston + jumps) option by central finite differences.
+>
+> Central differences of :func:`bates_price` for the spot Greeks ``delta``
+> (dV/dS) and ``gamma`` (d2V/dS2), the initial-variance sensitivity ``vega_v0``
+> (dV/dv0 -- the stochastic-vol analogue of vega), and the jump-intensity
+> sensitivity ``d_lambda`` (dV/dlam). At ``lam = 0`` the Greeks reduce to the
+> Heston Greeks. Returns a dict with ``price``, ``delta``, ``gamma``,
+> ``vega_v0``, ``d_lambda``.
 
 ### `bates_price(S, K, t, r, v0, kappa, theta, xi, rho, lam, mu_j, sigma_j, option_type=<OptionType.CALL: 'call'>, q=0.0, upper=200.0) -> float`  _function_
 

@@ -56,7 +56,7 @@ from .heston import heston_price, heston_smile
 from .heston_mc import (
     heston_qe_mc, heston_cv_mc, heston_pathwise_delta, heston_mc_greeks,
 )
-from .bates import bates_price, bates_smile
+from .bates import bates_price, bates_greeks, bates_smile
 from .double_heston import double_heston_price, double_heston_smile
 from .rough_heston import rough_heston_price, rough_heston_smile
 from .double_heston_calib import calibrate_double_heston
@@ -261,7 +261,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.227.0"
+__version__ = "1.228.0"
 
 __all__ = [
     "OptionType",
@@ -330,6 +330,7 @@ __all__ = [
     "heston_pathwise_delta",
     "heston_mc_greeks",
     "bates_price",
+    "bates_greeks",
     "bates_smile",
     "double_heston_price",
     "double_heston_smile",

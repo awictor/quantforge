@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.228.0] - 2026-09-10
+
+### Added
+- `bates_greeks` (in `bates.py`): spot Greeks (`delta`, `gamma`), the
+  initial-variance sensitivity `vega_v0`, and the jump-intensity sensitivity
+  `d_lambda` of a Bates (Heston + Merton jumps) option by central finite
+  differences on `bates_price` (one-sided at the `v0`/`lam` floors).
+- Verified: at `lam = 0` the delta matches a finite difference of the exact
+  Heston price; with jumps the delta matches a finite difference of `bates_price`;
+  call delta in (0,1) with positive gamma and `vega_v0`.
+
 ## [1.227.0] - 2026-09-10
 
 ### Added
