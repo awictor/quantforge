@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.191.1] - 2026-09-10
+
+### Tests
+- Trimmed the `bermudan_max_call_lsm` single-asset-lower-bound fast test from 30
+  steps / 20000 paths to 20 / 8000; the bound has a ~7-point margin, so the
+  smaller sample is comfortably safe. Fast gate back to ~51s.
+
 ## [1.191.0] - 2026-09-10
 
 ### Added

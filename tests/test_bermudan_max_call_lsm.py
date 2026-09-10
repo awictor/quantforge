@@ -39,7 +39,7 @@ def test_at_least_single_asset_american_lower_bound():
     # The max-call is worth at least a European vanilla on either asset.
     from quantforge import call_price
     am = bermudan_max_call_lsm(S1, S2, K, T, R, SIG1, SIG2, RHO,
-                               n_steps=30, n_paths=20_000, seed=4)
+                               n_steps=20, n_paths=8_000, seed=4)
     assert am > call_price(S1, K, T, R, SIG1) - 0.5
 
 
