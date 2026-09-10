@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.83.0] - 2026-09-10
+
+### Added
+- `svi_repair_butterfly` (in `svi.py`): repair a single SVI slice's butterfly
+  arbitrage by geometrically shrinking the wing angle `b` (flattening the smile,
+  lifting the g-function) until `svi_is_butterfly_free` passes, preserving the
+  level/skew/shift/curvature. A clean slice is returned unchanged.
+
 ## [1.82.0] - 2026-09-10
 
 ### Added

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.82.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.83.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1554,6 +1554,17 @@ Auto-generated from `quantforge` v1.82.0 by `docs/gen_api.py` — do not edit by
 ### `svi_is_butterfly_free(p: quantforge.svi.SVIParams, ks=None) -> bool`  _function_
 
 > (no docstring)
+
+### `svi_repair_butterfly(p: quantforge.svi.SVIParams, ks=None, max_iter=200, factor=0.98)`  _function_
+
+> Repair a single SVI slice's butterfly arbitrage by shrinking the wings.
+>
+> If the slice has ``svi_g(k) < 0`` anywhere (a negative density), it reduces
+> the wing angle ``b`` geometrically (which flattens the smile and lifts the
+> g-function) until :func:`svi_is_butterfly_free` passes or ``max_iter`` is
+> reached. Returns a new :class:`SVIParams`; the ATM level, skew, shift and
+> curvature are preserved. If already arbitrage-free the input is returned
+> unchanged.
 
 ## trinomial
 

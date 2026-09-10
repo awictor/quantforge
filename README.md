@@ -1059,9 +1059,10 @@ print(params.implied_vol(k=0.05, t=t))
 print(params.is_arbitrage_free_wings())
 
 # Butterfly (density) no-arbitrage check via the Gatheral-Jacquier g-function.
-from quantforge import svi_is_butterfly_free, svi_butterfly_arbitrage
+from quantforge import svi_is_butterfly_free, svi_butterfly_arbitrage, svi_repair_butterfly
 print(svi_is_butterfly_free(params))
 print(svi_butterfly_arbitrage(params))   # log-moneyness points that violate
+params = svi_repair_butterfly(params)    # shrink the wings until arbitrage-free
 ```
 
 ## Command line

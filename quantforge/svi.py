@@ -196,3 +196,24 @@ def lee_bounds_ok(p: SVIParams, tol=1e-9):
     """
     left, right = lee_wing_slopes(p)
     return left <= 2.0 + tol and right <= 2.0 + tol
+
+
+def svi_repair_butterfly(p: SVIParams, ks=None, max_iter=200, factor=0.98):
+    """Repair a single SVI slice's butterfly arbitrage by shrinking the wings.
+
+    If the slice has ``svi_g(k) < 0`` anywhere (a negative density), it reduces
+    the wing angle ``b`` geometrically (which flattens the smile and lifts the
+    g-function) until :func:`svi_is_butterfly_free` passes or ``max_iter`` is
+    reached. Returns a new :class:`SVIParams`; the ATM level, skew, shift and
+    curvature are preserved. If already arbitrage-free the input is returned
+    unchanged.
+    """
+    if svi_is_butterfly_free(p, ks):
+        return p
+    b = p.b
+    for _ in range(max_iter):
+        b *= factor
+        candidate = SVIParams(a=p.a, b=b, rho=p.rho, m=p.m, s=p.s)
+        if svi_is_butterfly_free(candidate, ks):
+            return candidate
+    return SVIParams(a=p.a, b=b, rho=p.rho, m=p.m, s=p.s)
