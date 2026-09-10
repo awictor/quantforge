@@ -525,6 +525,18 @@ swaption_price(swap_rate=0.03, strike=0.035, expiry=2.0, sigma_n=0.01,
                periods=periods, payer=True)
 ```
 
+Key-rate DV01 buckets the interest-rate sensitivity of any book expressed as a
+function of the zero curve:
+
+```python
+from quantforge import key_rate_dv01
+
+price = lambda curve: sum(cf * 2.718281828 ** (-curve[t] * t)
+                          for t, cf in {1.0: 5, 2.0: 105}.items())
+kr = key_rate_dv01(price, base_curve={1.0: 0.02, 2.0: 0.03})
+print(kr.buckets, kr.parallel)   # per-tenor DV01s sum to the parallel DV01
+```
+
 ## Merton jump-diffusion
 
 Adds lognormal jumps to the diffusion; priced as a Poisson-weighted series of

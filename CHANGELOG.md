@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.23.0] - 2026-09-09
+
+### Added
+- `dv01.py`: `key_rate_dv01` computes bucketed (key-rate) DV01 for any book
+  expressed as `price(zero_curve)`. Bumps each tenor independently (central or
+  one-sided), reports per-bucket sensitivities normalized to 1bp plus the
+  parallel DV01; the buckets sum to the parallel shift.
+
 ## [1.22.0] - 2026-09-09
 
 ### Added
