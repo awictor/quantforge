@@ -37,6 +37,7 @@ from .merton import merton_jump_price
 from .density import (
     risk_neutral_density, risk_neutral_cdf, price_from_density, density_total_mass,
 )
+from .varswap import variance_swap_strike, volatility_swap_strike
 from .portfolio import Contract, Position, BookRisk, Book, price_book
 from .svi import SVIParams, calibrate_svi
 from .sabr import SABRParams, sabr_vol, calibrate_sabr
@@ -63,7 +64,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.11.0"
+__version__ = "1.12.0"
 
 __all__ = [
     "OptionType",
@@ -104,6 +105,8 @@ __all__ = [
     "risk_neutral_cdf",
     "price_from_density",
     "density_total_mass",
+    "variance_swap_strike",
+    "volatility_swap_strike",
     "Contract",
     "Position",
     "BookRisk",

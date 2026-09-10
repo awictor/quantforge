@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.12.0] - 2026-09-09
+
+### Added
+- `varswap.py`: model-free variance- and volatility-swap fair strikes by static
+  option replication (Demeterfi-Derman-Kamani-Zou log-strip). `variance_swap_strike`
+  integrates an OTM put/call strip weighted by `1/K^2` around the forward;
+  `volatility_swap_strike` returns the `sqrt` proxy. Recovers `sigma^2` from a
+  flat-vol Black-Scholes chain to strip-truncation error.
+
 ## [1.11.0] - 2026-09-09
 
 ### Added

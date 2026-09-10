@@ -158,6 +158,26 @@ for pos in book.positions:
 `qty` is signed (short = negative) and `multiplier` scales to notional
 (e.g. 100 for US equity options). Net Greeks are position-scaled sums.
 
+## Variance / volatility swaps
+
+Model-free fair strike of a variance swap from an option strip (the log-contract
+replication behind the VIX):
+
+```python
+from quantforge import variance_swap_strike, volatility_swap_strike
+
+kvar = variance_swap_strike(S0=100, t=1.0, r=0.05,
+                            put_strikes=puts, put_prices=pp,
+                            call_strikes=calls, call_prices=cp)
+kvol = volatility_swap_strike(S0=100, t=1.0, r=0.05,
+                              put_strikes=puts, put_prices=pp,
+                              call_strikes=calls, call_prices=cp)
+```
+
+The strike is `(2/t)` times the log-contract value replicated by OTM options
+weighted `1/K^2`. For a flat-vol chain `kvar -> sigma^2`. The vol-swap value is
+the `sqrt` proxy (an upper bound before the convexity adjustment).
+
 ## Risk-neutral density (Breeden-Litzenberger)
 
 Extract the market-implied probability distribution of the underlying at expiry
