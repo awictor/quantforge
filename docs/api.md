@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.151.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.152.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3065,3 +3065,24 @@ Auto-generated from `quantforge` v1.151.0 by `docs/gen_api.py` — do not edit b
 ### `VolCube(expiries, tenors, node_params, forwards)`  _class_
 
 > A SABR-per-node swaption vol cube with variance interpolation.
+
+## vrp
+
+### `realized_variance(closes: Sequence[float], periods_per_year: int = 252)`  _function_
+
+> Annualized realized variance of log returns from a close series.
+
+### `variance_risk_premium(closes, implied_variance, periods_per_year=252)`  _function_
+
+> Realized-minus-implied variance risk premium and its components.
+>
+> Args:
+>     closes: realized price history over the measurement window.
+>     implied_variance: the annualized implied (variance-swap) variance for
+>         the same horizon -- e.g. from a smile replication.
+>     periods_per_year: sampling frequency of the closes.
+>
+> Returns a dict with ``realized_variance``, ``implied_variance``,
+> ``vrp`` (realized - implied; usually negative), ``ratio``
+> (realized / implied), and ``vol_premium`` (implied vol - realized vol, the
+> usual positive number quoted in vol points).

@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.152.0] - 2026-09-10
+
+### Added
+- Variance risk premium (new `vrp.py`): `realized_variance` computes annualized
+  realized variance from a close series, and `variance_risk_premium` combines it
+  with a supplied implied (variance-swap) variance into the additive premium
+  (realized - implied), the ratio, and the vol-point premium
+  (implied vol - realized vol).
+- Verified: realized variance recovers `sigma^2` from a GBM path; implied above
+  realized gives a negative VRP with a positive vol premium and ratio < 1;
+  realized above implied flips the signs; the components are internally
+  consistent.
+
 ## [1.151.0] - 2026-09-10
 
 ### Added

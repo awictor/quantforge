@@ -84,6 +84,7 @@ from .varswap import (
 )
 from .vix import vix_from_chain, vix_from_smile
 from .bkm import bkm_moments_from_smile, skew_swap_from_smile
+from .vrp import realized_variance, variance_risk_premium
 from .multiasset import (
     exchange_option, spread_option, basket_option, best_of_call, worst_of_call,
     exchange_greeks, spread_greeks, basket_greeks, implied_spread_correlation,
@@ -212,7 +213,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.151.0"
+__version__ = "1.152.0"
 
 __all__ = [
     "OptionType",
@@ -324,6 +325,8 @@ __all__ = [
     "vix_from_smile",
     "bkm_moments_from_smile",
     "skew_swap_from_smile",
+    "realized_variance",
+    "variance_risk_premium",
     "exchange_option",
     "spread_option",
     "basket_option",
