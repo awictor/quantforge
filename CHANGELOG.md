@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.51.0] - 2026-09-09
+
+### Added
+- `vannavolga.py`: `VannaVolgaSmile` builds an FX smile from the three market
+  quotes (ATM vol, 25-delta risk reversal, 25-delta butterfly), recovering the
+  pillar vols/strikes and interpolating the vol at any strike. `pillar_vols`
+  exposes the 25P/ATM/25C vols. Exact at the three pillars.
+
 ## [1.50.0] - 2026-09-09
 
 ### Added

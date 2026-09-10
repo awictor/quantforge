@@ -833,6 +833,18 @@ sm.vol(95)    # smoothly interpolated
 sm.vol(200)   # flat beyond the quoted range
 ```
 
+For an FX smile from the three market quotes, `VannaVolgaSmile` builds the
+25-delta pillars and interpolates:
+
+```python
+from quantforge import VannaVolgaSmile
+
+sm = VannaVolgaSmile(S=1.2, t=1.0, r_dom=0.02, r_for=0.01,
+                     atm=0.10, rr=0.02, bf=0.005)
+sm.vol(1.25)      # smile vol at a strike
+sm.pillars()      # [(K_25P, v), (K_ATM, v), (K_25C, v)]
+```
+
 SABR is the standard for interest-rate and FX smiles; SVI (below) is the
 common equity-index parametrization. Both interpolate/extrapolate a smile and
 plug into `implied_volatility`/`price` for consistent surface pricing.

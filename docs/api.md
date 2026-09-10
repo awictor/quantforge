@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.50.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.51.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1233,6 +1233,16 @@ Auto-generated from `quantforge` v1.50.0 by `docs/gen_api.py` — do not edit by
 >     american: if True, allow early exercise at every node; if False, price
 >         the European payoff (useful as a convergence cross-check).
 >     b: cost of carry (defaults to r). Dividend yield q enters as b = r - q.
+
+## vannavolga
+
+### `VannaVolgaSmile(S, t, r_dom, r_for, atm, rr, bf, call_delta=0.25)`  _class_
+
+> A vanna-volga FX smile built from ATM / RR / BF at one expiry.
+
+### `pillar_vols(atm, rr, bf)`  _function_
+
+> Return (sigma_25put, sigma_atm, sigma_25call) from ATM / RR / BF quotes.
 
 ## varswap
 
