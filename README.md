@@ -217,6 +217,29 @@ geometric_asian(S=100, K=100, t=1, r=0.05, sigma=0.3, option_type="call")
 Barrier kinds: `Barrier.DOWN_IN`, `DOWN_OUT`, `UP_IN`, `UP_OUT`. In/out parity
 (`in + out = vanilla`) holds exactly and is enforced by the tests.
 
+## SABR stochastic-vol smile
+
+The market-standard SABR model via Hagan's implied-vol expansion, with
+calibration of (alpha, rho, nu) at a fixed beta:
+
+```python
+from quantforge import sabr_vol, calibrate_sabr
+
+# Evaluate the smile.
+sabr_vol(F=100, K=90, t=1.0, alpha=0.2, beta=0.5, rho=-0.3, nu=0.4)
+
+# Calibrate to a market smile.
+strikes = [80, 90, 100, 110, 120]
+market  = [0.26, 0.235, 0.22, 0.225, 0.24]
+params, rmse = calibrate_sabr(F=100, t=0.5, strikes=strikes,
+                              market_vols=market, beta=0.5)
+print(params, rmse)
+```
+
+SABR is the standard for interest-rate and FX smiles; SVI (below) is the
+common equity-index parametrization. Both interpolate/extrapolate a smile and
+plug into `implied_volatility`/`price` for consistent surface pricing.
+
 ## Volatility surface (SVI)
 
 Fit Gatheral's raw SVI smile to market quotes with a built-in Nelder-Mead
