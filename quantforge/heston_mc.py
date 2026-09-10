@@ -131,6 +131,58 @@ def heston_qe_mc(S, K, t, r, v0, kappa, theta, xi, rho,
     return MCResult(price=price, std_error=se, n_paths=len(samples))
 
 
+def heston_mc_greeks(S, K, t, r, v0, kappa, theta, xi, rho,
+                     option_type=OptionType.CALL, q=0.0, n_steps=100,
+                     n_paths=100_000, antithetic=True, seed=None):
+    """Heston Greeks by common-random-number finite differences on the QE MC.
+
+    Repricing at bumped inputs with the *same* seed makes the two simulations
+    share their random draws, so the bumped price difference is dominated by the
+    genuine sensitivity rather than Monte Carlo noise -- far lower variance than
+    independent-sample bumps. Returns a dict with ``price`` and
+
+        delta      = dV/dS0
+        gamma      = d2V/dS0^2
+        vega_v0    = dV/dv0        (initial-variance sensitivity)
+        vega_theta = dV/dtheta     (long-variance sensitivity)
+        volvol     = dV/dxi        (vol-of-vol sensitivity)
+        rho_sens   = dV/drho       (spot/vol correlation sensitivity)
+
+    The variance-parameter Greeks are the ones that matter for a stochastic-vol
+    book; ``vega_v0`` is the closest analogue of Black-Scholes vega. Each is a
+    central difference with a relative bump; ``gamma`` reuses the delta re-prices.
+    Cross-checks a finite difference of the exact Fourier
+    :func:`quantforge.heston_price`.
+    """
+    seed = 0 if seed is None else seed
+
+    def px(**over):
+        kw = dict(S=S, K=K, t=t, r=r, v0=v0, kappa=kappa, theta=theta, xi=xi,
+                  rho=rho, option_type=option_type, q=q, n_steps=n_steps,
+                  n_paths=n_paths, antithetic=antithetic, seed=seed)
+        kw.update(over)
+        return heston_qe_mc(**kw).price
+
+    base = px()
+    hS = 1e-2 * S
+    up, dn = px(S=S + hS), px(S=S - hS)
+    delta = (up - dn) / (2.0 * hS)
+    gamma = (up - 2.0 * base + dn) / (hS * hS)
+
+    hv = 1e-3
+    vega_v0 = (px(v0=v0 + hv) - px(v0=v0 - hv)) / (2.0 * hv)
+    vega_theta = (px(theta=theta + hv) - px(theta=theta - hv)) / (2.0 * hv)
+
+    hx = 1e-3
+    volvol = (px(xi=xi + hx) - px(xi=xi - hx)) / (2.0 * hx)
+
+    hr = 1e-3
+    rho_sens = (px(rho=rho + hr) - px(rho=rho - hr)) / (2.0 * hr)
+
+    return {"price": base, "delta": delta, "gamma": gamma, "vega_v0": vega_v0,
+            "vega_theta": vega_theta, "volvol": volvol, "rho_sens": rho_sens}
+
+
 def heston_cv_mc(S, K, t, r, v0, kappa, theta, xi, rho,
                  option_type=OptionType.CALL, q=0.0, n_steps=100,
                  n_paths=50_000, antithetic=True, seed=None,

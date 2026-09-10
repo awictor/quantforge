@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.188.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.189.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1285,6 +1285,28 @@ Auto-generated from `quantforge` v1.188.0 by `docs/gen_api.py` — do not edit b
 >
 > Cross-checks the Fourier :func:`quantforge.heston_price` and reports a
 > standard error well below :func:`heston_qe_mc` at equal path count.
+
+### `heston_mc_greeks(S, K, t, r, v0, kappa, theta, xi, rho, option_type=<OptionType.CALL: 'call'>, q=0.0, n_steps=100, n_paths=100000, antithetic=True, seed=None)`  _function_
+
+> Heston Greeks by common-random-number finite differences on the QE MC.
+>
+> Repricing at bumped inputs with the *same* seed makes the two simulations
+> share their random draws, so the bumped price difference is dominated by the
+> genuine sensitivity rather than Monte Carlo noise -- far lower variance than
+> independent-sample bumps. Returns a dict with ``price`` and
+>
+>     delta      = dV/dS0
+>     gamma      = d2V/dS0^2
+>     vega_v0    = dV/dv0        (initial-variance sensitivity)
+>     vega_theta = dV/dtheta     (long-variance sensitivity)
+>     volvol     = dV/dxi        (vol-of-vol sensitivity)
+>     rho_sens   = dV/drho       (spot/vol correlation sensitivity)
+>
+> The variance-parameter Greeks are the ones that matter for a stochastic-vol
+> book; ``vega_v0`` is the closest analogue of Black-Scholes vega. Each is a
+> central difference with a relative bump; ``gamma`` reuses the delta re-prices.
+> Cross-checks a finite difference of the exact Fourier
+> :func:`quantforge.heston_price`.
 
 ### `heston_pathwise_delta(S, K, t, r, v0, kappa, theta, xi, rho, option_type=<OptionType.CALL: 'call'>, q=0.0, n_steps=100, n_paths=50000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
 
