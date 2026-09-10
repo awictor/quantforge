@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.77.0] - 2026-09-10
+
+### Added
+- `spread_greeks` (in `multiasset.py`): Greeks of a Kirk spread option by finite
+  differences — the two spot deltas, own-gammas, cross-gamma, and correlation
+  sensitivity. delta1 > 0 / delta2 < 0, cross-gamma near minus the own-gamma,
+  correlation vega negative.
+
 ## [1.76.0] - 2026-09-10
 
 ### Added

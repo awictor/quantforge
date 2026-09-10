@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.76.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.77.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1025,6 +1025,14 @@ Auto-generated from `quantforge` v1.76.0 by `docs/gen_api.py` — do not edit by
 >
 > Exact closed form; independent of the risk-free rate (the two assets'
 > financing cancels), depending only on the dividend yields.
+
+### `spread_greeks(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0, option_type=<OptionType.CALL: 'call'>)`  _function_
+
+> Greeks of a Kirk spread option (payoff max(S1 - S2 - K, 0)) by FD.
+>
+> Returns a dict with the two spot deltas, own-gammas, the cross-gamma
+> (``d2V/dS1 dS2``), and the correlation sensitivity (``corr_vega``). All by
+> central finite differences on the Kirk approximation.
 
 ### `spread_option(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0, option_type=<OptionType.CALL: 'call'>) -> float`  _function_
 
