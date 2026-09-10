@@ -287,3 +287,44 @@ def no_touch(S, H, t, r, sigma, b=None, cash=1.0):
         return cash * disc  # never touches in zero time
     hit = one_touch(S, H, t, r, sigma, b=b, cash=cash, payoff_at_hit=False)
     return cash * disc - hit
+
+
+# --------------------------------------------------------------------------
+# Barrier option Greeks (finite differences on the closed form)
+# --------------------------------------------------------------------------
+def barrier_greeks(S, K, H, t, r, sigma, option_type=OptionType.CALL,
+                   barrier=Barrier.DOWN_OUT, b=None, rebate=0.0):
+    """Greeks of a single-barrier option by central finite differences.
+
+    The Reiner-Rubinstein price is a closed form, but its Greeks are messy and
+    change character across the barrier, so we central-difference the price.
+    Returns a dict with delta, gamma, vega, and theta (calendar, per year).
+
+    Near the barrier the true delta/gamma are large and discontinuous; the
+    finite differences there are indicative rather than exact - use a spot bump
+    well away from ``H`` when a smooth number is needed.
+    """
+    ot = _coerce_type(option_type)
+    barrier = Barrier(barrier)
+    _validate(S, K, t, sigma)
+    if b is None:
+        b = r
+
+    def px(S_=S, t_=t, sigma_=sigma):
+        return barrier_option(S_, K, H, t_, r, sigma_, ot, barrier, b=b,
+                              rebate=rebate)
+
+    base = px()
+    hS = 1e-3 * S
+    up, dn = px(S_=S + hS), px(S_=S - hS)
+    delta = (up - dn) / (2.0 * hS)
+    gamma = (up - 2.0 * base + dn) / (hS * hS)
+
+    hv = 1e-4
+    vega = (px(sigma_=sigma + hv) - px(sigma_=sigma - hv)) / (2.0 * hv)
+
+    ht = min(1e-4, 0.5 * t)
+    theta = -(px(t_=t + ht) - px(t_=t - ht)) / (2.0 * ht)
+
+    return {"price": base, "delta": delta, "gamma": gamma,
+            "vega": vega, "theta": theta}

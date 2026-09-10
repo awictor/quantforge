@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.29.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.30.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -283,6 +283,18 @@ Auto-generated from `quantforge` v1.29.0 by `docs/gen_api.py` — do not edit by
 ### `asset_or_nothing(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
 
 > Pays the asset value S_T if in the money, else 0.
+
+### `barrier_greeks(S, K, H, t, r, sigma, option_type=<OptionType.CALL: 'call'>, barrier=<Barrier.DOWN_OUT: 'down-out'>, b=None, rebate=0.0)`  _function_
+
+> Greeks of a single-barrier option by central finite differences.
+>
+> The Reiner-Rubinstein price is a closed form, but its Greeks are messy and
+> change character across the barrier, so we central-difference the price.
+> Returns a dict with delta, gamma, vega, and theta (calendar, per year).
+>
+> Near the barrier the true delta/gamma are large and discontinuous; the
+> finite differences there are indicative rather than exact - use a spot bump
+> well away from ``H`` when a smooth number is needed.
 
 ### `barrier_option(S, K, H, t, r, sigma, option_type=<OptionType.CALL: 'call'>, barrier=<Barrier.DOWN_OUT: 'down-out'>, b=None, rebate=0.0)`  _function_
 

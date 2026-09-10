@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.30.0] - 2026-09-09
+
+### Added
+- `barrier_greeks` (in `exotics.py`): delta, gamma, vega, and theta (calendar)
+  of a single-barrier option by central finite differences on the
+  Reiner-Rubinstein price. A far knock-out matches the vanilla Greeks, and
+  knock-in + knock-out delta equals the vanilla delta (in-out parity).
+
 ## [1.29.0] - 2026-09-09
 
 ### Added

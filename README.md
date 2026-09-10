@@ -433,6 +433,16 @@ arithmetic_asian(S=100, K=100, t=1, r=0.05, sigma=0.3, option_type="call")
 Barrier kinds: `Barrier.DOWN_IN`, `DOWN_OUT`, `UP_IN`, `UP_OUT`. In/out parity
 (`in + out = vanilla`) holds exactly and is enforced by the tests.
 
+`barrier_greeks` returns delta/gamma/vega/theta of a barrier option by finite
+differences on the closed form:
+
+```python
+from quantforge import barrier_greeks, Barrier
+
+barrier_greeks(S=100, K=100, H=90, t=0.5, r=0.05, sigma=0.25,
+               option_type="call", barrier=Barrier.DOWN_OUT)
+```
+
 Digitals have unbounded pin risk at the strike, so desks super-replicate them
 with a tight vanilla spread:
 
