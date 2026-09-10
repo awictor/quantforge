@@ -65,6 +65,7 @@ from .dv01 import KeyRateDV01, key_rate_dv01
 from .bookgreeks import (
     BookSecondOrder, book_second_order, ThetaCarry, theta_carry_report,
 )
+from .attribution import PnLAttribution, attribute_pnl
 from .vegabucket import VegaBuckets, vega_buckets
 from .qmc import halton, european_qmc
 from .correlation import (
@@ -115,7 +116,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.57.0"
+__version__ = "1.58.0"
 
 __all__ = [
     "OptionType",
@@ -205,6 +206,8 @@ __all__ = [
     "book_second_order",
     "ThetaCarry",
     "theta_carry_report",
+    "PnLAttribution",
+    "attribute_pnl",
     "VegaBuckets",
     "vega_buckets",
     "halton",

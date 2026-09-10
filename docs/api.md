@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.57.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.58.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -34,6 +34,25 @@ Auto-generated from `quantforge` v1.57.0 by `docs/gen_api.py` — do not edit by
 > exercise early. The premium is non-negative and is (near) zero for an
 > American call with no dividends (``b >= r``), where early exercise is never
 > optimal.
+
+## attribution
+
+### `PnLAttribution(total: float, delta_pnl: float, gamma_pnl: float, vega_pnl: float, theta_pnl: float, rho_pnl: float, explained: float, unexplained: float) -> None`  _class_
+
+> PnLAttribution(total: float, delta_pnl: float, gamma_pnl: float, vega_pnl: float, theta_pnl: float, rho_pnl: float, explained: float, unexplained: float)
+
+### `attribute_pnl(S, K, t, r, sigma, dS, dsigma, dt, dr=0.0, option_type=<OptionType.CALL: 'call'>, b=None, qty=1.0) -> quantforge.attribution.PnLAttribution`  _function_
+
+> Attribute an option position's P&L over a move to its Greeks.
+>
+> Args:
+>     dS: change in spot. dsigma: change in vol. dt: elapsed calendar time
+>         (years). dr: change in rate.
+>     qty: signed position size (scales every P&L component).
+>
+> theta here is the calendar theta (per year) from the engine, so the theta
+> P&L is ``theta * dt`` (value lost as time passes). vega is per 1.0 vol, rho
+> per 1.0 rate; pass dsigma / dr in those units.
 
 ## bachelier
 

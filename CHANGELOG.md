@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.58.0] - 2026-09-09
+
+### Added
+- `attribution.py`: `attribute_pnl` explains an option position's realized P&L
+  over a market move via a second-order Greek expansion (delta / gamma / vega /
+  theta / rho P&L), returning a `PnLAttribution` with the true revaluation, the
+  explained sum, and the unexplained residual. The residual is tiny for modest
+  moves and grows for large ones (higher-order Greeks).
+
 ## [1.57.0] - 2026-09-09
 
 ### Changed

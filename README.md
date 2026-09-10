@@ -214,6 +214,19 @@ vb = vega_buckets(positions, edges=(0.25, 0.5, 1.0, 2.0, 5.0))
 print(vb.buckets)   # net vega per maturity bucket; sums to the net book vega
 ```
 
+Explain a position's realized P&L over a move via its Greeks:
+
+```python
+from quantforge import attribute_pnl
+
+a = attribute_pnl(S=100, K=100, t=0.5, r=0.05, sigma=0.25,
+                  dS=3, dsigma=0.02, dt=1/252)
+print(a.delta_pnl, a.gamma_pnl, a.vega_pnl, a.theta_pnl, a.unexplained)
+```
+
+`total = explained + unexplained`; the residual flags what the first/second-
+order Greeks miss.
+
 Split the book's time decay into gamma rent vs financing carry:
 
 ```python
