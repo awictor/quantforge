@@ -187,3 +187,69 @@ def vol_report(opens, highs, lows, closes, periods_per_year: int = 252,
         yang_zhang=yang_zhang(opens, highs, lows, closes, periods_per_year),
         ewma=ewma_vol(closes, ewma_lambda, periods_per_year),
     )
+
+
+@dataclass(frozen=True)
+class VolConePoint:
+    window: int              # rolling window length (in bars)
+    minimum: float
+    p25: float
+    median: float
+    p75: float
+    maximum: float
+    current: float           # most-recent window's realized vol
+
+
+def _percentile(sorted_vals, p):
+    """Linear-interpolated percentile of an already-sorted list (p in [0,1])."""
+    n = len(sorted_vals)
+    if n == 1:
+        return sorted_vals[0]
+    idx = p * (n - 1)
+    lo = int(math.floor(idx))
+    hi = min(lo + 1, n - 1)
+    frac = idx - lo
+    return sorted_vals[lo] * (1.0 - frac) + sorted_vals[hi] * frac
+
+
+def vol_cone(closes: Sequence[float], windows: Sequence[int],
+             periods_per_year: int = 252):
+    """Realized-volatility cone: the distribution of rolling realized vol per window.
+
+    For each window length, computes the annualized close-to-close realized vol
+    over every rolling block of returns of that length, then reports the min,
+    25th/50th/75th percentiles, max, and the most-recent (current) value. This
+    is the standard "vol cone" used to judge whether current realized vol is
+    high or low versus its own history at each horizon.
+
+    Args:
+        closes: the price series.
+        windows: rolling window lengths in *returns* (e.g. [5, 21, 63, 126]).
+        periods_per_year: annualization factor.
+
+    Returns a list of :class:`VolConePoint`, one per window (skipping windows
+    too long for the data).
+    """
+    rets = _log_returns(closes)
+    n = len(rets)
+    out = []
+    for w in sorted(windows):
+        if w < 2 or w > n:
+            continue
+        vols = []
+        for start in range(0, n - w + 1):
+            block = rets[start:start + w]
+            mean = sum(block) / w
+            var = sum((x - mean) ** 2 for x in block) / (w - 1)
+            vols.append(math.sqrt(var * periods_per_year))
+        vols_sorted = sorted(vols)
+        out.append(VolConePoint(
+            window=w,
+            minimum=vols_sorted[0],
+            p25=_percentile(vols_sorted, 0.25),
+            median=_percentile(vols_sorted, 0.5),
+            p75=_percentile(vols_sorted, 0.75),
+            maximum=vols_sorted[-1],
+            current=vols[-1],   # most-recent rolling block
+        ))
+    return out

@@ -98,7 +98,7 @@ from .montecarlo import (
 from .risk import VaRResult, parametric_var, historical_var, montecarlo_var
 from .volatility import (
     close_to_close, ewma_vol, parkinson, garman_klass, rogers_satchell,
-    yang_zhang, vol_report, VolReport,
+    yang_zhang, vol_report, VolReport, vol_cone, VolConePoint,
 )
 from .greeks2 import vanna, vomma, volga, charm, veta, speed, zomma, color
 from .scenario import ScenarioGrid, stress_grid, spot_ladder
@@ -115,7 +115,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.53.0"
+__version__ = "1.54.0"
 
 __all__ = [
     "OptionType",
@@ -273,6 +273,8 @@ __all__ = [
     "yang_zhang",
     "vol_report",
     "VolReport",
+    "vol_cone",
+    "VolConePoint",
     "vanna",
     "vomma",
     "volga",

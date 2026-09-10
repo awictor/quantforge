@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.53.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.54.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1351,6 +1351,10 @@ Auto-generated from `quantforge` v1.53.0 by `docs/gen_api.py` — do not edit by
 
 ## volatility
 
+### `VolConePoint(window: int, minimum: float, p25: float, median: float, p75: float, maximum: float, current: float) -> None`  _class_
+
+> VolConePoint(window: int, minimum: float, p25: float, median: float, p75: float, maximum: float, current: float)
+
 ### `VolReport(close_to_close: float, parkinson: float, garman_klass: float, rogers_satchell: float, yang_zhang: float, ewma: float) -> None`  _class_
 
 > VolReport(close_to_close: float, parkinson: float, garman_klass: float, rogers_satchell: float, yang_zhang: float, ewma: float)
@@ -1389,6 +1393,24 @@ Auto-generated from `quantforge` v1.53.0 by `docs/gen_api.py` — do not edit by
 >
 > var = mean( ln(H/C)ln(H/O) + ln(L/C)ln(L/O) ). Drift-independent: stays
 > unbiased even when the underlying has a non-zero mean return.
+
+### `vol_cone(closes: Sequence[float], windows: Sequence[int], periods_per_year: int = 252)`  _function_
+
+> Realized-volatility cone: the distribution of rolling realized vol per window.
+>
+> For each window length, computes the annualized close-to-close realized vol
+> over every rolling block of returns of that length, then reports the min,
+> 25th/50th/75th percentiles, max, and the most-recent (current) value. This
+> is the standard "vol cone" used to judge whether current realized vol is
+> high or low versus its own history at each horizon.
+>
+> Args:
+>     closes: the price series.
+>     windows: rolling window lengths in *returns* (e.g. [5, 21, 63, 126]).
+>     periods_per_year: annualization factor.
+>
+> Returns a list of :class:`VolConePoint`, one per window (skipping windows
+> too long for the data).
 
 ### `vol_report(opens, highs, lows, closes, periods_per_year: int = 252, ewma_lambda: float = 0.94) -> quantforge.volatility.VolReport`  _function_
 

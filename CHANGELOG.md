@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.54.0] - 2026-09-09
+
+### Added
+- `vol_cone` (in `volatility.py`): the realized-volatility cone — for each
+  rolling window length it reports the min / 25th / median / 75th / max and the
+  current realized vol (annualized), returning `VolConePoint` per window. The
+  cone narrows as the window grows and the median tracks the true vol.
+
 ## [1.53.0] - 2026-09-09
 
 ### Added

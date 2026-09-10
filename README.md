@@ -354,7 +354,17 @@ print(rep.parkinson, rep.garman_klass, rep.rogers_satchell, rep.yang_zhang)
 ```
 
 Yang-Zhang is drift-independent and handles overnight gaps; it is the default
-choice when you have clean OHLC data. Compare any of these against the implied
+choice when you have clean OHLC data.
+
+`vol_cone` shows the distribution of rolling realized vol per horizon — the
+standard "is current vol high or low" tool:
+
+```python
+from quantforge import vol_cone
+
+for pt in vol_cone(closes, windows=[5, 21, 63, 126]):
+    print(pt.window, pt.minimum, pt.median, pt.maximum, pt.current)
+``` Compare any of these against the implied
 vol from `implied_volatility` to trade realized-vs-implied.
 
 ## Delta-hedge P&L simulator
