@@ -4,6 +4,22 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.102.0] - 2026-09-10
+
+### Added
+- Leisen-Reimer binomial tree (new `leisen_reimer.py`): `leisen_reimer_price`
+  and `leisen_reimer_greeks`. Centres the tree on the strike and sets the
+  up-move and probability from a Peizer-Pratt inversion of the Black-Scholes
+  d1/d2, giving smooth `O(1/n^2)` convergence instead of CRR's slow oscillation.
+  Handles European and American exercise and a continuous dividend yield via
+  `b = r - q`; the step count is forced odd so the strike sits at the tree
+  centre.
+- Verified: European prices match Black-Scholes to <2e-3 at ~51 steps and beat
+  CRR at the same step count; American prices with dividends reach a 3000-step
+  CRR tree to ~1 cent (the American convergence is slower than the European
+  `O(1/n^2)`, since the smooth-payoff assumption breaks at the exercise
+  boundary, so a larger step count is used).
+
 ## [1.101.0] - 2026-09-10
 
 ### Added

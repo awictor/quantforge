@@ -23,6 +23,7 @@ from .bsm import (
 )
 from .implied import implied_volatility, implied_vol_smile
 from .binomial import american_price
+from .leisen_reimer import leisen_reimer_price, leisen_reimer_greeks
 from .trinomial import trinomial_price, richardson_american
 from .lsm import bermudan_lsm
 from .perpetual import perpetual_american, perpetual_exercise_boundary
@@ -148,7 +149,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.101.0"
+__version__ = "1.102.0"
 
 __all__ = [
     "OptionType",
@@ -166,6 +167,8 @@ __all__ = [
     "implied_volatility",
     "implied_vol_smile",
     "american_price",
+    "leisen_reimer_price",
+    "leisen_reimer_greeks",
     "trinomial_price",
     "richardson_american",
     "bermudan_lsm",

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.101.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.102.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -915,6 +915,28 @@ Auto-generated from `quantforge` v1.101.0 by `docs/gen_api.py` — do not edit b
 > returning ``(log_moneyness, vol)`` pairs sorted by strike on the forward
 > ``F = S e^{(r-q) t}``. An asymmetric jump distribution (``eta1 != eta2`` or
 > ``p != 1/2``) tilts the smile into a skew.
+
+## leisen_reimer
+
+### `leisen_reimer_greeks(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, steps=101, american=False)`  _function_
+
+> Delta and gamma from Leisen-Reimer tree nodes, plus FD vega/theta.
+>
+> Delta and gamma are read directly off the first two time steps of the tree
+> (no extra pricing passes), while vega and theta use small central
+> differences. Returns a dict with price, delta, gamma, vega and theta.
+
+### `leisen_reimer_price(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, steps=101, american=False) -> float`  _function_
+
+> Price an option with a Leisen-Reimer binomial tree.
+>
+> Args:
+>     steps: number of time steps; forced to the next odd integer so the tree
+>         straddles the strike (the source of the fast, monotone convergence).
+>     american: if ``True``, apply an early-exercise check at each node;
+>         otherwise price the European payoff.
+>     b: cost of carry (defaults to ``r``); dividend yield ``q`` enters as
+>         ``b = r - q``.
 
 ## localvol
 
