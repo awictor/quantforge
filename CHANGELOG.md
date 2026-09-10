@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.222.0] - 2026-09-10
+
+### Added
+- `cev_greeks` (in `cev.py`): delta, gamma, vega, and theta of a CEV option by
+  central finite differences on `cev_price`.
+- Verified: delta matches a finite difference across `beta` in {0.3, 0.5, 0.7};
+  the call delta is in (0,1) with positive gamma/vega and the put delta is
+  negative; a lower `beta` (steeper local-vol skew) lifts the ATM call delta.
+  (The `beta -> 1` Black-Scholes limit is *not* asserted -- the Schroder
+  noncentral-chi-square parameters are numerically unstable as `beta -> 1`, so
+  the checks stay in the well-conditioned interior.)
+
 ## [1.221.0] - 2026-09-10
 
 ### Added

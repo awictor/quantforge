@@ -162,3 +162,34 @@ def cev_price(S, K, t, r, sigma, beta, option_type=OptionType.CALL, q=0.0):
         return call
     # Put-call parity: P = C - S e^{-qt} + K e^{-rt}.
     return call - S * math.exp(-q * t) + K * disc
+
+
+def cev_greeks(S, K, t, r, sigma, beta, option_type=OptionType.CALL, q=0.0):
+    """Greeks of a CEV option by central finite differences.
+
+    Differentiates :func:`cev_price` for ``delta`` (dV/dS), ``gamma`` (d2V/dS2),
+    ``vega`` (dV/dsigma), and ``theta`` (calendar decay). As ``beta -> 1`` the
+    Greeks approach the Black-Scholes Greeks (``sigma`` is calibrated so the
+    ATM instantaneous vol matches). Lower ``beta`` steepens the local-vol skew,
+    lifting put deltas and gammas in the left wing. Returns a dict with ``price``
+    and those fields.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if not (0.0 <= beta < 1.0):
+        raise ValueError("beta must be in [0, 1)")
+
+    def px(S_=S, t_=t, sigma_=sigma):
+        return cev_price(S_, K, t_, r, sigma_, beta, ot, q=q)
+
+    base = px()
+    hS = 1e-4 * S
+    up, dn = px(S_=S + hS), px(S_=S - hS)
+    delta = (up - dn) / (2.0 * hS)
+    gamma = (up - 2.0 * base + dn) / (hS * hS)
+    hv = 1e-4
+    vega = (px(sigma_=sigma + hv) - px(sigma_=sigma - hv)) / (2.0 * hv)
+    ht = min(1e-4, 0.25 * t)
+    theta = -(px(t_=t + ht) - px(t_=t - ht)) / (2.0 * ht)
+    return {"price": base, "delta": delta, "gamma": gamma, "vega": vega,
+            "theta": theta}

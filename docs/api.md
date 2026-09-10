@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.221.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.222.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -407,6 +407,17 @@ Auto-generated from `quantforge` v1.221.0 by `docs/gen_api.py` — do not edit b
 > Price a European call/put for a Levy model via Carr-Madan + parity.
 
 ## cev
+
+### `cev_greeks(S, K, t, r, sigma, beta, option_type=<OptionType.CALL: 'call'>, q=0.0)`  _function_
+
+> Greeks of a CEV option by central finite differences.
+>
+> Differentiates :func:`cev_price` for ``delta`` (dV/dS), ``gamma`` (d2V/dS2),
+> ``vega`` (dV/dsigma), and ``theta`` (calendar decay). As ``beta -> 1`` the
+> Greeks approach the Black-Scholes Greeks (``sigma`` is calibrated so the
+> ATM instantaneous vol matches). Lower ``beta`` steepens the local-vol skew,
+> lifting put deltas and gammas in the left wing. Returns a dict with ``price``
+> and those fields.
 
 ### `cev_price(S, K, t, r, sigma, beta, option_type=<OptionType.CALL: 'call'>, q=0.0)`  _function_
 
