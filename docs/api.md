@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.230.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.231.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -827,6 +827,16 @@ Auto-generated from `quantforge` v1.230.0 by `docs/gen_api.py` — do not edit b
 > ``[-0.9 S, 20 S]``, staying above the ``-shift`` floor).
 
 ## double_heston
+
+### `double_heston_greeks(S, K, t, r, v01, kappa1, theta1, xi1, rho1, v02, kappa2, theta2, xi2, rho2, option_type=<OptionType.CALL: 'call'>, q=0.0)`  _function_
+
+> Greeks of a double-Heston option by central finite differences.
+>
+> Central differences of :func:`double_heston_price` for the spot Greeks
+> ``delta`` (dV/dS) and ``gamma`` (d2V/dS2), plus a per-factor
+> initial-variance sensitivity ``vega_v01`` and ``vega_v02`` (dV/dv0 for each
+> variance factor -- the stochastic-vol analogue of vega). Returns a dict with
+> ``price``, ``delta``, ``gamma``, ``vega_v01``, ``vega_v02``.
 
 ### `double_heston_price(S, K, t, r, v01, kappa1, theta1, xi1, rho1, v02, kappa2, theta2, xi2, rho2, option_type=<OptionType.CALL: 'call'>, q=0.0, upper=200.0) -> float`  _function_
 

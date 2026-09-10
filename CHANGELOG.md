@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.231.0] - 2026-09-10
+
+### Added
+- `double_heston_greeks` (in `double_heston.py`): spot Greeks (`delta`,
+  `gamma`) plus a per-factor initial-variance sensitivity `vega_v01` and
+  `vega_v02` of a double-Heston option by central finite differences on
+  `double_heston_price` (one-sided at each variance floor).
+- Verified: delta matches a finite difference; call delta in (0,1) with positive
+  gamma; both variance vegas are positive.
+
 ## [1.230.0] - 2026-09-10
 
 ### Added

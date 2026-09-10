@@ -107,6 +107,47 @@ def double_heston_price(S, K, t, r,
     return call - S * math.exp(-q * t) + K * math.exp(-r * t)
 
 
+def double_heston_greeks(S, K, t, r,
+                         v01, kappa1, theta1, xi1, rho1,
+                         v02, kappa2, theta2, xi2, rho2,
+                         option_type=OptionType.CALL, q=0.0):
+    """Greeks of a double-Heston option by central finite differences.
+
+    Central differences of :func:`double_heston_price` for the spot Greeks
+    ``delta`` (dV/dS) and ``gamma`` (d2V/dS2), plus a per-factor
+    initial-variance sensitivity ``vega_v01`` and ``vega_v02`` (dV/dv0 for each
+    variance factor -- the stochastic-vol analogue of vega). Returns a dict with
+    ``price``, ``delta``, ``gamma``, ``vega_v01``, ``vega_v02``.
+    """
+    ot = _coerce_type(option_type)
+    if S <= 0 or K <= 0:
+        raise ValueError("S and K must be positive")
+    if t <= 0:
+        raise ValueError("t must be positive")
+    for v0, th, xi in ((v01, theta1, xi1), (v02, theta2, xi2)):
+        if v0 < 0 or th < 0 or xi < 0:
+            raise ValueError("variance parameters must be non-negative")
+
+    def px(S_=S, dv1=0.0, dv2=0.0):
+        return double_heston_price(S_, K, t, r,
+                                   v01 + dv1, kappa1, theta1, xi1, rho1,
+                                   v02 + dv2, kappa2, theta2, xi2, rho2,
+                                   ot, q=q)
+
+    base = px()
+    hS = 1e-3 * S
+    up, dn = px(S_=S + hS), px(S_=S - hS)
+    delta = (up - dn) / (2.0 * hS)
+    gamma = (up - 2.0 * base + dn) / (hS * hS)
+    hv = 1e-4
+    vega_v01 = (px(dv1=hv) - px(dv1=-hv)) / (2.0 * hv) if v01 - hv >= 0 \
+        else (px(dv1=hv) - base) / hv
+    vega_v02 = (px(dv2=hv) - px(dv2=-hv)) / (2.0 * hv) if v02 - hv >= 0 \
+        else (px(dv2=hv) - base) / hv
+    return {"price": base, "delta": delta, "gamma": gamma,
+            "vega_v01": vega_v01, "vega_v02": vega_v02}
+
+
 def double_heston_smile(S, strikes, t, r,
                         v01, kappa1, theta1, xi1, rho1,
                         v02, kappa2, theta2, xi2, rho2, q=0.0):
