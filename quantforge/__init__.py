@@ -34,6 +34,9 @@ from .bachelier import (
 )
 from .hedgesim import simulate_delta_hedge, HedgeResult
 from .merton import merton_jump_price
+from .density import (
+    risk_neutral_density, risk_neutral_cdf, price_from_density, density_total_mass,
+)
 from .portfolio import Contract, Position, BookRisk, Book, price_book
 from .svi import SVIParams, calibrate_svi
 from .sabr import SABRParams, sabr_vol, calibrate_sabr
@@ -60,7 +63,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.10.0"
+__version__ = "1.11.0"
 
 __all__ = [
     "OptionType",
@@ -97,6 +100,10 @@ __all__ = [
     "simulate_delta_hedge",
     "HedgeResult",
     "merton_jump_price",
+    "risk_neutral_density",
+    "risk_neutral_cdf",
+    "price_from_density",
+    "density_total_mass",
     "Contract",
     "Position",
     "BookRisk",

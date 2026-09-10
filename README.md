@@ -158,6 +158,25 @@ for pos in book.positions:
 `qty` is signed (short = negative) and `multiplier` scales to notional
 (e.g. 100 for US equity options). Net Greeks are position-scaled sums.
 
+## Risk-neutral density (Breeden-Litzenberger)
+
+Extract the market-implied probability distribution of the underlying at expiry
+from a call-price curve, then reprice any payoff against it:
+
+```python
+from quantforge import risk_neutral_density, price_from_density, density_total_mass
+
+mids, pdf = risk_neutral_density(strikes, calls, t=1.0, r=0.05)
+print(density_total_mass(strikes, calls, 1.0, 0.05))   # ~ 1.0 for a clean curve
+
+# Price an arbitrary European payoff by integrating against the density.
+digital = price_from_density(strikes, calls, 1.0, 0.05,
+                             payoff=lambda ST: 1.0 if ST > 100 else 0.0)
+```
+
+The density is the discounted second derivative of the call curve in strike;
+`risk_neutral_cdf` gives the CDF from the first derivative.
+
 ## Implied forward and dividend
 
 Recover the forward price and discount factor directly from a call/put chain

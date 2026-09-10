@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.11.0] - 2026-09-09
+
+### Added
+- `density.py`: Breeden-Litzenberger risk-neutral density extraction from a
+  call-price curve. `risk_neutral_density` (second strike-derivative, non-
+  uniform grid), `risk_neutral_cdf` (first derivative), `price_from_density`
+  (integrate any payoff against the recovered density), and
+  `density_total_mass` (sanity check ~1). Recovers the lognormal pdf from a
+  BSM curve and reprices vanilla and digital payoffs.
+
 ## [1.10.0] - 2026-09-09
 
 ### Added
