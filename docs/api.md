@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.125.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.126.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2660,3 +2660,9 @@ Auto-generated from `quantforge` v1.125.0 by `docs/gen_api.py` — do not edit b
 >
 > Requires the previous close, so bars are chained: overnight return uses
 > ln(O_t / C_{t-1}).
+
+## volcube
+
+### `VolCube(expiries, tenors, node_params, forwards)`  _class_
+
+> A SABR-per-node swaption vol cube with variance interpolation.

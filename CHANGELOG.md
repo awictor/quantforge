@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.126.0] - 2026-09-10
+
+### Added
+- Swaption volatility cube (new `volcube.py`): `VolCube` stores a calibrated
+  SABR smile at each `(expiry, tenor)` node and interpolates across all three
+  market axes -- SABR handles strike/smile analytically, while expiry and tenor
+  use bilinear interpolation of the total variance `sigma^2 * expiry` (the
+  no-calendar-arbitrage-friendly choice). `VolCube.fit` builds it from market
+  smiles; `vol(expiry, tenor, strike)` queries any point.
+- Verified: each node reprices its own SABR smile, an interpolated `(3, 7)` node
+  lands between its neighbours, expiry interpolation stays in range, the SABR
+  smile shape is preserved, and beyond the grid the nearest node is used.
+
 ## [1.125.0] - 2026-09-10
 
 ### Added
