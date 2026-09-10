@@ -17,6 +17,7 @@ from .bsm import (
     vega,
     theta,
     rho,
+    epsilon,
     greeks,
     Greeks,
 )
@@ -80,7 +81,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.23.0"
+__version__ = "1.24.0"
 
 __all__ = [
     "OptionType",
@@ -92,6 +93,7 @@ __all__ = [
     "vega",
     "theta",
     "rho",
+    "epsilon",
     "greeks",
     "Greeks",
     "implied_volatility",

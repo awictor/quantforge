@@ -22,8 +22,9 @@ whole thing is a few hundred lines of readable, tested code.
 - **Zero dependencies** — standard library only.
 - **Generalized BSM** — one model covers stocks, dividends, futures (Black-76)
   and FX (Garman-Kohlhagen) via the cost-of-carry parameter.
-- **Every Greek analytic** — delta, gamma, vega, theta, rho, verified against
-  finite differences to 1e-4 or better.
+- **Every Greek analytic** — delta, gamma, vega, theta, rho, epsilon (dividend
+  rho), plus second-order (vanna/vomma/charm/…), verified against finite
+  differences to 1e-4 or better.
 - **Robust implied vol** — Newton-Raphson with a guaranteed bisection bracket,
   arbitrage-band rejection.
 - **American exercise** — binomial tree that converges to BSM on European

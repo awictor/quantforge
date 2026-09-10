@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.24.0] - 2026-09-09
+
+### Added
+- `epsilon` (dividend rho) in `bsm.py`: analytic sensitivity of the option
+  price to the continuous dividend yield, `dPrice/dq`. Negative for calls,
+  positive for puts, and verified against finite differences.
+
 ## [1.23.0] - 2026-09-09
 
 ### Added

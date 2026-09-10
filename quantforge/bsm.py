@@ -182,6 +182,28 @@ def rho(S, K, t, r, sigma, option_type=OptionType.CALL, b=None) -> float:
     return -K * t * disc * norm_cdf(-d2)
 
 
+def epsilon(S, K, t, r, sigma, option_type=OptionType.CALL, b=None) -> float:
+    """Dividend rho (a.k.a. epsilon / psi): dPrice/dq, per 1.0 change in the
+    continuous dividend yield.
+
+    The dividend yield enters through the carry ``b = r - q``, so raising q
+    lowers the forward. For a call ``dPrice/dq = -S t e^{(b-r)t} N(d1)``; for a
+    put ``+S t e^{(b-r)t} N(-d1)``. Assumes ``b`` moves with ``q`` (the standard
+    dividend-yield case).
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if b is None:
+        b = r
+    if t == 0 or sigma == 0:
+        return 0.0
+    d1, _ = _d1_d2(S, K, t, r, sigma, b)
+    carry = math.exp((b - r) * t)
+    if ot is OptionType.CALL:
+        return -S * t * carry * norm_cdf(d1)
+    return S * t * carry * norm_cdf(-d1)
+
+
 @dataclass(frozen=True)
 class Greeks:
     price: float
