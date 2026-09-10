@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.105.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.106.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -271,6 +271,31 @@ Auto-generated from `quantforge` v1.105.0 by `docs/gen_api.py` — do not edit b
 > dPrice/dSigma, per 1.0 change in vol (divide by 100 for per-vol-point).
 
 ## carrmadan
+
+### `carr_madan_smile_strip(S, t, r, q, psi, k_lo=-0.5, k_hi=0.5, alpha=1.5, n_fft=4096, eta=0.25)`  _function_
+
+> Implied-vol smile over a log-moneyness window from one Carr-Madan FFT.
+>
+> Runs :func:`carr_madan_strip` once, keeps the grid strikes whose forward
+> log-moneyness ``ln(K / F)`` lies in ``[k_lo, k_hi]``, and inverts each call
+> to a Black-Scholes implied vol. Returns ``(log_moneyness, vol)`` pairs sorted
+> by strike -- the whole smile from a single transform.
+
+### `carr_madan_strip(S, t, r, q, psi, alpha=1.5, n_fft=4096, eta=0.25)`  _function_
+
+> Price a whole strip of European calls in one FFT (Carr-Madan 1999).
+>
+> Returns ``(strikes, calls)`` on a log-strike grid centred on the forward.
+> The Carr-Madan damped-call transform is sampled at ``n_fft`` frequency points
+> spaced ``eta`` apart, Simpson-weighted, and inverted with a single radix-2
+> FFT -- so the entire smile costs one transform instead of one Gauss-Legendre
+> integral per strike. The log-strike spacing is ``lambda = 2 pi / (n_fft eta)``.
+>
+> Args:
+>     psi: characteristic exponent ``psi(u)`` (as in :func:`levy_price`).
+>     alpha: damping factor (> 0); needs ``psi(-(alpha+1) i)`` finite.
+>     n_fft: FFT length (power of two).
+>     eta: frequency-grid spacing; smaller = finer strikes over a wider range.
 
 ### `levy_price(S, K, t, r, q, psi, option_type=<OptionType.CALL: 'call'>, alpha=1.5, upper=200.0) -> float`  _function_
 

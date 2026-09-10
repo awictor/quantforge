@@ -4,6 +4,21 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.106.0] - 2026-09-10
+
+### Added
+- Carr-Madan FFT strip (in `carrmadan.py`): `carr_madan_strip` prices a whole
+  log-strike grid of European calls in a single transform, and
+  `carr_madan_smile_strip` returns the implied-vol smile over a log-moneyness
+  window from that one pass. Backed by a pure-Python radix-2 Cooley-Tukey `_fft`
+  (bit-reversal + butterflies, no NumPy) and Simpson-weighted frequency
+  sampling; works for any Levy model via its characteristic exponent (CGMY, NIG,
+  ...). The log-strike spacing is `2 pi / (n_fft * eta)`.
+- Verified: `_fft` matches a naive DFT and round-trips to ~1e-12; on the native
+  FFT grid the CGMY and NIG strip prices match the per-strike Gauss-Legendre
+  pricer to ~2e-6, and the smile strip is sorted, in-window, and shows the
+  expected skew.
+
 ## [1.105.0] - 2026-09-10
 
 ### Added
