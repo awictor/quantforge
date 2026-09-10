@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.129.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.130.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1131,6 +1131,24 @@ Auto-generated from `quantforge` v1.129.0 by `docs/gen_api.py` — do not edit b
 > pairs sorted by strike (``log_moneyness = ln(K / F)`` on the forward
 > ``F = S e^{(r-q)t}``). This exposes the skew/smile the stochastic-vol
 > parameters imply; a negative ``rho`` gives the usual downward equity skew.
+
+## heston_calib
+
+### `calibrate_heston(S, r, quotes, q=0.0, initial=None, feller_weight=0.0, max_iter=6000)`  _function_
+
+> Fit the five Heston parameters to an implied-vol surface.
+>
+> Args:
+>     quotes: iterable of ``(expiry, strike, market_vol)`` Black implied-vol
+>         points.
+>     initial: optional ``(v0, kappa, theta, xi, rho)`` seed; an ATM-variance
+>         based guess is used otherwise.
+>     feller_weight: if > 0, adds ``feller_weight * max(0, xi^2 - 2 kappa
+>         theta)^2`` to the objective, nudging the fit toward the Feller
+>         condition (a strictly positive variance process).
+>
+> Returns ``(params, rmse)`` -- the fitted 5-tuple and the root-mean-square
+> implied-vol error over the quotes.
 
 ## heston_mc
 

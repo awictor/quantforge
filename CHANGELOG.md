@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.130.0] - 2026-09-10
+
+### Added
+- `calibrate_heston` (new `heston_calib.py`): fit the five Heston parameters
+  `(v0, kappa, theta, xi, rho)` to an implied-vol surface by least squares on
+  Black vol over `(expiry, strike, vol)` quotes, pricing each candidate with the
+  Fourier `heston_price` and optimising with Nelder-Mead under a smooth
+  reparametrization. An optional `feller_weight` penalises Feller-condition
+  violations (`2 kappa theta < xi^2`) to prefer a strictly-positive variance
+  process.
+- Verified: recovers a synthetic Heston surface's parameters (rmse ~0); the
+  Feller penalty pushes `2 kappa theta` up to the `xi^2` boundary; all fitted
+  parameters stay in their valid regions.
+
 ## [1.129.0] - 2026-09-10
 
 ### Added
