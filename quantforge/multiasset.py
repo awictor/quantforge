@@ -20,6 +20,7 @@ import math
 
 from .mathfns import norm_cdf
 from .bsm import price as bsm_price, OptionType, _coerce_type
+from .american import _bivariate_normal
 
 
 def exchange_option(S1, S2, t, sigma1, sigma2, rho, q1=0.0, q2=0.0) -> float:
@@ -160,6 +161,76 @@ def _rainbow_mc(S1, S2, K, t, r, sigma1, sigma2, rho, q1, q2, kind, ot,
             total += payoff(-z1, -z2)
             count += 1
     return disc * total / count
+
+
+def _stulz_min_call(S1, S2, K, t, r, sigma1, sigma2, rho, q1, q2):
+    """Exact Stulz (1982) price of a call on the minimum of two assets.
+
+    ``max(min(S1, S2) - K, 0)``. With
+    ``sigma = sqrt(sigma1^2 - 2 rho sigma1 sigma2 + sigma2^2)`` the spread vol,
+    ``rho1 = (sigma1 - rho sigma2)/sigma``, ``rho2 = (sigma2 - rho sigma1)/sigma``,
+
+        d  = (ln(S1/S2) + (q2 - q1 + sigma^2/2) t) / (sigma sqrt(t))
+        yi = (ln(Si/K) + (r - qi + sigma_i^2/2) t) / (sigma_i sqrt(t))
+
+    the price is (Stulz eq. for the min):
+
+        S1 e^{-q1 t} M(y1, -d; -rho1)
+      + S2 e^{-q2 t} M(y2, d - sigma sqrt(t); -rho2)
+      - K e^{-r t} M(y1 - sigma1 sqrt(t), y2 - sigma2 sqrt(t); rho)
+
+    where ``M`` is the standardized bivariate-normal CDF.
+    """
+    st = math.sqrt(t)
+    sig = math.sqrt(sigma1 * sigma1 - 2.0 * rho * sigma1 * sigma2 + sigma2 * sigma2)
+    disc = math.exp(-r * t)
+    if sig < 1e-12:
+        # Perfectly correlated with equal vols: min is a single lognormal.
+        c1 = bsm_price(S1, K, t, r, sigma1, OptionType.CALL, b=r - q1)
+        c2 = bsm_price(S2, K, t, r, sigma2, OptionType.CALL, b=r - q2)
+        return min(c1, c2)
+    rho1 = (sigma1 - rho * sigma2) / sig
+    rho2 = (sigma2 - rho * sigma1) / sig
+    d = (math.log(S1 / S2) + (q2 - q1 + 0.5 * sig * sig) * t) / (sig * st)
+    y1 = (math.log(S1 / K) + (r - q1 + 0.5 * sigma1 * sigma1) * t) / (sigma1 * st)
+    y2 = (math.log(S2 / K) + (r - q2 + 0.5 * sigma2 * sigma2) * t) / (sigma2 * st)
+    return (S1 * math.exp(-q1 * t) * _bivariate_normal(y1, -d, -rho1)
+            + S2 * math.exp(-q2 * t) * _bivariate_normal(y2, d - sig * st, -rho2)
+            - K * disc * _bivariate_normal(y1 - sigma1 * st, y2 - sigma2 * st, rho))
+
+
+def best_of_call_closed(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0):
+    """Exact Stulz (1982) price of a call on the maximum of two assets.
+
+    ``max(max(S1, S2) - K, 0)``. Uses the Stulz identity
+    ``C_max + C_min = c(S1) + c(S2)`` (both vanilla calls at strike ``K``), so
+    ``C_max = c(S1) + c(S2) - C_min`` with the exact :func:`_stulz_min_call`.
+    This is the closed-form cross-check for the Monte Carlo :func:`best_of_call`.
+    """
+    if S1 <= 0 or S2 <= 0 or K <= 0:
+        raise ValueError("prices and strike must be positive")
+    if t <= 0:
+        raise ValueError("t must be positive")
+    if not -1.0 <= rho <= 1.0:
+        raise ValueError("rho must be in [-1, 1]")
+    c1 = bsm_price(S1, K, t, r, sigma1, OptionType.CALL, b=r - q1)
+    c2 = bsm_price(S2, K, t, r, sigma2, OptionType.CALL, b=r - q2)
+    return c1 + c2 - _stulz_min_call(S1, S2, K, t, r, sigma1, sigma2, rho, q1, q2)
+
+
+def worst_of_call_closed(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0):
+    """Exact Stulz (1982) price of a call on the minimum of two assets.
+
+    ``max(min(S1, S2) - K, 0)``. Closed-form cross-check for the Monte Carlo
+    :func:`worst_of_call`.
+    """
+    if S1 <= 0 or S2 <= 0 or K <= 0:
+        raise ValueError("prices and strike must be positive")
+    if t <= 0:
+        raise ValueError("t must be positive")
+    if not -1.0 <= rho <= 1.0:
+        raise ValueError("rho must be in [-1, 1]")
+    return _stulz_min_call(S1, S2, K, t, r, sigma1, sigma2, rho, q1, q2)
 
 
 def best_of_call(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0,

@@ -4,6 +4,21 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.183.0] - 2026-09-10
+
+### Added
+- `best_of_call_closed` / `worst_of_call_closed` (in `multiasset.py`): exact
+  Stulz (1982) closed forms for rainbow calls on the maximum / minimum of two
+  assets, replacing Monte Carlo (`best_of_call` / `worst_of_call`) with an
+  analytic price. Built on the spread vol
+  `sigma = sqrt(sigma1^2 - 2 rho sigma1 sigma2 + sigma2^2)` and the standardized
+  bivariate-normal CDF; the call-on-min is priced directly and the call-on-max
+  from the Stulz identity `C_max + C_min = c(S1) + c(S2)`.
+- Verified: the identity holds to 1e-9; both match their Monte Carlo
+  counterparts within MC error (best 17.150 vs 17.16, worst 4.574 vs 4.58), also
+  under negative correlation with dividends; the max-call dominates each vanilla
+  and the min-call.
+
 ## [1.182.0] - 2026-09-10
 
 ### Added

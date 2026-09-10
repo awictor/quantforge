@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.182.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.183.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2153,6 +2153,15 @@ Auto-generated from `quantforge` v1.182.0 by `docs/gen_api.py` — do not edit b
 > ``best + worst = call(S1) + call(S2)`` at the same strike (Stulz), which the
 > tests check.
 
+### `best_of_call_closed(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0)`  _function_
+
+> Exact Stulz (1982) price of a call on the maximum of two assets.
+>
+> ``max(max(S1, S2) - K, 0)``. Uses the Stulz identity
+> ``C_max + C_min = c(S1) + c(S2)`` (both vanilla calls at strike ``K``), so
+> ``C_max = c(S1) + c(S2) - C_min`` with the exact :func:`_stulz_min_call`.
+> This is the closed-form cross-check for the Monte Carlo :func:`best_of_call`.
+
 ### `exchange_greeks(S1, S2, t, sigma1, sigma2, rho, q1=0.0, q2=0.0)`  _function_
 
 > Greeks of a Margrabe exchange option (payoff max(S1 - S2, 0)) by FD.
@@ -2197,6 +2206,13 @@ Auto-generated from `quantforge` v1.182.0 by `docs/gen_api.py` — do not edit b
 ### `worst_of_call(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0, option_type=<OptionType.CALL: 'call'>, n_paths=100000, antithetic=True, seed=None)`  _function_
 
 > Option on the minimum of two assets: payoff max(min(S1,S2) - K, 0) (call).
+
+### `worst_of_call_closed(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0)`  _function_
+
+> Exact Stulz (1982) price of a call on the minimum of two assets.
+>
+> ``max(min(S1, S2) - K, 0)``. Closed-form cross-check for the Monte Carlo
+> :func:`worst_of_call`.
 
 ## nig
 
