@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.149.0] - 2026-09-10
+
+### Added
+- `forward_variance_swap_from_smile` (in `varswap.py`): fair forward-start
+  variance-swap strike over `[t1, t2]` from the two expiries' smiles. Total
+  variance is additive in time, so the accrued variance is
+  `(K_var(t2) t2 - K_var(t1) t1)/(t2 - t1)` with each spot-starting leg replicated
+  from its smile.
+- Verified: a flat term structure returns `sigma^2`; `t1 = 0` recovers the spot
+  variance swap exactly; an upward-sloping vol term structure gives a forward
+  variance above the front; and the additivity identity holds to 1e-6.
+
 ## [1.148.0] - 2026-09-10
 
 ### Added

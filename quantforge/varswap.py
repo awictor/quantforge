@@ -225,3 +225,27 @@ def gamma_swap_from_smile(S0, t, r, vol_fn, q=0.0, n_strikes=401, width=8.0,
     # variance is purely the 1/K-weighted strip scaled by 2 e^{rt}/(S0 t).
     growth = math.exp(r * t)
     return (2.0 * growth / (S0 * t)) * (put_strip + call_strip)
+
+
+def forward_variance_swap_from_smile(S0, t1, t2, r, vol_fn1, vol_fn2, q=0.0,
+                                     n_strikes=401, width=8.0):
+    """Fair forward-start variance-swap strike over ``[t1, t2]`` from two smiles.
+
+    Total (undiscounted) variance is additive in time, so the fair variance
+    accrued between ``t1`` and ``t2`` is
+
+        K_fwd = ( K_var(t2) * t2 - K_var(t1) * t1 ) / (t2 - t1),
+
+    where ``K_var(t_i)`` is the spot-starting variance-swap strike replicated
+    from the expiry-``t_i`` smile ``vol_fn_i(K)``. Requires ``0 <= t1 < t2``. A
+    flat term structure of flat smiles returns that flat variance.
+    """
+    if not (0.0 <= t1 < t2):
+        raise ValueError("need 0 <= t1 < t2")
+    kv2 = variance_swap_from_smile(S0, t2, r, vol_fn2, q=q,
+                                   n_strikes=n_strikes, width=width)
+    if t1 == 0.0:
+        return kv2
+    kv1 = variance_swap_from_smile(S0, t1, r, vol_fn1, q=q,
+                                   n_strikes=n_strikes, width=width)
+    return (kv2 * t2 - kv1 * t1) / (t2 - t1)

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.148.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.149.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2783,6 +2783,19 @@ Auto-generated from `quantforge` v1.148.0 by `docs/gen_api.py` — do not edit b
 > ``vol_fn(K)`` prices each strip option with Black-Scholes at its smile vol.
 > A corridor spanning the whole strip recovers (most of) the plain
 > variance-swap strike; a narrower corridor accrues less variance.
+
+### `forward_variance_swap_from_smile(S0, t1, t2, r, vol_fn1, vol_fn2, q=0.0, n_strikes=401, width=8.0)`  _function_
+
+> Fair forward-start variance-swap strike over ``[t1, t2]`` from two smiles.
+>
+> Total (undiscounted) variance is additive in time, so the fair variance
+> accrued between ``t1`` and ``t2`` is
+>
+>     K_fwd = ( K_var(t2) * t2 - K_var(t1) * t1 ) / (t2 - t1),
+>
+> where ``K_var(t_i)`` is the spot-starting variance-swap strike replicated
+> from the expiry-``t_i`` smile ``vol_fn_i(K)``. Requires ``0 <= t1 < t2``. A
+> flat term structure of flat smiles returns that flat variance.
 
 ### `gamma_swap_from_smile(S0, t, r, vol_fn, q=0.0, n_strikes=401, width=8.0, split=None)`  _function_
 
