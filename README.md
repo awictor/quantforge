@@ -483,6 +483,23 @@ bachelier_implied_vol(target_price=6.12, F=100, K=100, t=1.0, r=0.02)
 
 Includes analytic `bachelier_delta`, `bachelier_gamma`, and `bachelier_vega`.
 
+Interest-rate caps/floors/collars build on it as Bachelier caplet strips (so
+they handle negative rates):
+
+```python
+from quantforge import CapletPeriod, cap_price, floor_price, collar_price
+import math
+
+periods = [CapletPeriod(forward=0.03 + 0.002*i, expiry=float(i), accrual=1.0,
+                        discount=math.exp(-0.03*i), sigma_n=0.01)
+           for i in range(1, 5)]
+cap_price(periods, strike=0.04)
+floor_price(periods, strike=0.03)
+collar_price(periods, cap_strike=0.045, floor_strike=0.03)
+```
+
+Cap(K) - Floor(K) equals the discounted swap PV, which the tests enforce.
+
 ## Merton jump-diffusion
 
 Adds lognormal jumps to the diffusion; priced as a Poisson-weighted series of
