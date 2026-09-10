@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.212.0] - 2026-09-10
+
+### Added
+- `geometric_asian_greeks` (in `exotics.py`): Greeks of the continuously-
+  monitored geometric-average Asian. Since the Kemna-Vorst price is exactly a
+  Black-Scholes price at the adjusted vol `sigma_A = sigma/sqrt(3)` and carry
+  `b_A = (b - sigma^2/6)/2`, the spot enters only through that BSM price, so
+  `delta` and `gamma` are the exact BSM Greeks there (no finite difference);
+  `vega`, `theta`, and `rho` are central differences of the exact closed form.
+- Verified: delta, gamma, and vega match finite differences of `geometric_asian`
+  to machine / step precision; call delta in (0,1), gamma and vega positive; put
+  delta negative; the `price` field equals `geometric_asian`.
+
 ## [1.211.0] - 2026-09-10
 
 ### Added

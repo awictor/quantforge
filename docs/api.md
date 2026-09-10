@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.211.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.212.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -948,6 +948,19 @@ Auto-generated from `quantforge` v1.211.0 by `docs/gen_api.py` — do not edit b
 >
 > (Kemna-Vorst). This gives an exact closed form and is a standard control
 > variate for the arithmetic-average Asian priced by simulation.
+
+### `geometric_asian_greeks(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> Greeks of a continuously-monitored geometric-average Asian option.
+>
+> The Kemna-Vorst price is exactly a Black-Scholes price with the adjusted
+> volatility ``sigma_A = sigma / sqrt(3)`` and carry ``b_A = (b - sigma^2/6)/2``,
+> so the spot ``S`` enters only through the BSM price at ``(sigma_A, b_A)``:
+> ``delta`` and ``gamma`` are the exact BSM Greeks evaluated there (no finite
+> difference). ``vega``, ``theta``, and ``rho`` do depend on ``sigma``/``t``/
+> ``r`` through the adjusted parameters, so they are taken as central finite
+> differences of the exact closed form. Returns a dict with ``price``,
+> ``delta``, ``gamma``, ``vega``, ``theta``, ``rho``.
 
 ### `no_touch(S, H, t, r, sigma, b=None, cash=1.0)`  _function_
 

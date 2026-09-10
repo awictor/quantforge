@@ -16,7 +16,10 @@ import math
 from enum import Enum
 
 from .mathfns import norm_cdf
-from .bsm import OptionType, _coerce_type, _validate, price as bsm_price
+from .bsm import (
+    OptionType, _coerce_type, _validate, price as bsm_price,
+    delta as bsm_delta, gamma as bsm_gamma,
+)
 
 
 # --------------------------------------------------------------------------
@@ -178,6 +181,44 @@ def geometric_asian(S, K, t, r, sigma, option_type=OptionType.CALL, b=None):
     sigma_a = sigma / math.sqrt(3.0)
     b_a = 0.5 * (b - sigma * sigma / 6.0)
     return bsm_price(S, K, t, r, sigma_a, option_type, b=b_a)
+
+
+def geometric_asian_greeks(S, K, t, r, sigma, option_type=OptionType.CALL,
+                           b=None):
+    """Greeks of a continuously-monitored geometric-average Asian option.
+
+    The Kemna-Vorst price is exactly a Black-Scholes price with the adjusted
+    volatility ``sigma_A = sigma / sqrt(3)`` and carry ``b_A = (b - sigma^2/6)/2``,
+    so the spot ``S`` enters only through the BSM price at ``(sigma_A, b_A)``:
+    ``delta`` and ``gamma`` are the exact BSM Greeks evaluated there (no finite
+    difference). ``vega``, ``theta``, and ``rho`` do depend on ``sigma``/``t``/
+    ``r`` through the adjusted parameters, so they are taken as central finite
+    differences of the exact closed form. Returns a dict with ``price``,
+    ``delta``, ``gamma``, ``vega``, ``theta``, ``rho``.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if b is None:
+        b = r
+    sigma_a = sigma / math.sqrt(3.0)
+    b_a = 0.5 * (b - sigma * sigma / 6.0)
+    price = bsm_price(S, K, t, r, sigma_a, ot, b=b_a)
+    # S enters only via the BSM price at the adjusted params -> exact Greeks.
+    delta = bsm_delta(S, K, t, r, sigma_a, ot, b=b_a)
+    gamma = bsm_gamma(S, K, t, r, sigma_a, b=b_a)
+
+    def px(ss=sigma, tt=t, rr=r):
+        return geometric_asian(S, K, tt, rr, ss, ot, b=b)
+
+    hv = 1e-4
+    vega = (px(ss=sigma + hv) - px(ss=sigma - hv)) / (2.0 * hv)
+    ht = 1e-4
+    # Theta is -dV/dt (value decays as time passes).
+    theta = -(px(tt=t + ht) - px(tt=t - ht)) / (2.0 * ht)
+    hr = 1e-5
+    rho = (px(rr=r + hr) - px(rr=r - hr)) / (2.0 * hr)
+    return {"price": price, "delta": delta, "gamma": gamma, "vega": vega,
+            "theta": theta, "rho": rho}
 
 
 # --------------------------------------------------------------------------
