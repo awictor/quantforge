@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.104.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.105.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -269,6 +269,12 @@ Auto-generated from `quantforge` v1.104.0 by `docs/gen_api.py` — do not edit b
 ### `vega(S, K, t, r, sigma, b=None) -> float`  _function_
 
 > dPrice/dSigma, per 1.0 change in vol (divide by 100 for per-vol-point).
+
+## carrmadan
+
+### `levy_price(S, K, t, r, q, psi, option_type=<OptionType.CALL: 'call'>, alpha=1.5, upper=200.0) -> float`  _function_
+
+> Price a European call/put for a Levy model via Carr-Madan + parity.
 
 ## cev
 
@@ -1290,6 +1296,30 @@ Auto-generated from `quantforge` v1.104.0 by `docs/gen_api.py` — do not edit b
 ### `worst_of_call(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0, option_type=<OptionType.CALL: 'call'>, n_paths=100000, antithetic=True, seed=None)`  _function_
 
 > Option on the minimum of two assets: payoff max(min(S1,S2) - K, 0) (call).
+
+## nig
+
+### `nig_price(S, K, t, r, alpha, beta, delta, option_type=<OptionType.CALL: 'call'>, q=0.0, cm_alpha=1.5, upper=200.0) -> float`  _function_
+
+> Price a European option under the NIG model via Carr-Madan inversion.
+>
+> Args:
+>     alpha: tail-heaviness / steepness (> 0); larger = lighter tails.
+>     beta: asymmetry (``|beta| < alpha``); ``beta < 0`` gives a downward skew.
+>     delta: scale (> 0).
+>     q: continuous dividend yield.
+>     cm_alpha: Carr-Madan damping; needs ``alpha - (beta + cm_alpha + 1) > 0``
+>         for the martingale transform to stay finite.
+>
+> Puts use put-call parity.
+
+### `nig_smile(S, strikes, t, r, alpha, beta, delta, q=0.0, cm_alpha=1.5)`  _function_
+
+> Black-Scholes implied-vol smile the NIG model produces.
+>
+> Prices a call at each strike and inverts to a Black-Scholes implied vol,
+> returning ``(log_moneyness, vol)`` pairs sorted by strike on the forward
+> ``F = S e^{(r-q) t}``. ``beta < 0`` tilts the smile into a downward skew.
 
 ## overhedge
 

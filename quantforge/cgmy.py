@@ -19,11 +19,10 @@ transform, integrated here with the shared Gauss-Legendre nodes. Pure standard
 library (uses ``cmath`` for the complex powers; ``Gamma(-Y)`` is real).
 """
 
-import cmath
 import math
 
-from .bsm import OptionType, _coerce_type
-from .heston import _GL_NODES, _GL_WEIGHTS
+from .bsm import OptionType
+from .carrmadan import levy_price
 
 
 def _cgmy_psi(u, C, G, M, Y):
@@ -34,8 +33,12 @@ def _cgmy_psi(u, C, G, M, Y):
 
 
 def _cgmy_char_logspot(u, x0, t, r, q, C, G, M, Y):
-    """Characteristic function of ln S_T under the risk-neutral CGMY measure."""
-    # Martingale correction omega so that E[S_T] = S0 e^{(r-q) t}: omega = -psi(-i).
+    """Characteristic function of ln S_T under the risk-neutral CGMY measure.
+
+    Retained for reference and independent (e.g. Gil-Pelaez) cross-checks; the
+    Carr-Madan pricer itself now runs through :mod:`quantforge.carrmadan`.
+    """
+    import cmath
     omega = -_cgmy_psi(-1j, C, G, M, Y)
     drift = x0 + (r - q + omega) * t
     return cmath.exp(1j * u * drift + t * _cgmy_psi(u, C, G, M, Y))
@@ -56,7 +59,6 @@ def cgmy_price(S, K, t, r, C, G, M, Y, option_type=OptionType.CALL, q=0.0,
     ``C = 0`` gives a degenerate (deterministic-forward) payoff. Puts use
     put-call parity.
     """
-    ot = _coerce_type(option_type)
     if S <= 0 or K <= 0:
         raise ValueError("S and K must be positive")
     if t < 0:
@@ -68,32 +70,9 @@ def cgmy_price(S, K, t, r, C, G, M, Y, option_type=OptionType.CALL, q=0.0,
     if alpha <= 0 or alpha + 1.0 >= M:
         raise ValueError("need 0 < alpha and alpha + 1 < M for a finite transform")
 
-    if t == 0:
-        return max(S - K, 0.0) if ot is OptionType.CALL else max(K - S, 0.0)
-
-    x0 = math.log(S)
-    lnK = math.log(K)
-    disc = math.exp(-r * t)
-
-    # Carr-Madan: C(K) = e^{-alpha lnK}/pi * Re integral_0^inf e^{-i nu lnK} rho(nu) dnu,
-    #   rho(nu) = e^{-rT} phi(nu - (alpha+1) i) / (alpha^2 + alpha - nu^2 + i(2alpha+1)nu).
-    half = 0.5 * upper
-    total = 0.0
-    for node, w in zip(_GL_NODES, _GL_WEIGHTS):
-        nu = half * (node + 1.0)
-        if nu <= 0:
-            nu = 1e-8
-        u = nu - (alpha + 1.0) * 1j
-        phi = _cgmy_char_logspot(u, x0, t, r, q, C, G, M, Y)
-        denom = alpha * alpha + alpha - nu * nu + 1j * (2.0 * alpha + 1.0) * nu
-        rho = disc * phi / denom
-        total += w * (cmath.exp(-1j * nu * lnK) * rho).real
-    call = math.exp(-alpha * lnK) * half * total / math.pi
-
-    if ot is OptionType.CALL:
-        return call
-    # Put-call parity on the (r, q) forward.
-    return call - S * math.exp(-q * t) + K * math.exp(-r * t)
+    return levy_price(S, K, t, r, q,
+                      lambda u: _cgmy_psi(u, C, G, M, Y),
+                      option_type, alpha=alpha, upper=upper)
 
 
 def cgmy_smile(S, strikes, t, r, C, G, M, Y, q=0.0, alpha=1.5):

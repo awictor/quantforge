@@ -4,6 +4,27 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.105.0] - 2026-09-10
+
+### Added
+- Shared Carr-Madan engine (new `carrmadan.py`): `levy_price` / `carr_madan_call`
+  price any exponential-Levy model from its characteristic exponent `psi(u)`,
+  applying the martingale correction `omega = -psi(-i)` and the alpha-damped
+  Fourier inversion over the shared Gauss-Legendre nodes.
+- Normal Inverse Gaussian model (new `nig.py`): `nig_price` and `nig_smile`.
+  Barndorff-Nielsen's NIG has the analytic exponent
+  `psi(u) = delta (sqrt(alpha^2 - beta^2) - sqrt(alpha^2 - (beta + i u)^2))`
+  (tail `alpha`, asymmetry `beta`, scale `delta`) and is priced through the
+  shared engine.
+- Verified NIG against an independent Gil-Pelaez inversion to ~1e-6 on three
+  parameter sets, with put-call parity, `beta < 0` -> downward skew and
+  `beta > 0` -> upward skew.
+
+### Changed
+- `cgmy_price` now routes through the shared `carrmadan.levy_price` instead of
+  its own inlined Fourier loop (identical prices; the `_cgmy_char_logspot`
+  helper is kept for the Gil-Pelaez cross-check).
+
 ## [1.104.0] - 2026-09-10
 
 ### Added
