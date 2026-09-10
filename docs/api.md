@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.176.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.177.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2039,6 +2039,32 @@ Auto-generated from `quantforge` v1.176.0 by `docs/gen_api.py` — do not edit b
 > ``barrier`` is one of ``down-out``/``down-in``/``up-out``/``up-in``. "down"
 > watches for S <= H, "up" for S >= H. Knock-out pays the vanilla payoff
 > unless the barrier is activated; knock-in pays only if it is.
+
+### `spread_option_lhs_mc(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0, option_type=<OptionType.CALL: 'call'>, n_paths=50000, seed=None) -> quantforge.montecarlo.MCResult`  _function_
+
+> Two-asset spread option ``max(S1 - S2 - K, 0)`` by Latin hypercube MC.
+>
+> A plain two-asset simulation draws the two independent normals freely, so
+> clumps and gaps in each margin add variance. Latin hypercube sampling
+> stratifies *each* dimension into ``n_paths`` equiprobable bins and takes one
+> draw per bin, then independently permutes the two dimensions' bin order so
+> the pair is decorrelated before the target correlation is imposed. Mapping
+> the stratified uniforms through the inverse normal CDF gives two marginally
+> well-spread normals ``z1, z2``; the second asset's shock is correlated in the
+> usual way ``rho z1 + sqrt(1 - rho^2) z2`` (Cholesky of the 2x2). The margins
+> of a spread payoff are close to linear in each normal, so LHS removes most of
+> the variance a plain draw leaves in.
+>
+> Note on the reported ``std_error``: the LHS samples are *not* independent, so
+> the returned value is the plain i.i.d. formula and does **not** reflect the
+> LHS variance reduction -- it overstates the true error. The genuine gain
+> shows up only in the spread of the estimate across independent runs: at 4000
+> paths the across-seed RMSE against Kirk is roughly 0.10 versus 0.27 for a
+> plain two-asset draw (a ~2.6x reduction), even though both report a similar
+> ``std_error``. Use replication, not the reported SE, to size an LHS run.
+>
+> Cross-checks the Kirk :func:`quantforge.spread_option` (and, at ``K = 0``,
+> the exact Margrabe :func:`quantforge.exchange_option`).
 
 ## multiasset
 

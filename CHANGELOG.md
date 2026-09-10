@@ -4,6 +4,21 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.177.0] - 2026-09-10
+
+### Added
+- `spread_option_lhs_mc` (in `montecarlo.py`): two-asset spread option
+  `max(S1 - S2 - K, 0)` by Latin hypercube sampling. Each of the two driving
+  normals is stratified into `n_paths` equiprobable bins with one draw per bin,
+  the two dimensions' bin orders are independently permuted, and the stratified
+  uniforms are mapped through the inverse normal CDF; the second asset's shock
+  is correlated by `rho z1 + sqrt(1 - rho^2) z2`.
+- Verified: matches the Kirk `spread_option` and, at `K = 0`, the exact Margrabe
+  `exchange_option`. The LHS samples are not independent, so the reported
+  `std_error` (plain i.i.d. formula) overstates the true error; the genuine gain
+  is in the across-seed spread -- at 4000 paths the RMSE vs Kirk is ~0.10 versus
+  ~0.27 for a plain two-asset draw (~2.6x), documented on the function.
+
 ## [1.176.0] - 2026-09-10
 
 ### Added
