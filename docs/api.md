@@ -1,0 +1,973 @@
+# QuantForge API reference
+
+Auto-generated from `quantforge` v1.25.0 by `docs/gen_api.py` — do not edit by hand.
+
+## american
+
+### `bjerksund_stensland(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> American option price via Bjerksund-Stensland (2002), closed form.
+>
+> Args mirror the rest of the engine. ``b`` is the cost of carry (defaults to
+> ``r``); dividend yield q enters as b = r - q. American puts are priced via
+> the exact put-call transformation P(S,K,r,b) = C(K,S,r-b,-b).
+
+### `bjerksund_stensland_greeks(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> Greeks of the Bjerksund-Stensland American price by finite differences.
+>
+> The 2002 price is a closed form but its Greeks have no simple expression
+> (the exercise boundary and the bivariate-normal term move with the inputs),
+> so we central-difference the price. Returns a dict with delta, gamma, vega,
+> theta (per year, calendar), and rho.
+>
+> Bumps are chosen small relative to each input; because the BS2002 price is a
+> smooth function of its arguments (away from t=0) central differences are
+> accurate to a few basis points, plenty for hedging.
+
+## bachelier
+
+### `bachelier_delta(F, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>) -> float`  _function_
+
+> dPrice/dF (in the forward). Call delta is e^{-rt} N(d).
+
+### `bachelier_gamma(F, K, t, r, sigma) -> float`  _function_
+
+> d2Price/dF2. Same for calls and puts.
+
+### `bachelier_implied_vol(target_price, F, K, t, r, option_type=<OptionType.CALL: 'call'>, tol=1e-10, max_iter=100) -> float`  _function_
+
+> Solve for the normal volatility that reproduces ``target_price``.
+>
+> Newton's method on vega with a bisection fallback. Rejects prices outside
+> the no-arbitrage band [intrinsic, forward-bound].
+
+### `bachelier_price(F, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>) -> float`  _function_
+
+> Bachelier price of a European option on a forward ``F``.
+>
+> ``sigma`` is the normal (absolute) volatility. ``r`` discounts the payoff
+> from expiry; pass ``r=0`` to price on the forward directly.
+
+### `bachelier_vega(F, K, t, r, sigma) -> float`  _function_
+
+> dPrice/dsigma_N (per unit of normal vol). Same for calls and puts.
+
+## binomial
+
+### `american_price(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, steps=500)`  _function_
+
+> Price an American option via a CRR binomial tree.
+>
+> Args:
+>     steps: number of time steps. Higher = more accurate, O(steps^2) work.
+>     b: cost of carry (defaults to r). Dividend yield q enters as b = r - q.
+
+## bsm
+
+### `Greeks(price: float, delta: float, gamma: float, vega: float, theta: float, rho: float) -> None`  _class_
+
+> Greeks(price: float, delta: float, gamma: float, vega: float, theta: float, rho: float)
+
+### `OptionType(*values)`  _class_
+
+> str(object='') -> str
+> str(bytes_or_buffer[, encoding[, errors]]) -> str
+>
+> Create a new string object from the given object. If encoding or
+> errors is specified, then the object must expose a data buffer
+> that will be decoded using the given encoding and error handler.
+> Otherwise, returns the result of object.__str__() (if defined)
+> or repr(object).
+> encoding defaults to 'utf-8'.
+> errors defaults to 'strict'.
+
+### `call_price(S, K, t, r, sigma, b=None) -> float`  _function_
+
+> (no docstring)
+
+### `delta(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None) -> float`  _function_
+
+> dPrice/dS.
+
+### `epsilon(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None) -> float`  _function_
+
+> Dividend rho (a.k.a. epsilon / psi): dPrice/dq, per 1.0 change in the
+> continuous dividend yield.
+>
+> The dividend yield enters through the carry ``b = r - q``, so raising q
+> lowers the forward. For a call ``dPrice/dq = -S t e^{(b-r)t} N(d1)``; for a
+> put ``+S t e^{(b-r)t} N(-d1)``. Assumes ``b`` moves with ``q`` (the standard
+> dividend-yield case).
+
+### `gamma(S, K, t, r, sigma, b=None) -> float`  _function_
+
+> d2Price/dS2. Identical for calls and puts.
+
+### `greeks(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None) -> quantforge.bsm.Greeks`  _function_
+
+> Compute price and all first/second-order Greeks in one call.
+
+### `price(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None) -> float`  _function_
+
+> Price a European option under the generalized BSM model.
+>
+> Args:
+>     S: spot price of the underlying.
+>     K: strike price.
+>     t: time to expiry in years.
+>     r: continuously-compounded risk-free rate.
+>     sigma: annualized volatility.
+>     option_type: CALL or PUT (also accepts "call"/"put"/"c"/"p").
+>     b: cost of carry. Defaults to ``r`` (non-dividend stock).
+
+### `put_price(S, K, t, r, sigma, b=None) -> float`  _function_
+
+> (no docstring)
+
+### `rho(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None) -> float`  _function_
+
+> dPrice/dr, per 1.0 change in rate.
+>
+> Assumes carry moves with the rate (the plain BSM stock case). For models
+> where ``b`` is fixed independently of ``r`` (e.g. Black-76), pass ``b`` and
+> interpret accordingly.
+
+### `theta(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None) -> float`  _function_
+
+> Calendar-time theta, dPrice/d(calendar time) per year.
+>
+> This is the market convention: equal to ``-dPrice/dt_expiry``, so long
+> options usually show negative theta (value decays as the clock advances).
+> Divide by 365 for per-calendar-day decay.
+
+### `vega(S, K, t, r, sigma, b=None) -> float`  _function_
+
+> dPrice/dSigma, per 1.0 change in vol (divide by 100 for per-vol-point).
+
+## density
+
+### `density_total_mass(strikes: Sequence[float], calls: Sequence[float], t: float, r: float) -> float`  _function_
+
+> Integrate the extracted density; should be close to 1 for a good curve.
+
+### `price_from_density(strikes: Sequence[float], calls: Sequence[float], t: float, r: float, payoff: Callable[[float], float]) -> float`  _function_
+
+> Price a European payoff by integrating it against the extracted density.
+>
+> ``payoff`` maps a terminal underlying value to its cash payoff. The integral
+> uses the trapezoidal rule on the recovered density grid; the result is
+> discounted at ``r``.
+
+### `risk_neutral_cdf(strikes: Sequence[float], calls: Sequence[float], t: float, r: float) -> Tuple[List[float], List[float]]`  _function_
+
+> Estimate the risk-neutral CDF F(K) = 1 + e^{rt} dC/dK at midpoints.
+>
+> Uses central first differences; returns ``(mid_strikes, cdf_values)``.
+
+### `risk_neutral_density(strikes: Sequence[float], calls: Sequence[float], t: float, r: float) -> Tuple[List[float], List[float]]`  _function_
+
+> Estimate the risk-neutral pdf at the interior strikes.
+>
+> Uses a non-uniform central second difference of the call curve, so strikes
+> need not be equally spaced. Returns ``(mid_strikes, densities)`` for the
+> interior points (the two endpoints have no central second difference).
+
+## dv01
+
+### `KeyRateDV01(buckets: Dict[float, float], parallel: float, total_bucketed: float) -> None`  _class_
+
+> KeyRateDV01(buckets: Dict[float, float], parallel: float, total_bucketed: float)
+
+### `key_rate_dv01(price_fn: Callable[[Dict[float, float]], float], base_curve: Dict[float, float], bump: float = 0.0001, one_sided: bool = False) -> quantforge.dv01.KeyRateDV01`  _function_
+
+> Compute key-rate DV01s of a book about ``base_curve``.
+>
+> Args:
+>     price_fn: reprices the book given a ``{tenor: zero_rate}`` curve.
+>     base_curve: the current zero curve.
+>     bump: the rate shift per bucket (default 1bp). DV01 is reported as the
+>         PV change for a +1bp move, scaled from the actual bump.
+>     one_sided: use a forward difference instead of the default central one
+>         (cheaper, slightly less accurate).
+>
+> Returns a :class:`KeyRateDV01`. By convention DV01 is negative for a long
+> bond-like position (rates up -> PV down).
+
+## exotics
+
+### `Barrier(*values)`  _class_
+
+> str(object='') -> str
+> str(bytes_or_buffer[, encoding[, errors]]) -> str
+>
+> Create a new string object from the given object. If encoding or
+> errors is specified, then the object must expose a data buffer
+> that will be decoded using the given encoding and error handler.
+> Otherwise, returns the result of object.__str__() (if defined)
+> or repr(object).
+> encoding defaults to 'utf-8'.
+> errors defaults to 'strict'.
+
+### `arithmetic_asian(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> Continuously-monitored arithmetic-average-price Asian (Turnbull-Wakeman).
+>
+> The arithmetic average of a lognormal is not lognormal, so there is no exact
+> closed form. Turnbull-Wakeman (1991) matches the first two moments of the
+> average to a lognormal and prices with a Black-Scholes-style formula on the
+> average's forward. Fast and accurate for typical vols; agrees with the
+> arithmetic-Asian Monte Carlo (:func:`quantforge.arithmetic_asian_mc`) to a
+> few basis points. Averaging runs over the full life ``[0, t]``.
+
+### `asset_or_nothing(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> Pays the asset value S_T if in the money, else 0.
+
+### `barrier_option(S, K, H, t, r, sigma, option_type=<OptionType.CALL: 'call'>, barrier=<Barrier.DOWN_OUT: 'down-out'>, b=None, rebate=0.0)`  _function_
+
+> Price a single-barrier option with an optional cash rebate.
+>
+> Args:
+>     H: barrier level.
+>     barrier: one of the four Barrier kinds.
+>     rebate: cash paid if the option is knocked out (out types) or never
+>         knocked in (in types), paid at expiry.
+>
+> Implements the standard Reiner-Rubinstein decomposition. Validated in the
+> suite against in-out parity (knock-in + knock-out = vanilla + rebate term).
+
+### `cash_or_nothing(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, cash=1.0)`  _function_
+
+> Pays ``cash`` if the option finishes in the money, else 0.
+>
+> Call pays when S_T > K; put pays when S_T < K.
+
+### `geometric_asian(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> Continuously-monitored geometric-average-price Asian option.
+>
+> The geometric average of a lognormal is itself lognormal, so the price is a
+> BSM price with adjusted volatility and carry:
+>
+>     sigma_A = sigma / sqrt(3)
+>     b_A     = 0.5 * (b - sigma^2 / 6)
+>
+> (Kemna-Vorst). This gives an exact closed form and is a standard control
+> variate for the arithmetic-average Asian priced by simulation.
+
+### `no_touch(S, H, t, r, sigma, b=None, cash=1.0)`  _function_
+
+> No-touch binary: pays ``cash`` at expiry if the barrier is never reached.
+>
+> Complementary to :func:`one_touch` with payment at expiry:
+> ``no_touch = cash * e^{-rt} - one_touch(payoff_at_hit=False)``.
+
+### `one_touch(S, H, t, r, sigma, b=None, cash=1.0, payoff_at_hit=True)`  _function_
+
+> One-touch binary: pays ``cash`` if the spot ever reaches barrier ``H``.
+>
+> A continuously-monitored American digital. ``payoff_at_hit=True`` pays the
+> cash immediately when the barrier is touched (the FX-market convention);
+> ``False`` defers the payment to expiry. Works for an upper barrier
+> (``H > S``) or a lower barrier (``H < S``); the direction is inferred.
+>
+> Uses the standard Rubinstein-Reiner touch formulas.
+
+## forward
+
+### `ForwardResult(forward: float, discount_factor: float, implied_rate: float, implied_div_yield: float, n_strikes: int, rmse: float) -> None`  _class_
+
+> ForwardResult(forward: float, discount_factor: float, implied_rate: float, implied_div_yield: float, n_strikes: int, rmse: float)
+
+### `implied_forward(strikes: Sequence[float], calls: Sequence[float], puts: Sequence[float], t: float, spot: float = None)`  _function_
+
+> Extract the implied forward and discount factor from a parity fit.
+>
+> Solves ``C - P = D*F - D*K`` as a straight line in ``K`` by ordinary least
+> squares: the slope is ``-D`` and the intercept is ``D*F``.
+>
+> Args:
+>     strikes, calls, puts: equal-length chains at a single expiry.
+>     t: time to expiry in years (used to annualize the implied rate).
+>     spot: if given, also returns the implied continuous dividend yield.
+>
+> Returns a :class:`ForwardResult`.
+
+## forwardstart
+
+### `cliquet_price(S, reset_times: Sequence[float], r, sigma, alpha=1.0, option_type=<OptionType.CALL: 'call'>, b=None) -> float`  _function_
+
+> Price a cliquet (ratchet) as a strip of forward-start options.
+>
+> Args:
+>     reset_times: increasing schedule of reset/expiry dates in years, e.g.
+>         [0.25, 0.5, 0.75, 1.0]. Each consecutive pair (t_i, t_{i+1}) is one
+>         forward-start period that starts at t_i and expires at t_{i+1}. The
+>         first period starts now (t=0) and ends at reset_times[0].
+>
+> Returns the total present value of the strip.
+
+### `forward_start_price(S, t_start, t_expiry, r, sigma, alpha=1.0, option_type=<OptionType.CALL: 'call'>, b=None) -> float`  _function_
+
+> Price a forward-start option whose strike is set at ``t_start``.
+>
+> Args:
+>     S: current spot.
+>     t_start: time (years) until the strike is fixed. 0 reduces to a vanilla.
+>     t_expiry: total time (years) to the option's expiry (> t_start).
+>     alpha: moneyness multiple; strike = alpha * S_{t_start}. alpha=1 is ATM.
+>     b: cost of carry (defaults to r).
+>
+> Returns the present value.
+
+## greeks2
+
+### `charm(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None) -> float`  _function_
+
+> Calendar charm = -d(delta)/d(t_expiry): the drift of delta over time.
+
+### `color(S, K, t, r, sigma, b=None) -> float`  _function_
+
+> Calendar color = -d(gamma)/d(t_expiry): the decay of gamma over time.
+
+### `speed(S, K, t, r, sigma, b=None) -> float`  _function_
+
+> d(gamma)/d(spot). Third-order in spot; same for calls and puts.
+
+### `vanna(S, K, t, r, sigma, b=None) -> float`  _function_
+
+> d(delta)/d(sigma) = d(vega)/d(spot). Same for calls and puts.
+
+### `veta(S, K, t, r, sigma, b=None) -> float`  _function_
+
+> Calendar veta = -d(vega)/d(t_expiry): decay of vega over time.
+
+### `volga(S, K, t, r, sigma, b=None) -> float`  _function_
+
+> d(vega)/d(sigma) (volga). Same for calls and puts.
+
+### `vomma(S, K, t, r, sigma, b=None) -> float`  _function_
+
+> d(vega)/d(sigma) (volga). Same for calls and puts.
+
+### `zomma(S, K, t, r, sigma, b=None) -> float`  _function_
+
+> d(gamma)/d(sigma). Same for calls and puts.
+
+## hedgesim
+
+### `HedgeResult(mean_pnl: float, std_pnl: float, min_pnl: float, max_pnl: float, n_paths: int, n_steps: int) -> None`  _class_
+
+> HedgeResult(mean_pnl: float, std_pnl: float, min_pnl: float, max_pnl: float, n_paths: int, n_steps: int)
+
+### `simulate_delta_hedge(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, n_steps=50, n_paths=20000, hedge_vol=None, real_vol=None, seed=None, return_samples=False)`  _function_
+
+> Monte Carlo a discretely delta-hedged short option position.
+>
+> Args:
+>     n_steps: rebalancing dates over the option's life.
+>     hedge_vol: volatility used to compute the hedge delta (defaults to
+>         ``sigma``). Set different from ``real_vol`` to study hedging at the
+>         wrong vol.
+>     real_vol: volatility of the simulated path (defaults to ``sigma``).
+>     return_samples: if True, also return the raw per-path P&L list.
+>
+> Returns a :class:`HedgeResult` (and the samples if requested).
+
+## hedging
+
+### `StickyRule(*values)`  _class_
+
+> str(object='') -> str
+> str(bytes_or_buffer[, encoding[, errors]]) -> str
+>
+> Create a new string object from the given object. If encoding or
+> errors is specified, then the object must expose a data buffer
+> that will be decoded using the given encoding and error handler.
+> Otherwise, returns the result of object.__str__() (if defined)
+> or repr(object).
+> encoding defaults to 'utf-8'.
+> errors defaults to 'strict'.
+
+### `skew_slope(smile_fn, K, F, h=None)`  _function_
+
+> Estimate d(sigma)/dk at strike ``K`` via central finite difference.
+>
+> Args:
+>     smile_fn: callable ``sigma(K)`` returning implied vol for a strike.
+>     K: strike at which to measure the slope.
+>     F: forward (used to convert to log-moneyness k = ln(K/F)).
+>     h: bump in ``k`` space; defaults to a small fraction.
+>
+> Returns d(sigma)/dk where k = ln(K/F).
+
+### `smile_delta(S, K, t, r, sigma, dsigma_dk=0.0, option_type=<OptionType.CALL: 'call'>, b=None, sticky=<StickyRule.DELTA: 'delta'>) -> float`  _function_
+
+> Effective (smile-adjusted) delta of an option.
+>
+> Args:
+>     sigma: the option's current implied volatility.
+>     dsigma_dk: local skew slope d(sigma)/dk at this strike, where
+>         k = ln(K/F). Only used under the sticky-delta rule.
+>     sticky: STRIKE (delta == BS delta) or DELTA (add the vega/skew term).
+>
+> Under sticky-delta the smile is a function of moneyness, so a 1-unit rise in
+> spot lowers the log-moneyness of a fixed strike by 1/S, shifting its vol by
+> ``-(dsigma/dk)/S``. The effective delta is therefore
+>
+>     delta_eff = delta_BS + vega * d(sigma)/d(spot)
+>               = delta_BS - vega * (dsigma/dk) / S.
+
+### `smile_delta_from_smile(S, K, t, r, smile_fn, F=None, option_type=<OptionType.CALL: 'call'>, b=None) -> float`  _function_
+
+> Sticky-delta effective delta computed directly from a smile function.
+>
+> Reads the option's vol as ``smile_fn(K)``, estimates the local skew slope by
+> finite difference, and returns the adjusted delta. ``F`` defaults to the
+> carry-implied forward ``S * exp(b * t)``.
+
+## heston
+
+### `heston_price(S, K, t, r, v0, kappa, theta, xi, rho, option_type=<OptionType.CALL: 'call'>, q=0.0, upper=200.0) -> float`  _function_
+
+> Price a European option under the Heston model.
+>
+> Args:
+>     v0, kappa, theta, xi, rho: Heston parameters (see module docstring).
+>     q: continuous dividend yield.
+>     upper: truncation of the Fourier integral (200 is ample for typical
+>         parameters; raise for very long maturities or large xi).
+>
+> Returns the option price. Puts are obtained from put-call parity.
+
+## implied
+
+### `implied_volatility(target_price, S, K, t, r, option_type=<OptionType.CALL: 'call'>, b=None, tol=1e-08, max_iter=100, lo=1e-09, hi=10.0)`  _function_
+
+> Solve for the volatility that reproduces ``target_price``.
+>
+> Returns the implied vol, or raises ValueError if the quote is outside the
+> no-arbitrage band (no finite vol can produce it).
+
+## localvol
+
+### `dupire_local_vol(call_fn: Callable[[float, float], float], K: float, T: float, r: float, q: float = 0.0, dK: float = None, dT: float = None) -> float`  _function_
+
+> Dupire local volatility at strike ``K`` and maturity ``T``.
+>
+> Args:
+>     call_fn: ``C(K, T)`` returning the European call price for strike K and
+>         maturity T (both positive). Must be evaluable in a neighborhood of
+>         (K, T) for the finite differences.
+>     r, q: risk-free rate and continuous dividend yield.
+>     dK, dT: finite-difference bumps; default to small fractions of K and T.
+>
+> Returns the local volatility (not variance). Raises if the local variance
+> comes out non-positive (a sign of an arbitrageable / too-noisy surface).
+
+### `local_vol_from_implied(implied_vol_fn: Callable[[float, float], float], S: float, K: float, T: float, r: float, q: float = 0.0, dK: float = None, dT: float = None) -> float`  _function_
+
+> Dupire local vol from an implied-vol surface ``sigma_imp(K, T)``.
+>
+> Wraps :func:`dupire_local_vol` by turning the implied-vol surface into a
+> call-price surface with the Black-Scholes-Merton formula (carry ``b = r-q``).
+
+## lookback
+
+### `fixed_strike_lookback(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, s_extreme=None, b=None) -> float`  _function_
+
+> Fixed-strike lookback (Conze-Viswanathan).
+>
+> Call pays ``max(S_max - K, 0)``; put pays ``max(K - S_min, 0)``.
+>
+> Args:
+>     s_extreme: running maximum (call) or minimum (put) so far. Defaults to
+>         the current spot.
+
+### `floating_strike_lookback(S, t, r, sigma, option_type=<OptionType.CALL: 'call'>, s_extreme=None, b=None) -> float`  _function_
+
+> Floating-strike lookback (Goldman-Sosin-Gatto).
+>
+> Args:
+>     s_extreme: running minimum (for a call) or maximum (for a put) observed
+>         so far. Defaults to the current spot (inception).
+>     b: cost of carry (defaults to r).
+>
+> Call payoff: ``S_T - S_min``. Put payoff: ``S_max - S_T``.
+
+## merton
+
+### `merton_jump_price(S, K, t, r, sigma, lam, mu_j, sigma_j, option_type=<OptionType.CALL: 'call'>, b=None, max_terms=200, tol=1e-12) -> float`  _function_
+
+> Price a European option under the Merton jump-diffusion model.
+>
+> Args:
+>     sigma: diffusion volatility (the continuous part).
+>     lam: jump intensity (expected number of jumps per year, >= 0).
+>     mu_j: mean of the log jump size.
+>     sigma_j: standard deviation of the log jump size (>= 0).
+>     b: cost of carry (defaults to r). The drift is compensated so the
+>         discounted asset is a martingale under the given carry.
+>
+> Returns the option price as the Poisson-weighted BSM series.
+
+## montecarlo
+
+### `MCResult(price: float, std_error: float, n_paths: int) -> None`  _class_
+
+> MCResult(price: float, std_error: float, n_paths: int)
+
+### `arithmetic_asian_mc(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, n_steps=50, n_paths=50000, antithetic=True, control_variate=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
+
+> Price a fixed-strike arithmetic-average-price Asian option.
+>
+> With ``control_variate=True`` the geometric-average Asian (known in closed
+> form) is used as a control, dramatically reducing the standard error since
+> the two averages are almost perfectly correlated.
+
+### `european_mc(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, n_paths=100000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
+
+> Monte Carlo price of a European option (converges to the BSM value).
+
+## multiasset
+
+### `basket_option(spots, weights, K, t, r, sigmas, corr, q=None, option_type=<OptionType.CALL: 'call'>) -> float`  _function_
+
+> Two-asset basket call/put on ``w1 S1 + w2 S2`` via lognormal moment match.
+>
+> Args:
+>     spots: (S1, S2). weights: (w1, w2). sigmas: (sigma1, sigma2).
+>     corr: correlation between the two assets.
+>     q: optional (q1, q2) dividend yields; defaults to zeros.
+>
+> Matches the basket forward's first two moments to a single lognormal (Levy)
+> and prices with Black-Scholes. Exact for a single asset; an approximation
+> for the sum.
+
+### `exchange_option(S1, S2, t, sigma1, sigma2, rho, q1=0.0, q2=0.0) -> float`  _function_
+
+> Margrabe option to exchange asset 2 for asset 1: payoff max(S1 - S2, 0).
+>
+> Exact closed form; independent of the risk-free rate (the two assets'
+> financing cancels), depending only on the dividend yields.
+
+### `spread_option(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0, option_type=<OptionType.CALL: 'call'>) -> float`  _function_
+
+> Kirk (1995) approximation for a spread option: payoff max(S1 - S2 - K, 0).
+>
+> Reduces to an exact Margrabe formula when K = 0. Puts follow from parity on
+> the spread ``S1 - S2``.
+
+## overhedge
+
+### `Overhedge(cost: float, digital_value: float, cushion: float, long_strike: float, short_strike: float, quantity: float) -> None`  _class_
+
+> Overhedge(cost: float, digital_value: float, cushion: float, long_strike: float, short_strike: float, quantity: float)
+
+### `digital_call_overhedge(S, K, t, r, sigma, cash=1.0, width=None, b=None)`  _function_
+
+> Super-replicate a cash-or-nothing CALL digital with a call spread.
+>
+> Longs ``cash/width`` calls at ``K - width`` and shorts the same at ``K``, so
+> the payoff dominates ``cash * 1{S_T > K}``. Returns an :class:`Overhedge`
+> with the spread cost (a conservative price), the fair digital value, and the
+> cushion between them.
+
+### `digital_put_overhedge(S, K, t, r, sigma, cash=1.0, width=None, b=None)`  _function_
+
+> Super-replicate a cash-or-nothing PUT digital with a put spread.
+>
+> Longs ``cash/width`` puts at ``K + width`` and shorts the same at ``K``, so
+> the payoff dominates ``cash * 1{S_T < K}``.
+
+### `overhedge_payoff(oh: quantforge.overhedge.Overhedge, spot_at_expiry: float, is_call=True) -> float`  _function_
+
+> Terminal payoff of the replicating spread at ``spot_at_expiry``.
+
+## portfolio
+
+### `Book(positions: list = <factory>, net: quantforge.portfolio.BookRisk = <factory>) -> None`  _class_
+
+> Book(positions: list = <factory>, net: quantforge.portfolio.BookRisk = <factory>)
+
+### `BookRisk(market_value: float = 0.0, delta: float = 0.0, gamma: float = 0.0, vega: float = 0.0, theta: float = 0.0, rho: float = 0.0) -> None`  _class_
+
+> Aggregate book-level exposures (position-scaled sums).
+
+### `Contract(S: float, K: float, t: float, r: float, sigma: float, option_type: quantforge.bsm.OptionType = <OptionType.CALL: 'call'>, b: float = None, qty: float = 1.0, multiplier: float = 1.0, label: str = '') -> None`  _class_
+
+> A single option position.
+>
+> ``qty`` is signed: positive = long, negative = short. ``multiplier`` scales
+> each contract to its notional (e.g. 100 for US equity options).
+
+### `Position(contract: quantforge.portfolio.Contract, greeks: quantforge.bsm.Greeks) -> None`  _class_
+
+> A contract paired with its computed Greeks and position-scaled values.
+
+### `price_book(contracts: Iterable[quantforge.portfolio.Contract]) -> quantforge.portfolio.Book`  _function_
+
+> Value every contract and aggregate net book Greeks.
+>
+> Returns a ``Book`` with per-position detail and a ``net`` ``BookRisk`` of
+> position-scaled (qty * multiplier) sums.
+
+## rates
+
+### `CapletPeriod(forward: float, expiry: float, accrual: float, discount: float, sigma_n: float) -> None`  _class_
+
+> CapletPeriod(forward: float, expiry: float, accrual: float, discount: float, sigma_n: float)
+
+### `annuity(periods: Sequence[quantforge.rates.CapletPeriod]) -> float`  _function_
+
+> Present-value annuity (level / PV01) of a swap: sum of accrual*discount.
+
+### `cap_price(periods: Sequence[quantforge.rates.CapletPeriod], strike: float) -> float`  _function_
+
+> Price an interest-rate cap as the sum of its caplets.
+
+### `caplet_floorlet_parity(period: quantforge.rates.CapletPeriod, strike: float) -> float`  _function_
+
+> Caplet - floorlet at the same strike = discounted forward-minus-strike.
+>
+> A put-call-parity identity used to check the pricer:
+> ``caplet - floorlet = discount * accrual * (F - K)``.
+
+### `caplet_price(period: quantforge.rates.CapletPeriod, strike: float, is_cap: bool = True) -> float`  _function_
+
+> Price a single caplet (cap) or floorlet (floor).
+>
+> Value = discount * accrual * Bachelier(F, K, expiry, r=0, sigma_n),
+> with the option being a call for a caplet and a put for a floorlet. The
+> Bachelier price is taken undiscounted (r=0) and discounted explicitly by the
+> period's bond factor, which is the market convention.
+
+### `collar_price(periods: Sequence[quantforge.rates.CapletPeriod], cap_strike: float, floor_strike: float) -> float`  _function_
+
+> Price a collar: long a cap at ``cap_strike``, short a floor at ``floor_strike``.
+>
+> The net value is ``cap - floor``; a zero-cost collar is the pair of strikes
+> that makes this zero.
+
+### `floor_price(periods: Sequence[quantforge.rates.CapletPeriod], strike: float) -> float`  _function_
+
+> Price an interest-rate floor as the sum of its floorlets.
+
+### `swaption_parity(swap_rate, strike, periods) -> float`  _function_
+
+> Payer - receiver at the same strike = annuity * (swap_rate - strike).
+
+### `swaption_price(swap_rate, strike, expiry, sigma_n, periods, payer=True) -> float`  _function_
+
+> Bachelier price of a European swaption on the underlying swap.
+>
+> A payer swaption is a call on the swap rate; a receiver is a put. The value
+> is the swap's PV annuity times a Bachelier option on the forward swap rate:
+>
+>     V = annuity * Bachelier(swap_rate, strike, expiry, r=0, sigma_n).
+>
+> Args:
+>     swap_rate: current forward swap rate.
+>     strike: fixed strike rate.
+>     expiry: option expiry (years) — when the swap rate sets.
+>     sigma_n: normal (absolute) volatility of the swap rate.
+>     periods: the underlying swap's ``CapletPeriod`` legs, used only for the
+>         annuity (accrual and discount factors).
+>     payer: True for a payer (call), False for a receiver (put).
+>
+> Rates may be negative; the normal model handles that.
+
+## risk
+
+### `VaRResult(var: float, expected_shortfall: float, confidence: float, horizon_days: float, method: str) -> None`  _class_
+
+> VaRResult(var: float, expected_shortfall: float, confidence: float, horizon_days: float, method: str)
+
+### `historical_var(book, return_scenarios, spot, confidence=0.99, horizon_days=1.0)`  _function_
+
+> Historical VaR/ES: apply each realized return to a delta-gamma P&L.
+>
+> Args:
+>     return_scenarios: iterable of simple returns r (e.g. daily), already at
+>         the desired horizon.
+
+### `montecarlo_var(contracts, sigma_annual, confidence=0.99, horizon_days=1.0, trading_days=252, n_paths=20000, seed=None)`  _function_
+
+> Full-repricing VaR/ES: shock the spot, reprice every option, measure P&L.
+>
+> Unlike the parametric/historical estimators this makes no delta-gamma
+> approximation — each position is repriced under the shocked spot with time
+> advanced by the horizon.
+
+### `parametric_var(book, sigma_annual, spot, confidence=0.99, horizon_days=1.0, trading_days=252)`  _function_
+
+> Delta-gamma VaR/ES via a Cornish-Fisher expansion.
+>
+> Args:
+>     book: a priced :class:`Book` (net.delta, net.gamma in spot terms).
+>     sigma_annual: annualized volatility of the underlying's returns.
+>     spot: current underlying price (to turn return shocks into price moves).
+>     confidence: e.g. 0.99.
+>     horizon_days / trading_days: scale vol to the VaR horizon.
+>
+> P&L ~= delta * dS + 0.5 * gamma * dS^2, with dS = spot * r_h and r_h normal
+> with std ``sigma_h``. The gamma term makes P&L non-normal; Cornish-Fisher
+> corrects the quantile using the P&L skewness.
+
+## sabr
+
+### `SABRParams(alpha: float, beta: float, rho: float, nu: float) -> None`  _class_
+
+> SABRParams(alpha: float, beta: float, rho: float, nu: float)
+
+### `calibrate_sabr(F, t, strikes: Sequence[float], market_vols: Sequence[float], beta: float = 0.5, weights: Sequence[float] = None, initial: quantforge.sabr.SABRParams = None, max_iter: int = 4000) -> Tuple[quantforge.sabr.SABRParams, float]`  _function_
+
+> Fit (alpha, rho, nu) of a SABR smile to market Black vols; ``beta`` fixed.
+>
+> Returns ``(params, rmse)`` where rmse is the root-mean-square vol error.
+> Uses a smooth constrained reparametrization so alpha > 0, nu >= 0 and
+> rho in (-1, 1), optimized with the built-in Nelder-Mead.
+
+### `sabr_vol(F, K, t, alpha, beta, rho, nu) -> float`  _function_
+
+> Hagan (2002) lognormal (Black) implied volatility for the SABR model.
+>
+> Uses the standard expansion with the ATM limit handled separately to avoid
+> the removable 0/0 singularity at ``F == K``.
+
+## scenario
+
+### `ScenarioGrid(spot_shocks: tuple, vol_shocks: tuple, pnl: tuple, base_value: float, relative: bool) -> None`  _class_
+
+> ScenarioGrid(spot_shocks: tuple, vol_shocks: tuple, pnl: tuple, base_value: float, relative: bool)
+
+### `spot_ladder(contracts: Sequence[quantforge.portfolio.Contract], spot_shocks, relative=True)`  _function_
+
+> A 1-D price ladder: book P&L vs spot shock only (vol unchanged).
+>
+> Returns a list of (spot_shock, pnl) pairs.
+
+### `stress_grid(contracts: Sequence[quantforge.portfolio.Contract], spot_shocks, vol_shocks, relative=True) -> quantforge.scenario.ScenarioGrid`  _function_
+
+> Reprice a book across a Cartesian grid of spot and vol shocks.
+>
+> Args:
+>     contracts: the positions (signed qty, multiplier as in ``price_book``).
+>     spot_shocks: iterable of shocks to the underlying (e.g. [-0.1, 0, 0.1]).
+>     vol_shocks: iterable of shocks to volatility.
+>     relative: if True shocks are fractional (0.1 = +10%); if False they are
+>         absolute additive moves (spot in price units, vol in vol points).
+>
+> Returns a :class:`ScenarioGrid` whose ``pnl[i][j]`` is the change in book
+> market value under ``(spot_shocks[i], vol_shocks[j])``.
+
+## spline
+
+### `CubicSpline(xs: Sequence[float], ys: Sequence[float])`  _class_
+
+> Natural cubic spline through ``(xs, ys)`` with ``xs`` strictly increasing.
+
+### `SmileSpline(strikes: Sequence[float], vols: Sequence[float])`  _class_
+
+> Strike -> implied-vol natural cubic spline with flat extrapolation.
+
+## strategy
+
+### `break_evens(book: quantforge.portfolio.Book, lo: float, hi: float, n: int = 2000) -> List[float]`  _function_
+
+> Find terminal spots where total P&L (payoff - net premium) crosses zero.
+>
+> Scans ``[lo, hi]`` on a grid and refines each sign change by bisection. Net
+> premium is the book's market value now (positive = we paid it).
+
+### `butterfly(S, K_low, K_mid, K_high, t, r, sigma, kind='call', b=None, mult=1.0)`  _function_
+
+> Long butterfly: +1 K_low, -2 K_mid, +1 K_high (equally spaced strikes).
+
+### `iron_condor(S, K_put_long, K_put_short, K_call_short, K_call_long, t, r, sigma, b=None, mult=1.0)`  _function_
+
+> Iron condor: sell an OTM put spread and an OTM call spread.
+>
+> Strikes ordered K_put_long < K_put_short < K_call_short < K_call_long.
+> Collects premium; profits if the underlying stays between the short strikes.
+
+### `payoff_at_expiry(book: quantforge.portfolio.Book, spot_at_expiry: float) -> float`  _function_
+
+> Intrinsic payoff of the book's legs at a terminal spot (per multiplier).
+
+### `payoff_profile(book: quantforge.portfolio.Book, spots: Sequence[float]) -> List[float]`  _function_
+
+> Payoff at each terminal spot in ``spots``.
+
+### `risk_reversal(S, K_put, K_call, t, r, sigma, b=None, mult=1.0)`  _function_
+
+> Risk reversal: short an OTM put, long an OTM call (a skew/forward trade).
+
+### `straddle(S, K, t, r, sigma, b=None, mult=1.0, qty=1)`  _function_
+
+> Long straddle: long a call and a put at the same strike.
+
+### `strangle(S, K_put, K_call, t, r, sigma, b=None, mult=1.0, qty=1)`  _function_
+
+> Long strangle: long an OTM put and an OTM call (K_put < K_call).
+
+### `vertical_spread(S, K_long, K_short, t, r, sigma, kind='call', b=None, mult=1.0)`  _function_
+
+> Bull/bear vertical: long one option at K_long, short one at K_short.
+>
+> A call spread with K_long < K_short is a bull spread; a put spread with
+> K_long > K_short is a bear spread.
+
+## surface
+
+### `CalendarViolation(t_short: float, t_long: float, k: float, w_short: float, w_long: float) -> None`  _class_
+
+> CalendarViolation(t_short: float, t_long: float, k: float, w_short: float, w_long: float)
+
+### `SurfaceSlice(t: float, params: quantforge.svi.SVIParams, rmse: float) -> None`  _class_
+
+> SurfaceSlice(t: float, params: quantforge.svi.SVIParams, rmse: float)
+
+### `VolSurface(slices: List[quantforge.surface.SurfaceSlice])`  _class_
+
+> A term structure of SVI smiles with calendar-arbitrage diagnostics.
+
+## svi
+
+### `SVIParams(a: float, b: float, rho: float, m: float, s: float) -> None`  _class_
+
+> SVIParams(a: float, b: float, rho: float, m: float, s: float)
+
+### `calibrate_svi(ks: Sequence[float], total_variances: Sequence[float], weights: Sequence[float] = None, initial: quantforge.svi.SVIParams = None, max_iter: int = 4000) -> Tuple[quantforge.svi.SVIParams, float]`  _function_
+
+> Fit raw SVI to observed (log-moneyness, total-variance) points.
+>
+> Returns ``(params, rmse)`` where rmse is the root-mean-square total-variance
+> error. Uses an unconstrained Nelder-Mead over a smooth reparametrization
+> that enforces ``b >= 0``, ``s > 0``, and ``rho in (-1, 1)``.
+
+## trinomial
+
+### `richardson_american(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, steps=200)`  _function_
+
+> Richardson-extrapolated American price from ``n`` and ``2n`` trinomial solves.
+>
+> The trinomial price converges to the true value with a leading O(1/n) error,
+> so ``2 * P(2n) - P(n)`` cancels that term and converges faster. Returns the
+> extrapolated price.
+
+### `trinomial_price(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, steps=200, american=True)`  _function_
+
+> Price an option on a Boyle trinomial lattice.
+>
+> Args:
+>     american: if True, allow early exercise at every node; if False, price
+>         the European payoff (useful as a convergence cross-check).
+>     b: cost of carry (defaults to r). Dividend yield q enters as b = r - q.
+
+## varswap
+
+### `variance_swap_strike(S0, t, r, put_strikes: Sequence[float], put_prices: Sequence[float], call_strikes: Sequence[float], call_prices: Sequence[float], split: float = None) -> float`  _function_
+
+> Fair variance-swap strike (annualized variance) by option replication.
+>
+> Args:
+>     S0: current spot.
+>     t: swap tenor in years.
+>     r: risk-free rate.
+>     put_strikes/put_prices: OTM puts, strikes strictly below ``split``.
+>     call_strikes/call_prices: OTM calls, strikes strictly above ``split``.
+>     split: the forward split level ``K*``. Defaults to the forward
+>         ``S0 e^{r t}``.
+>
+> Returns the fair strike as an annualized variance (multiply tenor and take
+> sqrt for a vol number).
+
+### `volatility_swap_strike(S0, t, r, put_strikes, put_prices, call_strikes, call_prices, split=None) -> float`  _function_
+
+> Fair volatility-swap strike as ``sqrt(variance strike)``.
+>
+> This is the standard first-order proxy; it slightly overstates the true
+> vol-swap strike because ``E[sqrt(var)] <= sqrt(E[var])`` (Jensen), the
+> "convexity" or "vol-of-vol" adjustment, which requires a model to quantify.
+
+## vectorized
+
+### `delta_array(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> (no docstring)
+
+### `gamma_array(S, K, t, r, sigma, b=None)`  _function_
+
+> (no docstring)
+
+### `greeks_array(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> Return a dict of vectorized price, delta, gamma, vega arrays.
+
+### `price_array(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> Vectorized European price. Inputs may be scalars or NumPy arrays.
+
+### `vega_array(S, K, t, r, sigma, b=None)`  _function_
+
+> (no docstring)
+
+## volatility
+
+### `VolReport(close_to_close: float, parkinson: float, garman_klass: float, rogers_satchell: float, yang_zhang: float, ewma: float) -> None`  _class_
+
+> VolReport(close_to_close: float, parkinson: float, garman_klass: float, rogers_satchell: float, yang_zhang: float, ewma: float)
+
+### `close_to_close(closes: Sequence[float], periods_per_year: int = 252, ddof: int = 1) -> float`  _function_
+
+> Classic close-to-close realized volatility (annualized).
+>
+> Uses the sample standard deviation of log returns with ``ddof`` degrees of
+> freedom removed (1 = unbiased sample variance).
+
+### `ewma_vol(closes: Sequence[float], lam: float = 0.94, periods_per_year: int = 252) -> float`  _function_
+
+> RiskMetrics-style exponentially weighted volatility (annualized).
+>
+> Variance_t = lam * Variance_{t-1} + (1 - lam) * r_t^2, seeded with the
+> first squared return. ``lam=0.94`` is the RiskMetrics daily default.
+
+### `garman_klass(opens, highs, lows, closes, periods_per_year: int = 252) -> float`  _function_
+
+> Garman-Klass OHLC estimator (annualized).
+>
+> var = mean( 0.5*ln(H/L)^2 - (2ln2 - 1)*ln(C/O)^2 ). Uses the full bar; more
+> efficient than Parkinson, still assumes no overnight jump or drift.
+
+### `parkinson(highs: Sequence[float], lows: Sequence[float], periods_per_year: int = 252) -> float`  _function_
+
+> Parkinson high-low range estimator (annualized).
+>
+> var = (1 / (4 ln2)) * mean( ln(H/L)^2 ). ~5x more efficient than
+> close-to-close but ignores drift and overnight moves.
+
+### `rogers_satchell(opens, highs, lows, closes, periods_per_year: int = 252) -> float`  _function_
+
+> Rogers-Satchell OHLC estimator (annualized).
+>
+> var = mean( ln(H/C)ln(H/O) + ln(L/C)ln(L/O) ). Drift-independent: stays
+> unbiased even when the underlying has a non-zero mean return.
+
+### `vol_report(opens, highs, lows, closes, periods_per_year: int = 252, ewma_lambda: float = 0.94) -> quantforge.volatility.VolReport`  _function_
+
+> Compute every estimator at once for an OHLC series.
+
+### `yang_zhang(opens, highs, lows, closes, periods_per_year: int = 252) -> float`  _function_
+
+> Yang-Zhang estimator (annualized): drift-independent and jump-robust.
+>
+> Combines overnight (close-to-open) variance, open-to-close variance, and
+> the Rogers-Satchell term:
+>
+>     var = var_overnight + k * var_open_to_close + (1 - k) * var_RS
+>     k   = 0.34 / (1.34 + (N+1)/(N-1))
+>
+> Requires the previous close, so bars are chained: overnight return uses
+> ln(O_t / C_{t-1}).

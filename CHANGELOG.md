@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.25.0] - 2026-09-09
+
+### Added
+- Documentation site. `docs/gen_api.py` generates `docs/api.md` by introspecting
+  `quantforge.__all__` (signatures + docstrings, grouped by module) with zero
+  dependencies; `docs/index.md` and `mkdocs.yml` wire up an mkdocs site.
+- CI now runs `docs/gen_api.py --check`, and a test asserts the reference is in
+  sync and every public callable/class is documented, so the docs can't drift.
+
 ## [1.24.0] - 2026-09-09
 
 ### Added

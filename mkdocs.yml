@@ -1,0 +1,13 @@
+site_name: QuantForge
+site_description: Dependency-free options pricing and risk engine.
+repo_url: https://github.com/awictor/quantforge
+theme:
+  name: readthedocs
+
+nav:
+  - Home: index.md
+  - API reference: api.md
+
+# The API reference is generated from the source by docs/gen_api.py:
+#   python docs/gen_api.py
+# CI checks it is up to date with:  python docs/gen_api.py --check

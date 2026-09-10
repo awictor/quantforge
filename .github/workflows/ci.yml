@@ -18,5 +18,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install
         run: pip install -e ".[test]"
+      - name: Docs up to date
+        run: python docs/gen_api.py --check
       - name: Test
         run: pytest -q
