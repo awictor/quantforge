@@ -53,6 +53,24 @@ print(american_price(S=100, K=100, t=1.0, r=0.05, sigma=0.2,
                      option_type="put", b=0.05 - 0.03, steps=500))
 ```
 
+## Second-order Greeks
+
+For hedging through joint moves in spot, vol, and time:
+
+```python
+from quantforge import vanna, vomma, charm, veta, speed, zomma, color
+
+kw = dict(S=100, K=105, t=0.5, r=0.04, sigma=0.25)
+vanna(**kw)   # d(delta)/d(sigma) = d(vega)/d(spot)
+vomma(**kw)   # d(vega)/d(sigma)  (a.k.a. volga)  -- vol convexity
+charm(**kw, option_type="call")   # d(delta)/d(time) -- delta bleed
+veta(**kw)    # d(vega)/d(time)   -- vega decay
+speed(**kw); zomma(**kw); color(**kw)   # third-order in spot / cross terms
+```
+
+Every one is analytic and verified against finite differences of the
+first-order Greeks in the test suite.
+
 ## Batch pricing and portfolio risk
 
 Value a whole book in one call and get net exposures:

@@ -33,8 +33,9 @@ from .volatility import (
     close_to_close, ewma_vol, parkinson, garman_klass, rogers_satchell,
     yang_zhang, vol_report, VolReport,
 )
+from .greeks2 import vanna, vomma, volga, charm, veta, speed, zomma, color
 
-__version__ = "0.7.0"
+__version__ = "0.8.0"
 
 __all__ = [
     "OptionType",
@@ -77,5 +78,13 @@ __all__ = [
     "yang_zhang",
     "vol_report",
     "VolReport",
+    "vanna",
+    "vomma",
+    "volga",
+    "charm",
+    "veta",
+    "speed",
+    "zomma",
+    "color",
     "__version__",
 ]
