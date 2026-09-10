@@ -4,6 +4,21 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.170.0] - 2026-09-10
+
+### Added
+- `european_cv_mc` (in `montecarlo.py`): European Monte Carlo combining both
+  variance-reduction techniques -- antithetic sampling and a control variate.
+  The discounted terminal spot `Y = e^{-rt} S_T` has the known mean
+  `S0 e^{(b-r)t}` and is correlated with the payoff, so the estimator
+  `X - beta (Y - E[Y])` with the regression-optimal `beta = Cov(X,Y)/Var(Y)`
+  cuts the variance. Antithetic pairs are averaged into one sample before the
+  control is applied.
+- Verified: matches the closed-form Black-Scholes call and put within MC error
+  (also under a dividend carry `b = r - q`); at equal path count the standard
+  error is ~0.24x the plain `european_mc` for the ITM call and ~0.42x for the
+  put, and under half at the money.
+
 ## [1.169.1] - 2026-09-10
 
 ### Tests

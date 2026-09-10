@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.169.1 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.170.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1869,6 +1869,23 @@ Auto-generated from `quantforge` v1.169.1 by `docs/gen_api.py` — do not edit b
 > ``(lower, upper)`` for the whole monitored path; if either barrier is
 > breached it knocks out and pays the cash ``rebate`` (at expiry, discounted).
 > Also known as a double-barrier knock-out or "corridor" option.
+
+### `european_cv_mc(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, n_paths=100000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
+
+> European price with the underlying as a control variate (optimal beta).
+>
+> Combines both variance-reduction techniques: antithetic sampling *and* a
+> control variate. The discounted terminal spot ``Y = e^{-r t} S_T`` has the
+> known mean ``E[Y] = S0 e^{(b - r) t}`` (the forward, discounted), and it is
+> correlated with the discounted call/put payoff ``X``, so the controlled
+> estimator ``X - beta (Y - E[Y])`` has lower variance for the regression-
+> optimal ``beta = Cov(X, Y) / Var(Y)``. Beta is estimated from the same
+> sample; the resulting O(1/N) bias is negligible at these path counts and is
+> swamped by the variance reduction. Antithetic pairs are averaged into a
+> single sample first so both controls act on the same draws.
+>
+> Cross-checks the closed-form Black-Scholes value and reports a standard
+> error strictly below the plain :func:`european_mc` at equal path count.
 
 ### `european_mc(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, n_paths=100000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
 
