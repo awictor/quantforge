@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.193.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.194.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3094,6 +3094,25 @@ Auto-generated from `quantforge` v1.193.0 by `docs/gen_api.py` — do not edit b
 > RQMC SE falls off far faster than pseudo-random Monte Carlo's ``1/sqrt(N)``.
 >
 > Cross-checks the closed-form Black-Scholes value.
+
+### `sobol_lookback_rqmc(S, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, n_steps=6, n_paths=4096, n_rand=24, seed=None) -> quantforge.montecarlo.MCResult`  _function_
+
+> Randomized-QMC floating-strike lookback with an honest standard error.
+>
+> Prices the discretely-monitored floating-strike lookback -- call payoff
+> ``S_T - min_i S_{t_i}``, put payoff ``max_i S_{t_i} - S_T`` -- where the
+> running extreme is taken over the ``n_steps`` monitoring dates (plus the
+> known ``S_0``). Each path's normals come from one ``n_steps``-dimensional
+> Sobol point through the Brownian bridge, and a per-dimension
+> Cranley-Patterson rotation randomizes the point set, so ``n_rand`` shifts
+> give i.i.d. QMC estimates whose spread is a genuine SE.
+>
+> Discrete monitoring always *under*-prices the continuously-monitored
+> Goldman-Sosin-Gatto :func:`quantforge.floating_strike_lookback` (fewer
+> sampling dates see less extreme highs/lows); the gap shrinks as ``n_steps``
+> grows. ``n_steps`` is capped by the Sobol generator's dimension. Returns an
+> :class:`MCResult` with the mean price, across-randomization SE, and
+> ``n_paths`` = total points.
 
 ## spline
 

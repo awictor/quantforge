@@ -273,6 +273,64 @@ def sobol_asian_rqmc(S, K, t, r, sigma, option_type=OptionType.CALL, b=None,
     return MCResult(price=price, std_error=se, n_paths=n_rand * n_paths)
 
 
+def sobol_lookback_rqmc(S, t, r, sigma, option_type=OptionType.CALL, b=None,
+                        n_steps=6, n_paths=4096, n_rand=24,
+                        seed=None) -> MCResult:
+    """Randomized-QMC floating-strike lookback with an honest standard error.
+
+    Prices the discretely-monitored floating-strike lookback -- call payoff
+    ``S_T - min_i S_{t_i}``, put payoff ``max_i S_{t_i} - S_T`` -- where the
+    running extreme is taken over the ``n_steps`` monitoring dates (plus the
+    known ``S_0``). Each path's normals come from one ``n_steps``-dimensional
+    Sobol point through the Brownian bridge, and a per-dimension
+    Cranley-Patterson rotation randomizes the point set, so ``n_rand`` shifts
+    give i.i.d. QMC estimates whose spread is a genuine SE.
+
+    Discrete monitoring always *under*-prices the continuously-monitored
+    Goldman-Sosin-Gatto :func:`quantforge.floating_strike_lookback` (fewer
+    sampling dates see less extreme highs/lows); the gap shrinks as ``n_steps``
+    grows. ``n_steps`` is capped by the Sobol generator's dimension. Returns an
+    :class:`MCResult` with the mean price, across-randomization SE, and
+    ``n_paths`` = total points.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, S, t, sigma)
+    if b is None:
+        b = r
+    if n_steps < 1 or n_steps > len(_MINIT):
+        raise ValueError(f"n_steps must be in 1..{len(_MINIT)}")
+    if n_rand < 2:
+        raise ValueError("n_rand must be >= 2 to estimate a standard error")
+    dt = t / n_steps
+    disc = math.exp(-r * t)
+    call = ot is OptionType.CALL
+    rng = random.Random(seed)
+
+    estimates = []
+    for _ in range(n_rand):
+        shift = [rng.random() for _ in range(n_steps)]
+        sob = Sobol(n_steps)
+        total = 0.0
+        for _ in range(n_paths):
+            pt = sob.next()
+            u = [(pt[d] + shift[d]) % 1.0 for d in range(n_steps)]
+            W = brownian_bridge_path(u, t)
+            smin = smax = S
+            sT = S
+            for i in range(n_steps):
+                tk = (i + 1) * dt
+                sT = S * math.exp((b - 0.5 * sigma * sigma) * tk + sigma * W[i])
+                if sT < smin:
+                    smin = sT
+                if sT > smax:
+                    smax = sT
+            total += (sT - smin) if call else (smax - sT)
+        estimates.append(disc * total / n_paths)
+
+    price, se = _summarize(estimates)
+    return MCResult(price=price, std_error=se, n_paths=n_rand * n_paths)
+
+
 def sobol_asian(S, K, t, r, sigma, option_type=OptionType.CALL, b=None,
                 n_steps=6, n_paths=8192):
     """QMC arithmetic-average Asian price with Sobol + a Brownian bridge.
