@@ -197,6 +197,25 @@ Yang-Zhang is drift-independent and handles overnight gaps; it is the default
 choice when you have clean OHLC data. Compare any of these against the implied
 vol from `implied_volatility` to trade realized-vs-implied.
 
+## Delta-hedge P&L simulator
+
+Monte Carlo a discretely delta-hedged short option and see the hedging-error
+distribution — including what happens when you hedge at the wrong vol:
+
+```python
+from quantforge import simulate_delta_hedge
+
+# Rehedge 50 times over the option's life; error std shrinks like 1/sqrt(n).
+res = simulate_delta_hedge(S=100, K=100, t=1.0, r=0.05, sigma=0.2,
+                           n_steps=50, n_paths=20_000, seed=1)
+print(res.mean_pnl, res.std_pnl)   # mean ~ 0, std = discrete-hedging error
+
+# Hedge at 15% while the market realizes 30%: short gamma bleeds.
+res = simulate_delta_hedge(S=100, K=100, t=1.0, r=0.03, sigma=0.15,
+                           hedge_vol=0.15, real_vol=0.30, n_steps=50, seed=11)
+print(res.mean_pnl)   # negative
+```
+
 ## Portfolio risk (VaR / Expected Shortfall)
 
 Three estimators over a priced book — parametric delta-gamma (Cornish-Fisher),

@@ -27,6 +27,7 @@ TREE_CASES = [
 ]
 
 
+@pytest.mark.slow
 @pytest.mark.parametrize("S,K,t,r,sigma,ot,b", TREE_CASES)
 def test_bs2002_close_to_binomial_tree(S, K, t, r, sigma, ot, b):
     approx = bs(S, K, t, r, sigma, ot, b=b)

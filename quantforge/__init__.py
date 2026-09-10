@@ -32,6 +32,7 @@ from .bachelier import (
     bachelier_price, bachelier_delta, bachelier_gamma, bachelier_vega,
     bachelier_implied_vol,
 )
+from .hedgesim import simulate_delta_hedge, HedgeResult
 from .portfolio import Contract, Position, BookRisk, Book, price_book
 from .svi import SVIParams, calibrate_svi
 from .sabr import SABRParams, sabr_vol, calibrate_sabr
@@ -58,7 +59,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.8.0"
+__version__ = "1.9.0"
 
 __all__ = [
     "OptionType",
@@ -92,6 +93,8 @@ __all__ = [
     "bachelier_gamma",
     "bachelier_vega",
     "bachelier_implied_vol",
+    "simulate_delta_hedge",
+    "HedgeResult",
     "Contract",
     "Position",
     "BookRisk",

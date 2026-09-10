@@ -39,3 +39,6 @@ include = ["quantforge*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+markers = [
+    "slow: Monte Carlo / deep-tree tests; deselect with '-m \"not slow\"' for a fast run.",
+]

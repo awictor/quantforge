@@ -20,6 +20,7 @@ def test_european_trinomial_converges_to_bsm_put():
     assert tri == pytest.approx(put_price(S, K, t, r, sigma), abs=1e-2)
 
 
+@pytest.mark.slow
 def test_american_trinomial_matches_binomial():
     S, K, t, r, sigma = 100, 100, 1.0, 0.05, 0.2
     tri = trinomial_price(S, K, t, r, sigma, OptionType.PUT, steps=400, american=True)
@@ -40,6 +41,7 @@ def test_american_put_early_exercise_premium():
     assert am > eu  # early exercise is worth something here
 
 
+@pytest.mark.slow
 def test_richardson_more_accurate_than_plain_trinomial():
     # Reference: a very fine binomial tree.
     S, K, t, r, sigma = 100, 100, 1.0, 0.05, 0.2
@@ -49,6 +51,7 @@ def test_richardson_more_accurate_than_plain_trinomial():
     assert abs(rich - ref) < abs(plain - ref)
 
 
+@pytest.mark.slow
 def test_dividend_put_matches_binomial():
     # Carry b = r - q with a dividend yield.
     S, K, t, r, sigma, b = 100, 100, 1.0, 0.06, 0.25, 0.06 - 0.03

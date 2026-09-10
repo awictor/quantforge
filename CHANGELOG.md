@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.9.0] - 2026-09-09
+
+### Added
+- `hedgesim.py`: `simulate_delta_hedge` Monte Carlos a discretely delta-hedged
+  short option, returning the hedging-error distribution (mean, std, min, max).
+  Supports hedging at a different vol than the realized path (`hedge_vol` vs
+  `real_vol`) to study vol-mismatch P&L.
+- Test suite gains a `slow` marker; run `pytest -m "not slow"` for a ~4s fast
+  pass (deep Monte Carlo / tree cross-checks are marked slow).
+
 ## [1.8.0] - 2026-09-09
 
 ### Added
