@@ -4,6 +4,26 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.94.0] - 2026-09-10
+
+### Added
+- `rbergomi_price` and `rbergomi_smile` (new `rbergomi.py`): the rough Bergomi
+  stochastic-volatility model (Bayer-Friz-Gatheral 2016), whose variance is
+  driven by a rough fractional process with Hurst exponent `H < 1/2`. Simulated
+  with the Bennedsen-Lunde-Pakkanen (2017) hybrid scheme (kappa=1): the singular
+  cell nearest each step is sampled exactly from the joint law of the Brownian
+  increment and its kernel integral, the far cells use the optimally-placed
+  discretised kernel. `rbergomi_smile` reprices every strike on common terminal
+  spots and inverts to a Black-Scholes vol.
+- Verified: the discounted spot is a martingale (`E[S_T] e^{-rt} = S` to <5e-3),
+  `eta = 0` collapses to a flat smile at `sqrt(xi0)`, `rho < 0` gives a downward
+  skew, and -- the point of rough vol -- `H = 0.1` yields a steeper short-dated
+  ATM skew (-0.58) than the `H = 0.5` diffusive case (-0.41).
+
+### Fixed
+- Hybrid-scheme weights divided by `alpha = H - 1/2`, blowing up at `H = 1/2`;
+  that case now returns the constant-kernel (standard Brownian) weights.
+
 ## [1.93.0] - 2026-09-10
 
 ### Added

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.93.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.94.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1361,6 +1361,32 @@ Auto-generated from `quantforge` v1.93.0 by `docs/gen_api.py` — do not edit by
 >     payer: True for a payer (call), False for a receiver (put).
 >
 > Rates may be negative; the normal model handles that.
+
+## rbergomi
+
+### `rbergomi_price(S, K, t, xi0, eta, H, rho, r=0.0, option_type=<OptionType.CALL: 'call'>, n_steps=100, n_paths=20000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
+
+> Monte Carlo a European option under rough Bergomi.
+>
+> Args:
+>     xi0: the (flat) forward variance curve level; ``sqrt(xi0)`` is the
+>         baseline vol.
+>     eta: vol-of-vol of the rough driver.
+>     H: Hurst exponent in (0, 1); ``H < 0.5`` is rough (steep short skew),
+>         ``H = 0.5`` recovers a standard lognormal-vol diffusion.
+>     rho: spot/vol correlation (negative gives the equity down-skew).
+>
+> Returns an :class:`MCResult`.
+
+### `rbergomi_smile(S, strikes, t, xi0, eta, H, rho, r=0.0, n_steps=100, n_paths=40000, antithetic=True, seed=None)`  _function_
+
+> Black-Scholes implied-vol smile a rough Bergomi model produces.
+>
+> Simulates one set of terminal spots and reprices every strike on it (common
+> random numbers), then inverts each call price to its Black-Scholes implied
+> vol. Returns ``(log_moneyness, vol)`` pairs sorted by strike on the forward
+> ``F = S e^{r t}``. Rough dynamics (``H < 0.5``) with ``rho < 0`` give the
+> steep negative short-maturity skew that motivates the model.
 
 ## risk
 
