@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.185.0] - 2026-09-10
+
+### Added
+- `two_asset_digital` (in `multiasset.py`): exact closed form for a cash-or-
+  nothing digital on two correlated assets. Pays `cash` iff both single-asset
+  conditions hold (each `above` or `below` its strike). Price is
+  `cash e^{-rt} M(s1 d1, s2 d2; s1 s2 rho)` with `di` the usual `d2`,
+  `si = +/-1` for above/below, and `M` the standardized bivariate-normal CDF;
+  flipping a condition flips that `d`'s sign and the correlation.
+- Verified: all four quadrant prices match a correlated-GBM Monte Carlo, sum to
+  `e^{-rt}` (exhaustive) to 1e-9, factorize into the product of two single-asset
+  `cash_or_nothing` digitals at `rho = 0`, and scale linearly in `cash`.
+
 ## [1.184.0] - 2026-09-10
 
 ### Added

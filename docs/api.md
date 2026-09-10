@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.184.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.185.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2213,6 +2213,24 @@ Auto-generated from `quantforge` v1.184.0 by `docs/gen_api.py` — do not edit b
 >
 > Reduces to an exact Margrabe formula when K = 0. Puts follow from parity on
 > the spread ``S1 - S2``.
+
+### `two_asset_digital(S1, S2, K1, K2, t, r, sigma1, sigma2, rho, cond1='above', cond2='above', q1=0.0, q2=0.0, cash=1.0)`  _function_
+
+> Cash-or-nothing digital on two correlated assets (exact closed form).
+>
+> Pays ``cash`` at expiry iff both single-asset conditions hold: asset 1 is
+> ``above`` (``S1_T > K1``) or ``below`` (``S1_T < K1``) its strike, and
+> likewise for asset 2. Under the risk-neutral bivariate lognormal the price is
+>
+>     cash * e^{-r t} * M(s1 d1, s2 d2; s1 s2 rho)
+>
+> where ``di = (ln(Si/Ki) + (r - qi - sigma_i^2/2) t) / (sigma_i sqrt(t))`` is
+> the usual ``d2``, ``si = +1`` for an ``above`` condition and ``-1`` for a
+> ``below`` one, and ``M`` is the standardized bivariate-normal CDF. Flipping a
+> condition flips the sign of that ``d`` and of the correlation. The four
+> quadrant prices sum to ``cash e^{-r t}`` (the conditions are exhaustive).
+>
+> Cross-checks a correlated-GBM Monte Carlo.
 
 ### `worst_of_call(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0, option_type=<OptionType.CALL: 'call'>, n_paths=100000, antithetic=True, seed=None)`  _function_
 

@@ -233,6 +233,43 @@ def worst_of_call_closed(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0):
     return _stulz_min_call(S1, S2, K, t, r, sigma1, sigma2, rho, q1, q2)
 
 
+def two_asset_digital(S1, S2, K1, K2, t, r, sigma1, sigma2, rho,
+                      cond1="above", cond2="above", q1=0.0, q2=0.0, cash=1.0):
+    """Cash-or-nothing digital on two correlated assets (exact closed form).
+
+    Pays ``cash`` at expiry iff both single-asset conditions hold: asset 1 is
+    ``above`` (``S1_T > K1``) or ``below`` (``S1_T < K1``) its strike, and
+    likewise for asset 2. Under the risk-neutral bivariate lognormal the price is
+
+        cash * e^{-r t} * M(s1 d1, s2 d2; s1 s2 rho)
+
+    where ``di = (ln(Si/Ki) + (r - qi - sigma_i^2/2) t) / (sigma_i sqrt(t))`` is
+    the usual ``d2``, ``si = +1`` for an ``above`` condition and ``-1`` for a
+    ``below`` one, and ``M`` is the standardized bivariate-normal CDF. Flipping a
+    condition flips the sign of that ``d`` and of the correlation. The four
+    quadrant prices sum to ``cash e^{-r t}`` (the conditions are exhaustive).
+
+    Cross-checks a correlated-GBM Monte Carlo.
+    """
+    if S1 <= 0 or S2 <= 0 or K1 <= 0 or K2 <= 0:
+        raise ValueError("prices and strikes must be positive")
+    if t <= 0:
+        raise ValueError("t must be positive")
+    if not -1.0 <= rho <= 1.0:
+        raise ValueError("rho must be in [-1, 1]")
+    c1 = str(cond1).lower()
+    c2 = str(cond2).lower()
+    if c1 not in ("above", "below") or c2 not in ("above", "below"):
+        raise ValueError("cond1/cond2 must be 'above' or 'below'")
+    st = math.sqrt(t)
+    d1 = (math.log(S1 / K1) + (r - q1 - 0.5 * sigma1 * sigma1) * t) / (sigma1 * st)
+    d2 = (math.log(S2 / K2) + (r - q2 - 0.5 * sigma2 * sigma2) * t) / (sigma2 * st)
+    s1 = 1.0 if c1 == "above" else -1.0
+    s2 = 1.0 if c2 == "above" else -1.0
+    disc = math.exp(-r * t)
+    return cash * disc * _bivariate_normal(s1 * d1, s2 * d2, s1 * s2 * rho)
+
+
 def _disc_expected_min(S1, S2, t, r, sigma1, sigma2, rho, q1, q2):
     """Discounted risk-neutral expectation of ``min(S1_T, S2_T)``.
 
