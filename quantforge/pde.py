@@ -37,28 +37,13 @@ def _thomas(a, b, c, d):
     return x
 
 
-def crank_nicolson_price(S, K, t, r, sigma=None, option_type=OptionType.CALL,
-                         b=None, american=False, local_vol_fn=None,
-                         n_space=200, n_time=200, s_max_mult=4.0,
-                         psor_tol=1e-8, psor_max_iter=10000):
-    """Price a European or American option by a Crank-Nicolson PDE solve.
+def _cn_solve(S, K, t, r, sigma, ot, b, american, local_vol_fn,
+              n_space, n_time, s_max_mult, psor_tol, psor_max_iter, dt_override):
+    """Run the CN march; return (grid, ds, V, V_prev, dt).
 
-    Provide either a constant ``sigma`` or a ``local_vol_fn(S, t)`` (time ``t``
-    measured forward from today). ``b`` is the cost of carry (defaults to ``r``);
-    dividend yield ``q`` enters as ``b = r - q``. American exercise uses PSOR.
-
-    Returns the option value interpolated at spot ``S``.
+    ``V`` is the value grid at ``t=0``; ``V_prev`` is the grid one time step
+    earlier (i.e. at ``dt`` remaining flipped -- used for a theta difference).
     """
-    ot = _coerce_type(option_type)
-    if S <= 0 or K <= 0:
-        raise ValueError("S and K must be positive")
-    if b is None:
-        b = r
-    if sigma is None and local_vol_fn is None:
-        raise ValueError("provide sigma or local_vol_fn")
-    if t == 0:
-        return max(S - K, 0.0) if ot is OptionType.CALL else max(K - S, 0.0)
-
     call = ot is OptionType.CALL
     # Spot grid.
     ref_vol = sigma if sigma is not None else local_vol_fn(S, t)
@@ -71,6 +56,7 @@ def crank_nicolson_price(S, K, t, r, sigma=None, option_type=OptionType.CALL,
         return max(Si - K, 0.0) if call else max(K - Si, 0.0)
 
     V = [payoff(Si) for Si in grid]
+    V_prev = None   # value grid one step before the last (for theta)
 
     def vol_at(Si, tau):
         # tau = time remaining; forward time = t - tau.
@@ -80,6 +66,8 @@ def crank_nicolson_price(S, K, t, r, sigma=None, option_type=OptionType.CALL,
 
     # March backward in time (tau = time to maturity increases each step).
     for n in range(n_time):
+        if n == n_time - 1:
+            V_prev = list(V)   # snapshot at one step (dt) remaining
         tau_new = (n + 1) * dt
         # Interior CN coefficients (node-dependent for local vol).
         sub = [0.0] * (n_space + 1)
@@ -139,7 +127,89 @@ def crank_nicolson_price(S, K, t, r, sigma=None, option_type=OptionType.CALL,
                 if err < psor_tol:
                     break
 
-    # Interpolate the value at S.
+    return grid, ds, V, V_prev, dt
+
+
+def _interp(grid, ds, V, S):
+    n_space = len(grid) - 1
     j = min(int(S / ds), n_space - 1)
     w = (S - grid[j]) / ds
     return (1.0 - w) * V[j] + w * V[j + 1]
+
+
+def crank_nicolson_price(S, K, t, r, sigma=None, option_type=OptionType.CALL,
+                         b=None, american=False, local_vol_fn=None,
+                         n_space=200, n_time=200, s_max_mult=4.0,
+                         psor_tol=1e-8, psor_max_iter=10000):
+    """Price a European or American option by a Crank-Nicolson PDE solve.
+
+    Provide either a constant ``sigma`` or a ``local_vol_fn(S, t)`` (time ``t``
+    measured forward from today). ``b`` is the cost of carry (defaults to ``r``);
+    dividend yield ``q`` enters as ``b = r - q``. American exercise uses PSOR.
+
+    Returns the option value interpolated at spot ``S``.
+    """
+    ot = _coerce_type(option_type)
+    if S <= 0 or K <= 0:
+        raise ValueError("S and K must be positive")
+    if b is None:
+        b = r
+    if sigma is None and local_vol_fn is None:
+        raise ValueError("provide sigma or local_vol_fn")
+    if t == 0:
+        return max(S - K, 0.0) if ot is OptionType.CALL else max(K - S, 0.0)
+
+    grid, ds, V, _Vp, _dt = _cn_solve(S, K, t, r, sigma, ot, b, american,
+                                      local_vol_fn, n_space, n_time, s_max_mult,
+                                      psor_tol, psor_max_iter, None)
+    return _interp(grid, ds, V, S)
+
+
+def crank_nicolson_greeks(S, K, t, r, sigma=None, option_type=OptionType.CALL,
+                          b=None, american=False, local_vol_fn=None,
+                          n_space=200, n_time=200, s_max_mult=4.0,
+                          psor_tol=1e-8, psor_max_iter=10000):
+    """Price plus delta, gamma and theta read straight off the CN grid.
+
+    Delta and gamma come from central finite differences of the final value
+    grid in spot (no extra solves), and theta from the difference between the
+    ``t=0`` grid and the grid one time step earlier. Returns a dict with price,
+    delta, gamma and theta (calendar, per year).
+    """
+    ot = _coerce_type(option_type)
+    if S <= 0 or K <= 0:
+        raise ValueError("S and K must be positive")
+    if b is None:
+        b = r
+    if sigma is None and local_vol_fn is None:
+        raise ValueError("provide sigma or local_vol_fn")
+    if t == 0:
+        raise ValueError("t must be positive for PDE Greeks")
+
+    grid, ds, V, V_prev, dt = _cn_solve(S, K, t, r, sigma, ot, b, american,
+                                        local_vol_fn, n_space, n_time,
+                                        s_max_mult, psor_tol, psor_max_iter, None)
+    n_space_ = len(grid) - 1
+    j = min(max(int(S / ds), 1), n_space_ - 2)
+    price = _interp(grid, ds, V, S)
+
+    # Node-level central differences, then interpolate to S (which need not land
+    # on a grid node) so delta/gamma are unbiased by the grid offset.
+    def node_delta(i):
+        return (V[i + 1] - V[i - 1]) / (2.0 * ds)
+
+    def node_gamma(i):
+        return (V[i + 1] - 2.0 * V[i] + V[i - 1]) / (ds * ds)
+
+    w = (S - grid[j]) / ds
+    delta = (1.0 - w) * node_delta(j) + w * node_delta(j + 1)
+    gamma = (1.0 - w) * node_gamma(j) + w * node_gamma(j + 1)
+    # Calendar theta = -d(value)/d(time-to-maturity), interpolated to S. V has
+    # the full maturity, V_prev one step (dt) less.
+    if V_prev is not None:
+        th_j = -(V[j] - V_prev[j]) / dt
+        th_j1 = -(V[j + 1] - V_prev[j + 1]) / dt
+        theta = (1.0 - w) * th_j + w * th_j1
+    else:
+        theta = 0.0
+    return {"price": price, "delta": delta, "gamma": gamma, "theta": theta}

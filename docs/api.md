@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.133.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.134.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1772,6 +1772,15 @@ Auto-generated from `quantforge` v1.133.0 by `docs/gen_api.py` — do not edit b
 > Terminal payoff of the replicating spread at ``spot_at_expiry``.
 
 ## pde
+
+### `crank_nicolson_greeks(S, K, t, r, sigma=None, option_type=<OptionType.CALL: 'call'>, b=None, american=False, local_vol_fn=None, n_space=200, n_time=200, s_max_mult=4.0, psor_tol=1e-08, psor_max_iter=10000)`  _function_
+
+> Price plus delta, gamma and theta read straight off the CN grid.
+>
+> Delta and gamma come from central finite differences of the final value
+> grid in spot (no extra solves), and theta from the difference between the
+> ``t=0`` grid and the grid one time step earlier. Returns a dict with price,
+> delta, gamma and theta (calendar, per year).
 
 ### `crank_nicolson_price(S, K, t, r, sigma=None, option_type=<OptionType.CALL: 'call'>, b=None, american=False, local_vol_fn=None, n_space=200, n_time=200, s_max_mult=4.0, psor_tol=1e-08, psor_max_iter=10000)`  _function_
 

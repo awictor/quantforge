@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.134.0] - 2026-09-10
+
+### Added
+- `crank_nicolson_greeks` (in `pde.py`): delta, gamma and theta read straight
+  off the Crank-Nicolson grid -- no extra solves. Delta and gamma are node-level
+  central differences interpolated to the spot (so the grid offset does not bias
+  them), and theta is the difference between the `t=0` grid and the grid one
+  time step earlier. The solver was refactored into a shared `_cn_solve` used by
+  both the price and Greeks entry points.
+- Verified against Black-Scholes: delta to ~1e-4, gamma to ~5e-6, theta to
+  ~3e-3; the put delta matches; American-put Greeks have the right signs.
+
 ## [1.133.0] - 2026-09-10
 
 ### Added
