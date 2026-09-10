@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.139.0] - 2026-09-10
+
+### Added
+- FX delta-space quoting conventions (new `fxdelta.py`): `strike_from_delta` /
+  `delta_from_strike` convert between strike and delta in the forward- or
+  spot-delta convention, with an optional premium adjustment; `atm_dns_strike`
+  gives the delta-neutral-straddle ATM strike `F exp(0.5 sigma^2 t)`; and
+  `rr_bf_to_pillars` turns (ATM, 25d risk reversal, 25d butterfly) quotes into
+  the put/ATM/call pillar strikes and vols.
+- Verified: strike<->delta round-trips to ~1e-16 (forward, spot and
+  premium-adjusted); the ATM DNS strike makes a straddle delta-neutral; the
+  pillars reproduce the RR and BF quotes exactly and are strike-ordered; a
+  negative risk reversal makes the put vol exceed the call vol.
+
 ## [1.138.0] - 2026-09-10
 
 ### Added

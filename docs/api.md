@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.138.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.139.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -955,6 +955,46 @@ Auto-generated from `quantforge` v1.138.0 by `docs/gen_api.py` — do not edit b
 >     b: cost of carry (defaults to r).
 >
 > Returns the present value.
+
+## fxdelta
+
+### `atm_dns_strike(F, t, sigma)`  _function_
+
+> Delta-neutral-straddle ATM strike ``K = F exp(0.5 sigma^2 t)``.
+>
+> The strike at which a straddle has zero (forward) delta -- the market's
+> standard ATM quote for most currency pairs.
+
+### `delta_from_strike(F, t, sigma, K, is_call, premium_adjusted=False, spot_delta=False, r_for=0.0)`  _function_
+
+> Forward (or spot) delta of an option struck at ``K``.
+>
+> The inverse of :func:`strike_from_delta`; returns the signed delta.
+
+### `rr_bf_to_pillars(F, t, atm, rr, bf, call_delta=0.25)`  _function_
+
+> Convert (ATM, risk-reversal, butterfly) quotes to smile pillars.
+>
+> Returns ``(K_put, sigma_put, K_atm, sigma_atm, K_call, sigma_call)`` -- the
+> three market pillar strikes and vols. Uses the standard smile-implied-from-
+> quotes relations ``sigma_25c = atm + bf + rr/2``, ``sigma_25p = atm + bf -
+> rr/2`` and the delta-neutral ATM strike.
+
+### `strike_from_delta(F, t, sigma, delta, is_call, premium_adjusted=False, spot_delta=False, r_for=0.0)`  _function_
+
+> Strike with the given delta.
+>
+> Args:
+>     delta: the target delta magnitude convention -- pass the signed delta
+>         (call > 0, put < 0), e.g. ``0.25`` for a 25-delta call, ``-0.25``
+>         for a 25-delta put.
+>     is_call: whether the option is a call.
+>     premium_adjusted: use the premium-adjusted delta convention (delta net
+>         of the option premium, standard for premium-in-foreign pairs).
+>     spot_delta: if True the delta is a spot delta (discounted by ``r_for``);
+>         otherwise a forward delta.
+>
+> Returns the strike ``K``.
 
 ## g2pp
 

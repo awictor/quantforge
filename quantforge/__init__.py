@@ -139,6 +139,9 @@ from .sabr import (
     sabr_repair_butterfly,
 )
 from .vannavolga import VannaVolgaSmile, pillar_vols
+from .fxdelta import (
+    atm_dns_strike, strike_from_delta, delta_from_strike, rr_bf_to_pillars,
+)
 from .volcube import VolCube
 from .cms import (
     cms_adjustment_standard, cms_rate_convexity_replication, cms_rate,
@@ -198,7 +201,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.138.0"
+__version__ = "1.139.0"
 
 __all__ = [
     "OptionType",
@@ -421,6 +424,10 @@ __all__ = [
     "sabr_repair_butterfly",
     "VannaVolgaSmile",
     "pillar_vols",
+    "atm_dns_strike",
+    "strike_from_delta",
+    "delta_from_strike",
+    "rr_bf_to_pillars",
     "VolCube",
     "cms_adjustment_standard",
     "cms_rate_convexity_replication",
