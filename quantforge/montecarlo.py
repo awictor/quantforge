@@ -410,3 +410,60 @@ def average_strike_asian_mc(S, t, r, sigma, option_type=OptionType.CALL, b=None,
 
     price, se = _summarize(samples)
     return MCResult(price=price, std_error=se, n_paths=len(samples))
+
+
+def autocallable_mc(S, t, r, sigma, observation_times, autocall_barrier,
+                    coupon, protection_barrier=None, notional=1.0, b=None,
+                    n_paths=50_000, antithetic=True, seed=None) -> MCResult:
+    """Monte Carlo an autocallable structured note.
+
+    At each observation date, if the spot is at or above ``autocall_barrier``
+    the note redeems early paying ``notional * (1 + coupon * k)`` where ``k`` is
+    the observation number (accrued coupons), discounted to today. If it never
+    autocalls, at maturity the holder gets the notional back unless the spot
+    finished below ``protection_barrier`` (a down-and-in put on the notional),
+    in which case they take the downside ``notional * S_T / S``.
+
+    Args:
+        observation_times: increasing dates (years); the last is maturity.
+        autocall_barrier / protection_barrier: spot levels (same units as S).
+        coupon: coupon rate paid per elapsed observation on early redemption.
+    """
+    _validate(S, S, t, sigma)
+    if b is None:
+        b = r
+    obs = list(observation_times)
+    if any(obs[i] >= obs[i + 1] for i in range(len(obs) - 1)) or obs[0] <= 0:
+        raise ValueError("observation_times must be strictly increasing and positive")
+    if abs(obs[-1] - t) > 1e-9:
+        raise ValueError("last observation must be the maturity t")
+
+    steps = [obs[0]] + [obs[i + 1] - obs[i] for i in range(len(obs) - 1)]
+    rng = random.Random(seed)
+
+    def one_path(zs):
+        s = S
+        tau = 0.0
+        for k, (dt, z) in enumerate(zip(steps, zs), start=1):
+            drift = (b - 0.5 * sigma * sigma) * dt
+            s *= math.exp(drift + sigma * math.sqrt(dt) * z)
+            tau += dt
+            if s >= autocall_barrier and k < len(steps):
+                # Early redemption: notional + accrued coupons.
+                return math.exp(-r * tau) * notional * (1.0 + coupon * k)
+        # Reached maturity without autocalling.
+        disc = math.exp(-r * t)
+        if protection_barrier is not None and s < protection_barrier:
+            return disc * notional * (s / S)          # downside participation
+        return disc * notional * (1.0 + coupon * len(steps))
+
+    samples = []
+    n = n_paths // 2 if antithetic else n_paths
+    for _ in range(n):
+        zs = [rng.gauss(0.0, 1.0) for _ in range(len(steps))]
+        samples.append(one_path(zs))
+        if antithetic:
+            samples.append(one_path([-z for z in zs]))
+
+    price, se = _summarize(samples)
+    return MCResult(price=price, std_error=se, n_paths=len(samples))

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.69.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.70.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -834,6 +834,22 @@ Auto-generated from `quantforge` v1.69.0 by `docs/gen_api.py` — do not edit by
 > With ``control_variate=True`` the geometric-average Asian (known in closed
 > form) is used as a control, dramatically reducing the standard error since
 > the two averages are almost perfectly correlated.
+
+### `autocallable_mc(S, t, r, sigma, observation_times, autocall_barrier, coupon, protection_barrier=None, notional=1.0, b=None, n_paths=50000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
+
+> Monte Carlo an autocallable structured note.
+>
+> At each observation date, if the spot is at or above ``autocall_barrier``
+> the note redeems early paying ``notional * (1 + coupon * k)`` where ``k`` is
+> the observation number (accrued coupons), discounted to today. If it never
+> autocalls, at maturity the holder gets the notional back unless the spot
+> finished below ``protection_barrier`` (a down-and-in put on the notional),
+> in which case they take the downside ``notional * S_T / S``.
+>
+> Args:
+>     observation_times: increasing dates (years); the last is maturity.
+>     autocall_barrier / protection_barrier: spot levels (same units as S).
+>     coupon: coupon rate paid per elapsed observation on early redemption.
 
 ### `average_strike_asian_mc(S, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, n_steps=50, n_paths=50000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
 

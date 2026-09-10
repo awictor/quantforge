@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.70.0] - 2026-09-10
+
+### Added
+- `autocallable_mc` (in `montecarlo.py`): Monte Carlo an autocallable note —
+  early redemption with accrued coupon when the spot is at or above the autocall
+  barrier at an observation date, otherwise notional at maturity with a
+  down-and-in downside below the protection barrier. Higher coupons raise the
+  value; a protection barrier lowers it.
+
 ## [1.69.0] - 2026-09-10
 
 ### Added

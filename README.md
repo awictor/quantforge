@@ -537,6 +537,17 @@ compound_option(S=100, K1=5, K2=100, t1=0.5, t2=1.0, r=0.05, sigma=0.25,
                 kind="call-on-call")
 ```
 
+An autocallable note (early redemption + coupon at observation dates, downside
+below a protection barrier) is priced by Monte Carlo:
+
+```python
+from quantforge import autocallable_mc
+
+autocallable_mc(S=100, t=3.0, r=0.03, sigma=0.25,
+                observation_times=[1.0, 2.0, 3.0], autocall_barrier=100,
+                coupon=0.08, protection_barrier=70)
+```
+
 A capped cliquet (ratchet note) — periodic returns clipped locally and the sum
 clipped globally — is priced by Monte Carlo:
 
