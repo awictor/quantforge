@@ -47,3 +47,32 @@ def quanto_option(S, K, t, r_domestic, r_foreign, sigma_asset, sigma_fx, rho,
     # Quanto-adjusted cost of carry; discount at the domestic rate.
     b_q = r_foreign - q_asset - rho * sigma_asset * sigma_fx
     return bsm_price(S, K, t, r_domestic, sigma_asset, ot, b=b_q)
+
+
+def compo_option(S, K, t, r_domestic, r_foreign, sigma_asset, sigma_fx, rho,
+                 q_asset=0.0, option_type=OptionType.CALL) -> float:
+    """Price a composite (compo) FX option: a foreign asset valued in domestic terms.
+
+    Unlike a quanto (fixed FX), a compo option converts the foreign asset to
+    domestic currency at the *floating* exchange rate, so the payoff is on the
+    domestic-currency asset value ``X = S * FX``. Its volatility combines the
+    asset and FX vols with their correlation:
+
+        sigma_compo = sqrt(sigma_asset^2 + sigma_fx^2 + 2 rho sigma_asset sigma_fx)
+
+    Both ``S`` and ``K`` are quoted in domestic currency (K is the domestic
+    strike on the converted asset). Carry and discounting use the domestic rate;
+    the foreign rate enters as the asset's dividend-like yield ``q_asset``.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma_asset)
+    if not (-1.0 <= rho <= 1.0):
+        raise ValueError("rho must be in [-1, 1]")
+    if sigma_fx < 0:
+        raise ValueError("sigma_fx must be non-negative")
+
+    sigma_compo = math.sqrt(sigma_asset * sigma_asset + sigma_fx * sigma_fx
+                            + 2.0 * rho * sigma_asset * sigma_fx)
+    # Domestic-currency asset carries at the domestic rate less the asset yield.
+    b = r_domestic - q_asset
+    return bsm_price(S, K, t, r_domestic, sigma_compo, ot, b=b)

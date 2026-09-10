@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.60.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.61.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -981,6 +981,21 @@ Auto-generated from `quantforge` v1.60.0 by `docs/gen_api.py` — do not edit by
 > so callers can pass 0, 1, 2, ... and get well-spread points.
 
 ## quanto
+
+### `compo_option(S, K, t, r_domestic, r_foreign, sigma_asset, sigma_fx, rho, q_asset=0.0, option_type=<OptionType.CALL: 'call'>) -> float`  _function_
+
+> Price a composite (compo) FX option: a foreign asset valued in domestic terms.
+>
+> Unlike a quanto (fixed FX), a compo option converts the foreign asset to
+> domestic currency at the *floating* exchange rate, so the payoff is on the
+> domestic-currency asset value ``X = S * FX``. Its volatility combines the
+> asset and FX vols with their correlation:
+>
+>     sigma_compo = sqrt(sigma_asset^2 + sigma_fx^2 + 2 rho sigma_asset sigma_fx)
+>
+> Both ``S`` and ``K`` are quoted in domestic currency (K is the domestic
+> strike on the converted asset). Carry and discounting use the domestic rate;
+> the foreign rate enters as the asset's dividend-like yield ``q_asset``.
 
 ### `quanto_option(S, K, t, r_domestic, r_foreign, sigma_asset, sigma_fx, rho, q_asset=0.0, option_type=<OptionType.CALL: 'call'>) -> float`  _function_
 

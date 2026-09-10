@@ -977,6 +977,16 @@ quanto_option(S=100, K=100, t=1.0, r_domestic=0.03, r_foreign=0.05,
 The carry shifts by `-rho * sigma_asset * sigma_fx`; `rho=0` removes the
 adjustment.
 
+A composite (compo) option instead converts at the *floating* FX, so its vol
+combines the asset and FX vols:
+
+```python
+from quantforge import compo_option
+
+compo_option(S=100, K=100, t=1.0, r_domestic=0.05, r_foreign=0.05,
+             sigma_asset=0.2, sigma_fx=0.1, rho=0.5, option_type="call")
+```
+
 ## Model coverage
 
 | Instrument            | Set the carry `b` to | Function            |

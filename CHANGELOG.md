@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.61.0] - 2026-09-09
+
+### Added
+- `compo_option` (in `quanto.py`): composite (compo) FX option on a foreign
+  asset converted at the *floating* exchange rate, so the effective vol combines
+  the asset and FX vols with their correlation
+  (`sqrt(sa^2 + sfx^2 + 2 rho sa sfx)`). Complements the fixed-FX quanto; higher
+  correlation raises the price, and it matches a combined-lognormal Monte Carlo.
+
 ## [1.60.0] - 2026-09-09
 
 ### Added
