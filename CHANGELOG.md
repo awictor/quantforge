@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.186.0] - 2026-09-10
+
+### Added
+- `two_asset_asset_or_nothing` (in `multiasset.py`): asset-or-nothing digital
+  paying the first asset's terminal value `S1_T` iff both conditions hold (each
+  `above`/`below` its strike). Priced under the asset-1 (share) measure, where
+  asset 1's drift gains `sigma1^2` and asset 2's shock inherits an extra
+  `rho sigma1 sqrt(t)`: `S1 e^{-q1 t} M(s1 a1, s2 a2; s1 s2 rho)`.
+- Verified: all four quadrants match a correlated-GBM Monte Carlo; they sum to
+  the discounted forward `S1 e^{-q1 t}` (asset 1 is always delivered on some
+  quadrant) to 1e-8, including under a dividend yield; and at `rho = 0` the
+  price factorizes into the single-asset `asset_or_nothing` on S1 times the
+  risk-neutral probability that S2 clears K2.
+
 ## [1.185.0] - 2026-09-10
 
 ### Added

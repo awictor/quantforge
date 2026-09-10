@@ -270,6 +270,46 @@ def two_asset_digital(S1, S2, K1, K2, t, r, sigma1, sigma2, rho,
     return cash * disc * _bivariate_normal(s1 * d1, s2 * d2, s1 * s2 * rho)
 
 
+def two_asset_asset_or_nothing(S1, S2, K1, K2, t, r, sigma1, sigma2, rho,
+                               cond1="above", cond2="above", q1=0.0, q2=0.0):
+    """Asset-or-nothing digital paying ``S1_T`` iff both conditions hold.
+
+    Pays the *first* asset's terminal value at expiry iff asset 1 is
+    ``above``/``below`` ``K1`` and asset 2 is ``above``/``below`` ``K2``. Pricing
+    under the asset-1 (share) measure -- where ``S1`` is the numeraire and asset
+    1's drift gains ``sigma1^2`` while asset 2's shock inherits an extra
+    ``rho sigma1 sqrt(t)`` -- gives
+
+        S1 e^{-q1 t} * M(s1 a1, s2 a2; s1 s2 rho),
+
+        a1 = (ln(S1/K1) + (r - q1 + sigma1^2/2) t) / (sigma1 sqrt t)
+        a2 = (ln(S2/K2) + (r - q2 - sigma2^2/2) t) / (sigma2 sqrt t)
+             + rho sigma1 sqrt(t)
+
+    with ``si = +1`` for an ``above`` condition, ``-1`` for ``below``. The four
+    quadrant prices sum to the discounted forward ``S1 e^{-q1 t}`` (asset 1 is
+    always delivered, on some quadrant). Cross-checks a correlated-GBM Monte
+    Carlo. To pay asset 2 instead, swap the two assets in the call.
+    """
+    if S1 <= 0 or S2 <= 0 or K1 <= 0 or K2 <= 0:
+        raise ValueError("prices and strikes must be positive")
+    if t <= 0:
+        raise ValueError("t must be positive")
+    if not -1.0 <= rho <= 1.0:
+        raise ValueError("rho must be in [-1, 1]")
+    c1 = str(cond1).lower()
+    c2 = str(cond2).lower()
+    if c1 not in ("above", "below") or c2 not in ("above", "below"):
+        raise ValueError("cond1/cond2 must be 'above' or 'below'")
+    st = math.sqrt(t)
+    a1 = (math.log(S1 / K1) + (r - q1 + 0.5 * sigma1 * sigma1) * t) / (sigma1 * st)
+    a2 = (math.log(S2 / K2) + (r - q2 - 0.5 * sigma2 * sigma2) * t) / (sigma2 * st) \
+        + rho * sigma1 * st
+    s1 = 1.0 if c1 == "above" else -1.0
+    s2 = 1.0 if c2 == "above" else -1.0
+    return S1 * math.exp(-q1 * t) * _bivariate_normal(s1 * a1, s2 * a2, s1 * s2 * rho)
+
+
 def _disc_expected_min(S1, S2, t, r, sigma1, sigma2, rho, q1, q2):
     """Discounted risk-neutral expectation of ``min(S1_T, S2_T)``.
 
