@@ -40,15 +40,15 @@ def test_gamma_positive_and_roughly_right():
 
 def test_put_delta_negative():
     g = bermudan_lsm_greeks(S, K, T, R, SIG, OptionType.PUT,
-                            n_steps=40, n_paths=40_000, seed=2)
+                            n_steps=25, n_paths=8_000, seed=2)
     assert g["delta"] < 0.0
 
 
 def test_price_field_matches_lsm():
     g = bermudan_lsm_greeks(S, K, T, R, SIG, OptionType.PUT,
-                            n_steps=40, n_paths=30_000, seed=3)
-    direct = bermudan_lsm(S, K, T, R, SIG, OptionType.PUT, n_steps=40,
-                          n_paths=30_000, seed=3)
+                            n_steps=25, n_paths=8_000, seed=3)
+    direct = bermudan_lsm(S, K, T, R, SIG, OptionType.PUT, n_steps=25,
+                          n_paths=8_000, seed=3)
     assert g["price"] == pytest.approx(direct, abs=1e-9)
 
 

@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.167.1] - 2026-09-10
+
+### Tests
+- Trimmed the fast suite: the two fast LSM-Greeks checks (put-delta sign, price
+  field consistency) run at n_steps=25 / n_paths=8000 instead of 40/40000 (9s
+  each -> under 2s), cutting ~14s off the fast run. The delta/gamma accuracy
+  cross-checks against the binomial tree still run under `-m slow`.
+
 ## [1.167.0] - 2026-09-10
 
 ### Added
