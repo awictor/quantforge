@@ -23,8 +23,9 @@ from .bsm import (
 from .implied import implied_volatility
 from .binomial import american_price
 from .portfolio import Contract, Position, BookRisk, Book, price_book
+from .svi import SVIParams, calibrate_svi
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 
 __all__ = [
     "OptionType",
@@ -45,5 +46,7 @@ __all__ = [
     "BookRisk",
     "Book",
     "price_book",
+    "SVIParams",
+    "calibrate_svi",
     "__version__",
 ]

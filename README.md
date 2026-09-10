@@ -74,6 +74,30 @@ for pos in book.positions:
 `qty` is signed (short = negative) and `multiplier` scales to notional
 (e.g. 100 for US equity options). Net Greeks are position-scaled sums.
 
+## Volatility surface (SVI)
+
+Fit Gatheral's raw SVI smile to market quotes with a built-in Nelder-Mead
+calibrator (no SciPy):
+
+```python
+from quantforge import calibrate_svi, SVIParams
+
+# Observed smile: log-moneyness k = log(K/F), total variance w = sigma^2 * t.
+ks  = [-0.3, -0.2, -0.1, 0.0, 0.1, 0.2, 0.3]
+t   = 0.5
+vols = [0.28, 0.24, 0.21, 0.20, 0.205, 0.22, 0.245]
+tv  = [(v * v) * t for v in vols]
+
+params, rmse = calibrate_svi(ks, tv)
+print(params, "rmse:", rmse)
+
+# Interpolate/extrapolate a vol anywhere on the smile.
+print(params.implied_vol(k=0.05, t=t))
+
+# Static no-arbitrage wing check (Lee's slope bound).
+print(params.is_arbitrage_free_wings())
+```
+
 ## Command line
 
 Installing the package exposes a `quantforge` CLI:
