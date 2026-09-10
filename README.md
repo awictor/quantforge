@@ -722,6 +722,8 @@ quotes = [
     (2.0, ks_2y, w_2y),
 ]
 surf = VolSurface.fit(quotes)
+# ...or fit and repair any calendar arbitrage so w is non-decreasing in t:
+surf = VolSurface.fit_arbitrage_free(quotes)
 
 surf.implied_vol(k=0.05, t=0.75)          # interpolated vol between expiries
 surf.is_calendar_arbitrage_free()         # True if variance rises with maturity

@@ -60,6 +60,37 @@ class VolSurface:
             slices.append(SurfaceSlice(t=float(t), params=params, rmse=rmse))
         return cls(slices)
 
+    @classmethod
+    def fit_arbitrage_free(cls, quotes, ks_check=None, tol=1e-9):
+        """Fit each expiry with SVI, then repair any calendar-arbitrage.
+
+        Fits slice by slice (like :meth:`fit`), sorts by expiry, and then walks
+        from the shortest maturity upward: if a longer slice's total variance
+        dips below the running maximum-so-far at any checked log-moneyness, it
+        lifts that slice's level ``a`` just enough to restore ``w`` being
+        non-decreasing in maturity (the calendar-arbitrage condition). Returns a
+        surface that passes :meth:`is_calendar_arbitrage_free`.
+        """
+        base = cls.fit(quotes)
+        if ks_check is None:
+            ks_check = [-0.5, -0.25, -0.1, 0.0, 0.1, 0.25, 0.5]
+
+        repaired = [base.slices[0]]
+        for sl in base.slices[1:]:
+            prev = repaired[-1]
+            # Largest deficit of this slice's w below the previous slice's w.
+            deficit = 0.0
+            for k in ks_check:
+                gap = prev.params.total_variance(k) - sl.params.total_variance(k)
+                if gap > deficit:
+                    deficit = gap
+            if deficit > tol:
+                p = sl.params
+                lifted = SVIParams(a=p.a + deficit, b=p.b, rho=p.rho, m=p.m, s=p.s)
+                sl = SurfaceSlice(t=sl.t, params=lifted, rmse=sl.rmse)
+            repaired.append(sl)
+        return cls(repaired)
+
     def total_variance(self, k: float, t: float) -> float:
         """Interpolate total implied variance w(k, t) across the term structure.
 

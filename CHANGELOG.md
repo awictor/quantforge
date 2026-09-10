@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.66.0] - 2026-09-10
+
+### Added
+- `VolSurface.fit_arbitrage_free`: fits each expiry with SVI, then walks from
+  the short end up and lifts each slice's level just enough to keep total
+  variance non-decreasing in maturity — repairing calendar arbitrage. The
+  result passes `is_calendar_arbitrage_free`; a consistent surface is left as
+  fitted.
+
 ## [1.65.0] - 2026-09-09
 
 ### Added
