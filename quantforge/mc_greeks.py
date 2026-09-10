@@ -192,6 +192,75 @@ def asian_pathwise_vega(S, K, t, r, sigma, option_type=OptionType.CALL, b=None,
     return MCResult(price=m, std_error=se, n_paths=len(samples))
 
 
+def barrier_lr_delta(S, K, H, t, r, sigma, option_type=OptionType.CALL,
+                     barrier="down-out", b=None, rebate=0.0, n_steps=100,
+                     n_paths=100_000, antithetic=True, seed=None) -> MCResult:
+    """Delta of a discretely-monitored single-barrier option (likelihood ratio).
+
+    A knock-out/knock-in payoff is discontinuous in the spot (a path that just
+    grazes the barrier pays nothing), so the pathwise method is ill-defined. The
+    likelihood-ratio method sidesteps this: in the discrete GBM path the initial
+    spot enters only through the mean of the *first* log-increment,
+    ``ln S_1 = ln S0 + (b - sig^2/2) dt + sig sqrt(dt) Z_1``, so the score of the
+    path density with respect to ``S0`` is ``Z_1 / (S0 sig sqrt(dt))`` and
+
+        delta = E[ discounted_payoff * Z_1 / (S0 sig sqrt(dt)) ].
+
+    Monitoring is discrete (hard touch at the ``n_steps`` dates), matching
+    :func:`barrier_mc` with ``brownian_bridge=False``; a common-random-number
+    finite-difference of that price is the natural cross-check. ``barrier`` is
+    ``down-out``/``down-in``/``up-out``/``up-in``; "down" watches ``S <= H``,
+    "up" watches ``S >= H``. ``rebate`` is paid at expiry to killed knock-outs
+    or never-activated knock-ins.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if H <= 0:
+        raise ValueError("barrier H must be positive")
+    if b is None:
+        b = r
+    barrier = str(barrier).lower()
+    if barrier not in ("down-out", "down-in", "up-out", "up-in"):
+        raise ValueError("barrier must be down-out/down-in/up-out/up-in")
+    if n_steps < 1:
+        raise ValueError("n_steps must be >= 1")
+
+    up = barrier.startswith("up")
+    knock_in = barrier.endswith("in")
+    dt = t / n_steps
+    drift = (b - 0.5 * sigma * sigma) * dt
+    vol = sigma * math.sqrt(dt)
+    disc = math.exp(-r * t)
+    sign = 1.0 if ot is OptionType.CALL else -1.0
+    score_scale = 1.0 / (S * vol)          # Z_1 / (S0 sig sqrt(dt))
+    rng = random.Random(seed)
+    samples = []
+
+    def payoff(zs):
+        s = S
+        touched = (up and S >= H) or (not up and S <= H)
+        for z in zs:
+            s *= math.exp(drift + vol * z)
+            if (up and s >= H) or (not up and s <= H):
+                touched = True
+        barrier_ok = touched if knock_in else not touched
+        if barrier_ok:
+            return disc * max(sign * (s - K), 0.0)
+        return disc * rebate
+
+    def one(zs):
+        return payoff(zs) * zs[0] * score_scale
+
+    n = n_paths // 2 if antithetic else n_paths
+    for _ in range(n):
+        zs = [rng.gauss(0.0, 1.0) for _ in range(n_steps)]
+        samples.append(one(zs))
+        if antithetic:
+            samples.append(one([-z for z in zs]))
+    m, se = _summarize(samples)
+    return MCResult(price=m, std_error=se, n_paths=len(samples))
+
+
 def mixed_gamma(S, K, t, r, sigma, option_type=OptionType.CALL, b=None,
                 n_paths=200_000, antithetic=True, seed=None) -> MCResult:
     """European gamma by the mixed pathwise-likelihood-ratio estimator.

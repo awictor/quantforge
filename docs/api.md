@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.170.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.171.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1636,6 +1636,26 @@ Auto-generated from `quantforge` v1.170.0 by `docs/gen_api.py` — do not edit b
 > derivative is ``disc * 1_{A>K} * dA/dsig`` (put: ``-1_{A<K}``). Lower
 > variance than a bump for this Lipschitz payoff; the kink at ``A = K`` is a
 > measure-zero set.
+
+### `barrier_lr_delta(S, K, H, t, r, sigma, option_type=<OptionType.CALL: 'call'>, barrier='down-out', b=None, rebate=0.0, n_steps=100, n_paths=100000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
+
+> Delta of a discretely-monitored single-barrier option (likelihood ratio).
+>
+> A knock-out/knock-in payoff is discontinuous in the spot (a path that just
+> grazes the barrier pays nothing), so the pathwise method is ill-defined. The
+> likelihood-ratio method sidesteps this: in the discrete GBM path the initial
+> spot enters only through the mean of the *first* log-increment,
+> ``ln S_1 = ln S0 + (b - sig^2/2) dt + sig sqrt(dt) Z_1``, so the score of the
+> path density with respect to ``S0`` is ``Z_1 / (S0 sig sqrt(dt))`` and
+>
+>     delta = E[ discounted_payoff * Z_1 / (S0 sig sqrt(dt)) ].
+>
+> Monitoring is discrete (hard touch at the ``n_steps`` dates), matching
+> :func:`barrier_mc` with ``brownian_bridge=False``; a common-random-number
+> finite-difference of that price is the natural cross-check. ``barrier`` is
+> ``down-out``/``down-in``/``up-out``/``up-in``; "down" watches ``S <= H``,
+> "up" watches ``S >= H``. ``rebate`` is paid at expiry to killed knock-outs
+> or never-activated knock-ins.
 
 ### `lr_digital_delta(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, cash=1.0, n_paths=200000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
 

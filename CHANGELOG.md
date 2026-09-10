@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.171.0] - 2026-09-10
+
+### Added
+- `barrier_lr_delta` (in `mc_greeks.py`): delta of a discretely-monitored
+  single-barrier option by the likelihood-ratio method. The knock-out/knock-in
+  payoff is discontinuous in the spot, so the pathwise method fails; the LR
+  method uses the score of the path density. The initial spot enters only
+  through the mean of the first log-increment, so the score is
+  `Z_1 / (S0 sig sqrt(dt))` and `delta = E[disc_payoff * Z_1 / (S0 sig sqrt(dt))]`.
+- Verified: matches a common-random-number finite difference of the
+  discretely-monitored `barrier_mc` (brownian_bridge=False) within MC error for
+  a down-out call (0.784 vs 0.788) and an up-in put (0.089 vs 0.092); down-out
+  call delta is positive.
+
 ## [1.170.0] - 2026-09-10
 
 ### Added
