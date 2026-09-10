@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.46.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.47.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -415,6 +415,19 @@ Auto-generated from `quantforge` v1.46.0 by `docs/gen_api.py` — do not edit by
 ### `ForwardResult(forward: float, discount_factor: float, implied_rate: float, implied_div_yield: float, n_strikes: int, rmse: float) -> None`  _class_
 
 > ForwardResult(forward: float, discount_factor: float, implied_rate: float, implied_div_yield: float, n_strikes: int, rmse: float)
+
+### `dividend_curve(chain_by_expiry, spot)`  _function_
+
+> Bootstrap an implied dividend-yield term structure from a multi-expiry chain.
+>
+> Args:
+>     chain_by_expiry: iterable of ``(t, strikes, calls, puts)`` tuples, one
+>         per expiry.
+>     spot: current underlying spot.
+>
+> Returns a list of ``(t, ForwardResult)`` pairs sorted by expiry, each from
+> :func:`implied_forward`. The ``implied_div_yield`` field of each result is
+> the continuous dividend yield to that expiry (a point on the dividend curve).
 
 ### `implied_forward(strikes: Sequence[float], calls: Sequence[float], puts: Sequence[float], t: float, spot: float = None)`  _function_
 

@@ -26,7 +26,7 @@ from .binomial import american_price
 from .trinomial import trinomial_price, richardson_american
 from .lsm import bermudan_lsm
 from .perpetual import perpetual_american, perpetual_exercise_boundary
-from .forward import implied_forward, ForwardResult
+from .forward import implied_forward, ForwardResult, dividend_curve
 from .forwardstart import forward_start_price, cliquet_price
 from .chooser import chooser_option
 from .compound import compound_option
@@ -106,7 +106,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.46.0"
+__version__ = "1.47.0"
 
 __all__ = [
     "OptionType",
@@ -130,6 +130,7 @@ __all__ = [
     "perpetual_exercise_boundary",
     "implied_forward",
     "ForwardResult",
+    "dividend_curve",
     "forward_start_price",
     "cliquet_price",
     "chooser_option",

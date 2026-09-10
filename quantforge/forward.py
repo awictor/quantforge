@@ -88,3 +88,23 @@ def implied_forward(strikes: Sequence[float], calls: Sequence[float],
 
     return ForwardResult(forward=F, discount_factor=D, implied_rate=implied_rate,
                          implied_div_yield=div_yield, n_strikes=n, rmse=rmse)
+
+
+def dividend_curve(chain_by_expiry, spot):
+    """Bootstrap an implied dividend-yield term structure from a multi-expiry chain.
+
+    Args:
+        chain_by_expiry: iterable of ``(t, strikes, calls, puts)`` tuples, one
+            per expiry.
+        spot: current underlying spot.
+
+    Returns a list of ``(t, ForwardResult)`` pairs sorted by expiry, each from
+    :func:`implied_forward`. The ``implied_div_yield`` field of each result is
+    the continuous dividend yield to that expiry (a point on the dividend curve).
+    """
+    out = []
+    for t, strikes, calls, puts in chain_by_expiry:
+        res = implied_forward(strikes, calls, puts, t, spot=spot)
+        out.append((t, res))
+    out.sort(key=lambda x: x[0])
+    return out

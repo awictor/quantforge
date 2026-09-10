@@ -275,6 +275,17 @@ The points `(K, C - K)` vs `P` are linear under parity, so a least-squares fit
 returns both the forward (slope) and discount factor (intercept) at once, and
 the dividend yield follows from `F = S * exp((r - q) t)`.
 
+`dividend_curve` bootstraps the implied dividend-yield term structure from a
+multi-expiry chain:
+
+```python
+from quantforge import dividend_curve
+
+curve = dividend_curve(chain_by_expiry, spot=100.0)   # [(t, ForwardResult), ...]
+for t, res in curve:
+    print(t, res.implied_div_yield)
+```
+
 ## Index implied correlation
 
 The dispersion-trading measure: back out the common correlation an index vol

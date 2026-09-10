@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.47.0] - 2026-09-09
+
+### Added
+- `dividend_curve` (in `forward.py`): bootstraps an implied dividend-yield term
+  structure from a multi-expiry option chain, applying `implied_forward` per
+  expiry and returning sorted `(t, ForwardResult)` points. Recovers a known
+  dividend term structure exactly.
+
 ## [1.46.0] - 2026-09-09
 
 ### Added
