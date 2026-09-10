@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.175.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.176.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1994,6 +1994,24 @@ Auto-generated from `quantforge` v1.175.0 by `docs/gen_api.py` — do not edit b
 ### `european_mc(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, n_paths=100000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
 
 > Monte Carlo price of a European option (converges to the BSM value).
+
+### `european_stratified_mc(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, n_strata=100, n_per=10, seed=None) -> quantforge.montecarlo.MCResult`  _function_
+
+> European price by stratified sampling of the terminal normal.
+>
+> The single normal that drives the terminal spot is split into ``n_strata``
+> equiprobable strata ``[(i)/n, (i+1)/n]`` in probability space. Drawing
+> ``n_per`` uniforms *within* each stratum and mapping them through the inverse
+> normal CDF spreads the draws evenly across the distribution, removing the
+> clustering that inflates plain Monte Carlo variance. Because the strata are
+> equiprobable the estimator is the simple average of the per-stratum means,
+> and its variance is ``(1/n_strata^2) sum_i s_i^2 / n_per`` from the
+> within-stratum sample variances -- always at or below the plain estimator,
+> and much lower for a smooth payoff.
+>
+> Total paths drawn is ``n_strata * n_per``; ``n_per >= 2`` is required so each
+> stratum's variance is estimable. Cross-checks the closed-form Black-Scholes
+> value and reports a standard error below :func:`european_mc` at equal paths.
 
 ### `local_vol_mc(S, K, t, r, local_vol_fn, option_type=<OptionType.CALL: 'call'>, q=0.0, n_steps=100, n_paths=50000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
 
