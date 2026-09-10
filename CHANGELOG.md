@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.214.0] - 2026-09-10
+
+### Added
+- `chooser_option_greeks` (in `chooser.py`): delta, gamma, and vega of a simple
+  chooser option, exact by decomposition. The chooser is exactly a call to `T`
+  plus a put struck at the discounted-forward level expiring at the choice date,
+  and both legs are Black-Scholes prices in `S` and `sigma`, so the Greeks are
+  the exact sums of the two legs' BSM Greeks -- no finite difference.
+- Verified: delta, gamma, and vega match finite differences of `chooser_option`
+  to step precision; gamma and vega are positive (long both a call and a put).
+
 ## [1.213.0] - 2026-09-10
 
 ### Added

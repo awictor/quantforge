@@ -15,7 +15,10 @@ today.
 
 import math
 
-from .bsm import call_price, put_price, _validate
+from .bsm import (
+    call_price, put_price, _validate, delta as bsm_delta, gamma as bsm_gamma,
+    vega as bsm_vega, OptionType,
+)
 
 
 def chooser_option(S, K, t_choose, T, r, sigma, b=None) -> float:
@@ -38,3 +41,32 @@ def chooser_option(S, K, t_choose, T, r, sigma, b=None) -> float:
     k_put = K * math.exp(-b * (T - t_choose))
     put = put_price(S, k_put, t_choose, r, sigma, b=b)
     return call + put
+
+
+def chooser_option_greeks(S, K, t_choose, T, r, sigma, b=None):
+    """Greeks of a simple chooser option, exact by decomposition.
+
+    The chooser is exactly ``C(S, K, T) + P(S, K e^{-b(T - t_choose)}, t_choose)``
+    -- a call to ``T`` plus a put struck at the discounted-forward level expiring
+    at the choice date. Both legs are Black-Scholes prices in ``S`` and ``sigma``
+    (the put's strike does not depend on either), so ``delta``, ``gamma``, and
+    ``vega`` are the exact sums of the two legs' BSM Greeks -- no finite
+    difference. Returns a dict with ``price``, ``delta``, ``gamma``, ``vega``.
+    """
+    _validate(S, K, T, sigma)
+    if not (0.0 <= t_choose <= T):
+        raise ValueError("require 0 <= t_choose <= T")
+    if b is None:
+        b = r
+    k_put = K * math.exp(-b * (T - t_choose))
+
+    call = call_price(S, K, T, r, sigma, b=b)
+    put = put_price(S, k_put, t_choose, r, sigma, b=b)
+
+    delta = (bsm_delta(S, K, T, r, sigma, OptionType.CALL, b=b)
+             + bsm_delta(S, k_put, t_choose, r, sigma, OptionType.PUT, b=b))
+    gamma = (bsm_gamma(S, K, T, r, sigma, b=b)
+             + bsm_gamma(S, k_put, t_choose, r, sigma, b=b))
+    vega = (bsm_vega(S, K, T, r, sigma, b=b)
+            + bsm_vega(S, k_put, t_choose, r, sigma, b=b))
+    return {"price": call + put, "delta": delta, "gamma": gamma, "vega": vega}

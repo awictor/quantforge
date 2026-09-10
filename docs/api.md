@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.213.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.214.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -504,6 +504,17 @@ Auto-generated from `quantforge` v1.213.0 by `docs/gen_api.py` — do not edit b
 >     t_choose: time (years) until the call/put choice is made.
 >     T: total time (years) to the underlying option's expiry (>= t_choose).
 >     b: cost of carry (defaults to r).
+
+### `chooser_option_greeks(S, K, t_choose, T, r, sigma, b=None)`  _function_
+
+> Greeks of a simple chooser option, exact by decomposition.
+>
+> The chooser is exactly ``C(S, K, T) + P(S, K e^{-b(T - t_choose)}, t_choose)``
+> -- a call to ``T`` plus a put struck at the discounted-forward level expiring
+> at the choice date. Both legs are Black-Scholes prices in ``S`` and ``sigma``
+> (the put's strike does not depend on either), so ``delta``, ``gamma``, and
+> ``vega`` are the exact sums of the two legs' BSM Greeks -- no finite
+> difference. Returns a dict with ``price``, ``delta``, ``gamma``, ``vega``.
 
 ## cir
 

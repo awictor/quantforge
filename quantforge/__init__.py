@@ -38,7 +38,7 @@ from .mlmc import mlmc_asian
 from .perpetual import perpetual_american, perpetual_exercise_boundary
 from .forward import implied_forward, ForwardResult, dividend_curve
 from .forwardstart import forward_start_price, cliquet_price
-from .chooser import chooser_option
+from .chooser import chooser_option, chooser_option_greeks
 from .compound import compound_option, compound_option_greeks
 from .quanto import quanto_option, compo_option
 from .displaced import displaced_diffusion_price, displaced_implied_shift
@@ -252,7 +252,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.213.0"
+__version__ = "1.214.0"
 
 __all__ = [
     "OptionType",
@@ -295,6 +295,7 @@ __all__ = [
     "forward_start_price",
     "cliquet_price",
     "chooser_option",
+    "chooser_option_greeks",
     "compound_option",
     "compound_option_greeks",
     "quanto_option",
