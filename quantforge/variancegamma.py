@@ -65,6 +65,41 @@ def variance_gamma_price(S, K, t, r, sigma, nu, theta,
                       option_type, alpha=cm_alpha, upper=upper)
 
 
+def variance_gamma_greeks(S, K, t, r, sigma, nu, theta,
+                          option_type=OptionType.CALL, q=0.0, cm_alpha=1.5):
+    """Greeks of a Variance-Gamma option by central finite differences.
+
+    Central differences of :func:`variance_gamma_price` for ``delta`` (dV/dS),
+    ``gamma`` (d2V/dS2), ``vega`` (dV/dsigma, the Brownian-vol sensitivity), and
+    ``theta_greek`` (calendar decay, ``-dV/dt``). As ``nu -> 0`` the Greeks
+    approach the Black-Scholes Greeks. ``theta`` is the VG skew *parameter*; the
+    calendar Greek is returned as ``theta_greek`` to avoid the name clash.
+    Returns a dict with ``price``, ``delta``, ``gamma``, ``vega``, ``theta_greek``.
+    """
+    if S <= 0 or K <= 0:
+        raise ValueError("S and K must be positive")
+    if t <= 0:
+        raise ValueError("t must be positive")
+    if nu <= 0 or sigma <= 0:
+        raise ValueError("nu and sigma must be positive")
+
+    def px(S_=S, t_=t, sigma_=sigma):
+        return variance_gamma_price(S_, K, t_, r, sigma_, nu, theta,
+                                    option_type, q=q, cm_alpha=cm_alpha)
+
+    base = px()
+    hS = 1e-3 * S
+    up, dn = px(S_=S + hS), px(S_=S - hS)
+    delta = (up - dn) / (2.0 * hS)
+    gamma = (up - 2.0 * base + dn) / (hS * hS)
+    hv = 1e-4
+    vega = (px(sigma_=sigma + hv) - px(sigma_=sigma - hv)) / (2.0 * hv)
+    ht = min(1e-4, 0.25 * t)
+    theta_greek = -(px(t_=t + ht) - px(t_=t - ht)) / (2.0 * ht)
+    return {"price": base, "delta": delta, "gamma": gamma, "vega": vega,
+            "theta_greek": theta_greek}
+
+
 def variance_gamma_smile(S, strikes, t, r, sigma, nu, theta, q=0.0,
                          cm_alpha=1.5):
     """Black-Scholes implied-vol smile the Variance-Gamma model produces.

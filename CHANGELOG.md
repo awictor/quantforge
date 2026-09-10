@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.226.0] - 2026-09-10
+
+### Added
+- `variance_gamma_greeks` (in `variancegamma.py`): delta, gamma, vega
+  (Brownian-vol sensitivity), and `theta_greek` (calendar decay) of a
+  Variance-Gamma option by central finite differences on `variance_gamma_price`.
+  The calendar Greek is named `theta_greek` to avoid clashing with the VG skew
+  *parameter* `theta`.
+- Verified: a small `nu` gives a delta close to the Black-Scholes delta (the
+  `nu -> 0` limit); the delta matches a finite difference; call delta in (0,1)
+  with positive gamma/vega, put delta negative.
+
 ## [1.225.0] - 2026-09-10
 
 ### Added

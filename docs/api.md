@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.225.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.226.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3861,6 +3861,17 @@ Auto-generated from `quantforge` v1.225.0 by `docs/gen_api.py` — do not edit b
 > Return (sigma_25put, sigma_atm, sigma_25call) from ATM / RR / BF quotes.
 
 ## variancegamma
+
+### `variance_gamma_greeks(S, K, t, r, sigma, nu, theta, option_type=<OptionType.CALL: 'call'>, q=0.0, cm_alpha=1.5)`  _function_
+
+> Greeks of a Variance-Gamma option by central finite differences.
+>
+> Central differences of :func:`variance_gamma_price` for ``delta`` (dV/dS),
+> ``gamma`` (d2V/dS2), ``vega`` (dV/dsigma, the Brownian-vol sensitivity), and
+> ``theta_greek`` (calendar decay, ``-dV/dt``). As ``nu -> 0`` the Greeks
+> approach the Black-Scholes Greeks. ``theta`` is the VG skew *parameter*; the
+> calendar Greek is returned as ``theta_greek`` to avoid the name clash.
+> Returns a dict with ``price``, ``delta``, ``gamma``, ``vega``, ``theta_greek``.
 
 ### `variance_gamma_price(S, K, t, r, sigma, nu, theta, option_type=<OptionType.CALL: 'call'>, q=0.0, cm_alpha=1.5, upper=200.0)`  _function_
 
