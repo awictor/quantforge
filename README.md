@@ -289,6 +289,21 @@ geometric_asian(S=100, K=100, t=1, r=0.05, sigma=0.3, option_type="call")
 Barrier kinds: `Barrier.DOWN_IN`, `DOWN_OUT`, `UP_IN`, `UP_OUT`. In/out parity
 (`in + out = vanilla`) holds exactly and is enforced by the tests.
 
+Lookbacks (against the realized path extreme) have closed forms too:
+
+```python
+from quantforge import floating_strike_lookback, fixed_strike_lookback
+
+# Floating strike (buy at the low / sell at the high): payoff S_T - S_min.
+floating_strike_lookback(S=100, t=1.0, r=0.05, sigma=0.3, option_type="call")
+
+# Fixed strike on the realized maximum: payoff max(S_max - K, 0).
+fixed_strike_lookback(S=100, K=100, t=1.0, r=0.05, sigma=0.3, option_type="call")
+```
+
+Pass `s_extreme` (the running min/max observed so far) to price a seasoned
+lookback; it defaults to the current spot at inception.
+
 ## Term-structure surface (calendar-arbitrage aware)
 
 Stitch per-expiry SVI smiles into a full surface, interpolate vol at any

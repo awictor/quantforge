@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.6.0] - 2026-09-09
+
+### Added
+- `lookback.py`: continuously-monitored lookback options —
+  `floating_strike_lookback` (Goldman-Sosin-Gatto; payoff against the realized
+  extreme) and `fixed_strike_lookback` (Conze-Viswanathan; ordinary strike on
+  the realized extreme). Both take the running extreme and cost of carry `b`,
+  with the `b -> 0` singularity handled by a nudge. Cross-checked against Monte
+  Carlo path max/min.
+
 ## [1.5.0] - 2026-09-09
 
 ### Added
