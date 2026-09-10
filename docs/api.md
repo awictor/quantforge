@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.88.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.89.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1005,6 +1005,27 @@ Auto-generated from `quantforge` v1.88.0 by `docs/gen_api.py` — do not edit by
 >
 > "up" barriers watch for S >= H, "down" for S <= H. This is the standard
 > barrier-contingent binary; the path dependence has no simple closed form.
+
+### `barrier_mc(S, K, H, t, r, sigma, option_type=<OptionType.CALL: 'call'>, barrier='down-out', b=None, rebate=0.0, n_steps=100, n_paths=50000, antithetic=True, seed=None, brownian_bridge=True) -> quantforge.montecarlo.MCResult`  _function_
+
+> Monte Carlo a single-barrier vanilla option with a Brownian-bridge check.
+>
+> Prices the continuously-monitored single-barrier option that
+> :func:`quantforge.barrier_option` gives in closed form, so it is the natural
+> cross-check for that formula (including a continuous dividend yield ``q`` fed
+> in as ``b = r - q``). ``barrier`` is ``down-out``/``down-in``/``up-out``/
+> ``up-in``; "down" watches for ``S <= H`` and "up" for ``S >= H``.
+>
+> Naive discrete monitoring misses barrier crossings that happen *between*
+> time steps and so systematically over-prices knock-outs. With
+> ``brownian_bridge=True`` (the default) each step contributes the exact
+> conditional probability that the bridge between its two endpoints touched
+> ``H``; a path survives a knock-out only if it dodges the barrier on every
+> bridge. This removes the discretisation bias and converges to the
+> continuous-monitoring closed form.
+>
+> ``rebate`` is paid at expiry to knock-outs that are killed, or to knock-ins
+> that never activate, matching the closed form's convention.
 
 ### `capped_cliquet_mc(S, t, r, sigma, reset_times, local_cap=None, local_floor=0.0, global_cap=None, global_floor=0.0, b=None, n_paths=50000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
 

@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.89.0] - 2026-09-10
+
+### Added
+- `barrier_mc` (in `montecarlo.py`): Monte Carlo for single-barrier vanilla
+  options with a Brownian-bridge crossing correction, the natural cross-check
+  for the `barrier_option` closed form including a continuous dividend yield
+  (`b = r - q`). Each step contributes the exact conditional probability the
+  bridge between its endpoints touched the barrier, removing the discrete-
+  monitoring bias that otherwise over-prices knock-outs. Agrees with the
+  Reiner-Rubinstein closed form on all four barrier kinds (with q) to a few
+  basis points, and knock-in + knock-out reproduces the vanilla.
+
 ## [1.88.0] - 2026-09-10
 
 ### Added

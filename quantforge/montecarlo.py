@@ -255,6 +255,108 @@ def barrier_digital_mc(S, K, H, t, r, sigma, option_type=OptionType.CALL,
     return MCResult(price=price, std_error=se, n_paths=len(samples))
 
 
+def barrier_mc(S, K, H, t, r, sigma, option_type=OptionType.CALL,
+               barrier="down-out", b=None, rebate=0.0, n_steps=100,
+               n_paths=50_000, antithetic=True, seed=None,
+               brownian_bridge=True) -> MCResult:
+    """Monte Carlo a single-barrier vanilla option with a Brownian-bridge check.
+
+    Prices the continuously-monitored single-barrier option that
+    :func:`quantforge.barrier_option` gives in closed form, so it is the natural
+    cross-check for that formula (including a continuous dividend yield ``q`` fed
+    in as ``b = r - q``). ``barrier`` is ``down-out``/``down-in``/``up-out``/
+    ``up-in``; "down" watches for ``S <= H`` and "up" for ``S >= H``.
+
+    Naive discrete monitoring misses barrier crossings that happen *between*
+    time steps and so systematically over-prices knock-outs. With
+    ``brownian_bridge=True`` (the default) each step contributes the exact
+    conditional probability that the bridge between its two endpoints touched
+    ``H``; a path survives a knock-out only if it dodges the barrier on every
+    bridge. This removes the discretisation bias and converges to the
+    continuous-monitoring closed form.
+
+    ``rebate`` is paid at expiry to knock-outs that are killed, or to knock-ins
+    that never activate, matching the closed form's convention.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if H <= 0:
+        raise ValueError("barrier H must be positive")
+    if b is None:
+        b = r
+    barrier = str(barrier).lower()
+    if barrier not in ("down-out", "down-in", "up-out", "up-in"):
+        raise ValueError("barrier must be down-out/down-in/up-out/up-in")
+    if n_steps < 1:
+        raise ValueError("n_steps must be >= 1")
+
+    up = barrier.startswith("up")
+    knock_in = barrier.endswith("in")
+    dt = t / n_steps
+    drift = (b - 0.5 * sigma * sigma) * dt
+    vol = sigma * math.sqrt(dt)
+    disc = math.exp(-r * t)
+    sign = 1.0 if ot is OptionType.CALL else -1.0
+    var_step = sigma * sigma * dt  # variance of the log-return over one step
+
+    def survival(s0, s1):
+        """P(bridge from s0 to s1 does NOT cross H) over one step, in log space.
+
+        For a Brownian bridge between log-prices with per-step variance
+        ``var_step``, the probability of hitting a level ``lnH`` is
+        ``exp(-2 (lnH - ln s0)(lnH - ln s1) / var_step)`` when both endpoints
+        sit on the same side of the barrier; if either endpoint is already
+        beyond, the crossing probability is 1.
+        """
+        if up:
+            if s0 >= H or s1 >= H:
+                return 0.0
+        else:
+            if s0 <= H or s1 <= H:
+                return 0.0
+        a = math.log(H / s0)
+        c = math.log(H / s1)
+        return 1.0 - math.exp(-2.0 * a * c / var_step)
+
+    def one_path(zs):
+        s = S
+        surv = 1.0            # probability the path has stayed alive (no touch)
+        touched_hard = (up and S >= H) or (not up and S <= H)
+        for z in zs:
+            s_next = s * math.exp(drift + vol * z)
+            if brownian_bridge:
+                surv *= survival(s, s_next)
+            else:
+                if (up and s_next >= H) or (not up and s_next <= H):
+                    touched_hard = True
+            s = s_next
+        payoff = max(sign * (s - K), 0.0)
+        if brownian_bridge:
+            p_touch = 1.0 - surv
+            if knock_in:
+                val = p_touch * payoff + (1.0 - p_touch) * rebate
+            else:  # knock-out
+                val = surv * payoff + p_touch * rebate
+        else:
+            if knock_in:
+                val = payoff if touched_hard else rebate
+            else:
+                val = payoff if not touched_hard else rebate
+        return disc * val
+
+    rng = random.Random(seed)
+    samples = []
+    n = n_paths // 2 if antithetic else n_paths
+    for _ in range(n):
+        zs = [rng.gauss(0.0, 1.0) for _ in range(n_steps)]
+        samples.append(one_path(zs))
+        if antithetic:
+            samples.append(one_path([-z for z in zs]))
+
+    price, se = _summarize(samples)
+    return MCResult(price=price, std_error=se, n_paths=len(samples))
+
+
 def parisian_barrier_mc(S, K, H, t, r, sigma, window, option_type=OptionType.CALL,
                         barrier="down-out", b=None, n_steps=252, n_paths=40_000,
                         antithetic=True, seed=None) -> MCResult:
