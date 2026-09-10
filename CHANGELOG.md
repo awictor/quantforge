@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.208.0] - 2026-09-10
+
+### Added
+- `sobol_geometric_asian_rqmc` (in `sobol.py`): randomized-QMC geometric-average
+  Asian option (call `max(G - K, 0)`, put `max(K - G, 0)`) with an honest
+  standard error. Bridge construction + per-dimension Cranley-Patterson
+  rotation. Because the discrete geometric average is exactly lognormal it has a
+  closed form (`_discrete_geometric_asian`), so this is cross-checked against a
+  *deterministic* reference -- the tightest possible.
+- Verified: matches the exact closed form for call and put (also under a
+  dividend carry) within the tiny RQMC standard error (< 0.02).
+
 ## [1.207.0] - 2026-09-10
 
 ### Added

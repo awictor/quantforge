@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.207.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.208.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3275,6 +3275,22 @@ Auto-generated from `quantforge` v1.207.0 by `docs/gen_api.py` — do not edit b
 > Viswanathan :func:`quantforge.fixed_strike_lookback` (fewer sampling dates
 > see less extreme highs/lows); the gap shrinks as ``n_steps`` grows.
 > ``n_steps`` is capped by the Sobol generator's dimension.
+
+### `sobol_geometric_asian_rqmc(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, n_steps=6, n_paths=4096, n_rand=24, seed=None) -> quantforge.montecarlo.MCResult`  _function_
+
+> Randomized-QMC geometric-average Asian option with an honest standard error.
+>
+> Prices the discretely-monitored fixed-strike geometric-average Asian -- call
+> ``max(G - K, 0)``, put ``max(K - G, 0)`` with ``G`` the geometric mean of the
+> ``n_steps`` monitored spots. Normals come from one ``n_steps``-dim Sobol point
+> through the Brownian bridge, randomized by a per-dimension Cranley-Patterson
+> rotation, so ``n_rand`` shifts give a genuine SE.
+>
+> Because the discrete geometric average is exactly lognormal, this has a
+> *closed form* -- :func:`quantforge.montecarlo._discrete_geometric_asian` --
+> so it is the tightest available cross-check (a deterministic reference, not
+> another simulation). ``n_steps`` is capped by the Sobol generator's
+> dimension.
 
 ### `sobol_lookback_rqmc(S, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, n_steps=6, n_paths=4096, n_rand=24, seed=None) -> quantforge.montecarlo.MCResult`  _function_
 
