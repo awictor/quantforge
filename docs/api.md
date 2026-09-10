@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.122.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.123.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1877,6 +1877,32 @@ Auto-generated from `quantforge` v1.122.0 by `docs/gen_api.py` — do not edit b
 > P&L ~= delta * dS + 0.5 * gamma * dS^2, with dS = spot * r_h and r_h normal
 > with std ``sigma_h``. The gamma term makes P&L non-normal; Cornish-Fisher
 > corrects the quantile using the P&L skewness.
+
+## rough_heston
+
+### `rough_heston_price(S, K, t, r, v0, kappa, theta, nu, rho, H=0.1, option_type=<OptionType.CALL: 'call'>, q=0.0, n_grid=200, upper=120.0) -> float`  _function_
+
+> Price a European option under the rough-Heston model.
+>
+> Args:
+>     v0, kappa, theta: initial variance, mean-reversion speed, long variance.
+>     nu: volatility of variance *relative to kappa* (El Euch-Rosenbaum
+>         convention). At ``H = 0.5`` this reduces to the classical Heston
+>         model with vol-of-vol ``xi = kappa * nu``.
+>     rho: spot/variance correlation (negative for the equity skew).
+>     H: Hurst exponent in (0, 0.5]; ``H = 0.5`` recovers classical Heston.
+>     n_grid: fractional-Riccati time-grid resolution (more = more accurate,
+>         O(n_grid^2) work per Fourier node).
+>
+> Puts use put-call parity.
+
+### `rough_heston_smile(S, strikes, t, r, v0, kappa, theta, nu, rho, H=0.1, q=0.0, n_grid=200)`  _function_
+
+> Black-Scholes implied-vol smile the rough-Heston model produces.
+>
+> Returns ``(log_moneyness, vol)`` pairs sorted by strike on the forward
+> ``F = S e^{(r-q) t}``. Small ``H`` steepens the short-dated skew beyond what
+> classical Heston can reach.
 
 ## sabr
 

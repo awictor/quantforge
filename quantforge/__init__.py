@@ -43,6 +43,7 @@ from .heston import heston_price, heston_smile
 from .heston_mc import heston_qe_mc
 from .bates import bates_price, bates_smile
 from .double_heston import double_heston_price, double_heston_smile
+from .rough_heston import rough_heston_price, rough_heston_smile
 from .kou import kou_price, kou_smile
 from .cgmy import cgmy_price, cgmy_smile
 from .nig import nig_price, nig_smile
@@ -179,7 +180,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.122.0"
+__version__ = "1.123.0"
 
 __all__ = [
     "OptionType",
@@ -230,6 +231,8 @@ __all__ = [
     "bates_smile",
     "double_heston_price",
     "double_heston_smile",
+    "rough_heston_price",
+    "rough_heston_smile",
     "kou_price",
     "kou_smile",
     "cgmy_price",

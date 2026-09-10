@@ -4,6 +4,21 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.123.0] - 2026-09-10
+
+### Added
+- Rough-Heston model (new `rough_heston.py`): `rough_heston_price` and
+  `rough_heston_smile`. The variance is driven by a fractional kernel with Hurst
+  `H in (0, 0.5]`; its characteristic function comes from the fractional Riccati
+  equation, solved here by the fractional Adams predictor-corrector
+  (Diethelm-Ford-Freed) and inverted by the same Gil-Pelaez two-probability
+  Gauss-Legendre integral as Heston.
+- Verified: `H = 0.5` reduces to classical Heston (with `xi = kappa * nu`, the
+  El Euch-Rosenbaum convention) to <5e-3 and converges in the grid size; the
+  characteristic function is a martingale; put-call parity holds; and `H = 0.1`
+  gives a much steeper short-dated skew (-0.88) than `H = 0.5` (-0.42) -- the
+  rough-vol signature.
+
 ## [1.122.0] - 2026-09-10
 
 ### Added
