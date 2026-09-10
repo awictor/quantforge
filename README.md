@@ -704,6 +704,18 @@ bachelier_implied_vol(target_price=6.12, F=100, K=100, t=1.0, r=0.02)
 
 Includes analytic `bachelier_delta`, `bachelier_gamma`, and `bachelier_vega`.
 
+Displaced diffusion (shifted lognormal) interpolates between Black-Scholes and
+Bachelier and permits negative strikes:
+
+```python
+from quantforge import displaced_diffusion_price
+
+displaced_diffusion_price(S=100, K=100, t=1.0, r=0.05, sigma=0.2, shift=50,
+                          option_type="call")
+```
+
+`shift=0` is Black-Scholes; a larger shift moves toward normal-model behavior.
+
 Interest-rate caps/floors/collars build on it as Bachelier caplet strips (so
 they handle negative rates):
 

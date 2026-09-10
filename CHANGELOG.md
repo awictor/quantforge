@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.48.0] - 2026-09-09
+
+### Added
+- `displaced.py`: `displaced_diffusion_price` prices under Rubinstein's
+  displaced-diffusion (shifted-lognormal) model — a Black-Scholes price on
+  `S + shift` / `K + shift` with a rescaled vol. `shift = 0` recovers
+  Black-Scholes; a positive shift allows negative strikes/spot and moves the
+  skew toward normal-model behavior. Monte-Carlo verified.
+
 ## [1.47.0] - 2026-09-09
 
 ### Added

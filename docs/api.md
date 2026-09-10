@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.47.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.48.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -271,6 +271,22 @@ Auto-generated from `quantforge` v1.47.0 by `docs/gen_api.py` — do not edit by
 > Uses a non-uniform central second difference of the call curve, so strikes
 > need not be equally spaced. Returns ``(mid_strikes, densities)`` for the
 > interior points (the two endpoints have no central second difference).
+
+## displaced
+
+### `displaced_diffusion_price(S, K, t, r, sigma, shift=0.0, option_type=<OptionType.CALL: 'call'>, b=None) -> float`  _function_
+
+> Price a European option under the displaced-diffusion model.
+>
+> Args:
+>     shift: the displacement added to spot and strike. ``shift = 0`` is
+>         Black-Scholes; larger positive shifts push toward normal-model
+>         behavior and allow the underlying to fall below zero (down to
+>         ``-shift``).
+>     b: cost of carry (defaults to r).
+>
+> The payoff is unchanged (``max(S_T - K, 0)`` etc.); only the diffusion is
+> displaced, so the price equals a BSM price on ``S + shift`` / ``K + shift``.
 
 ## dv01
 
