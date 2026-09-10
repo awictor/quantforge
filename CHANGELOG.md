@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.153.1] - 2026-09-10
+
+### Tests
+- Trimmed the fast-suite runtime from ~44s to ~32s: the Kim-Greeks structural
+  checks (price equals the direct price, sign checks) run at n_steps=50 instead
+  of 120; the Bermudan-swaption sign/monotonicity checks at n_paths=6000 instead
+  of 20000; and the Heston-calibration parameter-validity check is marked slow.
+  All accuracy claims still run under `-m slow`.
+
 ## [1.153.0] - 2026-09-10
 
 ### Added

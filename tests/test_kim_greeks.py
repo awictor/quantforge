@@ -40,20 +40,20 @@ def test_gamma_matches_binomial_bump():
 
 
 def test_put_delta_negative_gamma_positive():
-    g = kim_put_greeks(100, 100, 1.0, 0.05, 0.2, n_steps=120)
+    g = kim_put_greeks(100, 100, 1.0, 0.05, 0.2, n_steps=50)
     assert g["delta"] < 0.0
     assert g["gamma"] > 0.0
 
 
 def test_price_field_matches_direct():
-    g = kim_put_greeks(100, 100, 1.0, 0.05, 0.2, q=0.02, n_steps=120)
-    direct = kim_american_put(100, 100, 1.0, 0.05, 0.2, q=0.02, n_steps=120)
+    g = kim_put_greeks(100, 100, 1.0, 0.05, 0.2, q=0.02, n_steps=50)
+    direct = kim_american_put(100, 100, 1.0, 0.05, 0.2, q=0.02, n_steps=50)
     assert g["price"] == pytest.approx(direct, abs=1e-9)
 
 
 def test_theta_negative_for_put():
     # A vanilla American put loses value as time passes (theta < 0 here).
-    g = kim_put_greeks(100, 100, 1.0, 0.05, 0.2, n_steps=120)
+    g = kim_put_greeks(100, 100, 1.0, 0.05, 0.2, n_steps=50)
     assert g["theta"] < 0.0
 
 

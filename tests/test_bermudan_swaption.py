@@ -36,18 +36,18 @@ def test_bermudan_at_least_single_exercise():
 def test_payer_and_receiver_both_positive():
     payer = bermudan_swaption_g2pp(_P0, [1.0, 2.0, 3.0], 0.03,
                                    A, B, SIGMA, ETA, RHO, payer=True,
-                                   n_paths=20000, seed=3)
+                                   n_paths=6000, seed=3)
     recv = bermudan_swaption_g2pp(_P0, [1.0, 2.0, 3.0], 0.03,
                                   A, B, SIGMA, ETA, RHO, payer=False,
-                                  n_paths=20000, seed=3)
+                                  n_paths=6000, seed=3)
     assert payer > 0.0 and recv > 0.0
 
 
 def test_higher_strike_lowers_payer_value():
     lo = bermudan_swaption_g2pp(_P0, [1.0, 2.0, 3.0], 0.02, A, B, SIGMA, ETA, RHO,
-                                payer=True, n_paths=20000, seed=4)
+                                payer=True, n_paths=6000, seed=4)
     hi = bermudan_swaption_g2pp(_P0, [1.0, 2.0, 3.0], 0.06, A, B, SIGMA, ETA, RHO,
-                                payer=True, n_paths=20000, seed=4)
+                                payer=True, n_paths=6000, seed=4)
     assert lo > hi  # a payer is worth less as the fixed rate rises
 
 

@@ -39,8 +39,8 @@ def test_feller_penalty_pushes_toward_condition():
     assert 2.0 * kappa * theta >= xi * xi - 1e-3
 
 
+@pytest.mark.slow
 def test_calibrated_params_valid():
-    # Validity of the reparametrization, not fit accuracy -- a short run suffices.
     params, _ = calibrate_heston(S, R, _surface(), max_iter=300)
     v0, kappa, theta, xi, rho = params
     assert v0 > 0 and kappa > 0 and theta > 0 and xi > 0
