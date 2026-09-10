@@ -104,6 +104,82 @@ def ssvi_is_arbitrage_free(params: SSVIParams, ks: Sequence[float] = None) -> bo
     return ssvi_calendar_free(params, ks)
 
 
+def _ssvi_k_derivs(k, theta, rho, eta, gamma):
+    """w and its k-derivatives at fixed theta: returns (w, dw_dk, d2w_dk2)."""
+    ph = ssvi_phi(theta, eta, gamma)
+    x = ph * k
+    R = math.sqrt((x + rho) ** 2 + (1.0 - rho * rho))
+    w = 0.5 * theta * (1.0 + rho * x + R)
+    dw_dk = 0.5 * theta * ph * (rho + (x + rho) / R)
+    d2w_dk2 = 0.5 * theta * ph * ph * (1.0 - rho * rho) / (R ** 3)
+    return w, dw_dk, d2w_dk2
+
+
+def _ssvi_dw_dtheta(k, theta, rho, eta, gamma):
+    """Partial derivative of total variance w.r.t. theta (holding t's k fixed)."""
+    ph = ssvi_phi(theta, eta, gamma)
+    dph_dtheta = ph * (-gamma / theta - (1.0 - gamma) / (1.0 + theta))
+    x = ph * k
+    R = math.sqrt((x + rho) ** 2 + (1.0 - rho * rho))
+    # d w / d theta at fixed k, accounting for phi(theta).
+    base = 0.5 * (1.0 + rho * x + R)
+    dx = dph_dtheta * k
+    chain = 0.5 * theta * (rho * dx + (x + rho) / R * dx)
+    return base + chain
+
+
+def ssvi_local_variance(k, t, theta, dtheta_dt, rho, eta, gamma):
+    """Dupire local variance of an SSVI surface, fully analytic (Gatheral).
+
+    Given the ATM total variance ``theta = theta(t)`` and its time derivative
+    ``dtheta_dt = theta'(t)`` at maturity ``t``, the local variance at
+    log-moneyness ``k`` is
+
+        sigma_loc^2 = (dw/dt)
+            / [ 1 - (k/w) w_k + (1/4)(-1/4 - 1/w + k^2/w^2) w_k^2 + (1/2) w_kk ]
+
+    with all ``w`` derivatives taken in closed form from the SSVI parametrization
+    (no finite differences). ``dw/dt = (dw/dtheta) * theta'(t)``.
+    """
+    w, w_k, w_kk = _ssvi_k_derivs(k, theta, rho, eta, gamma)
+    if w <= 0.0:
+        raise ValueError("total variance must be positive")
+    dw_dt = _ssvi_dw_dtheta(k, theta, rho, eta, gamma) * dtheta_dt
+    denom = (1.0
+             - (k / w) * w_k
+             + 0.25 * (-0.25 - 1.0 / w + k * k / (w * w)) * w_k * w_k
+             + 0.5 * w_kk)
+    if denom <= 0.0:
+        raise ValueError("non-positive Dupire denominator (butterfly arbitrage)")
+    return dw_dt / denom
+
+
+def ssvi_local_vol_from_params(params: SSVIParams, k, t):
+    """Local volatility of a fitted SSVI surface at ``(k, t)``.
+
+    Builds ``theta(t)`` and ``theta'(t)`` by linear interpolation of the fitted
+    per-expiry ATM total variances (piecewise-linear in ``t``), then applies the
+    analytic :func:`ssvi_local_variance`. ``t`` must lie within the fitted expiry
+    range.
+    """
+    ts = sorted(params.thetas)
+    if t < ts[0] - 1e-12 or t > ts[-1] + 1e-12:
+        raise ValueError("t outside the fitted expiry range")
+    # Locate the bracketing pillars for a linear theta(t) and its slope.
+    if t <= ts[0]:
+        i = 0
+    elif t >= ts[-1]:
+        i = len(ts) - 2
+    else:
+        i = max(j for j in range(len(ts) - 1) if ts[j] <= t)
+    t0, t1 = ts[i], ts[i + 1]
+    th0, th1 = params.thetas[t0], params.thetas[t1]
+    slope = (th1 - th0) / (t1 - t0)
+    theta = th0 + slope * (t - t0)
+    return math.sqrt(ssvi_local_variance(k, t, theta, slope,
+                                         params.rho, params.eta, params.gamma))
+
+
 def calibrate_ssvi(
     market: Sequence[Tuple[float, float, float]],
     initial: SSVIParams = None, max_iter: int = 8000,

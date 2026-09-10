@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.97.0] - 2026-09-10
+
+### Added
+- `ssvi_local_variance` and `ssvi_local_vol_from_params` (in `ssvi.py`): the
+  Dupire local variance of an SSVI surface in fully analytic form. The total
+  variance's strike derivatives (w_k, w_kk) and its theta-derivative come from
+  the SSVI parametrization in closed form -- no finite differences -- and feed
+  Gatheral's total-variance Dupire formula. `ssvi_local_vol_from_params` builds
+  theta(t) and theta'(t) by piecewise-linear interpolation of the fitted ATM
+  variances and returns the local vol at any (k, t) in range; it also raises on
+  a non-positive Dupire denominator (a butterfly-arbitrage flag).
+- Verified: the analytic local variance matches a finite-difference Dupire on
+  the same surface to ~1e-9 across strikes and maturities.
+
 ## [1.96.0] - 2026-09-10
 
 ### Added

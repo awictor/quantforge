@@ -104,6 +104,7 @@ from .svi import (
 from .ssvi import (
     SSVIParams, ssvi_phi, ssvi_total_variance, calibrate_ssvi,
     ssvi_butterfly_free, ssvi_calendar_free, ssvi_is_arbitrage_free,
+    ssvi_local_variance, ssvi_local_vol_from_params,
 )
 from .sabr import (
     SABRParams, sabr_vol, calibrate_sabr, calibrate_sabr_lm,
@@ -143,7 +144,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.96.0"
+__version__ = "1.97.0"
 
 __all__ = [
     "OptionType",
@@ -309,6 +310,8 @@ __all__ = [
     "ssvi_butterfly_free",
     "ssvi_calendar_free",
     "ssvi_is_arbitrage_free",
+    "ssvi_local_variance",
+    "ssvi_local_vol_from_params",
     "SABRParams",
     "sabr_vol",
     "calibrate_sabr",

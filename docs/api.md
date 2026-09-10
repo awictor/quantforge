@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.96.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.97.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1635,6 +1635,29 @@ Auto-generated from `quantforge` v1.96.0 by `docs/gen_api.py` — do not edit by
 ### `ssvi_is_arbitrage_free(params: quantforge.ssvi.SSVIParams, ks: Sequence[float] = None) -> bool`  _function_
 
 > True if every slice is butterfly-free and the surface is calendar-free.
+
+### `ssvi_local_variance(k, t, theta, dtheta_dt, rho, eta, gamma)`  _function_
+
+> Dupire local variance of an SSVI surface, fully analytic (Gatheral).
+>
+> Given the ATM total variance ``theta = theta(t)`` and its time derivative
+> ``dtheta_dt = theta'(t)`` at maturity ``t``, the local variance at
+> log-moneyness ``k`` is
+>
+>     sigma_loc^2 = (dw/dt)
+>         / [ 1 - (k/w) w_k + (1/4)(-1/4 - 1/w + k^2/w^2) w_k^2 + (1/2) w_kk ]
+>
+> with all ``w`` derivatives taken in closed form from the SSVI parametrization
+> (no finite differences). ``dw/dt = (dw/dtheta) * theta'(t)``.
+
+### `ssvi_local_vol_from_params(params: quantforge.ssvi.SSVIParams, k, t)`  _function_
+
+> Local volatility of a fitted SSVI surface at ``(k, t)``.
+>
+> Builds ``theta(t)`` and ``theta'(t)`` by linear interpolation of the fitted
+> per-expiry ATM total variances (piecewise-linear in ``t``), then applies the
+> analytic :func:`ssvi_local_variance`. ``t`` must lie within the fitted expiry
+> range.
 
 ### `ssvi_phi(theta: float, eta: float, gamma: float) -> float`  _function_
 
