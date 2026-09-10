@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.41.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.42.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -304,6 +304,14 @@ Auto-generated from `quantforge` v1.41.0 by `docs/gen_api.py` — do not edit by
 > average's forward. Fast and accurate for typical vols; agrees with the
 > arithmetic-Asian Monte Carlo (:func:`quantforge.arithmetic_asian_mc`) to a
 > few basis points. Averaging runs over the full life ``[0, t]``.
+
+### `asian_greeks(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, average='geometric')`  _function_
+
+> Greeks of an Asian option by central finite differences.
+>
+> ``average`` selects the closed form to differentiate: "geometric"
+> (Kemna-Vorst, exact) or "arithmetic" (Turnbull-Wakeman moment match).
+> Returns a dict with delta, gamma, vega, and theta (calendar, per year).
 
 ### `asset_or_nothing(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
 

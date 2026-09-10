@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.42.0] - 2026-09-09
+
+### Added
+- `asian_greeks` (in `exotics.py`): delta, gamma, vega, and theta of a Asian
+  option by central finite differences on either closed form
+  (`average="geometric"` Kemna-Vorst or `"arithmetic"` Turnbull-Wakeman). The
+  arithmetic-average delta exceeds the geometric one, matching the price order.
+
 ## [1.41.0] - 2026-09-09
 
 ### Added

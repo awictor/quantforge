@@ -485,6 +485,10 @@ geometric_asian(S=100, K=100, t=1, r=0.05, sigma=0.3, option_type="call")
 # Arithmetic-average Asian call (Turnbull-Wakeman moment matching).
 from quantforge import arithmetic_asian
 arithmetic_asian(S=100, K=100, t=1, r=0.05, sigma=0.3, option_type="call")
+
+# Asian Greeks (delta/gamma/vega/theta) for either average, by finite diff.
+from quantforge import asian_greeks
+asian_greeks(S=100, K=100, t=1, r=0.05, sigma=0.3, average="geometric")
 ```
 
 Barrier kinds: `Barrier.DOWN_IN`, `DOWN_OUT`, `UP_IN`, `UP_OUT`. In/out parity

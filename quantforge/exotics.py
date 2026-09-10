@@ -328,3 +328,44 @@ def barrier_greeks(S, K, H, t, r, sigma, option_type=OptionType.CALL,
 
     return {"price": base, "delta": delta, "gamma": gamma,
             "vega": vega, "theta": theta}
+
+
+# --------------------------------------------------------------------------
+# Asian option Greeks (finite differences on the closed forms)
+# --------------------------------------------------------------------------
+def asian_greeks(S, K, t, r, sigma, option_type=OptionType.CALL, b=None,
+                 average="geometric"):
+    """Greeks of an Asian option by central finite differences.
+
+    ``average`` selects the closed form to differentiate: "geometric"
+    (Kemna-Vorst, exact) or "arithmetic" (Turnbull-Wakeman moment match).
+    Returns a dict with delta, gamma, vega, and theta (calendar, per year).
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if b is None:
+        b = r
+    if average == "geometric":
+        pricer = geometric_asian
+    elif average == "arithmetic":
+        pricer = arithmetic_asian
+    else:
+        raise ValueError("average must be 'geometric' or 'arithmetic'")
+
+    def px(S_=S, t_=t, sigma_=sigma):
+        return pricer(S_, K, t_, r, sigma_, ot, b=b)
+
+    base = px()
+    hS = 1e-3 * S
+    up, dn = px(S_=S + hS), px(S_=S - hS)
+    delta = (up - dn) / (2.0 * hS)
+    gamma = (up - 2.0 * base + dn) / (hS * hS)
+
+    hv = 1e-4
+    vega = (px(sigma_=sigma + hv) - px(sigma_=sigma - hv)) / (2.0 * hv)
+
+    ht = min(1e-4, 0.5 * t)
+    theta = -(px(t_=t + ht) - px(t_=t - ht)) / (2.0 * ht)
+
+    return {"price": base, "delta": delta, "gamma": gamma,
+            "vega": vega, "theta": theta}
