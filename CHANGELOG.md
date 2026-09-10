@@ -4,7 +4,21 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
-## [1.127.0] - 2026-09-10
+## [1.128.0] - 2026-09-10
+
+### Added
+- SABR butterfly-arbitrage detection and repair (in `sabr.py`): `sabr_density`
+  is the Breeden-Litzenberger implied density of a SABR smile (second strike
+  derivative of the Black call at the SABR vol); `sabr_butterfly_arbitrage`
+  returns the strikes where that density goes negative (the Hagan expansion is
+  not guaranteed arb-free in the wings); `sabr_is_arbitrage_free` is the
+  boolean; and `sabr_repair_butterfly` shrinks the vol-of-vol `nu` until the
+  density is non-negative, preserving alpha/beta/rho.
+- Verified: a benign smile's density integrates to 1 and is arbitrage-free; an
+  extreme vol-of-vol flags negative-density strikes; repair restores arbitrage
+  freedom (`nu` 2.5 -> 1.66) while leaving a clean smile untouched.
+
+
 
 ### Added
 - CMS convexity adjustment (new `cms.py`): `cms_adjustment_standard` gives the

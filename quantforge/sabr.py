@@ -296,6 +296,75 @@ def calibrate_sabr(
     return SABRParams(alpha=alpha, beta=beta, rho=rho, nu=nu), math.sqrt(best_f / wsum)
 
 
+def sabr_density(F, K, t, alpha, beta, rho, nu, r=0.0, dK=None):
+    """Breeden-Litzenberger risk-neutral density of a SABR smile at strike ``K``.
+
+    The implied density is ``g(K) = e^{r t} d^2 C / dK^2`` where ``C(K)`` is the
+    Black call priced at the SABR vol ``sabr_vol(F, K)`` for each strike. Computed
+    by a central second difference in strike. A *negative* density signals
+    butterfly (static) arbitrage in the smile.
+    """
+    from .bsm import call_price, OptionType
+    if dK is None:
+        dK = 1e-3 * F
+
+    def C(k):
+        return call_price(F, k, t, r, sabr_vol(F, k, t, alpha, beta, rho, nu),
+                          b=0.0)
+
+    d2 = (C(K + dK) - 2.0 * C(K) + C(K - dK)) / (dK * dK)
+    return math.exp(r * t) * d2
+
+
+def sabr_butterfly_arbitrage(F, t, alpha, beta, rho, nu, strikes=None,
+                             r=0.0, tol=1e-8):
+    """Return the strikes where the SABR smile has negative implied density.
+
+    Scans ``strikes`` (default a wide grid around the forward) and reports every
+    ``K`` whose Breeden-Litzenberger density is below ``-tol`` -- the butterfly-
+    arbitrage points of the Hagan expansion (which is not guaranteed arb-free in
+    the wings).
+    """
+    if strikes is None:
+        strikes = [F * (0.2 + 0.02 * i) for i in range(0, 140)]  # 0.2F .. 3F
+    bad = []
+    for K in strikes:
+        if K <= 0:
+            continue
+        if sabr_density(F, K, t, alpha, beta, rho, nu, r=r) < -tol:
+            bad.append(K)
+    return bad
+
+
+def sabr_is_arbitrage_free(F, t, alpha, beta, rho, nu, strikes=None, r=0.0,
+                           tol=1e-8):
+    """True if the SABR smile's implied density is non-negative on the grid."""
+    return not sabr_butterfly_arbitrage(F, t, alpha, beta, rho, nu, strikes,
+                                        r=r, tol=tol)
+
+
+def sabr_repair_butterfly(F, t, params, r=0.0, strikes=None,
+                          max_iter=200, factor=0.95):
+    """Repair a SABR smile's butterfly arbitrage by shrinking the vol-of-vol.
+
+    The Hagan expansion loses density positivity when ``nu`` is large relative to
+    ``t`` (steep, convex wings). This shrinks ``nu`` geometrically until
+    :func:`sabr_is_arbitrage_free` passes, preserving alpha, beta and rho.
+    Returns a new :class:`SABRParams` (the input if already arbitrage-free).
+    """
+    if sabr_is_arbitrage_free(F, t, params.alpha, params.beta, params.rho,
+                              params.nu, strikes, r=r):
+        return params
+    nu = params.nu
+    for _ in range(max_iter):
+        nu *= factor
+        if sabr_is_arbitrage_free(F, t, params.alpha, params.beta, params.rho,
+                                  nu, strikes, r=r):
+            break
+    return SABRParams(alpha=params.alpha, beta=params.beta, rho=params.rho,
+                      nu=nu)
+
+
 def _solve3(A, b):
     """Solve a 3x3 linear system ``A x = b`` by Gaussian elimination.
 

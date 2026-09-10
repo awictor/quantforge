@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.127.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.128.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2015,6 +2015,28 @@ Auto-generated from `quantforge` v1.127.0 by `docs/gen_api.py` — do not edit b
 >
 > Returns ``(params, rmse, n_iter)``.
 
+### `sabr_butterfly_arbitrage(F, t, alpha, beta, rho, nu, strikes=None, r=0.0, tol=1e-08)`  _function_
+
+> Return the strikes where the SABR smile has negative implied density.
+>
+> Scans ``strikes`` (default a wide grid around the forward) and reports every
+> ``K`` whose Breeden-Litzenberger density is below ``-tol`` -- the butterfly-
+> arbitrage points of the Hagan expansion (which is not guaranteed arb-free in
+> the wings).
+
+### `sabr_density(F, K, t, alpha, beta, rho, nu, r=0.0, dK=None)`  _function_
+
+> Breeden-Litzenberger risk-neutral density of a SABR smile at strike ``K``.
+>
+> The implied density is ``g(K) = e^{r t} d^2 C / dK^2`` where ``C(K)`` is the
+> Black call priced at the SABR vol ``sabr_vol(F, K)`` for each strike. Computed
+> by a central second difference in strike. A *negative* density signals
+> butterfly (static) arbitrage in the smile.
+
+### `sabr_is_arbitrage_free(F, t, alpha, beta, rho, nu, strikes=None, r=0.0, tol=1e-08)`  _function_
+
+> True if the SABR smile's implied density is non-negative on the grid.
+
 ### `sabr_jacobian(F, t, strikes: Sequence[float], alpha, beta, rho, nu)`  _function_
 
 > Calibration Jacobian ``d sabr_vol(K_i) / d (alpha, rho, nu)``.
@@ -2023,6 +2045,15 @@ Auto-generated from `quantforge` v1.127.0 by `docs/gen_api.py` — do not edit b
 > the exact dual-number partials. This is the ``J`` a Gauss-Newton or
 > Levenberg-Marquardt step needs, and ``(J^T J)^{-1}`` gives the asymptotic
 > parameter covariance for standard errors on a fit.
+
+### `sabr_repair_butterfly(F, t, params, r=0.0, strikes=None, max_iter=200, factor=0.95)`  _function_
+
+> Repair a SABR smile's butterfly arbitrage by shrinking the vol-of-vol.
+>
+> The Hagan expansion loses density positivity when ``nu`` is large relative to
+> ``t`` (steep, convex wings). This shrinks ``nu`` geometrically until
+> :func:`sabr_is_arbitrage_free` passes, preserving alpha, beta and rho.
+> Returns a new :class:`SABRParams` (the input if already arbitrage-free).
 
 ### `sabr_sensitivities(F, K, t, alpha, beta, rho, nu)`  _function_
 
