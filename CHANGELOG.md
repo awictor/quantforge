@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.98.1] - 2026-09-10
+
+### Tests
+- Cross-check the Turnbull-Wakeman arithmetic-Asian Greeks against an
+  independent method: bump Greeks of the arithmetic-Asian Monte Carlo under
+  common random numbers. Delta, gamma and vega agree to ~1-2% (TW is a
+  two-moment approximation), and the arithmetic and geometric Greeks converge at
+  low vol. The prior Asian-Greeks tests only finite-differenced the same closed
+  form; these confirm the analytic values against a separate pricer.
+
 ## [1.98.0] - 2026-09-10
 
 ### Added
