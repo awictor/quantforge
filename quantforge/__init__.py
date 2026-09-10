@@ -27,8 +27,9 @@ from .svi import SVIParams, calibrate_svi
 from .exotics import (
     cash_or_nothing, asset_or_nothing, barrier_option, geometric_asian, Barrier,
 )
+from .montecarlo import MCResult, european_mc, arithmetic_asian_mc
 
-__version__ = "0.4.0"
+__version__ = "0.5.0"
 
 __all__ = [
     "OptionType",
@@ -56,5 +57,8 @@ __all__ = [
     "barrier_option",
     "geometric_asian",
     "Barrier",
+    "MCResult",
+    "european_mc",
+    "arithmetic_asian_mc",
     "__version__",
 ]

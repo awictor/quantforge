@@ -74,6 +74,26 @@ for pos in book.positions:
 `qty` is signed (short = negative) and `multiplier` scales to notional
 (e.g. 100 for US equity options). Net Greeks are position-scaled sums.
 
+## Monte Carlo (with variance reduction)
+
+For payoffs without a closed form. The engine uses the standard-library RNG,
+antithetic variates, and a geometric-Asian control variate — and returns a
+standard error with every price:
+
+```python
+from quantforge import european_mc, arithmetic_asian_mc
+
+# European call: converges to the exact BSM price.
+res = european_mc(S=100, K=100, t=1, r=0.05, sigma=0.2, seed=42)
+print(res.price, "+/-", res.std_error, res.confidence_interval())
+
+# Arithmetic-average Asian, with the geometric Asian as a control variate.
+# control_variate=True cuts the standard error by ~10x for free.
+res = arithmetic_asian_mc(S=100, K=100, t=1, r=0.05, sigma=0.3,
+                          n_steps=50, n_paths=50_000, control_variate=True, seed=1)
+print(res.price, "+/-", res.std_error)
+```
+
 ## Exotic options (closed form)
 
 Analytic prices for binaries, single barriers, and geometric Asians:
