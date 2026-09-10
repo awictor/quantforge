@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.202.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.203.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3159,6 +3159,19 @@ Auto-generated from `quantforge` v1.202.0 by `docs/gen_api.py` — do not edit b
 > :func:`quantforge.barrier_mc` with ``brownian_bridge=False`` (it does not add
 > the continuity correction), and cross-checks it. ``n_steps`` is capped by the
 > Sobol generator's dimension.
+
+### `sobol_double_knockout_rqmc(S, K, t, r, sigma, lower, upper, option_type=<OptionType.CALL: 'call'>, b=None, rebate=0.0, n_steps=6, n_paths=4096, n_rand=24, seed=None) -> quantforge.montecarlo.MCResult`  _function_
+
+> Randomized-QMC double-knockout (corridor) option with an honest standard error.
+>
+> Pays the vanilla payoff only if the spot stays strictly inside
+> ``(lower, upper)`` at every one of the ``n_steps`` monitoring dates; if
+> either barrier is breached it knocks out and pays the cash ``rebate`` at
+> expiry. Normals come from an ``n_steps``-dim Sobol point through the Brownian
+> bridge, randomized by a per-dimension Cranley-Patterson rotation, so
+> ``n_rand`` shifts give a genuine SE. The discretely-monitored analogue of
+> :func:`quantforge.double_knockout_mc`, which it cross-checks. ``n_steps`` is
+> capped by the Sobol generator's dimension.
 
 ### `sobol_european(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, n_paths=8192)`  _function_
 

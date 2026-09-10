@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.203.0] - 2026-09-10
+
+### Added
+- `sobol_double_knockout_rqmc` (in `sobol.py`): randomized-QMC double-knockout
+  (corridor) option with an honest standard error. Pays the vanilla payoff only
+  if the spot stays strictly inside `(lower, upper)` at every monitoring date,
+  else the cash `rebate`. Bridge construction + per-dimension Cranley-Patterson
+  rotation; the discrete analogue of `double_knockout_mc`.
+- Verified: matches `double_knockout_mc` within MC error; a very wide corridor
+  approaches the vanilla call; a narrower corridor is worth strictly less.
+
 ## [1.202.0] - 2026-09-10
 
 ### Added
