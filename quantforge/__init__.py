@@ -28,6 +28,7 @@ from .lsm import bermudan_lsm
 from .forward import implied_forward, ForwardResult
 from .forwardstart import forward_start_price, cliquet_price
 from .chooser import chooser_option
+from .compound import compound_option
 from .hedging import StickyRule, smile_delta, smile_delta_from_smile, skew_slope
 from .lookback import floating_strike_lookback, fixed_strike_lookback
 from .heston import heston_price
@@ -101,7 +102,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.40.0"
+__version__ = "1.41.0"
 
 __all__ = [
     "OptionType",
@@ -126,6 +127,7 @@ __all__ = [
     "forward_start_price",
     "cliquet_price",
     "chooser_option",
+    "compound_option",
     "StickyRule",
     "smile_delta",
     "smile_delta_from_smile",

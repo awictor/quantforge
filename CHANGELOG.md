@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.41.0] - 2026-09-09
+
+### Added
+- `compound.py`: `compound_option` prices Geske (1979) compound options — an
+  option on an option — for all four kinds (call/put-on-call/put), reusing the
+  bivariate-normal CDF and solving the critical-spot exercise boundary by
+  bisection. Cross-checked against Monte Carlo; call-on-call collapses to the
+  vanilla as the first strike goes to zero.
+
 ## [1.40.0] - 2026-09-09
 
 ### Added

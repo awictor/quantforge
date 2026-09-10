@@ -431,6 +431,15 @@ from quantforge import chooser_option
 chooser_option(S=100, K=100, t_choose=0.5, T=1.0, r=0.05, sigma=0.25)
 ```
 
+A compound option (option on an option, Geske) prices all four kinds:
+
+```python
+from quantforge import compound_option
+
+compound_option(S=100, K1=5, K2=100, t1=0.5, t2=1.0, r=0.05, sigma=0.25,
+                kind="call-on-call")
+```
+
 A capped cliquet (ratchet note) — periodic returns clipped locally and the sum
 clipped globally — is priced by Monte Carlo:
 

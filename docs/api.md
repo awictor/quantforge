@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.40.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.41.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -194,6 +194,20 @@ Auto-generated from `quantforge` v1.40.0 by `docs/gen_api.py` — do not edit by
 > Args:
 >     t_choose: time (years) until the call/put choice is made.
 >     T: total time (years) to the underlying option's expiry (>= t_choose).
+>     b: cost of carry (defaults to r).
+
+## compound
+
+### `compound_option(S, K1, K2, t1, t2, r, sigma, kind='call-on-call', b=None) -> float`  _function_
+
+> Price a compound option (Geske 1979).
+>
+> Args:
+>     K1: strike of the compound (paid at ``t1`` to obtain the underlying).
+>     K2: strike of the underlying option (expiring at ``t2``).
+>     t1: expiry of the compound (the decision date), ``0 < t1 < t2``.
+>     t2: expiry of the underlying option.
+>     kind: "call-on-call", "call-on-put", "put-on-call", "put-on-put".
 >     b: cost of carry (defaults to r).
 
 ## correlation
