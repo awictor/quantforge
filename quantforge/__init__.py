@@ -248,7 +248,7 @@ from .cheyette import (
 )
 from .g2pp import (
     g2pp_V, zero_bond as g2pp_zero_bond, bond_option as g2pp_bond_option,
-    caplet as g2pp_caplet,
+    caplet as g2pp_caplet, bond_option_greeks as g2pp_bond_option_greeks,
 )
 from .bermudan_swaption import bermudan_swaption_g2pp
 from .discount_curve import DiscountCurve, bootstrap_from_swaps
@@ -267,7 +267,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.234.1"
+__version__ = "1.235.0"
 
 __all__ = [
     "OptionType",
@@ -686,6 +686,7 @@ __all__ = [
     "g2pp_V",
     "g2pp_zero_bond",
     "g2pp_bond_option",
+    "g2pp_bond_option_greeks",
     "g2pp_caplet",
     "bermudan_swaption_g2pp",
     "DiscountCurve",

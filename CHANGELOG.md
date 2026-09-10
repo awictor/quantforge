@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.235.0] - 2026-09-10
+
+### Added
+- `g2pp_bond_option_greeks` (in `g2pp.py`): Greeks of a G2++ zero-coupon-bond
+  option -- the exact discount-factor deltas `delta_T` (`dV/dP0T = N(d1)`, the
+  underlying-bond delta) and `delta_S` (`dV/dP0S`), plus the two factor-vol
+  vegas `vega_sigma` and `vega_eta` by finite difference.
+- Verified: both deltas match finite differences of `g2pp_bond_option` (delta_T
+  equals the analytic `N(d1)`); the call's `delta_T` is in (0,1) and `delta_S`
+  negative; both vegas positive; the put's `delta_T` is negative.
+
 ## [1.234.1] - 2026-09-10
 
 ### Tests

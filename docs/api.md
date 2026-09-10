@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.234.1 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.235.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1245,6 +1245,22 @@ Auto-generated from `quantforge` v1.234.1 by `docs/gen_api.py` — do not edit b
 > ``strike``. ``P0S = P(0, expiry)``, ``P0T = P(0, maturity)``. Since
 > ``ln P(expiry, maturity)`` is Gaussian the price is a Black-style formula on
 > the forward bond ``P0T / P0S`` with the G2++ bond volatility.
+
+### `g2pp_bond_option_greeks(P0S, P0T, a, b, sigma, eta, rho, expiry, maturity, strike, is_call=True)`  _function_
+
+> Greeks of a G2++ zero-coupon-bond option.
+>
+> Sensitivities of :func:`bond_option` to the two discount factors and the
+> model vols, by central finite differences except the two discount-factor
+> deltas which are exact (the price is Black-style in ``P0T``/``P0S``):
+>
+>   * ``delta_T`` = dV/dP0T = ``N(d1)`` (call) -- the underlying-bond delta;
+>   * ``delta_S`` = dV/dP0S (the discount-leg delta);
+>   * ``vega_sigma`` = dV/dsigma, ``vega_eta`` = dV/deta -- exposure to the two
+>     G2++ factor vols.
+>
+> Returns a dict with ``price``, ``delta_T``, ``delta_S``, ``vega_sigma``,
+> ``vega_eta``.
 
 ### `g2pp_caplet(P0_reset, P0_pay, a, b, sigma, eta, rho, reset, pay, strike, notional=1.0)`  _function_
 

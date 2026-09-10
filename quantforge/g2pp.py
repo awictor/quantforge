@@ -97,3 +97,51 @@ def caplet(P0_reset, P0_pay, a, b, sigma, eta, rho, reset, pay, strike,
     put = bond_option(P0_reset, P0_pay, a, b, sigma, eta, rho, reset, pay,
                       K_bond, is_call=False)
     return notional * (1.0 + strike * tau) * put
+
+
+def bond_option_greeks(P0S, P0T, a, b, sigma, eta, rho, expiry, maturity,
+                       strike, is_call=True):
+    """Greeks of a G2++ zero-coupon-bond option.
+
+    Sensitivities of :func:`bond_option` to the two discount factors and the
+    model vols, by central finite differences except the two discount-factor
+    deltas which are exact (the price is Black-style in ``P0T``/``P0S``):
+
+      * ``delta_T`` = dV/dP0T = ``N(d1)`` (call) -- the underlying-bond delta;
+      * ``delta_S`` = dV/dP0S (the discount-leg delta);
+      * ``vega_sigma`` = dV/dsigma, ``vega_eta`` = dV/deta -- exposure to the two
+        G2++ factor vols.
+
+    Returns a dict with ``price``, ``delta_T``, ``delta_S``, ``vega_sigma``,
+    ``vega_eta``.
+    """
+    price = bond_option(P0S, P0T, a, b, sigma, eta, rho, expiry, maturity,
+                        strike, is_call)
+    sig_p = _bond_vol(a, b, sigma, eta, rho, expiry, maturity)
+    # Exact discount-factor deltas from the Black-style form.
+    if sig_p < 1e-14:
+        fwd = P0T / P0S
+        itm = (fwd > strike) if is_call else (fwd < strike)
+        delta_T = (1.0 if is_call else -1.0) if itm else 0.0
+        delta_S = 0.0
+    else:
+        d1 = (math.log(P0T / (strike * P0S)) + 0.5 * sig_p * sig_p) / sig_p
+        d2 = d1 - sig_p
+        if is_call:
+            delta_T = norm_cdf(d1)
+            delta_S = -strike * norm_cdf(d2)
+        else:
+            delta_T = -norm_cdf(-d1)
+            delta_S = strike * norm_cdf(-d2)
+
+    def px(sig=sigma, et=eta):
+        return bond_option(P0S, P0T, a, b, sig, et, rho, expiry, maturity,
+                           strike, is_call)
+
+    hv = 1e-6
+    vega_sigma = (px(sig=sigma + hv) - px(sig=max(sigma - hv, 0.0))) / (
+        (2.0 * hv) if sigma - hv >= 0 else hv)
+    vega_eta = (px(et=eta + hv) - px(et=max(eta - hv, 0.0))) / (
+        (2.0 * hv) if eta - hv >= 0 else hv)
+    return {"price": price, "delta_T": delta_T, "delta_S": delta_S,
+            "vega_sigma": vega_sigma, "vega_eta": vega_eta}
