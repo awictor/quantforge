@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.233.0] - 2026-09-10
+
+### Added
+- `rbergomi_greeks_cv` (in `rbergomi.py`): delta, gamma, and `vega_xi0`
+  (forward-variance-level sensitivity) of a rough-Bergomi call by
+  common-random-number bumps on the conditional control-variate estimator
+  `rbergomi_price_cv`. Same-seed repricing shares the volatility-driving Brownian
+  paths, so the finite differences are low-variance.
+- Verified: delta matches a common-random-number finite difference of
+  `rbergomi_price_cv` to machine precision; call delta in (0,1) with positive
+  gamma and `vega_xi0`; reproducible under a fixed seed.
+
 ## [1.232.0] - 2026-09-10
 
 ### Added

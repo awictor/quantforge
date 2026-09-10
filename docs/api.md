@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.232.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.233.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3018,6 +3018,17 @@ Auto-generated from `quantforge` v1.232.0 by `docs/gen_api.py` — do not edit b
 > Rates may be negative; the normal model handles that.
 
 ## rbergomi
+
+### `rbergomi_greeks_cv(S, K, t, xi0, eta, H, rho, r=0.0, n_steps=100, n_paths=20000, antithetic=True, seed=None)`  _function_
+
+> Greeks of a rough-Bergomi call by common-random-number bumps.
+>
+> Reprices the conditional (control-variate) estimator
+> :func:`rbergomi_price_cv` at bumped inputs on the *same* seed, so the two
+> simulations share their volatility-driving Brownian paths and the finite
+> differences are low-variance. Returns a dict with ``price``, ``delta``
+> (dV/dS), ``gamma`` (d2V/dS2), and ``vega_xi0`` (dV/dxi0 -- sensitivity to the
+> forward-variance level, the rough-Bergomi analogue of vega). Only calls.
 
 ### `rbergomi_price(S, K, t, xi0, eta, H, rho, r=0.0, option_type=<OptionType.CALL: 'call'>, n_steps=100, n_paths=20000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
 

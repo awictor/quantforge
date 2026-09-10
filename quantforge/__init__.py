@@ -85,6 +85,7 @@ from .carrmadan import (
 )
 from .rbergomi import (
     rbergomi_price, rbergomi_smile, rbergomi_price_cv, rbergomi_smile_cv,
+    rbergomi_greeks_cv,
 )
 from .bachelier import (
     bachelier_price, bachelier_delta, bachelier_gamma, bachelier_vega,
@@ -265,7 +266,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.232.0"
+__version__ = "1.233.0"
 
 __all__ = [
     "OptionType",
@@ -380,6 +381,7 @@ __all__ = [
     "rbergomi_smile",
     "rbergomi_price_cv",
     "rbergomi_smile_cv",
+    "rbergomi_greeks_cv",
     "bachelier_price",
     "bachelier_delta",
     "bachelier_gamma",

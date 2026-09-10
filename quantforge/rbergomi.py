@@ -281,6 +281,37 @@ def rbergomi_price_cv(S, K, t, xi0, eta, H, rho, r=0.0, n_steps=100,
     return MCResult(price=price, std_error=se, n_paths=len(samples))
 
 
+def rbergomi_greeks_cv(S, K, t, xi0, eta, H, rho, r=0.0, n_steps=100,
+                       n_paths=20_000, antithetic=True, seed=None):
+    """Greeks of a rough-Bergomi call by common-random-number bumps.
+
+    Reprices the conditional (control-variate) estimator
+    :func:`rbergomi_price_cv` at bumped inputs on the *same* seed, so the two
+    simulations share their volatility-driving Brownian paths and the finite
+    differences are low-variance. Returns a dict with ``price``, ``delta``
+    (dV/dS), ``gamma`` (d2V/dS2), and ``vega_xi0`` (dV/dxi0 -- sensitivity to the
+    forward-variance level, the rough-Bergomi analogue of vega). Only calls.
+    """
+    if S <= 0 or K <= 0:
+        raise ValueError("S and K must be positive")
+    if seed is None:
+        seed = 0
+
+    def px(S_=S, xi0_=xi0):
+        return rbergomi_price_cv(S_, K, t, xi0_, eta, H, rho, r, n_steps,
+                                 n_paths, antithetic, seed=seed).price
+
+    base = px()
+    hS = 1e-2 * S
+    up, dn = px(S_=S + hS), px(S_=S - hS)
+    delta = (up - dn) / (2.0 * hS)
+    gamma = (up - 2.0 * base + dn) / (hS * hS)
+    hx = 1e-4
+    vega_xi0 = (px(xi0_=xi0 + hx) - px(xi0_=max(xi0 - hx, 1e-12))) / (
+        (2.0 * hx) if xi0 - hx > 0 else hx)
+    return {"price": base, "delta": delta, "gamma": gamma, "vega_xi0": vega_xi0}
+
+
 def rbergomi_smile_cv(S, strikes, t, xi0, eta, H, rho, r=0.0, n_steps=100,
                       n_paths=40_000, antithetic=True, seed=None):
     """Rough Bergomi implied-vol smile via the conditional estimator.
