@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.147.0] - 2026-09-10
+
+### Added
+- `corridor_variance_swap_from_smile` (in `varswap.py`): fair corridor
+  variance-swap strike from a smile `vol_fn(K)`. A corridor variance swap
+  accrues realized variance only while the spot is in `[lower, upper]`; by
+  Carr-Lewis static replication this restricts the `1/K^2`-weighted option strip
+  to strikes inside the corridor. Each strip option is priced at its smile vol
+  with Black-Scholes.
+- Verified: a narrower corridor accrues less variance; nested corridors are
+  monotone at fixed strike density; a wide corridor recovers the full
+  variance-swap strike (~5e-3); the strike is positive.
+
 ## [1.146.0] - 2026-09-10
 
 ### Added

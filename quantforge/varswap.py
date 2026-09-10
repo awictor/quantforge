@@ -127,3 +127,50 @@ def variance_swap_from_smile(S0, t, r, vol_fn, q=0.0, n_strikes=401,
             call_px.append(call_price(S0, K, t, r, v, b=r - q))
     return variance_swap_strike(S0, t, r, put_ks, put_px, call_ks, call_px,
                                 split=split)
+
+
+def corridor_variance_swap_from_smile(S0, t, r, vol_fn, lower, upper, q=0.0,
+                                      n_strikes=401, split=None):
+    """Fair corridor variance-swap strike from a smile ``vol_fn(K)``.
+
+    A corridor variance swap accrues realized variance only while the spot is in
+    the corridor ``[lower, upper]``. By the Carr-Madan static-replication view
+    this restricts the ``1/K^2``-weighted option strip to strikes inside the
+    corridor (Carr & Lewis): the fair accrued variance is
+
+        K_corr = (2 e^{r t} / t) * ( strip of OTM options with L <= K <= U ).
+
+    ``vol_fn(K)`` prices each strip option with Black-Scholes at its smile vol.
+    A corridor spanning the whole strip recovers (most of) the plain
+    variance-swap strike; a narrower corridor accrues less variance.
+    """
+    from .bsm import call_price, put_price
+
+    if t <= 0:
+        raise ValueError("t must be positive")
+    if not (0.0 < lower < upper):
+        raise ValueError("need 0 < lower < upper")
+    F = S0 * math.exp((r - q) * t)
+    if split is None:
+        split = F
+    growth = math.exp(r * t)
+
+    put_ks, put_px, call_ks, call_px = [], [], [], []
+    # Uniform strike grid across the corridor.
+    for i in range(n_strikes):
+        K = lower + (upper - lower) * i / (n_strikes - 1)
+        if K <= 0:
+            continue
+        v = vol_fn(K)
+        if K < split:
+            put_ks.append(K)
+            put_px.append(put_price(S0, K, t, r, v, b=r - q))
+        else:
+            call_ks.append(K)
+            call_px.append(call_price(S0, K, t, r, v, b=r - q))
+
+    put_strip = _strip_integral(put_ks, put_px, lambda K: 1.0 / (K * K)) \
+        if len(put_ks) >= 2 else 0.0
+    call_strip = _strip_integral(call_ks, call_px, lambda K: 1.0 / (K * K)) \
+        if len(call_ks) >= 2 else 0.0
+    return (2.0 * growth / t) * (put_strip + call_strip)

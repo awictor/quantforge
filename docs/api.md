@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.146.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.147.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2768,6 +2768,21 @@ Auto-generated from `quantforge` v1.146.0 by `docs/gen_api.py` — do not edit b
 > larger ``nu`` fattens the wings.
 
 ## varswap
+
+### `corridor_variance_swap_from_smile(S0, t, r, vol_fn, lower, upper, q=0.0, n_strikes=401, split=None)`  _function_
+
+> Fair corridor variance-swap strike from a smile ``vol_fn(K)``.
+>
+> A corridor variance swap accrues realized variance only while the spot is in
+> the corridor ``[lower, upper]``. By the Carr-Madan static-replication view
+> this restricts the ``1/K^2``-weighted option strip to strikes inside the
+> corridor (Carr & Lewis): the fair accrued variance is
+>
+>     K_corr = (2 e^{r t} / t) * ( strip of OTM options with L <= K <= U ).
+>
+> ``vol_fn(K)`` prices each strip option with Black-Scholes at its smile vol.
+> A corridor spanning the whole strip recovers (most of) the plain
+> variance-swap strike; a narrower corridor accrues less variance.
 
 ### `variance_swap_from_smile(S0, t, r, vol_fn, q=0.0, n_strikes=401, width=8.0, split=None)`  _function_
 
