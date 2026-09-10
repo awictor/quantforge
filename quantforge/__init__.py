@@ -97,6 +97,7 @@ from .density_metrics import (
     tail_probability, density_entropy, expected_shortfall,
     kl_divergence_smiles, wasserstein_smiles,
 )
+from .density_var import density_var_es
 from .multiasset import (
     exchange_option, spread_option, basket_option, best_of_call, worst_of_call,
     exchange_greeks, spread_greeks, basket_greeks, implied_spread_correlation,
@@ -225,7 +226,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.162.0"
+__version__ = "1.163.0"
 
 __all__ = [
     "OptionType",
@@ -355,6 +356,7 @@ __all__ = [
     "expected_shortfall",
     "kl_divergence_smiles",
     "wasserstein_smiles",
+    "density_var_es",
     "exchange_option",
     "spread_option",
     "basket_option",

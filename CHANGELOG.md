@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.163.0] - 2026-09-10
+
+### Added
+- `density_var_es` (new `density_var.py`): risk-neutral Value-at-Risk and
+  Expected Shortfall of an option position whose horizon P&L is `pnl(S_T)`,
+  computed by integrating the smile-implied density into a P&L distribution and
+  taking the loss quantile and tail mean. VaR/ES returned as positive losses.
+- Verified: a long-forward VaR matches the lognormal quantile; ES >= VaR; a long
+  call's VaR is capped at the premium (max loss); a short call has a positive
+  VaR with a larger ES; higher confidence gives a larger VaR.
+- Bug fixed during validation: the ES accumulation broke on the first
+  zero-density deep-tail atom (returning ~0); it now fills the whole tail mass
+  regardless of individual atom probabilities.
+
 ## [1.162.0] - 2026-09-10
 
 ### Added

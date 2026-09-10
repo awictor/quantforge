@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.162.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.163.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -678,6 +678,21 @@ Auto-generated from `quantforge` v1.162.0 by `docs/gen_api.py` — do not edit b
 > satisfies the triangle inequality) and is measured in price units, so it is a
 > robust "how far apart are these distributions" number even when their
 > supports differ.
+
+## density_var
+
+### `density_var_es(S0, t, r, vol_fn, pnl, confidence=0.99, q=0.0, n=800, width=8.0)`  _function_
+
+> Risk-neutral VaR and Expected Shortfall of a payoff ``pnl(S_T)``.
+>
+> Args:
+>     pnl: horizon profit-and-loss as a function of the terminal spot (losses
+>         negative).
+>     confidence: e.g. 0.99 for the 99% level.
+>
+> Returns ``(var, es)`` with both as positive loss numbers: ``var`` is the loss
+> the P&L does not exceed with probability ``confidence`` under the
+> risk-neutral density, and ``es`` the mean loss beyond it.
 
 ## discount_curve
 
