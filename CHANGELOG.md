@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.232.0] - 2026-09-10
+
+### Added
+- `rough_heston_greeks` (in `rough_heston.py`): spot Greeks (`delta`, `gamma`)
+  and the initial-variance sensitivity `vega_v0` of a rough-Heston option by
+  central finite differences on `rough_heston_price`. Each re-price runs the
+  O(n_grid^2) fractional-Riccati solve, so it is comparatively slow; the default
+  `n_grid` matches the pricer's (small `H` needs a fine grid to stay stable).
+- Verified: at `H = 0.5` the delta matches a finite difference of the classical
+  Heston price (`xi = kappa * nu`); at `H = 0.3` (rough) the delta matches a
+  finite difference of `rough_heston_price`, with call delta in (0,1), positive
+  gamma and `vega_v0`.
+
 ## [1.231.0] - 2026-09-10
 
 ### Added

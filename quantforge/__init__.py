@@ -60,7 +60,9 @@ from .bates import bates_price, bates_greeks, bates_smile
 from .double_heston import (
     double_heston_price, double_heston_greeks, double_heston_smile,
 )
-from .rough_heston import rough_heston_price, rough_heston_smile
+from .rough_heston import (
+    rough_heston_price, rough_heston_greeks, rough_heston_smile,
+)
 from .double_heston_calib import calibrate_double_heston
 from .heston_calib import calibrate_heston
 from .lsv import calibrate_leverage as calibrate_lsv_leverage
@@ -263,7 +265,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.231.0"
+__version__ = "1.232.0"
 
 __all__ = [
     "OptionType",
@@ -338,6 +340,7 @@ __all__ = [
     "double_heston_greeks",
     "double_heston_smile",
     "rough_heston_price",
+    "rough_heston_greeks",
     "rough_heston_smile",
     "calibrate_double_heston",
     "calibrate_heston",

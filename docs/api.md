@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.231.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.232.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3127,6 +3127,19 @@ Auto-generated from `quantforge` v1.231.0 by `docs/gen_api.py` — do not edit b
 > negative value flags butterfly arbitrage in the smile there.
 
 ## rough_heston
+
+### `rough_heston_greeks(S, K, t, r, v0, kappa, theta, nu, rho, H=0.1, option_type=<OptionType.CALL: 'call'>, q=0.0, n_grid=200)`  _function_
+
+> Greeks of a rough-Heston option by central finite differences.
+>
+> Central differences of :func:`rough_heston_price` for the spot Greeks
+> ``delta`` (dV/dS) and ``gamma`` (d2V/dS2), and the initial-variance
+> sensitivity ``vega_v0`` (dV/dv0). Each re-price runs the O(n_grid^2)
+> fractional-Riccati solve, so this is comparatively slow. Small ``H`` needs a
+> fine grid to stay stable, so the default ``n_grid`` matches the pricer's. At
+> ``H = 0.5`` the Greeks approach
+> the classical Heston Greeks. Returns a dict with ``price``, ``delta``,
+> ``gamma``, ``vega_v0``.
 
 ### `rough_heston_price(S, K, t, r, v0, kappa, theta, nu, rho, H=0.1, option_type=<OptionType.CALL: 'call'>, q=0.0, n_grid=200, upper=120.0) -> float`  _function_
 

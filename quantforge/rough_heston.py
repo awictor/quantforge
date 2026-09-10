@@ -167,6 +167,44 @@ def rough_heston_price(S, K, t, r, v0, kappa, theta, nu, rho, H=0.1,
     return call - S * math.exp(-q * t) + K * math.exp(-r * t)
 
 
+def rough_heston_greeks(S, K, t, r, v0, kappa, theta, nu, rho, H=0.1,
+                        option_type=OptionType.CALL, q=0.0, n_grid=200):
+    """Greeks of a rough-Heston option by central finite differences.
+
+    Central differences of :func:`rough_heston_price` for the spot Greeks
+    ``delta`` (dV/dS) and ``gamma`` (d2V/dS2), and the initial-variance
+    sensitivity ``vega_v0`` (dV/dv0). Each re-price runs the O(n_grid^2)
+    fractional-Riccati solve, so this is comparatively slow. Small ``H`` needs a
+    fine grid to stay stable, so the default ``n_grid`` matches the pricer's. At
+    ``H = 0.5`` the Greeks approach
+    the classical Heston Greeks. Returns a dict with ``price``, ``delta``,
+    ``gamma``, ``vega_v0``.
+    """
+    ot = _coerce_type(option_type)
+    if S <= 0 or K <= 0:
+        raise ValueError("S and K must be positive")
+    if not (0.0 < H <= 0.5):
+        raise ValueError("H must be in (0, 0.5]")
+    if v0 < 0 or theta < 0 or nu < 0:
+        raise ValueError("variance parameters must be non-negative")
+    if t <= 0:
+        raise ValueError("t must be positive")
+
+    def px(S_=S, v0_=v0):
+        return rough_heston_price(S_, K, t, r, v0_, kappa, theta, nu, rho, H,
+                                  ot, q=q, n_grid=n_grid)
+
+    base = px()
+    hS = 2e-3 * S
+    up, dn = px(S_=S + hS), px(S_=S - hS)
+    delta = (up - dn) / (2.0 * hS)
+    gamma = (up - 2.0 * base + dn) / (hS * hS)
+    hv = 5e-4
+    vega_v0 = (px(v0_=v0 + hv) - px(v0_=max(v0 - hv, 0.0))) / (
+        (2.0 * hv) if v0 - hv >= 0 else hv)
+    return {"price": base, "delta": delta, "gamma": gamma, "vega_v0": vega_v0}
+
+
 def rough_heston_smile(S, strikes, t, r, v0, kappa, theta, nu, rho, H=0.1,
                        q=0.0, n_grid=200):
     """Black-Scholes implied-vol smile the rough-Heston model produces.
