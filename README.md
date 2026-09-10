@@ -65,6 +65,10 @@ print(bjerksund_stensland(S=100, K=100, t=1.0, r=0.05, sigma=0.2,
 # American Greeks (delta/gamma/vega/theta/rho) by finite differences:
 print(bjerksund_stensland_greeks(S=100, K=100, t=1.0, r=0.05, sigma=0.2,
                                  option_type="put", b=0.02))
+# Split into European value + early-exercise premium:
+from quantforge import early_exercise_premium
+print(early_exercise_premium(S=90, K=100, t=1.0, r=0.05, sigma=0.3,
+                             option_type="put"))
 
 # Or a trinomial lattice (smoother convergence), with Richardson extrapolation
 # for extra accuracy at low step counts.

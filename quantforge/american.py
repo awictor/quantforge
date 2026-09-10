@@ -209,3 +209,25 @@ def bjerksund_stensland_greeks(S, K, t, r, sigma, option_type=OptionType.CALL,
 
     return {"price": base, "delta": delta, "gamma": gamma,
             "vega": vega, "theta": theta, "rho": rho}
+
+
+def early_exercise_premium(S, K, t, r, sigma, option_type=OptionType.CALL,
+                           b=None):
+    """Decompose the American price into European value + early-exercise premium.
+
+    Returns a dict with ``american`` (Bjerksund-Stensland), ``european`` (BSM),
+    and ``premium`` = american - european, the extra value from the right to
+    exercise early. The premium is non-negative and is (near) zero for an
+    American call with no dividends (``b >= r``), where early exercise is never
+    optimal.
+    """
+    from .bsm import price as bsm_price
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if b is None:
+        b = r
+    american = bjerksund_stensland(S, K, t, r, sigma, ot, b=b)
+    european = bsm_price(S, K, t, r, sigma, ot, b=b)
+    premium = american - european
+    return {"american": american, "european": european,
+            "premium": max(premium, 0.0)}

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.48.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.49.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -24,6 +24,16 @@ Auto-generated from `quantforge` v1.48.0 by `docs/gen_api.py` — do not edit by
 > Bumps are chosen small relative to each input; because the BS2002 price is a
 > smooth function of its arguments (away from t=0) central differences are
 > accurate to a few basis points, plenty for hedging.
+
+### `early_exercise_premium(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> Decompose the American price into European value + early-exercise premium.
+>
+> Returns a dict with ``american`` (Bjerksund-Stensland), ``european`` (BSM),
+> and ``premium`` = american - european, the extra value from the right to
+> exercise early. The premium is non-negative and is (near) zero for an
+> American call with no dividends (``b >= r``), where early exercise is never
+> optimal.
 
 ## bachelier
 

@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.49.0] - 2026-09-09
+
+### Added
+- `early_exercise_premium` (in `american.py`): decomposes the American price
+  (Bjerksund-Stensland) into the European (BSM) value plus the early-exercise
+  premium. The premium is zero for a no-dividend American call and positive for
+  ITM puts and dividend-paying calls.
+
 ## [1.48.0] - 2026-09-09
 
 ### Added
