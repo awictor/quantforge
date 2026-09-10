@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.201.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.202.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3111,6 +3111,24 @@ Auto-generated from `quantforge` v1.201.0 by `docs/gen_api.py` — do not edit b
 > Returns an :class:`MCResult` with the mean price, the across-randomization
 > SE, and ``n_paths`` = total points (``n_rand * n_paths``). Cross-checks the
 > geometric-control-variate :func:`quantforge.arithmetic_asian_mc`.
+
+### `sobol_autocallable_rqmc(S, t, r, sigma, observation_times, autocall_barrier, coupon, protection_barrier=None, notional=1.0, b=None, n_paths=4096, n_rand=24, seed=None) -> quantforge.montecarlo.MCResult`  _function_
+
+> Randomized-QMC autocallable structured note with an honest standard error.
+>
+> The same product as :func:`quantforge.autocallable_mc`: at each observation
+> date, if the spot is at or above ``autocall_barrier`` the note redeems early
+> paying ``notional (1 + coupon k)`` (``k`` = observation number), discounted;
+> if it never autocalls, at maturity the holder gets the notional back unless
+> the spot finished below ``protection_barrier`` (a down-and-in put on the
+> notional), taking ``notional S_T / S`` instead.
+>
+> Each path's ``len(observation_times)`` Brownian values come from one Sobol
+> point through the Brownian bridge (dominant variance on the leading, most
+> uniform coordinates), and a per-dimension Cranley-Patterson rotation
+> randomizes the point set, so ``n_rand`` shifts give a genuine SE. The number
+> of observations is capped by the Sobol generator's dimension. Cross-checks
+> :func:`quantforge.autocallable_mc`.
 
 ### `sobol_barrier_digital_rqmc(S, K, H, t, r, sigma, option_type=<OptionType.CALL: 'call'>, barrier='up-in', b=None, cash=1.0, n_steps=6, n_paths=4096, n_rand=24, seed=None) -> quantforge.montecarlo.MCResult`  _function_
 

@@ -331,6 +331,119 @@ def sobol_lookback_rqmc(S, t, r, sigma, option_type=OptionType.CALL, b=None,
     return MCResult(price=price, std_error=se, n_paths=n_rand * n_paths)
 
 
+def sobol_autocallable_rqmc(S, t, r, sigma, observation_times, autocall_barrier,
+                            coupon, protection_barrier=None, notional=1.0,
+                            b=None, n_paths=4096, n_rand=24,
+                            seed=None) -> MCResult:
+    """Randomized-QMC autocallable structured note with an honest standard error.
+
+    The same product as :func:`quantforge.autocallable_mc`: at each observation
+    date, if the spot is at or above ``autocall_barrier`` the note redeems early
+    paying ``notional (1 + coupon k)`` (``k`` = observation number), discounted;
+    if it never autocalls, at maturity the holder gets the notional back unless
+    the spot finished below ``protection_barrier`` (a down-and-in put on the
+    notional), taking ``notional S_T / S`` instead.
+
+    Each path's ``len(observation_times)`` Brownian values come from one Sobol
+    point through the Brownian bridge (dominant variance on the leading, most
+    uniform coordinates), and a per-dimension Cranley-Patterson rotation
+    randomizes the point set, so ``n_rand`` shifts give a genuine SE. The number
+    of observations is capped by the Sobol generator's dimension. Cross-checks
+    :func:`quantforge.autocallable_mc`.
+    """
+    if b is None:
+        b = r
+    obs = list(observation_times)
+    n_obs = len(obs)
+    if n_obs < 1 or n_obs > len(_MINIT):
+        raise ValueError(f"number of observations must be in 1..{len(_MINIT)}")
+    if any(obs[i] >= obs[i + 1] for i in range(n_obs - 1)) or obs[0] <= 0:
+        raise ValueError("observation_times must be strictly increasing and positive")
+    if abs(obs[-1] - t) > 1e-9:
+        raise ValueError("last observation must be the maturity t")
+    if n_rand < 2:
+        raise ValueError("n_rand must be >= 2 to estimate a standard error")
+    if sigma <= 0 or S <= 0 or t <= 0:
+        raise ValueError("S, sigma, t must be positive")
+    rng = random.Random(seed)
+
+    # The Brownian bridge builds W at times k*dt on a uniform grid; run it on a
+    # grid fine enough that every observation date lands on a node.
+    def payoff_from_W(W):
+        # W has length n_obs, the Brownian motion at each observation time.
+        for k in range(n_obs):
+            tau = obs[k]
+            s = S * math.exp((b - 0.5 * sigma * sigma) * tau + sigma * W[k])
+            if s >= autocall_barrier and k < n_obs - 1:
+                return math.exp(-r * tau) * notional * (1.0 + coupon * (k + 1))
+        disc = math.exp(-r * t)
+        if protection_barrier is not None and s < protection_barrier:
+            return disc * notional * (s / S)
+        return disc * notional * (1.0 + coupon * n_obs)
+
+    # Build the Brownian motion at the (possibly non-uniform) observation dates
+    # from independent normals via the incremental construction, using the Sobol
+    # point mapped through the bridge on the observation grid.
+    estimates = []
+    for _ in range(n_rand):
+        shift = [rng.random() for _ in range(n_obs)]
+        sob = Sobol(n_obs)
+        total = 0.0
+        for _ in range(n_paths):
+            pt = sob.next()
+            u = [(pt[d] + shift[d]) % 1.0 for d in range(n_obs)]
+            # Bridge on the observation times directly.
+            W = _bridge_on_times(u, obs)
+            total += payoff_from_W(W)
+        estimates.append(total / n_paths)
+
+    price, se = _summarize(estimates)
+    return MCResult(price=price, std_error=se, n_paths=n_rand * n_paths)
+
+
+def _bridge_on_times(unifs, times):
+    """Brownian motion at arbitrary increasing ``times`` from uniforms via a bridge.
+
+    Fills the endpoint first (from the leading, most-uniform Sobol coordinate),
+    then successive midpoints, so the dominant variance loads onto the early
+    coordinates. Returns ``[W(times[0]), ..., W(times[-1])]`` with ``W(0)=0``.
+    """
+    n = len(times)
+    W = [0.0] * n
+    T = times[-1]
+    filled = [False] * n
+    order = []
+
+    def bisect(lo, hi):
+        # lo, hi are indices into times; -1 denotes t=0 (W=0).
+        if hi - lo <= 1:
+            return
+        mid = (lo + hi) // 2
+        order.append((mid, lo, hi))
+        bisect(lo, mid)
+        bisect(mid, hi)
+
+    order.append((n - 1, -1, -1))       # endpoint uses coordinate 0
+    bisect(-1, n - 1)
+
+    u_idx = 0
+    for (idx, lo, hi) in order:
+        z = norm_ppf(unifs[u_idx])
+        u_idx += 1
+        if lo == -1 and hi == -1:
+            W[n - 1] = math.sqrt(T) * z
+        else:
+            t_lo = 0.0 if lo == -1 else times[lo]
+            t_hi = times[hi]
+            t_mid = times[idx]
+            w_lo = 0.0 if lo == -1 else W[lo]
+            w_hi = W[hi]
+            mean = w_lo + (w_hi - w_lo) * (t_mid - t_lo) / (t_hi - t_lo)
+            var = (t_hi - t_mid) * (t_mid - t_lo) / (t_hi - t_lo)
+            W[idx] = mean + math.sqrt(var) * z
+    return W
+
+
 def sobol_barrier_digital_rqmc(S, K, H, t, r, sigma, option_type=OptionType.CALL,
                                barrier="up-in", b=None, cash=1.0, n_steps=6,
                                n_paths=4096, n_rand=24, seed=None) -> MCResult:

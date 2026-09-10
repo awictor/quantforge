@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.202.0] - 2026-09-10
+
+### Added
+- `sobol_autocallable_rqmc` (in `sobol.py`): randomized-QMC autocallable
+  structured note with an honest standard error -- the same product as
+  `autocallable_mc` (early redemption with accrued coupons at each observation,
+  down-and-in protection at maturity). Each path's Brownian values at the
+  observation dates come from one Sobol point via a Brownian bridge built
+  directly on the (possibly non-uniform) observation grid (`_bridge_on_times`),
+  randomized by a per-dimension Cranley-Patterson rotation.
+- Verified: matches `autocallable_mc` with and without a protection barrier
+  within MC error; the price rises with the coupon; the across-randomization SE
+  is tight (< 0.01).
+
 ## [1.201.0] - 2026-09-10
 
 ### Added
