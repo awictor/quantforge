@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.224.0] - 2026-09-10
+
+### Added
+- `bachelier_greeks` (in `bachelier.py`): bundles the Bachelier (normal-model)
+  Greeks -- `delta`, `gamma`, `vega` from the existing exact closed forms plus
+  `theta` (calendar decay) by central finite difference.
+- Verified: delta/gamma/vega equal their standalone closed forms; theta matches
+  a finite difference; the ATM call delta is exactly 0.5 at zero rate; the put
+  delta is negative.
+
 ## [1.223.0] - 2026-09-10
 
 ### Added

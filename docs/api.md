@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.223.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.224.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -120,6 +120,16 @@ Auto-generated from `quantforge` v1.223.0 by `docs/gen_api.py` — do not edit b
 ### `bachelier_gamma(F, K, t, r, sigma) -> float`  _function_
 
 > d2Price/dF2. Same for calls and puts.
+
+### `bachelier_greeks(F, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>)`  _function_
+
+> Bundle the Bachelier Greeks: delta, gamma, vega (analytic) plus theta.
+>
+> ``delta``, ``gamma``, and ``vega`` reuse the exact closed forms
+> :func:`bachelier_delta`, :func:`bachelier_gamma`, :func:`bachelier_vega`;
+> ``theta`` (calendar decay, ``-dV/dt``) is a central finite difference of
+> :func:`bachelier_price`. Returns a dict with ``price``, ``delta``, ``gamma``,
+> ``vega``, ``theta``. All are in normal-model (absolute-vol) terms.
 
 ### `bachelier_implied_vol(target_price, F, K, t, r, option_type=<OptionType.CALL: 'call'>, tol=1e-10, max_iter=100) -> float`  _function_
 

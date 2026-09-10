@@ -84,7 +84,7 @@ from .rbergomi import (
 )
 from .bachelier import (
     bachelier_price, bachelier_delta, bachelier_gamma, bachelier_vega,
-    bachelier_implied_vol,
+    bachelier_implied_vol, bachelier_greeks,
 )
 from .variancegamma import variance_gamma_price, variance_gamma_smile
 from .hedgesim import simulate_delta_hedge, HedgeResult
@@ -259,7 +259,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.223.0"
+__version__ = "1.224.0"
 
 __all__ = [
     "OptionType",
@@ -372,6 +372,7 @@ __all__ = [
     "bachelier_gamma",
     "bachelier_vega",
     "bachelier_implied_vol",
+    "bachelier_greeks",
     "variance_gamma_price",
     "variance_gamma_smile",
     "simulate_delta_hedge",

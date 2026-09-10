@@ -131,3 +131,25 @@ def bachelier_implied_vol(target_price, F, K, t, r, option_type=OptionType.CALL,
                 continue
         sigma = 0.5 * (lo + hi)
     return sigma
+
+
+def bachelier_greeks(F, K, t, r, sigma, option_type=OptionType.CALL):
+    """Bundle the Bachelier Greeks: delta, gamma, vega (analytic) plus theta.
+
+    ``delta``, ``gamma``, and ``vega`` reuse the exact closed forms
+    :func:`bachelier_delta`, :func:`bachelier_gamma`, :func:`bachelier_vega`;
+    ``theta`` (calendar decay, ``-dV/dt``) is a central finite difference of
+    :func:`bachelier_price`. Returns a dict with ``price``, ``delta``, ``gamma``,
+    ``vega``, ``theta``. All are in normal-model (absolute-vol) terms.
+    """
+    ot = _coerce_type(option_type)
+    _validate(F, K, t, sigma)
+    price = bachelier_price(F, K, t, r, sigma, ot)
+    delta = bachelier_delta(F, K, t, r, sigma, ot)
+    gamma = bachelier_gamma(F, K, t, r, sigma)
+    vega = bachelier_vega(F, K, t, r, sigma)
+    ht = min(1e-4, 0.25 * t) if t > 0 else 1e-4
+    theta = -(bachelier_price(F, K, t + ht, r, sigma, ot)
+              - bachelier_price(F, K, t - ht, r, sigma, ot)) / (2.0 * ht)
+    return {"price": price, "delta": delta, "gamma": gamma, "vega": vega,
+            "theta": theta}
