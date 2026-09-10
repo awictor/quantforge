@@ -4,6 +4,21 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.96.0] - 2026-09-10
+
+### Added
+- Surface SVI (new `ssvi.py`): the Gatheral-Jacquier (2014) arbitrage-free
+  whole-surface parametrization, tying every expiry's smile together through a
+  shared skew function and the ATM total-variance term structure `theta_t`.
+  `calibrate_ssvi` fits the global `(rho, eta, gamma)` power-law skew plus one
+  `theta` per expiry to a `(t, k, iv)` market surface; `ssvi_butterfly_free`,
+  `ssvi_calendar_free` and `ssvi_is_arbitrage_free` implement the sufficient
+  no-static-arbitrage conditions (density positivity within a slice, total
+  variance non-decreasing in maturity across slices).
+- Verified: recovers a synthetic surface's parameters to ~1e-8 RMSE, the
+  butterfly condition flags an excessive-skew slice, the calendar condition
+  flags a decreasing-`theta` term structure, and `phi` decays with maturity.
+
 ## [1.95.0] - 2026-09-10
 
 ### Added

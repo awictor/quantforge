@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.95.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.96.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1595,6 +1595,54 @@ Auto-generated from `quantforge` v1.95.0 by `docs/gen_api.py` — do not edit by
 ### `SmileSpline(strikes: Sequence[float], vols: Sequence[float])`  _class_
 
 > Strike -> implied-vol natural cubic spline with flat extrapolation.
+
+## ssvi
+
+### `SSVIParams(rho: float, eta: float, gamma: float, thetas: Dict[float, float] = <factory>) -> None`  _class_
+
+> A fitted SSVI surface: global (rho, eta, gamma) and per-expiry theta.
+
+### `calibrate_ssvi(market: Sequence[Tuple[float, float, float]], initial: quantforge.ssvi.SSVIParams = None, max_iter: int = 8000) -> Tuple[quantforge.ssvi.SSVIParams, float]`  _function_
+
+> Fit an SSVI surface to market implied vols.
+>
+> ``market`` is a sequence of ``(t, k, iv)`` points (expiry in years,
+> log-moneyness, Black-Scholes implied vol). Fits the global ``(rho, eta,
+> gamma)`` and one ``theta`` per distinct expiry by minimising the total-
+> variance RMSE, using a smooth reparametrization so ``theta > 0``, ``eta > 0``,
+> ``gamma in (0, 1)`` and ``rho in (-1, 1)`` and the built-in Nelder-Mead.
+>
+> Returns ``(params, rmse)`` where ``rmse`` is the root-mean-square implied-vol
+> error across the market points.
+
+### `ssvi_butterfly_free(theta: float, rho: float, eta: float, gamma: float, tol: float = 1e-09) -> bool`  _function_
+
+> Gatheral-Jacquier sufficient condition for a butterfly-arbitrage-free slice.
+>
+> A fixed-``theta`` SSVI slice has no butterfly (density-negative) arbitrage if
+>
+>     theta * phi * (1 + |rho|) <= 4      and
+>     theta * phi^2 * (1 + |rho|) <= 4 .
+
+### `ssvi_calendar_free(params: quantforge.ssvi.SSVIParams, ks: Sequence[float] = None, tol: float = 1e-09) -> bool`  _function_
+
+> Check the surface has no calendar-spread arbitrage on the fitted expiries.
+>
+> Calendar arbitrage is absent when total variance is non-decreasing in
+> maturity at every log-moneyness: ``w(k, t_{i+1}) >= w(k, t_i)``. Checked on a
+> grid of ``k`` across each adjacent pair of the fitted expiries.
+
+### `ssvi_is_arbitrage_free(params: quantforge.ssvi.SSVIParams, ks: Sequence[float] = None) -> bool`  _function_
+
+> True if every slice is butterfly-free and the surface is calendar-free.
+
+### `ssvi_phi(theta: float, eta: float, gamma: float) -> float`  _function_
+
+> Power-law SSVI skew function phi(theta).
+
+### `ssvi_total_variance(k: float, theta: float, rho: float, eta: float, gamma: float) -> float`  _function_
+
+> SSVI total implied variance w(k, theta).
 
 ## strategy
 
