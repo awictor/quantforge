@@ -22,6 +22,7 @@ from .bsm import (
 )
 from .implied import implied_volatility
 from .binomial import american_price
+from .trinomial import trinomial_price, richardson_american
 from .portfolio import Contract, Position, BookRisk, Book, price_book
 from .svi import SVIParams, calibrate_svi
 from .sabr import SABRParams, sabr_vol, calibrate_sabr
@@ -48,7 +49,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.1.0"
+__version__ = "1.2.0"
 
 __all__ = [
     "OptionType",
@@ -64,6 +65,8 @@ __all__ = [
     "Greeks",
     "implied_volatility",
     "american_price",
+    "trinomial_price",
+    "richardson_american",
     "Contract",
     "Position",
     "BookRisk",

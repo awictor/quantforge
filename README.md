@@ -61,6 +61,14 @@ print(american_price(S=100, K=100, t=1.0, r=0.05, sigma=0.2,
 from quantforge import bjerksund_stensland
 print(bjerksund_stensland(S=100, K=100, t=1.0, r=0.05, sigma=0.2,
                           option_type="put", b=0.02))
+
+# Or a trinomial lattice (smoother convergence), with Richardson extrapolation
+# for extra accuracy at low step counts.
+from quantforge import trinomial_price, richardson_american
+print(trinomial_price(S=100, K=100, t=1.0, r=0.05, sigma=0.2,
+                      option_type="put", steps=400))
+print(richardson_american(S=100, K=100, t=1.0, r=0.05, sigma=0.2,
+                          option_type="put", steps=50))
 ```
 
 ## Scenario / stress grid

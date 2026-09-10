@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.2.0] - 2026-09-09
+
+### Added
+- `trinomial.py`: `trinomial_price` prices American/European options on a Boyle
+  trinomial lattice (smoother convergence than the binomial tree), and
+  `richardson_american` combines `n`/`2n` solves to cancel the leading O(1/n)
+  error for a more accurate American price.
+
 ## [1.1.0] - 2026-09-09
 
 ### Added
