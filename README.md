@@ -575,6 +575,16 @@ print(oh.cost, oh.digital_value, oh.cushion)   # spread cost >= fair value
 The spread payoff dominates the digital everywhere and its cost converges to
 the fair digital value as `width -> 0`; the cushion is the pin-risk buffer.
 
+A Parisian barrier activates only after the spot stays past the level for a
+consecutive window (robust to brief spikes), priced by Monte Carlo:
+
+```python
+from quantforge import parisian_barrier_mc
+
+parisian_barrier_mc(S=100, K=100, H=90, t=1.0, r=0.05, sigma=0.25,
+                    window=0.1, option_type="call", barrier="down-out")
+```
+
 A barrier-contingent digital pays cash only if it finishes ITM *and* the
 barrier condition holds (Monte Carlo):
 

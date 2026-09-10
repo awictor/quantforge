@@ -253,3 +253,68 @@ def barrier_digital_mc(S, K, H, t, r, sigma, option_type=OptionType.CALL,
 
     price, se = _summarize(samples)
     return MCResult(price=price, std_error=se, n_paths=len(samples))
+
+
+def parisian_barrier_mc(S, K, H, t, r, sigma, window, option_type=OptionType.CALL,
+                        barrier="down-out", b=None, n_steps=252, n_paths=40_000,
+                        antithetic=True, seed=None) -> MCResult:
+    """Monte Carlo a Parisian barrier option.
+
+    Unlike a standard barrier (triggered by a single touch), a Parisian barrier
+    triggers only if the spot stays on the barrier's far side for a *consecutive*
+    elapsed time of at least ``window`` years. This makes the option robust to
+    brief spikes through the level.
+
+    ``barrier`` is one of ``down-out``/``down-in``/``up-out``/``up-in``. "down"
+    watches for S <= H, "up" for S >= H. Knock-out pays the vanilla payoff
+    unless the barrier is activated; knock-in pays only if it is.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if b is None:
+        b = r
+    barrier = str(barrier).lower()
+    if barrier not in ("down-out", "down-in", "up-out", "up-in"):
+        raise ValueError("barrier must be down-out/down-in/up-out/up-in")
+    if window <= 0 or window > t:
+        raise ValueError("window must be in (0, t]")
+    if n_steps < 1:
+        raise ValueError("n_steps must be >= 1")
+
+    up = barrier.startswith("up")
+    knock_in = barrier.endswith("in")
+    dt = t / n_steps
+    window_steps = max(1, int(round(window / dt)))
+    drift = (b - 0.5 * sigma * sigma) * dt
+    vol = sigma * math.sqrt(dt)
+    disc = math.exp(-r * t)
+    sign = 1.0 if ot is OptionType.CALL else -1.0
+
+    def one_path(zs):
+        s = S
+        consec = 0
+        activated = False
+        for z in zs:
+            s *= math.exp(drift + vol * z)
+            beyond = (s >= H) if up else (s <= H)
+            if beyond:
+                consec += 1
+                if consec >= window_steps:
+                    activated = True
+            else:
+                consec = 0
+        payoff = max(sign * (s - K), 0.0)
+        alive = activated if knock_in else (not activated)
+        return disc * payoff if alive else 0.0
+
+    rng = random.Random(seed)
+    samples = []
+    n = n_paths // 2 if antithetic else n_paths
+    for _ in range(n):
+        zs = [rng.gauss(0.0, 1.0) for _ in range(n_steps)]
+        samples.append(one_path(zs))
+        if antithetic:
+            samples.append(one_path([-z for z in zs]))
+
+    price, se = _summarize(samples)
+    return MCResult(price=price, std_error=se, n_paths=len(samples))

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.54.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.55.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -797,6 +797,19 @@ Auto-generated from `quantforge` v1.54.0 by `docs/gen_api.py` — do not edit by
 ### `european_mc(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, n_paths=100000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
 
 > Monte Carlo price of a European option (converges to the BSM value).
+
+### `parisian_barrier_mc(S, K, H, t, r, sigma, window, option_type=<OptionType.CALL: 'call'>, barrier='down-out', b=None, n_steps=252, n_paths=40000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
+
+> Monte Carlo a Parisian barrier option.
+>
+> Unlike a standard barrier (triggered by a single touch), a Parisian barrier
+> triggers only if the spot stays on the barrier's far side for a *consecutive*
+> elapsed time of at least ``window`` years. This makes the option robust to
+> brief spikes through the level.
+>
+> ``barrier`` is one of ``down-out``/``down-in``/``up-out``/``up-in``. "down"
+> watches for S <= H, "up" for S >= H. Knock-out pays the vanilla payoff
+> unless the barrier is activated; knock-in pays only if it is.
 
 ## multiasset
 

@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.55.0] - 2026-09-09
+
+### Added
+- `parisian_barrier_mc` (in `montecarlo.py`): Monte Carlo for a Parisian barrier
+  option, which activates only after the spot stays past the barrier for a
+  *consecutive* window (robust to brief spikes) rather than on a single touch.
+  Supports all four in/out, up/down kinds; knock-in + knock-out equals the
+  vanilla, and a Parisian knock-out is worth more than the instantaneous one.
+
 ## [1.54.0] - 2026-09-09
 
 ### Added
