@@ -40,7 +40,7 @@ def test_put_delta_signs_flip():
 
 
 def test_reproducible():
-    kw = dict(n_steps=15, n_paths=5_000, seed=99)
+    kw = dict(n_steps=6, n_paths=800, seed=99)
     a = bermudan_spread_lsm_greeks(S1, S2, K, T, R, SIG1, SIG2, RHO, **kw)
     b = bermudan_spread_lsm_greeks(S1, S2, K, T, R, SIG1, SIG2, RHO, **kw)
     assert a["delta1"] == b["delta1"]

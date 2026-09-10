@@ -36,7 +36,7 @@ def test_higher_weight_larger_delta():
     # Asset 1 carries the larger basket weight, so the basket is more sensitive
     # to it per unit spot -> larger delta1 than delta2 (spots are comparable).
     g = bermudan_basket_lsm_greeks(S1, S2, W1, W2, K, T, R, SIG1, SIG2, RHO,
-                                   n_steps=15, n_paths=6_000, seed=3)
+                                   n_steps=10, n_paths=4_000, seed=3)
     assert g["delta1"] > g["delta2"]
 
 
@@ -49,7 +49,7 @@ def test_put_deltas_negative():
 
 
 def test_reproducible():
-    kw = dict(n_steps=15, n_paths=4_000, seed=99)
+    kw = dict(n_steps=6, n_paths=800, seed=99)
     a = bermudan_basket_lsm_greeks(S1, S2, W1, W2, K, T, R, SIG1, SIG2, RHO, **kw)
     b = bermudan_basket_lsm_greeks(S1, S2, W1, W2, K, T, R, SIG1, SIG2, RHO, **kw)
     assert a["delta1"] == b["delta1"]

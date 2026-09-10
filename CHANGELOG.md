@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.234.1] - 2026-09-10
+
+### Tests
+- Trimmed the fast suite ~31s -> ~20s. The two-asset LSM-Greeks and
+  rBergomi-Greeks tests each run 5+ re-prices; the `test_reproducible`
+  determinism checks (which price twice) dropped to tiny sizes (n_steps 6-10,
+  n_paths 800-1500), and the sign/ordering checks (min-put `delta2 < delta1`,
+  basket `delta1 > delta2`, both-deltas-negative) to 10 steps / 3000-4000 paths
+  -- all robust across seeds at the smaller size. Accuracy cross-checks stay
+  under `-m slow`.
+
 ## [1.234.0] - 2026-09-10
 
 ### Added

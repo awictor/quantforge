@@ -31,7 +31,7 @@ def test_call_greek_signs():
 
 
 def test_reproducible():
-    kw = dict(n_steps=30, n_paths=6_000, seed=99)
+    kw = dict(n_steps=10, n_paths=1_500, seed=99)
     a = rbergomi_greeks_cv(S, K, T, XI0, ETA, H, RHO, R, **kw)
     b = rbergomi_greeks_cv(S, K, T, XI0, ETA, H, RHO, R, **kw)
     assert a["delta"] == b["delta"]
