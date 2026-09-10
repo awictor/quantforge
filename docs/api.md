@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.203.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.204.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3159,6 +3159,23 @@ Auto-generated from `quantforge` v1.203.0 by `docs/gen_api.py` — do not edit b
 > :func:`quantforge.barrier_mc` with ``brownian_bridge=False`` (it does not add
 > the continuity correction), and cross-checks it. ``n_steps`` is capped by the
 > Sobol generator's dimension.
+
+### `sobol_cliquet_rqmc(S, t, r, sigma, reset_times, local_cap=None, local_floor=0.0, global_cap=None, global_floor=0.0, b=None, n_paths=4096, n_rand=24, seed=None) -> quantforge.montecarlo.MCResult`  _function_
+
+> Randomized-QMC capped cliquet (ratchet) with an honest standard error.
+>
+> The same product as :func:`quantforge.capped_cliquet_mc`: the payoff sums the
+> per-period returns over the consecutive reset windows, each clipped to
+> ``[local_floor, local_cap]``, then clips the running sum to
+> ``[global_floor, global_cap]``, discounted at ``r``.
+>
+> Each path's Brownian motion at the reset times comes from one Sobol point via
+> a bridge on the reset grid (:func:`_bridge_on_times`), and the per-period
+> standardized shock is the bridge increment divided by ``sqrt(dt_i)``. A
+> per-dimension Cranley-Patterson rotation randomizes the point set, so
+> ``n_rand`` shifts give a genuine SE. The number of reset periods is capped by
+> the Sobol generator's dimension. Cross-checks
+> :func:`quantforge.capped_cliquet_mc`.
 
 ### `sobol_double_knockout_rqmc(S, K, t, r, sigma, lower, upper, option_type=<OptionType.CALL: 'call'>, b=None, rebate=0.0, n_steps=6, n_paths=4096, n_rand=24, seed=None) -> quantforge.montecarlo.MCResult`  _function_
 

@@ -331,6 +331,76 @@ def sobol_lookback_rqmc(S, t, r, sigma, option_type=OptionType.CALL, b=None,
     return MCResult(price=price, std_error=se, n_paths=n_rand * n_paths)
 
 
+def sobol_cliquet_rqmc(S, t, r, sigma, reset_times, local_cap=None,
+                       local_floor=0.0, global_cap=None, global_floor=0.0,
+                       b=None, n_paths=4096, n_rand=24, seed=None) -> MCResult:
+    """Randomized-QMC capped cliquet (ratchet) with an honest standard error.
+
+    The same product as :func:`quantforge.capped_cliquet_mc`: the payoff sums the
+    per-period returns over the consecutive reset windows, each clipped to
+    ``[local_floor, local_cap]``, then clips the running sum to
+    ``[global_floor, global_cap]``, discounted at ``r``.
+
+    Each path's Brownian motion at the reset times comes from one Sobol point via
+    a bridge on the reset grid (:func:`_bridge_on_times`), and the per-period
+    standardized shock is the bridge increment divided by ``sqrt(dt_i)``. A
+    per-dimension Cranley-Patterson rotation randomizes the point set, so
+    ``n_rand`` shifts give a genuine SE. The number of reset periods is capped by
+    the Sobol generator's dimension. Cross-checks
+    :func:`quantforge.capped_cliquet_mc`.
+    """
+    if b is None:
+        b = r
+    if sigma <= 0 or S <= 0 or t <= 0:
+        raise ValueError("S, sigma, t must be positive")
+    times = list(reset_times)
+    n_per = len(times)
+    if n_per < 1 or n_per > len(_MINIT):
+        raise ValueError(f"number of reset periods must be in 1..{len(_MINIT)}")
+    grid = [0.0] + times
+    if any(grid[i] >= grid[i + 1] for i in range(len(grid) - 1)):
+        raise ValueError("reset_times must be strictly increasing and positive")
+    if abs(times[-1] - t) > 1e-9:
+        raise ValueError("last reset time must be the maturity t")
+    if n_rand < 2:
+        raise ValueError("n_rand must be >= 2 to estimate a standard error")
+    disc = math.exp(-r * t)
+    rng = random.Random(seed)
+
+    def clip(x, lo, hi):
+        if lo is not None:
+            x = max(x, lo)
+        if hi is not None:
+            x = min(x, hi)
+        return x
+
+    def payoff_from_W(W):
+        total = 0.0
+        w_prev = 0.0
+        for i in range(n_per):
+            dt = grid[i + 1] - grid[i]
+            dW = W[i] - w_prev
+            w_prev = W[i]
+            ret = math.exp((b - 0.5 * sigma * sigma) * dt + sigma * dW) - 1.0
+            total += clip(ret, local_floor, local_cap)
+        return disc * clip(total, global_floor, global_cap)
+
+    estimates = []
+    for _ in range(n_rand):
+        shift = [rng.random() for _ in range(n_per)]
+        sob = Sobol(n_per)
+        total = 0.0
+        for _ in range(n_paths):
+            pt = sob.next()
+            u = [(pt[d] + shift[d]) % 1.0 for d in range(n_per)]
+            W = _bridge_on_times(u, times)
+            total += payoff_from_W(W)
+        estimates.append(total / n_paths)
+
+    price, se = _summarize(estimates)
+    return MCResult(price=price, std_error=se, n_paths=n_rand * n_paths)
+
+
 def sobol_double_knockout_rqmc(S, K, t, r, sigma, lower, upper,
                                option_type=OptionType.CALL, b=None, rebate=0.0,
                                n_steps=6, n_paths=4096, n_rand=24,

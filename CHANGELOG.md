@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.204.0] - 2026-09-10
+
+### Added
+- `sobol_cliquet_rqmc` (in `sobol.py`): randomized-QMC capped cliquet (ratchet)
+  note with an honest standard error -- the same product as `capped_cliquet_mc`
+  (per-period returns clipped to `[local_floor, local_cap]`, running sum clipped
+  to `[global_floor, global_cap]`). Brownian motion at the reset times comes from
+  one Sobol point via a bridge on the reset grid; the per-period standardized
+  shock is the bridge increment over `sqrt(dt_i)`, randomized by a per-dimension
+  Cranley-Patterson rotation.
+- Verified: matches `capped_cliquet_mc` with full caps and with uncapped-local /
+  no-global settings within MC error; a tighter local cap lowers the value; the
+  across-randomization SE is tight (< 0.01).
+
 ## [1.203.0] - 2026-09-10
 
 ### Added
