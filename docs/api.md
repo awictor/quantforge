@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.164.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.165.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1682,6 +1682,22 @@ Auto-generated from `quantforge` v1.164.0 by `docs/gen_api.py` — do not edit b
 > ``(log_moneyness, vol)`` pairs sorted by strike (log-moneyness on the forward
 > ``F = S e^{b t}``). Jumps fatten the tails, so the smile curves up in the
 > wings; a negative mean jump ``mu_j`` tilts it into a downward skew.
+
+## mlmc
+
+### `mlmc_asian(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, levels=4, M=2, n_paths=20000, seed=None)`  _function_
+
+> Arithmetic-average Asian price by multi-level Monte Carlo.
+>
+> Runs levels ``0..levels`` with refinement factor ``M`` (fine grid at the top
+> has ``M^levels`` steps). ``n_paths`` is the sample count at level 0; deeper
+> levels use fewer (``n_paths // M^l``, floored) since their corrections have
+> lower variance. Returns an :class:`~quantforge.MCResult` whose ``n_paths`` is
+> the total sample count across levels.
+>
+> A flat run at ``levels=0`` is plain single-grid Monte Carlo; increasing
+> ``levels`` refines the time discretisation while sharing the cost across
+> coarser levels.
 
 ## moment_premium
 

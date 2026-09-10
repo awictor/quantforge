@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.165.0] - 2026-09-10
+
+### Added
+- Multi-level Monte Carlo (new `mlmc.py`): `mlmc_asian` prices a fixed-strike
+  arithmetic Asian by the Giles (2008) telescoping estimator
+  `E[P_L] = E[P_0] + sum_l E[P_l - P_{l-1}]`, with each correction from coupled
+  fine/coarse paths sharing Brownian increments (each coarse step sums `M` fine
+  ones). Deeper levels use fewer paths since their corrections have lower
+  variance, cutting the cost to a target accuracy.
+- Verified: the level corrections decay geometrically; the estimate converges
+  to the Turnbull-Wakeman value as levels grow (err ~0.01 at 6 levels) and more
+  levels reduce the discretisation bias; call and put prices are positive.
+
 ## [1.164.0] - 2026-09-10
 
 ### Added
