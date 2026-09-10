@@ -4,6 +4,22 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.125.0] - 2026-09-10
+
+### Added
+- OIS/LIBOR dual-curve discounting (new `dualcurve.py`): value swaps under the
+  post-2008 convention where forward rates are projected off a forward (LIBOR)
+  curve while every cashflow is discounted on the collateral (OIS) curve.
+  `dual_forward_rate`, `dual_float_leg_value`, `dual_par_swap_rate` and
+  `dual_swap_value` take separate OIS and projection `DiscountCurve`s plus an
+  additive basis; `dual_calibrate_basis` solves the constant basis spread that
+  reprices a set of par swaps.
+- Verified: with a single shared curve the dual-curve par rate collapses to the
+  single-curve one exactly; the flat-curve forward equals `e^r - 1`; a known
+  basis is recovered to ~1e-6; a payer swap is worth zero at par and
+  payer + receiver = 0; adding basis raises the float leg; and a projection
+  curve above OIS raises the par rate.
+
 ## [1.124.0] - 2026-09-10
 
 ### Added

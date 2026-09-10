@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.124.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.125.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -655,6 +655,34 @@ Auto-generated from `quantforge` v1.124.0 by `docs/gen_api.py` — do not edit b
 > Returns ``(log_moneyness, vol)`` pairs sorted by strike on the forward
 > ``F = S e^{(r-q) t}``. The two mean-reversion speeds let the short- and
 > long-dated skew move more independently than single-factor Heston allows.
+
+## dualcurve
+
+### `dual_calibrate_basis(ois_curve, proj_curve, swap_maturities, par_rates, freq=1.0)`  _function_
+
+> Solve the constant basis spread that reprices the given par swap rates.
+>
+> Minimises the squared par-rate error over a single additive basis on the
+> projected forwards, with the built-in Nelder-Mead. Returns ``(basis, rmse)``.
+
+### `dual_float_leg_value(ois_curve, proj_curve, pay_times, basis=0.0)`  _function_
+
+> Value of a unit-notional float leg: projected forwards, OIS-discounted.
+>
+> ``basis`` is a constant spread (in rate units) added to each projected
+> forward -- the tenor/currency basis.
+
+### `dual_forward_rate(proj_curve, T0, T1)`  _function_
+
+> Simply-compounded forward rate over ``[T0, T1]`` off the projection curve.
+
+### `dual_par_swap_rate(ois_curve, proj_curve, pay_times, basis=0.0)`  _function_
+
+> Dual-curve par (fair fixed) rate: float-leg value over the OIS annuity.
+
+### `dual_swap_value(ois_curve, proj_curve, pay_times, fixed_rate, payer=True, basis=0.0)`  _function_
+
+> Value of a unit-notional swap (payer = pay fixed, receive float).
 
 ## dv01
 

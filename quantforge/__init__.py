@@ -171,6 +171,11 @@ from .g2pp import (
 )
 from .bermudan_swaption import bermudan_swaption_g2pp
 from .discount_curve import DiscountCurve, bootstrap_from_swaps
+from .dualcurve import (
+    forward_rate as dual_forward_rate, par_swap_rate as dual_par_swap_rate,
+    swap_value as dual_swap_value, float_leg_value as dual_float_leg_value,
+    calibrate_basis as dual_calibrate_basis,
+)
 
 # Vectorized NumPy fast path is optional; only expose it if NumPy is present.
 try:  # pragma: no cover - trivial availability branch
@@ -181,7 +186,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.124.0"
+__version__ = "1.125.0"
 
 __all__ = [
     "OptionType",
@@ -478,5 +483,10 @@ __all__ = [
     "bermudan_swaption_g2pp",
     "DiscountCurve",
     "bootstrap_from_swaps",
+    "dual_forward_rate",
+    "dual_par_swap_rate",
+    "dual_swap_value",
+    "dual_float_leg_value",
+    "dual_calibrate_basis",
     "__version__",
 ]
