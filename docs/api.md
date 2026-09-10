@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.117.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.118.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -43,6 +43,38 @@ Auto-generated from `quantforge` v1.117.0 by `docs/gen_api.py` — do not edit b
 > exercise early. The premium is non-negative and is (near) zero for an
 > American call with no dividends (``b >= r``), where early exercise is never
 > optimal.
+
+## andreasenhuge
+
+### `andreasen_huge_calibrate(F, strikes, T, market_vols, r=0.0, max_iter=60, tol=1e-08)`  _function_
+
+> Calibrate per-strike local vols so the AH smile matches market vols.
+>
+> Bootstraps the local vol at each interior strike by a 1-D bisection on the
+> single-strike implied-vol error (the implicit step couples neighbours only
+> weakly, so a few sweeps converge). Returns ``(local_vols, rmse)`` with
+> ``rmse`` the root-mean-square implied-vol error over the interior strikes.
+
+### `andreasen_huge_prices(F, strikes, T, local_vols)`  _function_
+
+> Arbitrage-free forward call prices from one implicit Dupire step.
+>
+> ``strikes`` is an increasing grid, ``local_vols`` the per-strike local vol
+> (same length). Returns the list of undiscounted forward call prices
+> ``C(K_i)`` at expiry ``T``. Multiply by ``e^{-rT}`` for the discounted price
+> if the forward already embeds the carry.
+>
+> The prices are monotone decreasing and convex in strike by construction, for
+> any positive ``local_vols`` -- the whole point of the scheme.
+
+### `andreasen_huge_smile(F, strikes, T, local_vols, r=0.0)`  _function_
+
+> Implied-vol smile from the Andreasen-Huge arbitrage-free call prices.
+>
+> Prices the grid with :func:`andreasen_huge_prices` (spot ``S = F e^{-rT}``,
+> carry ``b = r`` so the pricing forward is ``F``) and inverts each to a
+> Black-Scholes implied vol. Returns ``(log_moneyness, vol)`` pairs sorted by
+> strike on the forward ``F``.
 
 ## attribution
 

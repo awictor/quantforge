@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.118.0] - 2026-09-10
+
+### Added
+- Andreasen-Huge single-step arbitrage-free local-vol smile (new
+  `andreasenhuge.py`): `andreasen_huge_prices` solves one implicit Dupire
+  finite-difference step (a tridiagonal M-matrix system, Thomas algorithm) to
+  produce call prices that are monotone-decreasing and convex in strike -- hence
+  arbitrage-free -- for any positive local-vol grid. `andreasen_huge_smile`
+  inverts them to implied vols, and `andreasen_huge_calibrate` bootstraps the
+  per-strike local vols that reprice a market smile.
+- Verified: the prices are monotone and convex for both flat and steeply skewed
+  local vols; calibration reproduces a market skew to <5e-3 RMSE (interior
+  strikes to ~1e-4); the calibrated smile is downward-sloping.
+
 ## [1.117.0] - 2026-09-10
 
 ### Added
