@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.136.0] - 2026-09-10
+
+### Added
+- Rannacher time-stepping in the Crank-Nicolson solver (`pde.py`): the first
+  `rannacher` steps out of expiry are taken fully implicit (backward Euler)
+  before switching to Crank-Nicolson, damping the spurious oscillation the
+  non-smooth payoff kink induces in CN (which otherwise corrupts gamma/theta
+  near the strike). Exposed as a `rannacher` argument on `crank_nicolson_price`
+  and `crank_nicolson_greeks` (default 2; `0` recovers pure CN).
+- The theta-scheme was generalised to a per-step weight so the same code runs
+  backward Euler and Crank-Nicolson. Verified: prices still match Black-Scholes;
+  `rannacher=0` recovers pure CN; and on a coarse time grid the Rannacher gamma
+  near the strike is no worse than (here better than) pure CN.
+
 ## [1.135.0] - 2026-09-10
 
 ### Added

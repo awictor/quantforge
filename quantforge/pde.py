@@ -38,11 +38,17 @@ def _thomas(a, b, c, d):
 
 
 def _cn_solve(S, K, t, r, sigma, ot, b, american, local_vol_fn,
-              n_space, n_time, s_max_mult, psor_tol, psor_max_iter, dt_override):
+              n_space, n_time, s_max_mult, psor_tol, psor_max_iter, dt_override,
+              rannacher=2):
     """Run the CN march; return (grid, ds, V, V_prev, dt).
 
     ``V`` is the value grid at ``t=0``; ``V_prev`` is the grid one time step
     earlier (i.e. at ``dt`` remaining flipped -- used for a theta difference).
+
+    The first ``rannacher`` steps out of expiry are taken fully implicit
+    (backward Euler, ``theta_step = 1``) to damp the oscillation Crank-Nicolson
+    (``theta_step = 0.5``) suffers from the non-smooth payoff kink; the rest use
+    CN. ``rannacher = 0`` recovers pure Crank-Nicolson.
     """
     call = ot is OptionType.CALL
     # Spot grid.
@@ -69,7 +75,9 @@ def _cn_solve(S, K, t, r, sigma, ot, b, american, local_vol_fn,
         if n == n_time - 1:
             V_prev = list(V)   # snapshot at one step (dt) remaining
         tau_new = (n + 1) * dt
-        # Interior CN coefficients (node-dependent for local vol).
+        # Time-weight: fully implicit (1.0) for the first `rannacher` steps out
+        # of expiry, Crank-Nicolson (0.5) thereafter.
+        th = 1.0 if n < rannacher else 0.5
         sub = [0.0] * (n_space + 1)
         diag = [0.0] * (n_space + 1)
         sup = [0.0] * (n_space + 1)
@@ -79,19 +87,18 @@ def _cn_solve(S, K, t, r, sigma, ot, b, american, local_vol_fn,
             vol = vol_at(Si, tau_new)
             sig2 = vol * vol * Si * Si / (ds * ds)
             drift = b * Si / (2.0 * ds)
-            a_i = 0.5 * (sig2 - 0.0)          # diffusion
             # alpha, beta, gamma of the operator L on interior nodes.
-            alpha = 0.5 * (0.5 * sig2 - drift)     # coefficient of V[i-1]
-            gamma = 0.5 * (0.5 * sig2 + drift)     # coefficient of V[i+1]
-            beta = -0.5 * sig2 - 0.5 * r           # coefficient of V[i]
-            # CN: (I - dt/1 * theta L) V_new = (I + dt*(1-theta) L) V_old, theta=0.5
-            sub[i] = -dt * alpha
-            diag[i] = 1.0 - dt * beta
-            sup[i] = -dt * gamma
+            alpha = 0.5 * sig2 - drift     # coefficient of V[i-1]
+            gamma = 0.5 * sig2 + drift     # coefficient of V[i+1]
+            beta = -sig2 - r               # coefficient of V[i]
+            # theta-scheme: (I - th dt L) V_new = (I + (1-th) dt L) V_old.
+            sub[i] = -th * dt * alpha
+            diag[i] = 1.0 - th * dt * beta
+            sup[i] = -th * dt * gamma
             rhs[i] = (V[i]
-                      + dt * alpha * V[i - 1]
-                      + dt * beta * V[i]
-                      + dt * gamma * V[i + 1])
+                      + (1.0 - th) * dt * alpha * V[i - 1]
+                      + (1.0 - th) * dt * beta * V[i]
+                      + (1.0 - th) * dt * gamma * V[i + 1])
         # Boundary conditions.
         disc = math.exp(-r * tau_new)
         carry_fac = math.exp((b - r) * tau_new)
@@ -140,12 +147,14 @@ def _interp(grid, ds, V, S):
 def crank_nicolson_price(S, K, t, r, sigma=None, option_type=OptionType.CALL,
                          b=None, american=False, local_vol_fn=None,
                          n_space=200, n_time=200, s_max_mult=4.0,
-                         psor_tol=1e-8, psor_max_iter=10000):
+                         psor_tol=1e-8, psor_max_iter=10000, rannacher=2):
     """Price a European or American option by a Crank-Nicolson PDE solve.
 
     Provide either a constant ``sigma`` or a ``local_vol_fn(S, t)`` (time ``t``
     measured forward from today). ``b`` is the cost of carry (defaults to ``r``);
     dividend yield ``q`` enters as ``b = r - q``. American exercise uses PSOR.
+    ``rannacher`` sets how many initial fully-implicit steps damp the payoff-kink
+    oscillation (0 = pure Crank-Nicolson).
 
     Returns the option value interpolated at spot ``S``.
     """
@@ -161,20 +170,23 @@ def crank_nicolson_price(S, K, t, r, sigma=None, option_type=OptionType.CALL,
 
     grid, ds, V, _Vp, _dt = _cn_solve(S, K, t, r, sigma, ot, b, american,
                                       local_vol_fn, n_space, n_time, s_max_mult,
-                                      psor_tol, psor_max_iter, None)
+                                      psor_tol, psor_max_iter, None,
+                                      rannacher=rannacher)
     return _interp(grid, ds, V, S)
 
 
 def crank_nicolson_greeks(S, K, t, r, sigma=None, option_type=OptionType.CALL,
                           b=None, american=False, local_vol_fn=None,
                           n_space=200, n_time=200, s_max_mult=4.0,
-                          psor_tol=1e-8, psor_max_iter=10000):
+                          psor_tol=1e-8, psor_max_iter=10000, rannacher=2):
     """Price plus delta, gamma and theta read straight off the CN grid.
 
     Delta and gamma come from central finite differences of the final value
     grid in spot (no extra solves), and theta from the difference between the
-    ``t=0`` grid and the grid one time step earlier. Returns a dict with price,
-    delta, gamma and theta (calendar, per year).
+    ``t=0`` grid and the grid one time step earlier. ``rannacher`` initial
+    fully-implicit steps damp the payoff-kink oscillation that otherwise
+    corrupts gamma near the strike. Returns a dict with price, delta, gamma and
+    theta (calendar, per year).
     """
     ot = _coerce_type(option_type)
     if S <= 0 or K <= 0:
@@ -188,7 +200,8 @@ def crank_nicolson_greeks(S, K, t, r, sigma=None, option_type=OptionType.CALL,
 
     grid, ds, V, V_prev, dt = _cn_solve(S, K, t, r, sigma, ot, b, american,
                                         local_vol_fn, n_space, n_time,
-                                        s_max_mult, psor_tol, psor_max_iter, None)
+                                        s_max_mult, psor_tol, psor_max_iter, None,
+                                        rannacher=rannacher)
     n_space_ = len(grid) - 1
     j = min(max(int(S / ds), 1), n_space_ - 2)
     price = _interp(grid, ds, V, S)

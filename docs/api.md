@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.135.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.136.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1787,22 +1787,26 @@ Auto-generated from `quantforge` v1.135.0 by `docs/gen_api.py` — do not edit b
 > Supports a constant ``sigma`` or a ``local_vol_fn(S, t)`` and a carry
 > ``b = r - q``. Returns the value at spot ``S``.
 
-### `crank_nicolson_greeks(S, K, t, r, sigma=None, option_type=<OptionType.CALL: 'call'>, b=None, american=False, local_vol_fn=None, n_space=200, n_time=200, s_max_mult=4.0, psor_tol=1e-08, psor_max_iter=10000)`  _function_
+### `crank_nicolson_greeks(S, K, t, r, sigma=None, option_type=<OptionType.CALL: 'call'>, b=None, american=False, local_vol_fn=None, n_space=200, n_time=200, s_max_mult=4.0, psor_tol=1e-08, psor_max_iter=10000, rannacher=2)`  _function_
 
 > Price plus delta, gamma and theta read straight off the CN grid.
 >
 > Delta and gamma come from central finite differences of the final value
 > grid in spot (no extra solves), and theta from the difference between the
-> ``t=0`` grid and the grid one time step earlier. Returns a dict with price,
-> delta, gamma and theta (calendar, per year).
+> ``t=0`` grid and the grid one time step earlier. ``rannacher`` initial
+> fully-implicit steps damp the payoff-kink oscillation that otherwise
+> corrupts gamma near the strike. Returns a dict with price, delta, gamma and
+> theta (calendar, per year).
 
-### `crank_nicolson_price(S, K, t, r, sigma=None, option_type=<OptionType.CALL: 'call'>, b=None, american=False, local_vol_fn=None, n_space=200, n_time=200, s_max_mult=4.0, psor_tol=1e-08, psor_max_iter=10000)`  _function_
+### `crank_nicolson_price(S, K, t, r, sigma=None, option_type=<OptionType.CALL: 'call'>, b=None, american=False, local_vol_fn=None, n_space=200, n_time=200, s_max_mult=4.0, psor_tol=1e-08, psor_max_iter=10000, rannacher=2)`  _function_
 
 > Price a European or American option by a Crank-Nicolson PDE solve.
 >
 > Provide either a constant ``sigma`` or a ``local_vol_fn(S, t)`` (time ``t``
 > measured forward from today). ``b`` is the cost of carry (defaults to ``r``);
 > dividend yield ``q`` enters as ``b = r - q``. American exercise uses PSOR.
+> ``rannacher`` sets how many initial fully-implicit steps damp the payoff-kink
+> oscillation (0 = pure Crank-Nicolson).
 >
 > Returns the option value interpolated at spot ``S``.
 
