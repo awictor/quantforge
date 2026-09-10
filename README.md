@@ -192,6 +192,15 @@ bk = book_second_order(positions)
 print(bk.vanna, bk.vomma, bk.charm)
 ```
 
+Size a hedge to a target Greek off the book's net exposures:
+
+```python
+from quantforge import delta_hedge_shares, vega_neutral_quantity
+
+delta_hedge_shares(book)                                        # shares to zero delta
+vega_neutral_quantity(book, S=100, K=110, t=0.5, r=0.04, sigma=0.25)  # option units to zero vega
+```
+
 ## Variance / volatility swaps
 
 Model-free fair strike of a variance swap from an option strip (the log-contract

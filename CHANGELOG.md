@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.32.0] - 2026-09-09
+
+### Added
+- `sizing.py`: hedge-quantity helpers. `delta_hedge_shares` zeros a book's net
+  delta with the underlying; `neutralize` solves the units of a hedge option to
+  move delta/gamma/vega to a target; `vega_neutral_quantity` and
+  `gamma_neutral_quantity` are the zero-target shortcuts. All work off the net
+  Greeks from `price_book`.
+
 ## [1.31.0] - 2026-09-09
 
 ### Added

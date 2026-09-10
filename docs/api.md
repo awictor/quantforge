@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.31.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.32.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -849,6 +849,30 @@ Auto-generated from `quantforge` v1.31.0 by `docs/gen_api.py` — do not edit by
 >
 > Returns a :class:`ScenarioGrid` whose ``pnl[i][j]`` is the change in book
 > market value under ``(spot_shocks[i], vol_shocks[j])``.
+
+## sizing
+
+### `delta_hedge_shares(book: quantforge.portfolio.Book) -> float`  _function_
+
+> Shares of the underlying to add to zero the book's net delta.
+>
+> A share has delta 1, so the hedge is ``-net_delta`` shares (negative = sell).
+
+### `gamma_neutral_quantity(book: quantforge.portfolio.Book, S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, multiplier=1.0) -> float`  _function_
+
+> Units of a hedge option that zero the book's net gamma.
+
+### `neutralize(book: quantforge.portfolio.Book, greek: str, S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, multiplier=1.0, target: float = 0.0) -> float`  _function_
+
+> Units of the hedge option to move ``greek`` to ``target`` (default 0).
+>
+> ``greek`` is one of "delta", "gamma", "vega". Returns the signed quantity
+> (in option units, before the multiplier is applied to notionals): solving
+> ``net_greek + qty * multiplier * hedge_greek = target``.
+
+### `vega_neutral_quantity(book: quantforge.portfolio.Book, S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, multiplier=1.0) -> float`  _function_
+
+> Units of a hedge option that zero the book's net vega.
 
 ## spline
 
