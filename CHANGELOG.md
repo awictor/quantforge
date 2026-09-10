@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.145.0] - 2026-09-10
+
+### Added
+- `asian_pde_price` (new `pde_asian.py`): continuously-averaged arithmetic Asian
+  option by an augmented-state 2D PDE in spot and running integral. The integral
+  state is pure transport (`dI = S dt`, no diffusion), so each backward step is
+  operator-split: a semi-Lagrangian transport in `I` (interpolate along the
+  characteristic) then a Crank-Nicolson diffusion in `S` on each `I`-line. The
+  `I`-grid is bounded by the average's reachable range so it resolves the strike
+  kink.
+- Verified: a `K -> 0` average-price call equals the discounted expected average
+  (~0.05); prices agree with Turnbull-Wakeman to ~0.25 and converge toward a
+  continuous-monitoring Monte Carlo as the `I`-grid refines.
+
 ## [1.144.0] - 2026-09-10
 
 ### Added

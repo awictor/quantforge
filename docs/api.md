@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.144.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.145.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1910,6 +1910,19 @@ Auto-generated from `quantforge` v1.144.0 by `docs/gen_api.py` — do not edit b
 > solved implicitly (Thomas); the cross term ``A0`` stays explicit.
 >
 > Args and return value mirror :func:`adi_two_asset`.
+
+## pde_asian
+
+### `asian_pde_price(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, n_s=120, n_i=120, n_time=100, s_max_mult=4.0)`  _function_
+
+> Fixed-strike continuously-averaged arithmetic Asian by a 2D PDE.
+>
+> ``b`` is the cost of carry (defaults to ``r``); dividend yield ``q`` enters
+> as ``b = r - q``. Averaging runs over the full life ``[0, t]``; the payoff is
+> ``(A_t - K)^+`` for a call and ``(K - A_t)^+`` for a put, with
+> ``A_t = (1/t) int_0^t S_u du``.
+>
+> Returns the value at spot ``S`` (the running integral starts at 0).
 
 ## perpetual
 
