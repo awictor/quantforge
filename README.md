@@ -172,7 +172,8 @@ condor = iron_condor(S=100, K_put_long=80, K_put_short=90,
 print(payoff_profile(condor, spots=[70, 90, 100, 110, 130]))
 ```
 
-Also `vertical_spread`, `strangle`, `risk_reversal`, and `butterfly`.
+Also `vertical_spread`, `strangle`, `risk_reversal`, `butterfly`,
+`ratio_spread` (net short options), and `backspread` (net long options).
 
 ## Batch pricing and portfolio risk
 

@@ -144,3 +144,42 @@ def iron_condor(S, K_put_long, K_put_short, K_call_short, K_call_long,
         _leg(S, K_call_long, t, r, sigma, OptionType.CALL, +1, b, mult, f"long call {K_call_long}"),
     ]
     return price_book(legs)
+
+
+def ratio_spread(S, K_long, K_short, t, r, sigma, kind="call", ratio=2,
+                 b=None, mult=1.0):
+    """Ratio spread: long 1 option at K_long, short ``ratio`` at K_short.
+
+    A call ratio spread (K_long < K_short, ratio > 1) is long one lower-strike
+    call and short several higher-strike calls -- typically a small credit or
+    debit with a capped-profit tent that turns into unlimited downside beyond
+    the short strikes. Returns the leg :class:`Book`.
+    """
+    ot = _coerce_type(kind)
+    if ratio < 1:
+        raise ValueError("ratio must be >= 1")
+    legs = [
+        _leg(S, K_long, t, r, sigma, ot, +1, b, mult, f"long {kind} {K_long}"),
+        _leg(S, K_short, t, r, sigma, ot, -ratio, b, mult,
+             f"short {ratio}x {kind} {K_short}"),
+    ]
+    return price_book(legs)
+
+
+def backspread(S, K_short, K_long, t, r, sigma, kind="call", ratio=2,
+               b=None, mult=1.0):
+    """Backspread: short 1 option at K_short, long ``ratio`` at K_long.
+
+    The mirror of a ratio spread -- net long options, so it profits from a large
+    move (unlimited upside for a call backspread) and loses a little in the
+    middle. Returns the leg :class:`Book`.
+    """
+    ot = _coerce_type(kind)
+    if ratio < 1:
+        raise ValueError("ratio must be >= 1")
+    legs = [
+        _leg(S, K_short, t, r, sigma, ot, -1, b, mult, f"short {kind} {K_short}"),
+        _leg(S, K_long, t, r, sigma, ot, +ratio, b, mult,
+             f"long {ratio}x {kind} {K_long}"),
+    ]
+    return price_book(legs)

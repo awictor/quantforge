@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.63.0] - 2026-09-09
+
+### Added
+- `ratio_spread` and `backspread` (in `strategy.py`): a ratio spread (long 1,
+  short `ratio` at a further strike; net short options) and its mirror the
+  backspread (short 1, long `ratio`; net long options). Both return a leg
+  `Book`, so net price/Greeks and the payoff diagram come from the engine.
+
 ## [1.62.0] - 2026-09-09
 
 ### Added

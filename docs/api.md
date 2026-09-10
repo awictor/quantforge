@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.62.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.63.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1229,6 +1229,14 @@ Auto-generated from `quantforge` v1.62.0 by `docs/gen_api.py` — do not edit by
 
 ## strategy
 
+### `backspread(S, K_short, K_long, t, r, sigma, kind='call', ratio=2, b=None, mult=1.0)`  _function_
+
+> Backspread: short 1 option at K_short, long ``ratio`` at K_long.
+>
+> The mirror of a ratio spread -- net long options, so it profits from a large
+> move (unlimited upside for a call backspread) and loses a little in the
+> middle. Returns the leg :class:`Book`.
+
 ### `break_evens(book: quantforge.portfolio.Book, lo: float, hi: float, n: int = 2000) -> List[float]`  _function_
 
 > Find terminal spots where total P&L (payoff - net premium) crosses zero.
@@ -1254,6 +1262,15 @@ Auto-generated from `quantforge` v1.62.0 by `docs/gen_api.py` — do not edit by
 ### `payoff_profile(book: quantforge.portfolio.Book, spots: Sequence[float]) -> List[float]`  _function_
 
 > Payoff at each terminal spot in ``spots``.
+
+### `ratio_spread(S, K_long, K_short, t, r, sigma, kind='call', ratio=2, b=None, mult=1.0)`  _function_
+
+> Ratio spread: long 1 option at K_long, short ``ratio`` at K_short.
+>
+> A call ratio spread (K_long < K_short, ratio > 1) is long one lower-strike
+> call and short several higher-strike calls -- typically a small credit or
+> debit with a capped-profit tent that turns into unlimited downside beyond
+> the short strikes. Returns the leg :class:`Book`.
 
 ### `risk_reversal(S, K_put, K_call, t, r, sigma, b=None, mult=1.0)`  _function_
 
