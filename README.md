@@ -230,6 +230,25 @@ quantforge american -S 100 -K 100 -t 1 -r 0.05 --sigma 0.2 --type put -b 0.02
 | FX option             | `b = r - r_foreign`  | `price`, `greeks`   |
 | American exercise     | any of the above     | `american_price`    |
 
+## Performance
+
+Pure-Python, but fast enough for interactive risk work. On a typical laptop
+(single core, CPython 3.12):
+
+| Operation                     | Throughput        |
+|-------------------------------|-------------------|
+| Call price (BSM)              | ~1.4M / sec       |
+| Full Greeks (6 outputs)       | ~245K / sec       |
+| Implied vol (Newton+bisect)   | ~110K / sec       |
+| American (200-step tree)      | ~220 / sec        |
+
+Implied-vol round-trips to a max price error of `1e-8`. Reproduce with:
+
+```bash
+python benchmarks/bench.py --n 100000
+python benchmarks/bench.py --vollib   # accuracy check vs py_vollib, if installed
+```
+
 ## Testing
 
 ```bash
