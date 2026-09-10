@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.100.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.101.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -890,6 +890,31 @@ Auto-generated from `quantforge` v1.100.0 by `docs/gen_api.py` — do not edit b
 > Yields are relative to the stock capital ``S``. If assigned (S_T >= K) the
 > return is the capped gain to the strike plus the premium; the breakeven is
 > ``S - premium`` (the stock can fall by the premium before a loss).
+
+## kou
+
+### `kou_price(S, K, t, r, sigma, lam, p, eta1, eta2, option_type=<OptionType.CALL: 'call'>, q=0.0, upper=200.0) -> float`  _function_
+
+> Price a European option under the Kou double-exponential jump-diffusion.
+>
+> Args:
+>     sigma: diffusion volatility.
+>     lam: jump intensity (expected jumps per year, >= 0).
+>     p: probability a jump is upward (in [0, 1]).
+>     eta1: up-jump tail rate (must be > 1 so E[e^Y] is finite).
+>     eta2: down-jump tail rate (> 0).
+>     q: continuous dividend yield.
+>
+> ``lam = 0`` recovers Black-Scholes. Puts use put-call parity.
+
+### `kou_smile(S, strikes, t, r, sigma, lam, p, eta1, eta2, q=0.0)`  _function_
+
+> Black-Scholes implied-vol smile the Kou model produces.
+>
+> Prices a call at each strike and inverts to a Black-Scholes implied vol,
+> returning ``(log_moneyness, vol)`` pairs sorted by strike on the forward
+> ``F = S e^{(r-q) t}``. An asymmetric jump distribution (``eta1 != eta2`` or
+> ``p != 1/2``) tilts the smile into a skew.
 
 ## localvol
 

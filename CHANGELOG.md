@@ -4,6 +4,21 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.101.0] - 2026-09-10
+
+### Added
+- Kou (2002) double-exponential jump-diffusion (new `kou.py`): `kou_price` and
+  `kou_smile`. The jump size is an asymmetric double exponential (up-jump tail
+  rate `eta1 > 1`, down-jump tail rate `eta2 > 0`, up-probability `p`), giving
+  fatter, asymmetric tails than Merton's Gaussian jumps with a still-analytic
+  Levy characteristic function. Priced with the same two-probability
+  Gauss-Legendre Fourier integral as the Heston/Bates pricers, with the jump
+  drift compensator keeping the discounted spot a martingale.
+- Verified: `lambda = 0` recovers Black-Scholes to 1e-14, put-call parity holds,
+  jumps raise the price, asymmetric jumps produce a downward skew, and the
+  Fourier price matches an independent double-exponential-jump Monte Carlo to
+  <0.9 standard errors on three parameter sets.
+
 ## [1.100.0] - 2026-09-10
 
 ### Added

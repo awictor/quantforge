@@ -39,6 +39,7 @@ from .lookback import (
 from .heston import heston_price, heston_smile
 from .heston_mc import heston_qe_mc
 from .bates import bates_price, bates_smile
+from .kou import kou_price, kou_smile
 from .rbergomi import (
     rbergomi_price, rbergomi_smile, rbergomi_price_cv, rbergomi_smile_cv,
 )
@@ -147,7 +148,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.100.0"
+__version__ = "1.101.0"
 
 __all__ = [
     "OptionType",
@@ -193,6 +194,8 @@ __all__ = [
     "heston_qe_mc",
     "bates_price",
     "bates_smile",
+    "kou_price",
+    "kou_smile",
     "rbergomi_price",
     "rbergomi_smile",
     "rbergomi_price_cv",
