@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.107.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.108.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1110,6 +1110,32 @@ Auto-generated from `quantforge` v1.107.0 by `docs/gen_api.py` — do not edit b
 >     b: cost of carry (defaults to r). Dividend yield q enters as b = r - q.
 >
 > Returns the option price (in-sample LSM estimate, mildly biased low).
+
+## meixner
+
+### `meixner_price(S, K, t, r, a, b, d, option_type=<OptionType.CALL: 'call'>, q=0.0, cm_alpha=1.5, upper=200.0) -> float`  _function_
+
+> Price a European option under the Meixner model via Carr-Madan inversion.
+>
+> Args:
+>     a: jump-size scale (> 0).
+>     b: asymmetry in ``(-pi, pi)``; ``b < 0`` gives a downward skew.
+>     d: activity / tail parameter (> 0).
+>     q: continuous dividend yield.
+>     cm_alpha: Carr-Madan damping. The transform needs the moment-generating
+>         function at ``s = cm_alpha + 1`` to be finite, i.e.
+>         ``a (cm_alpha + 1) + b < pi`` (the ``cosh`` argument must stay off its
+>         pole).
+>
+> Puts use put-call parity.
+
+### `meixner_smile(S, strikes, t, r, a, b, d, q=0.0, cm_alpha=1.5)`  _function_
+
+> Black-Scholes implied-vol smile the Meixner model produces.
+>
+> Prices a call at each strike and inverts to a Black-Scholes implied vol,
+> returning ``(log_moneyness, vol)`` pairs sorted by strike on the forward
+> ``F = S e^{(r-q) t}``. ``b < 0`` tilts the smile into a downward skew.
 
 ## merton
 

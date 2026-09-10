@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.108.0] - 2026-09-10
+
+### Added
+- Meixner Levy model (new `meixner.py`): `meixner_price` and `meixner_smile`.
+  Schoutens' Meixner process has the analytic exponent
+  `psi(u) = 2 d (ln cos(b/2) - ln cosh((a u - i b)/2))` (scale `a`, asymmetry
+  `b in (-pi, pi)`, activity `d`) and is priced through the shared Carr-Madan
+  engine, so it also gets the COS cross-check for free.
+- Verified: Carr-Madan and COS prices agree to ~1.7e-6 on three parameter sets,
+  put-call parity holds, `b < 0` gives a downward skew and `b > 0` an upward
+  skew, and more activity `d` raises the price.
+
 ## [1.107.0] - 2026-09-10
 
 ### Added
