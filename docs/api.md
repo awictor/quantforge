@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.116.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.117.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1015,6 +1015,16 @@ Auto-generated from `quantforge` v1.116.0 by `docs/gen_api.py` — do not edit b
 >
 > ``B[i]`` is the critical spot at time ``i * (t / n_steps)`` below which
 > immediate exercise is optimal; ``B[n_steps]`` is the expiry value.
+
+### `kim_put_greeks(S, K, t, r, sigma, q=0.0, n_steps=80)`  _function_
+
+> Delta, gamma, theta of a Kim American put, reusing one boundary solve.
+>
+> The early-exercise boundary is spot-independent, so it is solved once (the
+> expensive step) and the spot/time bumps only re-run the cheap European-plus-
+> premium evaluation. Delta and gamma come from central differences in ``S``
+> on that fixed boundary; theta from a maturity bump (which does re-solve the
+> boundary). Returns ``{price, delta, gamma, theta}``.
 
 ## kou
 

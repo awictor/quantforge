@@ -153,7 +153,7 @@ from .american import (
     bjerksund_stensland_1993,
 )
 from .kim import (
-    kim_american_put, kim_american_call, kim_exercise_boundary,
+    kim_american_put, kim_american_call, kim_exercise_boundary, kim_put_greeks,
 )
 from .baw import baw_american
 
@@ -166,7 +166,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.116.0"
+__version__ = "1.117.0"
 
 __all__ = [
     "OptionType",
@@ -442,6 +442,7 @@ __all__ = [
     "kim_american_put",
     "kim_american_call",
     "kim_exercise_boundary",
+    "kim_put_greeks",
     "baw_american",
     "__version__",
 ]

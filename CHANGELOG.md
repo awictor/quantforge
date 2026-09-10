@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.117.0] - 2026-09-10
+
+### Added
+- `kim_put_greeks` (in `kim.py`): delta, gamma and theta of a Kim American put.
+  The early-exercise boundary is spot-independent, so it is solved once (the
+  expensive step) and the spot bumps only re-run the cheap European-plus-premium
+  evaluation on that fixed boundary; theta uses a maturity bump.
+- Verified against binomial bump Greeks: delta matches to ~5e-3, gamma to ~2e-3
+  (stable in the grid size -- the small residual is Kim's boundary
+  approximation, not quadrature noise), put delta is negative, gamma positive,
+  and theta negative.
+
 ## [1.116.0] - 2026-09-10
 
 ### Added

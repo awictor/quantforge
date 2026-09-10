@@ -152,6 +152,45 @@ def kim_american_call(S, K, t, r, sigma, q=0.0, n_steps=80):
     return kim_american_put(K, S, t, q, sigma, q=r, n_steps=n_steps)
 
 
+def _kim_put_from_boundary(S, K, t, r, q, sigma, B, dt):
+    """American put value at spot ``S`` reusing an already-solved boundary."""
+    if S <= B[0]:
+        return K - S
+    euro = put_price(S, K, t, r, sigma, b=r - q)
+    prem = _premium_put(S, K, t, r, q, sigma, B, dt)
+    return max(euro + prem, K - S)
+
+
+def kim_put_greeks(S, K, t, r, sigma, q=0.0, n_steps=80):
+    """Delta, gamma, theta of a Kim American put, reusing one boundary solve.
+
+    The early-exercise boundary is spot-independent, so it is solved once (the
+    expensive step) and the spot/time bumps only re-run the cheap European-plus-
+    premium evaluation. Delta and gamma come from central differences in ``S``
+    on that fixed boundary; theta from a maturity bump (which does re-solve the
+    boundary). Returns ``{price, delta, gamma, theta}``.
+    """
+    if S <= 0 or K <= 0:
+        raise ValueError("S and K must be positive")
+    if t <= 0 or sigma <= 0:
+        raise ValueError("need t > 0 and sigma > 0")
+
+    B, dt = _boundary_put(K, t, r, q, sigma, n_steps)
+    base = _kim_put_from_boundary(S, K, t, r, q, sigma, B, dt)
+    hS = 1e-3 * S
+    up = _kim_put_from_boundary(S + hS, K, t, r, q, sigma, B, dt)
+    dn = _kim_put_from_boundary(S - hS, K, t, r, q, sigma, B, dt)
+    delta = (up - dn) / (2.0 * hS)
+    gamma = (up - 2.0 * base + dn) / (hS * hS)
+
+    ht = min(1e-3, 0.25 * t)
+    p_up = kim_american_put(S, K, t + ht, r, sigma, q=q, n_steps=n_steps)
+    p_dn = kim_american_put(S, K, t - ht, r, sigma, q=q, n_steps=n_steps)
+    theta = -(p_up - p_dn) / (2.0 * ht)
+
+    return {"price": base, "delta": delta, "gamma": gamma, "theta": theta}
+
+
 def kim_exercise_boundary(K, t, r, sigma, q=0.0, n_steps=80):
     """Return the American-put early-exercise boundary ``B(t_i)`` on the grid.
 
