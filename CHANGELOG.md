@@ -4,6 +4,27 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.209.0] - 2026-09-10
+
+### Changed
+- Extended the Sobol generator from 6 to 12 dimensions, adding the canonical
+  Joe-Kuo primitive-polynomial coefficients and direction-number seeds for dims
+  7-12. Validated end-to-end: the RQMC geometric-Asian price matches the exact
+  discrete-geometric closed form at every `n_steps` from 2 to 12 (a wrong
+  polynomial/seed would break the low-discrepancy property and bias it),
+  regression-tested by `test_extended_sobol_dims_match_closed_form`. This lets
+  every `sobol_*_rqmc` routine use up to 12 monitoring dates.
+
+### Added
+- `sobol_parisian_rqmc` (in `sobol.py`): randomized-QMC Parisian barrier option
+  with an honest standard error -- knock-out/knock-in triggered only after the
+  spot spends a *consecutive* `window` on the barrier's far side. Bridge
+  construction + per-dimension Cranley-Patterson rotation; the discrete analogue
+  of `parisian_barrier_mc`.
+- Verified: matches `parisian_barrier_mc` at equal `n_steps` for down-out and
+  down-in; a knock-in plus its knock-out sum to the vanilla at the same seed; a
+  longer required window raises the knock-out value.
+
 ## [1.208.0] - 2026-09-10
 
 ### Added

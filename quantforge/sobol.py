@@ -29,14 +29,25 @@ _SCALE = float(1 << _BITS)
 # and Joe-Kuo initial direction numbers m_i for dimensions 2.. (dim 1 is trivial).
 # Dimension 1 uses v_k = 2^{BITS-1-k}; dims below cover the leading coordinates
 # that carry the Brownian bridge's dominant variance.
-_POLY = [0, 1, 1, 2, 1, 4]                        # a-bits per dim (dim>=2)
+# ``a`` bit-packs the inner coefficients of each dimension's primitive
+# polynomial; ``m`` is its initial direction-number seed. Dims 1-6 are the
+# original hand-verified set; dims 7-12 add the canonical Joe-Kuo
+# (new-joe-kuo-6.21201) values, validated end-to-end in the test suite by the
+# exact discrete-geometric-Asian closed form at each n_steps.
+_POLY = [0, 1, 1, 2, 1, 4, 4, 2, 4, 7, 11, 13]    # a-bits per dim (dim>=2)
 _MINIT = [
-    [],                    # dim 1 (special-cased)
-    [1],                   # dim 2, poly x+1        (degree 1)
-    [1, 1],                # dim 3, poly x^2+x+1    (degree 2)
-    [1, 3, 7],             # dim 4, poly x^3+x+1
-    [1, 1, 5],             # dim 5, poly x^3+x^2+1
-    [1, 3, 1, 1],          # dim 6, poly x^4+x+1
+    [],                          # dim 1 (special-cased)
+    [1],                         # dim 2
+    [1, 1],                      # dim 3
+    [1, 3, 7],                   # dim 4
+    [1, 1, 5],                   # dim 5
+    [1, 3, 1, 1],                # dim 6
+    [1, 3, 5, 13],               # dim 7   (Joe-Kuo)
+    [1, 1, 5, 5, 17],            # dim 8   (Joe-Kuo)
+    [1, 1, 5, 5, 5],             # dim 9   (Joe-Kuo)
+    [1, 7, 11, 13, 7],           # dim 10  (Joe-Kuo)
+    [1, 3, 7, 9, 5],             # dim 11  (Joe-Kuo)
+    [1, 1, 3, 13, 11],           # dim 12  (Joe-Kuo)
 ]
 
 
@@ -325,6 +336,77 @@ def sobol_lookback_rqmc(S, t, r, sigma, option_type=OptionType.CALL, b=None,
                 if sT > smax:
                     smax = sT
             total += (sT - smin) if call else (smax - sT)
+        estimates.append(disc * total / n_paths)
+
+    price, se = _summarize(estimates)
+    return MCResult(price=price, std_error=se, n_paths=n_rand * n_paths)
+
+
+def sobol_parisian_rqmc(S, K, H, t, r, sigma, window,
+                        option_type=OptionType.CALL, barrier="down-out", b=None,
+                        n_steps=12, n_paths=4096, n_rand=24,
+                        seed=None) -> MCResult:
+    """Randomized-QMC Parisian barrier option with an honest standard error.
+
+    A Parisian barrier triggers only if the spot stays on the barrier's far side
+    for a *consecutive* elapsed time of at least ``window`` years, so it is
+    robust to brief spikes. ``barrier`` is ``down-out``/``down-in``/``up-out``/
+    ``up-in`` ("down" watches ``S <= H``, "up" ``S >= H``). Normals come from one
+    ``n_steps``-dim Sobol point through the Brownian bridge, randomized by a
+    per-dimension Cranley-Patterson rotation, so ``n_rand`` shifts give a genuine
+    SE. The discretely-monitored analogue of
+    :func:`quantforge.parisian_barrier_mc`, which it cross-checks. ``n_steps`` is
+    capped by the Sobol generator's dimension (now 12), so the window is resolved
+    to ``round(window / dt)`` consecutive steps.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if H <= 0:
+        raise ValueError("barrier H must be positive")
+    if b is None:
+        b = r
+    barrier = str(barrier).lower()
+    if barrier not in ("down-out", "down-in", "up-out", "up-in"):
+        raise ValueError("barrier must be down-out/down-in/up-out/up-in")
+    if window <= 0 or window > t:
+        raise ValueError("window must be in (0, t]")
+    if n_steps < 1 or n_steps > len(_MINIT):
+        raise ValueError(f"n_steps must be in 1..{len(_MINIT)}")
+    if n_rand < 2:
+        raise ValueError("n_rand must be >= 2 to estimate a standard error")
+    up = barrier.startswith("up")
+    knock_in = barrier.endswith("in")
+    dt = t / n_steps
+    window_steps = max(1, int(round(window / dt)))
+    disc = math.exp(-r * t)
+    sign = 1.0 if ot is OptionType.CALL else -1.0
+    rng = random.Random(seed)
+
+    estimates = []
+    for _ in range(n_rand):
+        shift = [rng.random() for _ in range(n_steps)]
+        sob = Sobol(n_steps)
+        total = 0.0
+        for _ in range(n_paths):
+            pt = sob.next()
+            u = [(pt[d] + shift[d]) % 1.0 for d in range(n_steps)]
+            W = brownian_bridge_path(u, t)
+            consec = 0
+            activated = False
+            s = S
+            for i in range(n_steps):
+                s = S * math.exp((b - 0.5 * sigma * sigma) * ((i + 1) * dt)
+                                 + sigma * W[i])
+                beyond = (s >= H) if up else (s <= H)
+                if beyond:
+                    consec += 1
+                    if consec >= window_steps:
+                        activated = True
+                else:
+                    consec = 0
+            alive = activated if knock_in else (not activated)
+            if alive:
+                total += max(sign * (s - K), 0.0)
         estimates.append(disc * total / n_paths)
 
     price, se = _summarize(estimates)

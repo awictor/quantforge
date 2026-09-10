@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.208.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.209.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3310,6 +3310,21 @@ Auto-generated from `quantforge` v1.208.0 by `docs/gen_api.py` — do not edit b
 > grows. ``n_steps`` is capped by the Sobol generator's dimension. Returns an
 > :class:`MCResult` with the mean price, across-randomization SE, and
 > ``n_paths`` = total points.
+
+### `sobol_parisian_rqmc(S, K, H, t, r, sigma, window, option_type=<OptionType.CALL: 'call'>, barrier='down-out', b=None, n_steps=12, n_paths=4096, n_rand=24, seed=None) -> quantforge.montecarlo.MCResult`  _function_
+
+> Randomized-QMC Parisian barrier option with an honest standard error.
+>
+> A Parisian barrier triggers only if the spot stays on the barrier's far side
+> for a *consecutive* elapsed time of at least ``window`` years, so it is
+> robust to brief spikes. ``barrier`` is ``down-out``/``down-in``/``up-out``/
+> ``up-in`` ("down" watches ``S <= H``, "up" ``S >= H``). Normals come from one
+> ``n_steps``-dim Sobol point through the Brownian bridge, randomized by a
+> per-dimension Cranley-Patterson rotation, so ``n_rand`` shifts give a genuine
+> SE. The discretely-monitored analogue of
+> :func:`quantforge.parisian_barrier_mc`, which it cross-checks. ``n_steps`` is
+> capped by the Sobol generator's dimension (now 12), so the window is resolved
+> to ``round(window / dt)`` consecutive steps.
 
 ## spline
 

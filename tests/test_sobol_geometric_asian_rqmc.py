@@ -19,6 +19,18 @@ def test_matches_exact_closed_form(ot):
     assert rq.price == pytest.approx(cf, abs=3.0 * rq.std_error)
 
 
+@pytest.mark.parametrize("ns", list(range(2, 13)))
+def test_extended_sobol_dims_match_closed_form(ns):
+    # Locks the direction-number table (dims 7-12 added in 1.209.0): the RQMC geo
+    # Asian must match the exact closed form at every supported n_steps. A wrong
+    # primitive polynomial or seed would break the low-discrepancy property and
+    # bias this.
+    cf = _discrete_geometric_asian(S, K, T, R, SIG, OptionType.CALL, R, ns)
+    rq = sobol_geometric_asian_rqmc(S, K, T, R, SIG, OptionType.CALL,
+                                    n_steps=ns, n_paths=4096, n_rand=24, seed=7)
+    assert rq.price == pytest.approx(cf, abs=4.0 * rq.std_error)
+
+
 def test_dividend_carry_matches_closed_form():
     b = R - 0.03
     cf = _discrete_geometric_asian(S, K, T, R, SIG, OptionType.CALL, b, NS)
