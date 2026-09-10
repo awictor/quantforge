@@ -97,6 +97,9 @@ from .attribution import PnLAttribution, attribute_pnl, CarryRoll, carry_roll_pn
 from .income import IncomeMetrics, covered_call, cash_secured_put
 from .vegabucket import VegaBuckets, vega_buckets
 from .qmc import halton, european_qmc
+from .sobol import (
+    Sobol, brownian_bridge_path, sobol_european, sobol_asian,
+)
 from .correlation import (
     implied_correlation, index_vol_from_correlation, dispersion_basket_vol,
     correlation_term_structure,
@@ -159,7 +162,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.113.1"
+__version__ = "1.114.0"
 
 __all__ = [
     "OptionType",
@@ -311,6 +314,10 @@ __all__ = [
     "vega_buckets",
     "halton",
     "european_qmc",
+    "Sobol",
+    "brownian_bridge_path",
+    "sobol_european",
+    "sobol_asian",
     "implied_correlation",
     "index_vol_from_correlation",
     "dispersion_basket_vol",

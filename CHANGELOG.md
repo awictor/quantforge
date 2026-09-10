@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.114.0] - 2026-09-10
+
+### Added
+- Sobol sequence + Brownian-bridge QMC (new `sobol.py`): a `Sobol` generator
+  built from primitive-polynomial direction numbers (Joe-Kuo initial values) via
+  the Gray-code recurrence, `brownian_bridge_path` which loads a path's dominant
+  variance onto the leading (most uniform) Sobol coordinates, and two pricers --
+  `sobol_european` (1-D) and `sobol_asian` (Brownian-bridge, multi-step).
+- Verified: Sobol points cover the unit cube evenly (each quarter of the 1-D
+  coordinate within 2%), `sobol_european` matches Black-Scholes and its error is
+  materially smaller than pseudo-random MC at matched N (~0.007 vs ~0.09 at
+  N=8192), the Brownian bridge has the right terminal moments (mean ~0, variance
+  ~t), and `sobol_asian` matches a discrete-monitoring pseudo-random MC to ~0.01.
+
 ## [1.113.1] - 2026-09-10
 
 ### Changed

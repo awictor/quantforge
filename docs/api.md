@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.113.1 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.114.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1843,6 +1843,37 @@ Auto-generated from `quantforge` v1.113.1 by `docs/gen_api.py` — do not edit b
 ### `vega_neutral_quantity(book: quantforge.portfolio.Book, S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, multiplier=1.0) -> float`  _function_
 
 > Units of a hedge option that zero the book's net vega.
+
+## sobol
+
+### `Sobol(dim: int)`  _class_
+
+> A Sobol sequence generator (Gray-code recurrence).
+
+### `brownian_bridge_path(unifs: List[float], t: float)`  _function_
+
+> Build a Brownian path W_0..W_n at times k*dt from Sobol uniforms.
+>
+> ``unifs`` has length ``n`` (one per time step). The endpoint is drawn from
+> the first coordinate, then successive midpoints from the rest -- so the
+> leading (most uniform) Sobol dimensions carry the dominant variance.
+> Returns the list ``[W_1, ..., W_n]`` (W_0 = 0).
+
+### `sobol_asian(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, n_steps=6, n_paths=8192)`  _function_
+
+> QMC arithmetic-average Asian price with Sobol + a Brownian bridge.
+>
+> Each path's ``n_steps`` normals come from one Sobol point mapped through the
+> Brownian-bridge construction, so the dominant path variance lands on the
+> leading (most uniform) Sobol dimensions. ``n_steps`` is capped by the
+> generator's dimension.
+
+### `sobol_european(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, n_paths=8192)`  _function_
+
+> QMC European price using a 1-D Sobol sequence (single-step payoff).
+>
+> A direct Sobol analogue of :func:`quantforge.european_qmc`; converges faster
+> than pseudo-random Monte Carlo for this smooth one-dimensional integral.
 
 ## spline
 
