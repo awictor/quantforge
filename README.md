@@ -66,6 +66,10 @@ print(american_price(S=100, K=100, t=1.0, r=0.05, sigma=0.2,
 from quantforge import bjerksund_stensland, bjerksund_stensland_greeks
 print(bjerksund_stensland(S=100, K=100, t=1.0, r=0.05, sigma=0.2,
                           option_type="put", b=0.02))
+# The simpler single-boundary Bjerksund-Stensland (1993) is also available:
+from quantforge import bjerksund_stensland_1993
+print(bjerksund_stensland_1993(S=100, K=100, t=1.0, r=0.05, sigma=0.2,
+                               option_type="put", b=0.02))
 # American Greeks (delta/gamma/vega/theta/rho) by finite differences:
 print(bjerksund_stensland_greeks(S=100, K=100, t=1.0, r=0.05, sigma=0.2,
                                  option_type="put", b=0.02))

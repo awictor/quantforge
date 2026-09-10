@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.79.0] - 2026-09-10
+
+### Added
+- `bjerksund_stensland_1993` (in `american.py`): the single-flat-boundary
+  Bjerksund-Stensland (1993) American approximation — simpler and slightly less
+  accurate than the 2002 two-region version, within a few cents of the binomial
+  tree. Calls direct, puts via the exact transformation.
+
 ## [1.78.0] - 2026-09-10
 
 ### Added

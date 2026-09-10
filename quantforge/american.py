@@ -231,3 +231,49 @@ def early_exercise_premium(S, K, t, r, sigma, option_type=OptionType.CALL,
     premium = american - european
     return {"american": american, "european": european,
             "premium": max(premium, 0.0)}
+
+
+def _bs1993_call(S, K, t, r, b, sigma):
+    """American call via the Bjerksund-Stensland 1993 single-boundary model."""
+    if b >= r:
+        return bsm_price(S, K, t, r, sigma, OptionType.CALL, b=b)
+
+    v2 = sigma * sigma
+    beta = (0.5 - b / v2) + math.sqrt((b / v2 - 0.5) ** 2 + 2.0 * r / v2)
+    b_inf = beta / (beta - 1.0) * K
+    b0 = max(K, r / (r - b) * K)
+    h = -(b * t + 2.0 * sigma * math.sqrt(t)) * (b0 / (b_inf - b0))
+    trigger = b0 + (b_inf - b0) * (1.0 - math.exp(h))
+
+    if S >= trigger:
+        return S - K
+    alpha = (trigger - K) * trigger ** (-beta)
+    return (alpha * S ** beta
+            - alpha * _phi(S, t, beta, trigger, trigger, r, b, sigma)
+            + _phi(S, t, 1.0, trigger, trigger, r, b, sigma)
+            - _phi(S, t, 1.0, K, trigger, r, b, sigma)
+            - K * _phi(S, t, 0.0, trigger, trigger, r, b, sigma)
+            + K * _phi(S, t, 0.0, K, trigger, r, b, sigma))
+
+
+def bjerksund_stensland_1993(S, K, t, r, sigma, option_type=OptionType.CALL, b=None):
+    """American option price via Bjerksund-Stensland (1993), single flat boundary.
+
+    A simpler and slightly less accurate predecessor to the 2002 two-region
+    model (:func:`bjerksund_stensland`): it uses one flat exercise boundary. Calls
+    are priced directly; puts via the exact transformation
+    ``P(S,K,r,b) = C(K,S,r-b,-b)``.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if b is None:
+        b = r
+    if t == 0 or sigma == 0:
+        disc = math.exp(-r * t)
+        fwd = S * math.exp(b * t)
+        payoff = max(fwd - K, 0.0) if ot is OptionType.CALL else max(K - fwd, 0.0)
+        intrinsic = max(S - K, 0.0) if ot is OptionType.CALL else max(K - S, 0.0)
+        return max(disc * payoff, intrinsic)
+    if ot is OptionType.CALL:
+        return _bs1993_call(S, K, t, r, b, sigma)
+    return _bs1993_call(K, S, t, r - b, -b, sigma)

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.78.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.79.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -11,6 +11,15 @@ Auto-generated from `quantforge` v1.78.0 by `docs/gen_api.py` — do not edit by
 > Args mirror the rest of the engine. ``b`` is the cost of carry (defaults to
 > ``r``); dividend yield q enters as b = r - q. American puts are priced via
 > the exact put-call transformation P(S,K,r,b) = C(K,S,r-b,-b).
+
+### `bjerksund_stensland_1993(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> American option price via Bjerksund-Stensland (1993), single flat boundary.
+>
+> A simpler and slightly less accurate predecessor to the 2002 two-region
+> model (:func:`bjerksund_stensland`): it uses one flat exercise boundary. Calls
+> are priced directly; puts via the exact transformation
+> ``P(S,K,r,b) = C(K,S,r-b,-b)``.
 
 ### `bjerksund_stensland_greeks(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
 
