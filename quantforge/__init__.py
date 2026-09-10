@@ -24,8 +24,11 @@ from .implied import implied_volatility
 from .binomial import american_price
 from .portfolio import Contract, Position, BookRisk, Book, price_book
 from .svi import SVIParams, calibrate_svi
+from .exotics import (
+    cash_or_nothing, asset_or_nothing, barrier_option, geometric_asian, Barrier,
+)
 
-__version__ = "0.3.0"
+__version__ = "0.4.0"
 
 __all__ = [
     "OptionType",
@@ -48,5 +51,10 @@ __all__ = [
     "price_book",
     "SVIParams",
     "calibrate_svi",
+    "cash_or_nothing",
+    "asset_or_nothing",
+    "barrier_option",
+    "geometric_asian",
+    "Barrier",
     "__version__",
 ]

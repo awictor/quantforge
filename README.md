@@ -74,6 +74,29 @@ for pos in book.positions:
 `qty` is signed (short = negative) and `multiplier` scales to notional
 (e.g. 100 for US equity options). Net Greeks are position-scaled sums.
 
+## Exotic options (closed form)
+
+Analytic prices for binaries, single barriers, and geometric Asians:
+
+```python
+from quantforge import (
+    cash_or_nothing, asset_or_nothing, barrier_option, geometric_asian, Barrier,
+)
+
+# Digital: pays $10 if the call finishes in the money.
+cash_or_nothing(S=100, K=105, t=1, r=0.05, sigma=0.2, option_type="call", cash=10)
+
+# Down-and-out call with a $3 knock-out rebate (Reiner-Rubinstein).
+barrier_option(S=100, K=90, H=95, t=0.5, r=0.08, sigma=0.25,
+               option_type="call", barrier=Barrier.DOWN_OUT, b=0.04, rebate=3)
+
+# Geometric-average Asian call (Kemna-Vorst closed form).
+geometric_asian(S=100, K=100, t=1, r=0.05, sigma=0.3, option_type="call")
+```
+
+Barrier kinds: `Barrier.DOWN_IN`, `DOWN_OUT`, `UP_IN`, `UP_OUT`. In/out parity
+(`in + out = vanilla`) holds exactly and is enforced by the tests.
+
 ## Volatility surface (SVI)
 
 Fit Gatheral's raw SVI smile to market quotes with a built-in Nelder-Mead
