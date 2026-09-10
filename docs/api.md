@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.155.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.156.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2969,6 +2969,21 @@ Auto-generated from `quantforge` v1.155.0 by `docs/gen_api.py` — do not edit b
 > for per-vol-point), scaled by ``qty * multiplier``.
 
 ## vix
+
+### `equity_premium_lower_bound(S0, t, r, vol_fn, q=0.0, n_strikes=201, width=6.0)`  _function_
+
+> Martin's (2013) lower bound on the expected equity excess return.
+>
+> Martin shows that, under the (empirically mild) negative-correlation
+> condition, the expected simple excess return of the market over ``[0, t]`` is
+> bounded below by the risk-neutral *simple variance*:
+>
+>     (1/t) E_0[ (R_market - R_f) ] >= Rf * SVIX^2,
+>
+> where ``SVIX^2`` is the annualized simple-variance index
+> (:func:`svix_from_smile`) and ``Rf = e^{r t}`` the gross risk-free return.
+> This returns the annualized lower bound ``Rf * SVIX^2`` -- a model-free floor
+> on the equity premium computable purely from option prices.
 
 ### `svix_from_smile(S0, t, r, vol_fn, q=0.0, n_strikes=201, width=6.0)`  _function_
 

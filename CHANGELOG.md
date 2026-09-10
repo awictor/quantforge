@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.156.0] - 2026-09-10
+
+### Added
+- `equity_premium_lower_bound` (in `vix.py`): Martin's (2013) model-free lower
+  bound on the expected equity excess return, `Rf * SVIX^2`, computed from the
+  option smile via the simple-variance index. Under the negative-correlation
+  condition the annualized expected market excess return is bounded below by
+  this quantity.
+- Verified: a flat 20% vol gives a bound near `Rf * sigma^2`; a higher vol
+  raises it; and it equals `Rf` times the SVIX variance exactly.
+
 ## [1.155.0] - 2026-09-10
 
 ### Added

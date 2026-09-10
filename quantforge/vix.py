@@ -126,3 +126,24 @@ def svix_from_smile(S0, t, r, vol_fn, q=0.0, n_strikes=201, width=6.0):
 
     var = (2.0 * growth / (t * F * F)) * strip
     return var, 100.0 * math.sqrt(max(var, 0.0))
+
+
+def equity_premium_lower_bound(S0, t, r, vol_fn, q=0.0, n_strikes=201,
+                               width=6.0):
+    """Martin's (2013) lower bound on the expected equity excess return.
+
+    Martin shows that, under the (empirically mild) negative-correlation
+    condition, the expected simple excess return of the market over ``[0, t]`` is
+    bounded below by the risk-neutral *simple variance*:
+
+        (1/t) E_0[ (R_market - R_f) ] >= Rf * SVIX^2,
+
+    where ``SVIX^2`` is the annualized simple-variance index
+    (:func:`svix_from_smile`) and ``Rf = e^{r t}`` the gross risk-free return.
+    This returns the annualized lower bound ``Rf * SVIX^2`` -- a model-free floor
+    on the equity premium computable purely from option prices.
+    """
+    var, _svix = svix_from_smile(S0, t, r, vol_fn, q=q, n_strikes=n_strikes,
+                                 width=width)
+    rf = math.exp(r * t)
+    return rf * var
