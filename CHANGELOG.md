@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.227.0] - 2026-09-10
+
+### Added
+- `nig_greeks` (in `nig.py`): spot Greeks (`delta`, `gamma`, `theta`) plus
+  process-parameter sensitivities (`d_alpha` tail steepness, `d_beta` skew) of a
+  NIG option by central finite differences on `nig_price`. The `d_beta` bump is
+  clipped to keep `|beta| < alpha` on both sides.
+- Verified: delta matches a finite difference; call delta in (0,1) with positive
+  gamma, put delta negative; the parameter sensitivities are finite.
+
 ## [1.226.0] - 2026-09-10
 
 ### Added

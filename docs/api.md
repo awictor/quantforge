@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.226.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.227.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2618,6 +2618,16 @@ Auto-generated from `quantforge` v1.226.0 by `docs/gen_api.py` — do not edit b
 > Closed-form cross-check for the Monte Carlo :func:`worst_of_call` put.
 
 ## nig
+
+### `nig_greeks(S, K, t, r, alpha, beta, delta, option_type=<OptionType.CALL: 'call'>, q=0.0, cm_alpha=1.5)`  _function_
+
+> Greeks of a NIG option by central finite differences.
+>
+> Central differences of :func:`nig_price` for the spot Greeks ``delta``
+> (dV/dS), ``gamma`` (d2V/dS2), and ``theta`` (calendar decay), plus the
+> process-parameter sensitivities ``d_alpha`` (dV/dalpha, tail steepness) and
+> ``d_beta`` (dV/dbeta, skew). Returns a dict with ``price``, ``delta``,
+> ``gamma``, ``theta``, ``d_alpha``, ``d_beta``.
 
 ### `nig_price(S, K, t, r, alpha, beta, delta, option_type=<OptionType.CALL: 'call'>, q=0.0, cm_alpha=1.5, upper=200.0) -> float`  _function_
 

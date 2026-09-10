@@ -58,6 +58,44 @@ def nig_price(S, K, t, r, alpha, beta, delta, option_type=OptionType.CALL,
                       option_type, alpha=cm_alpha, upper=upper)
 
 
+def nig_greeks(S, K, t, r, alpha, beta, delta, option_type=OptionType.CALL,
+               q=0.0, cm_alpha=1.5):
+    """Greeks of a NIG option by central finite differences.
+
+    Central differences of :func:`nig_price` for the spot Greeks ``delta``
+    (dV/dS), ``gamma`` (d2V/dS2), and ``theta`` (calendar decay), plus the
+    process-parameter sensitivities ``d_alpha`` (dV/dalpha, tail steepness) and
+    ``d_beta`` (dV/dbeta, skew). Returns a dict with ``price``, ``delta``,
+    ``gamma``, ``theta``, ``d_alpha``, ``d_beta``.
+    """
+    if alpha <= 0 or delta <= 0:
+        raise ValueError("alpha and delta must be positive")
+    if abs(beta) >= alpha:
+        raise ValueError("need |beta| < alpha")
+    if t <= 0:
+        raise ValueError("t must be positive")
+
+    def px(S_=S, t_=t, a=alpha, bta=beta):
+        return nig_price(S_, K, t_, r, a, bta, delta, option_type, q=q,
+                         cm_alpha=cm_alpha)
+
+    base = px()
+    hS = 1e-3 * S
+    up, dn = px(S_=S + hS), px(S_=S - hS)
+    d_delta = (up - dn) / (2.0 * hS)
+    gamma = (up - 2.0 * base + dn) / (hS * hS)
+    ht = min(1e-4, 0.25 * t)
+    theta = -(px(t_=t + ht) - px(t_=t - ht)) / (2.0 * ht)
+    ha = 1e-3 * alpha
+    d_alpha = (px(a=alpha + ha) - px(a=alpha - ha)) / (2.0 * ha)
+    hb = 1e-3 * max(abs(beta), 1.0)
+    # Keep |beta| < alpha on both sides of the bump.
+    hb = min(hb, 0.5 * (alpha - abs(beta)))
+    d_beta = (px(bta=beta + hb) - px(bta=beta - hb)) / (2.0 * hb)
+    return {"price": base, "delta": d_delta, "gamma": gamma, "theta": theta,
+            "d_alpha": d_alpha, "d_beta": d_beta}
+
+
 def nig_smile(S, strikes, t, r, alpha, beta, delta, q=0.0, cm_alpha=1.5):
     """Black-Scholes implied-vol smile the NIG model produces.
 

@@ -72,7 +72,7 @@ from .pde2d import (
 from .pde_asian import asian_pde_price
 from .kou import kou_price, kou_greeks, kou_smile
 from .cgmy import cgmy_price, cgmy_smile
-from .nig import nig_price, nig_smile
+from .nig import nig_price, nig_greeks, nig_smile
 from .meixner import meixner_price, meixner_smile
 from .levycalib import calibrate_levy_smile, levy_psi
 from .levysurface import LevySurface, LevyCalendarViolation
@@ -261,7 +261,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.226.0"
+__version__ = "1.227.0"
 
 __all__ = [
     "OptionType",
@@ -354,6 +354,7 @@ __all__ = [
     "cgmy_price",
     "cgmy_smile",
     "nig_price",
+    "nig_greeks",
     "nig_smile",
     "meixner_price",
     "meixner_smile",
