@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.44.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.45.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -808,6 +808,22 @@ Auto-generated from `quantforge` v1.44.0 by `docs/gen_api.py` — do not edit by
 ### `overhedge_payoff(oh: quantforge.overhedge.Overhedge, spot_at_expiry: float, is_call=True) -> float`  _function_
 
 > Terminal payoff of the replicating spread at ``spot_at_expiry``.
+
+## perpetual
+
+### `perpetual_american(S, K, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> Price a perpetual American option (Merton 1973), exact closed form.
+>
+> Args:
+>     b: cost of carry (defaults to r). A perpetual call requires ``b < r``
+>         (some carry cost / dividend) to be finite and worth exercising;
+>         with ``b >= r`` the call is never exercised early and its value
+>         tends to the spot.
+
+### `perpetual_exercise_boundary(K, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> The optimal-exercise spot ``S*`` for a perpetual American option.
 
 ## portfolio
 

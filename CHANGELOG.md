@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.45.0] - 2026-09-09
+
+### Added
+- `perpetual.py`: `perpetual_american` prices a no-expiry American option in
+  exact closed form (Merton 1973), and `perpetual_exercise_boundary` returns the
+  flat optimal-exercise spot. Matches the binomial American price at long
+  maturity; a call with carry >= rate is never exercised early.
+
 ## [1.44.0] - 2026-09-09
 
 ### Added

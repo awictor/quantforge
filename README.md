@@ -78,6 +78,10 @@ print(richardson_american(S=100, K=100, t=1.0, r=0.05, sigma=0.2,
 from quantforge import bermudan_lsm
 print(bermudan_lsm(S=100, K=100, t=1.0, r=0.05, sigma=0.2,
                    option_type="put", n_steps=50, n_paths=40_000, seed=1))
+
+# Perpetual (no-expiry) American, exact closed form (Merton).
+from quantforge import perpetual_american
+print(perpetual_american(S=100, K=100, r=0.08, sigma=0.3, option_type="put"))
 ```
 
 ## Scenario / stress grid
