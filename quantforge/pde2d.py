@@ -163,3 +163,143 @@ def adi_spread_option(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0,
 
     return adi_two_asset(raw_payoff, S1, S2, t, r, sigma1, sigma2, rho,
                          q1, q2, n1, n2, n_time, width)
+
+
+def adi_two_asset_cs(payoff, S1, S2, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0,
+                     n1=60, n2=60, n_time=40, width=5.0, theta=0.5):
+    """Price a European two-asset option by the Craig-Sneyd ADI scheme.
+
+    The Peaceman-Rachford scheme (:func:`adi_two_asset`) is only first-order in
+    time when a mixed (correlation) derivative is present. Craig-Sneyd fixes that
+    with a Douglas predictor followed by a corrector that re-applies the explicit
+    cross term at the predicted value, restoring second-order time accuracy. The
+    directional operators ``A1``/``A2`` (each carrying half the ``r`` term) are
+    solved implicitly (Thomas); the cross term ``A0`` stays explicit.
+
+    Args and return value mirror :func:`adi_two_asset`.
+    """
+    if S1 <= 0 or S2 <= 0:
+        raise ValueError("prices must be positive")
+    if t < 0:
+        raise ValueError("t must be non-negative")
+    if t == 0:
+        return payoff(S1, S2)
+
+    x1c, x2c = math.log(S1), math.log(S2)
+    h1 = width * sigma1 * math.sqrt(t)
+    h2 = width * sigma2 * math.sqrt(t)
+    x1 = [x1c - h1 + 2.0 * h1 * i / n1 for i in range(n1 + 1)]
+    x2 = [x2c - h2 + 2.0 * h2 * j / n2 for j in range(n2 + 1)]
+    dx1 = 2.0 * h1 / n1
+    dx2 = 2.0 * h2 / n2
+    dt = t / n_time
+
+    mu1 = r - q1 - 0.5 * sigma1 * sigma1
+    mu2 = r - q2 - 0.5 * sigma2 * sigma2
+    a1 = 0.5 * sigma1 * sigma1
+    a2 = 0.5 * sigma2 * sigma2
+    corr = rho * sigma1 * sigma2
+
+    # A1 / A2 carry half the discount term each; A0 (cross) carries none.
+    l1_lo = a1 / (dx1 * dx1) - mu1 / (2.0 * dx1)
+    l1_di = -2.0 * a1 / (dx1 * dx1) - 0.5 * r
+    l1_up = a1 / (dx1 * dx1) + mu1 / (2.0 * dx1)
+    l2_lo = a2 / (dx2 * dx2) - mu2 / (2.0 * dx2)
+    l2_di = -2.0 * a2 / (dx2 * dx2) - 0.5 * r
+    l2_up = a2 / (dx2 * dx2) + mu2 / (2.0 * dx2)
+
+    def bc(i, j):
+        return payoff(math.exp(x1[i]), math.exp(x2[j]))
+
+    V = [[bc(i, j) for j in range(n2 + 1)] for i in range(n1 + 1)]
+
+    def A1(U, i, j):
+        return l1_lo * U[i - 1][j] + l1_di * U[i][j] + l1_up * U[i + 1][j]
+
+    def A2(U, i, j):
+        return l2_lo * U[i][j - 1] + l2_di * U[i][j] + l2_up * U[i][j + 1]
+
+    def A0(U, i, j):
+        return corr * (U[i + 1][j + 1] - U[i + 1][j - 1]
+                       - U[i - 1][j + 1] + U[i - 1][j - 1]) / (4.0 * dx1 * dx2)
+
+    def implicit_x1(Y0, V0):
+        """Solve (I - theta dt A1) X = Y0 - theta dt A1 V0, per x2-line."""
+        X = [[0.0] * (n2 + 1) for _ in range(n1 + 1)]
+        for i in range(n1 + 1):
+            X[i][0] = bc(i, 0)
+            X[i][n2] = bc(i, n2)
+        for j in range(n2 + 1):
+            X[0][j] = bc(0, j)
+            X[n1][j] = bc(n1, j)
+        for j in range(1, n2):
+            sub = [0.0] * (n1 + 1)
+            dia = [0.0] * (n1 + 1)
+            sup = [0.0] * (n1 + 1)
+            rhs = [0.0] * (n1 + 1)
+            dia[0] = 1.0
+            rhs[0] = bc(0, j)
+            dia[n1] = 1.0
+            rhs[n1] = bc(n1, j)
+            for i in range(1, n1):
+                sub[i] = -theta * dt * l1_lo
+                dia[i] = 1.0 - theta * dt * l1_di
+                sup[i] = -theta * dt * l1_up
+                rhs[i] = Y0[i][j] - theta * dt * A1(V0, i, j)
+            col = _thomas(sub, dia, sup, rhs)
+            for i in range(n1 + 1):
+                X[i][j] = col[i]
+        return X
+
+    def implicit_x2(Y1, V0):
+        """Solve (I - theta dt A2) X = Y1 - theta dt A2 V0, per x1-line."""
+        X = [[0.0] * (n2 + 1) for _ in range(n1 + 1)]
+        for i in range(n1 + 1):
+            X[i][0] = bc(i, 0)
+            X[i][n2] = bc(i, n2)
+        for j in range(n2 + 1):
+            X[0][j] = bc(0, j)
+            X[n1][j] = bc(n1, j)
+        for i in range(1, n1):
+            sub = [0.0] * (n2 + 1)
+            dia = [0.0] * (n2 + 1)
+            sup = [0.0] * (n2 + 1)
+            rhs = [0.0] * (n2 + 1)
+            dia[0] = 1.0
+            rhs[0] = bc(i, 0)
+            dia[n2] = 1.0
+            rhs[n2] = bc(i, n2)
+            for j in range(1, n2):
+                sub[j] = -theta * dt * l2_lo
+                dia[j] = 1.0 - theta * dt * l2_di
+                sup[j] = -theta * dt * l2_up
+                rhs[j] = Y1[i][j] - theta * dt * A2(V0, i, j)
+            row = _thomas(sub, dia, sup, rhs)
+            for j in range(n2 + 1):
+                X[i][j] = row[j]
+        return X
+
+    for _ in range(n_time):
+        # Douglas predictor: explicit full-operator Euler step.
+        Y0 = [[V[i][j] for j in range(n2 + 1)] for i in range(n1 + 1)]
+        for i in range(1, n1):
+            for j in range(1, n2):
+                Y0[i][j] = V[i][j] + dt * (A0(V, i, j) + A1(V, i, j)
+                                           + A2(V, i, j))
+        Y1 = implicit_x1(Y0, V)
+        Y2 = implicit_x2(Y1, V)
+        # Craig-Sneyd corrector: re-apply the cross term at the predicted value.
+        Y0h = [[Y0[i][j] for j in range(n2 + 1)] for i in range(n1 + 1)]
+        for i in range(1, n1):
+            for j in range(1, n2):
+                Y0h[i][j] = Y0[i][j] + 0.5 * dt * (A0(Y2, i, j) - A0(V, i, j))
+        Z1 = implicit_x1(Y0h, V)
+        Z2 = implicit_x2(Z1, V)
+        V = Z2
+
+    i = min(max(int((x1c - x1[0]) / dx1), 0), n1 - 1)
+    j = min(max(int((x2c - x2[0]) / dx2), 0), n2 - 1)
+    wi = (x1c - x1[i]) / dx1
+    wj = (x2c - x2[j]) / dx2
+    return ((1 - wi) * (1 - wj) * V[i][j] + wi * (1 - wj) * V[i + 1][j]
+            + (1 - wi) * wj * V[i][j + 1] + wi * wj * V[i + 1][j + 1])

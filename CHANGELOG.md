@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.143.0] - 2026-09-10
+
+### Added
+- `adi_two_asset_cs` (in `pde2d.py`): the Craig-Sneyd ADI scheme for two-asset
+  options. Peaceman-Rachford is only first-order in time when a mixed
+  (correlation) derivative is present; Craig-Sneyd restores second order with a
+  Douglas predictor followed by a corrector that re-applies the explicit cross
+  term at the predicted value. The directional operators are solved implicitly
+  (Thomas), the cross term explicitly.
+- Verified: matches the Margrabe exchange closed form; at few time steps it is
+  markedly more accurate than Peaceman-Rachford (0.0004 vs 0.043 at n_time=10),
+  its purpose; it converges in space; and the zero-correlation case matches
+  Margrabe.
+
 ## [1.142.0] - 2026-09-10
 
 ### Added

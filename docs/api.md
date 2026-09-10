@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.142.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.143.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1886,6 +1886,19 @@ Auto-generated from `quantforge` v1.142.0 by `docs/gen_api.py` — do not edit b
 >     width: half-width of the log-price box in standard deviations.
 >
 > Returns the discounted option value interpolated at ``(S1, S2)``.
+
+### `adi_two_asset_cs(payoff, S1, S2, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0, n1=60, n2=60, n_time=40, width=5.0, theta=0.5)`  _function_
+
+> Price a European two-asset option by the Craig-Sneyd ADI scheme.
+>
+> The Peaceman-Rachford scheme (:func:`adi_two_asset`) is only first-order in
+> time when a mixed (correlation) derivative is present. Craig-Sneyd fixes that
+> with a Douglas predictor followed by a corrector that re-applies the explicit
+> cross term at the predicted value, restoring second-order time accuracy. The
+> directional operators ``A1``/``A2`` (each carrying half the ``r`` term) are
+> solved implicitly (Thomas); the cross term ``A0`` stays explicit.
+>
+> Args and return value mirror :func:`adi_two_asset`.
 
 ## perpetual
 
