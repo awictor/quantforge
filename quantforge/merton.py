@@ -73,6 +73,39 @@ def merton_jump_price(S, K, t, r, sigma, lam, mu_j, sigma_j,
     return total
 
 
+def merton_jump_greeks(S, K, t, r, sigma, lam, mu_j, sigma_j,
+                       option_type=OptionType.CALL, b=None):
+    """Greeks of a Merton jump-diffusion option by central finite differences.
+
+    Differentiates :func:`merton_jump_price` for ``delta`` (dV/dS), ``gamma``
+    (d2V/dS2), ``vega`` (dV/dsigma, the *diffusion*-vol sensitivity), and
+    ``theta`` (calendar decay). At ``lam = 0`` (no jumps) the Greeks reduce to the
+    vanilla Black-Scholes Greeks. Returns a dict with ``price`` and those fields.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if lam < 0 or sigma_j < 0:
+        raise ValueError("lam and sigma_j must be non-negative")
+    if b is None:
+        b = r
+
+    def px(S_=S, t_=t, sigma_=sigma):
+        return merton_jump_price(S_, K, t_, r, sigma_, lam, mu_j, sigma_j, ot,
+                                 b=b)
+
+    base = px()
+    hS = 1e-4 * S
+    up, dn = px(S_=S + hS), px(S_=S - hS)
+    delta = (up - dn) / (2.0 * hS)
+    gamma = (up - 2.0 * base + dn) / (hS * hS)
+    hv = 1e-4
+    vega = (px(sigma_=sigma + hv) - px(sigma_=sigma - hv)) / (2.0 * hv)
+    ht = min(1e-4, 0.25 * t)
+    theta = -(px(t_=t + ht) - px(t_=t - ht)) / (2.0 * ht)
+    return {"price": base, "delta": delta, "gamma": gamma, "vega": vega,
+            "theta": theta}
+
+
 def merton_smile(S, strikes, t, r, sigma, lam, mu_j, sigma_j, b=None):
     """The Black-Scholes implied-vol smile a Merton jump-diffusion produces.
 

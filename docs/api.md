@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.222.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.223.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2008,6 +2008,15 @@ Auto-generated from `quantforge` v1.222.0 by `docs/gen_api.py` — do not edit b
 > ``F = S e^{(r-q) t}``. ``b < 0`` tilts the smile into a downward skew.
 
 ## merton
+
+### `merton_jump_greeks(S, K, t, r, sigma, lam, mu_j, sigma_j, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> Greeks of a Merton jump-diffusion option by central finite differences.
+>
+> Differentiates :func:`merton_jump_price` for ``delta`` (dV/dS), ``gamma``
+> (d2V/dS2), ``vega`` (dV/dsigma, the *diffusion*-vol sensitivity), and
+> ``theta`` (calendar decay). At ``lam = 0`` (no jumps) the Greeks reduce to the
+> vanilla Black-Scholes Greeks. Returns a dict with ``price`` and those fields.
 
 ### `merton_jump_price(S, K, t, r, sigma, lam, mu_j, sigma_j, option_type=<OptionType.CALL: 'call'>, b=None, max_terms=200, tol=1e-12) -> float`  _function_
 
