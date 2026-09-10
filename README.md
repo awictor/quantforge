@@ -880,6 +880,11 @@ print(params.implied_vol(k=0.05, t=t))
 
 # Static no-arbitrage wing check (Lee's slope bound).
 print(params.is_arbitrage_free_wings())
+
+# Butterfly (density) no-arbitrage check via the Gatheral-Jacquier g-function.
+from quantforge import svi_is_butterfly_free, svi_butterfly_arbitrage
+print(svi_is_butterfly_free(params))
+print(svi_butterfly_arbitrage(params))   # log-moneyness points that violate
 ```
 
 ## Command line

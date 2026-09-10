@@ -129,3 +129,45 @@ def calibrate_svi(
     params = unpack(best_p)
     rmse = math.sqrt(best_f / wsum)
     return params, rmse
+
+
+def _svi_derivs(p: SVIParams, k):
+    """Total variance w(k) and its first two derivatives w'(k), w''(k)."""
+    d = k - p.m
+    root = math.sqrt(d * d + p.s * p.s)
+    w = p.a + p.b * (p.rho * d + root)
+    wp = p.b * (p.rho + d / root)
+    wpp = p.b * p.s * p.s / (root * root * root)
+    return w, wp, wpp
+
+
+def svi_g(p: SVIParams, k):
+    """Gatheral-Jacquier g-function of a raw-SVI slice at log-moneyness ``k``.
+
+    The slice is free of butterfly (static/density) arbitrage iff ``g(k) >= 0``
+    for all ``k`` (the implied risk-neutral density is then non-negative). With
+    ``w = w(k)``, ``w'`` and ``w''``:
+
+        g(k) = (1 - k w' / (2w))^2 - (w'^2 / 4)(1/w + 1/4) + w''/2.
+    """
+    w, wp, wpp = _svi_derivs(p, k)
+    if w <= 0:
+        return float("-inf")
+    term1 = (1.0 - k * wp / (2.0 * w)) ** 2
+    term2 = (wp * wp / 4.0) * (1.0 / w + 0.25)
+    return term1 - term2 + wpp / 2.0
+
+
+def svi_butterfly_arbitrage(p: SVIParams, ks=None, tol=1e-10):
+    """Return the log-moneyness points where the SVI slice has butterfly arb.
+
+    Scans ``ks`` (default a wide grid) and reports those where ``g(k) < -tol``.
+    An empty list means the slice is butterfly-arbitrage-free on the grid.
+    """
+    if ks is None:
+        ks = [(-2.0 + 4.0 * i / 400.0) for i in range(401)]
+    return [k for k in ks if svi_g(p, k) < -tol]
+
+
+def svi_is_butterfly_free(p: SVIParams, ks=None) -> bool:
+    return not svi_butterfly_arbitrage(p, ks)

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.52.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.53.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1231,6 +1231,27 @@ Auto-generated from `quantforge` v1.52.0 by `docs/gen_api.py` — do not edit by
 > Returns ``(params, rmse)`` where rmse is the root-mean-square total-variance
 > error. Uses an unconstrained Nelder-Mead over a smooth reparametrization
 > that enforces ``b >= 0``, ``s > 0``, and ``rho in (-1, 1)``.
+
+### `svi_butterfly_arbitrage(p: quantforge.svi.SVIParams, ks=None, tol=1e-10)`  _function_
+
+> Return the log-moneyness points where the SVI slice has butterfly arb.
+>
+> Scans ``ks`` (default a wide grid) and reports those where ``g(k) < -tol``.
+> An empty list means the slice is butterfly-arbitrage-free on the grid.
+
+### `svi_g(p: quantforge.svi.SVIParams, k)`  _function_
+
+> Gatheral-Jacquier g-function of a raw-SVI slice at log-moneyness ``k``.
+>
+> The slice is free of butterfly (static/density) arbitrage iff ``g(k) >= 0``
+> for all ``k`` (the implied risk-neutral density is then non-negative). With
+> ``w = w(k)``, ``w'`` and ``w''``:
+>
+>     g(k) = (1 - k w' / (2w))^2 - (w'^2 / 4)(1/w + 1/4) + w''/2.
+
+### `svi_is_butterfly_free(p: quantforge.svi.SVIParams, ks=None) -> bool`  _function_
+
+> (no docstring)
 
 ## trinomial
 

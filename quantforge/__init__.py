@@ -80,7 +80,9 @@ from .gramcharlier import (
     corrado_su_call, corrado_su_price, realized_skewness, realized_excess_kurtosis,
 )
 from .portfolio import Contract, Position, BookRisk, Book, price_book
-from .svi import SVIParams, calibrate_svi
+from .svi import (
+    SVIParams, calibrate_svi, svi_g, svi_butterfly_arbitrage, svi_is_butterfly_free,
+)
 from .sabr import SABRParams, sabr_vol, calibrate_sabr
 from .vannavolga import VannaVolgaSmile, pillar_vols
 from .surface import VolSurface, SurfaceSlice, CalendarViolation
@@ -113,7 +115,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.52.0"
+__version__ = "1.53.0"
 
 __all__ = [
     "OptionType",
@@ -231,6 +233,9 @@ __all__ = [
     "price_book",
     "SVIParams",
     "calibrate_svi",
+    "svi_g",
+    "svi_butterfly_arbitrage",
+    "svi_is_butterfly_free",
     "SABRParams",
     "sabr_vol",
     "calibrate_sabr",

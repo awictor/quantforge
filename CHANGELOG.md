@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.53.0] - 2026-09-09
+
+### Added
+- SVI butterfly-arbitrage check (in `svi.py`): `svi_g` evaluates the
+  Gatheral-Jacquier g-function of a slice (>= 0 everywhere iff no butterfly /
+  density arbitrage), with `svi_butterfly_arbitrage` listing violating strikes
+  and `svi_is_butterfly_free` the boolean. Cross-checked against the sign of the
+  Breeden-Litzenberger density.
+
 ## [1.52.0] - 2026-09-09
 
 ### Added
