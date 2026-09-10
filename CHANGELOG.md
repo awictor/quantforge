@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.142.0] - 2026-09-10
+
+### Added
+- Two-asset ADI PDE solver (new `pde2d.py`): `adi_two_asset` prices a European
+  two-asset option for any terminal payoff by the Peaceman-Rachford
+  alternating-direction-implicit scheme in log-prices -- each time step is two
+  half-steps (implicit in x1, then x2) with the mixed correlation derivative
+  explicit, each half a set of tridiagonal Thomas solves. `adi_spread_option`
+  wraps it for `max(S1 - S2 - K, 0)`.
+- Verified: the zero-strike spread matches the Margrabe exchange closed form
+  (~2e-3, converging in the grid), a non-zero-strike spread matches the Kirk
+  approximation (~3e-3), higher asset correlation lowers the spread price
+  monotonically, and a generic max-of-two payoff prices sanely.
+
 ## [1.141.0] - 2026-09-10
 
 ### Added

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.141.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.142.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1868,6 +1868,24 @@ Auto-generated from `quantforge` v1.141.0 by `docs/gen_api.py` — do not edit b
 > oscillation (0 = pure Crank-Nicolson).
 >
 > Returns the option value interpolated at spot ``S``.
+
+## pde2d
+
+### `adi_spread_option(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0, n1=60, n2=60, n_time=40, width=5.0)`  _function_
+
+> European spread-option price ``max(S1 - S2 - K, 0)`` by ADI.
+
+### `adi_two_asset(payoff, S1, S2, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0, n1=60, n2=60, n_time=40, width=5.0)`  _function_
+
+> Price a European two-asset option by Peaceman-Rachford ADI.
+>
+> Args:
+>     payoff: callable ``payoff(s1, s2)`` giving the terminal value.
+>     S1, S2: spot prices. sigma1, sigma2, rho: vols and correlation.
+>     q1, q2: dividend yields. n1, n2, n_time: grid resolutions.
+>     width: half-width of the log-price box in standard deviations.
+>
+> Returns the discounted option value interpolated at ``(S1, S2)``.
 
 ## perpetual
 
