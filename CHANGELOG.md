@@ -4,6 +4,21 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.121.0] - 2026-09-10
+
+### Added
+- `bermudan_swaption_g2pp` (new `bermudan_swaption.py`): Bermudan swaption
+  pricing by Longstaff-Schwartz on the G2++ state. Simulates the correlated
+  ``(x, y)`` factors on the exercise schedule (exact OU transitions), carries a
+  discretely-compounded money-market numeraire from the one-period G2++ bonds,
+  values the co-terminal swap in closed form from the state, and regresses the
+  discounted continuation on a quadratic basis in ``(x, y)`` for the
+  exercise decision.
+- Verified: price is positive; a multi-date Bermudan is worth at least the
+  single-exercise value; payer and receiver are both positive; a payer's value
+  falls as the fixed rate rises; payer/receiver swap values are antisymmetric;
+  the simulated factors have ~zero mean.
+
 ## [1.120.0] - 2026-09-10
 
 ### Added

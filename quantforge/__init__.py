@@ -167,6 +167,7 @@ from .g2pp import (
     g2pp_V, zero_bond as g2pp_zero_bond, bond_option as g2pp_bond_option,
     caplet as g2pp_caplet,
 )
+from .bermudan_swaption import bermudan_swaption_g2pp
 
 # Vectorized NumPy fast path is optional; only expose it if NumPy is present.
 try:  # pragma: no cover - trivial availability branch
@@ -177,7 +178,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.120.0"
+__version__ = "1.121.0"
 
 __all__ = [
     "OptionType",
@@ -467,5 +468,6 @@ __all__ = [
     "g2pp_zero_bond",
     "g2pp_bond_option",
     "g2pp_caplet",
+    "bermudan_swaption_g2pp",
     "__version__",
 ]

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.120.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.121.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -172,6 +172,23 @@ Auto-generated from `quantforge` v1.120.0 by `docs/gen_api.py` — do not edit b
 > ``b`` is the cost of carry (defaults to ``r``); dividend yield ``q`` enters
 > as ``b = r - q``. A no-dividend American call (``b = r``) returns the
 > European value. Falls back to intrinsic below/above the critical spot.
+
+## bermudan_swaption
+
+### `bermudan_swaption_g2pp(P0, exercise_times, fixed_rate, a, b, sigma, eta, rho, payer=True, n_paths=20000, seed=None)`  _function_
+
+> Price a Bermudan swaption under G2++ by Longstaff-Schwartz.
+>
+> Args:
+>     P0: today's discount-factor function ``P(0, T)``.
+>     exercise_times: increasing list of exercise dates; at date ``t_k`` the
+>         holder may enter the co-terminal swap paying/receiving ``fixed_rate``
+>         on the remaining schedule ``exercise_times[k:]`` (annual periods).
+>     payer: True for a payer swaption (pay fixed), else receiver.
+>     a, b, sigma, eta, rho: G2++ parameters.
+>
+> Returns the Bermudan swaption price (today's value). Uses a
+> money-market numeraire built from one-period bonds along each path.
 
 ## binomial
 
