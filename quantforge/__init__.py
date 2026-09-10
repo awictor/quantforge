@@ -28,6 +28,10 @@ from .forwardstart import forward_start_price, cliquet_price
 from .hedging import StickyRule, smile_delta, smile_delta_from_smile, skew_slope
 from .lookback import floating_strike_lookback, fixed_strike_lookback
 from .heston import heston_price
+from .bachelier import (
+    bachelier_price, bachelier_delta, bachelier_gamma, bachelier_vega,
+    bachelier_implied_vol,
+)
 from .portfolio import Contract, Position, BookRisk, Book, price_book
 from .svi import SVIParams, calibrate_svi
 from .sabr import SABRParams, sabr_vol, calibrate_sabr
@@ -54,7 +58,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.7.0"
+__version__ = "1.8.0"
 
 __all__ = [
     "OptionType",
@@ -83,6 +87,11 @@ __all__ = [
     "floating_strike_lookback",
     "fixed_strike_lookback",
     "heston_price",
+    "bachelier_price",
+    "bachelier_delta",
+    "bachelier_gamma",
+    "bachelier_vega",
+    "bachelier_implied_vol",
     "Contract",
     "Position",
     "BookRisk",

@@ -330,6 +330,23 @@ Total variance is interpolated linearly in maturity (the standard
 no-arbitrage-friendly scheme) and the calendar check enforces that
 `w(k, t)` is non-decreasing in `t` at every strike.
 
+## Bachelier (normal) model
+
+For rates and spread options where the forward can go negative and a lognormal
+model breaks down. `sigma` is the normal (absolute) volatility:
+
+```python
+from quantforge import bachelier_price, bachelier_implied_vol
+
+# Works with negative forwards/strikes (e.g. a rate spread).
+bachelier_price(F=-0.5, K=-1.0, t=1.0, r=0.0, sigma=2.0, option_type="call")
+
+# Back out the normal vol from a market price.
+bachelier_implied_vol(target_price=6.12, F=100, K=100, t=1.0, r=0.02)
+```
+
+Includes analytic `bachelier_delta`, `bachelier_gamma`, and `bachelier_vega`.
+
 ## Heston stochastic volatility
 
 Full stochastic-variance pricing via the characteristic function, integrated

@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.8.0] - 2026-09-09
+
+### Added
+- `bachelier.py`: the Bachelier (normal) model — `bachelier_price`, analytic
+  delta/gamma/vega, and `bachelier_implied_vol` (Newton + bisection). Prices
+  options on a forward following arithmetic Brownian motion, so it handles
+  negative forwards/strikes (rates and spread options) where the lognormal
+  model breaks down. `sigma` here is the normal (absolute) volatility.
+
 ## [1.7.0] - 2026-09-09
 
 ### Added
