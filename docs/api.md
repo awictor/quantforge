@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.73.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.74.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -724,6 +724,34 @@ Auto-generated from `quantforge` v1.73.0 by `docs/gen_api.py` — do not edit by
 >
 > Returns the implied vol, or raises ValueError if the quote is outside the
 > no-arbitrage band (no finite vol can produce it).
+
+## income
+
+### `IncomeMetrics(premium: float, static_yield: float, annualized_yield: float, if_assigned_return: float, breakeven: float) -> None`  _class_
+
+> IncomeMetrics(premium: float, static_yield: float, annualized_yield: float, if_assigned_return: float, breakeven: float)
+
+### `cash_secured_put(S, K, t, r, sigma, b=None, premium=None) -> quantforge.income.IncomeMetrics`  _function_
+
+> Cash-secured put: short a put struck at ``K``, holding ``K`` cash.
+>
+> Args:
+>     premium: option premium; if None, uses the BSM put value.
+>
+> Yields are relative to the secured cash ``K``. If assigned (S_T <= K) the
+> trader buys the stock at ``K`` net of premium, so the effective purchase and
+> breakeven price is ``K - premium``.
+
+### `covered_call(S, K, t, r, sigma, b=None, premium=None) -> quantforge.income.IncomeMetrics`  _function_
+
+> Covered call: long stock at ``S``, short a call struck at ``K``.
+>
+> Args:
+>     premium: option premium; if None, uses the BSM call value.
+>
+> Yields are relative to the stock capital ``S``. If assigned (S_T >= K) the
+> return is the capped gain to the strike plus the premium; the breakeven is
+> ``S - premium`` (the stock can fall by the premium before a loss).
 
 ## localvol
 

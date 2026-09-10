@@ -258,6 +258,16 @@ delta_hedge_shares(book)                                        # shares to zero
 vega_neutral_quantity(book, S=100, K=110, t=0.5, r=0.04, sigma=0.25)  # option units to zero vega
 ```
 
+Covered-call / cash-secured-put income yields:
+
+```python
+from quantforge import covered_call, cash_secured_put
+
+m = covered_call(S=100, K=105, t=0.25, r=0.04, sigma=0.25)
+print(m.annualized_yield, m.breakeven, m.if_assigned_return)
+cash_secured_put(S=100, K=95, t=0.25, r=0.04, sigma=0.3)
+```
+
 Kelly-criterion bet/leverage sizing:
 
 ```python

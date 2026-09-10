@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.74.0] - 2026-09-10
+
+### Added
+- `income.py`: covered-call and cash-secured-put income analytics —
+  `covered_call` and `cash_secured_put` return an `IncomeMetrics` with the
+  premium (model or supplied), static and annualized yield, the if-assigned
+  return, and the breakeven (`S - premium` / `K - premium`).
+
 ## [1.73.0] - 2026-09-10
 
 ### Added

@@ -74,6 +74,7 @@ from .bookgreeks import (
     BookSecondOrder, book_second_order, ThetaCarry, theta_carry_report,
 )
 from .attribution import PnLAttribution, attribute_pnl, CarryRoll, carry_roll_pnl
+from .income import IncomeMetrics, covered_call, cash_secured_put
 from .vegabucket import VegaBuckets, vega_buckets
 from .qmc import halton, european_qmc
 from .correlation import (
@@ -126,7 +127,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.73.0"
+__version__ = "1.74.0"
 
 __all__ = [
     "OptionType",
@@ -230,6 +231,9 @@ __all__ = [
     "attribute_pnl",
     "CarryRoll",
     "carry_roll_pnl",
+    "IncomeMetrics",
+    "covered_call",
+    "cash_secured_put",
     "VegaBuckets",
     "vega_buckets",
     "halton",
