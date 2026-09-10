@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.68.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.69.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -926,6 +926,16 @@ Auto-generated from `quantforge` v1.68.0 by `docs/gen_api.py` — do not edit by
 > Monte Carlo on correlated GBM. Best-of and worst-of calls satisfy
 > ``best + worst = call(S1) + call(S2)`` at the same strike (Stulz), which the
 > tests check.
+
+### `exchange_greeks(S1, S2, t, sigma1, sigma2, rho, q1=0.0, q2=0.0)`  _function_
+
+> Greeks of a Margrabe exchange option (payoff max(S1 - S2, 0)) by FD.
+>
+> Returns a dict with the two spot deltas (``delta1`` = dV/dS1,
+> ``delta2`` = dV/dS2), the two own-gammas (``gamma1``, ``gamma2``), the
+> cross-gamma (``cross`` = d2V/dS1 dS2), and the correlation sensitivity
+> (``corr_vega`` = dV/drho). All by central finite differences on the exact
+> Margrabe formula.
 
 ### `exchange_option(S1, S2, t, sigma1, sigma2, rho, q1=0.0, q2=0.0) -> float`  _function_
 

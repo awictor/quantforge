@@ -50,6 +50,7 @@ from .density import (
 from .varswap import variance_swap_strike, volatility_swap_strike
 from .multiasset import (
     exchange_option, spread_option, basket_option, best_of_call, worst_of_call,
+    exchange_greeks,
 )
 from .strategy import (
     payoff_at_expiry, payoff_profile, break_evens,
@@ -122,7 +123,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.68.0"
+__version__ = "1.69.0"
 
 __all__ = [
     "OptionType",
@@ -183,6 +184,7 @@ __all__ = [
     "basket_option",
     "best_of_call",
     "worst_of_call",
+    "exchange_greeks",
     "payoff_at_expiry",
     "payoff_profile",
     "break_evens",

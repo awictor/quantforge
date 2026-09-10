@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.69.0] - 2026-09-10
+
+### Added
+- `exchange_greeks` (in `multiasset.py`): Greeks of a Margrabe exchange option
+  by finite differences — the two spot deltas, own-gammas, the cross-gamma
+  (`d2V/dS1 dS2`), and the correlation sensitivity. Cross-gamma equals minus the
+  own-gamma (degree-1 homogeneity) and correlation vega is negative.
+
 ## [1.68.0] - 2026-09-10
 
 ### Added

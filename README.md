@@ -481,6 +481,10 @@ from quantforge import exchange_option, spread_option, basket_option
 # Right to swap asset 2 for asset 1: max(S1 - S2, 0). Exact, rate-independent.
 exchange_option(S1=100, S2=95, t=1.0, sigma1=0.2, sigma2=0.25, rho=0.3)
 
+# Its Greeks (two deltas, own/cross gammas, correlation vega) by finite diff:
+from quantforge import exchange_greeks
+exchange_greeks(S1=100, S2=95, t=1.0, sigma1=0.2, sigma2=0.25, rho=0.3)
+
 # Spread: max(S1 - S2 - K, 0) via Kirk's approximation.
 spread_option(S1=100, S2=95, K=5, t=1.0, r=0.05, sigma1=0.2, sigma2=0.25, rho=0.5)
 

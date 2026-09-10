@@ -183,3 +183,40 @@ def worst_of_call(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0,
     ot = _coerce_type(option_type)
     return _rainbow_mc(S1, S2, K, t, r, sigma1, sigma2, rho, q1, q2, "worst", ot,
                        n_paths, antithetic, seed)
+
+
+def exchange_greeks(S1, S2, t, sigma1, sigma2, rho, q1=0.0, q2=0.0):
+    """Greeks of a Margrabe exchange option (payoff max(S1 - S2, 0)) by FD.
+
+    Returns a dict with the two spot deltas (``delta1`` = dV/dS1,
+    ``delta2`` = dV/dS2), the two own-gammas (``gamma1``, ``gamma2``), the
+    cross-gamma (``cross`` = d2V/dS1 dS2), and the correlation sensitivity
+    (``corr_vega`` = dV/drho). All by central finite differences on the exact
+    Margrabe formula.
+    """
+    def px(a=S1, b_=S2, s1=sigma1, s2=sigma2, rr=rho):
+        return exchange_option(a, b_, t, s1, s2, rr, q1, q2)
+
+    base = px()
+    h1 = 1e-3 * S1
+    h2 = 1e-3 * S2
+    d1u, d1d = px(a=S1 + h1), px(a=S1 - h1)
+    d2u, d2d = px(b_=S2 + h2), px(b_=S2 - h2)
+    delta1 = (d1u - d1d) / (2.0 * h1)
+    delta2 = (d2u - d2d) / (2.0 * h2)
+    gamma1 = (d1u - 2.0 * base + d1d) / (h1 * h1)
+    gamma2 = (d2u - 2.0 * base + d2d) / (h2 * h2)
+    # Cross-gamma via the mixed central difference.
+    pp = px(a=S1 + h1, b_=S2 + h2)
+    pm = px(a=S1 + h1, b_=S2 - h2)
+    mp = px(a=S1 - h1, b_=S2 + h2)
+    mm = px(a=S1 - h1, b_=S2 - h2)
+    cross = (pp - pm - mp + mm) / (4.0 * h1 * h2)
+
+    hr = 1e-5
+    corr_vega = (px(rr=min(rho + hr, 1.0 - 1e-9))
+                 - px(rr=max(rho - hr, -1.0 + 1e-9))) / (2.0 * hr)
+
+    return {"price": base, "delta1": delta1, "delta2": delta2,
+            "gamma1": gamma1, "gamma2": gamma2, "cross": cross,
+            "corr_vega": corr_vega}
