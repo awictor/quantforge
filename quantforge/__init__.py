@@ -159,6 +159,10 @@ from .baw import baw_american
 from .andreasenhuge import (
     andreasen_huge_prices, andreasen_huge_smile, andreasen_huge_calibrate,
 )
+from .cheyette import (
+    cheyette_G, cheyette_y, zero_bond as cheyette_zero_bond,
+    bond_option as cheyette_bond_option, caplet as cheyette_caplet,
+)
 
 # Vectorized NumPy fast path is optional; only expose it if NumPy is present.
 try:  # pragma: no cover - trivial availability branch
@@ -169,7 +173,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.118.0"
+__version__ = "1.119.0"
 
 __all__ = [
     "OptionType",
@@ -450,5 +454,10 @@ __all__ = [
     "andreasen_huge_prices",
     "andreasen_huge_smile",
     "andreasen_huge_calibrate",
+    "cheyette_G",
+    "cheyette_y",
+    "cheyette_zero_bond",
+    "cheyette_bond_option",
+    "cheyette_caplet",
     "__version__",
 ]

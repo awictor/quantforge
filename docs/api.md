@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.118.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.119.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -426,6 +426,41 @@ Auto-generated from `quantforge` v1.118.0 by `docs/gen_api.py` — do not edit b
 > returning ``(log_moneyness, vol)`` pairs sorted by strike on the forward
 > ``F = S e^{(r-q) t}``. Tail asymmetry (``G != M``) tilts the smile into a
 > skew; smaller ``Y`` fattens the wings.
+
+## cheyette
+
+### `cheyette_G(kappa, tau)`  _function_
+
+> The Cheyette/Hull-White G-function ``(1 - e^{-kappa tau}) / kappa``.
+
+### `cheyette_bond_option(P0S, P0T, kappa, sigma, expiry, maturity, strike, is_call=True)`  _function_
+
+> Price a European option on a zero-coupon bond under Cheyette (const sigma).
+>
+> Option expires at ``expiry`` (= ``t``) on a bond maturing at ``maturity``
+> (= ``T``), struck at ``strike``. ``P0S = P(0, expiry)`` and
+> ``P0T = P(0, maturity)`` are today's discount factors. This is the exact
+> Hull-White bond-option formula (Cheyette with constant sigma coincides with
+> Hull-White), used as the analytic anchor for the model.
+
+### `cheyette_caplet(P0_reset, P0_pay, kappa, sigma, reset, pay, strike, notional=1.0)`  _function_
+
+> Price a caplet under Cheyette (constant sigma) on ``[reset, pay]``.
+>
+> A caplet paying ``tau (L - strike)^+`` at ``pay`` (with ``L`` the simple
+> forward rate and ``tau = pay - reset``) equals ``notional (1 + strike tau)``
+> put options on the zero-coupon bond ``P(reset, pay)`` struck at
+> ``1 / (1 + strike tau)`` (the standard caplet<->bond-put identity).
+
+### `cheyette_y(kappa, sigma, t)`  _function_
+
+> The auxiliary state ``y(t)`` for constant sigma (= Var[x(t)]).
+
+### `cheyette_zero_bond(P0T, P0t, x, y, kappa, t, T)`  _function_
+
+> Cheyette zero-coupon bond ``P(t, T)`` given the state ``(x, y)``.
+>
+> ``P0T = P(0, T)`` and ``P0t = P(0, t)`` are today's discount factors.
 
 ## chooser
 

@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.119.0] - 2026-09-10
+
+### Added
+- Single-factor Cheyette / quasi-Gaussian short-rate model (new `cheyette.py`):
+  the Markovian HJM representation with state `(x, y)` and short rate
+  `r = f(0,t) + x`. `cheyette_zero_bond` reconstitutes `P(t,T)` off the initial
+  curve via the `G(t,T)` function, and `cheyette_bond_option` / `cheyette_caplet`
+  give the exact prices for a constant short-rate vol (where the factor
+  coincides with Hull-White), the caplet using the bond-put identity.
+- Verified: the bond option matches a forward-measure Monte Carlo to ~1e-5,
+  put-call parity holds, the caplet equals its `(1 + K tau)` bond-put
+  composition exactly, `kappa -> 0` stays finite, and `sigma -> 0` collapses to
+  the discounted intrinsic.
+
 ## [1.118.0] - 2026-09-10
 
 ### Added
