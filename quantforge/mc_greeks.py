@@ -192,6 +192,62 @@ def asian_pathwise_vega(S, K, t, r, sigma, option_type=OptionType.CALL, b=None,
     return MCResult(price=m, std_error=se, n_paths=len(samples))
 
 
+def lr_digital_greeks(S, K, t, r, sigma, option_type=OptionType.CALL, b=None,
+                      cash=1.0, n_paths=400_000, antithetic=True, seed=None):
+    """Delta, vega, gamma of a cash-or-nothing digital by likelihood ratio.
+
+    The digital payoff ``cash * 1_{S_T > K}`` (call) is discontinuous, so the
+    pathwise method is undefined for *any* of its Greeks. The likelihood-ratio
+    method differentiates the log-normal density instead of the payoff, so the
+    same one-step Black-Scholes score weights that :func:`lr_greeks` uses for a
+    vanilla apply unchanged to the digital:
+
+        delta:  Z / (S0 sigma sqrt(t))
+        vega:   (Z^2 - 1)/sigma - Z sqrt(t)
+        gamma:  (Z^2 - Z sigma sqrt(t) - 1) / (S0^2 sigma^2 t)
+
+    Returns a dict with ``price``, ``delta``, ``vega``, ``gamma`` (Monte Carlo
+    means) and their ``*_se`` standard errors. Cross-checks the analytic
+    :func:`quantforge.digital_greeks` (delta, gamma) and a sigma-bump of
+    :func:`quantforge.cash_or_nothing` (vega).
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if b is None:
+        b = r
+    disc = math.exp(-r * t)
+    sq = math.sqrt(t)
+    vsqrt = sigma * sq
+    call = ot is OptionType.CALL
+    rng = random.Random(seed)
+
+    price, delta, vega, gamma = [], [], [], []
+
+    def acc(z):
+        sT = S * math.exp((b - 0.5 * sigma * sigma) * t + vsqrt * z)
+        itm = (sT > K) if call else (sT < K)
+        pay = disc * cash if itm else 0.0
+        price.append(pay)
+        delta.append(pay * z / (S * vsqrt))
+        vega.append(pay * ((z * z - 1.0) / sigma - z * sq))
+        gamma.append(pay * (z * z - z * vsqrt - 1.0) / (S * S * sigma * sigma * t))
+
+    n = n_paths // 2 if antithetic else n_paths
+    for _ in range(n):
+        z = rng.gauss(0.0, 1.0)
+        acc(z)
+        if antithetic:
+            acc(-z)
+
+    out = {}
+    for name, samples in (("price", price), ("delta", delta),
+                          ("vega", vega), ("gamma", gamma)):
+        m, se = _summarize(samples)
+        out[name] = m
+        out[name + "_se"] = se
+    return out
+
+
 def barrier_lr_delta(S, K, H, t, r, sigma, option_type=OptionType.CALL,
                      barrier="down-out", b=None, rebate=0.0, n_steps=100,
                      n_paths=100_000, antithetic=True, seed=None) -> MCResult:

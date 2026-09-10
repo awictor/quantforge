@@ -4,6 +4,21 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.172.0] - 2026-09-10
+
+### Added
+- `lr_digital_greeks` (in `mc_greeks.py`): delta, vega, and gamma of a
+  cash-or-nothing digital by the likelihood-ratio method. The digital payoff is
+  discontinuous, so the pathwise method is undefined for every Greek; the LR
+  method differentiates the log-normal density, so the same one-step
+  Black-Scholes score weights as `lr_greeks` (delta `Z/(S0 sig sqrt t)`, vega
+  `(Z^2-1)/sig - Z sqrt t`, gamma `(Z^2 - Z sig sqrt t - 1)/(S0^2 sig^2 t)`)
+  apply unchanged to the digital.
+- Verified: delta and gamma match the analytic `digital_greeks`, vega matches a
+  sigma-bump of `cash_or_nothing`, within MC error for both call and put (e.g.
+  call delta 0.0274 vs 0.0274, vega -0.478 vs -0.479, gamma -0.00048 vs
+  -0.00048); call delta positive, put delta negative.
+
 ## [1.171.1] - 2026-09-10
 
 ### Tests

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.171.1 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.172.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1663,6 +1663,25 @@ Auto-generated from `quantforge` v1.171.1 by `docs/gen_api.py` — do not edit b
 >
 > The digital payoff is discontinuous, so pathwise delta is ill-defined, but
 > the LR estimator ``E[payoff * Z/(S0 sigma sqrt t)]`` is fine.
+
+### `lr_digital_greeks(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, cash=1.0, n_paths=400000, antithetic=True, seed=None)`  _function_
+
+> Delta, vega, gamma of a cash-or-nothing digital by likelihood ratio.
+>
+> The digital payoff ``cash * 1_{S_T > K}`` (call) is discontinuous, so the
+> pathwise method is undefined for *any* of its Greeks. The likelihood-ratio
+> method differentiates the log-normal density instead of the payoff, so the
+> same one-step Black-Scholes score weights that :func:`lr_greeks` uses for a
+> vanilla apply unchanged to the digital:
+>
+>     delta:  Z / (S0 sigma sqrt(t))
+>     vega:   (Z^2 - 1)/sigma - Z sqrt(t)
+>     gamma:  (Z^2 - Z sigma sqrt(t) - 1) / (S0^2 sigma^2 t)
+>
+> Returns a dict with ``price``, ``delta``, ``vega``, ``gamma`` (Monte Carlo
+> means) and their ``*_se`` standard errors. Cross-checks the analytic
+> :func:`quantforge.digital_greeks` (delta, gamma) and a sigma-bump of
+> :func:`quantforge.cash_or_nothing` (vega).
 
 ### `lr_greeks(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, n_paths=100000, antithetic=True, seed=None)`  _function_
 
