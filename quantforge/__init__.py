@@ -46,7 +46,8 @@ from .kou import kou_price, kou_smile
 from .cgmy import cgmy_price, cgmy_smile
 from .nig import nig_price, nig_smile
 from .meixner import meixner_price, meixner_smile
-from .levycalib import calibrate_levy_smile
+from .levycalib import calibrate_levy_smile, levy_psi
+from .levysurface import LevySurface, LevyCalendarViolation
 from .carrmadan import (
     levy_price, carr_madan_strip, carr_madan_smile_strip, cos_price, cos_greeks,
 )
@@ -158,7 +159,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.112.0"
+__version__ = "1.113.0"
 
 __all__ = [
     "OptionType",
@@ -216,6 +217,9 @@ __all__ = [
     "meixner_price",
     "meixner_smile",
     "calibrate_levy_smile",
+    "levy_psi",
+    "LevySurface",
+    "LevyCalendarViolation",
     "levy_price",
     "carr_madan_strip",
     "carr_madan_smile_strip",

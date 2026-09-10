@@ -110,6 +110,20 @@ _SPECS = {
 }
 
 
+def levy_psi(model, params):
+    """Return the characteristic exponent ``psi(u)`` for a named Levy model.
+
+    ``model`` is one of ``"vg"``, ``"nig"``, ``"meixner"``, ``"cgmy"`` and
+    ``params`` its raw parameter tuple (the same shape :func:`calibrate_levy_smile`
+    returns). Handy for pricing or surface-building a model outside calibration.
+    """
+    model = model.lower()
+    if model not in _SPECS:
+        raise ValueError(f"unknown model {model!r}; choose from {sorted(_SPECS)}")
+    _unpack, _pack, build, _seed = _SPECS[model]()
+    return build(tuple(params))
+
+
 def _strip_vols(S, t, r, q, psi, strikes, cm_alpha):
     """Model implied vols at ``strikes`` from one Carr-Madan FFT strip."""
     grid_K, grid_C = carr_madan_strip(S, t, r, q, psi, alpha=cm_alpha)

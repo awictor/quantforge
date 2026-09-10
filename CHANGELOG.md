@@ -4,6 +4,24 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.113.0] - 2026-09-10
+
+### Added
+- `LevySurface` (new `levysurface.py`): a unified implied-vol surface generated
+  by a single exponential-Levy parameter set (`vg`, `nig`, `meixner`, `cgmy`).
+  `implied_vol(k, t)` / `total_variance(k, t)` evaluate any point, `grid(...)`
+  builds an expiry x log-moneyness surface with one Carr-Madan FFT strip per
+  maturity, and `calendar_violations` / `is_calendar_arbitrage_free` check that
+  total variance is non-decreasing in maturity (the same test as the SVI
+  `VolSurface`).
+- `levy_psi(model, params)` factory (in `levycalib.py`): returns the
+  characteristic exponent for a named model + raw parameters, for pricing or
+  surface-building outside calibration.
+- Verified: the surface reprices the NIG and VG per-model smiles to ~1e-3, a
+  genuine Levy law is calendar-arbitrage-free across five expiries, total
+  variance grows with maturity, and `beta < 0` gives a downward skew at each
+  expiry.
+
 ## [1.112.0] - 2026-09-10
 
 ### Changed
