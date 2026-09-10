@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.153.1 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.154.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1518,6 +1518,30 @@ Auto-generated from `quantforge` v1.153.1 by `docs/gen_api.py` — do not edit b
 >
 > Returns ``leverage`` -- a dict ``{t: {k_center: L}}`` -- and the callable
 > ``lev_fn(spot, t)`` that interpolates it, suitable for an LSV Monte Carlo.
+
+## mc_greeks
+
+### `lr_digital_delta(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, cash=1.0, n_paths=200000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
+
+> Delta of a cash-or-nothing digital by the likelihood-ratio method.
+>
+> The digital payoff is discontinuous, so pathwise delta is ill-defined, but
+> the LR estimator ``E[payoff * Z/(S0 sigma sqrt t)]`` is fine.
+
+### `lr_greeks(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, n_paths=100000, antithetic=True, seed=None)`  _function_
+
+> European delta, gamma, vega by the likelihood-ratio method.
+>
+> Returns a dict with ``price``, ``delta``, ``gamma``, ``vega`` (each a Monte
+> Carlo mean) plus their ``*_se`` standard errors. Works for the discontinuous
+> digital payoff too (the LR weights do not touch the payoff).
+
+### `pathwise_delta(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, n_paths=100000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
+
+> European delta by the pathwise method (smooth-payoff estimator).
+>
+> Delta of a call is ``e^{-r t} 1_{S_T > K} S_T / S0`` (put: ``-1_{S_T < K}``).
+> Lower variance than the likelihood-ratio delta for these Lipschitz payoffs.
 
 ## meixner
 

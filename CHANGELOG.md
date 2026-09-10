@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.154.0] - 2026-09-10
+
+### Added
+- Monte Carlo Greeks without bumping (new `mc_greeks.py`): `lr_greeks` returns
+  European delta, gamma and vega by the likelihood-ratio (Malliavin-flavoured)
+  method -- `E[payoff * weight]` with density-derivative weights -- which works
+  even for discontinuous payoffs; `pathwise_delta` is the lower-variance
+  pathwise estimator for smooth payoffs; and `lr_digital_delta` gives the delta
+  of a cash-or-nothing digital, where the pathwise method fails.
+- Verified: LR delta/gamma/vega match Black-Scholes within Monte Carlo error;
+  the pathwise delta matches and has a smaller standard error than the LR delta;
+  and the LR digital delta matches the analytic (finite-difference) digital
+  delta.
+
 ## [1.153.1] - 2026-09-10
 
 ### Tests
