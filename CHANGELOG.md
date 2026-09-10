@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.184.0] - 2026-09-10
+
+### Added
+- `best_of_put_closed` / `worst_of_put_closed` (in `multiasset.py`): exact
+  closed forms for rainbow puts on the maximum / minimum of two assets. By
+  rainbow put-call parity `P = C - disc E[chosen] + K e^{-rt}`, built on the
+  call closed forms and `disc E[min] = S2 e^{-q2 t} - exchange_option(S2, S1)`
+  (`min(a,b) = b - max(b-a,0)`), with `disc E[max]` the two forwards less the
+  discounted expected min.
+- Verified: the put identity `P_min + P_max = p(S1) + p(S2)` holds to 1e-9;
+  both match their Monte Carlo counterparts within MC error; put-on-min exceeds
+  put-on-max, and put-on-max is below each single-asset vanilla put.
+
 ## [1.183.0] - 2026-09-10
 
 ### Added

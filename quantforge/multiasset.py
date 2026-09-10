@@ -233,6 +233,63 @@ def worst_of_call_closed(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0):
     return _stulz_min_call(S1, S2, K, t, r, sigma1, sigma2, rho, q1, q2)
 
 
+def _disc_expected_min(S1, S2, t, r, sigma1, sigma2, rho, q1, q2):
+    """Discounted risk-neutral expectation of ``min(S1_T, S2_T)``.
+
+    ``min(a, b) = b - max(b - a, 0)``, so the discounted expectation of the min
+    is the discounted forward of asset 2 minus the Margrabe value of the option
+    to exchange asset 1 for asset 2 (payoff ``max(S2 - S1, 0)``):
+
+        disc E[min] = S2 e^{-q2 t} - exchange_option(S2, S1; ...).
+    """
+    return S2 * math.exp(-q2 * t) - exchange_option(S2, S1, t, sigma2, sigma1,
+                                                     rho, q2, q1)
+
+
+def worst_of_put_closed(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0):
+    """Exact price of a put on the minimum of two assets: ``max(K - min(S1,S2), 0)``.
+
+    By put-call parity on the rainbow, a put and call on the same underlying
+    (here ``min(S1, S2)``) satisfy ``C - P = disc E[min] - K e^{-r t}``, so
+
+        P_min = C_min - disc E[min] + K e^{-r t}
+
+    with the exact :func:`worst_of_call_closed` and :func:`_disc_expected_min`.
+    Closed-form cross-check for the Monte Carlo :func:`worst_of_call` put.
+    """
+    if S1 <= 0 or S2 <= 0 or K <= 0:
+        raise ValueError("prices and strike must be positive")
+    if t <= 0:
+        raise ValueError("t must be positive")
+    if not -1.0 <= rho <= 1.0:
+        raise ValueError("rho must be in [-1, 1]")
+    cmin = worst_of_call_closed(S1, S2, K, t, r, sigma1, sigma2, rho, q1, q2)
+    demin = _disc_expected_min(S1, S2, t, r, sigma1, sigma2, rho, q1, q2)
+    return cmin - demin + K * math.exp(-r * t)
+
+
+def best_of_put_closed(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0):
+    """Exact price of a put on the maximum of two assets: ``max(K - max(S1,S2), 0)``.
+
+        P_max = C_max - disc E[max] + K e^{-r t},
+
+    where ``disc E[max] = S1 e^{-q1 t} + S2 e^{-q2 t} - disc E[min]`` (the two
+    forwards less the discounted expected min). Uses the exact
+    :func:`best_of_call_closed`. Cross-check for the Monte Carlo
+    :func:`best_of_call` put.
+    """
+    if S1 <= 0 or S2 <= 0 or K <= 0:
+        raise ValueError("prices and strike must be positive")
+    if t <= 0:
+        raise ValueError("t must be positive")
+    if not -1.0 <= rho <= 1.0:
+        raise ValueError("rho must be in [-1, 1]")
+    cmax = best_of_call_closed(S1, S2, K, t, r, sigma1, sigma2, rho, q1, q2)
+    demin = _disc_expected_min(S1, S2, t, r, sigma1, sigma2, rho, q1, q2)
+    demax = S1 * math.exp(-q1 * t) + S2 * math.exp(-q2 * t) - demin
+    return cmax - demax + K * math.exp(-r * t)
+
+
 def best_of_call(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0,
                  option_type=OptionType.CALL, n_paths=100_000, antithetic=True,
                  seed=None):

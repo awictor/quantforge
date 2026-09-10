@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.183.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.184.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2162,6 +2162,17 @@ Auto-generated from `quantforge` v1.183.0 by `docs/gen_api.py` — do not edit b
 > ``C_max = c(S1) + c(S2) - C_min`` with the exact :func:`_stulz_min_call`.
 > This is the closed-form cross-check for the Monte Carlo :func:`best_of_call`.
 
+### `best_of_put_closed(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0)`  _function_
+
+> Exact price of a put on the maximum of two assets: ``max(K - max(S1,S2), 0)``.
+>
+>     P_max = C_max - disc E[max] + K e^{-r t},
+>
+> where ``disc E[max] = S1 e^{-q1 t} + S2 e^{-q2 t} - disc E[min]`` (the two
+> forwards less the discounted expected min). Uses the exact
+> :func:`best_of_call_closed`. Cross-check for the Monte Carlo
+> :func:`best_of_call` put.
+
 ### `exchange_greeks(S1, S2, t, sigma1, sigma2, rho, q1=0.0, q2=0.0)`  _function_
 
 > Greeks of a Margrabe exchange option (payoff max(S1 - S2, 0)) by FD.
@@ -2213,6 +2224,18 @@ Auto-generated from `quantforge` v1.183.0 by `docs/gen_api.py` — do not edit b
 >
 > ``max(min(S1, S2) - K, 0)``. Closed-form cross-check for the Monte Carlo
 > :func:`worst_of_call`.
+
+### `worst_of_put_closed(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0)`  _function_
+
+> Exact price of a put on the minimum of two assets: ``max(K - min(S1,S2), 0)``.
+>
+> By put-call parity on the rainbow, a put and call on the same underlying
+> (here ``min(S1, S2)``) satisfy ``C - P = disc E[min] - K e^{-r t}``, so
+>
+>     P_min = C_min - disc E[min] + K e^{-r t}
+>
+> with the exact :func:`worst_of_call_closed` and :func:`_disc_expected_min`.
+> Closed-form cross-check for the Monte Carlo :func:`worst_of_call` put.
 
 ## nig
 
