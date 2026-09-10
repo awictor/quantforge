@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.187.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.188.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2273,6 +2273,28 @@ Auto-generated from `quantforge` v1.187.0 by `docs/gen_api.py` — do not edit b
 > condition flips the sign of that ``d`` and of the correlation. The four
 > quadrant prices sum to ``cash e^{-r t}`` (the conditions are exhaustive).
 >
+> Cross-checks a correlated-GBM Monte Carlo.
+
+### `two_asset_gap_option(S1, S2, K_trigger, K_payoff, K2, t, r, sigma1, sigma2, rho, option_type=<OptionType.CALL: 'call'>, cond2='above', q1=0.0, q2=0.0)`  _function_
+
+> Two-asset gap option: a gap payoff on asset 1 gated by asset 2.
+>
+> A gap option separates the *trigger* strike from the *payoff* strike. Here
+> the asset-1 gap payoff fires only if asset 2 also clears its barrier:
+>
+>     call: ``(S1_T - K_payoff) * 1[S1_T > K_trigger] * 1[cond2 on S2]``
+>     put:  ``(K_payoff - S1_T) * 1[S1_T < K_trigger] * 1[cond2 on S2]``
+>
+> (the payoff can be negative when ``K_payoff`` is on the far side of
+> ``K_trigger`` -- the defining feature of a gap option). It decomposes into
+> the two two-asset digitals with the *trigger* strike setting the asset-1
+> condition and the *payoff* strike scaling the cash leg:
+>
+>     call = AoN(S1>K_trigger, cond2) - K_payoff * CoN(S1>K_trigger, cond2)
+>     put  = K_payoff * CoN(S1<K_trigger, cond2) - AoN(S1<K_trigger, cond2)
+>
+> so it is an exact bivariate-normal closed form. With
+> ``K_payoff = K_trigger`` it reduces to :func:`correlation_option`.
 > Cross-checks a correlated-GBM Monte Carlo.
 
 ### `worst_of_call(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0, option_type=<OptionType.CALL: 'call'>, n_paths=100000, antithetic=True, seed=None)`  _function_

@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.188.0] - 2026-09-10
+
+### Added
+- `two_asset_gap_option` (in `multiasset.py`): a gap option on asset 1 gated by
+  asset 2, separating the trigger strike from the payoff strike. The asset-1 gap
+  payoff `(S1_T - K_payoff) 1[S1_T > K_trigger]` (call) fires only if asset 2
+  clears its barrier. Decomposes into the two two-asset digitals with the
+  trigger strike setting the asset-1 condition and the payoff strike scaling the
+  cash leg, so it is an exact bivariate-normal closed form.
+- Verified: matches a correlated-GBM Monte Carlo for call and put; reduces to
+  `correlation_option` when `K_payoff = K_trigger`; and a larger payoff strike
+  lowers the call.
+
 ## [1.187.0] - 2026-09-10
 
 ### Added

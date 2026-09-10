@@ -351,6 +351,46 @@ def correlation_option(S1, S2, K1, K2, t, r, sigma1, sigma2, rho,
     return K1 * con - aon
 
 
+def two_asset_gap_option(S1, S2, K_trigger, K_payoff, K2, t, r, sigma1, sigma2,
+                         rho, option_type=OptionType.CALL, cond2="above",
+                         q1=0.0, q2=0.0):
+    """Two-asset gap option: a gap payoff on asset 1 gated by asset 2.
+
+    A gap option separates the *trigger* strike from the *payoff* strike. Here
+    the asset-1 gap payoff fires only if asset 2 also clears its barrier:
+
+        call: ``(S1_T - K_payoff) * 1[S1_T > K_trigger] * 1[cond2 on S2]``
+        put:  ``(K_payoff - S1_T) * 1[S1_T < K_trigger] * 1[cond2 on S2]``
+
+    (the payoff can be negative when ``K_payoff`` is on the far side of
+    ``K_trigger`` -- the defining feature of a gap option). It decomposes into
+    the two two-asset digitals with the *trigger* strike setting the asset-1
+    condition and the *payoff* strike scaling the cash leg:
+
+        call = AoN(S1>K_trigger, cond2) - K_payoff * CoN(S1>K_trigger, cond2)
+        put  = K_payoff * CoN(S1<K_trigger, cond2) - AoN(S1<K_trigger, cond2)
+
+    so it is an exact bivariate-normal closed form. With
+    ``K_payoff = K_trigger`` it reduces to :func:`correlation_option`.
+    Cross-checks a correlated-GBM Monte Carlo.
+    """
+    ot = _coerce_type(option_type)
+    c2 = str(cond2).lower()
+    if c2 not in ("above", "below"):
+        raise ValueError("cond2 must be 'above' or 'below'")
+    if ot is OptionType.CALL:
+        aon = two_asset_asset_or_nothing(S1, S2, K_trigger, K2, t, r, sigma1,
+                                         sigma2, rho, "above", c2, q1, q2)
+        con = two_asset_digital(S1, S2, K_trigger, K2, t, r, sigma1, sigma2, rho,
+                                "above", c2, q1, q2)
+        return aon - K_payoff * con
+    aon = two_asset_asset_or_nothing(S1, S2, K_trigger, K2, t, r, sigma1,
+                                     sigma2, rho, "below", c2, q1, q2)
+    con = two_asset_digital(S1, S2, K_trigger, K2, t, r, sigma1, sigma2, rho,
+                            "below", c2, q1, q2)
+    return K_payoff * con - aon
+
+
 def _disc_expected_min(S1, S2, t, r, sigma1, sigma2, rho, q1, q2):
     """Discounted risk-neutral expectation of ``min(S1_T, S2_T)``.
 
