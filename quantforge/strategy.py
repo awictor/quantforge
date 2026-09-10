@@ -183,3 +183,42 @@ def backspread(S, K_short, K_long, t, r, sigma, kind="call", ratio=2,
              f"long {ratio}x {kind} {K_long}"),
     ]
     return price_book(legs)
+
+
+def strategy_report(book, lo=None, hi=None, n=4000):
+    """Summarize a strategy's expiry P&L: max profit, max loss, break-evens.
+
+    Scans terminal spots on a grid ``[lo, hi]`` (defaults span a wide range
+    around the leg strikes) and returns a dict with the net premium, the maximum
+    profit and maximum loss seen on the grid (P&L = payoff - premium), whether
+    each is bounded (i.e. not still rising/falling at the grid edge), and the
+    break-even spots from :func:`break_evens`.
+
+    P&L is per multiplier, matching :func:`payoff_at_expiry`.
+    """
+    premium = book.net.market_value
+    ks = [pos.contract.K for pos in book.positions]
+    S0 = book.positions[0].contract.S if book.positions else 100.0
+    if lo is None:
+        lo = 0.0
+    if hi is None:
+        hi = max(ks + [S0]) * 3.0
+
+    xs = [lo + (hi - lo) * i / n for i in range(n + 1)]
+    pnls = [payoff_at_expiry(book, s) - premium for s in xs]
+    max_profit = max(pnls)
+    max_loss = min(pnls)
+    # Flag an unbounded tail: still rising/falling at a grid edge and at (near)
+    # the extreme there.
+    profit_unbounded = ((pnls[-1] >= max_profit - 1e-6 and pnls[-1] > pnls[-2])
+                        or (pnls[0] >= max_profit - 1e-6 and pnls[0] > pnls[1]))
+    loss_unbounded = ((pnls[0] <= max_loss + 1e-6 and pnls[0] < pnls[1])
+                      or (pnls[-1] <= max_loss + 1e-6 and pnls[-1] < pnls[-2]))
+    return {
+        "net_premium": premium,
+        "max_profit": max_profit,
+        "max_loss": max_loss,
+        "profit_unbounded": profit_unbounded,
+        "loss_unbounded": loss_unbounded,
+        "break_evens": break_evens(book, lo, hi, n),
+    }

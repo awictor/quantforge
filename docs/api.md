@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.81.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.82.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1466,6 +1466,18 @@ Auto-generated from `quantforge` v1.81.0 by `docs/gen_api.py` — do not edit by
 ### `strangle(S, K_put, K_call, t, r, sigma, b=None, mult=1.0, qty=1)`  _function_
 
 > Long strangle: long an OTM put and an OTM call (K_put < K_call).
+
+### `strategy_report(book, lo=None, hi=None, n=4000)`  _function_
+
+> Summarize a strategy's expiry P&L: max profit, max loss, break-evens.
+>
+> Scans terminal spots on a grid ``[lo, hi]`` (defaults span a wide range
+> around the leg strikes) and returns a dict with the net premium, the maximum
+> profit and maximum loss seen on the grid (P&L = payoff - premium), whether
+> each is bounded (i.e. not still rising/falling at the grid edge), and the
+> break-even spots from :func:`break_evens`.
+>
+> P&L is per multiplier, matching :func:`payoff_at_expiry`.
 
 ### `vertical_spread(S, K_long, K_short, t, r, sigma, kind='call', b=None, mult=1.0)`  _function_
 

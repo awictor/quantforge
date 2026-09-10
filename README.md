@@ -183,6 +183,16 @@ print(payoff_profile(condor, spots=[70, 90, 100, 110, 130]))
 Also `vertical_spread`, `strangle`, `risk_reversal`, `butterfly`,
 `ratio_spread` (net short options), and `backspread` (net long options).
 
+`strategy_report` summarizes any of them — max profit/loss, unbounded-tail
+flags, and break-evens:
+
+```python
+from quantforge import strategy_report, iron_condor
+
+r = strategy_report(iron_condor(100, 80, 90, 110, 120, 0.5, 0.04, 0.25))
+print(r["max_profit"], r["max_loss"], r["break_evens"])
+```
+
 ## Batch pricing and portfolio risk
 
 Value a whole book in one call and get net exposures:

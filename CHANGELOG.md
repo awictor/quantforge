@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.82.0] - 2026-09-10
+
+### Added
+- `strategy_report` (in `strategy.py`): summarize any strategy `Book`'s expiry
+  P&L — net premium, max profit / max loss over a terminal-spot grid, whether
+  the profit/loss tail is unbounded, and the break-even spots. Works for every
+  builder (verticals, straddles, condors, ratio/backspreads, ...).
+
 ## [1.81.0] - 2026-09-10
 
 ### Added
