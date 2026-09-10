@@ -331,6 +331,71 @@ def sobol_lookback_rqmc(S, t, r, sigma, option_type=OptionType.CALL, b=None,
     return MCResult(price=price, std_error=se, n_paths=n_rand * n_paths)
 
 
+def sobol_barrier_rqmc(S, K, H, t, r, sigma, option_type=OptionType.CALL,
+                       barrier="down-out", b=None, rebate=0.0, n_steps=6,
+                       n_paths=4096, n_rand=24, seed=None) -> MCResult:
+    """Randomized-QMC discretely-monitored single-barrier option with honest SE.
+
+    Prices the knock-out/knock-in vanilla barrier option monitored at the
+    ``n_steps`` dates. ``barrier`` is ``down-out``/``down-in``/``up-out``/
+    ``up-in``; "down" watches ``S <= H``, "up" watches ``S >= H``. ``rebate`` is
+    paid at expiry to killed knock-outs or never-activated knock-ins.
+
+    Each path's normals come from one ``n_steps``-dimensional Sobol point through
+    the Brownian bridge, and a per-dimension Cranley-Patterson rotation
+    randomizes the point set, so ``n_rand`` shifts give i.i.d. QMC estimates
+    whose spread is a genuine SE. This is the discretely-monitored analogue of
+    :func:`quantforge.barrier_mc` with ``brownian_bridge=False`` (it does not add
+    the continuity correction), and cross-checks it. ``n_steps`` is capped by the
+    Sobol generator's dimension.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if H <= 0:
+        raise ValueError("barrier H must be positive")
+    if b is None:
+        b = r
+    barrier = str(barrier).lower()
+    if barrier not in ("down-out", "down-in", "up-out", "up-in"):
+        raise ValueError("barrier must be down-out/down-in/up-out/up-in")
+    if n_steps < 1 or n_steps > len(_MINIT):
+        raise ValueError(f"n_steps must be in 1..{len(_MINIT)}")
+    if n_rand < 2:
+        raise ValueError("n_rand must be >= 2 to estimate a standard error")
+    up = barrier.startswith("up")
+    knock_in = barrier.endswith("in")
+    dt = t / n_steps
+    disc = math.exp(-r * t)
+    sign = 1.0 if ot is OptionType.CALL else -1.0
+    rng = random.Random(seed)
+
+    estimates = []
+    for _ in range(n_rand):
+        shift = [rng.random() for _ in range(n_steps)]
+        sob = Sobol(n_steps)
+        total = 0.0
+        for _ in range(n_paths):
+            pt = sob.next()
+            u = [(pt[d] + shift[d]) % 1.0 for d in range(n_steps)]
+            W = brownian_bridge_path(u, t)
+            touched = (up and S >= H) or (not up and S <= H)
+            s = S
+            for i in range(n_steps):
+                s = S * math.exp((b - 0.5 * sigma * sigma) * ((i + 1) * dt)
+                                 + sigma * W[i])
+                if (up and s >= H) or (not up and s <= H):
+                    touched = True
+            alive = (not touched) if not knock_in else touched
+            if alive:
+                total += max(sign * (s - K), 0.0)
+            else:
+                total += rebate
+        estimates.append(disc * total / n_paths)
+
+    price, se = _summarize(estimates)
+    return MCResult(price=price, std_error=se, n_paths=n_rand * n_paths)
+
+
 def sobol_fixed_lookback_rqmc(S, K, t, r, sigma, option_type=OptionType.CALL,
                               b=None, n_steps=6, n_paths=4096, n_rand=24,
                               seed=None) -> MCResult:

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.198.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.199.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3096,6 +3096,23 @@ Auto-generated from `quantforge` v1.198.0 by `docs/gen_api.py` — do not edit b
 > Returns an :class:`MCResult` with the mean price, the across-randomization
 > SE, and ``n_paths`` = total points (``n_rand * n_paths``). Cross-checks the
 > geometric-control-variate :func:`quantforge.arithmetic_asian_mc`.
+
+### `sobol_barrier_rqmc(S, K, H, t, r, sigma, option_type=<OptionType.CALL: 'call'>, barrier='down-out', b=None, rebate=0.0, n_steps=6, n_paths=4096, n_rand=24, seed=None) -> quantforge.montecarlo.MCResult`  _function_
+
+> Randomized-QMC discretely-monitored single-barrier option with honest SE.
+>
+> Prices the knock-out/knock-in vanilla barrier option monitored at the
+> ``n_steps`` dates. ``barrier`` is ``down-out``/``down-in``/``up-out``/
+> ``up-in``; "down" watches ``S <= H``, "up" watches ``S >= H``. ``rebate`` is
+> paid at expiry to killed knock-outs or never-activated knock-ins.
+>
+> Each path's normals come from one ``n_steps``-dimensional Sobol point through
+> the Brownian bridge, and a per-dimension Cranley-Patterson rotation
+> randomizes the point set, so ``n_rand`` shifts give i.i.d. QMC estimates
+> whose spread is a genuine SE. This is the discretely-monitored analogue of
+> :func:`quantforge.barrier_mc` with ``brownian_bridge=False`` (it does not add
+> the continuity correction), and cross-checks it. ``n_steps`` is capped by the
+> Sobol generator's dimension.
 
 ### `sobol_european(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, n_paths=8192)`  _function_
 

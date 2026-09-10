@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.199.0] - 2026-09-10
+
+### Added
+- `sobol_barrier_rqmc` (in `sobol.py`): randomized-QMC discretely-monitored
+  single-barrier vanilla (down/up, in/out, with rebate) and an honest standard
+  error. Normals come from an `n_steps`-dim Sobol point through the Brownian
+  bridge, randomized by a per-dimension Cranley-Patterson rotation; the discrete
+  analogue of `barrier_mc(brownian_bridge=False)`.
+- Verified: matches the discretely-monitored `barrier_mc` across all four
+  barrier types within MC error; a knock-in plus its knock-out sum to the
+  vanilla call at the same seed (they partition every path); the knock-out is
+  below the vanilla.
+
 ## [1.198.0] - 2026-09-10
 
 ### Added
