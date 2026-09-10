@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.158.1] - 2026-09-10
+
+### Tests
+- Trimmed the fast-suite runtime from ~45s to ~30s: the variance-term-structure
+  tests build the strip at n_strikes=101, the LSM local-vol American>=European
+  check runs at n_steps=25/n_paths=8000, the rBergomi auto/forced identity uses
+  150 paths, and the Levy VG parameter recovery is marked slow. All accuracy
+  claims still run under `-m slow`.
+
 ## [1.158.0] - 2026-09-10
 
 ### Added

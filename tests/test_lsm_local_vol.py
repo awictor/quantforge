@@ -42,10 +42,10 @@ def test_skewed_local_vol_matches_pde_american():
 def test_american_put_above_european_ish():
     # American LSM >= the terminal-only (European) LSM proxy at n_steps=1.
     am = bermudan_lsm_local_vol(S, K, T, R, lambda s, tau: SIGMA,
-                                OptionType.PUT, n_steps=40, n_paths=20_000,
+                                OptionType.PUT, n_steps=25, n_paths=8_000,
                                 seed=3)
     eu = bermudan_lsm_local_vol(S, K, T, R, lambda s, tau: SIGMA,
-                                OptionType.PUT, n_steps=1, n_paths=20_000,
+                                OptionType.PUT, n_steps=1, n_paths=8_000,
                                 seed=3)
     assert am >= eu - 0.1
 

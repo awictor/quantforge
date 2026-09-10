@@ -31,9 +31,9 @@ def test_auto_matches_forced_modes():
     # explicit choice on the same seed.
     for n_steps, forced in [(100, False), (256, True)]:
         auto = rbergomi_paths(100, 1.0, 0.04, 1.5, 0.1, -0.7, 0.03,
-                              n_steps=n_steps, n_paths=300, seed=3)
+                              n_steps=n_steps, n_paths=150, seed=3)
         exp = rbergomi_paths(100, 1.0, 0.04, 1.5, 0.1, -0.7, 0.03,
-                             n_steps=n_steps, n_paths=300, seed=3, fast=forced)
+                             n_steps=n_steps, n_paths=150, seed=3, fast=forced)
         assert max(abs(a - b) for a, b in zip(auto, exp)) < 1e-9
 
 

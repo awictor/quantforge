@@ -19,6 +19,7 @@ def _vols(smile):
     return [iv for _, iv in smile]
 
 
+@pytest.mark.slow
 def test_recovers_vg_parameters():
     true = (0.2, 0.35, -0.25)
     mkt = _vols(variance_gamma_smile(S, STRIKES, T, R, *true))
