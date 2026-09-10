@@ -664,6 +664,17 @@ sabr_local_vol(S=100, K=90, T=1.0, r=0.05,
                alpha=0.25, beta=0.5, rho=-0.4, nu=0.5)
 ```
 
+`local_vol_mc` prices any European payoff under a local-vol surface
+`sigma_loc(S, t)`:
+
+```python
+from quantforge import local_vol_mc
+
+local_vol_mc(S=100, K=100, t=1.0, r=0.05,
+             local_vol_fn=lambda S, tau: 0.2 * (100 / S) ** 0.5,
+             option_type="call")
+```
+
 ## Term-structure surface (calendar-arbitrage aware)
 
 Stitch per-expiry SVI smiles into a full surface, interpolate vol at any

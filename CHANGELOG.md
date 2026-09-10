@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.56.0] - 2026-09-09
+
+### Added
+- `local_vol_mc` (in `montecarlo.py`): Monte Carlo a European option under a
+  Dupire local-volatility surface `sigma_loc(S, t)`, evolving the spot in
+  log-space with a spot/time-dependent vol at each step. A flat local vol
+  reproduces the Black-Scholes price; pairs with `dupire_local_vol` /
+  `sabr_local_vol` for surface-consistent pricing.
+
 ## [1.55.0] - 2026-09-09
 
 ### Added

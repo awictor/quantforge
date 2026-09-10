@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.55.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.56.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -797,6 +797,20 @@ Auto-generated from `quantforge` v1.55.0 by `docs/gen_api.py` — do not edit by
 ### `european_mc(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, n_paths=100000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
 
 > Monte Carlo price of a European option (converges to the BSM value).
+
+### `local_vol_mc(S, K, t, r, local_vol_fn, option_type=<OptionType.CALL: 'call'>, q=0.0, n_steps=100, n_paths=50000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
+
+> Monte Carlo a European option under a Dupire local-volatility surface.
+>
+> Args:
+>     local_vol_fn: callable ``sigma_loc(S, t_now)`` giving the instantaneous
+>         local volatility at spot ``S`` and elapsed time ``t_now``.
+>     q: continuous dividend yield (drift is ``r - q``).
+>
+> Evolves ``dS = (r - q) S dt + sigma_loc(S, t) S dW`` with an Euler step in
+> log-space. For a flat local vol this reproduces the Black-Scholes price; for
+> a genuine Dupire surface the discretely-simulated price is consistent with
+> that surface's vanilla prices.
 
 ### `parisian_barrier_mc(S, K, H, t, r, sigma, window, option_type=<OptionType.CALL: 'call'>, barrier='down-out', b=None, n_steps=252, n_paths=40000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
 

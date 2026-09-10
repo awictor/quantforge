@@ -318,3 +318,51 @@ def parisian_barrier_mc(S, K, H, t, r, sigma, window, option_type=OptionType.CAL
 
     price, se = _summarize(samples)
     return MCResult(price=price, std_error=se, n_paths=len(samples))
+
+
+def local_vol_mc(S, K, t, r, local_vol_fn, option_type=OptionType.CALL, q=0.0,
+                 n_steps=100, n_paths=50_000, antithetic=True, seed=None) -> MCResult:
+    """Monte Carlo a European option under a Dupire local-volatility surface.
+
+    Args:
+        local_vol_fn: callable ``sigma_loc(S, t_now)`` giving the instantaneous
+            local volatility at spot ``S`` and elapsed time ``t_now``.
+        q: continuous dividend yield (drift is ``r - q``).
+
+    Evolves ``dS = (r - q) S dt + sigma_loc(S, t) S dW`` with an Euler step in
+    log-space. For a flat local vol this reproduces the Black-Scholes price; for
+    a genuine Dupire surface the discretely-simulated price is consistent with
+    that surface's vanilla prices.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, 0.1)   # sigma checked inside local_vol_fn per step
+    if n_steps < 1:
+        raise ValueError("n_steps must be >= 1")
+    dt = t / n_steps
+    sqdt = math.sqrt(dt)
+    disc = math.exp(-r * t)
+    sign = 1.0 if ot is OptionType.CALL else -1.0
+    mu = r - q
+
+    def one_path(zs):
+        s = S
+        tau = 0.0
+        for z in zs:
+            sig = local_vol_fn(s, tau)
+            if sig < 0:
+                raise ValueError("local vol must be non-negative")
+            s *= math.exp((mu - 0.5 * sig * sig) * dt + sig * sqdt * z)
+            tau += dt
+        return disc * max(sign * (s - K), 0.0)
+
+    rng = random.Random(seed)
+    samples = []
+    n = n_paths // 2 if antithetic else n_paths
+    for _ in range(n):
+        zs = [rng.gauss(0.0, 1.0) for _ in range(n_steps)]
+        samples.append(one_path(zs))
+        if antithetic:
+            samples.append(one_path([-z for z in zs]))
+
+    price, se = _summarize(samples)
+    return MCResult(price=price, std_error=se, n_paths=len(samples))
