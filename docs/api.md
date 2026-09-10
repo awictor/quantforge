@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.205.1 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.206.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3144,6 +3144,19 @@ Auto-generated from `quantforge` v1.205.1 by `docs/gen_api.py` — do not edit b
 > randomizes the point set, so ``n_rand`` shifts give a genuine SE. The number
 > of observations is capped by the Sobol generator's dimension. Cross-checks
 > :func:`quantforge.autocallable_mc`.
+
+### `sobol_average_strike_rqmc(S, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, n_steps=6, n_paths=4096, n_rand=24, seed=None) -> quantforge.montecarlo.MCResult`  _function_
+
+> Randomized-QMC average-strike Asian option with an honest standard error.
+>
+> The strike is the realized arithmetic average of the monitored path, so a
+> call pays ``max(S_T - A, 0)`` and a put ``max(A - S_T, 0)`` with ``A`` the
+> average over the ``n_steps`` monitoring dates. Normals come from one
+> ``n_steps``-dim Sobol point through the Brownian bridge, randomized by a
+> per-dimension Cranley-Patterson rotation, so ``n_rand`` shifts give a genuine
+> SE. The discretely-monitored analogue of
+> :func:`quantforge.average_strike_asian_mc`, which it cross-checks. ``n_steps``
+> is capped by the Sobol generator's dimension.
 
 ### `sobol_barrier_digital_rqmc(S, K, H, t, r, sigma, option_type=<OptionType.CALL: 'call'>, barrier='up-in', b=None, cash=1.0, n_steps=6, n_paths=4096, n_rand=24, seed=None) -> quantforge.montecarlo.MCResult`  _function_
 

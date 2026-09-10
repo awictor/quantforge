@@ -331,6 +331,56 @@ def sobol_lookback_rqmc(S, t, r, sigma, option_type=OptionType.CALL, b=None,
     return MCResult(price=price, std_error=se, n_paths=n_rand * n_paths)
 
 
+def sobol_average_strike_rqmc(S, t, r, sigma, option_type=OptionType.CALL,
+                              b=None, n_steps=6, n_paths=4096, n_rand=24,
+                              seed=None) -> MCResult:
+    """Randomized-QMC average-strike Asian option with an honest standard error.
+
+    The strike is the realized arithmetic average of the monitored path, so a
+    call pays ``max(S_T - A, 0)`` and a put ``max(A - S_T, 0)`` with ``A`` the
+    average over the ``n_steps`` monitoring dates. Normals come from one
+    ``n_steps``-dim Sobol point through the Brownian bridge, randomized by a
+    per-dimension Cranley-Patterson rotation, so ``n_rand`` shifts give a genuine
+    SE. The discretely-monitored analogue of
+    :func:`quantforge.average_strike_asian_mc`, which it cross-checks. ``n_steps``
+    is capped by the Sobol generator's dimension.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, S, t, sigma)
+    if b is None:
+        b = r
+    if n_steps < 1 or n_steps > len(_MINIT):
+        raise ValueError(f"n_steps must be in 1..{len(_MINIT)}")
+    if n_rand < 2:
+        raise ValueError("n_rand must be >= 2 to estimate a standard error")
+    dt = t / n_steps
+    disc = math.exp(-r * t)
+    sign = 1.0 if ot is OptionType.CALL else -1.0
+    rng = random.Random(seed)
+
+    estimates = []
+    for _ in range(n_rand):
+        shift = [rng.random() for _ in range(n_steps)]
+        sob = Sobol(n_steps)
+        total = 0.0
+        for _ in range(n_paths):
+            pt = sob.next()
+            u = [(pt[d] + shift[d]) % 1.0 for d in range(n_steps)]
+            W = brownian_bridge_path(u, t)
+            avg_sum = 0.0
+            s = S
+            for i in range(n_steps):
+                s = S * math.exp((b - 0.5 * sigma * sigma) * ((i + 1) * dt)
+                                 + sigma * W[i])
+                avg_sum += s
+            avg = avg_sum / n_steps
+            total += max(sign * (s - avg), 0.0)
+        estimates.append(disc * total / n_paths)
+
+    price, se = _summarize(estimates)
+    return MCResult(price=price, std_error=se, n_paths=n_rand * n_paths)
+
+
 def sobol_cliquet_rqmc(S, t, r, sigma, reset_times, local_cap=None,
                        local_floor=0.0, global_cap=None, global_floor=0.0,
                        b=None, n_paths=4096, n_rand=24, seed=None) -> MCResult:

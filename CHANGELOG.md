@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.206.0] - 2026-09-10
+
+### Added
+- `sobol_average_strike_rqmc` (in `sobol.py`): randomized-QMC average-strike
+  Asian option with an honest standard error. The strike is the realized
+  arithmetic average of the path (call `max(S_T - A, 0)`, put `max(A - S_T, 0)`).
+  Bridge construction + per-dimension Cranley-Patterson rotation; the discrete
+  analogue of `average_strike_asian_mc`.
+- Verified: matches `average_strike_asian_mc` for call and put within MC error,
+  at roughly a seventh of the plain-MC standard error at equal points; prices
+  positive; SE < 0.02.
+
 ## [1.205.1] - 2026-09-10
 
 ### Tests
