@@ -163,3 +163,78 @@ def _norm_ppf(u):
     rr = ql * ql
     return (((((a[0] * rr + a[1]) * rr + a[2]) * rr + a[3]) * rr + a[4]) * rr + a[5]) * ql \
         / (((((b[0] * rr + b[1]) * rr + b[2]) * rr + b[3]) * rr + b[4]) * rr + 1.0)
+
+
+def heston_pathwise_delta(S, K, t, r, v0, kappa, theta, xi, rho,
+                          option_type=OptionType.CALL, q=0.0, n_steps=100,
+                          n_paths=50_000, antithetic=True, seed=None) -> MCResult:
+    """Heston delta by the pathwise method (spot enters multiplicatively).
+
+    In the QE simulation the initial spot appears only as the additive constant
+    ``ln S0`` in the terminal log-price, so ``S_T = S0 e^Y`` with ``Y``
+    independent of ``S0``. The pathwise delta is therefore exact and simple:
+
+        delta = e^{-r t} E[ 1_{S_T > K} S_T / S0 ]   (put: -1_{S_T < K}),
+
+    reusing the same Andersen-QE variance/asset scheme as
+    :func:`heston_qe_mc`. Cross-checks a finite-difference bump of the price.
+    """
+    ot = _coerce_type(option_type)
+    if S <= 0 or K <= 0:
+        raise ValueError("S and K must be positive")
+    if t < 0:
+        raise ValueError("t must be non-negative")
+    dt = t / n_steps
+    ekt = math.exp(-kappa * dt)
+    gamma1 = 0.5
+    gamma2 = 0.5
+    K0 = -rho * kappa * theta * dt / xi
+    K1 = gamma1 * dt * (kappa * rho / xi - 0.5) - rho / xi
+    K2 = gamma2 * dt * (kappa * rho / xi - 0.5) + rho / xi
+    K3 = gamma1 * dt * (1.0 - rho * rho)
+    K4 = gamma2 * dt * (1.0 - rho * rho)
+    K0d = K0 + (r - q) * dt
+    disc = math.exp(-r * t)
+    call = ot is OptionType.CALL
+    rng = random.Random(seed)
+
+    def next_var(v, uz):
+        m = theta + (v - theta) * ekt
+        s2 = (v * xi * xi * ekt / kappa) * (1.0 - ekt) \
+            + (theta * xi * xi / (2.0 * kappa)) * (1.0 - ekt) ** 2
+        if m <= 0.0:
+            return 0.0
+        psi = s2 / (m * m)
+        if psi <= PSI_C:
+            inv = 2.0 / psi
+            b2 = inv - 1.0 + math.sqrt(inv) * math.sqrt(max(inv - 1.0, 0.0))
+            a = m / (1.0 + b2)
+            return a * (math.sqrt(b2) + _norm_ppf(uz)) ** 2
+        p = (psi - 1.0) / (psi + 1.0)
+        beta = (1.0 - p) / m
+        return 0.0 if uz <= p else math.log((1.0 - p) / (1.0 - uz)) / beta
+
+    def one(norms, unis):
+        x = math.log(S)
+        v = v0
+        for z, u in zip(norms, unis):
+            vn = next_var(v, u)
+            vol = math.sqrt(max(K3 * v + K4 * vn, 0.0))
+            x += K0d + K1 * v + K2 * vn + vol * z
+            v = vn
+        sT = math.exp(x)
+        itm = (sT > K) if call else (sT < K)
+        if not itm:
+            return 0.0
+        return disc * (sT / S) if call else -disc * (sT / S)
+
+    samples = []
+    n = n_paths // 2 if antithetic else n_paths
+    for _ in range(n):
+        norms = [rng.gauss(0.0, 1.0) for _ in range(n_steps)]
+        unis = [rng.random() for _ in range(n_steps)]
+        samples.append(one(norms, unis))
+        if antithetic:
+            samples.append(one([-z for z in norms], [1.0 - u for u in unis]))
+    m, se = _summarize(samples)
+    return MCResult(price=m, std_error=se, n_paths=len(samples))

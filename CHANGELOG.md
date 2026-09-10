@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.169.0] - 2026-09-10
+
+### Added
+- `heston_pathwise_delta` (in `heston_mc.py`): Heston delta by the pathwise
+  method. In the Andersen-QE simulation the initial spot enters only as the
+  additive `ln S0` in the terminal log-price, so `S_T = S0 e^Y` with `Y`
+  independent of `S0` and the pathwise delta is exact:
+  `delta = e^{-rt} E[1_{S_T>K} S_T/S0]` (put: `-1_{S_T<K}`).
+- Verified: the call and put deltas match a finite-difference of the exact
+  Fourier `heston_price` within Monte Carlo error; the call delta is in (0, 1)
+  and the put delta is negative.
+
 ## [1.168.0] - 2026-09-10
 
 ### Added

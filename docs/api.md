@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.168.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.169.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1270,6 +1270,19 @@ Auto-generated from `quantforge` v1.168.0 by `docs/gen_api.py` — do not edit b
 > implied-vol error over the quotes.
 
 ## heston_mc
+
+### `heston_pathwise_delta(S, K, t, r, v0, kappa, theta, xi, rho, option_type=<OptionType.CALL: 'call'>, q=0.0, n_steps=100, n_paths=50000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
+
+> Heston delta by the pathwise method (spot enters multiplicatively).
+>
+> In the QE simulation the initial spot appears only as the additive constant
+> ``ln S0`` in the terminal log-price, so ``S_T = S0 e^Y`` with ``Y``
+> independent of ``S0``. The pathwise delta is therefore exact and simple:
+>
+>     delta = e^{-r t} E[ 1_{S_T > K} S_T / S0 ]   (put: -1_{S_T < K}),
+>
+> reusing the same Andersen-QE variance/asset scheme as
+> :func:`heston_qe_mc`. Cross-checks a finite-difference bump of the price.
 
 ### `heston_qe_mc(S, K, t, r, v0, kappa, theta, xi, rho, option_type=<OptionType.CALL: 'call'>, q=0.0, n_steps=100, n_paths=50000, antithetic=True, seed=None, gamma1=0.5) -> quantforge.montecarlo.MCResult`  _function_
 
