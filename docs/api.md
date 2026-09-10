@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.179.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.180.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1821,9 +1821,10 @@ Auto-generated from `quantforge` v1.179.0 by `docs/gen_api.py` — do not edit b
 
 > Price a fixed-strike arithmetic-average-price Asian option.
 >
-> With ``control_variate=True`` the geometric-average Asian (known in closed
-> form) is used as a control, dramatically reducing the standard error since
-> the two averages are almost perfectly correlated.
+> With ``control_variate=True`` the *discretely*-monitored geometric-average
+> Asian (known in closed form, over the same ``n_steps`` dates) is used as a
+> control, dramatically reducing the standard error since the two averages are
+> almost perfectly correlated.
 
 ### `autocallable_mc(S, t, r, sigma, observation_times, autocall_barrier, coupon, protection_barrier=None, notional=1.0, b=None, n_paths=50000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
 
@@ -2811,6 +2812,22 @@ Auto-generated from `quantforge` v1.179.0 by `docs/gen_api.py` — do not edit b
 > Brownian-bridge construction, so the dominant path variance lands on the
 > leading (most uniform) Sobol dimensions. ``n_steps`` is capped by the
 > generator's dimension.
+
+### `sobol_asian_rqmc(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, n_steps=6, n_paths=4096, n_rand=24, seed=None) -> quantforge.montecarlo.MCResult`  _function_
+
+> Randomized-QMC arithmetic Asian price with an honest standard error.
+>
+> The multi-dimensional analogue of :func:`sobol_european_rqmc`. Each path's
+> ``n_steps`` normals come from one ``n_steps``-dimensional Sobol point mapped
+> through the Brownian bridge (dominant variance on the leading, most uniform
+> coordinates). A per-dimension Cranley-Patterson rotation -- shift each Sobol
+> coordinate by an independent ``U ~ Uniform[0,1)`` modulo 1 -- randomizes the
+> whole point set without disturbing its low discrepancy, so ``n_rand``
+> independent shifts give i.i.d. QMC estimates whose spread is a genuine SE.
+>
+> Returns an :class:`MCResult` with the mean price, the across-randomization
+> SE, and ``n_paths`` = total points (``n_rand * n_paths``). Cross-checks the
+> geometric-control-variate :func:`quantforge.arithmetic_asian_mc`.
 
 ### `sobol_european(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, n_paths=8192)`  _function_
 

@@ -4,6 +4,31 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.180.0] - 2026-09-10
+
+### Fixed
+- `arithmetic_asian_mc` control variate was biased. It used the *continuous*
+  geometric-Asian closed form (`geometric_asian`, `sigma/sqrt(3)`) as the
+  control, but the Monte Carlo averages over `n_steps` *discrete* dates, so the
+  control's known expectation did not match the simulated geometric payoff. The
+  CV price was biased low -- e.g. 5.76 vs a true ~6.55 at `n_steps=6` -- while
+  reporting a tiny SE. Existing tests used `n_steps=50`/`250` (near-continuous)
+  and a loose `3*plain_SE` band, so they missed it. Added
+  `_discrete_geometric_asian` (exact closed form of the discretely-monitored
+  geometric average, `E[ln G] = ln S0 + (b-sig^2/2) dt (n+1)/2`,
+  `Var[ln G] = sig^2 dt (n+1)(2n+1)/(6n)`) and use it as the control. CV and
+  no-CV prices now agree at every `n_steps`; a tight `n_steps=6` regression test
+  guards it.
+
+### Added
+- `sobol_asian_rqmc` (in `sobol.py`): randomized-QMC arithmetic Asian with an
+  honest standard error -- the multi-dimensional analogue of
+  `sobol_european_rqmc`. Each path's normals come from an `n_steps`-dimensional
+  Sobol point through the Brownian bridge; a per-dimension Cranley-Patterson
+  rotation randomizes the point set, so `n_rand` shifts give i.i.d. QMC estimates
+  whose spread is a genuine SE. Cross-checks the (now-fixed) control-variate
+  `arithmetic_asian_mc` for call and put; ~0.06x the plain-MC SE at equal points.
+
 ## [1.179.0] - 2026-09-10
 
 ### Added

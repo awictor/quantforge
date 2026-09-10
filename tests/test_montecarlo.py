@@ -59,6 +59,21 @@ def test_control_variate_shrinks_std_error():
     assert abs(cv.price - plain.price) < 3 * plain.std_error
 
 
+def test_control_variate_unbiased_at_few_dates():
+    # Regression: the control variate must use the *discrete* geometric-Asian
+    # closed form (over the same n_steps dates), not the continuous one. With a
+    # continuous control the CV price was biased low by ~0.8 at n_steps=6 while
+    # the SE stayed tiny, so a loose "within 3*plain_SE" check missed it. Here
+    # the CV and no-CV prices must agree within the (large) no-CV error.
+    kw = dict(S=100, K=100, t=1.0, r=0.05, sigma=0.2,
+              option_type=OptionType.CALL, n_steps=6, n_paths=80_000, seed=7)
+    plain = arithmetic_asian_mc(control_variate=False, **kw)
+    cv = arithmetic_asian_mc(control_variate=True, **kw)
+    assert cv.price == pytest.approx(plain.price, abs=3 * plain.std_error)
+    # And the CV error bar is tiny, so the agreement is a real constraint.
+    assert cv.std_error < plain.std_error / 5
+
+
 def test_arithmetic_asian_above_geometric():
     # By the AM-GM inequality the arithmetic-average call is worth at least the
     # geometric-average call.

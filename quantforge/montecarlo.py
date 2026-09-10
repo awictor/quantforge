@@ -20,7 +20,7 @@ from dataclasses import dataclass
 
 from .bsm import OptionType, _coerce_type, _validate
 from .exotics import geometric_asian
-from .mathfns import norm_ppf
+from .mathfns import norm_ppf, norm_cdf
 
 
 @dataclass(frozen=True)
@@ -472,14 +472,47 @@ def _simulate_average_paths(S, t, r, sigma, b, n_steps, n_paths, rng, antithetic
             yield one_path([-z for z in zs])
 
 
+def _discrete_geometric_asian(S, K, t, r, sigma, ot, b, n_steps):
+    """Closed form of a *discretely*-monitored geometric-average Asian.
+
+    The geometric average ``G = (prod_{i=1}^{n} S_{t_i})^{1/n}`` over equally
+    spaced dates ``t_i = i * dt`` (``dt = t/n``) is lognormal with
+
+        E[ln G] = ln S0 + (b - sig^2/2) * dt * (n+1)/2
+        Var[ln G] = sig^2 * dt * (n+1)(2n+1) / (6n).
+
+    A Black-Scholes-style formula on that lognormal gives the exact price. This
+    is the correct control variate for :func:`arithmetic_asian_mc`, whose Monte
+    Carlo averages over the *same* ``n`` discrete dates -- the continuous-average
+    :func:`quantforge.geometric_asian` would leave a discretisation bias.
+    """
+    n = n_steps
+    dt = t / n
+    disc = math.exp(-r * t)
+    mu = math.log(S) + (b - 0.5 * sigma * sigma) * dt * (n + 1) / 2.0
+    var = sigma * sigma * dt * (n + 1) * (2 * n + 1) / (6.0 * n)
+    if var <= 0.0:
+        g = math.exp(mu)
+        payoff = max(g - K, 0.0) if ot is OptionType.CALL else max(K - g, 0.0)
+        return disc * payoff
+    sd = math.sqrt(var)
+    d1 = (mu - math.log(K) + var) / sd
+    d2 = d1 - sd
+    ef = math.exp(mu + 0.5 * var)          # E[G]
+    if ot is OptionType.CALL:
+        return disc * (ef * norm_cdf(d1) - K * norm_cdf(d2))
+    return disc * (K * norm_cdf(-d2) - ef * norm_cdf(-d1))
+
+
 def arithmetic_asian_mc(S, K, t, r, sigma, option_type=OptionType.CALL, b=None,
                         n_steps=50, n_paths=50_000, antithetic=True,
                         control_variate=True, seed=None) -> MCResult:
     """Price a fixed-strike arithmetic-average-price Asian option.
 
-    With ``control_variate=True`` the geometric-average Asian (known in closed
-    form) is used as a control, dramatically reducing the standard error since
-    the two averages are almost perfectly correlated.
+    With ``control_variate=True`` the *discretely*-monitored geometric-average
+    Asian (known in closed form, over the same ``n_steps`` dates) is used as a
+    control, dramatically reducing the standard error since the two averages are
+    almost perfectly correlated.
     """
     ot = _coerce_type(option_type)
     _validate(S, K, t, sigma)
@@ -491,7 +524,8 @@ def arithmetic_asian_mc(S, K, t, r, sigma, option_type=OptionType.CALL, b=None,
     disc = math.exp(-r * t)
     sign = 1.0 if ot is OptionType.CALL else -1.0
 
-    geo_closed = geometric_asian(S, K, t, r, sigma, ot, b) if control_variate else 0.0
+    geo_closed = (_discrete_geometric_asian(S, K, t, r, sigma, ot, b, n_steps)
+                  if control_variate else 0.0)
 
     arith_payoffs = []
     controlled = []
