@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.178.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.179.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2818,6 +2818,26 @@ Auto-generated from `quantforge` v1.178.0 by `docs/gen_api.py` — do not edit b
 >
 > A direct Sobol analogue of :func:`quantforge.european_qmc`; converges faster
 > than pseudo-random Monte Carlo for this smooth one-dimensional integral.
+
+### `sobol_european_rqmc(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, n_paths=4096, n_rand=24, seed=None) -> quantforge.montecarlo.MCResult`  _function_
+
+> Randomized-QMC European price with an honest standard error.
+>
+> Plain Sobol QMC (:func:`sobol_european`) returns a single number with no
+> error estimate -- the points are deterministic, so there is no variance to
+> report. Randomized QMC restores an unbiased error bar by applying a
+> Cranley-Patterson rotation: shift the whole Sobol point set by a random
+> ``U ~ Uniform[0,1)`` modulo 1. Each shift preserves the sequence's low
+> discrepancy but makes the resulting estimate an unbiased draw, so ``n_rand``
+> independent shifts give ``n_rand`` i.i.d. QMC estimates whose spread is a
+> genuine standard error.
+>
+> The returned :class:`MCResult` has ``price`` = mean over the randomizations,
+> ``std_error`` = their across-randomization SE, and ``n_paths`` = the total
+> points evaluated (``n_rand * n_paths``). For this smooth 1-D integral the
+> RQMC SE falls off far faster than pseudo-random Monte Carlo's ``1/sqrt(N)``.
+>
+> Cross-checks the closed-form Black-Scholes value.
 
 ## spline
 

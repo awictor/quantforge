@@ -15,10 +15,12 @@ normals from Sobol points. Pure standard library.
 """
 
 import math
+import random
 from typing import List
 
 from .mathfns import norm_ppf
 from .bsm import OptionType, _coerce_type, _validate
+from .montecarlo import MCResult, _summarize
 
 _BITS = 30
 _SCALE = float(1 << _BITS)
@@ -171,6 +173,53 @@ def sobol_european(S, K, t, r, sigma, option_type=OptionType.CALL, b=None,
         sT = S * math.exp(drift + vol * norm_ppf(u))
         total += max(sign * (sT - K), 0.0)
     return disc * total / n_paths
+
+
+def sobol_european_rqmc(S, K, t, r, sigma, option_type=OptionType.CALL, b=None,
+                        n_paths=4096, n_rand=24, seed=None) -> MCResult:
+    """Randomized-QMC European price with an honest standard error.
+
+    Plain Sobol QMC (:func:`sobol_european`) returns a single number with no
+    error estimate -- the points are deterministic, so there is no variance to
+    report. Randomized QMC restores an unbiased error bar by applying a
+    Cranley-Patterson rotation: shift the whole Sobol point set by a random
+    ``U ~ Uniform[0,1)`` modulo 1. Each shift preserves the sequence's low
+    discrepancy but makes the resulting estimate an unbiased draw, so ``n_rand``
+    independent shifts give ``n_rand`` i.i.d. QMC estimates whose spread is a
+    genuine standard error.
+
+    The returned :class:`MCResult` has ``price`` = mean over the randomizations,
+    ``std_error`` = their across-randomization SE, and ``n_paths`` = the total
+    points evaluated (``n_rand * n_paths``). For this smooth 1-D integral the
+    RQMC SE falls off far faster than pseudo-random Monte Carlo's ``1/sqrt(N)``.
+
+    Cross-checks the closed-form Black-Scholes value.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if b is None:
+        b = r
+    if n_rand < 2:
+        raise ValueError("n_rand must be >= 2 to estimate a standard error")
+    drift = (b - 0.5 * sigma * sigma) * t
+    vol = sigma * math.sqrt(t)
+    disc = math.exp(-r * t)
+    sign = 1.0 if ot is OptionType.CALL else -1.0
+    rng = random.Random(seed)
+
+    estimates = []
+    for _ in range(n_rand):
+        shift = rng.random()
+        sob = Sobol(1)
+        total = 0.0
+        for _ in range(n_paths):
+            u = (sob.next()[0] + shift) % 1.0        # Cranley-Patterson rotation
+            sT = S * math.exp(drift + vol * norm_ppf(u))
+            total += max(sign * (sT - K), 0.0)
+        estimates.append(disc * total / n_paths)
+
+    price, se = _summarize(estimates)
+    return MCResult(price=price, std_error=se, n_paths=n_rand * n_paths)
 
 
 def sobol_asian(S, K, t, r, sigma, option_type=OptionType.CALL, b=None,

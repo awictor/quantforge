@@ -4,6 +4,21 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.179.0] - 2026-09-10
+
+### Added
+- `sobol_european_rqmc` (in `sobol.py`): randomized-QMC European price with an
+  honest standard error. Plain Sobol QMC returns a single deterministic number
+  with no error bar; this applies a Cranley-Patterson rotation -- shifting the
+  whole Sobol point set by a random `U ~ Uniform[0,1)` mod 1 -- which preserves
+  the low discrepancy but makes each estimate an unbiased draw. `n_rand`
+  independent shifts give i.i.d. QMC estimates whose spread is a genuine SE.
+  Returns the mean price, the across-randomization SE, and `n_paths` = total
+  points (`n_rand * n_paths`).
+- Verified: matches the closed-form Black-Scholes call and put (also under a
+  dividend carry); at equal total points the RQMC standard error is ~0.05x the
+  plain `european_mc` for this smooth 1-D integral.
+
 ## [1.178.0] - 2026-09-10
 
 ### Added
