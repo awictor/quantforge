@@ -16,6 +16,7 @@ Greeks and revaluation both come from the exact BSM engine, so the residual is
 a genuine model-consistency check, not an artifact of mismatched pricers.
 """
 
+import math
 from dataclasses import dataclass
 
 from .bsm import price, delta, gamma, vega, theta, rho, OptionType, _coerce_type
@@ -76,4 +77,43 @@ def attribute_pnl(S, K, t, r, sigma, dS, dsigma, dt, dr=0.0,
         total=total, delta_pnl=delta_pnl, gamma_pnl=gamma_pnl, vega_pnl=vega_pnl,
         theta_pnl=theta_pnl, rho_pnl=rho_pnl, explained=explained,
         unexplained=total - explained,
+    )
+
+
+@dataclass(frozen=True)
+class CarryRoll:
+    horizon: float          # roll horizon in years
+    forward_spot: float     # spot rolled to the forward at the carry rate
+    value_now: float
+    value_rolled_static: float   # reprice at forward spot, shorter t, same vol
+    theta_roll: float            # value_rolled_static - value_now (pure roll P&L)
+
+
+def carry_roll_pnl(S, K, t, r, sigma, horizon, option_type=OptionType.CALL,
+                   b=None, qty=1.0):
+    """Roll-down / carry-roll P&L of an option over ``horizon`` at constant vol.
+
+    Rolls the position forward by ``horizon`` years assuming the spot drifts to
+    its forward ``S e^{b*horizon}`` and volatility is unchanged, then reprices at
+    the shorter remaining maturity. The roll P&L is the change in value -- the
+    theta bleed net of the forward drift the carry earns. This is the standard
+    "if nothing moves, what do I earn/pay" carry number.
+
+    Returns a :class:`CarryRoll`.
+    """
+    ot = _coerce_type(option_type)
+    if b is None:
+        b = r
+    if horizon <= 0 or horizon >= t:
+        raise ValueError("require 0 < horizon < t")
+
+    v0 = price(S, K, t, r, sigma, ot, b)
+    fwd_spot = S * math.exp(b * horizon)
+    v1 = price(fwd_spot, K, t - horizon, r, sigma, ot, b)
+    return CarryRoll(
+        horizon=horizon,
+        forward_spot=fwd_spot,
+        value_now=qty * v0,
+        value_rolled_static=qty * v1,
+        theta_roll=qty * (v1 - v0),
     )

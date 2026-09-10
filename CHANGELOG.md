@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.68.0] - 2026-09-10
+
+### Added
+- `carry_roll_pnl` (in `attribution.py`): the roll-down / carry-roll P&L of an
+  option over a horizon at constant vol — rolls the spot to its forward and
+  reprices at the shorter maturity, returning a `CarryRoll` with the value now,
+  the rolled value, and the roll P&L (theta bleed net of carry drift). Negative
+  for a long option, positive for a short.
+
 ## [1.67.0] - 2026-09-10
 
 ### Added

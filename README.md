@@ -232,6 +232,14 @@ print(a.delta_pnl, a.gamma_pnl, a.vega_pnl, a.theta_pnl, a.unexplained)
 `total = explained + unexplained`; the residual flags what the first/second-
 order Greeks miss.
 
+Carry-roll (roll-down) P&L — "if nothing moves, what do I earn?":
+
+```python
+from quantforge import carry_roll_pnl
+
+carry_roll_pnl(S=100, K=100, t=1.0, r=0.05, sigma=0.2, horizon=0.25).theta_roll
+```
+
 Split the book's time decay into gamma rent vs financing carry:
 
 ```python

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.67.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.68.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -37,6 +37,10 @@ Auto-generated from `quantforge` v1.67.0 by `docs/gen_api.py` — do not edit by
 
 ## attribution
 
+### `CarryRoll(horizon: float, forward_spot: float, value_now: float, value_rolled_static: float, theta_roll: float) -> None`  _class_
+
+> CarryRoll(horizon: float, forward_spot: float, value_now: float, value_rolled_static: float, theta_roll: float)
+
 ### `PnLAttribution(total: float, delta_pnl: float, gamma_pnl: float, vega_pnl: float, theta_pnl: float, rho_pnl: float, explained: float, unexplained: float) -> None`  _class_
 
 > PnLAttribution(total: float, delta_pnl: float, gamma_pnl: float, vega_pnl: float, theta_pnl: float, rho_pnl: float, explained: float, unexplained: float)
@@ -53,6 +57,18 @@ Auto-generated from `quantforge` v1.67.0 by `docs/gen_api.py` — do not edit by
 > theta here is the calendar theta (per year) from the engine, so the theta
 > P&L is ``theta * dt`` (value lost as time passes). vega is per 1.0 vol, rho
 > per 1.0 rate; pass dsigma / dr in those units.
+
+### `carry_roll_pnl(S, K, t, r, sigma, horizon, option_type=<OptionType.CALL: 'call'>, b=None, qty=1.0)`  _function_
+
+> Roll-down / carry-roll P&L of an option over ``horizon`` at constant vol.
+>
+> Rolls the position forward by ``horizon`` years assuming the spot drifts to
+> its forward ``S e^{b*horizon}`` and volatility is unchanged, then reprices at
+> the shorter remaining maturity. The roll P&L is the change in value -- the
+> theta bleed net of the forward drift the carry earns. This is the standard
+> "if nothing moves, what do I earn/pay" carry number.
+>
+> Returns a :class:`CarryRoll`.
 
 ## bachelier
 
