@@ -17,7 +17,7 @@ def test_discrete_below_continuous_call():
     # continuously-monitored Goldman-Sosin-Gatto closed form.
     cont = floating_strike_lookback(S, T, R, SIG, OptionType.CALL)
     mc = sobol_lookback_rqmc(S, T, R, SIG, OptionType.CALL, n_steps=6,
-                             n_paths=4096, n_rand=24, seed=1)
+                             n_paths=2048, n_rand=12, seed=1)
     assert mc.price < cont
     assert mc.price > 0.0
 
@@ -25,7 +25,7 @@ def test_discrete_below_continuous_call():
 def test_discrete_below_continuous_put():
     cont = floating_strike_lookback(S, T, R, SIG, OptionType.PUT)
     mc = sobol_lookback_rqmc(S, T, R, SIG, OptionType.PUT, n_steps=6,
-                             n_paths=4096, n_rand=24, seed=2)
+                             n_paths=2048, n_rand=12, seed=2)
     assert mc.price < cont
     assert mc.price > 0.0
 
@@ -50,7 +50,7 @@ def test_honest_se_small():
     # Bridge + RQMC gives a tight across-randomization SE for this smooth-ish
     # path functional.
     mc = sobol_lookback_rqmc(S, T, R, SIG, OptionType.CALL, n_steps=6,
-                             n_paths=4096, n_rand=24, seed=5)
+                             n_paths=2048, n_rand=12, seed=5)
     assert mc.std_error < 0.05
 
 

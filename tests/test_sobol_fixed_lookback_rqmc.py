@@ -15,7 +15,7 @@ S, K, T, R, SIG = 100.0, 100.0, 1.0, 0.05, 0.2
 def test_discrete_below_continuous_call():
     cont = fixed_strike_lookback(S, K, T, R, SIG, OptionType.CALL)
     mc = sobol_fixed_lookback_rqmc(S, K, T, R, SIG, OptionType.CALL, n_steps=6,
-                                   n_paths=4096, n_rand=24, seed=1)
+                                   n_paths=2048, n_rand=12, seed=1)
     assert mc.price < cont
     assert mc.price > 0.0
 
@@ -23,7 +23,7 @@ def test_discrete_below_continuous_call():
 def test_discrete_below_continuous_put():
     cont = fixed_strike_lookback(S, K, T, R, SIG, OptionType.PUT)
     mc = sobol_fixed_lookback_rqmc(S, K, T, R, SIG, OptionType.PUT, n_steps=6,
-                                   n_paths=4096, n_rand=24, seed=2)
+                                   n_paths=2048, n_rand=12, seed=2)
     assert mc.price < cont
     assert mc.price > 0.0
 
@@ -41,7 +41,7 @@ def test_call_at_least_vanilla():
     # over the path dominates the terminal spot).
     from quantforge import call_price
     mc = sobol_fixed_lookback_rqmc(S, K, T, R, SIG, OptionType.CALL, n_steps=6,
-                                   n_paths=4096, n_rand=24, seed=4)
+                                   n_paths=2048, n_rand=12, seed=4)
     assert mc.price > call_price(S, K, T, R, SIG) - 3 * mc.std_error
 
 

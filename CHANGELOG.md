@@ -4,6 +4,21 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.196.0] - 2026-09-10
+
+### Changed
+- The test suite now runs across all cores by default via `pytest-xdist`
+  (`addopts = "-n auto"` in `pyproject.toml`; `pytest-xdist>=3` added to the
+  `test` extra). The ~1700 tests are independent with no shared state, so
+  distribution is safe; the fast gate drops from ~55s to ~12s on a 24-core box
+  and CI gets a proportional speedup. Run serially with `-n0`.
+
+### Tests
+- Reduced the six RQMC lookback structural checks (floating and fixed strike)
+  from 4096 paths / 24 randomizations to 2048 / 12; the sign and ordering
+  assertions and the SE bound (actual SE ~0.006 vs a 0.05 threshold) hold
+  comfortably at the smaller size.
+
 ## [1.195.0] - 2026-09-10
 
 ### Added

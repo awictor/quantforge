@@ -24,7 +24,7 @@ dependencies = []
 quantforge = "quantforge.cli:main"
 
 [project.optional-dependencies]
-test = ["pytest>=7"]
+test = ["pytest>=7", "pytest-xdist>=3"]
 fast = ["numpy>=1.20"]
 
 [project.urls]
@@ -39,6 +39,10 @@ include = ["quantforge*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+# Run across all cores by default (pytest-xdist). The suite is ~1700 independent
+# tests with no shared state, so distribution is safe and cuts the fast gate
+# from ~55s to ~12s on a 24-core box. Override with '-n0' for a serial run.
+addopts = "-n auto"
 markers = [
     "slow: Monte Carlo / deep-tree tests; deselect with '-m \"not slow\"' for a fast run.",
 ]
