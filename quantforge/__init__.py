@@ -152,6 +152,9 @@ from .american import (
     bjerksund_stensland, bjerksund_stensland_greeks, early_exercise_premium,
     bjerksund_stensland_1993,
 )
+from .kim import (
+    kim_american_put, kim_american_call, kim_exercise_boundary,
+)
 
 # Vectorized NumPy fast path is optional; only expose it if NumPy is present.
 try:  # pragma: no cover - trivial availability branch
@@ -162,7 +165,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.114.0"
+__version__ = "1.115.0"
 
 __all__ = [
     "OptionType",
@@ -435,5 +438,8 @@ __all__ = [
     "bjerksund_stensland_greeks",
     "bjerksund_stensland_1993",
     "early_exercise_premium",
+    "kim_american_put",
+    "kim_american_call",
+    "kim_exercise_boundary",
     "__version__",
 ]

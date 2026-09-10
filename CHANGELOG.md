@@ -4,6 +4,27 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.115.0] - 2026-09-10
+
+### Added
+- American pricing via Kim's (1990) integral equation (new `kim.py`):
+  `kim_american_put`, `kim_american_call`, `kim_exercise_boundary`. The
+  early-exercise boundary solves a Volterra integral equation by backward
+  marching from expiry, bisecting the value-matching condition at each step; the
+  price is the European value plus the early-exercise premium integrated at
+  spot. The call uses the McDonald-Schroder put-call symmetry
+  `C(S,K,r,q) = P(K,S,q,r)`.
+- Verified: puts and dividend calls match a 4000-step binomial tree to ~1e-3 at
+  200 grid steps; the boundary rises to K at expiry; a no-dividend call equals
+  the European value.
+
+### Fixed
+- Two bugs caught against the binomial reference: the premium integral indexed
+  the boundary backward (`B[n-m]` instead of `B[m]`, the boundary `s` years
+  ahead), and the `s -> 0` integrand endpoint was forced to zero when on the
+  boundary it is `rK/2 - qS/2` (from `N(0)=1/2`). With both fixed the price
+  converges to the tree instead of ~1.8% low.
+
 ## [1.114.0] - 2026-09-10
 
 ### Added

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.114.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.115.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -978,6 +978,33 @@ Auto-generated from `quantforge` v1.114.0 by `docs/gen_api.py` — do not edit b
 > Yields are relative to the stock capital ``S``. If assigned (S_T >= K) the
 > return is the capped gain to the strike plus the premium; the breakeven is
 > ``S - premium`` (the stock can fall by the premium before a loss).
+
+## kim
+
+### `kim_american_call(S, K, t, r, sigma, q=0.0, n_steps=80)`  _function_
+
+> American call price via the put-call symmetry for American options.
+>
+> A dividend-paying American call maps to an American put by the McDonald-
+> Schroder symmetry ``C(S, K, r, q) = P(K, S, q, r)`` (spot<->strike,
+> rate<->dividend). With ``q = 0`` the call is never exercised early and this
+> returns the European call.
+
+### `kim_american_put(S, K, t, r, sigma, q=0.0, n_steps=80)`  _function_
+
+> American put price via Kim's integral equation.
+>
+> Solves the early-exercise boundary on an ``n_steps`` time grid, then returns
+> the European put plus the early-exercise premium integrated at spot ``S``.
+> If ``S`` is at or below the current boundary the option is exercised, so the
+> intrinsic value is returned.
+
+### `kim_exercise_boundary(K, t, r, sigma, q=0.0, n_steps=80)`  _function_
+
+> Return the American-put early-exercise boundary ``B(t_i)`` on the grid.
+>
+> ``B[i]`` is the critical spot at time ``i * (t / n_steps)`` below which
+> immediate exercise is optimal; ``B[n_steps]`` is the expiry value.
 
 ## kou
 
