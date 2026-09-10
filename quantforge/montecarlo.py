@@ -444,6 +444,70 @@ def spread_option_lhs_mc(S1, S2, K, t, r, sigma1, sigma2, rho,
     return MCResult(price=price, std_error=se, n_paths=n)
 
 
+def basket_option_lhs_mc(spots, weights, K, t, r, sigmas, corr, q=None,
+                         option_type=OptionType.CALL, n_paths=50_000,
+                         seed=None) -> MCResult:
+    """Two-asset basket option ``max(w1 S1 + w2 S2 - K, 0)`` by Latin hypercube MC.
+
+    The exact analogue of :func:`spread_option_lhs_mc` for a basket (weighted
+    sum) payoff. Each of the two driving normals is stratified into ``n_paths``
+    equiprobable bins with one draw per bin, the two bin orders are independently
+    permuted, and the stratified uniforms map through the inverse normal CDF;
+    asset 2's shock is correlated by ``corr z1 + sqrt(1 - corr^2) z2``.
+
+    Args mirror :func:`quantforge.basket_option`: ``spots`` ``(S1, S2)``,
+    ``weights`` ``(w1, w2)``, ``sigmas`` ``(s1, s2)``, ``corr`` the correlation,
+    and optional ``q`` ``(q1, q2)`` dividend yields.
+
+    Note on the reported ``std_error``: as with any LHS estimator the samples are
+    dependent, so the returned SE uses the plain i.i.d. formula and overstates
+    the true error -- wrap the call in :func:`replicated_mc` for an honest SE.
+    This routine is the *unbiased* Monte Carlo reference for the moment-matched
+    (approximate) :func:`quantforge.basket_option`.
+    """
+    ot = _coerce_type(option_type)
+    if len(spots) != 2 or len(weights) != 2 or len(sigmas) != 2:
+        raise ValueError("basket_option_lhs_mc handles exactly two assets")
+    if not -1.0 <= corr <= 1.0:
+        raise ValueError("corr must be in [-1, 1]")
+    if t <= 0:
+        raise ValueError("t must be positive")
+    if q is None:
+        q = (0.0, 0.0)
+    S1, S2 = spots
+    w1, w2 = weights
+    s1, s2 = sigmas
+    q1, q2 = q
+    d1 = (r - q1 - 0.5 * s1 * s1) * t
+    d2 = (r - q2 - 0.5 * s2 * s2) * t
+    v1 = s1 * math.sqrt(t)
+    v2 = s2 * math.sqrt(t)
+    corr2 = math.sqrt(1.0 - corr * corr)
+    disc = math.exp(-r * t)
+    sign = 1.0 if ot is OptionType.CALL else -1.0
+    rng = random.Random(seed)
+    n = n_paths
+
+    perm1 = list(range(n))
+    perm2 = list(range(n))
+    rng.shuffle(perm1)
+    rng.shuffle(perm2)
+
+    def payoff(z1, z2):
+        a = w1 * S1 * math.exp(d1 + v1 * z1)
+        bb = w2 * S2 * math.exp(d2 + v2 * (corr * z1 + corr2 * z2))
+        return disc * max(sign * (a + bb - K), 0.0)
+
+    samples = []
+    for i in range(n):
+        u1 = (perm1[i] + rng.random()) / n
+        u2 = (perm2[i] + rng.random()) / n
+        samples.append(payoff(norm_ppf(u1), norm_ppf(u2)))
+
+    price, se = _summarize(samples)
+    return MCResult(price=price, std_error=se, n_paths=n)
+
+
 def _simulate_average_paths(S, t, r, sigma, b, n_steps, n_paths, rng, antithetic):
     """Generate (arithmetic_avg, geometric_avg) of the price path for each run.
 

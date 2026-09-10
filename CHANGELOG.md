@@ -4,6 +4,21 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.182.0] - 2026-09-10
+
+### Added
+- `basket_option_lhs_mc` (in `montecarlo.py`): two-asset basket option
+  `max(w1 S1 + w2 S2 - K, 0)` by Latin hypercube sampling -- the analogue of
+  `spread_option_lhs_mc` for a weighted-sum payoff. Each driving normal is
+  stratified into `n_paths` equiprobable bins with independently permuted bin
+  orders, mapped through the inverse normal CDF; asset 2's shock is correlated
+  by `corr z1 + sqrt(1 - corr^2) z2`.
+- Verified: agrees with the Levy moment-matched (approximate) `basket_option`
+  for call and put (to a few cents), reduces to a Black-Scholes call when all
+  weight is on one asset, and -- wrapped in `replicated_mc` for an honest
+  across-seed SE -- places the moment-match price within a few SEs. As with any
+  LHS estimator the per-run `std_error` overstates the true error; documented.
+
 ## [1.181.1] - 2026-09-10
 
 ### Tests

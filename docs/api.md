@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.181.1 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.182.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1899,6 +1899,26 @@ Auto-generated from `quantforge` v1.181.1 by `docs/gen_api.py` — do not edit b
 >
 > ``rebate`` is paid at expiry to knock-outs that are killed, or to knock-ins
 > that never activate, matching the closed form's convention.
+
+### `basket_option_lhs_mc(spots, weights, K, t, r, sigmas, corr, q=None, option_type=<OptionType.CALL: 'call'>, n_paths=50000, seed=None) -> quantforge.montecarlo.MCResult`  _function_
+
+> Two-asset basket option ``max(w1 S1 + w2 S2 - K, 0)`` by Latin hypercube MC.
+>
+> The exact analogue of :func:`spread_option_lhs_mc` for a basket (weighted
+> sum) payoff. Each of the two driving normals is stratified into ``n_paths``
+> equiprobable bins with one draw per bin, the two bin orders are independently
+> permuted, and the stratified uniforms map through the inverse normal CDF;
+> asset 2's shock is correlated by ``corr z1 + sqrt(1 - corr^2) z2``.
+>
+> Args mirror :func:`quantforge.basket_option`: ``spots`` ``(S1, S2)``,
+> ``weights`` ``(w1, w2)``, ``sigmas`` ``(s1, s2)``, ``corr`` the correlation,
+> and optional ``q`` ``(q1, q2)`` dividend yields.
+>
+> Note on the reported ``std_error``: as with any LHS estimator the samples are
+> dependent, so the returned SE uses the plain i.i.d. formula and overstates
+> the true error -- wrap the call in :func:`replicated_mc` for an honest SE.
+> This routine is the *unbiased* Monte Carlo reference for the moment-matched
+> (approximate) :func:`quantforge.basket_option`.
 
 ### `capped_cliquet_mc(S, t, r, sigma, reset_times, local_cap=None, local_floor=0.0, global_cap=None, global_floor=0.0, b=None, n_paths=50000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
 
