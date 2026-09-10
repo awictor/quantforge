@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.189.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.190.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2242,6 +2242,22 @@ Auto-generated from `quantforge` v1.189.0 by `docs/gen_api.py` — do not edit b
 > lowers the spread volatility), so a bisection on ``rho in (-1, 1)`` recovers
 > the correlation consistent with the quote. Raises if the quote lies outside
 > the price range spanned by ``rho = -1 .. 1``.
+
+### `rainbow_greeks(S1, S2, K, t, r, sigma1, sigma2, rho, kind='best', option_type=<OptionType.CALL: 'call'>, q1=0.0, q2=0.0)`  _function_
+
+> Greeks of a rainbow (best-of/worst-of) option by FD on the Stulz closed form.
+>
+> ``kind`` is ``"best"`` (option on the maximum) or ``"worst"`` (on the
+> minimum). Differentiates the exact :func:`best_of_call_closed` /
+> :func:`worst_of_call_closed` / :func:`best_of_put_closed` /
+> :func:`worst_of_put_closed` -- no Monte Carlo noise -- for the two spot
+> deltas, the two own-gammas, the cross-gamma ``d2V/dS1 dS2``, and the
+> correlation sensitivity ``dV/drho``.
+>
+> A useful check: the best-of and worst-of *call* deltas in each asset sum to
+> the corresponding single-asset Black-Scholes delta (differentiate the Stulz
+> identity ``C_max + C_min = c(S1) + c(S2)``), and the max-call gains value as
+> correlation falls (``corr_vega < 0``) while the min-call gains as it rises.
 
 ### `spread_greeks(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0, option_type=<OptionType.CALL: 'call'>)`  _function_
 

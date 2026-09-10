@@ -579,6 +579,57 @@ def basket_greeks(spots, weights, K, t, r, sigmas, corr, q=None,
             "corr_vega": corr_vega}
 
 
+def rainbow_greeks(S1, S2, K, t, r, sigma1, sigma2, rho, kind="best",
+                   option_type=OptionType.CALL, q1=0.0, q2=0.0):
+    """Greeks of a rainbow (best-of/worst-of) option by FD on the Stulz closed form.
+
+    ``kind`` is ``"best"`` (option on the maximum) or ``"worst"`` (on the
+    minimum). Differentiates the exact :func:`best_of_call_closed` /
+    :func:`worst_of_call_closed` / :func:`best_of_put_closed` /
+    :func:`worst_of_put_closed` -- no Monte Carlo noise -- for the two spot
+    deltas, the two own-gammas, the cross-gamma ``d2V/dS1 dS2``, and the
+    correlation sensitivity ``dV/drho``.
+
+    A useful check: the best-of and worst-of *call* deltas in each asset sum to
+    the corresponding single-asset Black-Scholes delta (differentiate the Stulz
+    identity ``C_max + C_min = c(S1) + c(S2)``), and the max-call gains value as
+    correlation falls (``corr_vega < 0``) while the min-call gains as it rises.
+    """
+    ot = _coerce_type(option_type)
+    kind = str(kind).lower()
+    if kind not in ("best", "worst"):
+        raise ValueError("kind must be 'best' or 'worst'")
+    call = ot is OptionType.CALL
+    if kind == "best":
+        f = best_of_call_closed if call else best_of_put_closed
+    else:
+        f = worst_of_call_closed if call else worst_of_put_closed
+
+    def px(a=S1, b_=S2, rr=rho):
+        return f(a, b_, K, t, r, sigma1, sigma2, rr, q1, q2)
+
+    base = px()
+    h1 = 1e-3 * S1
+    h2 = 1e-3 * S2
+    d1u, d1d = px(a=S1 + h1), px(a=S1 - h1)
+    d2u, d2d = px(b_=S2 + h2), px(b_=S2 - h2)
+    delta1 = (d1u - d1d) / (2.0 * h1)
+    delta2 = (d2u - d2d) / (2.0 * h2)
+    gamma1 = (d1u - 2.0 * base + d1d) / (h1 * h1)
+    gamma2 = (d2u - 2.0 * base + d2d) / (h2 * h2)
+    pp = px(a=S1 + h1, b_=S2 + h2)
+    pm = px(a=S1 + h1, b_=S2 - h2)
+    mp = px(a=S1 - h1, b_=S2 + h2)
+    mm = px(a=S1 - h1, b_=S2 - h2)
+    cross = (pp - pm - mp + mm) / (4.0 * h1 * h2)
+    hr = 1e-5
+    corr_vega = (px(rr=min(rho + hr, 1.0 - 1e-9))
+                 - px(rr=max(rho - hr, -1.0 + 1e-9))) / (2.0 * hr)
+    return {"price": base, "delta1": delta1, "delta2": delta2,
+            "gamma1": gamma1, "gamma2": gamma2, "cross": cross,
+            "corr_vega": corr_vega}
+
+
 def implied_spread_correlation(target_price, S1, S2, K, t, r, sigma1, sigma2,
                                q1=0.0, q2=0.0, option_type=OptionType.CALL,
                                tol=1e-8, max_iter=100):

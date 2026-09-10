@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.190.0] - 2026-09-10
+
+### Added
+- `rainbow_greeks` (in `multiasset.py`): Greeks of a best-of/worst-of rainbow
+  option by finite differences on the exact Stulz closed forms (no Monte Carlo
+  noise). Returns the two spot deltas, the two own-gammas, the cross-gamma
+  `d2V/dS1 dS2`, and the correlation sensitivity `dV/drho`, for calls and puts.
+- Verified: the best-of and worst-of call deltas in each asset sum to the
+  single-asset Black-Scholes delta (differentiating the Stulz identity
+  `C_max + C_min = c1 + c2`), to 1e-4; the max-call `corr_vega` is negative and
+  the min-call's positive with the two summing to zero; own-gammas positive;
+  worst-of put deltas negative.
+
 ## [1.189.0] - 2026-09-10
 
 ### Added
