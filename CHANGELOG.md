@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.137.0] - 2026-09-10
+
+### Added
+- `calibrate_svi_from_prices` (in `svi.py`): calibrate a raw SVI slice directly
+  from market call *prices* rather than pre-inverted vols. Inverts each call to
+  its Black-Scholes implied vol, converts to total variance, and fits raw SVI,
+  vega-weighting the quotes by default (so a price error in the deep wings,
+  where vega is tiny, does not dominate the fit). Returns
+  `(params, iv_rmse, price_rmse)`.
+- Verified: recovers a synthetic SVI slice from clean prices exactly (iv/price
+  RMSE ~0); fits noisy prices; vega-weighted and unweighted both fit clean
+  prices; and the fitted slice reprices each strike to within the reported price
+  RMSE.
+
 ## [1.136.0] - 2026-09-10
 
 ### Added

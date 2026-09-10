@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.136.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.137.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2498,6 +2498,25 @@ Auto-generated from `quantforge` v1.136.0 by `docs/gen_api.py` — do not edit b
 > Returns ``(params, rmse)`` where rmse is the root-mean-square total-variance
 > error. Uses an unconstrained Nelder-Mead over a smooth reparametrization
 > that enforces ``b >= 0``, ``s > 0``, and ``rho in (-1, 1)``.
+
+### `calibrate_svi_from_prices(F, t, r, strikes, call_prices, q=0.0, vega_weighted=True, initial=None, max_iter=4000)`  _function_
+
+> Calibrate a raw SVI slice directly from market *call prices*.
+>
+> Inverts each call to its Black-Scholes implied volatility, converts to total
+> variance ``w = sigma^2 t``, and fits raw SVI with :func:`calibrate_svi`.
+> Quotes are vega-weighted by default (near-the-money prices carry the most
+> volatility information, so weighting by Black vega down-weights the deep
+> wings where a price error maps to a large vol error).
+>
+> Args:
+>     F: forward. strikes, call_prices: matching market quotes at expiry ``t``.
+>     r: discount rate (the calls are priced on the forward, carry ``b = r``
+>         relative to spot ``S = F e^{-rt}``... here calls are taken on the
+>         forward directly with discounting ``e^{-rt}``).
+>     vega_weighted: weight each quote by its Black vega if True.
+>
+> Returns ``(params, iv_rmse, price_rmse)``.
 
 ### `lee_bounds_ok(p: quantforge.svi.SVIParams, tol=1e-09)`  _function_
 

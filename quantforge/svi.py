@@ -294,3 +294,64 @@ def svi_repair_butterfly(p: SVIParams, ks=None, max_iter=200, factor=0.98):
         if svi_is_butterfly_free(candidate, ks):
             return candidate
     return SVIParams(a=p.a, b=b, rho=p.rho, m=p.m, s=p.s)
+
+
+def calibrate_svi_from_prices(F, t, r, strikes, call_prices, q=0.0,
+                              vega_weighted=True, initial=None, max_iter=4000):
+    """Calibrate a raw SVI slice directly from market *call prices*.
+
+    Inverts each call to its Black-Scholes implied volatility, converts to total
+    variance ``w = sigma^2 t``, and fits raw SVI with :func:`calibrate_svi`.
+    Quotes are vega-weighted by default (near-the-money prices carry the most
+    volatility information, so weighting by Black vega down-weights the deep
+    wings where a price error maps to a large vol error).
+
+    Args:
+        F: forward. strikes, call_prices: matching market quotes at expiry ``t``.
+        r: discount rate (the calls are priced on the forward, carry ``b = r``
+            relative to spot ``S = F e^{-rt}``... here calls are taken on the
+            forward directly with discounting ``e^{-rt}``).
+        vega_weighted: weight each quote by its Black vega if True.
+
+    Returns ``(params, iv_rmse, price_rmse)``.
+    """
+    from .implied import implied_volatility
+    from .bsm import call_price as bs_call, vega as bs_vega, OptionType
+
+    strikes = [float(k) for k in strikes]
+    call_prices = [float(c) for c in call_prices]
+    n = len(strikes)
+    if n != len(call_prices) or n < 5:
+        raise ValueError("need at least five matching (strike, call) quotes")
+
+    S = F * math.exp(-r * t)   # spot consistent with the given forward
+    ks, tv, weights = [], [], []
+    ivs = []
+    for K, c in zip(strikes, call_prices):
+        try:
+            iv = implied_volatility(c, S, K, t, r, OptionType.CALL, b=r)
+        except ValueError:
+            continue
+        ks.append(math.log(K / F))
+        tv.append(iv * iv * t)
+        ivs.append((K, iv))
+        w = bs_vega(S, K, t, r, iv, b=r) if vega_weighted else 1.0
+        weights.append(max(w, 1e-8))
+    if len(ks) < 5:
+        raise ValueError("fewer than five prices could be inverted to vols")
+
+    params, iv_rmse = calibrate_svi(ks, tv, weights=weights, initial=initial,
+                                    max_iter=max_iter)
+
+    # Price RMSE: reprice each strike at the fitted SVI vol.
+    sse = 0.0
+    for K, c in zip(strikes, call_prices):
+        k = math.log(K / F)
+        w = params.total_variance(k)
+        if w <= 0:
+            continue
+        iv = math.sqrt(w / t)
+        model_c = bs_call(S, K, t, r, iv, b=r)
+        sse += (model_c - c) ** 2
+    price_rmse = math.sqrt(sse / n)
+    return params, iv_rmse, price_rmse
