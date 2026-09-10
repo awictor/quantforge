@@ -213,3 +213,123 @@ def crank_nicolson_greeks(S, K, t, r, sigma=None, option_type=OptionType.CALL,
     else:
         theta = 0.0
     return {"price": price, "delta": delta, "gamma": gamma, "theta": theta}
+
+
+def crank_nicolson_barrier(S, K, H, t, r, sigma=None,
+                           option_type=OptionType.CALL, barrier="down-out",
+                           b=None, rebate=0.0, local_vol_fn=None,
+                           n_space=400, n_time=400):
+    """Price a continuously-monitored single-barrier option by a CN PDE.
+
+    Knock-out barriers are imposed as an *absorbing* boundary: at every time
+    step the value is set to ``rebate`` on the dead side of ``H`` (V = 0 there
+    for a zero rebate), the exact continuous-monitoring condition. ``barrier`` is
+    ``down-out``/``up-out`` for the directly-solved knock-outs, or
+    ``down-in``/``up-in``, obtained from in + out = vanilla (same rebate handling
+    as :func:`quantforge.barrier_option`).
+
+    Supports a constant ``sigma`` or a ``local_vol_fn(S, t)`` and a carry
+    ``b = r - q``. Returns the value at spot ``S``.
+    """
+    ot = _coerce_type(option_type)
+    if S <= 0 or K <= 0 or H <= 0:
+        raise ValueError("S, K and H must be positive")
+    if b is None:
+        b = r
+    if sigma is None and local_vol_fn is None:
+        raise ValueError("provide sigma or local_vol_fn")
+    barrier = str(barrier).lower()
+    if barrier not in ("down-out", "up-out", "down-in", "up-in"):
+        raise ValueError("barrier must be down-out/up-out/down-in/up-in")
+
+    # Knock-in via in + out = vanilla (both with the same rebate at expiry).
+    if barrier.endswith("in"):
+        out_kind = barrier.replace("in", "out")
+        ko = crank_nicolson_barrier(S, K, H, t, r, sigma, ot, out_kind, b=b,
+                                    rebate=0.0, local_vol_fn=local_vol_fn,
+                                    n_space=n_space, n_time=n_time)
+        vanilla = crank_nicolson_price(S, K, t, r, sigma, ot, b=b,
+                                       local_vol_fn=local_vol_fn,
+                                       n_space=n_space, n_time=n_time)
+        return vanilla - ko
+
+    up = barrier.startswith("up")
+    call = ot is OptionType.CALL
+    if t == 0:
+        alive = (S > H) if up is False else (S < H)
+        # Note: down-out alive if S > H; up-out alive if S < H.
+        alive = (S > H) if not up else (S < H)
+        if not alive:
+            return rebate
+        return max(S - K, 0.0) if call else max(K - S, 0.0)
+
+    # Grid: choose ds so a node lands exactly on the barrier H (otherwise the
+    # absorbing condition is applied at the nearest node, a level offset from H,
+    # which biases the price by O(ds)). Pick a target ds, then set the number of
+    # sub-intervals below H so H is a grid point, and extend to S_max above.
+    ref_vol = sigma if sigma is not None else local_vol_fn(S, t)
+    s_max = max(S, K, H) * 4.0 * max(1.0, math.exp(ref_vol * math.sqrt(t)))
+    ds_target = s_max / n_space
+    # Put a node exactly on the barrier so the absorbing V = rebate condition is
+    # applied at H itself (not the nearest node). The barrier discretisation is
+    # then O(ds); use a fine grid (n_space >= ~1000) for tight agreement with the
+    # continuous-monitoring closed form.
+    n_below = max(1, int(round(H / ds_target)))
+    ds = H / n_below                     # H = n_below * ds exactly
+    n_space = max(int(round(s_max / ds)), n_below + 2)
+    grid = [i * ds for i in range(n_space + 1)]
+    dt = t / n_time
+
+    def payoff(Si):
+        return max(Si - K, 0.0) if call else max(K - Si, 0.0)
+
+    def alive_node(Si):
+        return (Si > H) if not up else (Si < H)
+
+    V = [payoff(Si) if alive_node(Si) else rebate for Si in grid]
+
+    def vol_at(Si, tau):
+        return local_vol_fn(Si, t - tau) if local_vol_fn is not None else sigma
+
+    for n in range(n_time):
+        tau_new = (n + 1) * dt
+        sub = [0.0] * (n_space + 1)
+        diag = [0.0] * (n_space + 1)
+        sup = [0.0] * (n_space + 1)
+        rhs = [0.0] * (n_space + 1)
+        for i in range(1, n_space):
+            Si = grid[i]
+            vol = vol_at(Si, tau_new)
+            sig2 = vol * vol * Si * Si / (ds * ds)
+            drift = b * Si / (2.0 * ds)
+            alpha = 0.5 * (0.5 * sig2 - drift)
+            gamma = 0.5 * (0.5 * sig2 + drift)
+            beta = -0.5 * sig2 - 0.5 * r
+            sub[i] = -dt * alpha
+            diag[i] = 1.0 - dt * beta
+            sup[i] = -dt * gamma
+            rhs[i] = (V[i] + dt * alpha * V[i - 1] + dt * beta * V[i]
+                      + dt * gamma * V[i + 1])
+        disc = math.exp(-r * tau_new)
+        carry_fac = math.exp((b - r) * tau_new)
+        # Live-side far boundary; dead side gets the rebate.
+        if call:
+            lowV = 0.0
+            highV = grid[n_space] * carry_fac - K * disc
+        else:
+            lowV = K * disc
+            highV = 0.0
+        diag[0] = 1.0
+        sup[0] = 0.0
+        rhs[0] = rebate if not alive_node(grid[0]) else lowV
+        sub[n_space] = 0.0
+        diag[n_space] = 1.0
+        rhs[n_space] = rebate if not alive_node(grid[n_space]) else highV
+
+        V = _thomas(sub, diag, sup, rhs)
+        # Absorbing barrier: overwrite the dead side with the rebate.
+        for i in range(n_space + 1):
+            if not alive_node(grid[i]):
+                V[i] = rebate
+
+    return _interp(grid, ds, V, S)

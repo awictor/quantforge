@@ -4,6 +4,21 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.135.0] - 2026-09-10
+
+### Added
+- `crank_nicolson_barrier` (in `pde.py`): continuously-monitored single-barrier
+  options by a Crank-Nicolson PDE with an absorbing boundary -- the value is
+  pinned to the rebate on the dead side of the barrier at every time step. The
+  grid is anchored so a node lands exactly on `H` (otherwise the barrier is
+  applied at an offset node). `down-out`/`up-out` are solved directly;
+  `down-in`/`up-in` come from in + out = vanilla. Supports a constant `sigma` or
+  a `local_vol_fn` and a carry `b = r - q`.
+- Verified: matches the Reiner-Rubinstein closed form on all four barrier kinds
+  and a put (within the barrier's O(ds) discretisation bias on a fine grid);
+  knock-in + knock-out reproduces the vanilla; a knock-out is below the vanilla;
+  spot at the barrier returns the rebate.
+
 ## [1.134.0] - 2026-09-10
 
 ### Added

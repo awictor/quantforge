@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.134.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.135.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1772,6 +1772,20 @@ Auto-generated from `quantforge` v1.134.0 by `docs/gen_api.py` — do not edit b
 > Terminal payoff of the replicating spread at ``spot_at_expiry``.
 
 ## pde
+
+### `crank_nicolson_barrier(S, K, H, t, r, sigma=None, option_type=<OptionType.CALL: 'call'>, barrier='down-out', b=None, rebate=0.0, local_vol_fn=None, n_space=400, n_time=400)`  _function_
+
+> Price a continuously-monitored single-barrier option by a CN PDE.
+>
+> Knock-out barriers are imposed as an *absorbing* boundary: at every time
+> step the value is set to ``rebate`` on the dead side of ``H`` (V = 0 there
+> for a zero rebate), the exact continuous-monitoring condition. ``barrier`` is
+> ``down-out``/``up-out`` for the directly-solved knock-outs, or
+> ``down-in``/``up-in``, obtained from in + out = vanilla (same rebate handling
+> as :func:`quantforge.barrier_option`).
+>
+> Supports a constant ``sigma`` or a ``local_vol_fn(S, t)`` and a carry
+> ``b = r - q``. Returns the value at spot ``S``.
 
 ### `crank_nicolson_greeks(S, K, t, r, sigma=None, option_type=<OptionType.CALL: 'call'>, b=None, american=False, local_vol_fn=None, n_space=200, n_time=200, s_max_mult=4.0, psor_tol=1e-08, psor_max_iter=10000)`  _function_
 
