@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.132.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.133.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1770,6 +1770,18 @@ Auto-generated from `quantforge` v1.132.0 by `docs/gen_api.py` — do not edit b
 ### `overhedge_payoff(oh: quantforge.overhedge.Overhedge, spot_at_expiry: float, is_call=True) -> float`  _function_
 
 > Terminal payoff of the replicating spread at ``spot_at_expiry``.
+
+## pde
+
+### `crank_nicolson_price(S, K, t, r, sigma=None, option_type=<OptionType.CALL: 'call'>, b=None, american=False, local_vol_fn=None, n_space=200, n_time=200, s_max_mult=4.0, psor_tol=1e-08, psor_max_iter=10000)`  _function_
+
+> Price a European or American option by a Crank-Nicolson PDE solve.
+>
+> Provide either a constant ``sigma`` or a ``local_vol_fn(S, t)`` (time ``t``
+> measured forward from today). ``b`` is the cost of carry (defaults to ``r``);
+> dividend yield ``q`` enters as ``b = r - q``. American exercise uses PSOR.
+>
+> Returns the option value interpolated at spot ``S``.
 
 ## perpetual
 

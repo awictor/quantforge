@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.133.0] - 2026-09-10
+
+### Added
+- Crank-Nicolson PDE solver (new `pde.py`): `crank_nicolson_price` solves the
+  Black-Scholes-Merton PDE on a spot grid with the (unconditionally stable,
+  second-order) Crank-Nicolson scheme. Supports a constant `sigma` or a
+  `local_vol_fn(S, t)`, a cost-of-carry `b = r - q`, and American exercise via
+  projected SOR (PSOR) enforcing `V >= payoff`. The interior tridiagonal system
+  is solved by the Thomas algorithm.
+- Verified: European calls and puts match Black-Scholes; the error converges
+  `O(1/n^2)` in the grid; the dividend-carry and flat-local-vol cases match BS;
+  the American put matches a 3000-step binomial tree to ~1e-2 and exceeds the
+  European value.
+
 ## [1.132.0] - 2026-09-10
 
 ### Added
