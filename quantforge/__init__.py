@@ -47,7 +47,7 @@ from .localvol import dupire_local_vol, local_vol_from_implied
 from .spline import CubicSpline, SmileSpline
 from .rates import (
     CapletPeriod, caplet_price, cap_price, floor_price, collar_price,
-    caplet_floorlet_parity,
+    caplet_floorlet_parity, annuity, swaption_price, swaption_parity,
 )
 from .portfolio import Contract, Position, BookRisk, Book, price_book
 from .svi import SVIParams, calibrate_svi
@@ -76,7 +76,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.20.0"
+__version__ = "1.21.0"
 
 __all__ = [
     "OptionType",
@@ -141,6 +141,9 @@ __all__ = [
     "floor_price",
     "collar_price",
     "caplet_floorlet_parity",
+    "annuity",
+    "swaption_price",
+    "swaption_parity",
     "Contract",
     "Position",
     "BookRisk",

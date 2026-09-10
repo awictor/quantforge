@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.21.0] - 2026-09-09
+
+### Added
+- `swaption_price` (in `rates.py`): European payer/receiver swaptions on the
+  Bachelier model — the swap's PV annuity times a normal-model option on the
+  forward swap rate (handles negative rates). Plus `annuity` (PV01) and
+  `swaption_parity` (payer - receiver = annuity * (swap_rate - strike)).
+
 ## [1.20.0] - 2026-09-09
 
 ### Added

@@ -75,3 +75,43 @@ def caplet_floorlet_parity(period: CapletPeriod, strike: float) -> float:
     ``caplet - floorlet = discount * accrual * (F - K)``.
     """
     return period.discount * period.accrual * (period.forward - strike)
+
+
+def annuity(periods: Sequence[CapletPeriod]) -> float:
+    """Present-value annuity (level / PV01) of a swap: sum of accrual*discount."""
+    return sum(p.accrual * p.discount for p in periods)
+
+
+def swaption_price(swap_rate, strike, expiry, sigma_n, periods,
+                   payer=True) -> float:
+    """Bachelier price of a European swaption on the underlying swap.
+
+    A payer swaption is a call on the swap rate; a receiver is a put. The value
+    is the swap's PV annuity times a Bachelier option on the forward swap rate:
+
+        V = annuity * Bachelier(swap_rate, strike, expiry, r=0, sigma_n).
+
+    Args:
+        swap_rate: current forward swap rate.
+        strike: fixed strike rate.
+        expiry: option expiry (years) — when the swap rate sets.
+        sigma_n: normal (absolute) volatility of the swap rate.
+        periods: the underlying swap's ``CapletPeriod`` legs, used only for the
+            annuity (accrual and discount factors).
+        payer: True for a payer (call), False for a receiver (put).
+
+    Rates may be negative; the normal model handles that.
+    """
+    ann = annuity(periods)
+    ot = OptionType.CALL if payer else OptionType.PUT
+    if expiry <= 0:
+        intrinsic = (max(swap_rate - strike, 0.0) if payer
+                     else max(strike - swap_rate, 0.0))
+        return ann * intrinsic
+    undiscounted = bachelier_price(swap_rate, strike, expiry, 0.0, sigma_n, ot)
+    return ann * undiscounted
+
+
+def swaption_parity(swap_rate, strike, periods) -> float:
+    """Payer - receiver at the same strike = annuity * (swap_rate - strike)."""
+    return annuity(periods) * (swap_rate - strike)

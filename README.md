@@ -500,6 +500,17 @@ collar_price(periods, cap_strike=0.045, floor_strike=0.03)
 
 Cap(K) - Floor(K) equals the discounted swap PV, which the tests enforce.
 
+Swaptions price as the annuity times a Bachelier option on the forward swap
+rate:
+
+```python
+from quantforge import swaption_price
+
+# Payer swaption (call on the swap rate); receiver is payer=False.
+swaption_price(swap_rate=0.03, strike=0.035, expiry=2.0, sigma_n=0.01,
+               periods=periods, payer=True)
+```
+
 ## Merton jump-diffusion
 
 Adds lognormal jumps to the diffusion; priced as a Poisson-weighted series of
