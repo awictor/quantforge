@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.113.1] - 2026-09-10
+
+### Changed
+- The rBergomi conditional (turbocharged) estimator's `I1`/`QV` path loop now
+  shares the same cached-kernel FFT Volterra convolution as `rbergomi_paths`
+  (factored into module-level `_build_far_kernel` / `_far_sums_fft`), with the
+  same `fast="auto"` switch at `n_steps >= 200`. Verified the FFT and direct
+  `I1`/`QV` agree to ~1e-14 and the CV price/tests are unchanged.
+
 ## [1.113.0] - 2026-09-10
 
 ### Added

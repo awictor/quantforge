@@ -26,6 +26,19 @@ def test_auto_matches_forced_modes():
         assert max(abs(a - b) for a, b in zip(auto, exp)) < 1e-9
 
 
+@pytest.mark.parametrize("n_steps", [64, 128, 256])
+def test_w_stats_fft_matches_direct(n_steps):
+    # The conditional-estimator I1/QV loop shares the same cached-kernel FFT.
+    from quantforge.rbergomi import _rbergomi_w_stats
+    fast = _rbergomi_w_stats(100, 0.5, 0.04, 1.5, 0.1, -0.7, 0.0,
+                             n_steps, 1000, True, 1, fast=True)
+    direct = _rbergomi_w_stats(100, 0.5, 0.04, 1.5, 0.1, -0.7, 0.0,
+                               n_steps, 1000, True, 1, fast=False)
+    worst = max(max(abs(a[0] - b[0]), abs(a[1] - b[1]))
+                for a, b in zip(fast, direct))
+    assert worst < 1e-9
+
+
 def test_single_step_edge_case():
     # n_steps = 1 has no far cells; FFT path must degrade gracefully to direct.
     fast = rbergomi_paths(100, 0.5, 0.04, 1.0, 0.2, -0.5, 0.0,

@@ -50,6 +50,29 @@ def _next_pow2(n):
     return p
 
 
+def _build_far_kernel(w, n_steps):
+    """Precompute the FFT of the hybrid far-cell weight kernel (cached per run).
+
+    The far-cell Volterra contribution ``F[i] = sum_j dW[j] g[i-j]`` with
+    ``g[m] = w[m+1]`` is a convolution; returns ``(m_fft, G_fft)`` where
+    ``G_fft`` is the kernel spectrum reused across every path.
+    """
+    m_fft = _next_pow2(2 * n_steps)
+    g = [0.0] * m_fft
+    for mm in range(1, n_steps):
+        g[mm] = w[mm + 1]
+    return m_fft, _fft(g)
+
+
+def _far_sums_fft(dW, n_steps, m_fft, G_fft):
+    """Far-cell sums F[i] for i=0..n_steps-1 via cached-kernel FFT convolution."""
+    padded = list(dW) + [0.0] * (m_fft - n_steps)
+    DW_fft = _fft(padded)
+    prod = [DW_fft[i] * G_fft[i] for i in range(m_fft)]
+    conv = _fft(prod, inverse=True)
+    return [conv[i].real for i in range(n_steps)]
+
+
 def rbergomi_paths(S, t, xi0, eta, H, rho, r=0.0, n_steps=100, n_paths=20_000,
                    antithetic=True, seed=None, fast="auto"):
     """Yield discounted terminal spots under rough Bergomi (internal helper).
@@ -100,27 +123,16 @@ def rbergomi_paths(S, t, xi0, eta, H, rho, r=0.0, n_steps=100, n_paths=20_000,
     # is a discrete convolution of the increments with a fixed weight kernel.
     # Precompute the kernel's FFT once so each path costs O(n log n), not O(n^2).
     if fast and n_steps > 1:
-        m_fft = _next_pow2(2 * n_steps)
-        g = [0.0] * m_fft
-        for mm in range(1, n_steps):
-            g[mm] = w[mm + 1]           # w defined for k=2..n_steps
-        G_fft = _fft(g)                 # cached kernel spectrum, reused per path
+        m_fft, G_fft = _build_far_kernel(w, n_steps)
     else:
         m_fft = 0
         G_fft = None
 
-    def _far_sums(dW):
-        """Return F[i] for i=0..n_steps-1 via FFT convolution with the kernel."""
-        padded = list(dW) + [0.0] * (m_fft - n_steps)
-        DW_fft = _fft(padded)
-        prod = [DW_fft[i] * G_fft[i] for i in range(m_fft)]
-        conv = _fft(prod, inverse=True)
-        return [conv[i].real for i in range(n_steps)]
-
     def one_path(z1s, z2s, zps):
         dW = [sqrt_dt * z for z in z1s]                 # Brownian increments
         Y = [y_beta * dW[i] + y_resid * z2s[i] for i in range(n_steps)]
-        far = _far_sums(dW) if (fast and n_steps > 1) else None
+        far = (_far_sums_fft(dW, n_steps, m_fft, G_fft)
+               if (fast and n_steps > 1) else None)
         logS = math.log(S)
         v_prev = xi0                                    # V at t_0 (Wtilde_0 = 0)
         for i in range(n_steps):
@@ -153,7 +165,7 @@ def rbergomi_paths(S, t, xi0, eta, H, rho, r=0.0, n_steps=100, n_paths=20_000,
 
 
 def _rbergomi_w_stats(S, t, xi0, eta, H, rho, r, n_steps, n_paths,
-                      antithetic, seed):
+                      antithetic, seed, fast="auto"):
     """Per-path W-measurable statistics for the conditional estimator.
 
     Conditioning on the volatility-driving Brownian motion ``W``, the terminal
@@ -173,6 +185,8 @@ def _rbergomi_w_stats(S, t, xi0, eta, H, rho, r, n_steps, n_paths,
         raise ValueError("rho must be in [-1, 1]")
     if n_steps < 1:
         raise ValueError("n_steps must be >= 1")
+    if fast == "auto":
+        fast = n_steps >= 200
 
     dt = t / n_steps
     sqrt_dt = math.sqrt(dt)
@@ -185,12 +199,20 @@ def _rbergomi_w_stats(S, t, xi0, eta, H, rho, r, n_steps, n_paths,
     y_resid = math.sqrt(max(var_y - cov * cov / dt, 0.0))
     t_pow = [(i * dt) ** (2.0 * H) for i in range(n_steps + 1)]
 
+    if fast and n_steps > 1:
+        m_fft, G_fft = _build_far_kernel(w, n_steps)
+    else:
+        m_fft = 0
+        G_fft = None
+
     rng = random.Random(seed)
     stats = []
 
     def one_path(z1s, z2s):
         dW = [sqrt_dt * z for z in z1s]
         Y = [y_beta * dW[i] + y_resid * z2s[i] for i in range(n_steps)]
+        far = (_far_sums_fft(dW, n_steps, m_fft, G_fft)
+               if (fast and n_steps > 1) else None)
         v_prev = xi0
         I1 = 0.0
         QV = 0.0
@@ -198,9 +220,12 @@ def _rbergomi_w_stats(S, t, xi0, eta, H, rho, r, n_steps, n_paths,
             vol = math.sqrt(v_prev)
             I1 += vol * dW[i]        # left-point sqrt(V) dW
             QV += v_prev * dt        # left-point V ds
-            wt = Y[i]
-            for k in range(2, i + 2):
-                wt += w[k] * dW[i - k + 1]
+            if far is not None:
+                wt = Y[i] + far[i]
+            else:
+                wt = Y[i]
+                for k in range(2, i + 2):
+                    wt += w[k] * dW[i - k + 1]
             wtilde = root2H * wt
             v_prev = xi0 * math.exp(eta * wtilde - 0.5 * eta * eta * t_pow[i + 1])
         return (I1, QV)
