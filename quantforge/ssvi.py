@@ -258,7 +258,7 @@ def _ssvi_arb_penalty(rho, eta, gamma, thetas, expiries):
 def calibrate_ssvi(
     market: Sequence[Tuple[float, float, float]],
     initial: SSVIParams = None, max_iter: int = 8000,
-    arb_weight: float = 0.0,
+    arb_weight: float = 0.0, vega_weighted: bool = False,
 ) -> Tuple[SSVIParams, float]:
     """Fit an SSVI surface to market implied vols.
 
@@ -277,8 +277,18 @@ def calibrate_ssvi(
     expiries = sorted({t for t, _, _ in pts})
     n_exp = len(expiries)
     idx = {t: i for i, t in enumerate(expiries)}
-    # Market total variance targets.
-    w_mkt = [(idx[t], k, iv * iv * t) for t, k, iv in pts]
+    # Market total-variance targets, each with a (fixed) vega-proxy weight.
+    # vega ~ sqrt(w) exp(-d1^2/2), d1 = -k/sqrt(w) + sqrt(w)/2, so ATM quotes
+    # (largest vega, deepest liquidity) dominate when vega_weighted is set.
+    w_mkt = []
+    for t, k, iv in pts:
+        wt = 1.0
+        if vega_weighted:
+            w_obs = iv * iv * t
+            if w_obs > 1e-12:
+                d1 = -k / math.sqrt(w_obs) + 0.5 * math.sqrt(w_obs)
+                wt = max(math.sqrt(w_obs) * math.exp(-0.5 * d1 * d1), 1e-8)
+        w_mkt.append((idx[t], k, iv * iv * t, wt))
 
     def softplus(x):
         return math.log1p(math.exp(-abs(x))) + max(x, 0.0)
@@ -316,10 +326,10 @@ def calibrate_ssvi(
     def objective(p):
         rho, eta, gamma, thetas = unpack(p)
         err = 0.0
-        for i, k, w in w_mkt:
+        for i, k, w, wt in w_mkt:
             model = ssvi_total_variance(k, thetas[i], rho, eta, gamma)
             diff = model - w
-            err += diff * diff
+            err += wt * diff * diff
         if arb_weight > 0.0:
             err += arb_weight * _ssvi_arb_penalty(rho, eta, gamma, thetas,
                                                   expiries)

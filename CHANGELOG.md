@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.138.0] - 2026-09-10
+
+### Added
+- `calibrate_ssvi` gains a `vega_weighted` option: each quote's total-variance
+  error is weighted by an approximate Black vega
+  (`sqrt(w) exp(-d1^2/2)`), so near-the-money quotes -- largest vega, deepest
+  liquidity -- dominate the fit rather than the deep wings.
+- Verified: a clean surface is still recovered exactly; under wing noise the
+  vega-weighted fit has a smaller at-the-money vol error than the unweighted
+  fit; the fitted surface stays valid and arbitrage-free; and the default
+  (unweighted) behaviour is unchanged.
+
 ## [1.137.0] - 2026-09-10
 
 ### Added

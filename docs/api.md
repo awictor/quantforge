@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.137.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.138.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2296,7 +2296,7 @@ Auto-generated from `quantforge` v1.137.0 by `docs/gen_api.py` — do not edit b
 
 > A fitted SSVI surface: global (rho, eta, gamma) and per-expiry theta.
 
-### `calibrate_ssvi(market: Sequence[Tuple[float, float, float]], initial: quantforge.ssvi.SSVIParams = None, max_iter: int = 8000, arb_weight: float = 0.0) -> Tuple[quantforge.ssvi.SSVIParams, float]`  _function_
+### `calibrate_ssvi(market: Sequence[Tuple[float, float, float]], initial: quantforge.ssvi.SSVIParams = None, max_iter: int = 8000, arb_weight: float = 0.0, vega_weighted: bool = False) -> Tuple[quantforge.ssvi.SSVIParams, float]`  _function_
 
 > Fit an SSVI surface to market implied vols.
 >
