@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.70.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.71.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -888,6 +888,15 @@ Auto-generated from `quantforge` v1.70.0 by `docs/gen_api.py` — do not edit by
 >         period runs from now (t=0) to reset_times[0].
 >     local_cap / local_floor: per-period return bounds (cap None = uncapped).
 >     global_cap / global_floor: bounds on the summed payoff.
+
+### `double_knockout_mc(S, K, t, r, sigma, lower, upper, option_type=<OptionType.CALL: 'call'>, b=None, rebate=0.0, n_steps=100, n_paths=50000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
+
+> Monte Carlo a double-knockout barrier option (a corridor).
+>
+> The option pays the vanilla payoff only if the spot stays strictly inside
+> ``(lower, upper)`` for the whole monitored path; if either barrier is
+> breached it knocks out and pays the cash ``rebate`` (at expiry, discounted).
+> Also known as a double-barrier knock-out or "corridor" option.
 
 ### `european_mc(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, n_paths=100000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
 

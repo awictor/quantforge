@@ -467,3 +467,52 @@ def autocallable_mc(S, t, r, sigma, observation_times, autocall_barrier,
 
     price, se = _summarize(samples)
     return MCResult(price=price, std_error=se, n_paths=len(samples))
+
+
+def double_knockout_mc(S, K, t, r, sigma, lower, upper, option_type=OptionType.CALL,
+                       b=None, rebate=0.0, n_steps=100, n_paths=50_000,
+                       antithetic=True, seed=None) -> MCResult:
+    """Monte Carlo a double-knockout barrier option (a corridor).
+
+    The option pays the vanilla payoff only if the spot stays strictly inside
+    ``(lower, upper)`` for the whole monitored path; if either barrier is
+    breached it knocks out and pays the cash ``rebate`` (at expiry, discounted).
+    Also known as a double-barrier knock-out or "corridor" option.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if b is None:
+        b = r
+    if not (lower < S < upper):
+        raise ValueError("require lower < S < upper")
+    if n_steps < 1:
+        raise ValueError("n_steps must be >= 1")
+    dt = t / n_steps
+    drift = (b - 0.5 * sigma * sigma) * dt
+    vol = sigma * math.sqrt(dt)
+    disc = math.exp(-r * t)
+    sign = 1.0 if ot is OptionType.CALL else -1.0
+
+    def one_path(zs):
+        s = S
+        knocked = False
+        for z in zs:
+            s *= math.exp(drift + vol * z)
+            if s <= lower or s >= upper:
+                knocked = True
+                break
+        if knocked:
+            return disc * rebate
+        return disc * max(sign * (s - K), 0.0)
+
+    rng = random.Random(seed)
+    samples = []
+    n = n_paths // 2 if antithetic else n_paths
+    for _ in range(n):
+        zs = [rng.gauss(0.0, 1.0) for _ in range(n_steps)]
+        samples.append(one_path(zs))
+        if antithetic:
+            samples.append(one_path([-z for z in zs]))
+
+    price, se = _summarize(samples)
+    return MCResult(price=price, std_error=se, n_paths=len(samples))

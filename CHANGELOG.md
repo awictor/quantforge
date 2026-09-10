@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.71.0] - 2026-09-10
+
+### Added
+- `double_knockout_mc` (in `montecarlo.py`): Monte Carlo a double-knockout
+  (corridor) barrier option that pays the vanilla payoff only if the spot stays
+  inside `(lower, upper)` for the whole path, else the cash rebate. Wide
+  barriers approach the vanilla; a tighter corridor is cheaper.
+
 ## [1.70.0] - 2026-09-10
 
 ### Added

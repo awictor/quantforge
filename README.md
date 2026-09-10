@@ -630,6 +630,16 @@ print(oh.cost, oh.digital_value, oh.cushion)   # spread cost >= fair value
 The spread payoff dominates the digital everywhere and its cost converges to
 the fair digital value as `width -> 0`; the cushion is the pin-risk buffer.
 
+A double-knockout (corridor) option pays the vanilla payoff only if the spot
+stays inside two barriers for the whole path:
+
+```python
+from quantforge import double_knockout_mc
+
+double_knockout_mc(S=100, K=100, t=1.0, r=0.05, sigma=0.25,
+                   lower=90, upper=115, option_type="call")
+```
+
 A Parisian barrier activates only after the spot stays past the level for a
 consecutive window (robust to brief spikes), priced by Monte Carlo:
 
