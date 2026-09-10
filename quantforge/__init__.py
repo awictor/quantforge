@@ -240,6 +240,7 @@ from .kim import (
 from .baw import baw_american
 from .andreasenhuge import (
     andreasen_huge_prices, andreasen_huge_smile, andreasen_huge_calibrate,
+    andreasen_huge_strike_greeks,
 )
 from .cheyette import (
     cheyette_G, cheyette_y, zero_bond as cheyette_zero_bond,
@@ -266,7 +267,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.233.0"
+__version__ = "1.234.0"
 
 __all__ = [
     "OptionType",
@@ -676,6 +677,7 @@ __all__ = [
     "andreasen_huge_prices",
     "andreasen_huge_smile",
     "andreasen_huge_calibrate",
+    "andreasen_huge_strike_greeks",
     "cheyette_G",
     "cheyette_y",
     "cheyette_zero_bond",

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.233.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.234.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -75,6 +75,23 @@ Auto-generated from `quantforge` v1.233.0 by `docs/gen_api.py` — do not edit b
 > carry ``b = r`` so the pricing forward is ``F``) and inverts each to a
 > Black-Scholes implied vol. Returns ``(log_moneyness, vol)`` pairs sorted by
 > strike on the forward ``F``.
+
+### `andreasen_huge_strike_greeks(F, strikes, T, local_vols, r=0.0)`  _function_
+
+> Strike-space Greeks of the Andreasen-Huge call surface.
+>
+> From the arbitrage-free forward call prices (:func:`andreasen_huge_prices`),
+> computes at each interior strike:
+>
+>   * ``dual_delta`` = ``dC/dK`` (discounted), which equals ``-e^{-rT}`` times
+>     the risk-neutral probability of finishing above ``K``; monotone in
+>     ``[-e^{-rT}, 0]``;
+>   * ``rnd`` = ``e^{rT} d2C/dK2``, the Breeden-Litzenberger risk-neutral
+>     density, non-negative by the scheme's convexity.
+>
+> Returns ``(interior_strikes, dual_delta, rnd)`` as three equal-length lists
+> (the two Dirichlet edge strikes are dropped). The density is non-negative for
+> any positive ``local_vols`` and integrates to approximately 1 over the grid.
 
 ## attribution
 

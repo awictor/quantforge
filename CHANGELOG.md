@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.234.0] - 2026-09-10
+
+### Added
+- `andreasen_huge_strike_greeks` (in `andreasenhuge.py`): strike-space Greeks of
+  the arbitrage-free Andreasen-Huge call surface -- the `dual_delta` (`dC/dK`,
+  discounted; equals `-e^{-rT}` times the risk-neutral exceedance probability)
+  and the `rnd` (Breeden-Litzenberger risk-neutral density `e^{rT} d2C/dK2`) at
+  each interior strike.
+- Verified: the density is non-negative for any positive local vols (the
+  scheme's convexity), the dual delta is monotone in `[-e^{-rT}, 0]`, and the
+  density integrates to ~1 -- rising toward 1 as the strike grid widens
+  (0.89 -> 0.994 -> 0.9997), confirming the tail-truncation deficit rather than a
+  normalization error.
+
 ## [1.233.0] - 2026-09-10
 
 ### Added

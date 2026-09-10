@@ -99,6 +99,44 @@ def andreasen_huge_smile(F, strikes, T, local_vols, r=0.0):
     return out
 
 
+def andreasen_huge_strike_greeks(F, strikes, T, local_vols, r=0.0):
+    """Strike-space Greeks of the Andreasen-Huge call surface.
+
+    From the arbitrage-free forward call prices (:func:`andreasen_huge_prices`),
+    computes at each interior strike:
+
+      * ``dual_delta`` = ``dC/dK`` (discounted), which equals ``-e^{-rT}`` times
+        the risk-neutral probability of finishing above ``K``; monotone in
+        ``[-e^{-rT}, 0]``;
+      * ``rnd`` = ``e^{rT} d2C/dK2``, the Breeden-Litzenberger risk-neutral
+        density, non-negative by the scheme's convexity.
+
+    Returns ``(interior_strikes, dual_delta, rnd)`` as three equal-length lists
+    (the two Dirichlet edge strikes are dropped). The density is non-negative for
+    any positive ``local_vols`` and integrates to approximately 1 over the grid.
+    """
+    n = len(strikes)
+    if n < 3 or len(local_vols) != n:
+        raise ValueError("need >=3 strikes and matching local_vols")
+    disc = math.exp(-r * T)
+    c = andreasen_huge_prices(F, strikes, T, local_vols)   # forward calls
+    ks, dd, rnd = [], [], []
+    for i in range(1, n - 1):
+        dk_up = strikes[i + 1] - strikes[i]
+        dk_dn = strikes[i] - strikes[i - 1]
+        # Central first derivative (non-uniform grid) of the discounted price.
+        d1 = disc * (c[i + 1] - c[i - 1]) / (dk_up + dk_dn)
+        # Second derivative (non-uniform three-point), then de-discount for the
+        # risk-neutral density = e^{rT} d2C_disc/dK2 = d2C_fwd/dK2.
+        d2 = 2.0 * (c[i - 1] / (dk_dn * (dk_dn + dk_up))
+                    - c[i] / (dk_dn * dk_up)
+                    + c[i + 1] / (dk_up * (dk_dn + dk_up)))
+        ks.append(strikes[i])
+        dd.append(d1)
+        rnd.append(max(d2, 0.0))
+    return ks, dd, rnd
+
+
 def andreasen_huge_calibrate(F, strikes, T, market_vols, r=0.0,
                              max_iter=60, tol=1e-8):
     """Calibrate per-strike local vols so the AH smile matches market vols.
