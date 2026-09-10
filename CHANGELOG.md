@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.86.1] - 2026-09-10
+
+### Added
+- Test hardening: a barrier in-out parity property test (`KI + KO = vanilla`
+  across all four barrier kinds, calls/puts, and many strike/barrier
+  combinations, with and without dividends) and a Bachelier-to-Black-Scholes
+  low-vol ATM convergence test.
+
 ## [1.86.0] - 2026-09-10
 
 ### Added

@@ -132,7 +132,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.86.0"
+__version__ = "1.86.1"
 
 __all__ = [
     "OptionType",
