@@ -19,8 +19,27 @@ normal CDF from :mod:`quantforge.mathfns`.
 
 import math
 
-from .mathfns import norm_ppf
-from .bsm import delta as bs_delta, OptionType
+from .mathfns import norm_ppf, norm_pdf
+from .bsm import delta as bs_delta, OptionType, price as bs_price
+from .implied import implied_volatility
+from .sabr import _solve3
+
+
+def _vega_vanna_volga(S, K, t, r, b, sigma):
+    """Black-Scholes vega, vanna and volga at one strike (carry form).
+
+    vanna = d vega / d spot, volga = d vega / d vol; all evaluated at ``sigma``.
+    These three form the vanna-volga hedging basis.
+    """
+    vsqrt = sigma * math.sqrt(t)
+    d1 = (math.log(S / K) + (b + 0.5 * sigma * sigma) * t) / vsqrt
+    d2 = d1 - vsqrt
+    carry = math.exp((b - r) * t)
+    pdf = norm_pdf(d1)
+    vega = S * carry * pdf * math.sqrt(t)
+    vanna = -carry * pdf * d2 / sigma
+    volga = vega * d1 * d2 / sigma
+    return vega, vanna, volga
 
 
 def pillar_vols(atm, rr, bf):
@@ -78,3 +97,58 @@ class VannaVolgaSmile:
     def pillars(self):
         """Return the three (strike, vol) pillar points, sorted by strike."""
         return [(k, self.sig[k]) for k in self._ks]
+
+    def price(self, K, r_dom=0.0, r_for=0.0, option_type=OptionType.CALL):
+        """Vanna-volga option price via the Castagna-Mercurio correction.
+
+        The exact second-order vanna-volga construction: start from the flat-ATM
+        Black-Scholes price and add a linear combination of the three pillar
+        options' *market-minus-ATM* price differences, weighted so the target
+        option's vega, vanna and volga are matched by the hedging portfolio.
+        This reprices the three market instruments exactly (unlike the quadratic
+        vol interpolation in :meth:`vol`, which only matches the pillar vols) and
+        is the standard FX smile pricer.
+
+        ``r_dom``/``r_for`` are the domestic/foreign rates (carry ``b = r_dom -
+        r_for``); pass the same pair used to build the forward.
+        """
+        b = r_dom - r_for
+        s_atm = self.atm
+        ks = self._ks
+
+        # Target and pillar Greeks at the flat ATM vol (the hedging basis).
+        vt, nt, ct = _vega_vanna_volga(self.S, K, self.t, r_dom, b, s_atm)
+        rows = []  # columns: [vega, vanna, volga] of each pillar at ATM vol
+        for ki in ks:
+            rows.append(list(_vega_vanna_volga(self.S, ki, self.t, r_dom, b, s_atm)))
+
+        # Solve for weights x so sum_i x_i * greeks(k_i) = greeks(K), i.e. the
+        # pillar portfolio replicates the target's vega/vanna/volga.
+        A = [[rows[i][j] for i in range(3)] for j in range(3)]  # 3x3, rows=greeks
+        x = _solve3(A, [vt, nt, ct])
+        if x is None:
+            # Degenerate basis (e.g. coincident strikes): fall back to flat ATM.
+            return bs_price(self.S, K, self.t, r_dom, s_atm, option_type, b=b)
+
+        # Cost of the correction: each pillar's (market vol - ATM vol) price gap.
+        correction = 0.0
+        for i, ki in enumerate(ks):
+            mkt = bs_price(self.S, ki, self.t, r_dom, self.sig[ki], option_type, b=b)
+            atm = bs_price(self.S, ki, self.t, r_dom, s_atm, option_type, b=b)
+            correction += x[i] * (mkt - atm)
+
+        base = bs_price(self.S, K, self.t, r_dom, s_atm, option_type, b=b)
+        return base + correction
+
+    def vol_price_corrected(self, K, r_dom=0.0, r_for=0.0):
+        """Implied vol of the Castagna-Mercurio vanna-volga price at ``K``.
+
+        Inverts :meth:`price` back to a Black-Scholes vol, giving the smile that
+        actually reprices the three market instruments. Slower than :meth:`vol`
+        (one implied-vol solve per strike) but exact at the pillars in *price*,
+        not merely in interpolated vol.
+        """
+        b = r_dom - r_for
+        c = self.price(K, r_dom, r_for, OptionType.CALL)
+        return implied_volatility(c, self.S, K, self.t, r_dom,
+                                  OptionType.CALL, b=b)

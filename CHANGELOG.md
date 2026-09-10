@@ -4,6 +4,21 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.93.0] - 2026-09-10
+
+### Added
+- `VannaVolgaSmile.price` and `.vol_price_corrected` (in `vannavolga.py`): the
+  exact second-order Castagna-Mercurio vanna-volga construction. Starts from the
+  flat-ATM Black-Scholes price and adds the three pillar options' market-minus-
+  ATM price gaps, weighted (via a 3x3 vega/vanna/volga solve) so the hedging
+  portfolio matches the target's vega, vanna and volga. Unlike the existing
+  quadratic vol interpolation (`.vol`), this reprices the three market
+  instruments *exactly in price*, the standard FX smile pricer.
+- Verified: reprices all three market pillars to <1e-10, price-corrected vol
+  equals the pillar vols, put-call parity holds to 1e-16, a negative risk
+  reversal puts the put wing above the call wing, and a flat market gives a flat
+  smile.
+
 ## [1.92.0] - 2026-09-10
 
 ### Added
