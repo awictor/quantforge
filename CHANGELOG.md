@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.181.1] - 2026-09-10
+
+### Tests
+- Trimmed the fast suite ~50s -> ~47s. The Heston-CV standard-error-ordering
+  check drops from 30000 paths / 100 steps to 8000 / 30 (a robust inequality,
+  not an accuracy claim), and the dividend-yield Fourier match moved under
+  `-m slow` with the other `heston_cv_mc` accuracy cross-checks. Together these
+  removed ~19s of QE simulation from the fast gate.
+
 ## [1.181.0] - 2026-09-10
 
 ### Added

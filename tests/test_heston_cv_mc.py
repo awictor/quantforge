@@ -32,12 +32,13 @@ def test_put_matches_fourier():
 
 def test_control_variate_lowers_standard_error():
     cv = heston_cv_mc(S, K, T, R, V0, KAPPA, THETA, XI, RHO, OptionType.CALL,
-                      n_paths=30_000, seed=3)
+                      n_steps=30, n_paths=8_000, seed=3)
     plain = heston_qe_mc(S, K, T, R, V0, KAPPA, THETA, XI, RHO, OptionType.CALL,
-                         n_paths=30_000, seed=3)
+                         n_steps=30, n_paths=8_000, seed=3)
     assert cv.std_error < plain.std_error
 
 
+@pytest.mark.slow
 def test_dividend_yield():
     q = 0.02
     fx = heston_price(S, K, T, R, V0, KAPPA, THETA, XI, RHO, OptionType.CALL, q=q)
