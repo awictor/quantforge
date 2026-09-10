@@ -59,6 +59,7 @@ from .qmc import halton, european_qmc
 from .correlation import (
     implied_correlation, index_vol_from_correlation, dispersion_basket_vol,
 )
+from .cev import cev_price, noncentral_chisq_cdf
 from .portfolio import Contract, Position, BookRisk, Book, price_book
 from .svi import SVIParams, calibrate_svi
 from .sabr import SABRParams, sabr_vol, calibrate_sabr
@@ -86,7 +87,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.28.0"
+__version__ = "1.29.0"
 
 __all__ = [
     "OptionType",
@@ -168,6 +169,8 @@ __all__ = [
     "implied_correlation",
     "index_vol_from_correlation",
     "dispersion_basket_vol",
+    "cev_price",
+    "noncentral_chisq_cdf",
     "Contract",
     "Position",
     "BookRisk",

@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.29.0] - 2026-09-09
+
+### Added
+- `cev.py`: Constant-Elasticity-of-Variance pricing (Schroder/Hull) for
+  `0 <= beta < 1`, with a from-scratch noncentral chi-square CDF
+  (`noncentral_chisq_cdf`) and regularized incomplete gamma. The chi-square
+  summation starts at the Poisson mode so it is stable at large noncentrality.
+  `cev_price` matches Black-Scholes when scaled, satisfies parity, and produces
+  the leverage skew (lower beta -> richer downside puts). Cross-checked vs
+  Monte Carlo.
+
 ## [1.28.0] - 2026-09-09
 
 ### Added

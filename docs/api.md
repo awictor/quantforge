@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.28.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.29.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -157,6 +157,33 @@ Auto-generated from `quantforge` v1.28.0 by `docs/gen_api.py` — do not edit by
 ### `vega(S, K, t, r, sigma, b=None) -> float`  _function_
 
 > dPrice/dSigma, per 1.0 change in vol (divide by 100 for per-vol-point).
+
+## cev
+
+### `cev_price(S, K, t, r, sigma, beta, option_type=<OptionType.CALL: 'call'>, q=0.0)`  _function_
+
+> European CEV option price (Schroder 1989), for 0 <= beta < 1.
+>
+> Args:
+>     sigma: the CEV volatility level, calibrated so that at ``S`` the
+>         instantaneous lognormal vol equals ``sigma`` — i.e. the scale
+>         ``delta = sigma * S^{1-beta}``. This makes ``beta`` control only the
+>         skew, with ``sigma`` comparable to a Black-Scholes vol.
+>     beta: elasticity in [0, 1). beta = 1 recovers Black-Scholes (handled by
+>         a limit); beta = 0 is the Bachelier-like absolute-diffusion case.
+>     q: continuous dividend yield.
+>
+> Puts are obtained by put-call parity.
+
+### `noncentral_chisq_cdf(x: float, k: float, lam: float) -> float`  _function_
+
+> Noncentral chi-square CDF at ``x`` with ``k`` dof and noncentrality ``lam``.
+>
+> A Poisson(lam/2)-weighted sum of central chi-square CDFs:
+> ``F(x; k, lam) = sum_j pois(j; lam/2) * P((k+2j)/2, x/2)``. The summation
+> starts at the Poisson mode ``j0 = floor(lam/2)`` and expands outward, so it
+> stays numerically stable even when ``lam`` is large (the naive j=0 start
+> underflows because ``e^{-lam/2}`` is zero to machine precision).
 
 ## correlation
 

@@ -520,6 +520,19 @@ Total variance is interpolated linearly in maturity (the standard
 no-arbitrage-friendly scheme) and the calendar check enforces that
 `w(k, t)` is non-decreasing in `t` at every strike.
 
+## CEV (constant elasticity of variance)
+
+Local vol that scales with the spot level (the leverage effect), priced in
+closed form via the noncentral chi-square distribution — implemented from
+scratch, no SciPy:
+
+```python
+from quantforge import cev_price
+
+# beta in [0, 1); lower beta => stronger downside skew. beta -> 1 is BSM.
+cev_price(S=100, K=90, t=1.0, r=0.05, sigma=0.2, beta=0.5, option_type="put")
+```
+
 ## Bachelier (normal) model
 
 For rates and spread options where the forward can go negative and a lognormal
