@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.207.0] - 2026-09-10
+
+### Added
+- `bermudan_basket_lsm` (in `lsm.py`): American basket option on
+  `w1 S1 + w2 S2` (call or put) by Longstaff-Schwartz. Two correlated GBMs; the
+  continuation value is regressed on a quadratic basis in both spots plus the
+  basket `{1, S1, S2, S1^2, S2^2, S1 S2, w1 S1 + w2 S2}` over the in-the-money
+  paths.
+- Verified: without dividends the call matches the European moment-matched
+  `basket_option`; a 6% dividend on both assets gives a positive early-exercise
+  premium on the call (~0.38); the put carries an early-exercise premium even
+  without dividends (~0.26); reproducible.
+
 ## [1.206.0] - 2026-09-10
 
 ### Added

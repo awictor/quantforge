@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.206.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.207.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1603,6 +1603,21 @@ Auto-generated from `quantforge` v1.206.0 by `docs/gen_api.py` — do not edit b
 > running min/max) defaults to the current spot.
 
 ## lsm
+
+### `bermudan_basket_lsm(S1, S2, w1, w2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0, option_type=<OptionType.CALL: 'call'>, n_steps=50, n_paths=20000, seed=None) -> float`  _function_
+
+> American basket option on ``w1 S1 + w2 S2`` by Longstaff-Schwartz.
+>
+> Prices ``max(w1 S1_T + w2 S2_T - K, 0)`` (call) or the put, exercisable at
+> ``n_steps`` equally-spaced dates. Two correlated GBMs are simulated and the
+> continuation value is regressed on a quadratic basis in both spots plus the
+> basket ``B = w1 S1 + w2 S2``: ``{1, S1, S2, S1^2, S2^2, S1 S2, B}`` over the
+> in-the-money paths at each date.
+>
+> Returns the price (in-sample LSM estimate, mildly biased low). It sits at or
+> above the European moment-matched :func:`quantforge.basket_option`;
+> dividends create an early-exercise premium (and American puts carry one even
+> without).
 
 ### `bermudan_lsm(S, K, t, r, sigma, option_type=<OptionType.PUT: 'put'>, b=None, n_steps=50, n_paths=20000, degree=3, seed=None) -> float`  _function_
 
