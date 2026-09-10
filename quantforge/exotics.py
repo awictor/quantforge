@@ -369,3 +369,71 @@ def asian_greeks(S, K, t, r, sigma, option_type=OptionType.CALL, b=None,
 
     return {"price": base, "delta": delta, "gamma": gamma,
             "vega": vega, "theta": theta}
+
+
+# --------------------------------------------------------------------------
+# Gap options (Reiner-Rubinstein): separate trigger and payoff strikes
+# --------------------------------------------------------------------------
+def gap_option(S, K_trigger, K_payoff, t, r, sigma, option_type=OptionType.CALL,
+               b=None):
+    """Gap option: pays off against ``K_payoff`` but is triggered by ``K_trigger``.
+
+    A gap call pays ``S_T - K_payoff`` (which may be negative) whenever
+    ``S_T > K_trigger``; a gap put pays ``K_payoff - S_T`` whenever
+    ``S_T < K_trigger``. Setting the two strikes equal recovers the vanilla
+    option. Closed form (Reiner-Rubinstein).
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K_trigger, t, sigma)
+    if K_payoff <= 0:
+        raise ValueError("payoff strike must be positive")
+    if b is None:
+        b = r
+    carry = math.exp((b - r) * t)
+    disc = math.exp(-r * t)
+    if t == 0 or sigma == 0:
+        fwd = S * math.exp(b * t)
+        if ot is OptionType.CALL:
+            return disc * ((fwd - K_payoff) if fwd > K_trigger else 0.0)
+        return disc * ((K_payoff - fwd) if fwd < K_trigger else 0.0)
+    vsqrt = sigma * math.sqrt(t)
+    d1 = (math.log(S / K_trigger) + (b + 0.5 * sigma * sigma) * t) / vsqrt
+    d2 = d1 - vsqrt
+    if ot is OptionType.CALL:
+        return S * carry * norm_cdf(d1) - K_payoff * disc * norm_cdf(d2)
+    return K_payoff * disc * norm_cdf(-d2) - S * carry * norm_cdf(-d1)
+
+
+# --------------------------------------------------------------------------
+# Power options: payoff on S^power
+# --------------------------------------------------------------------------
+def power_option(S, K, t, r, sigma, power, option_type=OptionType.CALL, b=None):
+    """Power option with payoff ``max(S_T^power - K, 0)`` (call) / ``max(K - S_T^power, 0)``.
+
+    S_T^power is lognormal, so this has a closed form: an adjusted-drift,
+    adjusted-vol Black-Scholes on the transformed underlying. ``power = 1``
+    recovers the vanilla option.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if b is None:
+        b = r
+    if power <= 0:
+        raise ValueError("power must be positive")
+    disc = math.exp(-r * t)
+    if t == 0 or sigma == 0:
+        fwd_pow = (S * math.exp(b * t)) ** power
+        payoff = max(fwd_pow - K, 0.0) if ot is OptionType.CALL else max(K - fwd_pow, 0.0)
+        return disc * payoff
+    # E[S_T^power] under the risk-neutral measure with carry b.
+    vsqrt = sigma * math.sqrt(t)
+    # Mean and vol of log(S_T^power) = power * log(S_T).
+    mu = power * (math.log(S) + (b - 0.5 * sigma * sigma) * t)
+    vol_p = power * vsqrt
+    # Forward of S^power and its lognormal parameters.
+    fwd = math.exp(mu + 0.5 * vol_p * vol_p)
+    d1 = (mu + vol_p * vol_p - math.log(K)) / vol_p
+    d2 = d1 - vol_p
+    if ot is OptionType.CALL:
+        return disc * (fwd * norm_cdf(d1) - K * norm_cdf(d2))
+    return disc * (K * norm_cdf(-d2) - fwd * norm_cdf(-d1))

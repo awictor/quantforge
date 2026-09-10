@@ -79,7 +79,8 @@ from .sabr import SABRParams, sabr_vol, calibrate_sabr
 from .surface import VolSurface, SurfaceSlice, CalendarViolation
 from .exotics import (
     cash_or_nothing, asset_or_nothing, barrier_option, barrier_greeks,
-    geometric_asian, arithmetic_asian, asian_greeks, one_touch, no_touch, Barrier,
+    geometric_asian, arithmetic_asian, asian_greeks, one_touch, no_touch,
+    gap_option, power_option, Barrier,
 )
 from .montecarlo import (
     MCResult, european_mc, arithmetic_asian_mc, capped_cliquet_mc,
@@ -103,7 +104,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.43.0"
+__version__ = "1.44.0"
 
 __all__ = [
     "OptionType",
@@ -226,6 +227,8 @@ __all__ = [
     "asian_greeks",
     "one_touch",
     "no_touch",
+    "gap_option",
+    "power_option",
     "Barrier",
     "MCResult",
     "european_mc",

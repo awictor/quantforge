@@ -567,6 +567,18 @@ fixed_strike_lookback(S=100, K=100, t=1.0, r=0.05, sigma=0.3, option_type="call"
 Pass `s_extreme` (the running min/max observed so far) to price a seasoned
 lookback; it defaults to the current spot at inception.
 
+Gap options (separate trigger and payoff strikes) and power options (payoff on
+`S^p`) have closed forms too:
+
+```python
+from quantforge import gap_option, power_option
+
+gap_option(S=100, K_trigger=90, K_payoff=110, t=1.0, r=0.05, sigma=0.25,
+           option_type="call")
+power_option(S=100, K=10000, t=1.0, r=0.05, sigma=0.2, power=2.0,
+             option_type="call")
+```
+
 ## Local volatility (Dupire)
 
 Extract the Dupire local-volatility function from an implied-vol or call-price

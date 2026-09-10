@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.43.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.44.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -362,6 +362,15 @@ Auto-generated from `quantforge` v1.43.0 by `docs/gen_api.py` — do not edit by
 >
 > Call pays when S_T > K; put pays when S_T < K.
 
+### `gap_option(S, K_trigger, K_payoff, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> Gap option: pays off against ``K_payoff`` but is triggered by ``K_trigger``.
+>
+> A gap call pays ``S_T - K_payoff`` (which may be negative) whenever
+> ``S_T > K_trigger``; a gap put pays ``K_payoff - S_T`` whenever
+> ``S_T < K_trigger``. Setting the two strikes equal recovers the vanilla
+> option. Closed form (Reiner-Rubinstein).
+
 ### `geometric_asian(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
 
 > Continuously-monitored geometric-average-price Asian option.
@@ -392,6 +401,14 @@ Auto-generated from `quantforge` v1.43.0 by `docs/gen_api.py` — do not edit by
 > (``H > S``) or a lower barrier (``H < S``); the direction is inferred.
 >
 > Uses the standard Rubinstein-Reiner touch formulas.
+
+### `power_option(S, K, t, r, sigma, power, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> Power option with payoff ``max(S_T^power - K, 0)`` (call) / ``max(K - S_T^power, 0)``.
+>
+> S_T^power is lognormal, so this has a closed form: an adjusted-drift,
+> adjusted-vol Black-Scholes on the transformed underlying. ``power = 1``
+> recovers the vanilla option.
 
 ## forward
 

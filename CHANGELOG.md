@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.44.0] - 2026-09-09
+
+### Added
+- `gap_option` and `power_option` (in `exotics.py`): closed forms for a gap
+  option (separate trigger and payoff strikes; Reiner-Rubinstein) and a power
+  option (payoff on `S^power`; adjusted-drift/vol Black-Scholes). Equal gap
+  strikes and `power=1` recover the vanilla option; the power form is
+  Monte-Carlo verified.
+
 ## [1.43.0] - 2026-09-09
 
 ### Added
