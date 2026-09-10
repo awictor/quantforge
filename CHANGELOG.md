@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.167.0] - 2026-09-10
+
+### Added
+- `bermudan_lsm_greeks` (in `lsm.py`): delta and gamma of a Bermudan/American
+  LSM price by common-random-number bumps -- the option is repriced at
+  `S(1 +/- h)` on the same seeded path stream, so the finite differences are
+  low-variance. Returns price, delta and gamma.
+- Verified: delta matches a 2000-step binomial tree (~1e-2); gamma is positive
+  and in a loose band around the tree gamma (a second difference over a re-fit
+  regression is only indicative and needs many paths -- documented). Delta
+  converges to the tree value as paths grow (-0.40 -> -0.412).
+
 ## [1.166.0] - 2026-09-10
 
 ### Added

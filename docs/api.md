@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.166.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.167.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1565,6 +1565,21 @@ Auto-generated from `quantforge` v1.166.0 by `docs/gen_api.py` — do not edit b
 >     b: cost of carry (defaults to r). Dividend yield q enters as b = r - q.
 >
 > Returns the option price (in-sample LSM estimate, mildly biased low).
+
+### `bermudan_lsm_greeks(S, K, t, r, sigma, option_type=<OptionType.PUT: 'put'>, b=None, n_steps=50, n_paths=40000, degree=3, seed=None, h_rel=0.01)`  _function_
+
+> Delta and gamma of a Bermudan/American LSM price by common-random bumps.
+>
+> Prices the option at ``S``, ``S(1 +/- h)`` on the *same* random-number
+> stream (each call reseeds ``bermudan_lsm`` with the same ``seed``, so the
+> Brownian paths coincide up to the spot scaling and the finite differences
+> are low-variance). Returns a dict with ``price``, ``delta`` and ``gamma``
+> from central differences; ``h_rel`` is the relative spot bump.
+>
+> Common random numbers make the bump estimator far less noisy than
+> independent re-pricing; the LSM regression is re-fit at each bump, which is
+> the standard practical scheme. Delta is reliable; gamma (a second difference
+> over a re-fit regression) is only indicative and needs many paths.
 
 ### `bermudan_lsm_local_vol(S, K, t, r, local_vol_fn, option_type=<OptionType.PUT: 'put'>, q=0.0, n_steps=50, n_paths=20000, degree=3, seed=None) -> float`  _function_
 

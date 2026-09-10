@@ -195,3 +195,35 @@ def bermudan_lsm_local_vol(S, K, t, r, local_vol_fn, option_type=OptionType.PUT,
             for p in range(n_paths):
                 cash[p] *= disc
     return sum(cash) * disc / n_paths
+
+
+def bermudan_lsm_greeks(S, K, t, r, sigma, option_type=OptionType.PUT, b=None,
+                        n_steps=50, n_paths=40_000, degree=3, seed=None,
+                        h_rel=0.01):
+    """Delta and gamma of a Bermudan/American LSM price by common-random bumps.
+
+    Prices the option at ``S``, ``S(1 +/- h)`` on the *same* random-number
+    stream (each call reseeds ``bermudan_lsm`` with the same ``seed``, so the
+    Brownian paths coincide up to the spot scaling and the finite differences
+    are low-variance). Returns a dict with ``price``, ``delta`` and ``gamma``
+    from central differences; ``h_rel`` is the relative spot bump.
+
+    Common random numbers make the bump estimator far less noisy than
+    independent re-pricing; the LSM regression is re-fit at each bump, which is
+    the standard practical scheme. Delta is reliable; gamma (a second difference
+    over a re-fit regression) is only indicative and needs many paths.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if b is None:
+        b = r
+    h = h_rel * S
+    base = bermudan_lsm(S, K, t, r, sigma, ot, b=b, n_steps=n_steps,
+                        n_paths=n_paths, degree=degree, seed=seed)
+    up = bermudan_lsm(S + h, K, t, r, sigma, ot, b=b, n_steps=n_steps,
+                      n_paths=n_paths, degree=degree, seed=seed)
+    dn = bermudan_lsm(S - h, K, t, r, sigma, ot, b=b, n_steps=n_steps,
+                      n_paths=n_paths, degree=degree, seed=seed)
+    delta = (up - dn) / (2.0 * h)
+    gamma = (up - 2.0 * base + dn) / (h * h)
+    return {"price": base, "delta": delta, "gamma": gamma}
