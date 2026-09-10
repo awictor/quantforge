@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.229.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.230.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2022,6 +2022,16 @@ Auto-generated from `quantforge` v1.229.0 by `docs/gen_api.py` — do not edit b
 > A single-pass, model-agnostic alternative to the likelihood-ratio estimator.
 
 ## meixner
+
+### `meixner_greeks(S, K, t, r, a, b, d, option_type=<OptionType.CALL: 'call'>, q=0.0, cm_alpha=1.5)`  _function_
+
+> Greeks of a Meixner option by central finite differences.
+>
+> Central differences of :func:`meixner_price` for the spot Greeks ``delta``
+> (dV/dS), ``gamma`` (d2V/dS2), and ``theta`` (calendar decay), plus the
+> asymmetry (skew) sensitivity ``d_b`` (dV/db). The ``d_b`` bump is clipped to
+> keep ``b`` in ``(-pi, pi)`` on both sides. Returns a dict with ``price``,
+> ``delta``, ``gamma``, ``theta``, ``d_b``.
 
 ### `meixner_price(S, K, t, r, a, b, d, option_type=<OptionType.CALL: 'call'>, q=0.0, cm_alpha=1.5, upper=200.0) -> float`  _function_
 

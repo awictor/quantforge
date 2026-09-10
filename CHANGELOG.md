@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.230.0] - 2026-09-10
+
+### Added
+- `meixner_greeks` (in `meixner.py`): spot Greeks (`delta`, `gamma`, `theta`)
+  plus the asymmetry/skew sensitivity `d_b` (dV/db) of a Meixner option by
+  central finite differences on `meixner_price` (the `d_b` bump is clipped to
+  keep `b` in `(-pi, pi)`). Completes the Levy-model Greek family (Merton, Kou,
+  VG, NIG, CGMY, Meixner).
+- Verified: delta matches a finite difference; call delta in (0,1) with positive
+  gamma, put delta negative; the skew sensitivity is finite.
+
 ## [1.229.0] - 2026-09-10
 
 ### Added
