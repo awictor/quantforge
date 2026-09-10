@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.102.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.103.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -917,6 +917,22 @@ Auto-generated from `quantforge` v1.102.0 by `docs/gen_api.py` — do not edit b
 > ``p != 1/2``) tilts the smile into a skew.
 
 ## leisen_reimer
+
+### `leisen_reimer_american_accel(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, steps=101) -> float`  _function_
+
+> Richardson-extrapolated Leisen-Reimer American price (Broadie-Detemple).
+>
+> American LR convergence is only ``O(1/n)`` (the smooth-payoff assumption
+> behind the Peizer-Pratt inversion breaks at the early-exercise boundary),
+> unlike the ``O(1/n^2)`` European case. Broadie & Detemple (1996) cancel that
+> leading ``1/n`` term with a two-point Richardson extrapolation between an
+> ``n``-step and a ``2n``-step tree:
+>
+>     V_ext = 2 * V(2n) - V(n).
+>
+> For the same work this is several times more accurate than a single tree, so
+> a moderate ``steps`` reaches four-figure accuracy. ``b`` is the cost of carry
+> (dividend yield ``q`` via ``b = r - q``).
 
 ### `leisen_reimer_greeks(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, steps=101, american=False)`  _function_
 

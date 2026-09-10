@@ -88,6 +88,29 @@ def leisen_reimer_price(S, K, t, r, sigma, option_type=OptionType.CALL,
     return values[0]
 
 
+def leisen_reimer_american_accel(S, K, t, r, sigma, option_type=OptionType.CALL,
+                                 b=None, steps=101) -> float:
+    """Richardson-extrapolated Leisen-Reimer American price (Broadie-Detemple).
+
+    American LR convergence is only ``O(1/n)`` (the smooth-payoff assumption
+    behind the Peizer-Pratt inversion breaks at the early-exercise boundary),
+    unlike the ``O(1/n^2)`` European case. Broadie & Detemple (1996) cancel that
+    leading ``1/n`` term with a two-point Richardson extrapolation between an
+    ``n``-step and a ``2n``-step tree:
+
+        V_ext = 2 * V(2n) - V(n).
+
+    For the same work this is several times more accurate than a single tree, so
+    a moderate ``steps`` reaches four-figure accuracy. ``b`` is the cost of carry
+    (dividend yield ``q`` via ``b = r - q``).
+    """
+    vn = leisen_reimer_price(S, K, t, r, sigma, option_type, b=b,
+                             steps=steps, american=True)
+    v2n = leisen_reimer_price(S, K, t, r, sigma, option_type, b=b,
+                              steps=2 * steps, american=True)
+    return 2.0 * v2n - vn
+
+
 def leisen_reimer_greeks(S, K, t, r, sigma, option_type=OptionType.CALL,
                          b=None, steps=101, american=False):
     """Delta and gamma from Leisen-Reimer tree nodes, plus FD vega/theta.

@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.103.0] - 2026-09-10
+
+### Added
+- `leisen_reimer_american_accel` (in `leisen_reimer.py`): the Broadie-Detemple
+  (1996) two-point Richardson extrapolation of the American Leisen-Reimer price,
+  `V_ext = 2*V(2n) - V(n)`, which cancels the leading `1/n` error that the
+  American tree carries (its exercise boundary breaks the smooth-payoff
+  assumption behind Peizer-Pratt). Measured against a 6000-step CRR tree it is
+  1.6-20x more accurate than a single 101-step LR tree for the same work,
+  reaching a few mils; `b = r - q` supports dividends.
+
 ## [1.102.0] - 2026-09-10
 
 ### Added
