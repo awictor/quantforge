@@ -223,6 +223,27 @@ res = arithmetic_asian_mc(S=100, K=100, t=1, r=0.05, sigma=0.3,
 print(res.price, "+/-", res.std_error)
 ```
 
+## Forward-start and cliquet options
+
+Options whose strike is fixed at a future date (as a multiple of the then-spot),
+and strips of them (cliquets/ratchets):
+
+```python
+from quantforge import forward_start_price, cliquet_price
+
+# ATM-at-reset call: strike set at t=0.5 to alpha*S, expiring at t=1.0.
+forward_start_price(S=100, t_start=0.5, t_expiry=1.0, r=0.05, sigma=0.25,
+                    alpha=1.0, option_type="call")
+
+# A quarterly-reset cliquet over one year.
+cliquet_price(S=100, reset_times=[0.25, 0.5, 0.75, 1.0], r=0.05, sigma=0.2,
+              alpha=1.0, option_type="call")
+```
+
+Under BSM the forward-start value scales with the current spot and is
+independent of the absolute future strike (Rubinstein), so `alpha` (moneyness)
+is the only strike input.
+
 ## Exotic options (closed form)
 
 Analytic prices for binaries, single barriers, and geometric Asians:

@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.4.0] - 2026-09-09
+
+### Added
+- `forwardstart.py`: `forward_start_price` prices forward-start options
+  (strike fixed at a future date as a multiple of the then-spot) via
+  Rubinstein's closed form, and `cliquet_price` values a cliquet/ratchet as a
+  strip of consecutive forward-starts.
+
 ## [1.3.0] - 2026-09-09
 
 ### Added

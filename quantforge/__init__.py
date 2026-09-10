@@ -24,6 +24,7 @@ from .implied import implied_volatility
 from .binomial import american_price
 from .trinomial import trinomial_price, richardson_american
 from .forward import implied_forward, ForwardResult
+from .forwardstart import forward_start_price, cliquet_price
 from .portfolio import Contract, Position, BookRisk, Book, price_book
 from .svi import SVIParams, calibrate_svi
 from .sabr import SABRParams, sabr_vol, calibrate_sabr
@@ -50,7 +51,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.3.0"
+__version__ = "1.4.0"
 
 __all__ = [
     "OptionType",
@@ -70,6 +71,8 @@ __all__ = [
     "richardson_american",
     "implied_forward",
     "ForwardResult",
+    "forward_start_price",
+    "cliquet_price",
     "Contract",
     "Position",
     "BookRisk",
