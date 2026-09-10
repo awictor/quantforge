@@ -303,6 +303,25 @@ res = arithmetic_asian_mc(S=100, K=100, t=1, r=0.05, sigma=0.3,
 print(res.price, "+/-", res.std_error)
 ```
 
+## Two-asset options
+
+Exchange (Margrabe), spread (Kirk), and basket options on two correlated
+assets:
+
+```python
+from quantforge import exchange_option, spread_option, basket_option
+
+# Right to swap asset 2 for asset 1: max(S1 - S2, 0). Exact, rate-independent.
+exchange_option(S1=100, S2=95, t=1.0, sigma1=0.2, sigma2=0.25, rho=0.3)
+
+# Spread: max(S1 - S2 - K, 0) via Kirk's approximation.
+spread_option(S1=100, S2=95, K=5, t=1.0, r=0.05, sigma1=0.2, sigma2=0.25, rho=0.5)
+
+# Basket call on w1 S1 + w2 S2 (lognormal moment-match).
+basket_option(spots=(100, 100), weights=(0.5, 0.5), K=100, t=1.0, r=0.05,
+              sigmas=(0.2, 0.3), corr=0.4)
+```
+
 ## Forward-start and cliquet options
 
 Options whose strike is fixed at a future date (as a multiple of the then-spot),

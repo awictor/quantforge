@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.13.0] - 2026-09-09
+
+### Added
+- `multiasset.py`: two-asset options. `exchange_option` (Margrabe, exact),
+  `spread_option` (Kirk approximation, puts via parity), and `basket_option`
+  (Levy lognormal moment-match on the two-asset weighted sum). Exchange and
+  basket match correlated-GBM Monte Carlo; basket single-asset reduces to
+  Black-Scholes exactly.
+
 ## [1.12.0] - 2026-09-09
 
 ### Added
