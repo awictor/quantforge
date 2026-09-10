@@ -93,6 +93,9 @@ from .rnd import (
     risk_neutral_density_from_smile, density_grid_from_smile,
     price_payoff_from_density,
 )
+from .density_metrics import (
+    tail_probability, density_entropy, expected_shortfall,
+)
 from .multiasset import (
     exchange_option, spread_option, basket_option, best_of_call, worst_of_call,
     exchange_greeks, spread_greeks, basket_greeks, implied_spread_correlation,
@@ -221,7 +224,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.159.0"
+__version__ = "1.160.0"
 
 __all__ = [
     "OptionType",
@@ -346,6 +349,9 @@ __all__ = [
     "risk_neutral_density_from_smile",
     "density_grid_from_smile",
     "price_payoff_from_density",
+    "tail_probability",
+    "density_entropy",
+    "expected_shortfall",
     "exchange_option",
     "spread_option",
     "basket_option",

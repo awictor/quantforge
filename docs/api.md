@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.159.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.160.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -629,6 +629,26 @@ Auto-generated from `quantforge` v1.159.0 by `docs/gen_api.py` — do not edit b
 > Uses a non-uniform central second difference of the call curve, so strikes
 > need not be equally spaced. Returns ``(mid_strikes, densities)`` for the
 > interior points (the two endpoints have no central second difference).
+
+## density_metrics
+
+### `density_entropy(S0, t, r, vol_fn, q=0.0, n=600, width=8.0)`  _function_
+
+> Differential entropy ``-integral g ln g dK`` of the terminal-spot density.
+
+### `expected_shortfall(S0, t, r, vol_fn, level, lower=True, q=0.0, n=600, width=8.0)`  _function_
+
+> Risk-neutral tail mean ``E^Q[S_T | S_T < level]`` (or ``> level``).
+>
+> Returns the conditional expectation of the terminal spot in the tail beyond
+> ``level``; ``nan`` if that tail has zero probability.
+
+### `tail_probability(S0, t, r, vol_fn, level, lower=True, q=0.0, n=600, width=8.0)`  _function_
+
+> Risk-neutral tail probability ``Q(S_T < level)`` (or ``> level``).
+>
+> Equals the undiscounted price of a cash-or-nothing binary struck at
+> ``level``. ``lower=True`` returns the downside probability.
 
 ## discount_curve
 

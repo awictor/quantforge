@@ -4,6 +4,24 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.160.0] - 2026-09-10
+
+### Added
+- Risk-neutral density tail/shape metrics (new `density_metrics.py`):
+  `tail_probability` (`Q(S_T < L)` / `> U`, the undiscounted digital price),
+  `density_entropy` (differential entropy of the terminal-spot density) and
+  `expected_shortfall` (`E^Q[S_T | S_T` in a tail]), all from the
+  Breeden-Litzenberger smile density.
+- Verified: the upper-tail probability matches the lognormal `N(d2)`; the two
+  tails sum to 1; a downward skew fattens the left tail; entropy increases with
+  vol; the tail expected-shortfalls sit beyond their thresholds; an empty tail
+  returns NaN.
+
+### Fixed
+- `density_grid_from_smile` could evaluate a call at a non-positive strike at the
+  low end of a wide/high-vol grid (the finite-difference step exceeded the first
+  strike). The FD step is now capped at `0.5 * K` so `K - h > 0` everywhere.
+
 ## [1.159.0] - 2026-09-10
 
 ### Added

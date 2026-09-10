@@ -51,8 +51,11 @@ def density_grid_from_smile(S0, t, r, vol_fn, q=0.0, n=400, width=8.0):
     for i in range(n + 1):
         K = lo + i * dK
         strikes.append(K)
+        # The FD step must stay strictly inside (0, K) so K - h > 0 at the low
+        # nodes (a wide grid can have the grid spacing exceed the first strike).
+        h = min(max(1e-4 * S0, 0.25 * dK), 0.5 * K)
         dens.append(risk_neutral_density_from_smile(S0, t, r, vol_fn, K, q=q,
-                                                    dK=max(dK, 1e-4 * S0)))
+                                                    dK=h))
     return strikes, dens
 
 
