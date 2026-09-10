@@ -221,6 +221,82 @@ def digital_is_mc(S, K, t, r, sigma, option_type=OptionType.CALL, b=None,
     return MCResult(price=price, std_error=se, n_paths=len(samples))
 
 
+def european_is_adaptive_mc(S, K, t, r, sigma, option_type=OptionType.CALL,
+                            b=None, n_pilot=20_000, n_grid=41, n_paths=100_000,
+                            seed=None) -> MCResult:
+    """European price by importance sampling with a pilot-tuned optimal shift.
+
+    :func:`european_is_mc` centres the sampling shift on the strike, which is
+    near-optimal for a digital but not exactly optimal for a vanilla (whose
+    payoff keeps growing past the strike, pulling the best shift further OTM).
+    This routine tunes the shift ``mu`` from a short pilot instead of guessing.
+
+    For an estimator ``payoff(z) * L(z)`` with ``L(z) = exp(-mu z + mu^2/2)``,
+    a change of measure gives the second moment under the shifted law in terms
+    of plain ``N(0, 1)`` draws:
+
+        M(mu) = E_mu[(payoff L)^2] = E_0[payoff(z)^2 exp(-mu z + mu^2/2)].
+
+    So one pilot sample of ``payoff(z)^2`` and ``z`` under ``N(0, 1)`` scores
+    *every* candidate ``mu`` on a grid at negligible cost; the variance-minimising
+    ``mu`` is the one with the smallest ``M(mu)``. The main run then samples at
+    that ``mu`` with the standard likelihood-ratio correction, so the estimate
+    stays unbiased regardless of the tuning. The grid spans ``[0, 1.5 |mu0|]``
+    (or the mirror for OTM puts) around the strike-centring shift ``mu0``.
+
+    Cross-checks the closed-form Black-Scholes value; for a deep-OTM vanilla its
+    standard error is at or below :func:`european_is_mc` at equal main-run paths.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if b is None:
+        b = r
+    if n_pilot < 100 or n_grid < 1:
+        raise ValueError("n_pilot must be >= 100 and n_grid >= 1")
+    drift = (b - 0.5 * sigma * sigma) * t
+    vol = sigma * math.sqrt(t)
+    disc = math.exp(-r * t)
+    sign = 1.0 if ot is OptionType.CALL else -1.0
+    mu0 = (math.log(K / S) - drift) / vol      # strike-centring shift
+    rng = random.Random(seed)
+
+    def payoff(z):
+        sT = S * math.exp(drift + vol * z)
+        return disc * max(sign * (sT - K), 0.0)
+
+    # --- pilot: draw N(0,1), record (z, payoff^2), score every mu on the grid.
+    pilot = []
+    for _ in range(n_pilot):
+        z = rng.gauss(0.0, 1.0)
+        p = payoff(z)
+        pilot.append((z, p * p))
+
+    lo, hi = sorted((0.0, 1.5 * mu0))
+    if n_grid == 1:
+        grid = [mu0]
+    else:
+        step = (hi - lo) / (n_grid - 1)
+        grid = [lo + i * step for i in range(n_grid)]
+
+    best_mu, best_m = mu0, float("inf")
+    for mu in grid:
+        half = 0.5 * mu * mu
+        m = sum(p2 * math.exp(-mu * z + half) for z, p2 in pilot) / n_pilot
+        if m < best_m:
+            best_m, best_mu = m, mu
+
+    # --- main run at the tuned shift.
+    mu = best_mu
+    half = 0.5 * mu * mu
+    samples = []
+    for _ in range(n_paths):
+        z = rng.gauss(mu, 1.0)
+        samples.append(payoff(z) * math.exp(-mu * z + half))
+
+    price, se = _summarize(samples)
+    return MCResult(price=price, std_error=se, n_paths=len(samples))
+
+
 def _simulate_average_paths(S, t, r, sigma, b, n_steps, n_paths, rng, antithetic):
     """Generate (arithmetic_avg, geometric_avg) of the price path for each run.
 

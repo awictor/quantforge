@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.174.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.175.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1943,6 +1943,31 @@ Auto-generated from `quantforge` v1.174.0 by `docs/gen_api.py` — do not edit b
 >
 > Cross-checks the closed-form Black-Scholes value and reports a standard
 > error strictly below the plain :func:`european_mc` at equal path count.
+
+### `european_is_adaptive_mc(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, n_pilot=20000, n_grid=41, n_paths=100000, seed=None) -> quantforge.montecarlo.MCResult`  _function_
+
+> European price by importance sampling with a pilot-tuned optimal shift.
+>
+> :func:`european_is_mc` centres the sampling shift on the strike, which is
+> near-optimal for a digital but not exactly optimal for a vanilla (whose
+> payoff keeps growing past the strike, pulling the best shift further OTM).
+> This routine tunes the shift ``mu`` from a short pilot instead of guessing.
+>
+> For an estimator ``payoff(z) * L(z)`` with ``L(z) = exp(-mu z + mu^2/2)``,
+> a change of measure gives the second moment under the shifted law in terms
+> of plain ``N(0, 1)`` draws:
+>
+>     M(mu) = E_mu[(payoff L)^2] = E_0[payoff(z)^2 exp(-mu z + mu^2/2)].
+>
+> So one pilot sample of ``payoff(z)^2`` and ``z`` under ``N(0, 1)`` scores
+> *every* candidate ``mu`` on a grid at negligible cost; the variance-minimising
+> ``mu`` is the one with the smallest ``M(mu)``. The main run then samples at
+> that ``mu`` with the standard likelihood-ratio correction, so the estimate
+> stays unbiased regardless of the tuning. The grid spans ``[0, 1.5 |mu0|]``
+> (or the mirror for OTM puts) around the strike-centring shift ``mu0``.
+>
+> Cross-checks the closed-form Black-Scholes value; for a deep-OTM vanilla its
+> standard error is at or below :func:`european_is_mc` at equal main-run paths.
 
 ### `european_is_mc(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, shift=None, n_paths=100000, seed=None) -> quantforge.montecarlo.MCResult`  _function_
 

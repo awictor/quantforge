@@ -4,6 +4,21 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.175.0] - 2026-09-10
+
+### Added
+- `european_is_adaptive_mc` (in `montecarlo.py`): importance sampling with a
+  pilot-tuned optimal shift. The strike-centring shift of `european_is_mc` is
+  near-optimal for a digital but not for a vanilla, whose payoff keeps growing
+  past the strike and pulls the best shift further OTM. A change of measure
+  gives the shifted second moment from plain draws,
+  `M(mu) = E_0[payoff(z)^2 exp(-mu z + mu^2/2)]`, so one `N(0,1)` pilot sample
+  scores every candidate `mu` on a grid at negligible cost; the main run samples
+  at the variance-minimising `mu` and stays unbiased via the likelihood ratio.
+- Verified: matches the closed-form Black-Scholes call and put (deep OTM, ATM,
+  under carry); for a K=160 deep-OTM call the tuned shift gives ~0.87x the
+  standard error of the fixed strike-centring shift at equal main-run paths.
+
 ## [1.174.0] - 2026-09-10
 
 ### Added
