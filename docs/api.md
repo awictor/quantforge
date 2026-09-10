@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.197.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.198.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2370,6 +2370,21 @@ Auto-generated from `quantforge` v1.197.0 by `docs/gen_api.py` — do not edit b
 > quadrant prices sum to ``cash e^{-r t}`` (the conditions are exhaustive).
 >
 > Cross-checks a correlated-GBM Monte Carlo.
+
+### `two_asset_digital_greeks(S1, S2, K1, K2, t, r, sigma1, sigma2, rho, cond1='above', cond2='above', q1=0.0, q2=0.0, cash=1.0)`  _function_
+
+> Greeks of a two-asset correlated digital by FD on the exact closed form.
+>
+> Differentiates :func:`two_asset_digital` -- no Monte Carlo noise -- for the
+> two spot deltas (``delta1`` = dV/dS1, ``delta2`` = dV/dS2), the two
+> own-gammas, the cross-gamma ``d2V/dS1 dS2``, and the correlation sensitivity
+> ``corr_vega`` = dV/drho. Returns a dict with ``price`` and those fields.
+>
+> The correlation Greek is the interesting one: a both-``above`` (or
+> both-``below``) digital *gains* value as correlation rises (the two
+> in-the-money events move together), while a mixed above/below digital loses
+> it; summed over the four exhaustive quadrants the correlation sensitivity is
+> zero (total probability does not depend on ``rho``).
 
 ### `two_asset_gap_option(S1, S2, K_trigger, K_payoff, K2, t, r, sigma1, sigma2, rho, option_type=<OptionType.CALL: 'call'>, cond2='above', q1=0.0, q2=0.0)`  _function_
 

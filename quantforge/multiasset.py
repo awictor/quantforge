@@ -391,6 +391,48 @@ def two_asset_gap_option(S1, S2, K_trigger, K_payoff, K2, t, r, sigma1, sigma2,
     return K_payoff * con - aon
 
 
+def two_asset_digital_greeks(S1, S2, K1, K2, t, r, sigma1, sigma2, rho,
+                             cond1="above", cond2="above", q1=0.0, q2=0.0,
+                             cash=1.0):
+    """Greeks of a two-asset correlated digital by FD on the exact closed form.
+
+    Differentiates :func:`two_asset_digital` -- no Monte Carlo noise -- for the
+    two spot deltas (``delta1`` = dV/dS1, ``delta2`` = dV/dS2), the two
+    own-gammas, the cross-gamma ``d2V/dS1 dS2``, and the correlation sensitivity
+    ``corr_vega`` = dV/drho. Returns a dict with ``price`` and those fields.
+
+    The correlation Greek is the interesting one: a both-``above`` (or
+    both-``below``) digital *gains* value as correlation rises (the two
+    in-the-money events move together), while a mixed above/below digital loses
+    it; summed over the four exhaustive quadrants the correlation sensitivity is
+    zero (total probability does not depend on ``rho``).
+    """
+    def px(a=S1, bb=S2, rr=rho):
+        return two_asset_digital(a, bb, K1, K2, t, r, sigma1, sigma2, rr,
+                                 cond1, cond2, q1, q2, cash)
+
+    base = px()
+    h1 = 1e-2 * S1
+    h2 = 1e-2 * S2
+    u1, d1 = px(a=S1 + h1), px(a=S1 - h1)
+    u2, d2 = px(bb=S2 + h2), px(bb=S2 - h2)
+    delta1 = (u1 - d1) / (2.0 * h1)
+    delta2 = (u2 - d2) / (2.0 * h2)
+    gamma1 = (u1 - 2.0 * base + d1) / (h1 * h1)
+    gamma2 = (u2 - 2.0 * base + d2) / (h2 * h2)
+    pp = px(a=S1 + h1, bb=S2 + h2)
+    pm = px(a=S1 + h1, bb=S2 - h2)
+    mp = px(a=S1 - h1, bb=S2 + h2)
+    mm = px(a=S1 - h1, bb=S2 - h2)
+    cross = (pp - pm - mp + mm) / (4.0 * h1 * h2)
+    hr = 1e-4
+    corr_vega = (px(rr=min(rho + hr, 1.0 - 1e-9))
+                 - px(rr=max(rho - hr, -1.0 + 1e-9))) / (2.0 * hr)
+    return {"price": base, "delta1": delta1, "delta2": delta2,
+            "gamma1": gamma1, "gamma2": gamma2, "cross": cross,
+            "corr_vega": corr_vega}
+
+
 def _disc_expected_min(S1, S2, t, r, sigma1, sigma2, rho, q1, q2):
     """Discounted risk-neutral expectation of ``min(S1_T, S2_T)``.
 

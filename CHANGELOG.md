@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.198.0] - 2026-09-10
+
+### Added
+- `two_asset_digital_greeks` (in `multiasset.py`): Greeks of a two-asset
+  correlated digital by finite differences on the exact `two_asset_digital`
+  closed form (no Monte Carlo noise) -- the two spot deltas, own-gammas,
+  cross-gamma, and the correlation sensitivity `corr_vega`.
+- Verified: a both-above digital has positive spot deltas and a positive
+  `corr_vega` (the two in-the-money events move together), a mixed above/below
+  digital has negative `corr_vega`, and summed over the four exhaustive quadrants
+  the correlation sensitivity is zero (total probability is `rho`-independent);
+  Greeks scale linearly in `cash`; a `below` condition flips that spot delta's
+  sign.
+
 ## [1.197.0] - 2026-09-10
 
 ### Added
