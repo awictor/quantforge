@@ -30,7 +30,7 @@ from .trinomial import trinomial_price, richardson_american
 from .lsm import (
     bermudan_lsm, bermudan_lsm_local_vol, bermudan_lsm_greeks,
     bermudan_max_call_lsm, bermudan_max_call_lsm_greeks, bermudan_spread_lsm,
-    bermudan_min_put_lsm,
+    bermudan_spread_lsm_greeks, bermudan_min_put_lsm,
 )
 from .mlmc import mlmc_asian
 from .perpetual import perpetual_american, perpetual_exercise_boundary
@@ -246,7 +246,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.199.0"
+__version__ = "1.200.0"
 
 __all__ = [
     "OptionType",
@@ -275,6 +275,7 @@ __all__ = [
     "bermudan_max_call_lsm",
     "bermudan_max_call_lsm_greeks",
     "bermudan_spread_lsm",
+    "bermudan_spread_lsm_greeks",
     "bermudan_min_put_lsm",
     "mlmc_asian",
     "perpetual_american",

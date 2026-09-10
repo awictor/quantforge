@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.200.0] - 2026-09-10
+
+### Added
+- `bermudan_spread_lsm_greeks` (in `lsm.py`): deltas, own-gammas, and
+  cross-gamma of an American spread option by common-random-number bumps on
+  `bermudan_spread_lsm`. Same-seed repricing shares the Brownian shocks so the
+  finite differences are low-variance; the LSM regression is re-fit at each bump.
+- Verified: without dividends the two spot deltas match the European Kirk
+  `spread_greeks` deltas within noise (slow test); the spread-call long-leg
+  delta is positive and the short-leg delta negative, with the signs flipping
+  for the put; reproducible under a fixed seed.
+
 ## [1.199.0] - 2026-09-10
 
 ### Added
