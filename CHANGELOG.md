@@ -4,6 +4,21 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.104.0] - 2026-09-10
+
+### Added
+- CGMY tempered-stable Levy model (new `cgmy.py`): `cgmy_price` and `cgmy_smile`.
+  A pure-jump process with a stable Levy density tempered independently on each
+  tail (`C` activity, `G`/`M` down/up tempering, fine-structure `Y < 2`), whose
+  closed-form characteristic exponent uses `Gamma(-Y)` and complex powers.
+  Priced by Carr-Madan Fourier inversion of the damped call transform (damping
+  `alpha`, requiring `alpha + 1 < M`) over the shared Gauss-Legendre nodes, with
+  a martingale drift correction `omega = -psi(-i)`.
+- Verified against an independent Gil-Pelaez inversion of the same
+  characteristic function to ~1e-6 across three regimes (`Y = 0.5, 0.8, 1.2`);
+  put-call parity holds, `G < M` produces a downward skew and `G = M` a
+  symmetric smile, and more activity (`C`) raises the price.
+
 ## [1.103.0] - 2026-09-10
 
 ### Added

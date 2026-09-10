@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.103.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.104.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -296,6 +296,32 @@ Auto-generated from `quantforge` v1.103.0 by `docs/gen_api.py` — do not edit b
 > starts at the Poisson mode ``j0 = floor(lam/2)`` and expands outward, so it
 > stays numerically stable even when ``lam`` is large (the naive j=0 start
 > underflows because ``e^{-lam/2}`` is zero to machine precision).
+
+## cgmy
+
+### `cgmy_price(S, K, t, r, C, G, M, Y, option_type=<OptionType.CALL: 'call'>, q=0.0, alpha=1.5, upper=200.0) -> float`  _function_
+
+> Price a European option under the CGMY model by Carr-Madan inversion.
+>
+> Args:
+>     C, G, M, Y: CGMY parameters (``C > 0``; ``G, M > 0``; ``Y < 2`` and not a
+>         non-negative integer -- ``Y = 0`` is Variance Gamma, handled by the
+>         limit only approximately here, so pass a small ``Y`` instead).
+>     alpha: Carr-Madan damping factor (> 0); the call transform needs
+>         ``E[S_T^{alpha+1}] < infinity``, i.e. ``alpha + 1 < M``.
+>     upper: Fourier-integral truncation.
+>
+> ``C = 0`` gives a degenerate (deterministic-forward) payoff. Puts use
+> put-call parity.
+
+### `cgmy_smile(S, strikes, t, r, C, G, M, Y, q=0.0, alpha=1.5)`  _function_
+
+> Black-Scholes implied-vol smile the CGMY model produces.
+>
+> Prices a call at each strike and inverts to a Black-Scholes implied vol,
+> returning ``(log_moneyness, vol)`` pairs sorted by strike on the forward
+> ``F = S e^{(r-q) t}``. Tail asymmetry (``G != M``) tilts the smile into a
+> skew; smaller ``Y`` fattens the wings.
 
 ## chooser
 
