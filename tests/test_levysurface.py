@@ -35,6 +35,7 @@ def test_surface_reprices_vg_smile():
         assert iv_s == pytest.approx(iv_ref, abs=1e-3)
 
 
+@pytest.mark.slow
 def test_levy_surface_is_calendar_arbitrage_free():
     # A genuine Levy law has total variance non-decreasing in maturity.
     surf = LevySurface("nig", (18.0, -6.0, 0.55), S, R, Q)

@@ -157,6 +157,10 @@ def rough_heston_price(S, K, t, r, v0, kappa, theta, nu, rho, H=0.1,
                          n_grid, upper)
     P2 = _rh_probability(S, K, t, r, q, H, kappa, theta, nu, rho, v0, 2,
                          n_grid, upper)
+    if not (math.isfinite(P1) and math.isfinite(P2)):
+        raise ValueError(
+            "fractional Riccati diverged (non-finite probability); increase "
+            "n_grid -- small H needs a finer grid to stay stable")
     call = S * math.exp(-q * t) * P1 - K * math.exp(-r * t) * P2
     if ot is OptionType.CALL:
         return call

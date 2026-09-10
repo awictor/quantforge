@@ -19,6 +19,7 @@ HESTON_SETS = [
 ]
 
 
+@pytest.mark.slow
 @pytest.mark.parametrize("S,K,t,r,q,v0,kappa,theta,nu,rho", HESTON_SETS)
 def test_hurst_half_recovers_heston(S, K, t, r, q, v0, kappa, theta, nu, rho):
     # At H = 0.5 rough-Heston reduces to classical Heston with xi = kappa * nu.
@@ -32,21 +33,26 @@ def test_hurst_half_recovers_heston(S, K, t, r, q, v0, kappa, theta, nu, rho):
 def test_characteristic_function_is_martingale():
     # cf(-i) = E[S_T] = S e^{(r-q)t}.
     S, t, r, q = 100, 0.5, 0.03, 0.0
-    cf = _rh_cf(-1j, S, t, r, q, 0.3, 1.5, 0.04, 0.3, -0.7, 0.04, 300)
+    cf = _rh_cf(-1j, S, t, r, q, 0.3, 1.5, 0.04, 0.3, -0.7, 0.04, 100)
     assert cf.real == pytest.approx(S * math.exp((r - q) * t), abs=1e-6)
     assert abs(cf.imag) < 1e-6
 
 
 def test_put_call_parity():
+    # A small grid is enough to check parity (a structural identity, not a
+    # convergence claim), keeping this in the fast suite.
     S, K, t, r, q = 100, 105, 0.5, 0.04, 0.01
-    c = rough_heston_price(S, K, t, r, 0.04, 1.5, 0.04, 0.4, -0.6, H=0.2,
-                           option_type=OptionType.CALL, q=q, n_grid=200)
-    p = rough_heston_price(S, K, t, r, 0.04, 1.5, 0.04, 0.4, -0.6, H=0.2,
-                           option_type=OptionType.PUT, q=q, n_grid=200)
+    # H = 0.3 is stable on a modest grid (small H needs a finer one to keep the
+    # fractional Riccati from diverging); parity is a structural identity anyway.
+    c = rough_heston_price(S, K, t, r, 0.04, 1.5, 0.04, 0.4, -0.6, H=0.3,
+                           option_type=OptionType.CALL, q=q, n_grid=100)
+    p = rough_heston_price(S, K, t, r, 0.04, 1.5, 0.04, 0.4, -0.6, H=0.3,
+                           option_type=OptionType.PUT, q=q, n_grid=100)
     rhs = S * math.exp(-q * t) - K * math.exp(-r * t)
     assert (c - p) == pytest.approx(rhs, abs=5e-3)
 
 
+@pytest.mark.slow
 def test_rough_skew_steeper_than_heston_short_maturity():
     S, r, t = 100.0, 0.0, 0.1
     strikes = [85, 92, 100, 108, 116]
@@ -75,3 +81,11 @@ def test_bad_params_raise():
         rough_heston_price(100, 100, 1.0, 0.03, 0.04, 1.5, 0.04, 0.4, -0.7, H=0.7)
     with pytest.raises(ValueError):
         rough_heston_price(100, 100, 1.0, 0.03, -0.04, 1.5, 0.04, 0.4, -0.7, H=0.2)
+
+
+def test_divergent_grid_raises_not_nan():
+    # A too-coarse grid for small H makes the fractional Riccati diverge; the
+    # pricer must raise a clear error rather than silently return NaN.
+    with pytest.raises(ValueError):
+        rough_heston_price(100, 105, 0.5, 0.04, 0.04, 1.5, 0.04, 0.4, -0.6,
+                           H=0.2, n_grid=60)

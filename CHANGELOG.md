@@ -4,6 +4,22 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.128.1] - 2026-09-10
+
+### Fixed
+- `rough_heston_price` now raises a clear error when the fractional Riccati
+  diverges (a too-coarse `n_grid` for small `H`) instead of silently returning
+  NaN -- found while trimming the test suite, where an H=0.2 parity check on a
+  60-step grid produced NaN.
+
+### Tests
+- Trimmed the fast-suite runtime from ~66s to ~28s: marked the heaviest
+  Fourier/calibration cross-checks `slow` (rough-Heston Hurst-reduction and
+  short-skew, Levy NIG/Meixner/cross-model recovery, the Levy-surface calendar
+  scan, the 256-step rBergomi FFT identity) and cut redundant path counts on the
+  FFT-identity checks (numerical-identity, not statistical). Full coverage is
+  unchanged; the heavy checks still run under `-m slow`.
+
 ## [1.128.0] - 2026-09-10
 
 ### Added

@@ -28,6 +28,7 @@ def test_recovers_vg_parameters():
     assert p[2] == pytest.approx(true[2], abs=2e-2)
 
 
+@pytest.mark.slow
 def test_recovers_nig_parameters():
     true = (18.0, -6.0, 0.55)
     mkt = _vols(nig_smile(S, STRIKES, T, R, *true))
@@ -36,6 +37,7 @@ def test_recovers_nig_parameters():
     assert p[1] == pytest.approx(true[1], abs=0.2)  # asymmetry
 
 
+@pytest.mark.slow
 def test_recovers_meixner_parameters():
     true = (0.35, -0.4, 0.6)
     mkt = _vols(meixner_smile(S, STRIKES, T, R, *true))
@@ -53,6 +55,7 @@ def test_recovers_cgmy_fit_quality():
     assert rmse < 5e-3
 
 
+@pytest.mark.slow
 def test_cross_model_fit_is_close():
     # A NIG fit to a VG-generated smile should be close but not exact.
     mkt = _vols(variance_gamma_smile(S, STRIKES, T, R, 0.2, 0.4, -0.3))
