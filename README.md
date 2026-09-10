@@ -51,6 +51,12 @@ print(iv)
 # American put with a 3% dividend yield (carry b = r - q).
 print(american_price(S=100, K=100, t=1.0, r=0.05, sigma=0.2,
                      option_type="put", b=0.05 - 0.03, steps=500))
+
+# Or the closed-form Bjerksund-Stensland (2002) approximation: ~500x faster
+# than a 500-step tree, accurate to a few cents.
+from quantforge import bjerksund_stensland
+print(bjerksund_stensland(S=100, K=100, t=1.0, r=0.05, sigma=0.2,
+                          option_type="put", b=0.02))
 ```
 
 ## Scenario / stress grid
