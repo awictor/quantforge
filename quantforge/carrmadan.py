@@ -170,6 +170,113 @@ def carr_madan_smile_strip(S, t, r, q, psi, k_lo=-0.5, k_hi=0.5,
     return out
 
 
+def _cos_chi_psi(k, a, b, c, d):
+    """COS payoff-coefficient helpers chi_k and psi_k on [c, d] within [a, b].
+
+    ``chi_k = int_c^d e^y cos(k pi (y-a)/(b-a)) dy`` and
+    ``psi_k = int_c^d cos(k pi (y-a)/(b-a)) dy`` (Fang-Oosterlee eq. 22-23).
+    Returns ``(chi, psi)`` lists indexed by ``k = 0..len-1``.
+    """
+    n = len(k) if hasattr(k, "__len__") else k
+    ba = b - a
+    chi = [0.0] * n
+    psi = [0.0] * n
+    for kk in range(n):
+        w = kk * math.pi / ba
+        # chi_k.
+        cos_d = math.cos(w * (d - a))
+        cos_c = math.cos(w * (c - a))
+        sin_d = math.sin(w * (d - a))
+        sin_c = math.sin(w * (c - a))
+        chi[kk] = (1.0 / (1.0 + w * w)) * (
+            cos_d * math.exp(d) - cos_c * math.exp(c)
+            + w * sin_d * math.exp(d) - w * sin_c * math.exp(c))
+        # psi_k.
+        if kk == 0:
+            psi[kk] = d - c
+        else:
+            psi[kk] = (sin_d - sin_c) / w
+    return chi, psi
+
+
+def cos_price(S, K, t, r, q, psi, option_type=OptionType.CALL,
+              n_terms=256, L=12.0, cumulants=None) -> float:
+    """Price a European option by the COS method (Fang & Oosterlee, 2008).
+
+    Expands the risk-neutral density of the log-return in a Fourier-cosine series
+    on a truncation range ``[a, b]``, so the price is a finite sum of the
+    characteristic function sampled at ``k pi / (b - a)`` against closed-form
+    payoff coefficients. Exponentially convergent in ``n_terms`` for smooth
+    densities -- an independent Fourier method to cross-check the Carr-Madan
+    pricer.
+
+    Args:
+        psi: characteristic exponent ``psi(u)`` (as in :func:`levy_price`).
+        n_terms: number of cosine terms.
+        L: truncation-range width in standard deviations (10-12 is ample).
+        cumulants: optional ``(c1, c2, c4)`` of the log-return to set ``[a, b]``;
+            if omitted they are estimated by differencing ``psi`` numerically.
+
+    Puts use put-call parity.
+    """
+    ot = _coerce_type(option_type)
+    if S <= 0 or K <= 0:
+        raise ValueError("S and K must be positive")
+    if t < 0:
+        raise ValueError("t must be non-negative")
+    if t == 0:
+        return max(S - K, 0.0) if ot is OptionType.CALL else max(K - S, 0.0)
+
+    omega = (-psi(-1j)).real
+    # x = ln(S/K); the drift lives in the density's mean.
+    x = math.log(S / K)
+    mu = (r - q + omega) * t          # risk-neutral log-return drift
+
+    # Cumulants of the log-return L_t (about its mean) for the truncation range.
+    if cumulants is None:
+        # c2 = -psi''(0) t via a central second difference of t*psi(u). c4 needs
+        # a fourth difference, whose h^4 denominator amplifies roundoff badly for
+        # non-smooth exponents (e.g. CGMY's Gamma(-Y) power law), so use a larger
+        # step for it and clamp; c4 only fine-tunes the truncation width.
+        h2 = 1e-3
+        c2 = abs((-(t * psi(h2) + t * psi(-h2)).real) / (h2 * h2))
+        h4 = 5e-2
+        c4_raw = ((t * psi(2 * h4) + t * psi(-2 * h4)).real
+                  - 4.0 * (t * psi(h4) + t * psi(-h4)).real) / (h4 ** 4)
+        # A sane c4 is O(c2^2 t); reject a blown-up finite difference.
+        c4 = abs(c4_raw)
+        if not math.isfinite(c4) or c4 > 1e3 * (c2 * c2 + 1.0):
+            c4 = 0.0
+    else:
+        _c1, c2, c4 = cumulants
+
+    a = mu + x - L * math.sqrt(c2 + math.sqrt(max(c4, 0.0)))
+    b = mu + x + L * math.sqrt(c2 + math.sqrt(max(c4, 0.0)))
+    ba = b - a
+
+    # Payoff coefficients V_k for a call on [max(0,.),.]; for a call the payoff
+    # is K(e^y - 1)^+ with y = ln(S_T/K), positive on [0, b].
+    chi, psi_c = _cos_chi_psi(n_terms, a, b, 0.0, b)
+    Vk = [2.0 / ba * K * (chi[kk] - psi_c[kk]) for kk in range(n_terms)]
+
+    disc = math.exp(-r * t)
+    total = 0.0
+    for kk in range(n_terms):
+        u = kk * math.pi / ba
+        # Characteristic function of X_T = ln(S_T/K) = x + mu + L_t, whose density
+        # the cosine series expands: E[e^{i u X_T}] = e^{i u (x + mu) + t psi(u)}.
+        cf = cmath.exp(1j * u * (x + mu) + t * psi(u))
+        term = (cf * cmath.exp(-1j * u * a)).real * Vk[kk]
+        if kk == 0:
+            term *= 0.5
+        total += term
+    call = disc * total
+
+    if ot is OptionType.CALL:
+        return call
+    return call - S * math.exp(-q * t) + K * math.exp(-r * t)
+
+
 def levy_price(S, K, t, r, q, psi, option_type=OptionType.CALL,
                alpha=1.5, upper=200.0) -> float:
     """Price a European call/put for a Levy model via Carr-Madan + parity."""

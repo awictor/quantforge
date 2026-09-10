@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.106.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.107.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -296,6 +296,26 @@ Auto-generated from `quantforge` v1.106.0 by `docs/gen_api.py` — do not edit b
 >     alpha: damping factor (> 0); needs ``psi(-(alpha+1) i)`` finite.
 >     n_fft: FFT length (power of two).
 >     eta: frequency-grid spacing; smaller = finer strikes over a wider range.
+
+### `cos_price(S, K, t, r, q, psi, option_type=<OptionType.CALL: 'call'>, n_terms=256, L=12.0, cumulants=None) -> float`  _function_
+
+> Price a European option by the COS method (Fang & Oosterlee, 2008).
+>
+> Expands the risk-neutral density of the log-return in a Fourier-cosine series
+> on a truncation range ``[a, b]``, so the price is a finite sum of the
+> characteristic function sampled at ``k pi / (b - a)`` against closed-form
+> payoff coefficients. Exponentially convergent in ``n_terms`` for smooth
+> densities -- an independent Fourier method to cross-check the Carr-Madan
+> pricer.
+>
+> Args:
+>     psi: characteristic exponent ``psi(u)`` (as in :func:`levy_price`).
+>     n_terms: number of cosine terms.
+>     L: truncation-range width in standard deviations (10-12 is ample).
+>     cumulants: optional ``(c1, c2, c4)`` of the log-return to set ``[a, b]``;
+>         if omitted they are estimated by differencing ``psi`` numerically.
+>
+> Puts use put-call parity.
 
 ### `levy_price(S, K, t, r, q, psi, option_type=<OptionType.CALL: 'call'>, alpha=1.5, upper=200.0) -> float`  _function_
 

@@ -4,6 +4,25 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.107.0] - 2026-09-10
+
+### Added
+- COS method (in `carrmadan.py`): `cos_price` implements the Fang-Oosterlee
+  (2008) Fourier-cosine expansion of the risk-neutral log-return density on a
+  cumulant-based truncation range, with closed-form call payoff coefficients
+  (chi/psi). Exponentially convergent and independent of the Carr-Madan
+  transform, so it is a genuine cross-check for the whole Levy family.
+- Verified: matches Black-Scholes to 1e-8 (GBM exponent), and matches the
+  Carr-Madan pricer to ~1e-6/1e-4 on CGMY and three NIG parameter sets; parity
+  holds and the error shrinks with the term count.
+
+### Fixed
+- The COS characteristic function omitted the `x = ln(S/K)` shift, so only ATM
+  strikes priced correctly; and the fourth-difference c4 cumulant estimate blew
+  up on non-smooth exponents (CGMY's Gamma(-Y) power law), ballooning the
+  truncation range until the density undersampled. c4 now uses a larger step and
+  is clamped to a sane multiple of c2^2 (it only fine-tunes the range).
+
 ## [1.106.0] - 2026-09-10
 
 ### Added

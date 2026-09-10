@@ -45,7 +45,9 @@ from .bates import bates_price, bates_smile
 from .kou import kou_price, kou_smile
 from .cgmy import cgmy_price, cgmy_smile
 from .nig import nig_price, nig_smile
-from .carrmadan import levy_price, carr_madan_strip, carr_madan_smile_strip
+from .carrmadan import (
+    levy_price, carr_madan_strip, carr_madan_smile_strip, cos_price,
+)
 from .rbergomi import (
     rbergomi_price, rbergomi_smile, rbergomi_price_cv, rbergomi_smile_cv,
 )
@@ -154,7 +156,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.106.0"
+__version__ = "1.107.0"
 
 __all__ = [
     "OptionType",
@@ -212,6 +214,7 @@ __all__ = [
     "levy_price",
     "carr_madan_strip",
     "carr_madan_smile_strip",
+    "cos_price",
     "rbergomi_price",
     "rbergomi_smile",
     "rbergomi_price_cv",
