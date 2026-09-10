@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.80.0] - 2026-09-10
+
+### Added
+- `basket_greeks` (in `multiasset.py`): Greeks of a two-asset basket option by
+  finite differences — both spot deltas, own-gammas, cross-gamma, and
+  correlation sensitivity. Both deltas positive, correlation vega positive
+  (higher correlation raises the basket vol), and weight rebalancing shifts the
+  delta split.
+
 ## [1.79.0] - 2026-09-10
 
 ### Added

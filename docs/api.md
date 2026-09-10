@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.79.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.80.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -996,6 +996,14 @@ Auto-generated from `quantforge` v1.79.0 by `docs/gen_api.py` — do not edit by
 > unless the barrier is activated; knock-in pays only if it is.
 
 ## multiasset
+
+### `basket_greeks(spots, weights, K, t, r, sigmas, corr, q=None, option_type=<OptionType.CALL: 'call'>)`  _function_
+
+> Greeks of a two-asset basket option (Levy moment-match) by FD.
+>
+> Returns a dict with the two spot deltas, own-gammas, the cross-gamma, and
+> the correlation sensitivity, all by central finite differences on
+> :func:`basket_option`.
 
 ### `basket_option(spots, weights, K, t, r, sigmas, corr, q=None, option_type=<OptionType.CALL: 'call'>) -> float`  _function_
 

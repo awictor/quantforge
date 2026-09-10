@@ -255,3 +255,39 @@ def spread_greeks(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0,
     return {"price": base, "delta1": delta1, "delta2": delta2,
             "gamma1": gamma1, "gamma2": gamma2, "cross": cross,
             "corr_vega": corr_vega}
+
+
+def basket_greeks(spots, weights, K, t, r, sigmas, corr, q=None,
+                  option_type=OptionType.CALL):
+    """Greeks of a two-asset basket option (Levy moment-match) by FD.
+
+    Returns a dict with the two spot deltas, own-gammas, the cross-gamma, and
+    the correlation sensitivity, all by central finite differences on
+    :func:`basket_option`.
+    """
+    ot = _coerce_type(option_type)
+    S1, S2 = spots
+
+    def px(a=S1, b_=S2, rr=corr):
+        return basket_option((a, b_), weights, K, t, r, sigmas, rr, q, ot)
+
+    base = px()
+    h1 = 1e-3 * S1
+    h2 = 1e-3 * S2
+    d1u, d1d = px(a=S1 + h1), px(a=S1 - h1)
+    d2u, d2d = px(b_=S2 + h2), px(b_=S2 - h2)
+    delta1 = (d1u - d1d) / (2.0 * h1)
+    delta2 = (d2u - d2d) / (2.0 * h2)
+    gamma1 = (d1u - 2.0 * base + d1d) / (h1 * h1)
+    gamma2 = (d2u - 2.0 * base + d2d) / (h2 * h2)
+    pp = px(a=S1 + h1, b_=S2 + h2)
+    pm = px(a=S1 + h1, b_=S2 - h2)
+    mp = px(a=S1 - h1, b_=S2 + h2)
+    mm = px(a=S1 - h1, b_=S2 - h2)
+    cross = (pp - pm - mp + mm) / (4.0 * h1 * h2)
+    hr = 1e-5
+    corr_vega = (px(rr=min(corr + hr, 1.0 - 1e-9))
+                 - px(rr=max(corr - hr, -1.0 + 1e-9))) / (2.0 * hr)
+    return {"price": base, "delta1": delta1, "delta2": delta2,
+            "gamma1": gamma1, "gamma2": gamma2, "cross": cross,
+            "corr_vega": corr_vega}
