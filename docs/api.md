@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.38.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.39.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -184,6 +184,17 @@ Auto-generated from `quantforge` v1.38.0 by `docs/gen_api.py` — do not edit by
 > starts at the Poisson mode ``j0 = floor(lam/2)`` and expands outward, so it
 > stays numerically stable even when ``lam`` is large (the naive j=0 start
 > underflows because ``e^{-lam/2}`` is zero to machine precision).
+
+## chooser
+
+### `chooser_option(S, K, t_choose, T, r, sigma, b=None) -> float`  _function_
+
+> Price a simple chooser option (Rubinstein 1991).
+>
+> Args:
+>     t_choose: time (years) until the call/put choice is made.
+>     T: total time (years) to the underlying option's expiry (>= t_choose).
+>     b: cost of carry (defaults to r).
 
 ## correlation
 

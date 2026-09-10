@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.39.0] - 2026-09-09
+
+### Added
+- `chooser.py`: `chooser_option` prices a simple chooser (Rubinstein 1991) in
+  closed form — the holder picks call or put at a future date. Decomposes into a
+  call to expiry plus a put on the discounted-forward strike expiring at the
+  choice date; equals a straddle when the choice is at expiry.
+
 ## [1.38.0] - 2026-09-09
 
 ### Added

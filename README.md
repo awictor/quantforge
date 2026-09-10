@@ -417,6 +417,14 @@ Under BSM the forward-start value scales with the current spot and is
 independent of the absolute future strike (Rubinstein), so `alpha` (moneyness)
 is the only strike input.
 
+A simple chooser (pick call or put at a future date) has a closed form:
+
+```python
+from quantforge import chooser_option
+
+chooser_option(S=100, K=100, t_choose=0.5, T=1.0, r=0.05, sigma=0.25)
+```
+
 A capped cliquet (ratchet note) — periodic returns clipped locally and the sum
 clipped globally — is priced by Monte Carlo:
 
