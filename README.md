@@ -1,5 +1,9 @@
 # QuantForge
 
+![CI](https://github.com/awictor/quantforge/actions/workflows/ci.yml/badge.svg)
+![Python](https://img.shields.io/badge/python-3.8%2B-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+
 Fast, **dependency-free** options pricing and risk engine in pure Python.
 
 QuantForge prices European and American options, computes the full set of

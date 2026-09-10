@@ -4,6 +4,8 @@ __pycache__/
 .pytest_cache/
 build/
 dist/
+*.tar.gz
+*.whl
 .venv/
 venv/
 .DS_Store
