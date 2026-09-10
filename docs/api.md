@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.126.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.127.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -501,6 +501,43 @@ Auto-generated from `quantforge` v1.126.0 by `docs/gen_api.py` — do not edit b
 ### `cir_zero_coupon_yield(r0, t, kappa, theta, sigma)`  _function_
 
 > Continuously-compounded yield of the CIR zero-coupon bond to ``t``.
+
+## cms
+
+### `cms_adjustment_standard(forward, sigma, expiry, tenor, freq=1.0, pay_lag=0.0)`  _function_
+
+> Standard-model (linear-TSR) CMS convexity adjustment.
+>
+> Args:
+>     forward: forward swap rate S0.
+>     sigma: lognormal (Black) swap-rate volatility.
+>     expiry: fixing time in years.
+>     tenor: swap tenor in years.
+>     freq: payment frequency of the underlying swap (per year).
+>     pay_lag: payment delay in years (0 = natural payment).
+>
+> Under the linear terminal-swap-rate model the adjustment is
+> ``CA = G * Var_A(S_T) = G * S0^2 (e^{sigma^2 T} - 1)`` -- the exact
+> lognormal variance, not just its ``sigma^2 T`` leading term. Returns the
+> additive adjustment so ``E_pay[S_T] = forward + CA``.
+
+### `cms_rate(forward, sigma, expiry, tenor, freq=1.0, pay_lag=0.0)`  _function_
+
+> Convexity-adjusted expected CMS rate under the standard model.
+
+### `cms_rate_convexity_replication(forward, expiry, tenor, vol_fn, freq=1.0, pay_lag=0.0, width=8.0, n=800)`  _function_
+
+> CMS convexity adjustment by static replication over a swaption strip.
+>
+> Under the linear-TSR model the adjustment is ``G * E_A[(S_T - S0)^2]``, and
+> the second moment of the swap rate is replicated model-free by a strip of
+> swaptions (Carr-Madan variance replication):
+>
+>     E_A[(S_T - S0)^2] = 2 * integral_0^inf swaption(K) dK,
+>
+> with payer swaptions for ``K >= S0`` and receiver swaptions for ``K < S0``,
+> each priced at the smile vol ``vol_fn(K)``. This captures the whole smile,
+> and with a flat ``vol_fn`` it reproduces :func:`cms_adjustment_standard`.
 
 ## compound
 

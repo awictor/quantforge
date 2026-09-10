@@ -4,7 +4,21 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
-## [1.126.0] - 2026-09-10
+## [1.127.0] - 2026-09-10
+
+### Added
+- CMS convexity adjustment (new `cms.py`): `cms_adjustment_standard` gives the
+  linear-TSR / Hagan standard-model adjustment `G * Var_A(S_T)` (using the exact
+  lognormal variance), `cms_rate_convexity_replication` computes it by model-free
+  static replication over a swaption strip with a caller-supplied volatility
+  smile (Carr-Madan second-moment replication times the level factor `G`), and
+  `cms_rate` returns the convexity-adjusted expected CMS rate.
+- Verified: zero vol gives no adjustment; the adjustment is positive; the
+  flat-smile replication matches the standard model to ~1e-5; both match a
+  linear-TSR Monte Carlo to ~2e-4; a convex smile raises the adjustment; and a
+  payment lag increases it.
+
+
 
 ### Added
 - Swaption volatility cube (new `volcube.py`): `VolCube` stores a calibrated
