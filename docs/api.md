@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.192.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.193.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1670,6 +1670,21 @@ Auto-generated from `quantforge` v1.192.0 by `docs/gen_api.py` — do not edit b
 > The regression is re-fit at each bump (the standard practical scheme). The
 > deltas are reliable; the gammas -- second differences over a re-fit
 > regression -- are only indicative and need many paths.
+
+### `bermudan_spread_lsm(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0, option_type=<OptionType.CALL: 'call'>, n_steps=50, n_paths=20000, seed=None) -> float`  _function_
+
+> American spread option ``max(S1_T - S2_T - K, 0)`` by Longstaff-Schwartz.
+>
+> Prices an early-exercisable option on the spread ``S1 - S2`` (call) or
+> ``K - (S1 - S2)`` (put), exercisable at ``n_steps`` equally-spaced dates. Two
+> correlated GBMs are simulated and the continuation value is regressed on a
+> quadratic basis in both spots plus the spread ``S1 - S2``:
+> ``{1, S1, S2, S1^2, S2^2, S1 S2, S1 - S2}``, over the in-the-money paths at
+> each date.
+>
+> Returns the price (in-sample LSM estimate, mildly biased low). It sits at or
+> above the European Kirk :func:`quantforge.spread_option`; dividends on the
+> long leg create an early-exercise premium.
 
 ## lsv
 

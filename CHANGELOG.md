@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.193.0] - 2026-09-10
+
+### Added
+- `bermudan_spread_lsm` (in `lsm.py`): American spread option
+  `max(S1_T - S2_T - K, 0)` (call) or `max(K - (S1_T - S2_T), 0)` (put) by
+  Longstaff-Schwartz. Two correlated GBMs; the continuation value is regressed
+  on a quadratic basis in both spots plus the spread
+  `{1, S1, S2, S1^2, S2^2, S1 S2, S1 - S2}` over the in-the-money paths.
+- Verified: without dividends it matches the European Kirk `spread_option`
+  (11.83); an 8% dividend on the long leg produces a positive early-exercise
+  premium (~0.75); it is never cheaper than the European; call and put prices
+  are positive and reproducible.
+
 ## [1.192.0] - 2026-09-10
 
 ### Added
