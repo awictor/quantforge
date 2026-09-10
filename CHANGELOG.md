@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.116.0] - 2026-09-10
+
+### Added
+- `baw_american` (new `baw.py`): the Barone-Adesi-Whaley (1987) quadratic
+  approximation for American options. Splits the price into the European value
+  plus an early-exercise premium (a power of spot anchored at the critical price
+  ``S*``, found by a 1-D Newton solve of the value-matching condition). Fast
+  closed-form, dividends via ``b = r - q``; a no-dividend call returns the
+  European value.
+- Verified: within ~0.1 of a 4000-step binomial tree for puts and dividend
+  calls (BAW's known approximation accuracy), within ~0.05 of the accurate Kim
+  integral-equation price, and correctly floored at intrinsic.
+
 ## [1.115.0] - 2026-09-10
 
 ### Added

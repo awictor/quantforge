@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.115.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.116.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -130,6 +130,16 @@ Auto-generated from `quantforge` v1.115.0 by `docs/gen_api.py` — do not edit b
 > returning ``(log_moneyness, vol)`` pairs sorted by strike on the forward
 > ``F = S e^{(r-q) t}``. Jumps steepen the short-dated skew beyond what the
 > Heston diffusion alone can produce.
+
+## baw
+
+### `baw_american(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None) -> float`  _function_
+
+> American option price by the Barone-Adesi-Whaley quadratic approximation.
+>
+> ``b`` is the cost of carry (defaults to ``r``); dividend yield ``q`` enters
+> as ``b = r - q``. A no-dividend American call (``b = r``) returns the
+> European value. Falls back to intrinsic below/above the critical spot.
 
 ## binomial
 
