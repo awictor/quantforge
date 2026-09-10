@@ -330,6 +330,23 @@ Total variance is interpolated linearly in maturity (the standard
 no-arbitrage-friendly scheme) and the calendar check enforces that
 `w(k, t)` is non-decreasing in `t` at every strike.
 
+## Heston stochastic volatility
+
+Full stochastic-variance pricing via the characteristic function, integrated
+with a built-in Gauss-Legendre rule (no SciPy):
+
+```python
+from quantforge import heston_price
+
+heston_price(S=100, K=100, t=1.0, r=0.0,
+             v0=0.04, kappa=2.0, theta=0.04, xi=0.3, rho=-0.7,
+             option_type="call")
+```
+
+`v0` is the initial variance, `kappa`/`theta` the mean-reversion speed/level,
+`xi` the vol-of-vol, and `rho` the spot/variance correlation. As `xi -> 0` the
+price collapses to Black-Scholes; puts follow from put-call parity.
+
 ## SABR stochastic-vol smile
 
 The market-standard SABR model via Hagan's implied-vol expansion, with

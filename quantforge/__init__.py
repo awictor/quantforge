@@ -27,6 +27,7 @@ from .forward import implied_forward, ForwardResult
 from .forwardstart import forward_start_price, cliquet_price
 from .hedging import StickyRule, smile_delta, smile_delta_from_smile, skew_slope
 from .lookback import floating_strike_lookback, fixed_strike_lookback
+from .heston import heston_price
 from .portfolio import Contract, Position, BookRisk, Book, price_book
 from .svi import SVIParams, calibrate_svi
 from .sabr import SABRParams, sabr_vol, calibrate_sabr
@@ -53,7 +54,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.6.0"
+__version__ = "1.7.0"
 
 __all__ = [
     "OptionType",
@@ -81,6 +82,7 @@ __all__ = [
     "skew_slope",
     "floating_strike_lookback",
     "fixed_strike_lookback",
+    "heston_price",
     "Contract",
     "Position",
     "BookRisk",

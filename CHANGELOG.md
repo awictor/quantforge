@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.7.0] - 2026-09-09
+
+### Added
+- `heston.py`: `heston_price` prices European options under the Heston (1993)
+  stochastic-volatility model via its characteristic function (Albrecher
+  "little trap" form), integrated with a self-contained 64-point
+  Gauss-Legendre rule (no SciPy). Puts follow from parity. Collapses to
+  Black-Scholes as the vol-of-vol goes to zero.
+
 ## [1.6.0] - 2026-09-09
 
 ### Added
