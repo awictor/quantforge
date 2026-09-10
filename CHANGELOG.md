@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.201.0] - 2026-09-10
+
+### Added
+- `sobol_barrier_digital_rqmc` (in `sobol.py`): randomized-QMC barrier-contingent
+  cash-or-nothing digital with an honest standard error. Pays `cash` iff the
+  option finishes in the money AND the barrier condition holds over the `n_steps`
+  monitoring dates (`up-in`/`down-in`/`up-out`/`down-out`). Bridge construction +
+  per-dimension Cranley-Patterson rotation; the discrete analogue of
+  `barrier_digital_mc`.
+- Verified: matches `barrier_digital_mc` across all four barrier types within MC
+  error; a knock-in plus its knock-out sum to the plain `cash_or_nothing` digital
+  at the same seed; the value scales linearly in `cash`.
+
 ## [1.200.1] - 2026-09-10
 
 ### Tests

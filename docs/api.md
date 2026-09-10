@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.200.1 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.201.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3111,6 +3111,19 @@ Auto-generated from `quantforge` v1.200.1 by `docs/gen_api.py` — do not edit b
 > Returns an :class:`MCResult` with the mean price, the across-randomization
 > SE, and ``n_paths`` = total points (``n_rand * n_paths``). Cross-checks the
 > geometric-control-variate :func:`quantforge.arithmetic_asian_mc`.
+
+### `sobol_barrier_digital_rqmc(S, K, H, t, r, sigma, option_type=<OptionType.CALL: 'call'>, barrier='up-in', b=None, cash=1.0, n_steps=6, n_paths=4096, n_rand=24, seed=None) -> quantforge.montecarlo.MCResult`  _function_
+
+> Randomized-QMC barrier-contingent cash-or-nothing digital, honest SE.
+>
+> Pays ``cash`` at expiry iff the option finishes in the money (call
+> ``S_T > K``, put ``S_T < K``) AND the barrier condition holds over the
+> ``n_steps`` monitoring dates: ``up-in``/``down-in`` need the barrier touched,
+> ``up-out``/``down-out`` need it untouched ("up" watches ``S >= H``, "down"
+> ``S <= H``). Normals come from an ``n_steps``-dim Sobol point through the
+> Brownian bridge, randomized by a per-dimension Cranley-Patterson rotation, so
+> ``n_rand`` shifts give a genuine SE. The discrete analogue of
+> :func:`quantforge.barrier_digital_mc`, which it cross-checks.
 
 ### `sobol_barrier_rqmc(S, K, H, t, r, sigma, option_type=<OptionType.CALL: 'call'>, barrier='down-out', b=None, rebate=0.0, n_steps=6, n_paths=4096, n_rand=24, seed=None) -> quantforge.montecarlo.MCResult`  _function_
 
