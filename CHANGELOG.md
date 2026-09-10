@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.124.0] - 2026-09-10
+
+### Added
+- Discount curve (new `discount_curve.py`): `DiscountCurve` builds a log-linear
+  (piecewise-constant instantaneous-forward) discount curve from pillar
+  `(T, DF)` points or continuously-compounded zero rates, with zero-rate,
+  forward-rate and par-swap-rate accessors. `bootstrap_from_swaps` bootstraps
+  pillar discount factors from par swap rates (each pillar solves a linear
+  equation given the shorter ones). This is exactly the initial-curve object the
+  Gaussian short-rate models (`cheyette`, `g2pp`) consume.
+- Verified: a flat zero-rate curve reproduces `e^{-zT}`; interpolation is exact
+  at pillars; a consecutive-annual-tenor bootstrap reproduces its par rates to
+  1e-10; and G2++ reprices the bootstrapped curve's own bonds exactly.
+
 ## [1.123.0] - 2026-09-10
 
 ### Added

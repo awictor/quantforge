@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.123.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.124.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -577,6 +577,26 @@ Auto-generated from `quantforge` v1.123.0 by `docs/gen_api.py` — do not edit b
 > Uses a non-uniform central second difference of the call curve, so strikes
 > need not be equally spaced. Returns ``(mid_strikes, densities)`` for the
 > interior points (the two endpoints have no central second difference).
+
+## discount_curve
+
+### `DiscountCurve(times, dfs)`  _class_
+
+> Log-linear discount curve from pillar ``(T, DF)`` points.
+
+### `bootstrap_from_swaps(swap_maturities, par_rates, freq=1.0)`  _function_
+
+> Bootstrap a :class:`DiscountCurve` from par swap rates.
+>
+> Args:
+>     swap_maturities: increasing swap tenors in years (each an integer number
+>         of ``1/freq``-year periods).
+>     par_rates: the fair fixed rate for each tenor.
+>     freq: fixed-leg payments per year (1 = annual).
+>
+> Solves pillar by pillar: with all shorter discount factors known, each new
+> par-rate equation is linear in the final ``DF(T_n)``. Returns the curve whose
+> par-swap rates reproduce the inputs.
 
 ## displaced
 

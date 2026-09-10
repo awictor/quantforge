@@ -170,6 +170,7 @@ from .g2pp import (
     caplet as g2pp_caplet,
 )
 from .bermudan_swaption import bermudan_swaption_g2pp
+from .discount_curve import DiscountCurve, bootstrap_from_swaps
 
 # Vectorized NumPy fast path is optional; only expose it if NumPy is present.
 try:  # pragma: no cover - trivial availability branch
@@ -180,7 +181,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.123.0"
+__version__ = "1.124.0"
 
 __all__ = [
     "OptionType",
@@ -475,5 +476,7 @@ __all__ = [
     "g2pp_bond_option",
     "g2pp_caplet",
     "bermudan_swaption_g2pp",
+    "DiscountCurve",
+    "bootstrap_from_swaps",
     "__version__",
 ]
