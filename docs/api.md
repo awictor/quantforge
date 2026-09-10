@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.172.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.173.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1925,6 +1925,28 @@ Auto-generated from `quantforge` v1.172.0 by `docs/gen_api.py` — do not edit b
 >
 > Cross-checks the closed-form Black-Scholes value and reports a standard
 > error strictly below the plain :func:`european_mc` at equal path count.
+
+### `european_is_mc(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, shift=None, n_paths=100000, seed=None) -> quantforge.montecarlo.MCResult`  _function_
+
+> European price by importance sampling, for deep out-of-the-money options.
+>
+> A plain simulation of a far-OTM option wastes almost every path: the payoff
+> is zero unless the terminal spot crosses a distant strike, so the estimator
+> is dominated by the rare paths that do. Importance sampling draws the
+> terminal normal from a *shifted* mean ``N(mu, 1)`` instead of ``N(0, 1)`` to
+> push mass into the money, then corrects the bias with the likelihood ratio
+>
+>     L(z) = exp(-mu z + mu^2 / 2),
+>
+> so ``E_shifted[payoff * L] = E[payoff]`` is unbiased. The default ``shift``
+> centres the terminal log-spot on the strike -- ``mu* = (ln(K/S0) - (b -
+> sig^2/2) t) / (sig sqrt(t))`` -- which is near variance-optimal for a digital
+> and a large reduction for a deep-OTM vanilla. Pass an explicit ``shift`` to
+> override. Antithetic sampling is not used (it would fight the deliberate
+> asymmetry of the shift).
+>
+> Cross-checks the closed-form Black-Scholes value; for a deep-OTM strike its
+> standard error is far below the plain :func:`european_mc` at equal paths.
 
 ### `european_mc(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, n_paths=100000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
 

@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.173.0] - 2026-09-10
+
+### Added
+- `european_is_mc` (in `montecarlo.py`): European price by importance sampling,
+  for deep out-of-the-money options where a plain simulation wastes almost every
+  path. Draws the terminal normal from a shifted mean `N(mu, 1)` to push mass
+  into the money and corrects with the likelihood ratio
+  `L(z) = exp(-mu z + mu^2/2)`. The default shift centres the terminal log-spot
+  on the strike, `mu* = (ln(K/S0) - (b - sig^2/2) t) / (sig sqrt(t))`.
+- Verified: matches the closed-form Black-Scholes call and put (deep OTM and
+  ATM, under a dividend carry, and with an explicit shift); for a K=160 deep-OTM
+  call the standard error is ~0.086x the plain `european_mc` at equal paths.
+
 ## [1.172.0] - 2026-09-10
 
 ### Added

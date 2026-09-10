@@ -134,6 +134,51 @@ def european_cv_mc(S, K, t, r, sigma, option_type=OptionType.CALL, b=None,
     return MCResult(price=price, std_error=se, n_paths=len(controlled))
 
 
+def european_is_mc(S, K, t, r, sigma, option_type=OptionType.CALL, b=None,
+                   shift=None, n_paths=100_000, seed=None) -> MCResult:
+    """European price by importance sampling, for deep out-of-the-money options.
+
+    A plain simulation of a far-OTM option wastes almost every path: the payoff
+    is zero unless the terminal spot crosses a distant strike, so the estimator
+    is dominated by the rare paths that do. Importance sampling draws the
+    terminal normal from a *shifted* mean ``N(mu, 1)`` instead of ``N(0, 1)`` to
+    push mass into the money, then corrects the bias with the likelihood ratio
+
+        L(z) = exp(-mu z + mu^2 / 2),
+
+    so ``E_shifted[payoff * L] = E[payoff]`` is unbiased. The default ``shift``
+    centres the terminal log-spot on the strike -- ``mu* = (ln(K/S0) - (b -
+    sig^2/2) t) / (sig sqrt(t))`` -- which is near variance-optimal for a digital
+    and a large reduction for a deep-OTM vanilla. Pass an explicit ``shift`` to
+    override. Antithetic sampling is not used (it would fight the deliberate
+    asymmetry of the shift).
+
+    Cross-checks the closed-form Black-Scholes value; for a deep-OTM strike its
+    standard error is far below the plain :func:`european_mc` at equal paths.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if b is None:
+        b = r
+    drift = (b - 0.5 * sigma * sigma) * t
+    vol = sigma * math.sqrt(t)
+    disc = math.exp(-r * t)
+    sign = 1.0 if ot is OptionType.CALL else -1.0
+    mu = shift if shift is not None else (math.log(K / S) - drift) / vol
+    rng = random.Random(seed)
+    samples = []
+
+    for _ in range(n_paths):
+        z = rng.gauss(mu, 1.0)                    # shifted draw
+        sT = S * math.exp(drift + vol * z)
+        pay = disc * max(sign * (sT - K), 0.0)
+        lr = math.exp(-mu * z + 0.5 * mu * mu)    # likelihood ratio N(0,1)/N(mu,1)
+        samples.append(pay * lr)
+
+    price, se = _summarize(samples)
+    return MCResult(price=price, std_error=se, n_paths=len(samples))
+
+
 def _simulate_average_paths(S, t, r, sigma, b, n_steps, n_paths, rng, antithetic):
     """Generate (arithmetic_avg, geometric_avg) of the price path for each run.
 
