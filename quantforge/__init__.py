@@ -89,6 +89,10 @@ from .bkm import bkm_moments_from_smile, skew_swap_from_smile
 from .vrp import realized_variance, variance_risk_premium
 from .mc_greeks import lr_greeks, pathwise_delta, lr_digital_delta
 from .moment_premium import moment_risk_premia
+from .rnd import (
+    risk_neutral_density_from_smile, density_grid_from_smile,
+    price_payoff_from_density,
+)
 from .multiasset import (
     exchange_option, spread_option, basket_option, best_of_call, worst_of_call,
     exchange_greeks, spread_greeks, basket_greeks, implied_spread_correlation,
@@ -217,7 +221,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.158.1"
+__version__ = "1.159.0"
 
 __all__ = [
     "OptionType",
@@ -339,6 +343,9 @@ __all__ = [
     "pathwise_delta",
     "lr_digital_delta",
     "moment_risk_premia",
+    "risk_neutral_density_from_smile",
+    "density_grid_from_smile",
+    "price_payoff_from_density",
     "exchange_option",
     "spread_option",
     "basket_option",

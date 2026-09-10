@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.158.1 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.159.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2231,6 +2231,30 @@ Auto-generated from `quantforge` v1.158.1 by `docs/gen_api.py` — do not edit b
 > P&L ~= delta * dS + 0.5 * gamma * dS^2, with dS = spot * r_h and r_h normal
 > with std ``sigma_h``. The gamma term makes P&L non-normal; Cornish-Fisher
 > corrects the quantile using the P&L skewness.
+
+## rnd
+
+### `density_grid_from_smile(S0, t, r, vol_fn, q=0.0, n=400, width=8.0)`  _function_
+
+> Return ``(strikes, density)`` of the risk-neutral density on a grid.
+>
+> Strikes span ``width`` standard deviations of log-moneyness around the
+> forward. Useful for plotting or integrating custom payoffs.
+
+### `price_payoff_from_density(S0, t, r, vol_fn, payoff, q=0.0, n=400, width=8.0)`  _function_
+
+> Price a European payoff ``payoff(S_T)`` model-free from the smile density.
+>
+> ``price = e^{-r t} integral payoff(K) g(K) dK`` by the trapezoidal rule over
+> the Breeden-Litzenberger density grid. A flat smile reprices vanillas and
+> digitals to Black-Scholes.
+
+### `risk_neutral_density_from_smile(S0, t, r, vol_fn, K, q=0.0, dK=None)`  _function_
+
+> Breeden-Litzenberger risk-neutral density ``g(K)`` at strike ``K``.
+>
+> ``g(K) = e^{r t} d^2 C / dK^2`` with the call priced at the smile vol; a
+> negative value flags butterfly arbitrage in the smile there.
 
 ## rough_heston
 

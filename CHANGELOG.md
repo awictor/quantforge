@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.159.0] - 2026-09-10
+
+### Added
+- Breeden-Litzenberger risk-neutral density from a smile (new `rnd.py`):
+  `risk_neutral_density_from_smile` gives `g(K) = e^{r t} d^2 C/dK^2`,
+  `density_grid_from_smile` returns the density on a strike grid, and
+  `price_payoff_from_density` prices any European payoff model-free by
+  integrating it against the density.
+- Verified: the density integrates to 1; it reprices calls, puts and digitals
+  to Black-Scholes; the payoff `K` recovers the spot (discounted forward); the
+  ATM density is positive; and a concave (arbitraging) smile produces a negative
+  density in the wings.
+
 ## [1.158.1] - 2026-09-10
 
 ### Tests
