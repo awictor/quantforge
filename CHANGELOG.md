@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.153.0] - 2026-09-10
+
+### Added
+- `svix_from_smile` (in `vix.py`): Martin's (2013) simple-variance index (SVIX).
+  Unlike the VIX log-contract (`1/K^2` weights), the simple variance swap weights
+  the OTM strip by the constant `1/F^2`, corresponding to the payoff
+  `(S_T - F)^2 / F^2` with no log approximation -- jump-robust and a genuine
+  lower bound on the equity premium. Reported as `100 * SVIX`.
+- Verified: a flat smile returns ~`100 * sigma`; `SVIX = 100 * sqrt(variance)`;
+  it is positive; and it differs from the VIX under a skew (the two coincide only
+  to leading order).
+
 ## [1.152.0] - 2026-09-10
 
 ### Added

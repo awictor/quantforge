@@ -82,7 +82,7 @@ from .varswap import (
     corridor_variance_swap_from_smile, gamma_swap_from_smile,
     forward_variance_swap_from_smile,
 )
-from .vix import vix_from_chain, vix_from_smile
+from .vix import vix_from_chain, vix_from_smile, svix_from_smile
 from .bkm import bkm_moments_from_smile, skew_swap_from_smile
 from .vrp import realized_variance, variance_risk_premium
 from .multiasset import (
@@ -213,7 +213,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.152.0"
+__version__ = "1.153.0"
 
 __all__ = [
     "OptionType",
@@ -323,6 +323,7 @@ __all__ = [
     "forward_variance_swap_from_smile",
     "vix_from_chain",
     "vix_from_smile",
+    "svix_from_smile",
     "bkm_moments_from_smile",
     "skew_swap_from_smile",
     "realized_variance",

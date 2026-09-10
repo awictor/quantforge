@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.152.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.153.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2934,6 +2934,22 @@ Auto-generated from `quantforge` v1.152.0 by `docs/gen_api.py` — do not edit b
 > for per-vol-point), scaled by ``qty * multiplier``.
 
 ## vix
+
+### `svix_from_smile(S0, t, r, vol_fn, q=0.0, n_strikes=201, width=6.0)`  _function_
+
+> Martin (2013) "simple variance" index (SVIX) from a smile ``vol_fn(K)``.
+>
+> Unlike the VIX log-contract (``1/K^2`` weights), the simple variance swap
+> weights the OTM strip by ``1/F^2`` -- a constant -- so it corresponds to the
+> payoff ``(S_T - F)^2 / F^2`` and needs no log approximation, making it robust
+> to large moves/jumps and giving a genuine lower bound on the equity premium
+> (Martin). The fair simple variance is
+>
+>     SVIX^2 = (2 e^{r t} / (t F^2)) * ( OTM option strip ),
+>
+> reported as ``100 * SVIX``. A flat smile returns approximately
+> ``100 * sigma`` (equal to VIX only to leading order; the two differ at higher
+> order in vol).
 
 ### `vix_from_chain(strikes, q_prices, F, t, r)`  _function_
 

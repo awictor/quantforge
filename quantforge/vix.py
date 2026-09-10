@@ -82,3 +82,47 @@ def vix_from_smile(S0, t, r, vol_fn, q=0.0, n_strikes=201, width=6.0):
             prices.append(call_price(S0, K, t, r, v, b=r - q))
         strikes.append(K)
     return vix_from_chain(strikes, prices, F, t, r)
+
+
+def svix_from_smile(S0, t, r, vol_fn, q=0.0, n_strikes=201, width=6.0):
+    """Martin (2013) "simple variance" index (SVIX) from a smile ``vol_fn(K)``.
+
+    Unlike the VIX log-contract (``1/K^2`` weights), the simple variance swap
+    weights the OTM strip by ``1/F^2`` -- a constant -- so it corresponds to the
+    payoff ``(S_T - F)^2 / F^2`` and needs no log approximation, making it robust
+    to large moves/jumps and giving a genuine lower bound on the equity premium
+    (Martin). The fair simple variance is
+
+        SVIX^2 = (2 e^{r t} / (t F^2)) * ( OTM option strip ),
+
+    reported as ``100 * SVIX``. A flat smile returns approximately
+    ``100 * sigma`` (equal to VIX only to leading order; the two differ at higher
+    order in vol).
+    """
+    from .bsm import call_price, put_price
+
+    if t <= 0:
+        raise ValueError("t must be positive")
+    F = S0 * math.exp((r - q) * t)
+    atm_vol = vol_fn(F)
+    sd = atm_vol * math.sqrt(t)
+    growth = math.exp(r * t)
+
+    strikes, opts = [], []
+    for i in range(n_strikes):
+        x = -width * sd + 2.0 * width * sd * i / (n_strikes - 1)
+        K = F * math.exp(x)
+        v = vol_fn(K)
+        if K < F:
+            opts.append(put_price(S0, K, t, r, v, b=r - q))
+        else:
+            opts.append(call_price(S0, K, t, r, v, b=r - q))
+        strikes.append(K)
+
+    strip = 0.0
+    for i in range(len(strikes) - 1):
+        k0, k1 = strikes[i], strikes[i + 1]
+        strip += 0.5 * (opts[i] + opts[i + 1]) * (k1 - k0)   # unweighted (1/F^2 outside)
+
+    var = (2.0 * growth / (t * F * F)) * strip
+    return var, 100.0 * math.sqrt(max(var, 0.0))
