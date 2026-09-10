@@ -230,6 +230,28 @@ quantforge american -S 100 -K 100 -t 1 -r 0.05 --sigma 0.2 --type put -b 0.02
 | FX option             | `b = r - r_foreign`  | `price`, `greeks`   |
 | American exercise     | any of the above     | `american_price`    |
 
+## Vectorized fast path (optional NumPy)
+
+The core is zero-dependency. If you have NumPy and need to price whole chains,
+`quantforge.vectorized` runs the same formulas over arrays:
+
+```python
+import numpy as np
+from quantforge import price_array, greeks_array
+
+S = np.full(10_000, 100.0)
+K = np.linspace(80, 120, 10_000)          # a strike grid
+p = price_array(S, K, t=0.5, r=0.04, sigma=0.25, option_type="call")
+g = greeks_array(S, K, 0.5, 0.04, 0.25)   # dict of price/delta/gamma/vega arrays
+```
+
+Scalars broadcast against arrays. Results match the scalar engine to machine
+precision (1e-12) and run ~6x faster on large batches. Install with:
+
+```bash
+pip install "quantforge[fast]"
+```
+
 ## Performance
 
 Pure-Python, but fast enough for interactive risk work. On a typical laptop

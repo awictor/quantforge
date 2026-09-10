@@ -35,7 +35,16 @@ from .volatility import (
 )
 from .greeks2 import vanna, vomma, volga, charm, veta, speed, zomma, color
 
-__version__ = "0.8.0"
+# Vectorized NumPy fast path is optional; only expose it if NumPy is present.
+try:  # pragma: no cover - trivial availability branch
+    from .vectorized import (
+        price_array, delta_array, gamma_array, vega_array, greeks_array,
+        HAS_NUMPY,
+    )
+except ImportError:  # pragma: no cover
+    HAS_NUMPY = False
+
+__version__ = "0.10.0"
 
 __all__ = [
     "OptionType",
@@ -86,5 +95,11 @@ __all__ = [
     "speed",
     "zomma",
     "color",
+    "price_array",
+    "delta_array",
+    "gamma_array",
+    "vega_array",
+    "greeks_array",
+    "HAS_NUMPY",
     "__version__",
 ]
