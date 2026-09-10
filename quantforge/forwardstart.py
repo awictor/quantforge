@@ -127,3 +127,43 @@ def cliquet_price(S, reset_times: Sequence[float], r, sigma, alpha=1.0,
         else:
             total += forward_start_price(S, t_start, t_end, r, sigma, alpha, ot, b=b)
     return total
+
+
+def cliquet_greeks(S, reset_times: Sequence[float], r, sigma, alpha=1.0,
+                   option_type=OptionType.CALL, b=None):
+    """Greeks of a cliquet (ratchet) by central finite differences.
+
+    A cliquet is a strip of consecutive forward-start options. Only the first
+    (spot-strike) period carries spot gamma; every later forward-start period is
+    linear in the current spot, so the cliquet's ``gamma`` comes entirely from
+    the first period and is small relative to a single vanilla. ``delta``,
+    ``gamma``, ``vega``, and ``theta`` are central finite differences of
+    :func:`cliquet_price`; ``theta`` shifts every reset date together. Returns a
+    dict with ``price``, ``delta``, ``gamma``, ``vega``, ``theta``.
+    """
+    ot = _coerce_type(option_type)
+    if not reset_times:
+        raise ValueError("cliquet needs at least one reset time")
+    times = list(reset_times)
+    if any(times[i] >= times[i + 1] for i in range(len(times) - 1)):
+        raise ValueError("reset_times must be strictly increasing")
+    if times[0] <= 0:
+        raise ValueError("first reset time must be positive")
+    if b is None:
+        b = r
+
+    def px(S_=S, sigma_=sigma, dt=0.0):
+        shifted = [tm - dt for tm in times]
+        return cliquet_price(S_, shifted, r, sigma_, alpha, ot, b=b)
+
+    base = px()
+    hS = 1e-4 * S
+    up, dn = px(S_=S + hS), px(S_=S - hS)
+    delta = (up - dn) / (2.0 * hS)
+    gamma = (up - 2.0 * base + dn) / (hS * hS)
+    hv = 1e-4
+    vega = (px(sigma_=sigma + hv) - px(sigma_=sigma - hv)) / (2.0 * hv)
+    ht = min(1e-4, 0.25 * times[0])
+    theta = -(px(dt=-ht) - px(dt=ht)) / (2.0 * ht)
+    return {"price": base, "delta": delta, "gamma": gamma, "vega": vega,
+            "theta": theta}

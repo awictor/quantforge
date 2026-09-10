@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.221.0] - 2026-09-10
+
+### Added
+- `cliquet_greeks` (in `forwardstart.py`): delta, gamma, vega, and theta of a
+  cliquet (ratchet) by central finite differences on `cliquet_price` (theta
+  shifts every reset date together).
+- Verified: every strike scales with the spot (`alpha * S_reset`), so the
+  cliquet is homogeneous of degree 1 in `S` -- `delta` equals `price / S`
+  exactly and `gamma` is zero. Delta and vega also match finite differences of
+  `cliquet_price`.
+
 ## [1.220.0] - 2026-09-10
 
 ### Added

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.220.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.221.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1071,6 +1071,18 @@ Auto-generated from `quantforge` v1.220.0 by `docs/gen_api.py` — do not edit b
 > Returns a :class:`ForwardResult`.
 
 ## forwardstart
+
+### `cliquet_greeks(S, reset_times: Sequence[float], r, sigma, alpha=1.0, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> Greeks of a cliquet (ratchet) by central finite differences.
+>
+> A cliquet is a strip of consecutive forward-start options. Only the first
+> (spot-strike) period carries spot gamma; every later forward-start period is
+> linear in the current spot, so the cliquet's ``gamma`` comes entirely from
+> the first period and is small relative to a single vanilla. ``delta``,
+> ``gamma``, ``vega``, and ``theta`` are central finite differences of
+> :func:`cliquet_price`; ``theta`` shifts every reset date together. Returns a
+> dict with ``price``, ``delta``, ``gamma``, ``vega``, ``theta``.
 
 ### `cliquet_price(S, reset_times: Sequence[float], r, sigma, alpha=1.0, option_type=<OptionType.CALL: 'call'>, b=None) -> float`  _function_
 
