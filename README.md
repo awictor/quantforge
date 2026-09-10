@@ -136,6 +136,23 @@ for pos in book.positions:
 `qty` is signed (short = negative) and `multiplier` scales to notional
 (e.g. 100 for US equity options). Net Greeks are position-scaled sums.
 
+## Implied forward and dividend
+
+Recover the forward price and discount factor directly from a call/put chain
+using put-call parity — no volatility assumption:
+
+```python
+from quantforge import implied_forward
+
+res = implied_forward(strikes, calls, puts, t=1.0, spot=100.0)
+print(res.forward, res.discount_factor)
+print(res.implied_rate, res.implied_div_yield)
+```
+
+The points `(K, C - K)` vs `P` are linear under parity, so a least-squares fit
+returns both the forward (slope) and discount factor (intercept) at once, and
+the dividend yield follows from `F = S * exp((r - q) t)`.
+
 ## Realized volatility
 
 Estimate historical vol from a price series — close-to-close, EWMA, and the

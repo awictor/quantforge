@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.3.0] - 2026-09-09
+
+### Added
+- `forward.py`: `implied_forward` extracts the implied forward price and
+  discount factor from a call/put chain via a put-call-parity least-squares
+  fit (no volatility assumption), and backs out the implied rate and dividend
+  yield.
+
 ## [1.2.0] - 2026-09-09
 
 ### Added
