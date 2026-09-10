@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.51.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.52.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -79,12 +79,29 @@ Auto-generated from `quantforge` v1.51.0 by `docs/gen_api.py` — do not edit by
 
 > BookSecondOrder(vanna: float = 0.0, vomma: float = 0.0, charm: float = 0.0, veta: float = 0.0, speed: float = 0.0, zomma: float = 0.0, color: float = 0.0)
 
+### `ThetaCarry(theta: float, gamma_rent: float, residual: float) -> None`  _class_
+
+> ThetaCarry(theta: float, gamma_rent: float, residual: float)
+
 ### `book_second_order(contracts: Iterable[quantforge.portfolio.Contract]) -> quantforge.bookgreeks.BookSecondOrder`  _function_
 
 > Aggregate position-scaled second-order Greeks across a book.
 >
 > charm/veta/color are calendar-convention (per year), matching the scalar
 > functions in :mod:`quantforge.greeks2`.
+
+### `theta_carry_report(contracts)`  _function_
+
+> Decompose a book's net theta into gamma-rent and a residual carry term.
+>
+> The theta-gamma relationship says an option's time decay is dominated by the
+> "gamma rent" paid on convexity: for a single underlying with volatility
+> ``sigma``, ``theta ~= -0.5 * Gamma * sigma^2 * S^2`` plus a smaller
+> drift/financing residual (rho- and dividend-carry effects).
+>
+> Sums the position-scaled net theta and the gamma-rent term across the book;
+> the residual is the difference. When every leg shares one spot/vol (a
+> single-name book) the gamma-rent uses that common S and sigma.
 
 ## bsm
 

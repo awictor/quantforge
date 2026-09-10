@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.52.0] - 2026-09-09
+
+### Added
+- `theta_carry_report` (in `bookgreeks.py`): decomposes a book's net theta into
+  the gamma-rent term (`-0.5 * Gamma * sigma^2 * S^2`) and a residual
+  drift/financing carry, returning a `ThetaCarry`. With zero carry the theta is
+  pure gamma rent; a non-zero rate produces the financing residual.
+
 ## [1.51.0] - 2026-09-09
 
 ### Added

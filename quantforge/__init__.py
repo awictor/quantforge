@@ -62,7 +62,9 @@ from .overhedge import (
     Overhedge, digital_call_overhedge, digital_put_overhedge, overhedge_payoff,
 )
 from .dv01 import KeyRateDV01, key_rate_dv01
-from .bookgreeks import BookSecondOrder, book_second_order
+from .bookgreeks import (
+    BookSecondOrder, book_second_order, ThetaCarry, theta_carry_report,
+)
 from .vegabucket import VegaBuckets, vega_buckets
 from .qmc import halton, european_qmc
 from .correlation import (
@@ -111,7 +113,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.51.0"
+__version__ = "1.52.0"
 
 __all__ = [
     "OptionType",
@@ -199,6 +201,8 @@ __all__ = [
     "key_rate_dv01",
     "BookSecondOrder",
     "book_second_order",
+    "ThetaCarry",
+    "theta_carry_report",
     "VegaBuckets",
     "vega_buckets",
     "halton",

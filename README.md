@@ -214,6 +214,15 @@ vb = vega_buckets(positions, edges=(0.25, 0.5, 1.0, 2.0, 5.0))
 print(vb.buckets)   # net vega per maturity bucket; sums to the net book vega
 ```
 
+Split the book's time decay into gamma rent vs financing carry:
+
+```python
+from quantforge import theta_carry_report
+
+tc = theta_carry_report(positions)
+print(tc.theta, tc.gamma_rent, tc.residual)   # theta = gamma_rent + residual
+```
+
 Size a hedge to a target Greek off the book's net exposures:
 
 ```python
