@@ -51,7 +51,9 @@ from .pde import (
     crank_nicolson_price, crank_nicolson_greeks, crank_nicolson_barrier,
     crank_nicolson_digital, crank_nicolson_no_touch,
 )
-from .pde2d import adi_two_asset, adi_spread_option, adi_two_asset_cs
+from .pde2d import (
+    adi_two_asset, adi_spread_option, adi_two_asset_cs, adi_two_asset_american,
+)
 from .kou import kou_price, kou_smile
 from .cgmy import cgmy_price, cgmy_smile
 from .nig import nig_price, nig_smile
@@ -203,7 +205,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.143.0"
+__version__ = "1.144.0"
 
 __all__ = [
     "OptionType",
@@ -267,6 +269,7 @@ __all__ = [
     "adi_two_asset",
     "adi_spread_option",
     "adi_two_asset_cs",
+    "adi_two_asset_american",
     "kou_price",
     "kou_smile",
     "cgmy_price",

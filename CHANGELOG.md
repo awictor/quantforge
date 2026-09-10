@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.144.0] - 2026-09-10
+
+### Added
+- `adi_two_asset_american` (in `pde2d.py`): two-asset options with optional
+  early exercise on the Peaceman-Rachford ADI grid. When `american=True` the
+  value grid is floored at the immediate-exercise payoff after each time step
+  (the 2D analogue of the vanilla PSOR floor), for American best-of / worst-of /
+  spread payoffs.
+- Verified: the European limit (`american=False`) matches the best-of and
+  worst-of closed forms and converges in the grid; the American value is at
+  least the European; a dividend yield produces a positive early-exercise
+  premium; and the American value is floored at intrinsic deep in the money.
+
 ## [1.143.0] - 2026-09-10
 
 ### Added

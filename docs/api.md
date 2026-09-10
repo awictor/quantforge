@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.143.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.144.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1886,6 +1886,17 @@ Auto-generated from `quantforge` v1.143.0 by `docs/gen_api.py` — do not edit b
 >     width: half-width of the log-price box in standard deviations.
 >
 > Returns the discounted option value interpolated at ``(S1, S2)``.
+
+### `adi_two_asset_american(payoff, S1, S2, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0, n1=60, n2=60, n_time=40, width=5.0, american=True)`  _function_
+
+> Two-asset option with optional early exercise, by Peaceman-Rachford ADI.
+>
+> Same discretisation as :func:`adi_two_asset` but, when ``american=True``,
+> the value grid is floored at the immediate-exercise payoff after each time
+> step (the explicit-payoff projection -- the 2D analogue of the vanilla PSOR
+> floor). Suitable for American best-of / worst-of / spread payoffs.
+>
+> Returns the value interpolated at ``(S1, S2)``.
 
 ### `adi_two_asset_cs(payoff, S1, S2, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0, n1=60, n2=60, n_time=40, width=5.0, theta=0.5)`  _function_
 
