@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.76.0] - 2026-09-10
+
+### Added
+- `cir.py`: the Cox-Ingersoll-Ross (1985) short-rate model — `cir_zero_coupon_bond`
+  and `cir_zero_coupon_yield` via the affine closed form with the square-root
+  diffusion that keeps the rate non-negative. Short yield equals the short rate,
+  the long yield approaches the CIR limit `2 kappa theta / (gamma + kappa)`, and
+  bond prices match a floored-Euler Monte Carlo.
+
 ## [1.75.0] - 2026-09-10
 
 ### Added

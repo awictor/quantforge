@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.75.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.76.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -274,6 +274,18 @@ Auto-generated from `quantforge` v1.75.0 by `docs/gen_api.py` — do not edit by
 >     t_choose: time (years) until the call/put choice is made.
 >     T: total time (years) to the underlying option's expiry (>= t_choose).
 >     b: cost of carry (defaults to r).
+
+## cir
+
+### `cir_zero_coupon_bond(r0, t, kappa, theta, sigma)`  _function_
+
+> CIR zero-coupon bond price P(0, t) for a unit face, given r(0)=r0.
+>
+> Requires ``r0 >= 0`` and positive parameters.
+
+### `cir_zero_coupon_yield(r0, t, kappa, theta, sigma)`  _function_
+
+> Continuously-compounded yield of the CIR zero-coupon bond to ``t``.
 
 ## compound
 

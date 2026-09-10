@@ -921,6 +921,14 @@ bond_option(r0=0.03, t_option=1.0, t_bond=5.0, strike=0.85,
             kappa=0.5, theta=0.05, sigma=0.01, option_type="call")
 ```
 
+The Cox-Ingersoll-Ross model keeps rates non-negative (square-root diffusion):
+
+```python
+from quantforge import cir_zero_coupon_bond
+
+cir_zero_coupon_bond(r0=0.03, t=5.0, kappa=0.5, theta=0.05, sigma=0.08)
+```
+
 Key-rate DV01 buckets the interest-rate sensitivity of any book expressed as a
 function of the zero curve:
 
