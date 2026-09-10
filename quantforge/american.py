@@ -166,3 +166,46 @@ def bjerksund_stensland(S, K, t, r, sigma, option_type=OptionType.CALL, b=None):
         return _bs2002_call(S, K, t, r, b, sigma)
     # Put via transformation.
     return _bs2002_call(K, S, t, r - b, -b, sigma)
+
+
+def bjerksund_stensland_greeks(S, K, t, r, sigma, option_type=OptionType.CALL,
+                               b=None):
+    """Greeks of the Bjerksund-Stensland American price by finite differences.
+
+    The 2002 price is a closed form but its Greeks have no simple expression
+    (the exercise boundary and the bivariate-normal term move with the inputs),
+    so we central-difference the price. Returns a dict with delta, gamma, vega,
+    theta (per year, calendar), and rho.
+
+    Bumps are chosen small relative to each input; because the BS2002 price is a
+    smooth function of its arguments (away from t=0) central differences are
+    accurate to a few basis points, plenty for hedging.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if b is None:
+        b = r
+
+    def px(S_=S, t_=t, r_=r, sigma_=sigma, b_=b):
+        return bjerksund_stensland(S_, K, t_, r_, sigma_, ot, b=b_)
+
+    base = px()
+
+    hS = 1e-3 * S
+    up, dn = px(S_=S + hS), px(S_=S - hS)
+    delta = (up - dn) / (2.0 * hS)
+    gamma = (up - 2.0 * base + dn) / (hS * hS)
+
+    hv = 1e-4
+    vega = (px(sigma_=sigma + hv) - px(sigma_=sigma - hv)) / (2.0 * hv)
+
+    # Calendar theta = -dPrice/d(t_expiry); guard against t - h <= 0.
+    ht = min(1e-4, 0.5 * t)
+    theta = -(px(t_=t + ht) - px(t_=t - ht)) / (2.0 * ht)
+
+    # Rho: bump the rate and the carry together (the stock case b moves with r).
+    hr = 1e-5
+    rho = (px(r_=r + hr, b_=b + hr) - px(r_=r - hr, b_=b - hr)) / (2.0 * hr)
+
+    return {"price": base, "delta": delta, "gamma": gamma,
+            "vega": vega, "theta": theta, "rho": rho}

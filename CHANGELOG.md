@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.17.0] - 2026-09-09
+
+### Added
+- `bjerksund_stensland_greeks`: delta, gamma, vega, theta (calendar), and rho of
+  the Bjerksund-Stensland American price by central finite differences (the
+  2002 closed form has no simple Greek expressions). For a no-dividend American
+  call the Greeks equal the European BSM Greeks, as they must.
+
 ## [1.16.1] - 2026-09-09
 
 ### Changed

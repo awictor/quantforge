@@ -58,9 +58,12 @@ print(american_price(S=100, K=100, t=1.0, r=0.05, sigma=0.2,
 
 # Or the closed-form Bjerksund-Stensland (2002) approximation: ~500x faster
 # than a 500-step tree, accurate to a few cents.
-from quantforge import bjerksund_stensland
+from quantforge import bjerksund_stensland, bjerksund_stensland_greeks
 print(bjerksund_stensland(S=100, K=100, t=1.0, r=0.05, sigma=0.2,
                           option_type="put", b=0.02))
+# American Greeks (delta/gamma/vega/theta/rho) by finite differences:
+print(bjerksund_stensland_greeks(S=100, K=100, t=1.0, r=0.05, sigma=0.2,
+                                 option_type="put", b=0.02))
 
 # Or a trinomial lattice (smoother convergence), with Richardson extrapolation
 # for extra accuracy at low step counts.
