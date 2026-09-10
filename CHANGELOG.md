@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.5.0] - 2026-09-09
+
+### Added
+- `hedging.py`: smile-aware delta. `smile_delta` returns the effective delta
+  under the sticky-strike rule (equals BS delta) or the sticky-delta /
+  sticky-moneyness rule (adds a `-vega * (dsigma/dk) / S` skew term).
+  `skew_slope` finite-differences a supplied smile, and
+  `smile_delta_from_smile` wires the two together.
+
 ## [1.4.0] - 2026-09-09
 
 ### Added

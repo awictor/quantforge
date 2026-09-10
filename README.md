@@ -97,6 +97,28 @@ for ss, row in grid.as_rows():
 Shocks are fractional when `relative=True`, or absolute price/vol-point moves
 when `relative=False`. `spot_ladder(...)` gives the 1-D spot-only P&L profile.
 
+## Smile-aware delta (sticky-strike / sticky-delta)
+
+The BS delta assumes vol is fixed as spot moves. When the smile rides with the
+underlying (sticky-delta / sticky-moneyness), the effective hedge ratio picks
+up a skew term:
+
+```python
+from quantforge import smile_delta, smile_delta_from_smile, StickyRule
+
+# Explicit skew slope dsigma/dk at this strike:
+smile_delta(S=100, K=105, t=0.5, r=0.04, sigma=0.25, dsigma_dk=-0.4,
+            option_type="call", sticky=StickyRule.DELTA)
+
+# Or straight from a smile function sigma(K):
+smile = lambda K: 0.25 - 0.2 * (K / 100 - 1)
+smile_delta_from_smile(S=100, K=105, t=0.5, r=0.04, smile_fn=smile,
+                       option_type="call")
+```
+
+Sticky-strike returns the plain BS delta; sticky-delta adds
+`-vega * (dsigma/dk) / S`, so a downward equity skew raises the call delta.
+
 ## Second-order Greeks
 
 For hedging through joint moves in spot, vol, and time:
