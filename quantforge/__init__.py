@@ -98,7 +98,9 @@ from .svi import (
     SVIParams, calibrate_svi, svi_g, svi_butterfly_arbitrage, svi_is_butterfly_free,
     lee_wing_slopes, lee_bounds_ok, svi_repair_butterfly,
 )
-from .sabr import SABRParams, sabr_vol, calibrate_sabr
+from .sabr import (
+    SABRParams, sabr_vol, calibrate_sabr, sabr_sensitivities, sabr_jacobian,
+)
 from .vannavolga import VannaVolgaSmile, pillar_vols
 from .surface import VolSurface, SurfaceSlice, CalendarViolation
 from .exotics import (
@@ -133,7 +135,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.90.0"
+__version__ = "1.91.0"
 
 __all__ = [
     "OptionType",
@@ -291,6 +293,8 @@ __all__ = [
     "SABRParams",
     "sabr_vol",
     "calibrate_sabr",
+    "sabr_sensitivities",
+    "sabr_jacobian",
     "VannaVolgaSmile",
     "pillar_vols",
     "VolSurface",

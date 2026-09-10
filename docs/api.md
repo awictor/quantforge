@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.90.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.91.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1412,6 +1412,31 @@ Auto-generated from `quantforge` v1.90.0 by `docs/gen_api.py` — do not edit by
 > Returns ``(params, rmse)`` where rmse is the root-mean-square vol error.
 > Uses a smooth constrained reparametrization so alpha > 0, nu >= 0 and
 > rho in (-1, 1), optimized with the built-in Nelder-Mead.
+
+### `sabr_jacobian(F, t, strikes: Sequence[float], alpha, beta, rho, nu)`  _function_
+
+> Calibration Jacobian ``d sabr_vol(K_i) / d (alpha, rho, nu)``.
+>
+> Returns a list of ``[d_dalpha, d_drho, d_dnu]`` rows, one per strike, using
+> the exact dual-number partials. This is the ``J`` a Gauss-Newton or
+> Levenberg-Marquardt step needs, and ``(J^T J)^{-1}`` gives the asymptotic
+> parameter covariance for standard errors on a fit.
+
+### `sabr_sensitivities(F, K, t, alpha, beta, rho, nu)`  _function_
+
+> Exact partial derivatives of the Hagan SABR vol via forward-mode AD.
+>
+> Returns a dict with the vol itself and its machine-precision partials
+>
+>     ``vol`` and ``d_dF, d_dK, d_dalpha, d_drho, d_dnu``
+>
+> computed with dual numbers (no finite-difference truncation error). The
+> (alpha, rho, nu) partials are the columns of the calibration Jacobian; the
+> ``d_dF`` and ``d_dK`` partials give the smile's backbone and skew slopes.
+>
+> At exactly ``F == K`` the ATM branch of :func:`sabr_vol` is used, whose
+> F/K partials describe that branch (a finite-difference bump moves off ATM);
+> the alpha/rho/nu partials are exact everywhere.
 
 ### `sabr_vol(F, K, t, alpha, beta, rho, nu) -> float`  _function_
 

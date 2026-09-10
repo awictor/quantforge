@@ -24,6 +24,168 @@ from typing import Sequence, Tuple
 from .optimize import nelder_mead
 
 
+# --------------------------------------------------------------------------
+# Forward-mode dual numbers, for exact (machine-precision) parameter
+# sensitivities of the Hagan expansion. Each Dual carries a value and a fixed
+# vector of partial derivatives w.r.t. the seeded variables
+# (F, K, alpha, rho, nu); beta is treated as a constant.
+# --------------------------------------------------------------------------
+_NVAR = 5  # F, K, alpha, rho, nu
+
+
+class _Dual:
+    __slots__ = ("v", "d")
+
+    def __init__(self, v, d=None):
+        self.v = v
+        self.d = d if d is not None else [0.0] * _NVAR
+
+    @staticmethod
+    def const(v):
+        return _Dual(v, [0.0] * _NVAR)
+
+    @staticmethod
+    def var(v, i):
+        d = [0.0] * _NVAR
+        d[i] = 1.0
+        return _Dual(v, d)
+
+    def _lift(self, o):
+        return o if isinstance(o, _Dual) else _Dual.const(o)
+
+    def __add__(self, o):
+        o = self._lift(o)
+        return _Dual(self.v + o.v, [a + b for a, b in zip(self.d, o.d)])
+    __radd__ = __add__
+
+    def __sub__(self, o):
+        o = self._lift(o)
+        return _Dual(self.v - o.v, [a - b for a, b in zip(self.d, o.d)])
+
+    def __rsub__(self, o):
+        return self._lift(o).__sub__(self)
+
+    def __mul__(self, o):
+        o = self._lift(o)
+        return _Dual(self.v * o.v,
+                     [self.v * b + o.v * a for a, b in zip(self.d, o.d)])
+    __rmul__ = __mul__
+
+    def __truediv__(self, o):
+        o = self._lift(o)
+        inv = 1.0 / o.v
+        return _Dual(self.v * inv,
+                     [(a * o.v - self.v * b) * inv * inv
+                      for a, b in zip(self.d, o.d)])
+
+    def __rtruediv__(self, o):
+        return self._lift(o).__truediv__(self)
+
+    def __pow__(self, p):
+        # p is a plain float exponent.
+        val = self.v ** p
+        coeff = p * self.v ** (p - 1.0)
+        return _Dual(val, [coeff * a for a in self.d])
+
+    def log(self):
+        inv = 1.0 / self.v
+        return _Dual(math.log(self.v), [a * inv for a in self.d])
+
+    def sqrt(self):
+        val = math.sqrt(self.v)
+        coeff = 0.5 / val
+        return _Dual(val, [coeff * a for a in self.d])
+
+
+def _sabr_vol_dual(F, K, t, alpha, beta, rho, nu):
+    """Hagan (2002) vol evaluated on dual numbers; returns the _Dual result.
+
+    Mirrors :func:`sabr_vol` term for term so the value agrees exactly and the
+    ``.d`` vector holds the exact partials w.r.t. (F, K, alpha, rho, nu).
+    """
+    one_beta = 1.0 - beta
+    logFK_val = math.log(F.v / K.v)
+
+    if abs(logFK_val) < 1e-12:
+        FK_beta = F ** one_beta
+        term1 = (one_beta ** 2) / 24.0 * alpha * alpha / (FK_beta ** 2)
+        term2 = alpha * (rho * (0.25 * beta * nu)) / FK_beta
+        term3 = (nu * nu) * ((2.0 - 3.0 * (rho * rho)) / 24.0)
+        return alpha / FK_beta * (1.0 + (term1 + term2 + term3) * t)
+
+    # logFK must stay a dual so the F/K partials propagate through z, x(z) and
+    # the log(F/K) prefactor series.
+    logFK = (F / K).log()
+    FK = F * K
+    FK_beta = FK ** (one_beta / 2.0)
+    log_FK2 = logFK * logFK
+
+    z = (nu / alpha) * FK_beta * logFK
+    inner = (1.0 - 2.0 * rho * z + z * z).sqrt() + z - rho
+    x_z = (inner / (1.0 - rho)).log()
+
+    denom = FK_beta * (1.0
+                       + (one_beta ** 2) / 24.0 * log_FK2
+                       + (one_beta ** 4) / 1920.0 * log_FK2 * log_FK2)
+
+    term1 = (one_beta ** 2) / 24.0 * (alpha * alpha) / (FK ** one_beta)
+    term2 = alpha * (rho * (0.25 * beta * nu)) / FK_beta
+    term3 = (nu * nu) * ((2.0 - 3.0 * (rho * rho)) / 24.0)
+    correction = 1.0 + (term1 + term2 + term3) * t
+
+    return (alpha / denom) * (z / x_z) * correction
+
+
+def sabr_sensitivities(F, K, t, alpha, beta, rho, nu):
+    """Exact partial derivatives of the Hagan SABR vol via forward-mode AD.
+
+    Returns a dict with the vol itself and its machine-precision partials
+
+        ``vol`` and ``d_dF, d_dK, d_dalpha, d_drho, d_dnu``
+
+    computed with dual numbers (no finite-difference truncation error). The
+    (alpha, rho, nu) partials are the columns of the calibration Jacobian; the
+    ``d_dF`` and ``d_dK`` partials give the smile's backbone and skew slopes.
+
+    At exactly ``F == K`` the ATM branch of :func:`sabr_vol` is used, whose
+    F/K partials describe that branch (a finite-difference bump moves off ATM);
+    the alpha/rho/nu partials are exact everywhere.
+    """
+    if F <= 0 or K <= 0:
+        raise ValueError("F and K must be positive")
+    if alpha <= 0:
+        raise ValueError("alpha must be positive")
+    if t <= 0:
+        raise ValueError("t must be positive")
+    Fd = _Dual.var(F, 0)
+    Kd = _Dual.var(K, 1)
+    ad = _Dual.var(alpha, 2)
+    rd = _Dual.var(rho, 3)
+    nd = _Dual.var(nu, 4)
+    out = _sabr_vol_dual(Fd, Kd, t, ad, beta, rd, nd)
+    g = out.d
+    return {
+        "vol": out.v,
+        "d_dF": g[0], "d_dK": g[1],
+        "d_dalpha": g[2], "d_drho": g[3], "d_dnu": g[4],
+    }
+
+
+def sabr_jacobian(F, t, strikes: Sequence[float], alpha, beta, rho, nu):
+    """Calibration Jacobian ``d sabr_vol(K_i) / d (alpha, rho, nu)``.
+
+    Returns a list of ``[d_dalpha, d_drho, d_dnu]`` rows, one per strike, using
+    the exact dual-number partials. This is the ``J`` a Gauss-Newton or
+    Levenberg-Marquardt step needs, and ``(J^T J)^{-1}`` gives the asymptotic
+    parameter covariance for standard errors on a fit.
+    """
+    rows = []
+    for K in strikes:
+        s = sabr_sensitivities(F, K, t, alpha, beta, rho, nu)
+        rows.append([s["d_dalpha"], s["d_drho"], s["d_dnu"]])
+    return rows
+
+
 @dataclass(frozen=True)
 class SABRParams:
     alpha: float

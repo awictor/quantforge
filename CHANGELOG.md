@@ -4,6 +4,22 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.91.0] - 2026-09-10
+
+### Added
+- `sabr_sensitivities` and `sabr_jacobian` (in `sabr.py`): exact partial
+  derivatives of the Hagan SABR implied vol via a small forward-mode dual-number
+  type, with no finite-difference truncation error. `sabr_sensitivities` returns
+  the vol plus its partials w.r.t. F, K, alpha, rho and nu; `sabr_jacobian`
+  stacks the (alpha, rho, nu) columns into the calibration Jacobian a
+  Gauss-Newton / Levenberg-Marquardt step (and the parameter covariance) needs.
+- Verified every partial against central finite differences across strikes to a
+  max error of ~1e-10.
+
+### Fixed
+- The dual-number vol reused a scalar `log(F/K)`, which zeroed the F/K partials;
+  `logFK` is now carried as a dual so the smile backbone/skew slopes propagate.
+
 ## [1.90.0] - 2026-09-10
 
 ### Added
