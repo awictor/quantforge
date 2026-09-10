@@ -405,6 +405,25 @@ fixed_strike_lookback(S=100, K=100, t=1.0, r=0.05, sigma=0.3, option_type="call"
 Pass `s_extreme` (the running min/max observed so far) to price a seasoned
 lookback; it defaults to the current spot at inception.
 
+## Local volatility (Dupire)
+
+Extract the Dupire local-volatility function from an implied-vol or call-price
+surface:
+
+```python
+from quantforge import local_vol_from_implied, dupire_local_vol
+
+# From an implied-vol surface sigma(K, T):
+smile = lambda K, T: 0.25 - 0.1 * (K / 100 - 1.0)
+local_vol_from_implied(smile, S=100, K=105, T=1.0, r=0.03, q=0.0)
+
+# Or directly from a call-price surface C(K, T):
+dupire_local_vol(call_fn, K=100, T=1.0, r=0.03, q=0.0)
+```
+
+A flat implied surface returns a constant local vol; a pure term structure
+returns the analytic `sqrt(dw/dT)`.
+
 ## Term-structure surface (calendar-arbitrage aware)
 
 Stitch per-expiry SVI smiles into a full surface, interpolate vol at any

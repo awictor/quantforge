@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.16.0] - 2026-09-09
+
+### Added
+- `localvol.py`: Dupire local volatility. `dupire_local_vol` evaluates the
+  Dupire formula from a call-price surface `C(K, T)` by finite differences;
+  `local_vol_from_implied` wraps an implied-vol surface via Black-Scholes.
+  Recovers a flat implied vol as a constant local vol and matches the analytic
+  term-structure local variance `dw/dT`.
+
 ## [1.15.0] - 2026-09-09
 
 ### Added
