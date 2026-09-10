@@ -197,6 +197,82 @@ def bermudan_lsm_local_vol(S, K, t, r, local_vol_fn, option_type=OptionType.PUT,
     return sum(cash) * disc / n_paths
 
 
+def bermudan_min_put_lsm(S1, S2, K, t, r, sigma1, sigma2, rho,
+                         q1=0.0, q2=0.0, n_steps=50, n_paths=20_000,
+                         seed=None) -> float:
+    """American put on the minimum of two assets by Longstaff-Schwartz.
+
+    Prices ``max(K - min(S1_T, S2_T), 0)`` with early exercise at ``n_steps``
+    equally-spaced dates -- the worst-of protective put, a common structured-note
+    hedge. Two correlated GBMs are simulated and the continuation value is
+    regressed on a quadratic basis in both spots plus the running min
+    ``{1, S1, S2, S1^2, S2^2, S1 S2, min(S1,S2)}`` over the in-the-money paths.
+
+    Returns the price (in-sample LSM estimate, mildly biased low). Puts carry
+    early-exercise value even without dividends, so it sits above the European
+    :func:`quantforge.worst_of_put_closed`.
+    """
+    if S1 <= 0 or S2 <= 0 or K <= 0:
+        raise ValueError("prices and strike must be positive")
+    if t <= 0:
+        raise ValueError("t must be positive")
+    if not -1.0 <= rho <= 1.0:
+        raise ValueError("rho must be in [-1, 1]")
+    if n_steps < 1:
+        raise ValueError("n_steps must be >= 1")
+    rng = random.Random(seed)
+
+    dt = t / n_steps
+    dr1 = (r - q1 - 0.5 * sigma1 * sigma1) * dt
+    dr2 = (r - q2 - 0.5 * sigma2 * sigma2) * dt
+    v1 = sigma1 * math.sqrt(dt)
+    v2 = sigma2 * math.sqrt(dt)
+    corr2 = math.sqrt(1.0 - rho * rho)
+    disc = math.exp(-r * dt)
+
+    p1 = [[S1] * (n_steps + 1) for _ in range(n_paths)]
+    p2 = [[S2] * (n_steps + 1) for _ in range(n_paths)]
+    for p in range(n_paths):
+        s1, s2 = S1, S2
+        for step in range(1, n_steps + 1):
+            z1 = rng.gauss(0.0, 1.0)
+            z2 = rng.gauss(0.0, 1.0)
+            s1 *= math.exp(dr1 + v1 * z1)
+            s2 *= math.exp(dr2 + v2 * (rho * z1 + corr2 * z2))
+            p1[p][step] = s1
+            p2[p][step] = s2
+
+    def payoff(a, bb):
+        return max(K - min(a, bb), 0.0)
+
+    cash = [payoff(p1[p][n_steps], p2[p][n_steps]) for p in range(n_paths)]
+
+    for step in range(n_steps - 1, 0, -1):
+        itm = [p for p in range(n_paths)
+               if payoff(p1[p][step], p2[p][step]) > 0]
+        if len(itm) > 8:
+            X, Y = [], []
+            for p in itm:
+                a, bb = p1[p][step], p2[p][step]
+                X.append([1.0, a, bb, a * a, bb * bb, a * bb, min(a, bb)])
+                Y.append(cash[p] * disc)
+            beta = _solve_normal_equations(X, Y)
+            for p in itm:
+                a, bb = p1[p][step], p2[p][step]
+                basis = [1.0, a, bb, a * a, bb * bb, a * bb, min(a, bb)]
+                cont = sum(beta[j] * basis[j] for j in range(len(basis)))
+                ex = payoff(a, bb)
+                cash[p] = ex if ex >= cont else cash[p] * disc
+            for p in range(n_paths):
+                if payoff(p1[p][step], p2[p][step]) <= 0:
+                    cash[p] *= disc
+        else:
+            for p in range(n_paths):
+                cash[p] *= disc
+
+    return sum(cash) * disc / n_paths
+
+
 def bermudan_spread_lsm(S1, S2, K, t, r, sigma1, sigma2, rho,
                         q1=0.0, q2=0.0, option_type=OptionType.CALL,
                         n_steps=50, n_paths=20_000, seed=None) -> float:

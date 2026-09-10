@@ -4,6 +4,26 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.197.0] - 2026-09-10
+
+### Added
+- `bermudan_min_put_lsm` (in `lsm.py`): American put on the minimum of two assets
+  `max(K - min(S1_T, S2_T), 0)` by Longstaff-Schwartz -- the worst-of protective
+  put. Two correlated GBMs; the continuation value is regressed on a quadratic
+  basis in both spots plus the running min
+  `{1, S1, S2, S1^2, S2^2, S1 S2, min(S1,S2)}` over the in-the-money paths.
+- Verified: exceeds the European Stulz `worst_of_put_closed` by a positive
+  early-exercise premium (puts carry early-exercise value even without
+  dividends, ~0.42 here); is worth at least its intrinsic on the min when deep
+  in the money; reproducible under a fixed seed.
+
+### Audit
+- Swept every test for Monte Carlo functions called without a `seed` whose
+  result feeds an assertion (the class of the `test_pde2d_american` flake fixed
+  in 1.196.1). All remaining seedless calls are `pytest.raises(ValueError)`
+  argument-validation checks (no sampling) or pass the seed via `**kw`; no
+  further nondeterministic references found.
+
 ## [1.196.1] - 2026-09-10
 
 ### Fixed

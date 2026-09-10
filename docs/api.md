@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.196.1 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.197.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1670,6 +1670,20 @@ Auto-generated from `quantforge` v1.196.1 by `docs/gen_api.py` — do not edit b
 > The regression is re-fit at each bump (the standard practical scheme). The
 > deltas are reliable; the gammas -- second differences over a re-fit
 > regression -- are only indicative and need many paths.
+
+### `bermudan_min_put_lsm(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0, n_steps=50, n_paths=20000, seed=None) -> float`  _function_
+
+> American put on the minimum of two assets by Longstaff-Schwartz.
+>
+> Prices ``max(K - min(S1_T, S2_T), 0)`` with early exercise at ``n_steps``
+> equally-spaced dates -- the worst-of protective put, a common structured-note
+> hedge. Two correlated GBMs are simulated and the continuation value is
+> regressed on a quadratic basis in both spots plus the running min
+> ``{1, S1, S2, S1^2, S2^2, S1 S2, min(S1,S2)}`` over the in-the-money paths.
+>
+> Returns the price (in-sample LSM estimate, mildly biased low). Puts carry
+> early-exercise value even without dividends, so it sits above the European
+> :func:`quantforge.worst_of_put_closed`.
 
 ### `bermudan_spread_lsm(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0, option_type=<OptionType.CALL: 'call'>, n_steps=50, n_paths=20000, seed=None) -> float`  _function_
 
