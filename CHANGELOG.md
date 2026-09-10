@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.225.0] - 2026-09-10
+
+### Added
+- `kou_greeks` (in `kou.py`): delta, gamma, vega (diffusion-vol sensitivity),
+  and theta of a Kou double-exponential jump-diffusion option by central finite
+  differences on `kou_price`.
+- Verified: at `lam = 0` (no jumps) the Greeks reduce exactly to the vanilla
+  Black-Scholes Greeks; with jumps the delta matches a finite difference, the
+  call delta is in (0,1) with positive gamma/vega, and the put delta is negative.
+
 ## [1.224.0] - 2026-09-10
 
 ### Added

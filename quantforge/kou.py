@@ -112,6 +112,39 @@ def kou_price(S, K, t, r, sigma, lam, p, eta1, eta2,
     return call - S * math.exp(-q * t) + K * math.exp(-r * t)
 
 
+def kou_greeks(S, K, t, r, sigma, lam, p, eta1, eta2,
+               option_type=OptionType.CALL, q=0.0):
+    """Greeks of a Kou double-exponential jump-diffusion option by FD.
+
+    Central finite differences of :func:`kou_price` for ``delta`` (dV/dS),
+    ``gamma`` (d2V/dS2), ``vega`` (dV/dsigma, the *diffusion*-vol sensitivity),
+    and ``theta`` (calendar decay). At ``lam = 0`` (no jumps) these reduce to the
+    vanilla Black-Scholes Greeks. Returns a dict with ``price`` and those fields.
+    """
+    ot = _coerce_type(option_type)
+    if S <= 0 or K <= 0:
+        raise ValueError("S and K must be positive")
+    if t <= 0:
+        raise ValueError("t must be positive")
+    if sigma < 0 or lam < 0:
+        raise ValueError("sigma and lam must be non-negative")
+
+    def px(S_=S, t_=t, sigma_=sigma):
+        return kou_price(S_, K, t_, r, sigma_, lam, p, eta1, eta2, ot, q=q)
+
+    base = px()
+    hS = 1e-3 * S
+    up, dn = px(S_=S + hS), px(S_=S - hS)
+    delta = (up - dn) / (2.0 * hS)
+    gamma = (up - 2.0 * base + dn) / (hS * hS)
+    hv = 1e-4
+    vega = (px(sigma_=sigma + hv) - px(sigma_=sigma - hv)) / (2.0 * hv)
+    ht = min(1e-4, 0.25 * t)
+    theta = -(px(t_=t + ht) - px(t_=t - ht)) / (2.0 * ht)
+    return {"price": base, "delta": delta, "gamma": gamma, "vega": vega,
+            "theta": theta}
+
+
 def kou_smile(S, strikes, t, r, sigma, lam, p, eta1, eta2, q=0.0):
     """Black-Scholes implied-vol smile the Kou model produces.
 

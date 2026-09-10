@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.224.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.225.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1549,6 +1549,15 @@ Auto-generated from `quantforge` v1.224.0 by `docs/gen_api.py` — do not edit b
 > boundary). Returns ``{price, delta, gamma, theta}``.
 
 ## kou
+
+### `kou_greeks(S, K, t, r, sigma, lam, p, eta1, eta2, option_type=<OptionType.CALL: 'call'>, q=0.0)`  _function_
+
+> Greeks of a Kou double-exponential jump-diffusion option by FD.
+>
+> Central finite differences of :func:`kou_price` for ``delta`` (dV/dS),
+> ``gamma`` (d2V/dS2), ``vega`` (dV/dsigma, the *diffusion*-vol sensitivity),
+> and ``theta`` (calendar decay). At ``lam = 0`` (no jumps) these reduce to the
+> vanilla Black-Scholes Greeks. Returns a dict with ``price`` and those fields.
 
 ### `kou_price(S, K, t, r, sigma, lam, p, eta1, eta2, option_type=<OptionType.CALL: 'call'>, q=0.0, upper=200.0) -> float`  _function_
 

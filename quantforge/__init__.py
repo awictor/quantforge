@@ -70,7 +70,7 @@ from .pde2d import (
     adi_two_asset, adi_spread_option, adi_two_asset_cs, adi_two_asset_american,
 )
 from .pde_asian import asian_pde_price
-from .kou import kou_price, kou_smile
+from .kou import kou_price, kou_greeks, kou_smile
 from .cgmy import cgmy_price, cgmy_smile
 from .nig import nig_price, nig_smile
 from .meixner import meixner_price, meixner_smile
@@ -259,7 +259,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.224.0"
+__version__ = "1.225.0"
 
 __all__ = [
     "OptionType",
@@ -347,6 +347,7 @@ __all__ = [
     "adi_two_asset_american",
     "asian_pde_price",
     "kou_price",
+    "kou_greeks",
     "kou_smile",
     "cgmy_price",
     "cgmy_smile",
