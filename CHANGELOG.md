@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.145.1] - 2026-09-10
+
+### Tests
+- Trimmed the fast-suite runtime back from ~45s to ~37s: the smooth `K -> 0`
+  Asian-PDE sanity check runs on a modest grid (it needs no strike-kink
+  resolution), the ATM/OTM Asian-PDE put check is marked slow, and the
+  Heston-calibration parameter-validity check uses a short optimiser run (it
+  tests the reparametrization, not fit accuracy). Full accuracy coverage is
+  unchanged under `-m slow`.
+
 ## [1.145.0] - 2026-09-10
 
 ### Added

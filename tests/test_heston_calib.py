@@ -40,7 +40,8 @@ def test_feller_penalty_pushes_toward_condition():
 
 
 def test_calibrated_params_valid():
-    params, _ = calibrate_heston(S, R, _surface(), max_iter=2000)
+    # Validity of the reparametrization, not fit accuracy -- a short run suffices.
+    params, _ = calibrate_heston(S, R, _surface(), max_iter=300)
     v0, kappa, theta, xi, rho = params
     assert v0 > 0 and kappa > 0 and theta > 0 and xi > 0
     assert -1.0 < rho < 1.0
