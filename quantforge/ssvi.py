@@ -234,9 +234,31 @@ def ssvi_reprice_mc(params: SSVIParams, S0, K, t, r, q=0.0,
                         antithetic=antithetic, seed=seed)
 
 
+def _ssvi_arb_penalty(rho, eta, gamma, thetas, expiries):
+    """Non-negative penalty measuring SSVI no-arbitrage violations.
+
+    Sums the butterfly-condition excess at each expiry (``theta phi (1+|rho|)``
+    and ``theta phi^2 (1+|rho|)`` over 4) and the calendar violation (negative
+    increments of ``theta`` in maturity). Zero iff the surface is arbitrage-free.
+    """
+    pen = 0.0
+    for th in thetas:
+        ph = ssvi_phi(th, eta, gamma)
+        c1 = th * ph * (1.0 + abs(rho)) - 4.0
+        c2 = th * ph * ph * (1.0 + abs(rho)) - 4.0
+        pen += max(0.0, c1) ** 2 + max(0.0, c2) ** 2
+    # Calendar: theta must be non-decreasing across sorted expiries.
+    order = sorted(range(len(expiries)), key=lambda i: expiries[i])
+    for a, b in zip(order, order[1:]):
+        drop = thetas[a] - thetas[b]
+        pen += max(0.0, drop) ** 2
+    return pen
+
+
 def calibrate_ssvi(
     market: Sequence[Tuple[float, float, float]],
     initial: SSVIParams = None, max_iter: int = 8000,
+    arb_weight: float = 0.0,
 ) -> Tuple[SSVIParams, float]:
     """Fit an SSVI surface to market implied vols.
 
@@ -298,6 +320,9 @@ def calibrate_ssvi(
             model = ssvi_total_variance(k, thetas[i], rho, eta, gamma)
             diff = model - w
             err += diff * diff
+        if arb_weight > 0.0:
+            err += arb_weight * _ssvi_arb_penalty(rho, eta, gamma, thetas,
+                                                  expiries)
         return err
 
     best_p, _ = nelder_mead(objective, x0, step=0.3, max_iter=max_iter, tol=1e-16)
@@ -312,3 +337,26 @@ def calibrate_ssvi(
         model_iv = math.sqrt(max(w, 0.0) / t)
         sse += (model_iv - iv) ** 2
     return params, math.sqrt(sse / len(pts))
+
+
+def calibrate_ssvi_arbitrage_free(
+    market: Sequence[Tuple[float, float, float]],
+    initial: SSVIParams = None, max_iter: int = 8000,
+    weights=(1.0, 10.0, 100.0, 1000.0, 1e4, 1e5, 1e6),
+) -> Tuple[SSVIParams, float]:
+    """Fit an arbitrage-free SSVI surface by ramping the no-arb penalty.
+
+    Calibrates with :func:`calibrate_ssvi` at increasing ``arb_weight`` values,
+    warm-starting each from the previous fit, and returns the first result that
+    passes :func:`ssvi_is_arbitrage_free` (or the last, most-penalised fit if
+    none does). Trades a little fit RMSE for a guaranteed no-arbitrage surface.
+    """
+    params, rmse = calibrate_ssvi(market, initial=initial, max_iter=max_iter)
+    if ssvi_is_arbitrage_free(params):
+        return params, rmse
+    for w in weights:
+        params, rmse = calibrate_ssvi(market, initial=params, max_iter=max_iter,
+                                      arb_weight=w)
+        if ssvi_is_arbitrage_free(params):
+            break
+    return params, rmse

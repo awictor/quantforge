@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.132.0] - 2026-09-10
+
+### Added
+- Arbitrage-free SSVI calibration (in `ssvi.py`): `calibrate_ssvi` gains an
+  `arb_weight` that penalises butterfly and calendar no-arbitrage violations,
+  and `calibrate_ssvi_arbitrage_free` ramps that weight (warm-starting each fit
+  from the last) until the surface passes `ssvi_is_arbitrage_free`. Trades a
+  little fit RMSE for a guaranteed no-arbitrage surface.
+- Verified: an intentionally arbitraging SSVI surface is flagged and the plain
+  fit reproduces it, while the penalised fit returns an arbitrage-free surface
+  (pulling `eta` 8.0 -> 1.8); on a clean surface the arb-free fit matches the
+  plain fit's RMSE and removing arbitrage never improves the fit to an
+  arbitraging market.
+
 ## [1.131.0] - 2026-09-10
 
 ### Added

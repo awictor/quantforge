@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.131.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.132.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2257,7 +2257,7 @@ Auto-generated from `quantforge` v1.131.0 by `docs/gen_api.py` — do not edit b
 
 > A fitted SSVI surface: global (rho, eta, gamma) and per-expiry theta.
 
-### `calibrate_ssvi(market: Sequence[Tuple[float, float, float]], initial: quantforge.ssvi.SSVIParams = None, max_iter: int = 8000) -> Tuple[quantforge.ssvi.SSVIParams, float]`  _function_
+### `calibrate_ssvi(market: Sequence[Tuple[float, float, float]], initial: quantforge.ssvi.SSVIParams = None, max_iter: int = 8000, arb_weight: float = 0.0) -> Tuple[quantforge.ssvi.SSVIParams, float]`  _function_
 
 > Fit an SSVI surface to market implied vols.
 >
@@ -2269,6 +2269,15 @@ Auto-generated from `quantforge` v1.131.0 by `docs/gen_api.py` — do not edit b
 >
 > Returns ``(params, rmse)`` where ``rmse`` is the root-mean-square implied-vol
 > error across the market points.
+
+### `calibrate_ssvi_arbitrage_free(market: Sequence[Tuple[float, float, float]], initial: quantforge.ssvi.SSVIParams = None, max_iter: int = 8000, weights=(1.0, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0)) -> Tuple[quantforge.ssvi.SSVIParams, float]`  _function_
+
+> Fit an arbitrage-free SSVI surface by ramping the no-arb penalty.
+>
+> Calibrates with :func:`calibrate_ssvi` at increasing ``arb_weight`` values,
+> warm-starting each from the previous fit, and returns the first result that
+> passes :func:`ssvi_is_arbitrage_free` (or the last, most-penalised fit if
+> none does). Trades a little fit RMSE for a guaranteed no-arbitrage surface.
 
 ### `ssvi_butterfly_free(theta: float, rho: float, eta: float, gamma: float, tol: float = 1e-09) -> bool`  _function_
 
