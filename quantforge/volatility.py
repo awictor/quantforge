@@ -253,3 +253,88 @@ def vol_cone(closes: Sequence[float], windows: Sequence[int],
             current=vols[-1],   # most-recent rolling block
         ))
     return out
+
+
+@dataclass(frozen=True)
+class GarchParams:
+    omega: float             # long-run variance intercept
+    alpha: float             # weight on last squared return (ARCH)
+    beta: float              # weight on last variance (GARCH)
+
+    @property
+    def persistence(self):
+        return self.alpha + self.beta
+
+    @property
+    def long_run_variance(self):
+        p = self.persistence
+        return self.omega / (1.0 - p) if p < 1.0 else float("inf")
+
+
+def fit_garch(returns: Sequence[float], periods_per_year: int = 252):
+    """Fit a GARCH(1,1) variance model to a return series by quasi-MLE.
+
+    Model: ``h_t = omega + alpha * r_{t-1}^2 + beta * h_{t-1}`` with the returns
+    assumed conditionally normal (Gaussian quasi-likelihood). Fitted with the
+    built-in Nelder-Mead over a smooth reparametrization that keeps
+    ``omega > 0``, ``alpha, beta >= 0`` and ``alpha + beta < 1`` (stationary).
+
+    Returns ``GarchParams`` (per-period variance parameters).
+    """
+    from .optimize import nelder_mead
+
+    r = [float(x) for x in returns]
+    n = len(r)
+    if n < 20:
+        raise ValueError("need at least ~20 returns to fit GARCH")
+    sample_var = sum((x - sum(r) / n) ** 2 for x in r) / n
+
+    def softplus(x):
+        return math.log1p(math.exp(-abs(x))) + max(x, 0.0)
+
+    def unpack(p):
+        # omega = softplus; alpha, beta via a softmax-like split of persistence.
+        omega = softplus(p[0]) + 1e-12
+        # persistence in (0,1) via logistic; split between alpha/beta by logistic.
+        pers = 1.0 / (1.0 + math.exp(-p[1]))
+        frac = 1.0 / (1.0 + math.exp(-p[2]))
+        alpha = pers * frac
+        beta = pers * (1.0 - frac)
+        return omega, alpha, beta
+
+    def neg_loglik(p):
+        omega, alpha, beta = unpack(p)
+        h = sample_var
+        ll = 0.0
+        for i in range(n):
+            if h <= 0:
+                return 1e18
+            ll += 0.5 * (math.log(h) + r[i] * r[i] / h)
+            h = omega + alpha * r[i] * r[i] + beta * h
+        return ll
+
+    x0 = [math.log(math.expm1(max(sample_var * 0.1, 1e-10))), 0.0, 0.0]
+    best, _ = nelder_mead(neg_loglik, x0, step=0.5, max_iter=4000, tol=1e-12)
+    omega, alpha, beta = unpack(best)
+    return GarchParams(omega=omega, alpha=alpha, beta=beta)
+
+
+def garch_forecast(params: GarchParams, last_return, last_variance,
+                   horizon=1, periods_per_year: int = 252):
+    """Forecast annualized volatility ``horizon`` periods ahead under GARCH(1,1).
+
+    The one-step-ahead variance is ``h_1 = omega + alpha r^2 + beta h``. Beyond
+    that the expected variance mean-reverts toward the long-run level at rate
+    ``persistence`` per step: ``E[h_k] = LR + persistence^{k-1} (h_1 - LR)``.
+    Returns the annualized volatility for the ``horizon``-step-ahead period.
+    """
+    if horizon < 1:
+        raise ValueError("horizon must be >= 1")
+    h1 = params.omega + params.alpha * last_return * last_return + params.beta * last_variance
+    lr = params.long_run_variance
+    p = params.persistence
+    if horizon == 1 or p >= 1.0:
+        h = h1
+    else:
+        h = lr + (p ** (horizon - 1)) * (h1 - lr)
+    return math.sqrt(h * periods_per_year)

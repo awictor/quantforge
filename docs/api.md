@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.61.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.62.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1435,6 +1435,10 @@ Auto-generated from `quantforge` v1.61.0 by `docs/gen_api.py` — do not edit by
 
 ## volatility
 
+### `GarchParams(omega: float, alpha: float, beta: float) -> None`  _class_
+
+> GarchParams(omega: float, alpha: float, beta: float)
+
 ### `VolConePoint(window: int, minimum: float, p25: float, median: float, p75: float, maximum: float, current: float) -> None`  _class_
 
 > VolConePoint(window: int, minimum: float, p25: float, median: float, p75: float, maximum: float, current: float)
@@ -1456,6 +1460,26 @@ Auto-generated from `quantforge` v1.61.0 by `docs/gen_api.py` — do not edit by
 >
 > Variance_t = lam * Variance_{t-1} + (1 - lam) * r_t^2, seeded with the
 > first squared return. ``lam=0.94`` is the RiskMetrics daily default.
+
+### `fit_garch(returns: Sequence[float], periods_per_year: int = 252)`  _function_
+
+> Fit a GARCH(1,1) variance model to a return series by quasi-MLE.
+>
+> Model: ``h_t = omega + alpha * r_{t-1}^2 + beta * h_{t-1}`` with the returns
+> assumed conditionally normal (Gaussian quasi-likelihood). Fitted with the
+> built-in Nelder-Mead over a smooth reparametrization that keeps
+> ``omega > 0``, ``alpha, beta >= 0`` and ``alpha + beta < 1`` (stationary).
+>
+> Returns ``GarchParams`` (per-period variance parameters).
+
+### `garch_forecast(params: quantforge.volatility.GarchParams, last_return, last_variance, horizon=1, periods_per_year: int = 252)`  _function_
+
+> Forecast annualized volatility ``horizon`` periods ahead under GARCH(1,1).
+>
+> The one-step-ahead variance is ``h_1 = omega + alpha r^2 + beta h``. Beyond
+> that the expected variance mean-reverts toward the long-run level at rate
+> ``persistence`` per step: ``E[h_k] = LR + persistence^{k-1} (h_1 - LR)``.
+> Returns the annualized volatility for the ``horizon``-step-ahead period.
 
 ### `garman_klass(opens, highs, lows, closes, periods_per_year: int = 252) -> float`  _function_
 

@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.62.0] - 2026-09-09
+
+### Added
+- GARCH(1,1) volatility forecasting (in `volatility.py`): `fit_garch` estimates
+  the variance model by Gaussian quasi-MLE (stationary reparametrization,
+  Nelder-Mead), and `garch_forecast` gives the annualized vol `horizon` steps
+  ahead, mean-reverting to the long-run level. Recovers persistence on synthetic
+  GARCH data.
+
 ## [1.61.0] - 2026-09-09
 
 ### Added

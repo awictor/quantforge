@@ -377,6 +377,16 @@ from quantforge import vol_cone
 
 for pt in vol_cone(closes, windows=[5, 21, 63, 126]):
     print(pt.window, pt.minimum, pt.median, pt.maximum, pt.current)
+```
+
+`fit_garch` estimates a GARCH(1,1) model and `garch_forecast` projects the vol
+forward, mean-reverting to the long-run level:
+
+```python
+from quantforge import fit_garch, garch_forecast
+
+p = fit_garch(returns)
+garch_forecast(p, last_return=returns[-1], last_variance=h, horizon=21)
 ``` Compare any of these against the implied
 vol from `implied_volatility` to trade realized-vs-implied.
 
