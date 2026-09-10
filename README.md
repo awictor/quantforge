@@ -403,6 +403,17 @@ Under BSM the forward-start value scales with the current spot and is
 independent of the absolute future strike (Rubinstein), so `alpha` (moneyness)
 is the only strike input.
 
+A capped cliquet (ratchet note) — periodic returns clipped locally and the sum
+clipped globally — is priced by Monte Carlo:
+
+```python
+from quantforge import capped_cliquet_mc
+
+capped_cliquet_mc(S=100, t=1.0, r=0.05, sigma=0.3,
+                  reset_times=[0.25, 0.5, 0.75, 1.0],
+                  local_cap=0.05, global_cap=0.15)
+```
+
 ## Quasi-Monte Carlo
 
 Deterministic low-discrepancy (Halton) integration converges several times

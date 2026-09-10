@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.32.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.33.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -597,6 +597,22 @@ Auto-generated from `quantforge` v1.32.0 by `docs/gen_api.py` — do not edit by
 > With ``control_variate=True`` the geometric-average Asian (known in closed
 > form) is used as a control, dramatically reducing the standard error since
 > the two averages are almost perfectly correlated.
+
+### `capped_cliquet_mc(S, t, r, sigma, reset_times, local_cap=None, local_floor=0.0, global_cap=None, global_floor=0.0, b=None, n_paths=50000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
+
+> Monte Carlo a locally- and globally-capped cliquet (ratchet).
+>
+> The payoff sums the periodic returns of the underlying over consecutive
+> reset windows, clipping each period return to ``[local_floor, local_cap]``,
+> then clips the running sum to ``[global_floor, global_cap]``. The result is
+> discounted at ``r``. This is the standard capped-cliquet structured note;
+> the caps make it path-dependent with no closed form.
+>
+> Args:
+>     reset_times: increasing schedule, e.g. [0.25, 0.5, 0.75, 1.0]; the first
+>         period runs from now (t=0) to reset_times[0].
+>     local_cap / local_floor: per-period return bounds (cap None = uncapped).
+>     global_cap / global_floor: bounds on the summed payoff.
 
 ### `european_mc(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, n_paths=100000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
 

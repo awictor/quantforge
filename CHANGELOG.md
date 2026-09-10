@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.33.0] - 2026-09-09
+
+### Added
+- `capped_cliquet_mc` (in `montecarlo.py`): Monte Carlo pricer for a locally-
+  and globally-capped cliquet (ratchet) note — sums clipped periodic returns
+  and clips the running total, with antithetic variates and a seed. Tightening
+  either cap lowers the price; the global cap bounds the payoff.
+
 ## [1.32.0] - 2026-09-09
 
 ### Added

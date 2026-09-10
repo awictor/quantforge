@@ -140,3 +140,58 @@ def arithmetic_asian_mc(S, K, t, r, sigma, option_type=OptionType.CALL, b=None,
     samples = controlled if control_variate else arith_payoffs
     price, se = _summarize(samples)
     return MCResult(price=price, std_error=se, n_paths=len(samples))
+
+
+def capped_cliquet_mc(S, t, r, sigma, reset_times, local_cap=None,
+                      local_floor=0.0, global_cap=None, global_floor=0.0,
+                      b=None, n_paths=50_000, antithetic=True, seed=None) -> MCResult:
+    """Monte Carlo a locally- and globally-capped cliquet (ratchet).
+
+    The payoff sums the periodic returns of the underlying over consecutive
+    reset windows, clipping each period return to ``[local_floor, local_cap]``,
+    then clips the running sum to ``[global_floor, global_cap]``. The result is
+    discounted at ``r``. This is the standard capped-cliquet structured note;
+    the caps make it path-dependent with no closed form.
+
+    Args:
+        reset_times: increasing schedule, e.g. [0.25, 0.5, 0.75, 1.0]; the first
+            period runs from now (t=0) to reset_times[0].
+        local_cap / local_floor: per-period return bounds (cap None = uncapped).
+        global_cap / global_floor: bounds on the summed payoff.
+    """
+    _validate(S, S, t, sigma)
+    if b is None:
+        b = r
+    times = [0.0] + list(reset_times)
+    if any(times[i] >= times[i + 1] for i in range(len(times) - 1)):
+        raise ValueError("reset_times must be strictly increasing and positive")
+    disc = math.exp(-r * t)
+    rng = random.Random(seed)
+
+    def clip(x, lo, hi):
+        if lo is not None:
+            x = max(x, lo)
+        if hi is not None:
+            x = min(x, hi)
+        return x
+
+    def one_path(draws):
+        total = 0.0
+        for i, z in enumerate(draws):
+            dt = times[i + 1] - times[i]
+            drift = (b - 0.5 * sigma * sigma) * dt
+            ret = math.exp(drift + sigma * math.sqrt(dt) * z) - 1.0
+            total += clip(ret, local_floor, local_cap)
+        return disc * clip(total, global_floor, global_cap)
+
+    n_periods = len(reset_times)
+    samples = []
+    n = n_paths // 2 if antithetic else n_paths
+    for _ in range(n):
+        zs = [rng.gauss(0.0, 1.0) for _ in range(n_periods)]
+        samples.append(one_path(zs))
+        if antithetic:
+            samples.append(one_path([-z for z in zs]))
+
+    price, se = _summarize(samples)
+    return MCResult(price=price, std_error=se, n_paths=len(samples))
