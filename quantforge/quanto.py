@@ -18,7 +18,10 @@ and the option is discounted at the domestic rate ``r_domestic``. Setting
 
 import math
 
-from .bsm import price as bsm_price, OptionType, _coerce_type, _validate
+from .bsm import (
+    price as bsm_price, OptionType, _coerce_type, _validate,
+    delta as bsm_delta, gamma as bsm_gamma,
+)
 
 
 def quanto_option(S, K, t, r_domestic, r_foreign, sigma_asset, sigma_fx, rho,
@@ -47,6 +50,45 @@ def quanto_option(S, K, t, r_domestic, r_foreign, sigma_asset, sigma_fx, rho,
     # Quanto-adjusted cost of carry; discount at the domestic rate.
     b_q = r_foreign - q_asset - rho * sigma_asset * sigma_fx
     return bsm_price(S, K, t, r_domestic, sigma_asset, ot, b=b_q)
+
+
+def quanto_option_greeks(S, K, t, r_domestic, r_foreign, sigma_asset, sigma_fx,
+                         rho, q_asset=0.0, option_type=OptionType.CALL):
+    """Greeks of a quanto option.
+
+    The quanto price is a Black-Scholes price on the foreign asset with the
+    quanto-adjusted carry ``b_q = r_foreign - q_asset - rho sigma_asset
+    sigma_fx``, discounted domestically. The spot enters only through that BSM
+    price, so ``delta`` and ``gamma`` are the exact BSM Greeks at ``b_q`` (no
+    finite difference). ``vega`` (dV/dsigma_asset -- which also moves ``b_q``),
+    ``fx_vega`` (dV/dsigma_fx, the quanto's exposure to FX volatility), and
+    ``corr_vega`` (dV/drho) are central finite differences of the closed form.
+    Returns a dict with ``price``, ``delta``, ``gamma``, ``vega``, ``fx_vega``,
+    ``corr_vega``.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma_asset)
+    if not (-1.0 <= rho <= 1.0):
+        raise ValueError("rho must be in [-1, 1]")
+    if sigma_fx < 0:
+        raise ValueError("sigma_fx must be non-negative")
+    b_q = r_foreign - q_asset - rho * sigma_asset * sigma_fx
+    price = bsm_price(S, K, t, r_domestic, sigma_asset, ot, b=b_q)
+    delta = bsm_delta(S, K, t, r_domestic, sigma_asset, ot, b=b_q)
+    gamma = bsm_gamma(S, K, t, r_domestic, sigma_asset, b=b_q)
+
+    def px(sa=sigma_asset, sfx=sigma_fx, rr=rho):
+        return quanto_option(S, K, t, r_domestic, r_foreign, sa, sfx, rr,
+                             q_asset, ot)
+
+    hv = 1e-4
+    vega = (px(sa=sigma_asset + hv) - px(sa=sigma_asset - hv)) / (2.0 * hv)
+    fx_vega = (px(sfx=sigma_fx + hv) - px(sfx=sigma_fx - hv)) / (2.0 * hv)
+    hr = 1e-5
+    corr_vega = (px(rr=min(rho + hr, 1.0 - 1e-9))
+                 - px(rr=max(rho - hr, -1.0 + 1e-9))) / (2.0 * hr)
+    return {"price": price, "delta": delta, "gamma": gamma, "vega": vega,
+            "fx_vega": fx_vega, "corr_vega": corr_vega}
 
 
 def compo_option(S, K, t, r_domestic, r_foreign, sigma_asset, sigma_fx, rho,

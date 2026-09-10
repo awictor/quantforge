@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.216.0] - 2026-09-10
+
+### Added
+- `quanto_option_greeks` (in `quanto.py`): Greeks of a quanto option. The price
+  is a Black-Scholes price on the foreign asset with the quanto-adjusted carry
+  `b_q = r_foreign - q_asset - rho sigma_asset sigma_fx`, so the spot enters only
+  through that BSM price -- `delta` and `gamma` are the exact BSM Greeks at `b_q`
+  (no finite difference). `vega` (asset vol), `fx_vega` (FX vol), and `corr_vega`
+  (correlation) are central finite differences of the closed form.
+- Verified: delta matches a finite difference; at `rho = 0` the delta equals the
+  plain BSM delta at carry `r_foreign - q`; `corr_vega` is negative for a
+  positive-rho call (higher correlation lowers the quanto carry); call gamma and
+  asset vega are positive.
+
 ## [1.215.0] - 2026-09-10
 
 ### Added

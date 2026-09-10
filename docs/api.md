@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.215.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.216.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2789,6 +2789,20 @@ Auto-generated from `quantforge` v1.215.0 by `docs/gen_api.py` — do not edit b
 >
 > The price is in domestic currency per unit of the fixed exchange rate
 > (multiply by the agreed FX level for the cash amount).
+
+### `quanto_option_greeks(S, K, t, r_domestic, r_foreign, sigma_asset, sigma_fx, rho, q_asset=0.0, option_type=<OptionType.CALL: 'call'>)`  _function_
+
+> Greeks of a quanto option.
+>
+> The quanto price is a Black-Scholes price on the foreign asset with the
+> quanto-adjusted carry ``b_q = r_foreign - q_asset - rho sigma_asset
+> sigma_fx``, discounted domestically. The spot enters only through that BSM
+> price, so ``delta`` and ``gamma`` are the exact BSM Greeks at ``b_q`` (no
+> finite difference). ``vega`` (dV/dsigma_asset -- which also moves ``b_q``),
+> ``fx_vega`` (dV/dsigma_fx, the quanto's exposure to FX volatility), and
+> ``corr_vega`` (dV/drho) are central finite differences of the closed form.
+> Returns a dict with ``price``, ``delta``, ``gamma``, ``vega``, ``fx_vega``,
+> ``corr_vega``.
 
 ## rates
 
