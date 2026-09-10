@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.98.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.99.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -106,6 +106,30 @@ Auto-generated from `quantforge` v1.98.0 by `docs/gen_api.py` — do not edit by
 ### `bachelier_vega(F, K, t, r, sigma) -> float`  _function_
 
 > dPrice/dsigma_N (per unit of normal vol). Same for calls and puts.
+
+## bates
+
+### `bates_price(S, K, t, r, v0, kappa, theta, xi, rho, lam, mu_j, sigma_j, option_type=<OptionType.CALL: 'call'>, q=0.0, upper=200.0) -> float`  _function_
+
+> Price a European option under the Bates (Heston + Merton jumps) model.
+>
+> Args:
+>     v0, kappa, theta, xi, rho: Heston stochastic-variance parameters.
+>     lam: jump intensity (expected jumps per year, >= 0).
+>     mu_j, sigma_j: mean and std of the log jump size.
+>     q: continuous dividend yield.
+>     upper: Fourier-integral truncation (raise for long maturities/large xi).
+>
+> ``lam = 0`` recovers the Heston price exactly. Puts use put-call parity.
+
+### `bates_smile(S, strikes, t, r, v0, kappa, theta, xi, rho, lam, mu_j, sigma_j, q=0.0)`  _function_
+
+> Black-Scholes implied-vol smile the Bates model produces.
+>
+> Prices a call at each strike and inverts to a Black-Scholes implied vol,
+> returning ``(log_moneyness, vol)`` pairs sorted by strike on the forward
+> ``F = S e^{(r-q) t}``. Jumps steepen the short-dated skew beyond what the
+> Heston diffusion alone can produce.
 
 ## binomial
 

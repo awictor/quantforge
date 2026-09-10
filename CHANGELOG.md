@@ -4,6 +4,29 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.99.0] - 2026-09-10
+
+### Added
+- Bates (1996) model (new `bates.py`): Heston stochastic volatility plus Merton
+  lognormal jumps. `bates_price` reuses the Heston two-probability Fourier
+  integral and Gauss-Legendre machinery, multiplying the Heston characteristic
+  function by the independent compound-Poisson jump factor with a martingale
+  drift compensator. `bates_smile` returns the implied-vol smile. `lambda = 0`
+  recovers the Heston price exactly.
+- Verified: `lambda = 0` matches Heston to 1e-8, put-call parity holds, jumps
+  raise the price vs Heston, a negative mean jump steepens the downward skew,
+  and -- the decisive check -- the Fourier price matches an independent
+  Andersen-QE variance simulation with a compound-Poisson jump overlay to <0.35
+  standard errors on three parameter sets.
+
+### Fixed
+- The jump characteristic factor initially used a `+-1/2` measure shift and an
+  `i*phi` compensator; the Monte Carlo cross-check exposed a 12-86 sigma error.
+  The correct Heston-decomposition shift is `s = 1` (share measure, argument
+  `phi - i`) for P1 and `s = 0` for P2, with the compensator `-a*lambda*t*k`;
+  after the fix the MC agreement is <0.35 sigma. Parity and the `lambda = 0`
+  limit alone did not catch this -- only the independent jump-aware MC did.
+
 ## [1.98.1] - 2026-09-10
 
 ### Tests
