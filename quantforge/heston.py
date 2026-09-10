@@ -132,3 +132,27 @@ def heston_price(S, K, t, r, v0, kappa, theta, xi, rho,
         return call
     # Put-call parity: P = C - S e^{-qt} + K e^{-rt}.
     return call - S * math.exp(-q * t) + K * math.exp(-r * t)
+
+
+def heston_smile(S, strikes, t, r, v0, kappa, theta, xi, rho, q=0.0):
+    """The Black-Scholes implied-vol smile a Heston model produces.
+
+    Prices a European call at each strike under Heston, then inverts each price
+    to its Black-Scholes implied volatility, returning ``(log_moneyness, vol)``
+    pairs sorted by strike (``log_moneyness = ln(K / F)`` on the forward
+    ``F = S e^{(r-q)t}``). This exposes the skew/smile the stochastic-vol
+    parameters imply; a negative ``rho`` gives the usual downward equity skew.
+    """
+    from .implied import implied_volatility
+
+    F = S * math.exp((r - q) * t)
+    out = []
+    for K in sorted(strikes):
+        c = heston_price(S, K, t, r, v0, kappa, theta, xi, rho,
+                         OptionType.CALL, q=q)
+        try:
+            iv = implied_volatility(c, S, K, t, r, OptionType.CALL, b=r - q)
+        except ValueError:
+            continue
+        out.append((math.log(K / F), iv))
+    return out

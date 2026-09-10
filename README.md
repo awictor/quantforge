@@ -1001,6 +1001,15 @@ heston_price(S=100, K=100, t=1.0, r=0.0,
 `xi` the vol-of-vol, and `rho` the spot/variance correlation. As `xi -> 0` the
 price collapses to Black-Scholes; puts follow from put-call parity.
 
+`heston_smile` extracts the implied-vol smile the parameters produce:
+
+```python
+from quantforge import heston_smile
+
+heston_smile(S=100, strikes=[80, 90, 100, 110, 120], t=1.0, r=0.0,
+             v0=0.04, kappa=2.0, theta=0.04, xi=0.5, rho=-0.7)  # downward skew
+```
+
 ## SABR stochastic-vol smile
 
 The market-standard SABR model via Hagan's implied-vol expansion, with

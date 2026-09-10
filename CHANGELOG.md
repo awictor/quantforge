@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.86.0] - 2026-09-10
+
+### Added
+- `heston_smile` (in `heston.py`): the Black-Scholes implied-vol smile a Heston
+  model produces — prices calls across strikes and inverts each to a BSM vol,
+  returning `(log_moneyness, vol)` pairs. Flat at `sqrt(v0)` when the vol-of-vol
+  is zero; a negative `rho` gives a downward equity skew, positive an upward
+  one.
+
 ## [1.85.1] - 2026-09-10
 
 ### Added

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.85.1 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.86.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -749,6 +749,16 @@ Auto-generated from `quantforge` v1.85.1 by `docs/gen_api.py` — do not edit by
 >         parameters; raise for very long maturities or large xi).
 >
 > Returns the option price. Puts are obtained from put-call parity.
+
+### `heston_smile(S, strikes, t, r, v0, kappa, theta, xi, rho, q=0.0)`  _function_
+
+> The Black-Scholes implied-vol smile a Heston model produces.
+>
+> Prices a European call at each strike under Heston, then inverts each price
+> to its Black-Scholes implied volatility, returning ``(log_moneyness, vol)``
+> pairs sorted by strike (``log_moneyness = ln(K / F)`` on the forward
+> ``F = S e^{(r-q)t}``). This exposes the skew/smile the stochastic-vol
+> parameters imply; a negative ``rho`` gives the usual downward equity skew.
 
 ## holee
 
