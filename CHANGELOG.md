@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.141.0] - 2026-09-10
+
+### Added
+- `VannaVolgaSmile.vol_cm` (in `vannavolga.py`): the Castagna-Mercurio analytic
+  vanna-volga implied-vol approximation from the three delta pillars. `order=1`
+  is the vega/vanna/volga-weighted first-order average
+  `sigma_atm + sum_i x_i (sigma_i - sigma_atm)`; `order=2` adds the standard
+  second-order convexity correction
+  `(-sigma_atm + sqrt(sigma_atm^2 + d1 d2 (2 sigma_atm D1 + D2)))/(d1 d2)`.
+- Verified: both orders are exact at the three pillars; the second order matches
+  the price-corrected vol off-pillar to ~1e-3; the two orders differ off-pillar;
+  and a negative risk reversal gives a downward skew.
+
 ## [1.140.0] - 2026-09-10
 
 ### Added

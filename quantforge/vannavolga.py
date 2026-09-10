@@ -25,6 +25,13 @@ from .implied import implied_volatility
 from .sabr import _solve3
 
 
+def d1_d2(F, K, t, sigma):
+    """Product ``d1 * d2`` of the Black d-terms on the forward ``F``."""
+    vsqrt = sigma * math.sqrt(t)
+    d1 = (math.log(F / K) + 0.5 * vsqrt * vsqrt) / vsqrt
+    return d1 * (d1 - vsqrt)
+
+
 def _vega_vanna_volga(S, K, t, r, b, sigma):
     """Black-Scholes vega, vanna and volga at one strike (carry form).
 
@@ -97,6 +104,58 @@ class VannaVolgaSmile:
     def pillars(self):
         """Return the three (strike, vol) pillar points, sorted by strike."""
         return [(k, self.sig[k]) for k in self._ks]
+
+    def _cm_weights(self, K):
+        """Vanna-volga replication weights x1, x2, x3 for strike ``K``.
+
+        The weights make the three pillar options' vega, vanna and volga (at the
+        flat ATM vol) replicate the target strike's -- Castagna-Mercurio's
+        analytic result gives them in closed form from the pillar log-moneynesses.
+        """
+        k1, k2, k3 = self._ks
+        x = math.log(K)
+        y1, y2, y3 = math.log(k1), math.log(k2), math.log(k3)
+        x1 = (x - y2) * (x - y3) / ((y1 - y2) * (y1 - y3))
+        x2 = (x - y1) * (x - y3) / ((y2 - y1) * (y2 - y3))
+        x3 = (x - y1) * (x - y2) / ((y3 - y1) * (y3 - y2))
+        return x1, x2, x3
+
+    def vol_cm(self, K, order=2):
+        """Castagna-Mercurio vanna-volga implied-vol approximation at ``K``.
+
+        ``order=1`` gives the first-order approximation -- a vega-weighted
+        average of the pillar vols, ``sigma_atm + sum_i x_i (sigma_i -
+        sigma_atm)`` with the vanna-volga replication weights. ``order=2`` adds
+        the standard second-order correction
+
+            sigma ~= sigma_atm + (-sigma_atm
+                     + sqrt(sigma_atm^2 + d1 d2 (2 sigma_atm D1 + D2))) / (d1 d2),
+
+        with ``D1`` the first-order excess and ``D2`` the pillar convexity term.
+        Both are exact at the three pillars; the second order is the market
+        standard.
+        """
+        k1, k2, k3 = self._ks
+        s1, s2, s3 = self.sig[k1], self.sig[k2], self.sig[k3]
+        s_atm = self.atm
+        x1, x2, x3 = self._cm_weights(K)
+        D1 = x1 * (s1 - s_atm) + x2 * (s2 - s_atm) + x3 * (s3 - s_atm)
+        if order <= 1:
+            return s_atm + D1
+
+        vsqrt = s_atm * math.sqrt(self.t)
+        d1 = (math.log(self.F / K) + 0.5 * vsqrt * vsqrt) / vsqrt
+        d2 = d1 - vsqrt
+        # Second-order convexity term: vanna-volga weighted squared vol excess.
+        D2 = (x1 * d1_d2(self.F, k1, self.t, s_atm) * (s1 - s_atm) ** 2
+              + x2 * d1_d2(self.F, k2, self.t, s_atm) * (s2 - s_atm) ** 2
+              + x3 * d1_d2(self.F, k3, self.t, s_atm) * (s3 - s_atm) ** 2)
+        disc = d1 * d2
+        inner = s_atm * s_atm + disc * (2.0 * s_atm * D1 + D2)
+        if inner < 0.0:
+            return s_atm + D1        # fall back to first order if degenerate
+        return s_atm + (-s_atm + math.sqrt(inner)) / disc if abs(disc) > 1e-12 \
+            else s_atm + D1
 
     def price(self, K, r_dom=0.0, r_for=0.0, option_type=OptionType.CALL):
         """Vanna-volga option price via the Castagna-Mercurio correction.
