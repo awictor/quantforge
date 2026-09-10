@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.109.0] - 2026-09-10
+
+### Added
+- `cos_greeks` (in `carrmadan.py`): analytic delta and gamma of the COS-method
+  price for any Levy model. Spot enters the cosine sum only through the
+  characteristic function's `e^{i u (x + mu)}` factor with `x = ln(S/K)`, so
+  differentiating term-by-term gives delta (`i u / S` per term) and gamma
+  (`i u (i u - 1)/S^2`) with no re-pricing and no finite differences; the put
+  follows by parity.
+- Verified: matches Black-Scholes delta/gamma to 1e-6 for the GBM exponent, and
+  matches finite-difference COS Greeks on CGMY and NIG to ~1e-4.
+
 ## [1.108.0] - 2026-09-10
 
 ### Added

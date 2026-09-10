@@ -277,6 +277,70 @@ def cos_price(S, K, t, r, q, psi, option_type=OptionType.CALL,
     return call - S * math.exp(-q * t) + K * math.exp(-r * t)
 
 
+def cos_greeks(S, K, t, r, q, psi, option_type=OptionType.CALL,
+               n_terms=256, L=12.0, cumulants=None):
+    """Delta and gamma of a COS-method price, analytic in the cosine series.
+
+    The COS price is ``disc * sum_k Re(cf_k e^{-i u_k a}) V_k`` where the model
+    dependence on spot enters only through ``cf_k = e^{i u_k (x + mu) + t psi}``
+    with ``x = ln(S/K)``. Differentiating that sum term-by-term w.r.t. ``S`` (so
+    ``dx/dS = 1/S``) gives delta and gamma with no re-pricing and no finite
+    differences: each term picks up ``i u_k / S`` for delta and
+    ``i u_k (i u_k - 1)/S^2`` for gamma. Returns ``{price, delta, gamma}``.
+    """
+    ot = _coerce_type(option_type)
+    if S <= 0 or K <= 0:
+        raise ValueError("S and K must be positive")
+    if t <= 0:
+        raise ValueError("t must be positive for COS Greeks")
+
+    omega = (-psi(-1j)).real
+    x = math.log(S / K)
+    mu = (r - q + omega) * t
+
+    if cumulants is None:
+        h2 = 1e-3
+        c2 = abs((-(t * psi(h2) + t * psi(-h2)).real) / (h2 * h2))
+        h4 = 5e-2
+        c4_raw = ((t * psi(2 * h4) + t * psi(-2 * h4)).real
+                  - 4.0 * (t * psi(h4) + t * psi(-h4)).real) / (h4 ** 4)
+        c4 = abs(c4_raw)
+        if not math.isfinite(c4) or c4 > 1e3 * (c2 * c2 + 1.0):
+            c4 = 0.0
+    else:
+        _c1, c2, c4 = cumulants
+
+    a = mu + x - L * math.sqrt(c2 + math.sqrt(max(c4, 0.0)))
+    b = mu + x + L * math.sqrt(c2 + math.sqrt(max(c4, 0.0)))
+    ba = b - a
+
+    chi, psi_c = _cos_chi_psi(n_terms, a, b, 0.0, b)
+    Vk = [2.0 / ba * K * (chi[kk] - psi_c[kk]) for kk in range(n_terms)]
+
+    disc = math.exp(-r * t)
+    price = delta = gamma = 0.0
+    for kk in range(n_terms):
+        u = kk * math.pi / ba
+        cf = cmath.exp(1j * u * (x + mu) + t * psi(u)) * cmath.exp(-1j * u * a)
+        weight = 0.5 if kk == 0 else 1.0
+        price += weight * cf.real * Vk[kk]
+        # d/dx = i u ; d^2/dx^2 = (i u)^2. With x = ln S: d/dS = (1/S) d/dx and
+        # d^2/dS^2 = (1/S^2)(d^2/dx^2 - d/dx).
+        delta += weight * (1j * u * cf).real * Vk[kk]
+        gamma += weight * ((1j * u) * (1j * u - 1.0) * cf).real * Vk[kk]
+
+    call = disc * price
+    call_delta = disc * delta / S
+    call_gamma = disc * gamma / (S * S)
+
+    if ot is OptionType.CALL:
+        return {"price": call, "delta": call_delta, "gamma": call_gamma}
+    # Put via parity: P = C - S e^{-qt} + K e^{-rt}; gamma unchanged, delta - e^{-qt}.
+    put = call - S * math.exp(-q * t) + K * math.exp(-r * t)
+    return {"price": put, "delta": call_delta - math.exp(-q * t),
+            "gamma": call_gamma}
+
+
 def levy_price(S, K, t, r, q, psi, option_type=OptionType.CALL,
                alpha=1.5, upper=200.0) -> float:
     """Price a European call/put for a Levy model via Carr-Madan + parity."""

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.108.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.109.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -296,6 +296,17 @@ Auto-generated from `quantforge` v1.108.0 by `docs/gen_api.py` — do not edit b
 >     alpha: damping factor (> 0); needs ``psi(-(alpha+1) i)`` finite.
 >     n_fft: FFT length (power of two).
 >     eta: frequency-grid spacing; smaller = finer strikes over a wider range.
+
+### `cos_greeks(S, K, t, r, q, psi, option_type=<OptionType.CALL: 'call'>, n_terms=256, L=12.0, cumulants=None)`  _function_
+
+> Delta and gamma of a COS-method price, analytic in the cosine series.
+>
+> The COS price is ``disc * sum_k Re(cf_k e^{-i u_k a}) V_k`` where the model
+> dependence on spot enters only through ``cf_k = e^{i u_k (x + mu) + t psi}``
+> with ``x = ln(S/K)``. Differentiating that sum term-by-term w.r.t. ``S`` (so
+> ``dx/dS = 1/S``) gives delta and gamma with no re-pricing and no finite
+> differences: each term picks up ``i u_k / S`` for delta and
+> ``i u_k (i u_k - 1)/S^2`` for gamma. Returns ``{price, delta, gamma}``.
 
 ### `cos_price(S, K, t, r, q, psi, option_type=<OptionType.CALL: 'call'>, n_terms=256, L=12.0, cumulants=None) -> float`  _function_
 
