@@ -90,3 +90,45 @@ def caplet(P0_reset, P0_pay, kappa, sigma, reset, pay, strike, notional=1.0):
     put = bond_option(P0_reset, P0_pay, kappa, sigma, reset, pay, K_bond,
                       is_call=False)
     return notional * (1.0 + strike * tau) * put
+
+
+def bond_option_greeks(P0S, P0T, kappa, sigma, expiry, maturity, strike,
+                       is_call=True):
+    """Greeks of a Cheyette (Hull-White) zero-coupon-bond option.
+
+    Sensitivities of :func:`bond_option` to the two discount factors -- exact,
+    from the Black-style form -- plus the vol sensitivity by finite difference:
+
+      * ``delta_T`` = dV/dP0T = ``N(d1)`` (call), the underlying-bond delta;
+      * ``delta_S`` = dV/dP0S (discount-leg delta);
+      * ``vega`` = dV/dsigma.
+
+    Returns a dict with ``price``, ``delta_T``, ``delta_S``, ``vega``.
+    """
+    price = bond_option(P0S, P0T, kappa, sigma, expiry, maturity, strike,
+                        is_call)
+    G = cheyette_G(kappa, maturity - expiry)
+    sigma_p = G * math.sqrt(_x_variance(kappa, sigma, expiry))
+    if sigma_p < 1e-14:
+        fwd = P0T / P0S
+        itm = (fwd > strike) if is_call else (fwd < strike)
+        delta_T = (1.0 if is_call else -1.0) if itm else 0.0
+        delta_S = 0.0
+    else:
+        d1 = (math.log(P0T / (strike * P0S)) + 0.5 * sigma_p * sigma_p) / sigma_p
+        d2 = d1 - sigma_p
+        if is_call:
+            delta_T = norm_cdf(d1)
+            delta_S = -strike * norm_cdf(d2)
+        else:
+            delta_T = -norm_cdf(-d1)
+            delta_S = strike * norm_cdf(-d2)
+
+    hv = 1e-6
+    vega = (bond_option(P0S, P0T, kappa, sigma + hv, expiry, maturity, strike,
+                        is_call)
+            - bond_option(P0S, P0T, kappa, max(sigma - hv, 0.0), expiry,
+                          maturity, strike, is_call)) / (
+        (2.0 * hv) if sigma - hv >= 0 else hv)
+    return {"price": price, "delta_T": delta_T, "delta_S": delta_S,
+            "vega": vega}

@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.237.0] - 2026-09-10
+
+### Added
+- `cheyette_bond_option_greeks` (in `cheyette.py`): exact discount-factor deltas
+  `delta_T` (`dV/dP0T = N(d1)`, underlying-bond delta) and `delta_S` (`dV/dP0S`),
+  plus the vol sensitivity `vega`, of a Cheyette (Hull-White) zero-coupon-bond
+  option.
+- Verified: both deltas match finite differences of `cheyette_bond_option`; the
+  call's `delta_T` is in (0,1) and `delta_S` negative; vega positive; the put's
+  `delta_T` negative.
+
 ## [1.236.0] - 2026-09-10
 
 ### Added

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.236.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.237.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -533,6 +533,19 @@ Auto-generated from `quantforge` v1.236.0 by `docs/gen_api.py` — do not edit b
 > ``P0T = P(0, maturity)`` are today's discount factors. This is the exact
 > Hull-White bond-option formula (Cheyette with constant sigma coincides with
 > Hull-White), used as the analytic anchor for the model.
+
+### `cheyette_bond_option_greeks(P0S, P0T, kappa, sigma, expiry, maturity, strike, is_call=True)`  _function_
+
+> Greeks of a Cheyette (Hull-White) zero-coupon-bond option.
+>
+> Sensitivities of :func:`bond_option` to the two discount factors -- exact,
+> from the Black-style form -- plus the vol sensitivity by finite difference:
+>
+>   * ``delta_T`` = dV/dP0T = ``N(d1)`` (call), the underlying-bond delta;
+>   * ``delta_S`` = dV/dP0S (discount-leg delta);
+>   * ``vega`` = dV/dsigma.
+>
+> Returns a dict with ``price``, ``delta_T``, ``delta_S``, ``vega``.
 
 ### `cheyette_caplet(P0_reset, P0_pay, kappa, sigma, reset, pay, strike, notional=1.0)`  _function_
 
