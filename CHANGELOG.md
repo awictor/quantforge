@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.195.0] - 2026-09-10
+
+### Added
+- `sobol_fixed_lookback_rqmc` (in `sobol.py`): randomized-QMC discretely-
+  monitored fixed-strike lookback with an honest standard error. Call payoff
+  `max(max_i S_{t_i} - K, 0)`, put payoff `max(K - min_i S_{t_i}, 0)` over `S_0`
+  and the `n_steps` monitoring dates; normals from an `n_steps`-dim Sobol point
+  through the Brownian bridge, randomized by a per-dimension Cranley-Patterson
+  rotation.
+- Verified: the discrete price is below the continuously-monitored Conze-
+  Viswanathan `fixed_strike_lookback` for call and put, and rises toward it as
+  monitoring frequency grows (n=2 -> 6: 12.2 -> 14.6 vs 19.2 continuous); the
+  call dominates the plain vanilla.
+
 ## [1.194.1] - 2026-09-10
 
 ### Tests
