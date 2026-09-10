@@ -34,6 +34,7 @@ from .volatility import (
     yang_zhang, vol_report, VolReport,
 )
 from .greeks2 import vanna, vomma, volga, charm, veta, speed, zomma, color
+from .scenario import ScenarioGrid, stress_grid, spot_ladder
 
 # Vectorized NumPy fast path is optional; only expose it if NumPy is present.
 try:  # pragma: no cover - trivial availability branch
@@ -44,7 +45,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "0.10.0"
+__version__ = "0.11.0"
 
 __all__ = [
     "OptionType",
@@ -101,5 +102,8 @@ __all__ = [
     "vega_array",
     "greeks_array",
     "HAS_NUMPY",
+    "ScenarioGrid",
+    "stress_grid",
+    "spot_ladder",
     "__version__",
 ]

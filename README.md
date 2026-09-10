@@ -53,6 +53,32 @@ print(american_price(S=100, K=100, t=1.0, r=0.05, sigma=0.2,
                      option_type="put", b=0.05 - 0.03, steps=500))
 ```
 
+## Scenario / stress grid
+
+Revalue a book across a grid of spot and vol shocks — the classic trader "risk
+matrix" — and pull out the worst case:
+
+```python
+from quantforge import Contract, stress_grid
+
+straddle = [
+    Contract(S=100, K=100, t=0.25, r=0.02, sigma=0.3, option_type="call", qty=-1),
+    Contract(S=100, K=100, t=0.25, r=0.02, sigma=0.3, option_type="put",  qty=-1),
+]
+
+grid = stress_grid(straddle,
+                   spot_shocks=[-0.2, -0.1, 0.0, 0.1, 0.2],   # +/-20% spot
+                   vol_shocks=[-0.5, 0.0, 0.5],               # +/-50% vol
+                   relative=True)
+
+print(grid.worst_case())          # (spot_shock, vol_shock, pnl) of the biggest loss
+for ss, row in grid.as_rows():
+    print(ss, row)                # P&L per vol shock at each spot shock
+```
+
+Shocks are fractional when `relative=True`, or absolute price/vol-point moves
+when `relative=False`. `spot_ladder(...)` gives the 1-D spot-only P&L profile.
+
 ## Second-order Greeks
 
 For hedging through joint moves in spot, vol, and time:
