@@ -50,7 +50,7 @@ def test_volvol_and_rho_match_fourier():
 
 def test_delta_in_unit_interval_and_gamma_positive():
     g = heston_mc_greeks(S, K, T, R, V0, KAPPA, THETA, XI, RHO, OptionType.CALL,
-                         n_steps=25, n_paths=6_000, seed=4)
+                         n_steps=15, n_paths=3_000, seed=4)
     assert 0.0 < g["delta"] < 1.0
     assert g["gamma"] > 0.0
 
@@ -58,13 +58,13 @@ def test_delta_in_unit_interval_and_gamma_positive():
 def test_variance_vegas_positive():
     # More initial or long-run variance raises a call.
     g = heston_mc_greeks(S, K, T, R, V0, KAPPA, THETA, XI, RHO, OptionType.CALL,
-                         n_steps=25, n_paths=6_000, seed=5)
+                         n_steps=15, n_paths=3_000, seed=5)
     assert g["vega_v0"] > 0.0
     assert g["vega_theta"] > 0.0
 
 
 def test_reproducible():
-    kw = dict(n_steps=30, n_paths=8_000, seed=99)
+    kw = dict(n_steps=12, n_paths=1_500, seed=99)
     a = heston_mc_greeks(S, K, T, R, V0, KAPPA, THETA, XI, RHO, **kw)
     b = heston_mc_greeks(S, K, T, R, V0, KAPPA, THETA, XI, RHO, **kw)
     assert a["price"] == b["price"]

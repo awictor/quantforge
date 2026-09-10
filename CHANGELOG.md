@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.190.1] - 2026-09-10
+
+### Tests
+- Trimmed the fast suite: the three `heston_mc_greeks` structural checks (each
+  runs 9 QE re-prices per Greek set, ~14s combined) drop to smaller sizes -- the
+  reproducibility check to 12 steps / 1500 paths and the two positivity/interval
+  checks to 15 / 3000. They only assert determinism, a sign, or a `(0,1)` range,
+  not accuracy; the Fourier-FD accuracy cross-checks stay under `-m slow`.
+
 ## [1.190.0] - 2026-09-10
 
 ### Added
