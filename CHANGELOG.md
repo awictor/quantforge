@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.187.0] - 2026-09-10
+
+### Added
+- `correlation_option` (in `multiasset.py`): a two-asset correlation option -- a
+  vanilla on asset 1 that pays only if asset 2 satisfies a barrier condition
+  (`above`/`below` K2). Decomposes exactly into the two two-asset digitals:
+  `call = AoN(S1>K1, cond2) - K1 CoN(S1>K1, cond2)` and
+  `put = K1 CoN(S1<K1, cond2) - AoN(S1<K1, cond2)`, where `AoN` is
+  `two_asset_asset_or_nothing` and `CoN` is `two_asset_digital`, so it is a
+  closed form.
+- Verified: matches a correlated-GBM Monte Carlo for call, put, and a below
+  barrier; reduces to the plain Black-Scholes vanilla on S1 when the barrier is
+  always met; and the `above` + `below` gated calls sum to that vanilla (1e-9).
+
 ## [1.186.0] - 2026-09-10
 
 ### Added

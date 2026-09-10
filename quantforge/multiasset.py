@@ -310,6 +310,47 @@ def two_asset_asset_or_nothing(S1, S2, K1, K2, t, r, sigma1, sigma2, rho,
     return S1 * math.exp(-q1 * t) * _bivariate_normal(s1 * a1, s2 * a2, s1 * s2 * rho)
 
 
+def correlation_option(S1, S2, K1, K2, t, r, sigma1, sigma2, rho,
+                       option_type=OptionType.CALL, cond2="above",
+                       q1=0.0, q2=0.0):
+    """Two-asset correlation option: a vanilla on asset 1 gated by asset 2.
+
+    Pays the asset-1 vanilla payoff at expiry only if asset 2 satisfies its
+    barrier condition:
+
+        call: ``max(S1_T - K1, 0) * 1[cond2 on S2]``
+        put:  ``max(K1 - S1_T, 0) * 1[cond2 on S2]``
+
+    with ``cond2`` = ``above`` (``S2_T > K2``) or ``below`` (``S2_T < K2``). It
+    decomposes exactly into the two two-asset digitals already priced here:
+
+        call = AoN(S1>K1, cond2) - K1 * CoN(S1>K1, cond2)
+        put  = K1 * CoN(S1<K1, cond2) - AoN(S1<K1, cond2)
+
+    where ``AoN`` is :func:`two_asset_asset_or_nothing` (pays ``S1_T``) and
+    ``CoN`` is :func:`two_asset_digital` (pays 1). Both pieces are exact
+    bivariate-normal closed forms, so the correlation option is too.
+
+    Cross-checks a correlated-GBM Monte Carlo.
+    """
+    ot = _coerce_type(option_type)
+    c2 = str(cond2).lower()
+    if c2 not in ("above", "below"):
+        raise ValueError("cond2 must be 'above' or 'below'")
+    # The two-asset helpers validate S/K/t/rho.
+    if ot is OptionType.CALL:
+        aon = two_asset_asset_or_nothing(S1, S2, K1, K2, t, r, sigma1, sigma2,
+                                         rho, "above", c2, q1, q2)
+        con = two_asset_digital(S1, S2, K1, K2, t, r, sigma1, sigma2, rho,
+                                "above", c2, q1, q2)
+        return aon - K1 * con
+    aon = two_asset_asset_or_nothing(S1, S2, K1, K2, t, r, sigma1, sigma2,
+                                     rho, "below", c2, q1, q2)
+    con = two_asset_digital(S1, S2, K1, K2, t, r, sigma1, sigma2, rho,
+                            "below", c2, q1, q2)
+    return K1 * con - aon
+
+
 def _disc_expected_min(S1, S2, t, r, sigma1, sigma2, rho, q1, q2):
     """Discounted risk-neutral expectation of ``min(S1_T, S2_T)``.
 

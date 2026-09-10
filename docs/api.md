@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.186.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.187.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2172,6 +2172,28 @@ Auto-generated from `quantforge` v1.186.0 by `docs/gen_api.py` — do not edit b
 > forwards less the discounted expected min). Uses the exact
 > :func:`best_of_call_closed`. Cross-check for the Monte Carlo
 > :func:`best_of_call` put.
+
+### `correlation_option(S1, S2, K1, K2, t, r, sigma1, sigma2, rho, option_type=<OptionType.CALL: 'call'>, cond2='above', q1=0.0, q2=0.0)`  _function_
+
+> Two-asset correlation option: a vanilla on asset 1 gated by asset 2.
+>
+> Pays the asset-1 vanilla payoff at expiry only if asset 2 satisfies its
+> barrier condition:
+>
+>     call: ``max(S1_T - K1, 0) * 1[cond2 on S2]``
+>     put:  ``max(K1 - S1_T, 0) * 1[cond2 on S2]``
+>
+> with ``cond2`` = ``above`` (``S2_T > K2``) or ``below`` (``S2_T < K2``). It
+> decomposes exactly into the two two-asset digitals already priced here:
+>
+>     call = AoN(S1>K1, cond2) - K1 * CoN(S1>K1, cond2)
+>     put  = K1 * CoN(S1<K1, cond2) - AoN(S1<K1, cond2)
+>
+> where ``AoN`` is :func:`two_asset_asset_or_nothing` (pays ``S1_T``) and
+> ``CoN`` is :func:`two_asset_digital` (pays 1). Both pieces are exact
+> bivariate-normal closed forms, so the correlation option is too.
+>
+> Cross-checks a correlated-GBM Monte Carlo.
 
 ### `exchange_greeks(S1, S2, t, sigma1, sigma2, rho, q1=0.0, q2=0.0)`  _function_
 
