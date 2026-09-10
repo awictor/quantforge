@@ -72,6 +72,7 @@ from .overhedge import (
 from .dv01 import KeyRateDV01, key_rate_dv01
 from .bookgreeks import (
     BookSecondOrder, book_second_order, ThetaCarry, theta_carry_report,
+    BumpGreeks, book_bump_greeks,
 )
 from .attribution import PnLAttribution, attribute_pnl, CarryRoll, carry_roll_pnl
 from .income import IncomeMetrics, covered_call, cash_secured_put
@@ -127,7 +128,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.74.0"
+__version__ = "1.75.0"
 
 __all__ = [
     "OptionType",
@@ -227,6 +228,8 @@ __all__ = [
     "book_second_order",
     "ThetaCarry",
     "theta_carry_report",
+    "BumpGreeks",
+    "book_bump_greeks",
     "PnLAttribution",
     "attribute_pnl",
     "CarryRoll",

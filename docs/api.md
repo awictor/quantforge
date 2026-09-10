@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.74.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.75.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -114,9 +114,26 @@ Auto-generated from `quantforge` v1.74.0 by `docs/gen_api.py` — do not edit by
 
 > BookSecondOrder(vanna: float = 0.0, vomma: float = 0.0, charm: float = 0.0, veta: float = 0.0, speed: float = 0.0, zomma: float = 0.0, color: float = 0.0)
 
+### `BumpGreeks(price: float, delta: float, gamma: float, vega: float, theta: float) -> None`  _class_
+
+> BumpGreeks(price: float, delta: float, gamma: float, vega: float, theta: float)
+
 ### `ThetaCarry(theta: float, gamma_rent: float, residual: float) -> None`  _class_
 
 > ThetaCarry(theta: float, gamma_rent: float, residual: float)
+
+### `book_bump_greeks(contracts, dS_frac=0.001, dvol=0.0001, dt=0.0001)`  _function_
+
+> Net book Greeks by bumping the shared market and repricing (model-free).
+>
+> Applies a common shock to every leg's spot, volatility, and time-to-expiry
+> and reprices the whole book via :func:`quantforge.price_book`, so the net
+> delta/gamma/vega/theta come out numerically without needing analytic Greeks
+> for each instrument. Assumes all legs share one underlying and vol (a
+> single-name book), the usual case for this kind of check.
+>
+> ``dS_frac`` is the relative spot bump; ``dvol`` and ``dt`` are absolute.
+> Returns a :class:`BumpGreeks`.
 
 ### `book_second_order(contracts: Iterable[quantforge.portfolio.Contract]) -> quantforge.bookgreeks.BookSecondOrder`  _function_
 

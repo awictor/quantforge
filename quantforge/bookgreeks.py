@@ -79,3 +79,49 @@ def theta_carry_report(contracts):
         gamma_rent += scale * (-0.5 * g * c.sigma * c.sigma * c.S * c.S)
     return ThetaCarry(theta=net_theta, gamma_rent=gamma_rent,
                       residual=net_theta - gamma_rent)
+
+
+@dataclass(frozen=True)
+class BumpGreeks:
+    price: float
+    delta: float
+    gamma: float
+    vega: float
+    theta: float            # calendar (per year)
+
+
+def book_bump_greeks(contracts, dS_frac=1e-3, dvol=1e-4, dt=1e-4):
+    """Net book Greeks by bumping the shared market and repricing (model-free).
+
+    Applies a common shock to every leg's spot, volatility, and time-to-expiry
+    and reprices the whole book via :func:`quantforge.price_book`, so the net
+    delta/gamma/vega/theta come out numerically without needing analytic Greeks
+    for each instrument. Assumes all legs share one underlying and vol (a
+    single-name book), the usual case for this kind of check.
+
+    ``dS_frac`` is the relative spot bump; ``dvol`` and ``dt`` are absolute.
+    Returns a :class:`BumpGreeks`.
+    """
+    from .portfolio import Contract, price_book
+
+    contracts = [c.normalized() for c in contracts]
+    if not contracts:
+        raise ValueError("book is empty")
+    S0 = contracts[0].S
+
+    def reprice(dS=0.0, dv=0.0, dtau=0.0):
+        legs = [Contract(S=c.S + dS, K=c.K, t=max(c.t - dtau, 1e-9), r=c.r,
+                         sigma=max(c.sigma + dv, 1e-9), option_type=c.option_type,
+                         b=c.b, qty=c.qty, multiplier=c.multiplier, label=c.label)
+                for c in contracts]
+        return price_book(legs).net.market_value
+
+    base = reprice()
+    hS = dS_frac * S0
+    up, dn = reprice(dS=hS), reprice(dS=-hS)
+    delta = (up - dn) / (2.0 * hS)
+    gamma = (up - 2.0 * base + dn) / (hS * hS)
+    vega = (reprice(dv=dvol) - reprice(dv=-dvol)) / (2.0 * dvol)
+    # Calendar theta: value change as time advances (t decreases).
+    theta = (reprice(dtau=dt) - base) / dt
+    return BumpGreeks(price=base, delta=delta, gamma=gamma, vega=vega, theta=theta)

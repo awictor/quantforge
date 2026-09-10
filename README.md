@@ -200,6 +200,16 @@ for pos in book.positions:
 `qty` is signed (short = negative) and `multiplier` scales to notional
 (e.g. 100 for US equity options). Net Greeks are position-scaled sums.
 
+`book_bump_greeks` gets net delta/gamma/vega/theta by bumping the shared market
+and repricing — model-free, so it works for any instrument in the book:
+
+```python
+from quantforge import book_bump_greeks
+
+bg = book_bump_greeks(positions)
+print(bg.delta, bg.gamma, bg.vega, bg.theta)
+```
+
 `book_second_order` aggregates the net second-order Greeks (vanna, vomma,
 charm, veta, speed, zomma, color) the same way:
 

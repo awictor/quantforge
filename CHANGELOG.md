@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.75.0] - 2026-09-10
+
+### Added
+- `book_bump_greeks` (in `bookgreeks.py`): net book delta/gamma/vega/theta by
+  bumping the shared spot/vol/time across every leg and repricing via
+  `price_book` — model-free, so it works for any instrument in the book, not
+  only ones with analytic Greeks. Matches the analytic net Greeks on a plain
+  option book.
+
 ## [1.74.0] - 2026-09-10
 
 ### Added
