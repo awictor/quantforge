@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.45.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.46.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -868,6 +868,24 @@ Auto-generated from `quantforge` v1.45.0 by `docs/gen_api.py` — do not edit by
 >
 > Skips index 0 (the origin) by convention via a 1-based offset internally,
 > so callers can pass 0, 1, 2, ... and get well-spread points.
+
+## quanto
+
+### `quanto_option(S, K, t, r_domestic, r_foreign, sigma_asset, sigma_fx, rho, q_asset=0.0, option_type=<OptionType.CALL: 'call'>) -> float`  _function_
+
+> Price a quanto option (fixed-FX foreign-asset option in domestic terms).
+>
+> Args:
+>     S, K: foreign-asset spot and strike (in foreign-asset units).
+>     r_domestic: domestic risk-free rate (used for discounting).
+>     r_foreign: foreign risk-free rate.
+>     sigma_asset: volatility of the foreign asset.
+>     sigma_fx: volatility of the domestic/foreign FX rate.
+>     rho: correlation between the asset and the FX rate.
+>     q_asset: dividend yield on the foreign asset.
+>
+> The price is in domestic currency per unit of the fixed exchange rate
+> (multiply by the agreed FX level for the cash amount).
 
 ## rates
 

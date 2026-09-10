@@ -836,6 +836,21 @@ quantforge iv      -S 100 -K 105 -t 0.5 -r 0.04 --price 6.12 --type call
 quantforge american -S 100 -K 100 -t 1 -r 0.05 --sigma 0.2 --type put -b 0.02
 ```
 
+## Quanto options
+
+A foreign-asset option settled in domestic currency at a fixed FX rate — the
+quanto adjustment enters through the carry:
+
+```python
+from quantforge import quanto_option
+
+quanto_option(S=100, K=100, t=1.0, r_domestic=0.03, r_foreign=0.05,
+              sigma_asset=0.25, sigma_fx=0.1, rho=0.5, option_type="call")
+```
+
+The carry shifts by `-rho * sigma_asset * sigma_fx`; `rho=0` removes the
+adjustment.
+
 ## Model coverage
 
 | Instrument            | Set the carry `b` to | Function            |

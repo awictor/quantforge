@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.46.0] - 2026-09-09
+
+### Added
+- `quanto.py`: `quanto_option` prices a foreign-asset option settled in domestic
+  currency at a fixed exchange rate. The quanto adjustment shifts the carry by
+  `-rho * sigma_asset * sigma_fx` and discounts at the domestic rate; `rho=0`
+  removes it. Monte-Carlo verified.
+
 ## [1.45.0] - 2026-09-09
 
 ### Added
