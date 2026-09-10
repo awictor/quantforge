@@ -28,8 +28,9 @@ from .exotics import (
     cash_or_nothing, asset_or_nothing, barrier_option, geometric_asian, Barrier,
 )
 from .montecarlo import MCResult, european_mc, arithmetic_asian_mc
+from .risk import VaRResult, parametric_var, historical_var, montecarlo_var
 
-__version__ = "0.5.0"
+__version__ = "0.6.0"
 
 __all__ = [
     "OptionType",
@@ -60,5 +61,9 @@ __all__ = [
     "MCResult",
     "european_mc",
     "arithmetic_asian_mc",
+    "VaRResult",
+    "parametric_var",
+    "historical_var",
+    "montecarlo_var",
     "__version__",
 ]

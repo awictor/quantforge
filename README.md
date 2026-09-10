@@ -74,6 +74,34 @@ for pos in book.positions:
 `qty` is signed (short = negative) and `multiplier` scales to notional
 (e.g. 100 for US equity options). Net Greeks are position-scaled sums.
 
+## Portfolio risk (VaR / Expected Shortfall)
+
+Three estimators over a priced book — parametric delta-gamma (Cornish-Fisher),
+historical, and full-repricing Monte Carlo:
+
+```python
+from quantforge import Contract, price_book, parametric_var, montecarlo_var
+
+positions = [
+    Contract(S=100, K=100, t=0.25, r=0.02, sigma=0.3, option_type="call", qty=-1),
+    Contract(S=100, K=100, t=0.25, r=0.02, sigma=0.3, option_type="put",  qty=-1),
+]
+book = price_book(positions)
+
+# 99% 1-day VaR from the book's net delta/gamma (captures convexity).
+r = parametric_var(book, sigma_annual=0.3, spot=100, confidence=0.99, horizon_days=1)
+print(r.var, r.expected_shortfall, r.method)
+
+# Full-repricing MC VaR: no delta-gamma approximation.
+r = montecarlo_var(positions, sigma_annual=0.3, confidence=0.99, horizon_days=5,
+                   n_paths=20_000, seed=1)
+print(r.var, r.expected_shortfall)
+```
+
+VaR is a positive loss number; Expected Shortfall (CVaR) is the mean loss
+beyond it. The parametric/historical estimators assume a single underlying;
+the MC estimator reprices every position exactly.
+
 ## Monte Carlo (with variance reduction)
 
 For payoffs without a closed form. The engine uses the standard-library RNG,
