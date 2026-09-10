@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.205.0] - 2026-09-10
+
+### Added
+- `bermudan_min_put_lsm_greeks` (in `lsm.py`): deltas, own-gammas, and
+  cross-gamma of an American min-put (worst-of protective put) by
+  common-random-number bumps on `bermudan_min_put_lsm`. Same-seed repricing
+  shares the Brownian shocks so the finite differences are low-variance; the LSM
+  regression is re-fit at each bump. Completes the two-asset LSM Greek family
+  (max-call, spread, min-put).
+- Verified: both spot deltas are negative (a higher spot lifts the min and
+  shrinks the put); the lower-starting asset carries the larger-magnitude delta
+  (it is more often the min); the price exceeds the European
+  `worst_of_put_closed` by the early-exercise premium; reproducible.
+
 ## [1.204.0] - 2026-09-10
 
 ### Added

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.204.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.205.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1684,6 +1684,21 @@ Auto-generated from `quantforge` v1.204.0 by `docs/gen_api.py` — do not edit b
 > Returns the price (in-sample LSM estimate, mildly biased low). Puts carry
 > early-exercise value even without dividends, so it sits above the European
 > :func:`quantforge.worst_of_put_closed`.
+
+### `bermudan_min_put_lsm_greeks(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0, n_steps=50, n_paths=40000, seed=None, h_rel=0.01)`  _function_
+
+> Deltas and cross-gamma of an American min-put by common-random bumps.
+>
+> Reprices :func:`bermudan_min_put_lsm` at bumped spots on the *same* seed, so
+> the two simulations share their Brownian shocks and the finite differences
+> are low-variance. Returns a dict with ``price``, the two spot deltas
+> (``delta1`` = dV/dS1, ``delta2`` = dV/dS2), the two own-gammas
+> (``gamma1``, ``gamma2``), and the cross-gamma (``cross`` = d2V/dS1 dS2).
+>
+> For the worst-of protective put ``max(K - min(S1, S2), 0)`` both spot deltas
+> are negative (a higher spot lifts the min, shrinking the put); the LSM
+> regression is re-fit at each bump. Deltas are reliable; the gammas (second
+> differences over a re-fit regression) are indicative and need many paths.
 
 ### `bermudan_spread_lsm(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0, option_type=<OptionType.CALL: 'call'>, n_steps=50, n_paths=20000, seed=None) -> float`  _function_
 
