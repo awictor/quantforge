@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.64.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.65.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -417,6 +417,18 @@ Auto-generated from `quantforge` v1.64.0 by `docs/gen_api.py` — do not edit by
 >
 > Implements the standard Reiner-Rubinstein decomposition. Validated in the
 > suite against in-out parity (knock-in + knock-out = vanilla + rebate term).
+
+### `barrier_rebate(S, H, t, r, sigma, knock='out', b=None, cash=1.0, payoff_at_hit=True)`  _function_
+
+> Standalone rebate cashflow attached to a barrier.
+>
+> A **knock-out rebate** pays ``cash`` if the barrier ``H`` is breached (the
+> consolation for the option knocking out); a **knock-in rebate** pays ``cash``
+> at expiry if the barrier is *never* breached (the option failed to knock in).
+>
+> ``payoff_at_hit`` (knock-out only) pays on touch vs at expiry. This reuses
+> the touch-option machinery: a knock-out rebate is a one-touch, a knock-in
+> rebate is a no-touch.
 
 ### `cash_or_nothing(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, cash=1.0)`  _function_
 

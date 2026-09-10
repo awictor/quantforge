@@ -635,6 +635,10 @@ one_touch(S=100, H=120, t=1.0, r=0.05, sigma=0.2, cash=1.0, payoff_at_hit=True)
 
 # Pays $1 at expiry only if 80 is never touched.
 no_touch(S=100, H=80, t=1.0, r=0.05, sigma=0.2, cash=1.0)
+
+# Standalone barrier rebate: knock-out (on breach) or knock-in (if never hit).
+from quantforge import barrier_rebate
+barrier_rebate(S=100, H=120, t=1.0, r=0.05, sigma=0.2, knock="out", cash=1.0)
 ```
 
 Lookbacks (against the realized path extreme) have closed forms too:

@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.65.0] - 2026-09-09
+
+### Added
+- `barrier_rebate` (in `exotics.py`): the standalone rebate cashflow on a
+  barrier — a knock-out rebate (pays cash on breach, at-hit or at-expiry) is a
+  one-touch, a knock-in rebate (pays at expiry if never breached) is a
+  no-touch. Knock-out (expiry) + knock-in sums to the discounted cash.
+
 ## [1.64.0] - 2026-09-09
 
 ### Added

@@ -437,3 +437,25 @@ def power_option(S, K, t, r, sigma, power, option_type=OptionType.CALL, b=None):
     if ot is OptionType.CALL:
         return disc * (fwd * norm_cdf(d1) - K * norm_cdf(d2))
     return disc * (K * norm_cdf(-d2) - fwd * norm_cdf(-d1))
+
+
+def barrier_rebate(S, H, t, r, sigma, knock="out", b=None, cash=1.0,
+                   payoff_at_hit=True):
+    """Standalone rebate cashflow attached to a barrier.
+
+    A **knock-out rebate** pays ``cash`` if the barrier ``H`` is breached (the
+    consolation for the option knocking out); a **knock-in rebate** pays ``cash``
+    at expiry if the barrier is *never* breached (the option failed to knock in).
+
+    ``payoff_at_hit`` (knock-out only) pays on touch vs at expiry. This reuses
+    the touch-option machinery: a knock-out rebate is a one-touch, a knock-in
+    rebate is a no-touch.
+    """
+    knock = str(knock).lower()
+    if knock in ("out", "knock-out", "ko"):
+        return one_touch(S, H, t, r, sigma, b=b, cash=cash,
+                         payoff_at_hit=payoff_at_hit)
+    if knock in ("in", "knock-in", "ki"):
+        # A knock-in rebate pays only if the barrier is never hit -> no-touch.
+        return no_touch(S, H, t, r, sigma, b=b, cash=cash)
+    raise ValueError("knock must be 'out' or 'in'")
