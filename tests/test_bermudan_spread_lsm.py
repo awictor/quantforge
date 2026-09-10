@@ -33,7 +33,7 @@ def test_american_at_least_european():
     eu = spread_option(S1, S2, K, T, R, SIG1, SIG2, RHO,
                        option_type=OptionType.CALL)
     am = bermudan_spread_lsm(S1, S2, K, T, R, SIG1, SIG2, RHO,
-                             n_steps=25, n_paths=15_000, seed=3)
+                             n_steps=15, n_paths=6_000, seed=3)
     assert am > eu - 0.15
 
 

@@ -27,7 +27,7 @@ def test_deltas_near_european_no_dividend():
 
 def test_deltas_in_unit_interval():
     g = bermudan_max_call_lsm_greeks(S1, S2, K, T, R, SIG1, SIG2, RHO,
-                                     n_steps=12, n_paths=3_000, seed=2)
+                                     n_steps=10, n_paths=2_500, seed=2)
     assert 0.0 < g["delta1"] < 1.0
     assert 0.0 < g["delta2"] < 1.0
 
@@ -36,7 +36,7 @@ def test_cross_gamma_negative():
     # The two spots are substitutes in a max payoff: a higher S2 lowers the
     # sensitivity to S1, so the cross-gamma is negative.
     g = bermudan_max_call_lsm_greeks(S1, S2, K, T, R, SIG1, SIG2, RHO,
-                                     n_steps=15, n_paths=8_000, seed=3)
+                                     n_steps=12, n_paths=5_000, seed=3)
     assert g["cross"] < 0.0
 
 

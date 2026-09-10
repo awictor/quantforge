@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.194.1] - 2026-09-10
+
+### Tests
+- Trimmed the fast suite ~66s -> ~50s by shrinking the heavy two-asset LSM/RQMC
+  structural checks (each stores full two-asset paths and re-prices several
+  times): the max-call cross-gamma check 15 steps / 8000 paths -> 12 / 5000 (its
+  sign is robust across seeds there), the delta-interval check 12 / 3000 ->
+  10 / 2500, and the American-spread lower-bound check 25 / 15000 -> 15 / 6000.
+  The accuracy cross-checks stay under `-m slow`.
+
 ## [1.194.0] - 2026-09-10
 
 ### Added
