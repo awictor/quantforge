@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.200.1] - 2026-09-10
+
+### Tests
+- Trimmed the two `bermudan_spread_lsm_greeks` sign-check fast tests (each
+  re-prices five times) from 20 steps / 15000 paths to 12 / 5000; they assert
+  only delta signs, which are robust at the smaller size. Fast gate ~35s -> ~20s.
+
 ## [1.200.0] - 2026-09-10
 
 ### Added

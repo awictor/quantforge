@@ -26,15 +26,15 @@ def test_deltas_near_european_kirk():
 
 def test_long_leg_positive_short_leg_negative():
     g = bermudan_spread_lsm_greeks(S1, S2, K, T, R, SIG1, SIG2, RHO,
-                                   n_steps=20, n_paths=15_000, seed=2)
+                                   n_steps=12, n_paths=5_000, seed=2)
     assert g["delta1"] > 0.0   # long the spread in S1
     assert g["delta2"] < 0.0   # short the spread in S2
 
 
 def test_put_delta_signs_flip():
     g = bermudan_spread_lsm_greeks(S1, S2, K, T, R, SIG1, SIG2, RHO,
-                                   option_type=OptionType.PUT, n_steps=20,
-                                   n_paths=15_000, seed=3)
+                                   option_type=OptionType.PUT, n_steps=12,
+                                   n_paths=5_000, seed=3)
     assert g["delta1"] < 0.0
     assert g["delta2"] > 0.0
 
