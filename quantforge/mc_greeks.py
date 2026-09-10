@@ -235,3 +235,49 @@ def mixed_gamma(S, K, t, r, sigma, option_type=OptionType.CALL, b=None,
             samples.append(one(-z))
     m, se = _summarize(samples)
     return MCResult(price=m, std_error=se, n_paths=len(samples))
+
+
+def smoothed_digital_delta(S, K, t, r, sigma, option_type=OptionType.CALL,
+                           b=None, cash=1.0, eps_rel=0.02, n_paths=200_000,
+                           antithetic=True, seed=None) -> MCResult:
+    """Delta of a cash-or-nothing digital by a smoothed (call-spread) payoff.
+
+    The digital's indicator is discontinuous, so its pathwise delta is
+    undefined. Replacing the indicator with a narrow call-spread ramp of relative
+    width ``eps_rel`` -- ``clamp((S_T - (K - eps/2)) / eps, 0, 1)`` for a call --
+    makes the payoff Lipschitz, so the pathwise delta
+    ``disc * cash * (dramp/dS_T) * (S_T / S0)`` is well-defined. It trades bias
+    for variance in ``eps_rel``: a wider spread lowers the variance but adds
+    smoothing bias, a narrower one reduces the bias (converging to the true
+    digital delta as ``eps_rel -> 0``) but the ``1/eps`` ramp raises the variance.
+    A single-pass, model-agnostic alternative to the likelihood-ratio estimator.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if b is None:
+        b = r
+    disc = math.exp(-r * t)
+    vsqrt = sigma * math.sqrt(t)
+    call = ot is OptionType.CALL
+    eps = eps_rel * K
+    lo = K - 0.5 * eps
+    hi = K + 0.5 * eps
+    rng = random.Random(seed)
+    samples = []
+
+    def one(z):
+        sT = S * math.exp((b - 0.5 * sigma * sigma) * t + vsqrt * z)
+        # Ramp derivative is 1/eps inside the spread, 0 outside.
+        if lo < sT < hi:
+            slope = (1.0 / eps) if call else (-1.0 / eps)
+            return disc * cash * slope * (sT / S)
+        return 0.0
+
+    n = n_paths // 2 if antithetic else n_paths
+    for _ in range(n):
+        z = rng.gauss(0.0, 1.0)
+        samples.append(one(z))
+        if antithetic:
+            samples.append(one(-z))
+    m, se = _summarize(samples)
+    return MCResult(price=m, std_error=se, n_paths=len(samples))

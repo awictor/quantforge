@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.167.1 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.168.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1661,6 +1661,20 @@ Auto-generated from `quantforge` v1.167.1 by `docs/gen_api.py` — do not edit b
 >
 > Delta of a call is ``e^{-r t} 1_{S_T > K} S_T / S0`` (put: ``-1_{S_T < K}``).
 > Lower variance than the likelihood-ratio delta for these Lipschitz payoffs.
+
+### `smoothed_digital_delta(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, cash=1.0, eps_rel=0.02, n_paths=200000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
+
+> Delta of a cash-or-nothing digital by a smoothed (call-spread) payoff.
+>
+> The digital's indicator is discontinuous, so its pathwise delta is
+> undefined. Replacing the indicator with a narrow call-spread ramp of relative
+> width ``eps_rel`` -- ``clamp((S_T - (K - eps/2)) / eps, 0, 1)`` for a call --
+> makes the payoff Lipschitz, so the pathwise delta
+> ``disc * cash * (dramp/dS_T) * (S_T / S0)`` is well-defined. It trades bias
+> for variance in ``eps_rel``: a wider spread lowers the variance but adds
+> smoothing bias, a narrower one reduces the bias (converging to the true
+> digital delta as ``eps_rel -> 0``) but the ``1/eps`` ramp raises the variance.
+> A single-pass, model-agnostic alternative to the likelihood-ratio estimator.
 
 ## meixner
 

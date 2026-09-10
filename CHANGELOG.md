@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.168.0] - 2026-09-10
+
+### Added
+- `smoothed_digital_delta` (in `mc_greeks.py`): pathwise delta of a
+  cash-or-nothing digital via a call-spread smoothing of the discontinuous
+  indicator (ramp of relative width `eps_rel`), making the payoff Lipschitz so
+  the pathwise derivative is well-defined. A single-pass, model-agnostic
+  alternative to the likelihood-ratio digital delta.
+- Verified: it matches the analytic digital delta; a narrower spread lowers the
+  smoothing bias (converging as `eps_rel -> 0`, at the cost of higher variance
+  from the `1/eps` ramp -- the classic bias/variance tradeoff, documented); call
+  delta positive, put delta negative.
+
 ## [1.167.1] - 2026-09-10
 
 ### Tests
