@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.59.0] - 2026-09-09
+
+### Added
+- `average_strike_asian_mc` (in `montecarlo.py`): Monte Carlo an average-strike
+  Asian option, where the strike is the realized arithmetic average of the path
+  (call pays `max(S_T - A, 0)`). Complements the fixed-strike Asians; a single
+  monitoring date collapses the payoff to zero.
+
 ## [1.58.0] - 2026-09-09
 
 ### Added

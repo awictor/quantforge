@@ -366,3 +366,47 @@ def local_vol_mc(S, K, t, r, local_vol_fn, option_type=OptionType.CALL, q=0.0,
 
     price, se = _summarize(samples)
     return MCResult(price=price, std_error=se, n_paths=len(samples))
+
+
+def average_strike_asian_mc(S, t, r, sigma, option_type=OptionType.CALL, b=None,
+                            n_steps=50, n_paths=50_000, antithetic=True,
+                            seed=None) -> MCResult:
+    """Monte Carlo an average-strike Asian option.
+
+    The strike is the realized arithmetic average of the monitored path, so a
+    call pays ``max(S_T - A, 0)`` and a put ``max(A - S_T, 0)``, where ``A`` is
+    the average over the ``n_steps`` monitoring dates. There is no simple closed
+    form; the average and terminal spot come from the same simulated path.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, S, t, sigma)
+    if b is None:
+        b = r
+    if n_steps < 1:
+        raise ValueError("n_steps must be >= 1")
+    dt = t / n_steps
+    drift = (b - 0.5 * sigma * sigma) * dt
+    vol = sigma * math.sqrt(dt)
+    disc = math.exp(-r * t)
+    sign = 1.0 if ot is OptionType.CALL else -1.0
+
+    def one_path(zs):
+        s = S
+        avg_sum = 0.0
+        for z in zs:
+            s *= math.exp(drift + vol * z)
+            avg_sum += s
+        avg = avg_sum / n_steps
+        return disc * max(sign * (s - avg), 0.0)   # strike = realized average
+
+    rng = random.Random(seed)
+    samples = []
+    n = n_paths // 2 if antithetic else n_paths
+    for _ in range(n):
+        zs = [rng.gauss(0.0, 1.0) for _ in range(n_steps)]
+        samples.append(one_path(zs))
+        if antithetic:
+            samples.append(one_path([-z for z in zs]))
+
+    price, se = _summarize(samples)
+    return MCResult(price=price, std_error=se, n_paths=len(samples))

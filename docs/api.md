@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.58.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.59.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -783,6 +783,15 @@ Auto-generated from `quantforge` v1.58.0 by `docs/gen_api.py` — do not edit by
 > With ``control_variate=True`` the geometric-average Asian (known in closed
 > form) is used as a control, dramatically reducing the standard error since
 > the two averages are almost perfectly correlated.
+
+### `average_strike_asian_mc(S, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, n_steps=50, n_paths=50000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
+
+> Monte Carlo an average-strike Asian option.
+>
+> The strike is the realized arithmetic average of the monitored path, so a
+> call pays ``max(S_T - A, 0)`` and a put ``max(A - S_T, 0)``, where ``A`` is
+> the average over the ``n_steps`` monitoring dates. There is no simple closed
+> form; the average and terminal spot come from the same simulated path.
 
 ### `barrier_digital_mc(S, K, H, t, r, sigma, option_type=<OptionType.CALL: 'call'>, barrier='up-in', b=None, cash=1.0, n_steps=100, n_paths=50000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
 

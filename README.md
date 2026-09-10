@@ -559,6 +559,10 @@ arithmetic_asian(S=100, K=100, t=1, r=0.05, sigma=0.3, option_type="call")
 # Asian Greeks (delta/gamma/vega/theta) for either average, by finite diff.
 from quantforge import asian_greeks
 asian_greeks(S=100, K=100, t=1, r=0.05, sigma=0.3, average="geometric")
+
+# Average-strike Asian (strike = realized average) by Monte Carlo.
+from quantforge import average_strike_asian_mc
+average_strike_asian_mc(S=100, t=1, r=0.05, sigma=0.3, option_type="call")
 ```
 
 Barrier kinds: `Barrier.DOWN_IN`, `DOWN_OUT`, `UP_IN`, `UP_OUT`. In/out parity
