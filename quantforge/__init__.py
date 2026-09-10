@@ -82,6 +82,7 @@ from .varswap import (
     corridor_variance_swap_from_smile, gamma_swap_from_smile,
     forward_variance_swap_from_smile,
 )
+from .vix import vix_from_chain, vix_from_smile
 from .multiasset import (
     exchange_option, spread_option, basket_option, best_of_call, worst_of_call,
     exchange_greeks, spread_greeks, basket_greeks, implied_spread_correlation,
@@ -210,7 +211,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.149.0"
+__version__ = "1.150.0"
 
 __all__ = [
     "OptionType",
@@ -318,6 +319,8 @@ __all__ = [
     "corridor_variance_swap_from_smile",
     "gamma_swap_from_smile",
     "forward_variance_swap_from_smile",
+    "vix_from_chain",
+    "vix_from_smile",
     "exchange_option",
     "spread_option",
     "basket_option",

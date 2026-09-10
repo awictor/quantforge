@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.150.0] - 2026-09-10
+
+### Added
+- CBOE VIX-style fair volatility index (new `vix.py`): `vix_from_chain`
+  implements the exact discrete CBOE formula -- the `dK/K^2`-weighted OTM strip
+  minus the `(F/K0 - 1)^2` forward-correction term, reported as
+  `100 * sqrt(variance)` -- and `vix_from_smile` builds the chain from a smile
+  `vol_fn(K)`.
+- Verified: a flat smile returns `VIX = 100 * sigma` exactly; a downward skew
+  lifts the index above the ATM level (the fear premium); a manually-built
+  flat-vol chain matches; and `VIX = 100 * sqrt(variance)`.
+
 ## [1.149.0] - 2026-09-10
 
 ### Added

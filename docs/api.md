@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.149.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.150.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2917,6 +2917,29 @@ Auto-generated from `quantforge` v1.149.0 by `docs/gen_api.py` — do not edit b
 >
 > Returns a :class:`VegaBuckets`. Vega is per 1.0 change in vol (divide by 100
 > for per-vol-point), scaled by ``qty * multiplier``.
+
+## vix
+
+### `vix_from_chain(strikes, q_prices, F, t, r)`  _function_
+
+> CBOE variance/VIX from a discrete OTM option chain.
+>
+> Args:
+>     strikes: increasing list of strikes.
+>     q_prices: the OTM option mid-price at each strike (put below the forward,
+>         call above; at the money use the average of the two).
+>     F: implied forward. t: tenor in years. r: risk-free rate.
+>
+> Returns ``(variance, vix)`` -- the annualized fair variance and
+> ``100 * sqrt(variance)``.
+
+### `vix_from_smile(S0, t, r, vol_fn, q=0.0, n_strikes=201, width=6.0)`  _function_
+
+> VIX-style fair index built from a smile ``vol_fn(K)``.
+>
+> Samples an OTM chain around the forward, prices each option at its smile vol
+> with Black-Scholes, and applies :func:`vix_from_chain`. A flat smile returns
+> ``VIX ~= 100 * sigma``.
 
 ## volatility
 
