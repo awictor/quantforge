@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.87.0] - 2026-09-10
+
+### Added
+- `merton_smile` (in `merton.py`): the Black-Scholes implied-vol smile a Merton
+  jump-diffusion produces — prices calls across strikes and inverts each to a
+  BSM vol. Flat at `sigma` with no jumps; symmetric jumps lift the wings into a
+  smile and a negative mean jump tilts it into a downward skew.
+
 ## [1.86.1] - 2026-09-10
 
 ### Added

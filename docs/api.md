@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.86.1 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.87.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -920,6 +920,16 @@ Auto-generated from `quantforge` v1.86.1 by `docs/gen_api.py` — do not edit by
 >         discounted asset is a martingale under the given carry.
 >
 > Returns the option price as the Poisson-weighted BSM series.
+
+### `merton_smile(S, strikes, t, r, sigma, lam, mu_j, sigma_j, b=None)`  _function_
+
+> The Black-Scholes implied-vol smile a Merton jump-diffusion produces.
+>
+> Prices a European call at each strike under the jump-diffusion, then inverts
+> each price to its Black-Scholes implied volatility, returning
+> ``(log_moneyness, vol)`` pairs sorted by strike (log-moneyness on the forward
+> ``F = S e^{b t}``). Jumps fatten the tails, so the smile curves up in the
+> wings; a negative mean jump ``mu_j`` tilts it into a downward skew.
 
 ## montecarlo
 

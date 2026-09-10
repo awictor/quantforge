@@ -71,3 +71,28 @@ def merton_jump_price(S, K, t, r, sigma, lam, mu_j, sigma_j,
             break
 
     return total
+
+
+def merton_smile(S, strikes, t, r, sigma, lam, mu_j, sigma_j, b=None):
+    """The Black-Scholes implied-vol smile a Merton jump-diffusion produces.
+
+    Prices a European call at each strike under the jump-diffusion, then inverts
+    each price to its Black-Scholes implied volatility, returning
+    ``(log_moneyness, vol)`` pairs sorted by strike (log-moneyness on the forward
+    ``F = S e^{b t}``). Jumps fatten the tails, so the smile curves up in the
+    wings; a negative mean jump ``mu_j`` tilts it into a downward skew.
+    """
+    from .implied import implied_volatility
+    if b is None:
+        b = r
+    F = S * math.exp(b * t)
+    out = []
+    for K in sorted(strikes):
+        c = merton_jump_price(S, K, t, r, sigma, lam, mu_j, sigma_j,
+                              OptionType.CALL, b=b)
+        try:
+            iv = implied_volatility(c, S, K, t, r, OptionType.CALL, b=b)
+        except ValueError:
+            continue
+        out.append((math.log(K / F), iv))
+    return out

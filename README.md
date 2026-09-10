@@ -881,6 +881,15 @@ variance_gamma_price(S=100, K=100, t=1.0, r=0.05, sigma=0.2,
 `nu -> 0` recovers Black-Scholes; a negative `theta` gives the equity left
 skew.
 
+Merton jump-diffusion also exposes its implied-vol smile:
+
+```python
+from quantforge import merton_smile
+
+merton_smile(S=100, strikes=[80, 90, 100, 110, 120], t=1.0, r=0.05,
+             sigma=0.2, lam=1.0, mu_j=-0.1, sigma_j=0.15)   # jump smile/skew
+```
+
 ## Bachelier (normal) model
 
 For rates and spread options where the forward can go negative and a lognormal
