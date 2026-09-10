@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.218.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.219.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -736,6 +736,16 @@ Auto-generated from `quantforge` v1.218.0 by `docs/gen_api.py` — do not edit b
 > par-swap rates reproduce the inputs.
 
 ## displaced
+
+### `displaced_diffusion_greeks(S, K, t, r, sigma, shift=0.0, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> Greeks of a displaced-diffusion option by central finite differences.
+>
+> Differentiates :func:`displaced_diffusion_price` for ``delta`` (dV/dS),
+> ``gamma`` (d2V/dS2), ``vega`` (dV/dsigma), and ``theta`` (calendar decay).
+> At ``shift = 0`` these reduce to the vanilla Black-Scholes Greeks; a positive
+> shift flattens the smile toward normal-model behaviour. Returns a dict with
+> ``price`` and those fields.
 
 ### `displaced_diffusion_price(S, K, t, r, sigma, shift=0.0, option_type=<OptionType.CALL: 'call'>, b=None) -> float`  _function_
 

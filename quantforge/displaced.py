@@ -58,6 +58,42 @@ def displaced_diffusion_price(S, K, t, r, sigma, shift=0.0,
     return bsm_price(S_shift, K_shift, t, r, sigma_d, ot, b=b_d)
 
 
+def displaced_diffusion_greeks(S, K, t, r, sigma, shift=0.0,
+                               option_type=OptionType.CALL, b=None):
+    """Greeks of a displaced-diffusion option by central finite differences.
+
+    Differentiates :func:`displaced_diffusion_price` for ``delta`` (dV/dS),
+    ``gamma`` (d2V/dS2), ``vega`` (dV/dsigma), and ``theta`` (calendar decay).
+    At ``shift = 0`` these reduce to the vanilla Black-Scholes Greeks; a positive
+    shift flattens the smile toward normal-model behaviour. Returns a dict with
+    ``price`` and those fields.
+    """
+    ot = _coerce_type(option_type)
+    if t < 0:
+        raise ValueError("t must be non-negative")
+    if sigma < 0:
+        raise ValueError("sigma must be non-negative")
+    if b is None:
+        b = r
+    if S + shift <= 0 or K + shift <= 0:
+        raise ValueError("S + shift and K + shift must be positive")
+
+    def px(S_=S, t_=t, sigma_=sigma):
+        return displaced_diffusion_price(S_, K, t_, r, sigma_, shift, ot, b=b)
+
+    base = px()
+    hS = 1e-4 * S
+    up, dn = px(S_=S + hS), px(S_=S - hS)
+    delta = (up - dn) / (2.0 * hS)
+    gamma = (up - 2.0 * base + dn) / (hS * hS)
+    hv = 1e-4
+    vega = (px(sigma_=sigma + hv) - px(sigma_=sigma - hv)) / (2.0 * hv)
+    ht = min(1e-4, 0.25 * t) if t > 0 else 1e-4
+    theta = -(px(t_=t + ht) - px(t_=t - ht)) / (2.0 * ht)
+    return {"price": base, "delta": delta, "gamma": gamma, "vega": vega,
+            "theta": theta}
+
+
 def displaced_implied_shift(S, t, r, quotes, b=None,
                             shift_lo=None, shift_hi=None):
     """Calibrate the displacement that reproduces an observed vol skew.

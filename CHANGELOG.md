@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.219.0] - 2026-09-10
+
+### Added
+- `displaced_diffusion_greeks` (in `displaced.py`): delta, gamma, vega, and
+  theta of a displaced-diffusion option by central finite differences on
+  `displaced_diffusion_price`.
+- Verified: at `shift = 0` the Greeks reduce exactly to the vanilla
+  Black-Scholes Greeks; the delta matches a finite difference at a positive
+  shift; call delta in (0,1) with positive gamma/vega, put delta negative.
+
 ## [1.218.0] - 2026-09-10
 
 ### Added
