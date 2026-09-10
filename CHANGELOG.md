@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.72.0] - 2026-09-10
+
+### Added
+- `VolSurface.vol_grid` and `VolSurface.strike_vol_grid`: export a
+  `(expiries x strikes)` grid of implied vols from the surface for charting —
+  indexed by log-moneyness or by strike (using the carry-implied forward per
+  expiry). Returns the grid plus its axes.
+
 ## [1.71.0] - 2026-09-10
 
 ### Added

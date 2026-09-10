@@ -176,3 +176,28 @@ class VolSurface:
                 "surface has calendar arbitrage there"
             )
         return math.sqrt(fv)
+
+    def vol_grid(self, ks, ts):
+        """Return a (len(ts) x len(ks)) grid of implied vols for charting.
+
+        ``ks`` are log-moneyness points, ``ts`` expiries. ``grid[i][j]`` is the
+        implied vol at ``(ts[i], ks[j])``, ready to feed a heatmap or surface
+        plot. Also returns the axes so callers do not have to track order.
+        """
+        grid = [[self.implied_vol(k, t) for k in ks] for t in ts]
+        return {"ks": list(ks), "ts": list(ts), "vols": grid}
+
+    def strike_vol_grid(self, spot, strikes, ts, b=None):
+        """Grid of implied vols indexed by *strike* rather than log-moneyness.
+
+        Converts each strike to log-moneyness ``k = ln(K / F(t))`` per expiry,
+        where the forward ``F(t) = spot * e^{b t}``, then reads the surface.
+        Handy when the chart axis is strike, not moneyness.
+        """
+        if b is None:
+            b = 0.0
+        grid = []
+        for t in ts:
+            fwd = spot * math.exp(b * t)
+            grid.append([self.implied_vol(math.log(K / fwd), t) for K in strikes])
+        return {"strikes": list(strikes), "ts": list(ts), "vols": grid}

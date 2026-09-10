@@ -779,6 +779,13 @@ sees) comes straight off the surface:
 surf.forward_vol(k=0.0, t1=1.0, t2=2.0)   # sqrt of the forward variance
 ```
 
+Export a grid of vols for a heatmap/surface plot (by log-moneyness or strike):
+
+```python
+surf.vol_grid(ks=[-0.2, 0.0, 0.2], ts=[0.5, 1.0, 2.0])
+surf.strike_vol_grid(spot=100, strikes=[90, 100, 110], ts=[0.5, 1.0])
+```
+
 ## Skew/kurtosis-adjusted pricing (Corrado-Su)
 
 Add the first skewness and kurtosis corrections to Black-Scholes via a
