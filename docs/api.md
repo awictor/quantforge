@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.154.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.155.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1501,6 +1501,17 @@ Auto-generated from `quantforge` v1.154.0 by `docs/gen_api.py` — do not edit b
 >     b: cost of carry (defaults to r). Dividend yield q enters as b = r - q.
 >
 > Returns the option price (in-sample LSM estimate, mildly biased low).
+
+### `bermudan_lsm_local_vol(S, K, t, r, local_vol_fn, option_type=<OptionType.PUT: 'put'>, q=0.0, n_steps=50, n_paths=20000, degree=3, seed=None) -> float`  _function_
+
+> Bermudan/American option under a local-volatility surface by LSM.
+>
+> Same Longstaff-Schwartz backward induction as :func:`bermudan_lsm`, but each
+> Euler step uses the spot- and time-dependent ``local_vol_fn(S, tau)`` (with
+> ``tau`` the elapsed forward time) instead of a constant vol -- so it prices
+> early-exercise options directly on a calibrated Dupire / SVI local-vol
+> surface. Carry is ``b = r - q``. A flat ``local_vol_fn`` reproduces the
+> constant-vol LSM price.
 
 ## lsv
 

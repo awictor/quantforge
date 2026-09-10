@@ -130,3 +130,68 @@ def bermudan_lsm(S, K, t, r, sigma, option_type=OptionType.PUT, b=None,
 
     # Discount the step-1 cashflows back to today.
     return sum(cash) * disc / n_paths
+
+
+def bermudan_lsm_local_vol(S, K, t, r, local_vol_fn, option_type=OptionType.PUT,
+                           q=0.0, n_steps=50, n_paths=20_000, degree=3,
+                           seed=None) -> float:
+    """Bermudan/American option under a local-volatility surface by LSM.
+
+    Same Longstaff-Schwartz backward induction as :func:`bermudan_lsm`, but each
+    Euler step uses the spot- and time-dependent ``local_vol_fn(S, tau)`` (with
+    ``tau`` the elapsed forward time) instead of a constant vol -- so it prices
+    early-exercise options directly on a calibrated Dupire / SVI local-vol
+    surface. Carry is ``b = r - q``. A flat ``local_vol_fn`` reproduces the
+    constant-vol LSM price.
+    """
+    ot = _coerce_type(option_type)
+    if S <= 0 or K <= 0:
+        raise ValueError("S and K must be positive")
+    if n_steps < 1:
+        raise ValueError("n_steps must be >= 1")
+    b = r - q
+    rng = random.Random(seed)
+    dt = t / n_steps
+    sqdt = math.sqrt(dt)
+    disc = math.exp(-r * dt)
+    sign = 1.0 if ot is OptionType.CALL else -1.0
+
+    paths = [[S] * (n_steps + 1) for _ in range(n_paths)]
+    for p in range(n_paths):
+        s = S
+        tau = 0.0
+        for step in range(1, n_steps + 1):
+            vol = local_vol_fn(s, tau)
+            if vol < 0:
+                raise ValueError("local vol must be non-negative")
+            s *= math.exp((b - 0.5 * vol * vol) * dt + vol * sqdt * rng.gauss(0.0, 1.0))
+            paths[p][step] = s
+            tau += dt
+
+    def payoff(s):
+        return max(sign * (s - K), 0.0)
+
+    cash = [payoff(paths[p][n_steps]) for p in range(n_paths)]
+    for step in range(n_steps - 1, 0, -1):
+        itm = [p for p in range(n_paths) if payoff(paths[p][step]) > 0]
+        if len(itm) > degree + 1:
+            X, Y = [], []
+            for p in itm:
+                s = paths[p][step]
+                X.append([s ** d for d in range(degree + 1)])
+                Y.append(cash[p] * disc)
+            beta = _solve_normal_equations(X, Y)
+            for p in itm:
+                s = paths[p][step]
+                cont = sum(beta[d] * s ** d for d in range(degree + 1))
+                if payoff(s) >= cont:
+                    cash[p] = payoff(s)
+                else:
+                    cash[p] = cash[p] * disc
+            for p in range(n_paths):
+                if payoff(paths[p][step]) <= 0:
+                    cash[p] *= disc
+        else:
+            for p in range(n_paths):
+                cash[p] *= disc
+    return sum(cash) * disc / n_paths

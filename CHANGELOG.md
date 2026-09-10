@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.155.0] - 2026-09-10
+
+### Added
+- `bermudan_lsm_local_vol` (in `lsm.py`): Longstaff-Schwartz American/Bermudan
+  pricing under a local-volatility surface. Same backward-induction regression
+  as `bermudan_lsm`, but each Euler step uses `local_vol_fn(S, tau)` -- so it
+  prices early-exercise options directly on a calibrated Dupire/SVI local-vol
+  surface. Carry `b = r - q`.
+- Verified: a flat `local_vol_fn` reproduces the constant-vol LSM price and a
+  binomial tree; a genuinely skewed local vol matches an independent
+  Crank-Nicolson American PDE (~0.03).
+
 ## [1.154.0] - 2026-09-10
 
 ### Added
