@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.39.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.40.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -704,6 +704,14 @@ Auto-generated from `quantforge` v1.39.0 by `docs/gen_api.py` — do not edit by
 > and prices with Black-Scholes. Exact for a single asset; an approximation
 > for the sum.
 
+### `best_of_call(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0, option_type=<OptionType.CALL: 'call'>, n_paths=100000, antithetic=True, seed=None)`  _function_
+
+> Option on the maximum of two assets: payoff max(max(S1,S2) - K, 0) (call).
+>
+> Monte Carlo on correlated GBM. Best-of and worst-of calls satisfy
+> ``best + worst = call(S1) + call(S2)`` at the same strike (Stulz), which the
+> tests check.
+
 ### `exchange_option(S1, S2, t, sigma1, sigma2, rho, q1=0.0, q2=0.0) -> float`  _function_
 
 > Margrabe option to exchange asset 2 for asset 1: payoff max(S1 - S2, 0).
@@ -717,6 +725,10 @@ Auto-generated from `quantforge` v1.39.0 by `docs/gen_api.py` — do not edit by
 >
 > Reduces to an exact Margrabe formula when K = 0. Puts follow from parity on
 > the spread ``S1 - S2``.
+
+### `worst_of_call(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0, option_type=<OptionType.CALL: 'call'>, n_paths=100000, antithetic=True, seed=None)`  _function_
+
+> Option on the minimum of two assets: payoff max(min(S1,S2) - K, 0) (call).
 
 ## overhedge
 

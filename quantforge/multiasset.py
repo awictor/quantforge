@@ -127,3 +127,59 @@ def basket_option(spots, weights, K, t, r, sigmas, corr, q=None,
     if ot is OptionType.CALL:
         return disc * (M1 * norm_cdf(d1) - K * norm_cdf(d2))
     return disc * (K * norm_cdf(-d2) - M1 * norm_cdf(-d1))
+
+
+def _rainbow_mc(S1, S2, K, t, r, sigma1, sigma2, rho, q1, q2, kind, ot,
+                n_paths, antithetic, seed):
+    """Shared correlated-GBM Monte Carlo for best-of / worst-of payoffs."""
+    import random
+    rng = random.Random(seed)
+    d1 = (r - q1 - 0.5 * sigma1 * sigma1) * t
+    d2 = (r - q2 - 0.5 * sigma2 * sigma2) * t
+    v1 = sigma1 * math.sqrt(t)
+    v2 = sigma2 * math.sqrt(t)
+    corr2 = math.sqrt(1.0 - rho * rho)
+    disc = math.exp(-r * t)
+    sign = 1.0 if ot is OptionType.CALL else -1.0
+
+    def payoff(z1, z2):
+        a = S1 * math.exp(d1 + v1 * z1)
+        b_ = S2 * math.exp(d2 + v2 * (rho * z1 + corr2 * z2))
+        chosen = max(a, b_) if kind == "best" else min(a, b_)
+        return max(sign * (chosen - K), 0.0)
+
+    total = 0.0
+    n = n_paths // 2 if antithetic else n_paths
+    count = 0
+    for _ in range(n):
+        z1 = rng.gauss(0.0, 1.0)
+        z2 = rng.gauss(0.0, 1.0)
+        total += payoff(z1, z2)
+        count += 1
+        if antithetic:
+            total += payoff(-z1, -z2)
+            count += 1
+    return disc * total / count
+
+
+def best_of_call(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0,
+                 option_type=OptionType.CALL, n_paths=100_000, antithetic=True,
+                 seed=None):
+    """Option on the maximum of two assets: payoff max(max(S1,S2) - K, 0) (call).
+
+    Monte Carlo on correlated GBM. Best-of and worst-of calls satisfy
+    ``best + worst = call(S1) + call(S2)`` at the same strike (Stulz), which the
+    tests check.
+    """
+    ot = _coerce_type(option_type)
+    return _rainbow_mc(S1, S2, K, t, r, sigma1, sigma2, rho, q1, q2, "best", ot,
+                       n_paths, antithetic, seed)
+
+
+def worst_of_call(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0,
+                  option_type=OptionType.CALL, n_paths=100_000, antithetic=True,
+                  seed=None):
+    """Option on the minimum of two assets: payoff max(min(S1,S2) - K, 0) (call)."""
+    ot = _coerce_type(option_type)
+    return _rainbow_mc(S1, S2, K, t, r, sigma1, sigma2, rho, q1, q2, "worst", ot,
+                       n_paths, antithetic, seed)

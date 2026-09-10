@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.40.0] - 2026-09-09
+
+### Added
+- `best_of_call` / `worst_of_call` (in `multiasset.py`): rainbow options on the
+  max / min of two correlated assets, priced by Monte Carlo on correlated GBM
+  (antithetic, seeded). Best-of + worst-of equals the sum of the two single-name
+  calls (Stulz identity), which the tests verify.
+
 ## [1.39.0] - 2026-09-09
 
 ### Added

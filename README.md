@@ -394,7 +394,13 @@ spread_option(S1=100, S2=95, K=5, t=1.0, r=0.05, sigma1=0.2, sigma2=0.25, rho=0.
 # Basket call on w1 S1 + w2 S2 (lognormal moment-match).
 basket_option(spots=(100, 100), weights=(0.5, 0.5), K=100, t=1.0, r=0.05,
               sigmas=(0.2, 0.3), corr=0.4)
+
+# Rainbow: option on the best (max) or worst (min) of two assets (Monte Carlo).
+from quantforge import best_of_call, worst_of_call
+best_of_call(S1=100, S2=100, K=100, t=1.0, r=0.05, sigma1=0.2, sigma2=0.25, rho=0.4)
 ```
+
+Best-of + worst-of equals `call(S1) + call(S2)` (Stulz identity).
 
 ## Forward-start and cliquet options
 
