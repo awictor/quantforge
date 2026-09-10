@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.157.0] - 2026-09-10
+
+### Added
+- `moment_risk_premia` (new `moment_premium.py`): skewness- and
+  kurtosis-risk premia -- the risk-neutral (BKM) skewness/excess-kurtosis the
+  option smile implies versus what realized in the price history. Returns
+  realized, implied and premium (implied - realized) for both moments, wiring
+  `bkm_moments_from_smile` to the realized-moment estimators.
+- Verified: a downward-skewed smile against a near-symmetric GBM history gives a
+  negative skew premium (crash-protection demand) and a positive kurtosis
+  premium; a flat smile gives a near-zero skew premium; the components are
+  internally consistent.
+
 ## [1.156.0] - 2026-09-10
 
 ### Added

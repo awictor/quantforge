@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.156.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.157.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1605,6 +1605,21 @@ Auto-generated from `quantforge` v1.156.0 by `docs/gen_api.py` — do not edit b
 > ``(log_moneyness, vol)`` pairs sorted by strike (log-moneyness on the forward
 > ``F = S e^{b t}``). Jumps fatten the tails, so the smile curves up in the
 > wings; a negative mean jump ``mu_j`` tilts it into a downward skew.
+
+## moment_premium
+
+### `moment_risk_premia(closes: Sequence[float], S0, t, r, vol_fn, q=0.0, n_strikes=401, width=8.0)`  _function_
+
+> Realized vs risk-neutral (BKM) skewness and excess kurtosis.
+>
+> Args:
+>     closes: realized price history over the measurement window (its log
+>         returns give the realized moments).
+>     S0, t, r, vol_fn, q: inputs for the BKM risk-neutral moments implied by
+>         the option smile at horizon ``t``.
+>
+> Returns a dict with ``realized_skew``, ``implied_skew``, ``skew_premium``
+> (implied - realized), and the analogous ``*_kurt`` excess-kurtosis fields.
 
 ## montecarlo
 
