@@ -27,7 +27,10 @@ from .leisen_reimer import (
     leisen_reimer_price, leisen_reimer_greeks, leisen_reimer_american_accel,
 )
 from .trinomial import trinomial_price, richardson_american
-from .lsm import bermudan_lsm, bermudan_lsm_local_vol, bermudan_lsm_greeks
+from .lsm import (
+    bermudan_lsm, bermudan_lsm_local_vol, bermudan_lsm_greeks,
+    bermudan_max_call_lsm,
+)
 from .mlmc import mlmc_asian
 from .perpetual import perpetual_american, perpetual_exercise_boundary
 from .forward import implied_forward, ForwardResult, dividend_curve
@@ -240,7 +243,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.190.1"
+__version__ = "1.191.0"
 
 __all__ = [
     "OptionType",
@@ -266,6 +269,7 @@ __all__ = [
     "bermudan_lsm",
     "bermudan_lsm_local_vol",
     "bermudan_lsm_greeks",
+    "bermudan_max_call_lsm",
     "mlmc_asian",
     "perpetual_american",
     "perpetual_exercise_boundary",

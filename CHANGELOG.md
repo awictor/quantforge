@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.191.0] - 2026-09-10
+
+### Added
+- `bermudan_max_call_lsm` (in `lsm.py`): American call on the maximum of two
+  assets by Longstaff-Schwartz -- the classic two-asset early-exercise
+  benchmark. Simulates two correlated GBMs and regresses the continuation value
+  on a quadratic basis in both spots plus the running max
+  `{1, S1, S2, S1^2, S2^2, S1 S2, max(S1,S2)}` over the in-the-money paths at
+  each date.
+- Verified: without dividends it matches the European Stulz
+  `best_of_call_closed` (little early-exercise value); with a 6% dividend on
+  both assets it exceeds the European by a positive early-exercise premium; it
+  dominates a single-asset vanilla and is reproducible under a fixed seed.
+
 ## [1.190.1] - 2026-09-10
 
 ### Tests

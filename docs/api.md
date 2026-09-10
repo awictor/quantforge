@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.190.1 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.191.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1641,6 +1641,21 @@ Auto-generated from `quantforge` v1.190.1 by `docs/gen_api.py` — do not edit b
 > early-exercise options directly on a calibrated Dupire / SVI local-vol
 > surface. Carry is ``b = r - q``. A flat ``local_vol_fn`` reproduces the
 > constant-vol LSM price.
+
+### `bermudan_max_call_lsm(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0, n_steps=50, n_paths=20000, seed=None) -> float`  _function_
+
+> American call on the maximum of two assets by Longstaff-Schwartz.
+>
+> Prices ``max(max(S1_T, S2_T) - K, 0)`` with early exercise at ``n_steps``
+> equally-spaced dates -- the classic two-asset LSM benchmark. Two correlated
+> GBMs are simulated (``S2``'s shock is ``rho z1 + sqrt(1-rho^2) z2``) and the
+> continuation value is regressed on a quadratic basis in both spots plus the
+> running max: ``{1, S1, S2, S1^2, S2^2, S1 S2, max(S1,S2)}``, over the
+> in-the-money paths at each date.
+>
+> Returns the price (in-sample LSM estimate, mildly biased low). It sits at or
+> above the European :func:`quantforge.best_of_call_closed`; with dividends the
+> gap is the early-exercise premium.
 
 ## lsv
 
