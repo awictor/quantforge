@@ -49,6 +49,9 @@ from .rates import (
     CapletPeriod, caplet_price, cap_price, floor_price, collar_price,
     caplet_floorlet_parity, annuity, swaption_price, swaption_parity,
 )
+from .overhedge import (
+    Overhedge, digital_call_overhedge, digital_put_overhedge, overhedge_payoff,
+)
 from .portfolio import Contract, Position, BookRisk, Book, price_book
 from .svi import SVIParams, calibrate_svi
 from .sabr import SABRParams, sabr_vol, calibrate_sabr
@@ -76,7 +79,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.21.0"
+__version__ = "1.22.0"
 
 __all__ = [
     "OptionType",
@@ -144,6 +147,10 @@ __all__ = [
     "annuity",
     "swaption_price",
     "swaption_parity",
+    "Overhedge",
+    "digital_call_overhedge",
+    "digital_put_overhedge",
+    "overhedge_payoff",
     "Contract",
     "Position",
     "BookRisk",

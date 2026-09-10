@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.22.0] - 2026-09-09
+
+### Added
+- `overhedge.py`: super-replicate a cash-or-nothing digital with a tight
+  vanilla spread. `digital_call_overhedge` / `digital_put_overhedge` return an
+  `Overhedge` (spread cost as a conservative price, the fair digital value, and
+  the cushion between them); `overhedge_payoff` gives the spread's terminal
+  payoff, which dominates the digital everywhere and converges to it as the
+  spread width shrinks.
+
 ## [1.21.0] - 2026-09-09
 
 ### Added

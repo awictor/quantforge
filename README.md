@@ -393,6 +393,20 @@ arithmetic_asian(S=100, K=100, t=1, r=0.05, sigma=0.3, option_type="call")
 Barrier kinds: `Barrier.DOWN_IN`, `DOWN_OUT`, `UP_IN`, `UP_OUT`. In/out parity
 (`in + out = vanilla`) holds exactly and is enforced by the tests.
 
+Digitals have unbounded pin risk at the strike, so desks super-replicate them
+with a tight vanilla spread:
+
+```python
+from quantforge import digital_call_overhedge
+
+oh = digital_call_overhedge(S=100, K=100, t=0.25, r=0.05, sigma=0.2,
+                            cash=1.0, width=2)
+print(oh.cost, oh.digital_value, oh.cushion)   # spread cost >= fair value
+```
+
+The spread payoff dominates the digital everywhere and its cost converges to
+the fair digital value as `width -> 0`; the cushion is the pin-risk buffer.
+
 One-touch / no-touch binaries pay a fixed cash on (or against) a barrier being
 hit:
 
