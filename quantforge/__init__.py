@@ -29,8 +29,12 @@ from .exotics import (
 )
 from .montecarlo import MCResult, european_mc, arithmetic_asian_mc
 from .risk import VaRResult, parametric_var, historical_var, montecarlo_var
+from .volatility import (
+    close_to_close, ewma_vol, parkinson, garman_klass, rogers_satchell,
+    yang_zhang, vol_report, VolReport,
+)
 
-__version__ = "0.6.0"
+__version__ = "0.7.0"
 
 __all__ = [
     "OptionType",
@@ -65,5 +69,13 @@ __all__ = [
     "parametric_var",
     "historical_var",
     "montecarlo_var",
+    "close_to_close",
+    "ewma_vol",
+    "parkinson",
+    "garman_klass",
+    "rogers_satchell",
+    "yang_zhang",
+    "vol_report",
+    "VolReport",
     "__version__",
 ]

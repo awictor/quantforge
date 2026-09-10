@@ -74,6 +74,28 @@ for pos in book.positions:
 `qty` is signed (short = negative) and `multiplier` scales to notional
 (e.g. 100 for US equity options). Net Greeks are position-scaled sums.
 
+## Realized volatility
+
+Estimate historical vol from a price series — close-to-close, EWMA, and the
+efficient range-based estimators (Parkinson, Garman-Klass, Rogers-Satchell,
+Yang-Zhang). All annualized:
+
+```python
+from quantforge import close_to_close, yang_zhang, vol_report
+
+closes = [...]                      # daily closes
+print(close_to_close(closes))       # classic
+print(ewma_vol(closes, lam=0.94))   # RiskMetrics
+
+# Range-based estimators need OHLC bars and are much lower-variance.
+rep = vol_report(opens, highs, lows, closes)
+print(rep.parkinson, rep.garman_klass, rep.rogers_satchell, rep.yang_zhang)
+```
+
+Yang-Zhang is drift-independent and handles overnight gaps; it is the default
+choice when you have clean OHLC data. Compare any of these against the implied
+vol from `implied_volatility` to trade realized-vs-implied.
+
 ## Portfolio risk (VaR / Expected Shortfall)
 
 Three estimators over a priced book — parametric delta-gamma (Cornish-Fisher),
