@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.91.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.92.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1412,6 +1412,18 @@ Auto-generated from `quantforge` v1.91.0 by `docs/gen_api.py` — do not edit by
 > Returns ``(params, rmse)`` where rmse is the root-mean-square vol error.
 > Uses a smooth constrained reparametrization so alpha > 0, nu >= 0 and
 > rho in (-1, 1), optimized with the built-in Nelder-Mead.
+
+### `calibrate_sabr_lm(F, t, strikes: Sequence[float], market_vols: Sequence[float], beta: float = 0.5, weights: Sequence[float] = None, initial: quantforge.sabr.SABRParams = None, max_iter: int = 100, tol: float = 1e-14)`  _function_
+
+> Fit (alpha, rho, nu) of a SABR smile by Levenberg-Marquardt.
+>
+> Uses the exact analytic Jacobian (:func:`sabr_jacobian`) instead of the
+> derivative-free Nelder-Mead of :func:`calibrate_sabr`, so it converges in a
+> handful of iterations and lands on the same optimum. Parameters are box
+> constrained to the valid region (``alpha > 0``, ``nu >= 0``,
+> ``-1 < rho < 1``) by clamping each proposed step.
+>
+> Returns ``(params, rmse, n_iter)``.
 
 ### `sabr_jacobian(F, t, strikes: Sequence[float], alpha, beta, rho, nu)`  _function_
 

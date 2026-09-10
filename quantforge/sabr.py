@@ -294,3 +294,114 @@ def calibrate_sabr(
     best_p, best_f = nelder_mead(objective, x0, step=0.3, max_iter=max_iter, tol=1e-16)
     alpha, rho, nu = unpack(best_p)
     return SABRParams(alpha=alpha, beta=beta, rho=rho, nu=nu), math.sqrt(best_f / wsum)
+
+
+def _solve3(A, b):
+    """Solve a 3x3 linear system ``A x = b`` by Gaussian elimination.
+
+    Returns ``None`` if the matrix is singular; used for the SABR Gauss-Newton
+    normal equations where ``A`` is the (damped) 3x3 ``J^T J``.
+    """
+    M = [row[:] + [b[i]] for i, row in enumerate(A)]
+    for col in range(3):
+        piv = max(range(col, 3), key=lambda r: abs(M[r][col]))
+        if abs(M[piv][col]) < 1e-300:
+            return None
+        M[col], M[piv] = M[piv], M[col]
+        pv = M[col][col]
+        for r in range(3):
+            if r == col:
+                continue
+            f = M[r][col] / pv
+            for c in range(col, 4):
+                M[r][c] -= f * M[col][c]
+    return [M[i][3] / M[i][i] for i in range(3)]
+
+
+def calibrate_sabr_lm(
+    F, t, strikes: Sequence[float], market_vols: Sequence[float],
+    beta: float = 0.5, weights: Sequence[float] = None,
+    initial: SABRParams = None, max_iter: int = 100, tol: float = 1e-14,
+):
+    """Fit (alpha, rho, nu) of a SABR smile by Levenberg-Marquardt.
+
+    Uses the exact analytic Jacobian (:func:`sabr_jacobian`) instead of the
+    derivative-free Nelder-Mead of :func:`calibrate_sabr`, so it converges in a
+    handful of iterations and lands on the same optimum. Parameters are box
+    constrained to the valid region (``alpha > 0``, ``nu >= 0``,
+    ``-1 < rho < 1``) by clamping each proposed step.
+
+    Returns ``(params, rmse, n_iter)``.
+    """
+    strikes = [float(k) for k in strikes]
+    market_vols = [float(v) for v in market_vols]
+    n = len(strikes)
+    if n != len(market_vols) or n < 3:
+        raise ValueError("need at least 3 matching (strike, vol) points")
+    if weights is None:
+        weights = [1.0] * n
+    wsum = sum(weights)
+    sqrt_w = [math.sqrt(w) for w in weights]
+
+    if initial is None:
+        atm_idx = min(range(n), key=lambda i: abs(strikes[i] - F))
+        alpha0 = market_vols[atm_idx] * (F ** (1.0 - beta))
+        initial = SABRParams(alpha=max(alpha0, 1e-4), beta=beta, rho=-0.2, nu=0.4)
+
+    def clamp(alpha, rho, nu):
+        alpha = max(alpha, 1e-8)
+        nu = max(nu, 0.0)
+        rho = max(min(rho, 0.999), -0.999)
+        return alpha, rho, nu
+
+    alpha, rho, nu = clamp(initial.alpha, initial.rho, initial.nu)
+
+    def residuals(alpha, rho, nu):
+        return [sqrt_w[i] * (sabr_vol(F, strikes[i], t, alpha, beta, rho, nu)
+                             - market_vols[i]) for i in range(n)]
+
+    def sse(res):
+        return sum(r * r for r in res)
+
+    res = residuals(alpha, rho, nu)
+    cost = sse(res)
+    lam = 1e-3
+    n_iter = 0
+    for n_iter in range(1, max_iter + 1):
+        # Weighted Jacobian rows d residual_i / d (alpha, rho, nu).
+        J = sabr_jacobian(F, t, strikes, alpha, beta, rho, nu)
+        J = [[sqrt_w[i] * J[i][k] for k in range(3)] for i in range(n)]
+
+        # Normal-equation pieces: JtJ (3x3) and Jtr (3).
+        JtJ = [[sum(J[i][a] * J[i][c] for i in range(n)) for c in range(3)]
+               for a in range(3)]
+        Jtr = [sum(J[i][a] * res[i] for i in range(n)) for a in range(3)]
+
+        # Levenberg-Marquardt damped step, with lambda adaptation. Grow lambda
+        # until a step reduces the cost (toward gradient descent), then accept.
+        stepped = False
+        for _ in range(30):
+            A = [[JtJ[a][c] + (lam if a == c else 0.0) * JtJ[a][a]
+                  for c in range(3)] for a in range(3)]
+            delta = _solve3(A, [-g for g in Jtr])
+            if delta is None:
+                lam *= 10.0
+                continue
+            na, nr, nn = clamp(alpha + delta[0], rho + delta[1], nu + delta[2])
+            new_res = residuals(na, nr, nn)
+            new_cost = sse(new_res)
+            if new_cost < cost:
+                alpha, rho, nu = na, nr, nn
+                res = new_res
+                cost_drop = cost - new_cost
+                cost = new_cost
+                lam = max(lam * 0.5, 1e-12)
+                stepped = True
+                break
+            lam *= 10.0
+        # Stop if no downhill step exists, or the improvement is negligible.
+        if not stepped or cost_drop <= tol * (1.0 + cost):
+            break
+
+    params = SABRParams(alpha=alpha, beta=beta, rho=rho, nu=nu)
+    return params, math.sqrt(cost / wsum), n_iter

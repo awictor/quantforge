@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.92.0] - 2026-09-10
+
+### Added
+- `calibrate_sabr_lm` (in `sabr.py`): a Levenberg-Marquardt SABR calibrator that
+  reuses the exact `sabr_jacobian` from v1.91.0 instead of the derivative-free
+  Nelder-Mead. Solves the damped 3x3 normal equations (new `_solve3` Gaussian
+  elimination), adapts the damping to guarantee a downhill step, and box-clamps
+  (alpha, rho, nu) to the valid region. Returns `(params, rmse, n_iter)`.
+- Recovers synthetic (alpha, rho, nu) to ~1e-12 RMSE in ~4 iterations (vs
+  Nelder-Mead's ~2e-9) and lands on the same optimum as `calibrate_sabr` on a
+  noisy market; also verified for the beta=1 lognormal smile.
+
 ## [1.91.0] - 2026-09-10
 
 ### Added
