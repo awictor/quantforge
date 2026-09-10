@@ -530,6 +530,13 @@ Total variance is interpolated linearly in maturity (the standard
 no-arbitrage-friendly scheme) and the calendar check enforces that
 `w(k, t)` is non-decreasing in `t` at every strike.
 
+The forward vol between two maturities (the vol a forward-starting option
+sees) comes straight off the surface:
+
+```python
+surf.forward_vol(k=0.0, t1=1.0, t2=2.0)   # sqrt of the forward variance
+```
+
 ## CEV (constant elasticity of variance)
 
 Local vol that scales with the spot level (the leverage effect), priced in

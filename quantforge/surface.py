@@ -117,3 +117,31 @@ class VolSurface:
 
     def is_calendar_arbitrage_free(self, ks: Sequence[float] = None) -> bool:
         return not self.calendar_arbitrage(ks)
+
+    def forward_variance(self, k: float, t1: float, t2: float) -> float:
+        """Forward (instantaneous-average) variance between ``t1`` and ``t2``.
+
+        The total variance is additive in time, so the variance realized over
+        ``[t1, t2]`` at log-moneyness ``k`` is
+        ``(w(k, t2) - w(k, t1)) / (t2 - t1)``. A negative result signals a
+        calendar-arbitrage violation between those maturities.
+        """
+        if t2 <= t1:
+            raise ValueError("require t2 > t1")
+        w1 = self.total_variance(k, t1)
+        w2 = self.total_variance(k, t2)
+        return (w2 - w1) / (t2 - t1)
+
+    def forward_vol(self, k: float, t1: float, t2: float) -> float:
+        """Forward volatility between ``t1`` and ``t2`` = sqrt(forward variance).
+
+        The vol of a forward-starting option that sets at ``t1`` and expires at
+        ``t2``. Raises if the forward variance is negative (calendar arbitrage).
+        """
+        fv = self.forward_variance(k, t1, t2)
+        if fv < 0:
+            raise ValueError(
+                f"negative forward variance ({fv:.4g}) between {t1} and {t2}; "
+                "surface has calendar arbitrage there"
+            )
+        return math.sqrt(fv)

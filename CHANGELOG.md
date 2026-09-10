@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.31.0] - 2026-09-09
+
+### Added
+- `VolSurface.forward_variance` / `forward_vol`: the forward (instantaneous-
+  average) variance and volatility between two maturities, from the additive
+  total-variance surface — the vol of a forward-starting option. Raises on a
+  negative forward variance (calendar arbitrage).
+
 ## [1.30.0] - 2026-09-09
 
 ### Added
