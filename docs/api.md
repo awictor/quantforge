@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.87.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.88.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -387,6 +387,29 @@ Auto-generated from `quantforge` v1.87.0 by `docs/gen_api.py` — do not edit by
 >
 > The payoff is unchanged (``max(S_T - K, 0)`` etc.); only the diffusion is
 > displaced, so the price equals a BSM price on ``S + shift`` / ``K + shift``.
+
+### `displaced_implied_shift(S, t, r, quotes, b=None, shift_lo=None, shift_hi=None)`  _function_
+
+> Calibrate the displacement that reproduces an observed vol skew.
+>
+> Displaced diffusion has one skew knob, the ``shift``: a positive shift
+> lowers the low-strike wing relative to the high-strike wing (a downward
+> skew), while ``shift = 0`` is flat Black-Scholes. Given a set of Black-Scholes
+> implied-vol quotes ``quotes = [(K, iv), ...]`` this finds the single shift
+> whose displaced-diffusion smile best fits them.
+>
+> The at-the-money volatility is not a free skew knob here, but it is not
+> fixed blindly either: for every trial shift the model's local ``sigma`` is
+> re-solved so the displaced smile reproduces the ATM quote (the one whose
+> strike is closest to the forward ``F = S e^{b t}``) exactly. That decouples
+> level from skew, so the shift is driven purely by the off-ATM quotes and the
+> fit is not biased by the local-vs-implied vol convention.
+>
+> Returns ``(shift, sigma_atm, rmse)`` where ``sigma_atm`` is the local vol at
+> the fitted shift and ``rmse`` is the root-mean-square implied-vol error
+> across the quotes. Minimises the squared vol error over the shift by
+> golden-section search on ``[shift_lo, shift_hi]`` (defaults scale with spot:
+> ``[-0.9 S, 20 S]``, staying above the ``-shift`` floor).
 
 ## dv01
 

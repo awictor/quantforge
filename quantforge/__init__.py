@@ -31,7 +31,7 @@ from .forwardstart import forward_start_price, cliquet_price
 from .chooser import chooser_option
 from .compound import compound_option
 from .quanto import quanto_option, compo_option
-from .displaced import displaced_diffusion_price
+from .displaced import displaced_diffusion_price, displaced_implied_shift
 from .hedging import StickyRule, smile_delta, smile_delta_from_smile, skew_slope
 from .lookback import (
     floating_strike_lookback, fixed_strike_lookback, lookback_greeks,
@@ -132,7 +132,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.87.0"
+__version__ = "1.88.0"
 
 __all__ = [
     "OptionType",
@@ -165,6 +165,7 @@ __all__ = [
     "quanto_option",
     "compo_option",
     "displaced_diffusion_price",
+    "displaced_implied_shift",
     "StickyRule",
     "smile_delta",
     "smile_delta_from_smile",

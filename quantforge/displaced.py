@@ -56,3 +56,101 @@ def displaced_diffusion_price(S, K, t, r, sigma, shift=0.0,
     b_d = math.log(fwd_shift / S_shift) / t if t > 0 else b
 
     return bsm_price(S_shift, K_shift, t, r, sigma_d, ot, b=b_d)
+
+
+def displaced_implied_shift(S, t, r, quotes, b=None,
+                            shift_lo=None, shift_hi=None):
+    """Calibrate the displacement that reproduces an observed vol skew.
+
+    Displaced diffusion has one skew knob, the ``shift``: a positive shift
+    lowers the low-strike wing relative to the high-strike wing (a downward
+    skew), while ``shift = 0`` is flat Black-Scholes. Given a set of Black-Scholes
+    implied-vol quotes ``quotes = [(K, iv), ...]`` this finds the single shift
+    whose displaced-diffusion smile best fits them.
+
+    The at-the-money volatility is not a free skew knob here, but it is not
+    fixed blindly either: for every trial shift the model's local ``sigma`` is
+    re-solved so the displaced smile reproduces the ATM quote (the one whose
+    strike is closest to the forward ``F = S e^{b t}``) exactly. That decouples
+    level from skew, so the shift is driven purely by the off-ATM quotes and the
+    fit is not biased by the local-vs-implied vol convention.
+
+    Returns ``(shift, sigma_atm, rmse)`` where ``sigma_atm`` is the local vol at
+    the fitted shift and ``rmse`` is the root-mean-square implied-vol error
+    across the quotes. Minimises the squared vol error over the shift by
+    golden-section search on ``[shift_lo, shift_hi]`` (defaults scale with spot:
+    ``[-0.9 S, 20 S]``, staying above the ``-shift`` floor).
+    """
+    from .implied import implied_volatility
+
+    if b is None:
+        b = r
+    quotes = [(float(K), float(iv)) for K, iv in quotes]
+    if len(quotes) < 2:
+        raise ValueError("need at least two (K, iv) quotes to fit a skew")
+    if any(iv <= 0 for _, iv in quotes):
+        raise ValueError("implied vols must be positive")
+
+    F = S * math.exp(b * t)
+    # The ATM anchor: quote nearest the forward, matched exactly at every shift.
+    K_atm, iv_atm = min(quotes, key=lambda q: abs(q[0] - F))
+
+    if shift_lo is None:
+        shift_lo = -0.9 * S
+    if shift_hi is None:
+        shift_hi = 20.0 * S
+
+    def sigma_for_shift(shift):
+        # Solve the local sigma whose displaced price at K_atm inverts to iv_atm.
+        # The map sigma -> displaced ATM implied vol is monotone, so bisect.
+        lo, hi = 1e-6, 5.0
+        for _ in range(80):
+            mid = 0.5 * (lo + hi)
+            px = displaced_diffusion_price(S, K_atm, t, r, mid, shift,
+                                           OptionType.CALL, b=b)
+            iv = implied_volatility(px, S, K_atm, t, r, OptionType.CALL, b=b)
+            if iv < iv_atm:
+                lo = mid
+            else:
+                hi = mid
+        return 0.5 * (lo + hi)
+
+    def sse(shift):
+        if S + shift <= 0 or K_atm + shift <= 0:
+            return float("inf"), 0.0
+        sigma_loc = sigma_for_shift(shift)
+        total = 0.0
+        for K, iv_mkt in quotes:
+            if K + shift <= 0:
+                return float("inf"), sigma_loc
+            px = displaced_diffusion_price(S, K, t, r, sigma_loc, shift,
+                                           OptionType.CALL, b=b)
+            try:
+                iv_mod = implied_volatility(px, S, K, t, r,
+                                            OptionType.CALL, b=b)
+            except ValueError:
+                return float("inf"), sigma_loc
+            total += (iv_mod - iv_mkt) ** 2
+        return total, sigma_loc
+
+    # Golden-section search for the minimiser on [shift_lo, shift_hi].
+    invphi = (math.sqrt(5.0) - 1.0) / 2.0
+    a, bb = shift_lo, shift_hi
+    c = bb - invphi * (bb - a)
+    d = a + invphi * (bb - a)
+    fc, fd = sse(c)[0], sse(d)[0]
+    for _ in range(200):
+        if bb - a < 1e-8 * max(1.0, S):
+            break
+        if fc < fd:
+            bb, d, fd = d, c, fc
+            c = bb - invphi * (bb - a)
+            fc = sse(c)[0]
+        else:
+            a, c, fc = c, d, fd
+            d = a + invphi * (bb - a)
+            fd = sse(d)[0]
+    shift = 0.5 * (a + bb)
+    total, sigma_atm = sse(shift)
+    rmse = math.sqrt(total / len(quotes))
+    return shift, sigma_atm, rmse

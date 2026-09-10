@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.88.0] - 2026-09-10
+
+### Added
+- `displaced_implied_shift` (in `displaced.py`): calibrate the displaced-diffusion
+  shift that reproduces an observed Black-Scholes vol skew. For each trial shift
+  the local `sigma` is re-solved to match the ATM quote exactly, so the shift is
+  driven purely by the off-ATM skew and is not biased by the local-vs-implied
+  vol convention; golden-section search minimises the RMS vol error. Recovers a
+  known shift exactly on synthetic quotes (40 -> 40, 100 -> 100, 0 -> 0).
+
 ## [1.87.0] - 2026-09-10
 
 ### Added
