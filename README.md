@@ -137,6 +137,26 @@ speed(**kw); zomma(**kw); color(**kw)   # third-order in spot / cross terms
 Every one is analytic and verified against finite differences of the
 first-order Greeks in the test suite.
 
+## Option strategies
+
+Named multi-leg builders return a `Book`, so net price and Greeks come from the
+same engine, plus a payoff diagram and break-even solver:
+
+```python
+from quantforge import straddle, iron_condor, payoff_profile, break_evens
+
+book = straddle(S=100, K=100, t=0.5, r=0.04, sigma=0.25)
+print(book.net.market_value, book.net.delta, book.net.vega)   # net premium/Greeks
+print(break_evens(book, lo=50, hi=150))                       # [K-prem, K+prem]
+
+condor = iron_condor(S=100, K_put_long=80, K_put_short=90,
+                     K_call_short=110, K_call_long=120,
+                     t=0.5, r=0.04, sigma=0.25)
+print(payoff_profile(condor, spots=[70, 90, 100, 110, 130]))
+```
+
+Also `vertical_spread`, `strangle`, `risk_reversal`, and `butterfly`.
+
 ## Batch pricing and portfolio risk
 
 Value a whole book in one call and get net exposures:

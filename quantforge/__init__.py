@@ -39,6 +39,10 @@ from .density import (
 )
 from .varswap import variance_swap_strike, volatility_swap_strike
 from .multiasset import exchange_option, spread_option, basket_option
+from .strategy import (
+    payoff_at_expiry, payoff_profile, break_evens,
+    vertical_spread, straddle, strangle, risk_reversal, butterfly, iron_condor,
+)
 from .portfolio import Contract, Position, BookRisk, Book, price_book
 from .svi import SVIParams, calibrate_svi
 from .sabr import SABRParams, sabr_vol, calibrate_sabr
@@ -66,7 +70,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.14.0"
+__version__ = "1.15.0"
 
 __all__ = [
     "OptionType",
@@ -112,6 +116,15 @@ __all__ = [
     "exchange_option",
     "spread_option",
     "basket_option",
+    "payoff_at_expiry",
+    "payoff_profile",
+    "break_evens",
+    "vertical_spread",
+    "straddle",
+    "strangle",
+    "risk_reversal",
+    "butterfly",
+    "iron_condor",
     "Contract",
     "Position",
     "BookRisk",

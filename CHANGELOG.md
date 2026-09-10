@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.15.0] - 2026-09-09
+
+### Added
+- `strategy.py`: multi-leg option-strategy builders returning a `Book` (so net
+  price/Greeks come from the existing engine): `vertical_spread`, `straddle`,
+  `strangle`, `risk_reversal`, `butterfly`, `iron_condor`. Plus
+  `payoff_at_expiry` / `payoff_profile` for the P&L diagram and `break_evens`
+  (grid scan + bisection) for the zero-P&L spots.
+
 ## [1.14.0] - 2026-09-09
 
 ### Added
