@@ -4,6 +4,23 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.178.0] - 2026-09-10
+
+### Added
+- `replicated_mc` (in `montecarlo.py`): batched-replication honest standard
+  error for variance-reduced estimators. Stratified, Latin hypercube, and QMC
+  estimators draw dependent samples, so the plain i.i.d. `std_error` they report
+  is not the truth (see the note on `spread_option_lhs_mc`). Running the whole
+  estimator `n_batches` times with distinct seeds gives independent batch means
+  whose spread is an unbiased standard error. Takes any callable
+  `seed -> MCResult | float`; returns the mean price, the across-batch SE
+  `s/sqrt(n_batches)`, and `n_paths = n_batches`.
+- Verified: for a plain `european_mc` the across-batch SE matches a single-run
+  i.i.d. SE / sqrt(n_batches) (0.032 vs 0.031, calibrated); the mean is unbiased
+  vs Black-Scholes for a stratified estimator; and it exposes the LHS spread
+  reduction (LHS honest SE < 0.6x a plain two-asset MC's honest SE) that the
+  naive per-run SE hides.
+
 ## [1.177.0] - 2026-09-10
 
 ### Added

@@ -35,6 +35,35 @@ class MCResult:
         return (self.price - half, self.price + half)
 
 
+def replicated_mc(estimator, n_batches=30, base_seed=0) -> MCResult:
+    """Honest standard error for a variance-reduced (dependent-sample) estimator.
+
+    Stratified sampling, Latin hypercube, and low-discrepancy (QMC) estimators
+    draw *dependent* samples, so the plain i.i.d. ``std_error`` those routines
+    report understates -- or, for a negatively-correlated design, overstates --
+    the true error and cannot be used to size a run (see the note on
+    :func:`spread_option_lhs_mc`). The fix is batched replication: run the whole
+    estimator ``n_batches`` times with distinct seeds and treat the batch prices
+    as the i.i.d. sample. The batch means *are* independent, so their spread is
+    an unbiased estimate of the estimator's true standard error.
+
+    ``estimator`` is any callable ``seed -> MCResult | float`` (e.g.
+    ``lambda s: european_stratified_mc(..., seed=s)``). Seeds are
+    ``base_seed, base_seed + 1, ...``. Returns an :class:`MCResult` whose
+    ``price`` is the mean of the batch prices, ``std_error`` is the across-batch
+    standard error ``s / sqrt(n_batches)``, and ``n_paths`` is ``n_batches`` (the
+    number of independent replications, not the per-batch path count).
+    """
+    if n_batches < 2:
+        raise ValueError("n_batches must be >= 2 to estimate a standard error")
+    prices = []
+    for i in range(n_batches):
+        out = estimator(base_seed + i)
+        prices.append(out.price if isinstance(out, MCResult) else float(out))
+    price, se = _summarize(prices)
+    return MCResult(price=price, std_error=se, n_paths=n_batches)
+
+
 def _terminal_payoffs(S, K, t, r, sigma, ot, b, n_paths, rng, antithetic):
     """Yield discounted terminal payoffs of a European option (one time step)."""
     drift = (b - 0.5 * sigma * sigma) * t
