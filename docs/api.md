@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.128.1 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.129.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -692,6 +692,22 @@ Auto-generated from `quantforge` v1.128.1 by `docs/gen_api.py` — do not edit b
 > Returns ``(log_moneyness, vol)`` pairs sorted by strike on the forward
 > ``F = S e^{(r-q) t}``. The two mean-reversion speeds let the short- and
 > long-dated skew move more independently than single-factor Heston allows.
+
+## double_heston_calib
+
+### `calibrate_double_heston(S, r, quotes, q=0.0, initial=None, max_iter=6000)`  _function_
+
+> Fit the ten double-Heston parameters to an implied-vol surface.
+>
+> Args:
+>     quotes: iterable of ``(expiry, strike, market_vol)`` Black implied-vol
+>         points.
+>     initial: optional starting 10-tuple ``(v01, kappa1, theta1, xi1, rho1,
+>         v02, kappa2, theta2, xi2, rho2)``; a sensible two-scale seed is used
+>         otherwise (a fast- and a slow-reverting factor).
+>
+> Returns ``(params, rmse)`` -- the fitted 10-tuple and the root-mean-square
+> implied-vol error over the quotes.
 
 ## dualcurve
 

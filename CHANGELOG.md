@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.129.0] - 2026-09-10
+
+### Added
+- `calibrate_double_heston` (new `double_heston_calib.py`): fit all ten
+  double-Heston parameters (two variance factors) to an implied-vol surface by
+  least squares on Black vol over `(expiry, strike, vol)` quotes, pricing each
+  candidate with the Fourier `double_heston_price` and optimising with
+  Nelder-Mead under a smooth reparametrization (variances/vol-of-vols positive,
+  correlations in `(-1, 1)`). A two-scale (fast + slow factor) seed is used by
+  default.
+- Verified: calibrating to a synthetic double-Heston surface (4 expiries x 5
+  strikes) fits to ~2e-5 RMSE with all fitted parameters in their valid regions.
+
 ## [1.128.1] - 2026-09-10
 
 ### Fixed
