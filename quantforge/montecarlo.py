@@ -179,6 +179,48 @@ def european_is_mc(S, K, t, r, sigma, option_type=OptionType.CALL, b=None,
     return MCResult(price=price, std_error=se, n_paths=len(samples))
 
 
+def digital_is_mc(S, K, t, r, sigma, option_type=OptionType.CALL, b=None,
+                  cash=1.0, shift=None, n_paths=100_000, seed=None) -> MCResult:
+    """Cash-or-nothing digital price by importance sampling (deep-OTM friendly).
+
+    A deep-OTM digital is even harder to simulate plainly than a vanilla: the
+    payoff is a bounded 0/``cash`` indicator, so a far strike gives a tiny hit
+    probability ``p`` and a relative standard error that blows up like
+    ``sqrt((1-p)/p)``. Sampling the terminal normal from a shifted mean
+    ``N(mu, 1)`` and reweighting by the likelihood ratio
+    ``L(z) = exp(-mu z + mu^2/2)`` moves paths into the money while staying
+    unbiased. The default shift places the mean draw exactly on the strike
+    boundary, ``mu* = (ln(K/S0) - (b - sig^2/2) t) / (sig sqrt(t))``, so about
+    half the shifted paths pay -- near variance-optimal for the indicator.
+
+    Cross-checks the closed-form :func:`quantforge.cash_or_nothing`; for a
+    deep-OTM strike the standard error is far below a plain indicator estimator
+    at equal paths.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if b is None:
+        b = r
+    drift = (b - 0.5 * sigma * sigma) * t
+    vol = sigma * math.sqrt(t)
+    disc = math.exp(-r * t)
+    call = ot is OptionType.CALL
+    mu = shift if shift is not None else (math.log(K / S) - drift) / vol
+    rng = random.Random(seed)
+    samples = []
+
+    for _ in range(n_paths):
+        z = rng.gauss(mu, 1.0)
+        sT = S * math.exp(drift + vol * z)
+        itm = (sT > K) if call else (sT < K)
+        pay = disc * cash if itm else 0.0
+        lr = math.exp(-mu * z + 0.5 * mu * mu)
+        samples.append(pay * lr)
+
+    price, se = _summarize(samples)
+    return MCResult(price=price, std_error=se, n_paths=len(samples))
+
+
 def _simulate_average_paths(S, t, r, sigma, b, n_steps, n_paths, rng, antithetic):
     """Generate (arithmetic_avg, geometric_avg) of the price path for each run.
 

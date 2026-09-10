@@ -182,8 +182,8 @@ from .exotics import (
     gap_option, power_option, barrier_rebate, Barrier,
 )
 from .montecarlo import (
-    MCResult, european_mc, european_cv_mc, european_is_mc, arithmetic_asian_mc,
-    capped_cliquet_mc,
+    MCResult, european_mc, european_cv_mc, european_is_mc, digital_is_mc,
+    arithmetic_asian_mc, capped_cliquet_mc,
     barrier_mc, barrier_digital_mc, parisian_barrier_mc, local_vol_mc,
     average_strike_asian_mc, autocallable_mc, double_knockout_mc,
 )
@@ -231,7 +231,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.173.0"
+__version__ = "1.174.0"
 
 __all__ = [
     "OptionType",
@@ -525,6 +525,7 @@ __all__ = [
     "european_mc",
     "european_cv_mc",
     "european_is_mc",
+    "digital_is_mc",
     "arithmetic_asian_mc",
     "capped_cliquet_mc",
     "barrier_mc",

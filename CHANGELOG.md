@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.174.0] - 2026-09-10
+
+### Added
+- `digital_is_mc` (in `montecarlo.py`): cash-or-nothing digital price by
+  importance sampling. A deep-OTM digital is even harder to simulate plainly
+  than a vanilla -- the 0/`cash` indicator has relative SE that blows up like
+  `sqrt((1-p)/p)` for a small hit probability `p`. Shifting the terminal normal
+  to `N(mu, 1)` and reweighting by `L(z) = exp(-mu z + mu^2/2)` moves paths into
+  the money unbiased; the default shift puts the mean draw on the strike
+  boundary so about half the paths pay.
+- Verified: matches the closed-form `cash_or_nothing` (deep OTM call and put,
+  ATM, cash scaling, dividend carry); for a K=160 deep-OTM digital the standard
+  error is ~0.17x a plain indicator estimator at equal paths.
+
 ## [1.173.0] - 2026-09-10
 
 ### Added

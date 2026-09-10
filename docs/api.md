@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.173.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.174.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1899,6 +1899,24 @@ Auto-generated from `quantforge` v1.173.0 by `docs/gen_api.py` — do not edit b
 >         period runs from now (t=0) to reset_times[0].
 >     local_cap / local_floor: per-period return bounds (cap None = uncapped).
 >     global_cap / global_floor: bounds on the summed payoff.
+
+### `digital_is_mc(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, cash=1.0, shift=None, n_paths=100000, seed=None) -> quantforge.montecarlo.MCResult`  _function_
+
+> Cash-or-nothing digital price by importance sampling (deep-OTM friendly).
+>
+> A deep-OTM digital is even harder to simulate plainly than a vanilla: the
+> payoff is a bounded 0/``cash`` indicator, so a far strike gives a tiny hit
+> probability ``p`` and a relative standard error that blows up like
+> ``sqrt((1-p)/p)``. Sampling the terminal normal from a shifted mean
+> ``N(mu, 1)`` and reweighting by the likelihood ratio
+> ``L(z) = exp(-mu z + mu^2/2)`` moves paths into the money while staying
+> unbiased. The default shift places the mean draw exactly on the strike
+> boundary, ``mu* = (ln(K/S0) - (b - sig^2/2) t) / (sig sqrt(t))``, so about
+> half the shifted paths pay -- near variance-optimal for the indicator.
+>
+> Cross-checks the closed-form :func:`quantforge.cash_or_nothing`; for a
+> deep-OTM strike the standard error is far below a plain indicator estimator
+> at equal paths.
 
 ### `double_knockout_mc(S, K, t, r, sigma, lower, upper, option_type=<OptionType.CALL: 'call'>, b=None, rebate=0.0, n_steps=100, n_paths=50000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
 
