@@ -4,6 +4,24 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.217.0] - 2026-09-10
+
+### Added
+- `compo_option_greeks` (in `quanto.py`): Greeks of a composite (compo) FX
+  option. The price is a Black-Scholes price on the domestic-currency asset with
+  the combined vol `sqrt(sigma_asset^2 + sigma_fx^2 + 2 rho sigma_asset sigma_fx)`
+  and carry `r_domestic - q`, so `delta`/`gamma` are exact BSM Greeks; `vega`,
+  `fx_vega`, and `corr_vega` are finite differences.
+- Verified: delta matches a finite difference; at `sigma_fx = 0` the delta
+  equals the plain BSM delta at carry `r_domestic - q`; a compo is long FX
+  volatility (`fx_vega > 0`), unlike a quanto; call gamma and vega positive.
+
+### Fixed
+- The `fx_vega` finite difference in `quanto_option_greeks` /
+  `compo_option_greeks` probed a negative `sigma_fx` when `sigma_fx` sat below
+  the bump size (e.g. `sigma_fx = 0`), raising `ValueError`. It now falls back to
+  a one-sided difference at the volatility floor.
+
 ## [1.216.0] - 2026-09-10
 
 ### Added

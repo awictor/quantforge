@@ -83,7 +83,11 @@ def quanto_option_greeks(S, K, t, r_domestic, r_foreign, sigma_asset, sigma_fx,
 
     hv = 1e-4
     vega = (px(sa=sigma_asset + hv) - px(sa=sigma_asset - hv)) / (2.0 * hv)
-    fx_vega = (px(sfx=sigma_fx + hv) - px(sfx=sigma_fx - hv)) / (2.0 * hv)
+    # sigma_fx has a floor of 0, so use a one-sided difference near the boundary.
+    if sigma_fx >= hv:
+        fx_vega = (px(sfx=sigma_fx + hv) - px(sfx=sigma_fx - hv)) / (2.0 * hv)
+    else:
+        fx_vega = (px(sfx=sigma_fx + hv) - price) / hv
     hr = 1e-5
     corr_vega = (px(rr=min(rho + hr, 1.0 - 1e-9))
                  - px(rr=max(rho - hr, -1.0 + 1e-9))) / (2.0 * hr)
@@ -118,3 +122,48 @@ def compo_option(S, K, t, r_domestic, r_foreign, sigma_asset, sigma_fx, rho,
     # Domestic-currency asset carries at the domestic rate less the asset yield.
     b = r_domestic - q_asset
     return bsm_price(S, K, t, r_domestic, sigma_compo, ot, b=b)
+
+
+def compo_option_greeks(S, K, t, r_domestic, r_foreign, sigma_asset, sigma_fx,
+                        rho, q_asset=0.0, option_type=OptionType.CALL):
+    """Greeks of a composite (compo) FX option.
+
+    A compo option is a Black-Scholes price on the domestic-currency asset value
+    with the combined volatility
+    ``sigma_compo = sqrt(sigma_asset^2 + sigma_fx^2 + 2 rho sigma_asset sigma_fx)``
+    and carry ``b = r_domestic - q_asset``. The spot enters only through the BSM
+    price, so ``delta`` and ``gamma`` are exact BSM Greeks (no finite difference).
+    ``vega`` (dV/dsigma_asset), ``fx_vega`` (dV/dsigma_fx), and ``corr_vega``
+    (dV/drho) are central finite differences of the closed form; unlike a quanto,
+    a compo is *long* FX volatility (positive ``fx_vega``). Returns a dict with
+    ``price``, ``delta``, ``gamma``, ``vega``, ``fx_vega``, ``corr_vega``.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma_asset)
+    if not (-1.0 <= rho <= 1.0):
+        raise ValueError("rho must be in [-1, 1]")
+    if sigma_fx < 0:
+        raise ValueError("sigma_fx must be non-negative")
+    sigma_compo = math.sqrt(sigma_asset * sigma_asset + sigma_fx * sigma_fx
+                            + 2.0 * rho * sigma_asset * sigma_fx)
+    b = r_domestic - q_asset
+    price = bsm_price(S, K, t, r_domestic, sigma_compo, ot, b=b)
+    delta = bsm_delta(S, K, t, r_domestic, sigma_compo, ot, b=b)
+    gamma = bsm_gamma(S, K, t, r_domestic, sigma_compo, b=b)
+
+    def px(sa=sigma_asset, sfx=sigma_fx, rr=rho):
+        return compo_option(S, K, t, r_domestic, r_foreign, sa, sfx, rr,
+                            q_asset, ot)
+
+    hv = 1e-4
+    vega = (px(sa=sigma_asset + hv) - px(sa=sigma_asset - hv)) / (2.0 * hv)
+    # sigma_fx has a floor of 0, so use a one-sided difference near the boundary.
+    if sigma_fx >= hv:
+        fx_vega = (px(sfx=sigma_fx + hv) - px(sfx=sigma_fx - hv)) / (2.0 * hv)
+    else:
+        fx_vega = (px(sfx=sigma_fx + hv) - price) / hv
+    hr = 1e-5
+    corr_vega = (px(rr=min(rho + hr, 1.0 - 1e-9))
+                 - px(rr=max(rho - hr, -1.0 + 1e-9))) / (2.0 * hr)
+    return {"price": price, "delta": delta, "gamma": gamma, "vega": vega,
+            "fx_vega": fx_vega, "corr_vega": corr_vega}

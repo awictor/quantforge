@@ -49,6 +49,13 @@ def test_price_field_matches_quanto_option():
         abs=1e-12)
 
 
+def test_zero_fx_vol_no_crash():
+    # sigma_fx = 0 lands on the vol floor; the fx_vega FD must fall back to a
+    # one-sided difference rather than probe a negative sigma_fx.
+    g = quanto_option_greeks(S, K, T, RD, RF, SA, 0.0, RHO, Q, OptionType.CALL)
+    assert g["fx_vega"] == g["fx_vega"]  # finite, not NaN / no exception
+
+
 def test_bad_rho_raises():
     with pytest.raises(ValueError):
         quanto_option_greeks(S, K, T, RD, RF, SA, SFX, 1.5, Q)

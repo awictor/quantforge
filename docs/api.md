@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.216.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.217.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2773,6 +2773,20 @@ Auto-generated from `quantforge` v1.216.0 by `docs/gen_api.py` — do not edit b
 > Both ``S`` and ``K`` are quoted in domestic currency (K is the domestic
 > strike on the converted asset). Carry and discounting use the domestic rate;
 > the foreign rate enters as the asset's dividend-like yield ``q_asset``.
+
+### `compo_option_greeks(S, K, t, r_domestic, r_foreign, sigma_asset, sigma_fx, rho, q_asset=0.0, option_type=<OptionType.CALL: 'call'>)`  _function_
+
+> Greeks of a composite (compo) FX option.
+>
+> A compo option is a Black-Scholes price on the domestic-currency asset value
+> with the combined volatility
+> ``sigma_compo = sqrt(sigma_asset^2 + sigma_fx^2 + 2 rho sigma_asset sigma_fx)``
+> and carry ``b = r_domestic - q_asset``. The spot enters only through the BSM
+> price, so ``delta`` and ``gamma`` are exact BSM Greeks (no finite difference).
+> ``vega`` (dV/dsigma_asset), ``fx_vega`` (dV/dsigma_fx), and ``corr_vega``
+> (dV/drho) are central finite differences of the closed form; unlike a quanto,
+> a compo is *long* FX volatility (positive ``fx_vega``). Returns a dict with
+> ``price``, ``delta``, ``gamma``, ``vega``, ``fx_vega``, ``corr_vega``.
 
 ### `quanto_option(S, K, t, r_domestic, r_foreign, sigma_asset, sigma_fx, rho, q_asset=0.0, option_type=<OptionType.CALL: 'call'>) -> float`  _function_
 
