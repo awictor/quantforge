@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.157.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.158.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2910,6 +2910,23 @@ Auto-generated from `quantforge` v1.157.0 by `docs/gen_api.py` — do not edit b
 >
 > Returns the fair strike as an annualized variance (multiply tenor and take
 > sqrt for a vol number).
+
+### `variance_term_structure(S0, r, expiries, vol_fns, q=0.0, n_strikes=401, width=8.0)`  _function_
+
+> Term structure of variance-swap strikes and the forward-variance curve.
+>
+> Args:
+>     expiries: increasing list of expiries.
+>     vol_fns: one smile ``vol_fn(K)`` per expiry (matching order).
+>
+> Returns ``(spot_var, forward_var)`` where ``spot_var[i]`` is the
+> spot-starting variance-swap strike to ``expiries[i]`` and ``forward_var[i]``
+> the annualized *forward* variance over ``(expiries[i-1], expiries[i]]``
+> (``forward_var[0]`` = ``spot_var[0]``). By total-variance additivity
+> ``forward_var[i] = (K_i t_i - K_{i-1} t_{i-1}) / (t_i - t_{i-1})``.
+>
+> A flat term structure of flat smiles gives a constant curve; a rising
+> variance term structure gives positive, increasing forward variances.
 
 ### `volatility_swap_strike(S0, t, r, put_strikes, put_prices, call_strikes, call_prices, split=None) -> float`  _function_
 

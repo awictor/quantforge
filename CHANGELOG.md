@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.158.0] - 2026-09-10
+
+### Added
+- `variance_term_structure` (in `varswap.py`): the term structure of
+  variance-swap strikes across expiries plus the forward (instantaneous)
+  variance curve between them. Returns `(spot_var, forward_var)` where
+  `forward_var[i] = (K_i t_i - K_{i-1} t_{i-1})/(t_i - t_{i-1})` by
+  total-variance additivity.
+- Verified: a flat term structure gives a constant curve (to the ~1e-6 strip
+  truncation level); a rising vol term structure gives positive, increasing
+  forward variances; the forward curve matches
+  `forward_variance_swap_from_smile`; and `forward_var[0]` equals the first spot
+  strike.
+
 ## [1.157.0] - 2026-09-10
 
 ### Added

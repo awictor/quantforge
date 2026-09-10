@@ -80,7 +80,7 @@ from .density import (
 from .varswap import (
     variance_swap_strike, volatility_swap_strike, variance_swap_from_smile,
     corridor_variance_swap_from_smile, gamma_swap_from_smile,
-    forward_variance_swap_from_smile,
+    forward_variance_swap_from_smile, variance_term_structure,
 )
 from .vix import (
     vix_from_chain, vix_from_smile, svix_from_smile, equity_premium_lower_bound,
@@ -217,7 +217,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.157.0"
+__version__ = "1.158.0"
 
 __all__ = [
     "OptionType",
@@ -326,6 +326,7 @@ __all__ = [
     "corridor_variance_swap_from_smile",
     "gamma_swap_from_smile",
     "forward_variance_swap_from_smile",
+    "variance_term_structure",
     "vix_from_chain",
     "vix_from_smile",
     "svix_from_smile",

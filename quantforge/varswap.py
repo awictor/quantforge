@@ -249,3 +249,37 @@ def forward_variance_swap_from_smile(S0, t1, t2, r, vol_fn1, vol_fn2, q=0.0,
     kv1 = variance_swap_from_smile(S0, t1, r, vol_fn1, q=q,
                                    n_strikes=n_strikes, width=width)
     return (kv2 * t2 - kv1 * t1) / (t2 - t1)
+
+
+def variance_term_structure(S0, r, expiries, vol_fns, q=0.0, n_strikes=401,
+                            width=8.0):
+    """Term structure of variance-swap strikes and the forward-variance curve.
+
+    Args:
+        expiries: increasing list of expiries.
+        vol_fns: one smile ``vol_fn(K)`` per expiry (matching order).
+
+    Returns ``(spot_var, forward_var)`` where ``spot_var[i]`` is the
+    spot-starting variance-swap strike to ``expiries[i]`` and ``forward_var[i]``
+    the annualized *forward* variance over ``(expiries[i-1], expiries[i]]``
+    (``forward_var[0]`` = ``spot_var[0]``). By total-variance additivity
+    ``forward_var[i] = (K_i t_i - K_{i-1} t_{i-1}) / (t_i - t_{i-1})``.
+
+    A flat term structure of flat smiles gives a constant curve; a rising
+    variance term structure gives positive, increasing forward variances.
+    """
+    if len(expiries) != len(vol_fns):
+        raise ValueError("expiries and vol_fns must match in length")
+    ts = list(expiries)
+    if any(ts[i] >= ts[i + 1] for i in range(len(ts) - 1)):
+        raise ValueError("expiries must be strictly increasing")
+
+    spot_var = [variance_swap_from_smile(S0, ti, r, fn, q=q, n_strikes=n_strikes,
+                                         width=width)
+                for ti, fn in zip(ts, vol_fns)]
+    forward_var = [spot_var[0]]
+    for i in range(1, len(ts)):
+        fv = (spot_var[i] * ts[i] - spot_var[i - 1] * ts[i - 1]) \
+            / (ts[i] - ts[i - 1])
+        forward_var.append(fv)
+    return spot_var, forward_var
