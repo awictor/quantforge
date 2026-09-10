@@ -223,6 +223,15 @@ delta_hedge_shares(book)                                        # shares to zero
 vega_neutral_quantity(book, S=100, K=110, t=0.5, r=0.04, sigma=0.25)  # option units to zero vega
 ```
 
+Kelly-criterion bet/leverage sizing:
+
+```python
+from quantforge import kelly_fraction_binary, kelly_fraction_continuous
+
+kelly_fraction_binary(win_prob=0.6, win_payoff=1.0)     # 0.2 of bankroll
+kelly_fraction_continuous(0.08, 0.04, fraction=0.5)     # half-Kelly leverage
+```
+
 ## Variance / volatility swaps
 
 Model-free fair strike of a variance swap from an option strip (the log-contract

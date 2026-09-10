@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.50.0] - 2026-09-09
+
+### Added
+- Kelly-criterion sizing (in `sizing.py`): `kelly_fraction_binary` (optimal
+  stake for a binary bet from win probability and odds),
+  `kelly_fraction_continuous` (growth-optimal leverage `mu / sigma^2`, with a
+  fractional-Kelly multiplier), and `kelly_growth_rate` (expected log-growth at
+  a given leverage, maximized at full Kelly).
+
 ## [1.49.0] - 2026-09-09
 
 ### Added

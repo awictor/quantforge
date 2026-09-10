@@ -72,6 +72,7 @@ from .correlation import (
 from .cev import cev_price, noncentral_chisq_cdf
 from .sizing import (
     delta_hedge_shares, neutralize, vega_neutral_quantity, gamma_neutral_quantity,
+    kelly_fraction_binary, kelly_fraction_continuous, kelly_growth_rate,
 )
 from .gramcharlier import (
     corrado_su_call, corrado_su_price, realized_skewness, realized_excess_kurtosis,
@@ -109,7 +110,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.49.0"
+__version__ = "1.50.0"
 
 __all__ = [
     "OptionType",
@@ -211,6 +212,9 @@ __all__ = [
     "neutralize",
     "vega_neutral_quantity",
     "gamma_neutral_quantity",
+    "kelly_fraction_binary",
+    "kelly_fraction_continuous",
+    "kelly_growth_rate",
     "corrado_su_call",
     "corrado_su_price",
     "realized_skewness",

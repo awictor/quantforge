@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.49.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.50.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1086,6 +1086,37 @@ Auto-generated from `quantforge` v1.49.0 by `docs/gen_api.py` — do not edit by
 ### `gamma_neutral_quantity(book: quantforge.portfolio.Book, S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, multiplier=1.0) -> float`  _function_
 
 > Units of a hedge option that zero the book's net gamma.
+
+### `kelly_fraction_binary(win_prob, win_payoff, loss_amount=1.0)`  _function_
+
+> Kelly fraction for a binary bet.
+>
+> Args:
+>     win_prob: probability of winning, p in (0, 1).
+>     win_payoff: net amount won per unit staked on a win (the "b" in b-to-1
+>         odds).
+>     loss_amount: amount lost per unit staked on a loss (default 1).
+>
+> Returns the fraction of bankroll to wager: ``f = (p*b - q*loss) / (b*loss)``
+> where ``q = 1 - p``. A non-positive result means the bet has no edge; the
+> optimal stake is then zero (returned as a negative/zero fraction for the
+> caller to clamp).
+
+### `kelly_fraction_continuous(expected_excess_return, variance, fraction=1.0)`  _function_
+
+> Continuous Kelly allocation for a normally-distributed return.
+>
+> For a return with mean excess ``mu`` (over the risk-free rate) and variance
+> ``sigma^2``, the growth-optimal leverage is ``f* = mu / sigma^2``. Multiply
+> by ``fraction`` for fractional Kelly (e.g. 0.5 for half-Kelly, which trades
+> a little growth for much lower drawdown).
+
+### `kelly_growth_rate(expected_excess_return, variance, leverage)`  _function_
+
+> Expected log-growth rate at a given leverage (continuous Kelly).
+>
+> ``g(f) = f*mu - 0.5 * f^2 * sigma^2``. Maximized at the full-Kelly leverage
+> ``f* = mu / sigma^2``; used to compare fractional-Kelly choices.
 
 ### `neutralize(book: quantforge.portfolio.Book, greek: str, S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, multiplier=1.0, target: float = 0.0) -> float`  _function_
 
