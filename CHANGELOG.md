@@ -4,6 +4,25 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.148.0] - 2026-09-10
+
+### Added
+- `gamma_swap_from_smile` (in `varswap.py`): fair gamma-swap (price-weighted
+  variance) strike from a smile `vol_fn(K)`. A gamma swap accrues `(S_t/S0)`-
+  weighted realized variance, so by Carr-Lewis it is replicated by an option
+  strip weighted `1/K` (vs the variance swap's `1/K^2`), scaled by
+  `2 e^{rt}/(S0 t)`, with no forward remainder (the price-weighted log contract
+  has none).
+- Verified: a flat smile returns `sigma^2`; a denser strip reduces the error; a
+  downward skew makes the gamma swap worth less than the same smile's variance
+  swap (spot-weighting down-weights the high-vol low-strike puts).
+
+### Fixed
+- An initial gamma-swap formula carried a spurious forward "drift" term (copied
+  from the variance-swap log contract); the price-weighted log contract has no
+  such remainder. Removing it makes the flat case equal `sigma^2` and restores
+  the correct gamma < variance ordering under a downward skew.
+
 ## [1.147.0] - 2026-09-10
 
 ### Added

@@ -174,3 +174,54 @@ def corridor_variance_swap_from_smile(S0, t, r, vol_fn, lower, upper, q=0.0,
     call_strip = _strip_integral(call_ks, call_px, lambda K: 1.0 / (K * K)) \
         if len(call_ks) >= 2 else 0.0
     return (2.0 * growth / t) * (put_strip + call_strip)
+
+
+def gamma_swap_from_smile(S0, t, r, vol_fn, q=0.0, n_strikes=401, width=8.0,
+                          split=None):
+    """Fair gamma-swap strike from a smile ``vol_fn(K)``.
+
+    A gamma (or "weighted variance") swap accrues ``(S_t / S0) d<ln S>`` -- each
+    increment of realized variance weighted by the spot level -- so it is
+    replicated by an option strip weighted ``1/K`` (the price-weighted version of
+    the variance swap's ``1/K^2``), plus the matching log-contract terms
+    (Carr-Lewis). Its fair strike is
+
+        K_gamma = (2 e^{r t} / (S0 t)) * ( 1/K-weighted OTM strip )
+                  + (2/t) * (r - q) * (e^{(r-q) t} - 1) / (r - q) ...  [drift term]
+
+    Implemented from the price-weighted log contract; ``vol_fn(K)`` prices each
+    option with Black-Scholes. A flat smile returns that flat variance.
+    """
+    from .bsm import call_price, put_price
+
+    if t <= 0:
+        raise ValueError("t must be positive")
+    F = S0 * math.exp((r - q) * t)
+    if split is None:
+        split = F
+    atm_vol = vol_fn(split)
+    sd = atm_vol * math.sqrt(t)
+
+    put_ks, put_px, call_ks, call_px = [], [], [], []
+    for i in range(n_strikes):
+        x = -width * sd + 2.0 * width * sd * i / (n_strikes - 1)
+        K = split * math.exp(x)
+        v = vol_fn(K)
+        if K < split:
+            put_ks.append(K)
+            put_px.append(put_price(S0, K, t, r, v, b=r - q))
+        else:
+            call_ks.append(K)
+            call_px.append(call_price(S0, K, t, r, v, b=r - q))
+
+    # Price-weighted strip: weight 1/K (vs 1/K^2 for the plain variance swap).
+    put_strip = _strip_integral(put_ks, put_px, lambda K: 1.0 / K) \
+        if len(put_ks) >= 2 else 0.0
+    call_strip = _strip_integral(call_ks, call_px, lambda K: 1.0 / K) \
+        if len(call_ks) >= 2 else 0.0
+
+    # Gamma-swap replication (Carr-Lewis): the price-weighted log contract has
+    # no forward remainder (unlike the variance swap), so the fair accrued
+    # variance is purely the 1/K-weighted strip scaled by 2 e^{rt}/(S0 t).
+    growth = math.exp(r * t)
+    return (2.0 * growth / (S0 * t)) * (put_strip + call_strip)

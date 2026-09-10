@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.147.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.148.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2783,6 +2783,22 @@ Auto-generated from `quantforge` v1.147.0 by `docs/gen_api.py` — do not edit b
 > ``vol_fn(K)`` prices each strip option with Black-Scholes at its smile vol.
 > A corridor spanning the whole strip recovers (most of) the plain
 > variance-swap strike; a narrower corridor accrues less variance.
+
+### `gamma_swap_from_smile(S0, t, r, vol_fn, q=0.0, n_strikes=401, width=8.0, split=None)`  _function_
+
+> Fair gamma-swap strike from a smile ``vol_fn(K)``.
+>
+> A gamma (or "weighted variance") swap accrues ``(S_t / S0) d<ln S>`` -- each
+> increment of realized variance weighted by the spot level -- so it is
+> replicated by an option strip weighted ``1/K`` (the price-weighted version of
+> the variance swap's ``1/K^2``), plus the matching log-contract terms
+> (Carr-Lewis). Its fair strike is
+>
+>     K_gamma = (2 e^{r t} / (S0 t)) * ( 1/K-weighted OTM strip )
+>               + (2/t) * (r - q) * (e^{(r-q) t} - 1) / (r - q) ...  [drift term]
+>
+> Implemented from the price-weighted log contract; ``vol_fn(K)`` prices each
+> option with Black-Scholes. A flat smile returns that flat variance.
 
 ### `variance_swap_from_smile(S0, t, r, vol_fn, q=0.0, n_strikes=401, width=8.0, split=None)`  _function_
 
