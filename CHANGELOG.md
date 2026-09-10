@@ -4,6 +4,21 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.140.0] - 2026-09-10
+
+### Added
+- Digital and no-touch binaries via the Crank-Nicolson PDE (`pde.py`):
+  `crank_nicolson_digital` prices a cash-or-nothing digital (digital-specific
+  boundary conditions, Rannacher damping on by default for the payoff jump), and
+  `crank_nicolson_no_touch` prices a no-touch binary as a knock-out of a
+  constant cash payoff with an absorbing barrier (a node placed exactly on `H`).
+  A pay-at-expiry one-touch is `cash * e^{-rt} - no_touch`. Constant `sigma` or
+  `local_vol_fn`, carry `b = r - q`.
+- Verified: the digital matches the closed-form `cash_or_nothing` (~4e-3),
+  digital call + put equals the discount factor exactly, the no-touch matches
+  its closed form (~5e-3), and the one-touch complement matches the analytic
+  pay-at-expiry one-touch.
+
 ## [1.139.0] - 2026-09-10
 
 ### Added

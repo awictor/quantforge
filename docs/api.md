@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.139.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.140.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1827,6 +1827,17 @@ Auto-generated from `quantforge` v1.139.0 by `docs/gen_api.py` — do not edit b
 > Supports a constant ``sigma`` or a ``local_vol_fn(S, t)`` and a carry
 > ``b = r - q``. Returns the value at spot ``S``.
 
+### `crank_nicolson_digital(S, K, t, r, sigma=None, option_type=<OptionType.CALL: 'call'>, b=None, cash=1.0, local_vol_fn=None, n_space=400, n_time=400, rannacher=2)`  _function_
+
+> Price a cash-or-nothing digital by a Crank-Nicolson PDE.
+>
+> Terminal payoff is ``cash`` if the option finishes in the money (call:
+> ``S_T > K``; put: ``S_T < K``), else 0. Boundary conditions are the digital's
+> own: a call pays ``cash * e^{-r tau}`` at the top and 0 at 0 (mirror for a
+> put). Supports a constant ``sigma`` or a ``local_vol_fn`` and a carry
+> ``b = r - q``; the payoff kink at the strike makes Rannacher damping
+> especially useful, so it is on by default.
+
 ### `crank_nicolson_greeks(S, K, t, r, sigma=None, option_type=<OptionType.CALL: 'call'>, b=None, american=False, local_vol_fn=None, n_space=200, n_time=200, s_max_mult=4.0, psor_tol=1e-08, psor_max_iter=10000, rannacher=2)`  _function_
 
 > Price plus delta, gamma and theta read straight off the CN grid.
@@ -1837,6 +1848,14 @@ Auto-generated from `quantforge` v1.139.0 by `docs/gen_api.py` — do not edit b
 > fully-implicit steps damp the payoff-kink oscillation that otherwise
 > corrupts gamma near the strike. Returns a dict with price, delta, gamma and
 > theta (calendar, per year).
+
+### `crank_nicolson_no_touch(S, H, t, r, sigma=None, b=None, cash=1.0, local_vol_fn=None, n_space=400, n_time=400)`  _function_
+
+> Price a no-touch binary (pays ``cash`` at expiry if ``H`` never hit).
+>
+> Solved as a knock-out of a constant ``cash`` payoff with an absorbing
+> barrier at ``H`` (a node is placed exactly on ``H``). A one-touch that pays
+> at expiry is ``cash * e^{-r t} - no_touch``.
 
 ### `crank_nicolson_price(S, K, t, r, sigma=None, option_type=<OptionType.CALL: 'call'>, b=None, american=False, local_vol_fn=None, n_space=200, n_time=200, s_max_mult=4.0, psor_tol=1e-08, psor_max_iter=10000, rannacher=2)`  _function_
 

@@ -49,6 +49,7 @@ from .heston_calib import calibrate_heston
 from .lsv import calibrate_leverage as calibrate_lsv_leverage
 from .pde import (
     crank_nicolson_price, crank_nicolson_greeks, crank_nicolson_barrier,
+    crank_nicolson_digital, crank_nicolson_no_touch,
 )
 from .kou import kou_price, kou_smile
 from .cgmy import cgmy_price, cgmy_smile
@@ -201,7 +202,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.139.0"
+__version__ = "1.140.0"
 
 __all__ = [
     "OptionType",
@@ -260,6 +261,8 @@ __all__ = [
     "crank_nicolson_price",
     "crank_nicolson_greeks",
     "crank_nicolson_barrier",
+    "crank_nicolson_digital",
+    "crank_nicolson_no_touch",
     "kou_price",
     "kou_smile",
     "cgmy_price",

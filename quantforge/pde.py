@@ -346,3 +346,150 @@ def crank_nicolson_barrier(S, K, H, t, r, sigma=None,
                 V[i] = rebate
 
     return _interp(grid, ds, V, S)
+
+
+def crank_nicolson_digital(S, K, t, r, sigma=None, option_type=OptionType.CALL,
+                           b=None, cash=1.0, local_vol_fn=None,
+                           n_space=400, n_time=400, rannacher=2):
+    """Price a cash-or-nothing digital by a Crank-Nicolson PDE.
+
+    Terminal payoff is ``cash`` if the option finishes in the money (call:
+    ``S_T > K``; put: ``S_T < K``), else 0. Boundary conditions are the digital's
+    own: a call pays ``cash * e^{-r tau}`` at the top and 0 at 0 (mirror for a
+    put). Supports a constant ``sigma`` or a ``local_vol_fn`` and a carry
+    ``b = r - q``; the payoff kink at the strike makes Rannacher damping
+    especially useful, so it is on by default.
+    """
+    ot = _coerce_type(option_type)
+    if S <= 0 or K <= 0:
+        raise ValueError("S and K must be positive")
+    if b is None:
+        b = r
+    if sigma is None and local_vol_fn is None:
+        raise ValueError("provide sigma or local_vol_fn")
+    call = ot is OptionType.CALL
+    if t == 0:
+        itm = (S > K) if call else (S < K)
+        return cash if itm else 0.0
+
+    ref_vol = sigma if sigma is not None else local_vol_fn(S, t)
+    s_max = max(S, K) * 4.0 * max(1.0, math.exp(ref_vol * math.sqrt(t)))
+    ds = s_max / n_space
+    grid = [i * ds for i in range(n_space + 1)]
+    dt = t / n_time
+
+    def dpay(Si):
+        itm = (Si > K) if call else (Si < K)
+        return cash if itm else 0.0
+
+    V = [dpay(Si) for Si in grid]
+
+    def vol_at(Si, tau):
+        return local_vol_fn(Si, t - tau) if local_vol_fn is not None else sigma
+
+    for n in range(n_time):
+        tau_new = (n + 1) * dt
+        th = 1.0 if n < rannacher else 0.5
+        sub = [0.0] * (n_space + 1)
+        diag = [0.0] * (n_space + 1)
+        sup = [0.0] * (n_space + 1)
+        rhs = [0.0] * (n_space + 1)
+        for i in range(1, n_space):
+            Si = grid[i]
+            vol = vol_at(Si, tau_new)
+            sig2 = vol * vol * Si * Si / (ds * ds)
+            drift = b * Si / (2.0 * ds)
+            alpha = 0.5 * sig2 - drift
+            gamma = 0.5 * sig2 + drift
+            beta = -sig2 - r
+            sub[i] = -th * dt * alpha
+            diag[i] = 1.0 - th * dt * beta
+            sup[i] = -th * dt * gamma
+            rhs[i] = (V[i] + (1.0 - th) * dt * alpha * V[i - 1]
+                      + (1.0 - th) * dt * beta * V[i]
+                      + (1.0 - th) * dt * gamma * V[i + 1])
+        disc = math.exp(-r * tau_new)
+        # A call digital -> cash at the high boundary; a put digital -> cash at 0.
+        lowV = 0.0 if call else cash * disc
+        highV = cash * disc if call else 0.0
+        diag[0] = 1.0
+        sup[0] = 0.0
+        rhs[0] = lowV
+        sub[n_space] = 0.0
+        diag[n_space] = 1.0
+        rhs[n_space] = highV
+        V = _thomas(sub, diag, sup, rhs)
+
+    return _interp(grid, ds, V, S)
+
+
+def crank_nicolson_no_touch(S, H, t, r, sigma=None, b=None, cash=1.0,
+                            local_vol_fn=None, n_space=400, n_time=400):
+    """Price a no-touch binary (pays ``cash`` at expiry if ``H`` never hit).
+
+    Solved as a knock-out of a constant ``cash`` payoff with an absorbing
+    barrier at ``H`` (a node is placed exactly on ``H``). A one-touch that pays
+    at expiry is ``cash * e^{-r t} - no_touch``.
+    """
+    if S <= 0 or H <= 0:
+        raise ValueError("S and H must be positive")
+    if b is None:
+        b = r
+    if sigma is None and local_vol_fn is None:
+        raise ValueError("provide sigma or local_vol_fn")
+    up = H > S
+    if t == 0:
+        return cash   # no time to touch
+
+    ref_vol = sigma if sigma is not None else local_vol_fn(S, t)
+    s_max = max(S, H) * 4.0 * max(1.0, math.exp(ref_vol * math.sqrt(t)))
+    ds_target = s_max / n_space
+    n_below = max(1, int(round(H / ds_target)))
+    ds = H / n_below
+    n_space = max(int(round(s_max / ds)), n_below + 2)
+    grid = [i * ds for i in range(n_space + 1)]
+    dt = t / n_time
+
+    def alive(Si):
+        return (Si < H) if up else (Si > H)
+
+    V = [cash if alive(Si) else 0.0 for Si in grid]
+
+    def vol_at(Si, tau):
+        return local_vol_fn(Si, t - tau) if local_vol_fn is not None else sigma
+
+    for n in range(n_time):
+        tau_new = (n + 1) * dt
+        sub = [0.0] * (n_space + 1)
+        diag = [0.0] * (n_space + 1)
+        sup = [0.0] * (n_space + 1)
+        rhs = [0.0] * (n_space + 1)
+        for i in range(1, n_space):
+            Si = grid[i]
+            vol = vol_at(Si, tau_new)
+            sig2 = vol * vol * Si * Si / (ds * ds)
+            drift = b * Si / (2.0 * ds)
+            alpha = 0.5 * sig2 - drift
+            gamma = 0.5 * sig2 + drift
+            beta = -sig2 - r
+            sub[i] = -0.5 * dt * alpha
+            diag[i] = 1.0 - 0.5 * dt * beta
+            sup[i] = -0.5 * dt * gamma
+            rhs[i] = (V[i] + 0.5 * dt * alpha * V[i - 1]
+                      + 0.5 * dt * beta * V[i] + 0.5 * dt * gamma * V[i + 1])
+        disc = math.exp(-r * tau_new)
+        # Live far boundary carries the discounted cash; dead side is 0.
+        lowV = cash * disc if alive(grid[0]) else 0.0
+        highV = cash * disc if alive(grid[n_space]) else 0.0
+        diag[0] = 1.0
+        sup[0] = 0.0
+        rhs[0] = lowV
+        sub[n_space] = 0.0
+        diag[n_space] = 1.0
+        rhs[n_space] = highV
+        V = _thomas(sub, diag, sup, rhs)
+        for i in range(n_space + 1):
+            if not alive(grid[i]):
+                V[i] = 0.0
+
+    return _interp(grid, ds, V, S)
