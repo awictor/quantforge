@@ -40,9 +40,9 @@ def test_pathwise_vega_near_turnbull_wakeman_fd():
 
 def test_call_and_put_vega_positive():
     c = asian_pathwise_vega(S, K, T, R, 0.2, OptionType.CALL,
-                            n_steps=40, n_paths=40_000, seed=3)
+                            n_steps=20, n_paths=15_000, seed=3)
     p = asian_pathwise_vega(S, K, T, R, 0.2, OptionType.PUT,
-                            n_steps=40, n_paths=40_000, seed=4)
+                            n_steps=20, n_paths=15_000, seed=4)
     assert c.price > 0.0 and p.price > 0.0
 
 

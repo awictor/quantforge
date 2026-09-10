@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.171.1] - 2026-09-10
+
+### Tests
+- Trimmed the fast suite ~49s -> ~35s. The LSM-Greeks sign/price-field checks
+  drop from 25 steps / 8000 paths to 20 / 4000, and the Asian pathwise-vega
+  positivity check from 40 steps / 40000 paths to 20 / 15000. These assert
+  only a sign or an exact price-field match, not accuracy; the accuracy
+  cross-checks stay under `-m slow`, unchanged.
+
 ## [1.171.0] - 2026-09-10
 
 ### Added
