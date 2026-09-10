@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.213.0] - 2026-09-10
+
+### Added
+- `compound_option_greeks` (in `compound.py`): delta, gamma, vega, and theta of
+  a Geske compound option by central finite differences on `compound_option`
+  (all four kinds: call/put on call/put). Theta shifts both expiries together.
+- Verified: delta matches a finite difference of the closed form; a
+  call-on-call has positive delta, gamma, and vega; a put-on-call has negative
+  delta. Noted (via cross-check) that vega is *not* universally positive -- a put
+  on an option is short the compound optionality, so `put-on-call` and
+  `put-on-put` can have negative vega; only the call compounds are asserted
+  positive.
+
 ## [1.212.0] - 2026-09-10
 
 ### Added

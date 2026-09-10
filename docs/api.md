@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.212.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.213.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -567,6 +567,16 @@ Auto-generated from `quantforge` v1.212.0 by `docs/gen_api.py` — do not edit b
 >     t2: expiry of the underlying option.
 >     kind: "call-on-call", "call-on-put", "put-on-call", "put-on-put".
 >     b: cost of carry (defaults to r).
+
+### `compound_option_greeks(S, K1, K2, t1, t2, r, sigma, kind='call-on-call', b=None)`  _function_
+
+> Greeks of a compound option (Geske) by central finite differences.
+>
+> Differentiates :func:`compound_option` for ``delta`` (dV/dS), ``gamma``
+> (d2V/dS2), ``vega`` (dV/dsigma), and ``theta`` (calendar decay, ``-dV/dt``
+> shifting both expiries together). Returns a dict with ``price`` and those
+> fields. ``kind`` is one of ``call-on-call``/``call-on-put``/``put-on-call``/
+> ``put-on-put``.
 
 ## correlation
 

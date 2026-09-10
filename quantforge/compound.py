@@ -116,3 +116,32 @@ def compound_option(S, K1, K2, t1, t2, r, sigma,
     return (S * carry2 * cbnd(a1, -y1, -rho)
             - K2 * disc2 * cbnd(a2, -y2, -rho)
             + K1 * disc1 * norm_cdf(a2))
+
+
+def compound_option_greeks(S, K1, K2, t1, t2, r, sigma, kind="call-on-call",
+                           b=None):
+    """Greeks of a compound option (Geske) by central finite differences.
+
+    Differentiates :func:`compound_option` for ``delta`` (dV/dS), ``gamma``
+    (d2V/dS2), ``vega`` (dV/dsigma), and ``theta`` (calendar decay, ``-dV/dt``
+    shifting both expiries together). Returns a dict with ``price`` and those
+    fields. ``kind`` is one of ``call-on-call``/``call-on-put``/``put-on-call``/
+    ``put-on-put``.
+    """
+    if b is None:
+        b = r
+
+    def px(s=S, sig=sigma, dt=0.0):
+        return compound_option(s, K1, K2, t1 - dt, t2 - dt, r, sig, kind, b=b)
+
+    base = px()
+    hS = 1e-3 * S
+    up, dn = px(s=S + hS), px(s=S - hS)
+    delta = (up - dn) / (2.0 * hS)
+    gamma = (up - 2.0 * base + dn) / (hS * hS)
+    hv = 1e-4
+    vega = (px(sig=sigma + hv) - px(sig=sigma - hv)) / (2.0 * hv)
+    ht = min(1e-4, 0.25 * t1)
+    theta = -(px(dt=-ht) - px(dt=ht)) / (2.0 * ht)
+    return {"price": base, "delta": delta, "gamma": gamma, "vega": vega,
+            "theta": theta}
