@@ -39,6 +39,7 @@ from .bachelier import (
     bachelier_price, bachelier_delta, bachelier_gamma, bachelier_vega,
     bachelier_implied_vol,
 )
+from .variancegamma import variance_gamma_price
 from .hedgesim import simulate_delta_hedge, HedgeResult
 from .merton import merton_jump_price
 from .density import (
@@ -117,7 +118,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.59.0"
+__version__ = "1.60.0"
 
 __all__ = [
     "OptionType",
@@ -160,6 +161,7 @@ __all__ = [
     "bachelier_gamma",
     "bachelier_vega",
     "bachelier_implied_vol",
+    "variance_gamma_price",
     "simulate_delta_hedge",
     "HedgeResult",
     "merton_jump_price",

@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.60.0] - 2026-09-09
+
+### Added
+- `variancegamma.py`: `variance_gamma_price` prices European options under the
+  Variance-Gamma (Madan-Carr-Chang) pure-jump model via its characteristic
+  function, integrated with the shared Gauss-Legendre quadrature (no SciPy).
+  `nu` controls kurtosis and `theta` the skew; `nu -> 0` recovers Black-Scholes.
+  Monte-Carlo verified.
+
 ## [1.59.0] - 2026-09-09
 
 ### Added

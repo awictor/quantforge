@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.59.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.60.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1336,6 +1336,20 @@ Auto-generated from `quantforge` v1.59.0 by `docs/gen_api.py` — do not edit by
 ### `pillar_vols(atm, rr, bf)`  _function_
 
 > Return (sigma_25put, sigma_atm, sigma_25call) from ATM / RR / BF quotes.
+
+## variancegamma
+
+### `variance_gamma_price(S, K, t, r, sigma, nu, theta, option_type=<OptionType.CALL: 'call'>, q=0.0, upper=200.0)`  _function_
+
+> Price a European option under the Variance-Gamma model.
+>
+> Args:
+>     sigma: Brownian volatility. nu: gamma-time variance rate (> 0).
+>     theta: Brownian drift (skew; negative for an equity left skew).
+>     q: continuous dividend yield.
+>
+> Puts follow from put-call parity. As ``nu -> 0`` the price approaches the
+> Black-Scholes value.
 
 ## varswap
 

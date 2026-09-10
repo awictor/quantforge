@@ -757,6 +757,22 @@ from quantforge import cev_price
 cev_price(S=100, K=90, t=1.0, r=0.05, sigma=0.2, beta=0.5, option_type="put")
 ```
 
+## Variance-Gamma (pure-jump)
+
+Brownian motion evaluated at a random gamma business time — a pure-jump model
+with skew (`theta`) and kurtosis (`nu`) controls, priced via its characteristic
+function:
+
+```python
+from quantforge import variance_gamma_price
+
+variance_gamma_price(S=100, K=100, t=1.0, r=0.05, sigma=0.2,
+                     nu=0.3, theta=-0.1, option_type="call")
+```
+
+`nu -> 0` recovers Black-Scholes; a negative `theta` gives the equity left
+skew.
+
 ## Bachelier (normal) model
 
 For rates and spread options where the forward can go negative and a lognormal
