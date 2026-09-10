@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.26.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.27.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -625,6 +625,22 @@ Auto-generated from `quantforge` v1.26.0 by `docs/gen_api.py` — do not edit by
 >
 > Returns a ``Book`` with per-position detail and a ``net`` ``BookRisk`` of
 > position-scaled (qty * multiplier) sums.
+
+## qmc
+
+### `european_qmc(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, n_points=8192) -> float`  _function_
+
+> Price a European option by 1-D quasi-Monte Carlo (Halton) integration.
+>
+> Converges to the exact Black-Scholes value much faster than pseudo-random
+> Monte Carlo for the same ``n_points``. Deterministic (no seed needed).
+
+### `halton(index: int, dim: int) -> List[float]`  _function_
+
+> The ``index``-th Halton point in ``dim`` dimensions (0-based index).
+>
+> Skips index 0 (the origin) by convention via a 1-based offset internally,
+> so callers can pass 0, 1, 2, ... and get well-spread points.
 
 ## rates
 

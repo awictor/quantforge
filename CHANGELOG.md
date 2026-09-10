@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.27.0] - 2026-09-09
+
+### Added
+- `qmc.py`: quasi-Monte Carlo. `halton` generates low-discrepancy points (van
+  der Corput radical inverse per prime base) and `european_qmc` prices a
+  European option by deterministic Halton integration of the payoff — it
+  converges to the Black-Scholes value several times faster than pseudo-random
+  Monte Carlo at the same point count.
+
 ## [1.26.0] - 2026-09-09
 
 ### Added

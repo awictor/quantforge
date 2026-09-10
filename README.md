@@ -377,6 +377,18 @@ Under BSM the forward-start value scales with the current spot and is
 independent of the absolute future strike (Rubinstein), so `alpha` (moneyness)
 is the only strike input.
 
+## Quasi-Monte Carlo
+
+Deterministic low-discrepancy (Halton) integration converges several times
+faster than pseudo-random Monte Carlo for a European payoff:
+
+```python
+from quantforge import european_qmc, halton
+
+european_qmc(S=100, K=100, t=1.0, r=0.05, sigma=0.2, n_points=8192)
+halton(index=0, dim=2)   # a low-discrepancy point in the unit square
+```
+
 ## Exotic options (closed form)
 
 Analytic prices for binaries, single barriers, and geometric Asians:
