@@ -22,8 +22,9 @@ from .bsm import (
 )
 from .implied import implied_volatility
 from .binomial import american_price
+from .portfolio import Contract, Position, BookRisk, Book, price_book
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 __all__ = [
     "OptionType",
@@ -39,5 +40,10 @@ __all__ = [
     "Greeks",
     "implied_volatility",
     "american_price",
+    "Contract",
+    "Position",
+    "BookRisk",
+    "Book",
+    "price_book",
     "__version__",
 ]

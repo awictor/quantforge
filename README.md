@@ -53,6 +53,38 @@ print(american_price(S=100, K=100, t=1.0, r=0.05, sigma=0.2,
                      option_type="put", b=0.05 - 0.03, steps=500))
 ```
 
+## Batch pricing and portfolio risk
+
+Value a whole book in one call and get net exposures:
+
+```python
+from quantforge import Contract, price_book
+
+book = price_book([
+    Contract(S=100, K=105, t=0.5, r=0.04, sigma=0.25, option_type="call",
+             qty=10, multiplier=100, label="AAPL 105C"),
+    Contract(S=100, K=95,  t=0.5, r=0.04, sigma=0.30, option_type="put",
+             qty=-5, multiplier=100, label="AAPL 95P"),
+])
+print(book.net.delta, book.net.gamma, book.net.vega, book.net.market_value)
+for pos in book.positions:
+    print(pos.contract.label, pos.position_delta)
+```
+
+`qty` is signed (short = negative) and `multiplier` scales to notional
+(e.g. 100 for US equity options). Net Greeks are position-scaled sums.
+
+## Command line
+
+Installing the package exposes a `quantforge` CLI:
+
+```bash
+quantforge price   -S 100 -K 105 -t 0.5 -r 0.04 --sigma 0.25 --type call
+quantforge greeks  -S 100 -K 105 -t 0.5 -r 0.04 --sigma 0.25
+quantforge iv      -S 100 -K 105 -t 0.5 -r 0.04 --price 6.12 --type call
+quantforge american -S 100 -K 100 -t 1 -r 0.05 --sigma 0.2 --type put -b 0.02
+```
+
 ## Model coverage
 
 | Instrument            | Set the carry `b` to | Function            |
