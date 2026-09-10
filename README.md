@@ -221,6 +221,32 @@ geometric_asian(S=100, K=100, t=1, r=0.05, sigma=0.3, option_type="call")
 Barrier kinds: `Barrier.DOWN_IN`, `DOWN_OUT`, `UP_IN`, `UP_OUT`. In/out parity
 (`in + out = vanilla`) holds exactly and is enforced by the tests.
 
+## Term-structure surface (calendar-arbitrage aware)
+
+Stitch per-expiry SVI smiles into a full surface, interpolate vol at any
+`(log-moneyness, expiry)`, and check for calendar arbitrage:
+
+```python
+from quantforge import VolSurface
+
+# Per-expiry quotes: (t, log-moneyness points, total variances w = sigma^2 t).
+quotes = [
+    (0.5, ks_6m, w_6m),
+    (1.0, ks_1y, w_1y),
+    (2.0, ks_2y, w_2y),
+]
+surf = VolSurface.fit(quotes)
+
+surf.implied_vol(k=0.05, t=0.75)          # interpolated vol between expiries
+surf.is_calendar_arbitrage_free()         # True if variance rises with maturity
+for v in surf.calendar_arbitrage():
+    print(v.t_short, v.t_long, v.k, v.w_short, v.w_long)   # any crossing curves
+```
+
+Total variance is interpolated linearly in maturity (the standard
+no-arbitrage-friendly scheme) and the calendar check enforces that
+`w(k, t)` is non-decreasing in `t` at every strike.
+
 ## SABR stochastic-vol smile
 
 The market-standard SABR model via Hagan's implied-vol expansion, with

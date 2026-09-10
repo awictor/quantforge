@@ -25,6 +25,7 @@ from .binomial import american_price
 from .portfolio import Contract, Position, BookRisk, Book, price_book
 from .svi import SVIParams, calibrate_svi
 from .sabr import SABRParams, sabr_vol, calibrate_sabr
+from .surface import VolSurface, SurfaceSlice, CalendarViolation
 from .exotics import (
     cash_or_nothing, asset_or_nothing, barrier_option, geometric_asian, Barrier,
 )
@@ -47,7 +48,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 
 __all__ = [
     "OptionType",
@@ -73,6 +74,9 @@ __all__ = [
     "SABRParams",
     "sabr_vol",
     "calibrate_sabr",
+    "VolSurface",
+    "SurfaceSlice",
+    "CalendarViolation",
     "cash_or_nothing",
     "asset_or_nothing",
     "barrier_option",

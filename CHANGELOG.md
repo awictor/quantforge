@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.1.0] - 2026-09-09
+
+### Added
+- `surface.py`: `VolSurface` stitches per-expiry SVI smiles into a term
+  structure, interpolates total variance linearly in maturity, and reports
+  calendar arbitrage (total variance must be non-decreasing in `t` at each
+  strike). `VolSurface.fit` calibrates one SVI slice per expiry.
+
 ## [1.0.0] - 2026-09-09
 
 First stable release. The public API is now considered stable under SemVer.
