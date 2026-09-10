@@ -136,3 +136,57 @@ def lr_digital_delta(S, K, t, r, sigma, option_type=OptionType.CALL, b=None,
             samples.append(one(-z))
     m, se = _summarize(samples)
     return MCResult(price=m, std_error=se, n_paths=len(samples))
+
+
+def asian_pathwise_vega(S, K, t, r, sigma, option_type=OptionType.CALL, b=None,
+                        n_steps=50, n_paths=100_000, antithetic=True,
+                        seed=None) -> MCResult:
+    """Pathwise vega of a fixed-strike arithmetic-average Asian call/put.
+
+    Differentiates the payoff along each path with respect to ``sigma``. With
+    ``S_i = S0 exp(sum (b - sig^2/2) dt + sig sqrt(dt) Z_j)``, the pathwise
+    sensitivity of each monitored spot is ``dS_i/dsig = S_i * (W_i - sig t_i)``
+    where ``W_i = sqrt(dt) sum_{j<=i} Z_j`` is the accumulated Brownian motion,
+    so the average's derivative is ``dA/dsig = mean_i dS_i/dsig`` and the payoff
+    derivative is ``disc * 1_{A>K} * dA/dsig`` (put: ``-1_{A<K}``). Lower
+    variance than a bump for this Lipschitz payoff; the kink at ``A = K`` is a
+    measure-zero set.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if b is None:
+        b = r
+    if n_steps < 1:
+        raise ValueError("n_steps must be >= 1")
+    dt = t / n_steps
+    sqdt = math.sqrt(dt)
+    disc = math.exp(-r * t)
+    call = ot is OptionType.CALL
+    rng = random.Random(seed)
+    samples = []
+
+    def one(zs):
+        s = S
+        w = 0.0                      # accumulated Brownian motion
+        avg = 0.0
+        davg = 0.0                   # d(sum S_i)/dsig
+        for i, z in enumerate(zs):
+            s *= math.exp((b - 0.5 * sigma * sigma) * dt + sigma * sqdt * z)
+            w += sqdt * z
+            tau = (i + 1) * dt
+            avg += s
+            davg += s * (w - sigma * tau)
+        avg /= n_steps
+        davg /= n_steps
+        if call:
+            return disc * davg if avg > K else 0.0
+        return -disc * davg if avg < K else 0.0
+
+    n = n_paths // 2 if antithetic else n_paths
+    for _ in range(n):
+        zs = [rng.gauss(0.0, 1.0) for _ in range(n_steps)]
+        samples.append(one(zs))
+        if antithetic:
+            samples.append(one([-z for z in zs]))
+    m, se = _summarize(samples)
+    return MCResult(price=m, std_error=se, n_paths=len(samples))

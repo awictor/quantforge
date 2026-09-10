@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.164.0] - 2026-09-10
+
+### Added
+- `asian_pathwise_vega` (in `mc_greeks.py`): pathwise vega of a fixed-strike
+  arithmetic-average Asian option -- differentiating the payoff along each path
+  w.r.t. `sigma`, with `dS_i/dsigma = S_i (W_i - sigma t_i)` and
+  `dA/dsigma = mean_i dS_i/dsigma`. A lower-variance alternative to bumping for
+  this path-dependent, Lipschitz payoff.
+- Verified: it matches a central-difference bump of the arithmetic-Asian Monte
+  Carlo within MC error, and agrees with a finite-difference of the
+  Turnbull-Wakeman continuous-average closed form; call and put vega are
+  positive.
+
 ## [1.163.0] - 2026-09-10
 
 ### Added

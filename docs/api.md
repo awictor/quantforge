@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.163.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.164.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1595,6 +1595,19 @@ Auto-generated from `quantforge` v1.163.0 by `docs/gen_api.py` — do not edit b
 > ``lev_fn(spot, t)`` that interpolates it, suitable for an LSV Monte Carlo.
 
 ## mc_greeks
+
+### `asian_pathwise_vega(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, n_steps=50, n_paths=100000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
+
+> Pathwise vega of a fixed-strike arithmetic-average Asian call/put.
+>
+> Differentiates the payoff along each path with respect to ``sigma``. With
+> ``S_i = S0 exp(sum (b - sig^2/2) dt + sig sqrt(dt) Z_j)``, the pathwise
+> sensitivity of each monitored spot is ``dS_i/dsig = S_i * (W_i - sig t_i)``
+> where ``W_i = sqrt(dt) sum_{j<=i} Z_j`` is the accumulated Brownian motion,
+> so the average's derivative is ``dA/dsig = mean_i dS_i/dsig`` and the payoff
+> derivative is ``disc * 1_{A>K} * dA/dsig`` (put: ``-1_{A<K}``). Lower
+> variance than a bump for this Lipschitz payoff; the kink at ``A = K`` is a
+> measure-zero set.
 
 ### `lr_digital_delta(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, cash=1.0, n_paths=200000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
 
