@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.161.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.162.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -663,6 +663,21 @@ Auto-generated from `quantforge` v1.161.0 by `docs/gen_api.py` — do not edit b
 >
 > Equals the undiscounted price of a cash-or-nothing binary struck at
 > ``level``. ``lower=True`` returns the downside probability.
+
+### `wasserstein_smiles(S0, t, r, vol_fn_p, vol_fn_q, q=0.0, n=600, width=8.0)`  _function_
+
+> Wasserstein-1 distance between two smile-implied densities.
+>
+> For one-dimensional distributions the 1-Wasserstein (earth-mover) distance
+> equals the L1 gap between their CDFs,
+>
+>     W1 = integral |F_p(K) - F_q(K)| dK,
+>
+> computed here on a shared strike grid from the two Breeden-Litzenberger
+> densities. Unlike :func:`kl_divergence_smiles` it is a true metric (symmetric,
+> satisfies the triangle inequality) and is measured in price units, so it is a
+> robust "how far apart are these distributions" number even when their
+> supports differ.
 
 ## discount_curve
 

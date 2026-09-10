@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.162.0] - 2026-09-10
+
+### Added
+- `wasserstein_smiles` (in `density_metrics.py`): the 1-Wasserstein
+  (earth-mover) distance between two smile-implied densities, computed as the L1
+  gap between their CDFs `integral |F_p - F_q| dK` on a shared strike grid.
+  Unlike the KL divergence it is a true metric (symmetric, triangle inequality)
+  measured in price units.
+- Verified: identical smiles give ~0; it is symmetric; positive for differing
+  vols and growing with the vol gap; a skewed smile is a positive distance from
+  a flat one; the triangle inequality holds.
+
 ## [1.161.0] - 2026-09-10
 
 ### Added

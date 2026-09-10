@@ -123,3 +123,51 @@ def kl_divergence_smiles(S0, t, r, vol_fn_p, vol_fn_q, q=0.0, n=600, width=8.0):
         t1 = term(k1, gp[i + 1])
         total += 0.5 * (t0 + t1) * (k1 - k0)
     return total
+
+
+def wasserstein_smiles(S0, t, r, vol_fn_p, vol_fn_q, q=0.0, n=600, width=8.0):
+    """Wasserstein-1 distance between two smile-implied densities.
+
+    For one-dimensional distributions the 1-Wasserstein (earth-mover) distance
+    equals the L1 gap between their CDFs,
+
+        W1 = integral |F_p(K) - F_q(K)| dK,
+
+    computed here on a shared strike grid from the two Breeden-Litzenberger
+    densities. Unlike :func:`kl_divergence_smiles` it is a true metric (symmetric,
+    satisfies the triangle inequality) and is measured in price units, so it is a
+    robust "how far apart are these distributions" number even when their
+    supports differ.
+    """
+    # Union grid span so both CDFs reach 0 and 1.
+    Fwd = S0 * math.exp((r - q) * t)
+    sd = max(vol_fn_p(Fwd), vol_fn_q(Fwd)) * math.sqrt(t)
+    lo = Fwd * math.exp(-width * sd)
+    hi = Fwd * math.exp(width * sd)
+    dK = (hi - lo) / n
+
+    ks_p, gp = _grid(S0, t, r, vol_fn_p, q, n, width)
+    ks_q, gq = _grid(S0, t, r, vol_fn_q, q, n, width)
+
+    def interp(ks, g, K):
+        d = ks[1] - ks[0]
+        if K <= ks[0] or K >= ks[-1]:
+            return 0.0
+        pos = (K - ks[0]) / d
+        i = int(pos)
+        w = pos - i
+        return (1.0 - w) * g[i] + w * g[i + 1]
+
+    total = 0.0
+    Fp = 0.0
+    Fq = 0.0
+    prev = None
+    for i in range(n + 1):
+        K = lo + i * dK
+        Fp += interp(ks_p, gp, K) * dK
+        Fq += interp(ks_q, gq, K) * dK
+        cur = abs(Fp - Fq)
+        if prev is not None:
+            total += 0.5 * (prev + cur) * dK
+        prev = cur
+    return total
