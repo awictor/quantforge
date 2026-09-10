@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.235.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.236.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -4120,6 +4120,16 @@ Auto-generated from `quantforge` v1.235.0 by `docs/gen_api.py` — do not edit b
 >
 > A call pays ``max(P(t_option, t_bond) - strike, 0)`` at the option expiry.
 > Uses the closed-form bond-price volatility.
+
+### `vasicek_bond_option_greeks(r0, t_option, t_bond, strike, kappa, theta, sigma, option_type=<OptionType.CALL: 'call'>)`  _function_
+
+> Greeks of a Vasicek zero-coupon-bond option by central finite differences.
+>
+> Central differences of :func:`bond_option` for the short-rate sensitivities
+> ``rho_r`` (dV/dr0) and ``gamma_r`` (d2V/dr0^2), and the vol sensitivity
+> ``vega`` (dV/dsigma). A bond call *falls* as the short rate rises (higher
+> rates discount the bond harder), so ``rho_r < 0`` for a call. Returns a dict
+> with ``price``, ``rho_r``, ``gamma_r``, ``vega``.
 
 ### `zero_coupon_bond(r0, t, kappa, theta, sigma)`  _function_
 

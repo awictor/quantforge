@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.236.0] - 2026-09-10
+
+### Added
+- `vasicek_bond_option_greeks` (in `vasicek.py`): short-rate sensitivities
+  `rho_r` (dV/dr0) and `gamma_r` (d2V/dr0^2), plus the vol sensitivity `vega`
+  (dV/dsigma) of a Vasicek zero-coupon-bond option by central finite differences
+  on `bond_option`.
+- Verified: `rho_r` matches a finite difference; a bond call's `rho_r` is
+  negative (it loses value as the short rate rises) and a put's is positive;
+  vega is positive.
+
 ## [1.235.0] - 2026-09-10
 
 ### Added

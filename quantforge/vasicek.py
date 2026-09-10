@@ -84,3 +84,31 @@ def bond_option(r0, t_option, t_bond, strike, kappa, theta, sigma,
     if ot is OptionType.CALL:
         return P_bond * norm_cdf(d1) - strike * P_opt * norm_cdf(d2)
     return strike * P_opt * norm_cdf(-d2) - P_bond * norm_cdf(-d1)
+
+
+def bond_option_greeks(r0, t_option, t_bond, strike, kappa, theta, sigma,
+                       option_type=OptionType.CALL):
+    """Greeks of a Vasicek zero-coupon-bond option by central finite differences.
+
+    Central differences of :func:`bond_option` for the short-rate sensitivities
+    ``rho_r`` (dV/dr0) and ``gamma_r`` (d2V/dr0^2), and the vol sensitivity
+    ``vega`` (dV/dsigma). A bond call *falls* as the short rate rises (higher
+    rates discount the bond harder), so ``rho_r < 0`` for a call. Returns a dict
+    with ``price``, ``rho_r``, ``gamma_r``, ``vega``.
+    """
+    ot = _coerce_type(option_type)
+    if not (0 < t_option < t_bond):
+        raise ValueError("require 0 < t_option < t_bond")
+
+    def px(r=r0, sig=sigma):
+        return bond_option(r, t_option, t_bond, strike, kappa, theta, sig, ot)
+
+    base = px()
+    hr = 1e-5
+    up, dn = px(r=r0 + hr), px(r=r0 - hr)
+    rho_r = (up - dn) / (2.0 * hr)
+    gamma_r = (up - 2.0 * base + dn) / (hr * hr)
+    hv = 1e-6
+    vega = (px(sig=sigma + hv) - px(sig=max(sigma - hv, 0.0))) / (
+        (2.0 * hv) if sigma - hv >= 0 else hv)
+    return {"price": base, "rho_r": rho_r, "gamma_r": gamma_r, "vega": vega}
