@@ -73,6 +73,11 @@ print(trinomial_price(S=100, K=100, t=1.0, r=0.05, sigma=0.2,
                       option_type="put", steps=400))
 print(richardson_american(S=100, K=100, t=1.0, r=0.05, sigma=0.2,
                           option_type="put", steps=50))
+
+# Or Bermudan/American by Longstaff-Schwartz least-squares Monte Carlo.
+from quantforge import bermudan_lsm
+print(bermudan_lsm(S=100, K=100, t=1.0, r=0.05, sigma=0.2,
+                   option_type="put", n_steps=50, n_paths=40_000, seed=1))
 ```
 
 ## Scenario / stress grid

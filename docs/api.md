@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.34.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.35.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -590,6 +590,20 @@ Auto-generated from `quantforge` v1.34.0 by `docs/gen_api.py` — do not edit by
 >     b: cost of carry (defaults to r).
 >
 > Call payoff: ``S_T - S_min``. Put payoff: ``S_max - S_T``.
+
+## lsm
+
+### `bermudan_lsm(S, K, t, r, sigma, option_type=<OptionType.PUT: 'put'>, b=None, n_steps=50, n_paths=20000, degree=3, seed=None) -> float`  _function_
+
+> Price a Bermudan option (exercisable at ``n_steps`` equally-spaced dates).
+>
+> Args:
+>     n_steps: number of exercise opportunities over the life; as it grows the
+>         price approaches the continuously-exercisable American value.
+>     degree: polynomial degree of the regression basis in spot.
+>     b: cost of carry (defaults to r). Dividend yield q enters as b = r - q.
+>
+> Returns the option price (in-sample LSM estimate, mildly biased low).
 
 ## merton
 

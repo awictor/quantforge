@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.35.0] - 2026-09-09
+
+### Added
+- `lsm.py`: `bermudan_lsm` prices Bermudan/American options by Longstaff-Schwartz
+  least-squares Monte Carlo — backward induction over exercise dates, regressing
+  the discounted continuation value on a polynomial basis of spot (normal
+  equations solved in pure Python). Converges to the binomial American value as
+  the number of exercise dates grows.
+
 ## [1.34.0] - 2026-09-09
 
 ### Added

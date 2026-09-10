@@ -24,6 +24,7 @@ from .bsm import (
 from .implied import implied_volatility
 from .binomial import american_price
 from .trinomial import trinomial_price, richardson_american
+from .lsm import bermudan_lsm
 from .forward import implied_forward, ForwardResult
 from .forwardstart import forward_start_price, cliquet_price
 from .hedging import StickyRule, smile_delta, smile_delta_from_smile, skew_slope
@@ -95,7 +96,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.34.0"
+__version__ = "1.35.0"
 
 __all__ = [
     "OptionType",
@@ -114,6 +115,7 @@ __all__ = [
     "american_price",
     "trinomial_price",
     "richardson_american",
+    "bermudan_lsm",
     "implied_forward",
     "ForwardResult",
     "forward_start_price",
