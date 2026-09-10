@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.57.0] - 2026-09-09
+
+### Changed
+- `implied_volatility` now seeds the Newton solve with the Corrado-Miller (1996)
+  rational approximation instead of the ATM-only Brenner-Subrahmanyam guess.
+  It is accurate away from the money too, cutting the Newton iteration count
+  several-fold (~5x fewer across a strike/vol grid), and falls back to the old
+  seed in the deep wings. The solver's answers are unchanged.
+
 ## [1.56.0] - 2026-09-09
 
 ### Added

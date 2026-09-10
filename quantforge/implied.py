@@ -51,8 +51,24 @@ def implied_volatility(
     if target_price >= upper - eps:
         return hi
 
-    # Initial guess: Brenner-Subrahmanyam ATM approximation.
-    sigma = math.sqrt(2.0 * math.pi / t) * target_price / S
+    # Initial guess: Corrado-Miller (1996) rational approximation. It is
+    # accurate away from the money too (not just ATM like Brenner-Subrahmanyam),
+    # cutting Newton iterations several-fold. Falls back to Brenner-Subrahmanyam
+    # if the discriminant goes negative (deep wings).
+    disc = math.exp(-r * t)
+    X = K * disc                       # present value of the strike
+    # Express the quote as a call-equivalent for the Corrado-Miller formula.
+    if ot is OptionType.CALL:
+        c = target_price
+    else:
+        c = target_price + S * math.exp((b - r) * t) - X   # put-call parity
+    S_disc = S * math.exp((b - r) * t)
+    a = c - 0.5 * (S_disc - X)
+    radicand = a * a - (S_disc - X) ** 2 / math.pi
+    if radicand >= 0 and (S_disc + X) > 0:
+        sigma = (math.sqrt(2.0 * math.pi / t) / (S_disc + X)) * (a + math.sqrt(radicand))
+    else:
+        sigma = math.sqrt(2.0 * math.pi / t) * target_price / S
     sigma = min(max(sigma, lo), hi)
 
     f_lo = price(S, K, t, r, lo, ot, b) - target_price
