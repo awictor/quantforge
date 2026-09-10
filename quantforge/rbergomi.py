@@ -107,6 +107,135 @@ def rbergomi_paths(S, t, xi0, eta, H, rho, r=0.0, n_steps=100, n_paths=20_000,
     return terminals
 
 
+def _rbergomi_w_stats(S, t, xi0, eta, H, rho, r, n_steps, n_paths,
+                      antithetic, seed):
+    """Per-path W-measurable statistics for the conditional estimator.
+
+    Conditioning on the volatility-driving Brownian motion ``W``, the terminal
+    log-spot is Gaussian, so only two path functionals are needed to price any
+    strike analytically:
+
+        I1 = int_0^t sqrt(V_s) dW_s   (the rho-correlated stochastic integral)
+        QV = int_0^t V_s ds           (the realised quadratic variation)
+
+    Returns a list of ``(I1, QV)`` pairs (one per simulated W path).
+    """
+    if not (0.0 < H < 1.0):
+        raise ValueError("H must be in (0, 1)")
+    if xi0 <= 0 or eta < 0:
+        raise ValueError("xi0 must be positive and eta non-negative")
+    if not (-1.0 <= rho <= 1.0):
+        raise ValueError("rho must be in [-1, 1]")
+    if n_steps < 1:
+        raise ValueError("n_steps must be >= 1")
+
+    dt = t / n_steps
+    sqrt_dt = math.sqrt(dt)
+    root2H = math.sqrt(2.0 * H)
+    alpha = H - 0.5
+    w = _hybrid_weights(H, dt, n_steps)
+    cov = dt ** (alpha + 1.0) / (alpha + 1.0)
+    var_y = dt ** (2.0 * alpha + 1.0) / (2.0 * alpha + 1.0)
+    y_beta = cov / dt
+    y_resid = math.sqrt(max(var_y - cov * cov / dt, 0.0))
+    t_pow = [(i * dt) ** (2.0 * H) for i in range(n_steps + 1)]
+
+    rng = random.Random(seed)
+    stats = []
+
+    def one_path(z1s, z2s):
+        dW = [sqrt_dt * z for z in z1s]
+        Y = [y_beta * dW[i] + y_resid * z2s[i] for i in range(n_steps)]
+        v_prev = xi0
+        I1 = 0.0
+        QV = 0.0
+        for i in range(n_steps):
+            vol = math.sqrt(v_prev)
+            I1 += vol * dW[i]        # left-point sqrt(V) dW
+            QV += v_prev * dt        # left-point V ds
+            wt = Y[i]
+            for k in range(2, i + 2):
+                wt += w[k] * dW[i - k + 1]
+            wtilde = root2H * wt
+            v_prev = xi0 * math.exp(eta * wtilde - 0.5 * eta * eta * t_pow[i + 1])
+        return (I1, QV)
+
+    n = n_paths // 2 if antithetic else n_paths
+    for _ in range(n):
+        z1s = [rng.gauss(0.0, 1.0) for _ in range(n_steps)]
+        z2s = [rng.gauss(0.0, 1.0) for _ in range(n_steps)]
+        stats.append(one_path(z1s, z2s))
+        if antithetic:
+            stats.append(one_path([-z for z in z1s], [-z for z in z2s]))
+    return stats
+
+
+def _conditional_call(S, K, t, r, rho, I1, QV):
+    """Black-Scholes call price conditional on one W path (see _rbergomi_w_stats).
+
+    Given ``I1`` and ``QV``, log S_T | W is Gaussian, so the conditional call is
+    a Black-Scholes price with an effective spot ``S exp(rho I1 - rho^2 QV / 2)``
+    and an effective variance ``(1 - rho^2) QV``.
+    """
+    from .bsm import price as bs_price
+    S_cond = S * math.exp(rho * I1 - 0.5 * rho * rho * QV)
+    var_eff = (1.0 - rho * rho) * QV
+    if var_eff <= 0.0:
+        # rho = +-1: fully correlated, no residual noise -> discounted intrinsic.
+        fwd = S_cond * math.exp(r * t)
+        return math.exp(-r * t) * max(fwd - K, 0.0)
+    sigma_eff = math.sqrt(var_eff / t)
+    return bs_price(S_cond, K, t, r, sigma_eff, OptionType.CALL, b=r)
+
+
+def rbergomi_price_cv(S, K, t, xi0, eta, H, rho, r=0.0, n_steps=100,
+                      n_paths=20_000, antithetic=True, seed=None) -> MCResult:
+    """Rough Bergomi European call by the conditional (turbocharged) estimator.
+
+    Instead of simulating the orthogonal spot noise and averaging noisy payoffs
+    (:func:`rbergomi_price`), this conditions on the volatility-driving Brownian
+    motion and integrates the orthogonal noise out with a Black-Scholes formula
+    (McCrickerd & Pakkanen, 2018). Every path contributes a smooth conditional
+    price, so the Monte Carlo standard error drops sharply for the same paths --
+    typically several-fold, and more as ``|rho|`` shrinks.
+
+    Only calls are provided directly; puts follow from put-call parity on the
+    forward ``S e^{r t}``.
+    """
+    if S <= 0 or K <= 0:
+        raise ValueError("S and K must be positive")
+    stats = _rbergomi_w_stats(S, t, xi0, eta, H, rho, r, n_steps, n_paths,
+                              antithetic, seed)
+    samples = [_conditional_call(S, K, t, r, rho, I1, QV) for I1, QV in stats]
+    price, se = _summarize(samples)
+    return MCResult(price=price, std_error=se, n_paths=len(samples))
+
+
+def rbergomi_smile_cv(S, strikes, t, xi0, eta, H, rho, r=0.0, n_steps=100,
+                      n_paths=40_000, antithetic=True, seed=None):
+    """Rough Bergomi implied-vol smile via the conditional estimator.
+
+    Like :func:`rbergomi_smile` but prices each strike with the low-variance
+    conditional call on a shared set of W paths, then inverts to a Black-Scholes
+    vol. Returns ``(log_moneyness, vol)`` pairs sorted by strike.
+    """
+    from .implied import implied_volatility
+
+    F = S * math.exp(r * t)
+    stats = _rbergomi_w_stats(S, t, xi0, eta, H, rho, r, n_steps, n_paths,
+                              antithetic, seed)
+    out = []
+    for K in sorted(strikes):
+        samples = [_conditional_call(S, K, t, r, rho, I1, QV) for I1, QV in stats]
+        price, _ = _summarize(samples)
+        try:
+            iv = implied_volatility(price, S, K, t, r, OptionType.CALL, b=r)
+        except ValueError:
+            continue
+        out.append((math.log(K / F), iv))
+    return out
+
+
 def rbergomi_price(S, K, t, xi0, eta, H, rho, r=0.0,
                    option_type=OptionType.CALL, n_steps=100, n_paths=20_000,
                    antithetic=True, seed=None) -> MCResult:

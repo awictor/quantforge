@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.95.0] - 2026-09-10
+
+### Added
+- `rbergomi_price_cv` and `rbergomi_smile_cv` (in `rbergomi.py`): the conditional
+  ("turbocharged") rough Bergomi estimator of McCrickerd & Pakkanen (2018).
+  Conditioning on the volatility-driving Brownian motion makes the terminal
+  log-spot Gaussian, so each path contributes a smooth Black-Scholes conditional
+  price (effective spot `S exp(rho I1 - rho^2 QV/2)`, effective variance
+  `(1 - rho^2) QV`) instead of a noisy indicator payoff. Same price as the plain
+  estimator within Monte Carlo error, with the standard error cut severalfold --
+  ~2x at rho=-0.7 up to ~6-7x as `|rho|` shrinks (the integrated-out noise
+  fraction is `1 - rho^2`).
+
 ## [1.94.0] - 2026-09-10
 
 ### Added

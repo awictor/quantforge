@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.94.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.95.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1378,6 +1378,20 @@ Auto-generated from `quantforge` v1.94.0 by `docs/gen_api.py` — do not edit by
 >
 > Returns an :class:`MCResult`.
 
+### `rbergomi_price_cv(S, K, t, xi0, eta, H, rho, r=0.0, n_steps=100, n_paths=20000, antithetic=True, seed=None) -> quantforge.montecarlo.MCResult`  _function_
+
+> Rough Bergomi European call by the conditional (turbocharged) estimator.
+>
+> Instead of simulating the orthogonal spot noise and averaging noisy payoffs
+> (:func:`rbergomi_price`), this conditions on the volatility-driving Brownian
+> motion and integrates the orthogonal noise out with a Black-Scholes formula
+> (McCrickerd & Pakkanen, 2018). Every path contributes a smooth conditional
+> price, so the Monte Carlo standard error drops sharply for the same paths --
+> typically several-fold, and more as ``|rho|`` shrinks.
+>
+> Only calls are provided directly; puts follow from put-call parity on the
+> forward ``S e^{r t}``.
+
 ### `rbergomi_smile(S, strikes, t, xi0, eta, H, rho, r=0.0, n_steps=100, n_paths=40000, antithetic=True, seed=None)`  _function_
 
 > Black-Scholes implied-vol smile a rough Bergomi model produces.
@@ -1387,6 +1401,14 @@ Auto-generated from `quantforge` v1.94.0 by `docs/gen_api.py` — do not edit by
 > vol. Returns ``(log_moneyness, vol)`` pairs sorted by strike on the forward
 > ``F = S e^{r t}``. Rough dynamics (``H < 0.5``) with ``rho < 0`` give the
 > steep negative short-maturity skew that motivates the model.
+
+### `rbergomi_smile_cv(S, strikes, t, xi0, eta, H, rho, r=0.0, n_steps=100, n_paths=40000, antithetic=True, seed=None)`  _function_
+
+> Rough Bergomi implied-vol smile via the conditional estimator.
+>
+> Like :func:`rbergomi_smile` but prices each strike with the low-variance
+> conditional call on a shared set of W paths, then inverts to a Black-Scholes
+> vol. Returns ``(log_moneyness, vol)`` pairs sorted by strike.
 
 ## risk
 
