@@ -891,6 +891,16 @@ swaption_price(swap_rate=0.03, strike=0.035, expiry=2.0, sigma_n=0.01,
                periods=periods, payer=True)
 ```
 
+The Vasicek short-rate model prices zero-coupon bonds and options on them:
+
+```python
+from quantforge import zero_coupon_bond, bond_option
+
+zero_coupon_bond(r0=0.03, t=5.0, kappa=0.5, theta=0.05, sigma=0.01)
+bond_option(r0=0.03, t_option=1.0, t_bond=5.0, strike=0.85,
+            kappa=0.5, theta=0.05, sigma=0.01, option_type="call")
+```
+
 Key-rate DV01 buckets the interest-rate sensitivity of any book expressed as a
 function of the zero curve:
 

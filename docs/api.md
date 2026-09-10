@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.72.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.73.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1494,6 +1494,29 @@ Auto-generated from `quantforge` v1.72.0 by `docs/gen_api.py` — do not edit by
 > This is the standard first-order proxy; it slightly overstates the true
 > vol-swap strike because ``E[sqrt(var)] <= sqrt(E[var])`` (Jensen), the
 > "convexity" or "vol-of-vol" adjustment, which requires a model to quantify.
+
+## vasicek
+
+### `bond_option(r0, t_option, t_bond, strike, kappa, theta, sigma, option_type=<OptionType.CALL: 'call'>)`  _function_
+
+> European option (Jamshidian) on a zero-coupon bond under Vasicek.
+>
+> Args:
+>     t_option: option expiry. t_bond: the underlying bond's maturity
+>         (``t_bond > t_option``). strike: strike on the bond price.
+>
+> A call pays ``max(P(t_option, t_bond) - strike, 0)`` at the option expiry.
+> Uses the closed-form bond-price volatility.
+
+### `zero_coupon_bond(r0, t, kappa, theta, sigma)`  _function_
+
+> Vasicek zero-coupon bond price P(0, t) for a unit face, given r(0)=r0.
+>
+> ``P = A(t) * exp(-B(t) * r0)`` with the standard affine coefficients.
+
+### `zero_coupon_yield(r0, t, kappa, theta, sigma)`  _function_
+
+> Continuously-compounded yield of the Vasicek zero-coupon bond to ``t``.
 
 ## vectorized
 

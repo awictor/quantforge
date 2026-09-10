@@ -63,6 +63,9 @@ from .rates import (
     CapletPeriod, caplet_price, cap_price, floor_price, collar_price,
     caplet_floorlet_parity, annuity, swaption_price, swaption_parity,
 )
+from .vasicek import (
+    zero_coupon_bond, zero_coupon_yield, bond_option,
+)
 from .overhedge import (
     Overhedge, digital_call_overhedge, digital_put_overhedge, overhedge_payoff,
 )
@@ -123,7 +126,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.72.0"
+__version__ = "1.73.0"
 
 __all__ = [
     "OptionType",
@@ -210,6 +213,9 @@ __all__ = [
     "annuity",
     "swaption_price",
     "swaption_parity",
+    "zero_coupon_bond",
+    "zero_coupon_yield",
+    "bond_option",
     "Overhedge",
     "digital_call_overhedge",
     "digital_put_overhedge",

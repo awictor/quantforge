@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.73.0] - 2026-09-10
+
+### Added
+- `vasicek.py`: the Vasicek (1977) short-rate model — `zero_coupon_bond` and
+  `zero_coupon_yield` (affine closed form) and `bond_option` (Jamshidian
+  closed-form European option on a zero-coupon bond). The short yield equals the
+  short rate, the long yield approaches the mean-reversion level less the
+  convexity term, and bond-option parity holds; MC-verified.
+
 ## [1.72.0] - 2026-09-10
 
 ### Added
