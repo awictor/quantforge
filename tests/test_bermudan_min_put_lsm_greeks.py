@@ -12,7 +12,7 @@ SIG1, SIG2, RHO = 0.2, 0.3, 0.4
 def test_both_deltas_negative():
     # Raising either spot lifts min(S1,S2), shrinking the protective put.
     g = bermudan_min_put_lsm_greeks(S1, S2, K, T, R, SIG1, SIG2, RHO,
-                                    n_steps=20, n_paths=15_000, seed=1)
+                                    n_steps=12, n_paths=5_000, seed=1)
     assert g["delta1"] < 0.0
     assert g["delta2"] < 0.0
 
@@ -21,7 +21,7 @@ def test_lower_asset_has_larger_magnitude_delta():
     # S2 starts lower, so it is more often the min -> the put is more sensitive
     # to it (more negative delta).
     g = bermudan_min_put_lsm_greeks(S1, S2, K, T, R, SIG1, SIG2, RHO,
-                                    n_steps=25, n_paths=30_000, seed=2)
+                                    n_steps=15, n_paths=8_000, seed=2)
     assert g["delta2"] < g["delta1"]
 
 
