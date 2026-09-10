@@ -80,3 +80,46 @@ def expected_shortfall(S0, t, r, vol_fn, level, lower=True, q=0.0, n=600,
             den += p
             num += mid * p
     return num / den if den > 1e-14 else float("nan")
+
+
+def kl_divergence_smiles(S0, t, r, vol_fn_p, vol_fn_q, q=0.0, n=600, width=8.0):
+    """Kullback-Leibler divergence ``KL(g_p || g_q)`` of two smile densities.
+
+    Both risk-neutral densities are built on the same strike grid (from
+    ``vol_fn_p`` and ``vol_fn_q``), renormalised to unit mass, and
+
+        KL = integral g_p(K) ln( g_p(K) / g_q(K) ) dK
+
+    is integrated by the trapezoidal rule. Zero iff the two densities coincide,
+    always non-negative, and asymmetric in its arguments. Useful for measuring
+    how far one implied distribution sits from another (two dates, two models,
+    or implied vs a reference).
+    """
+    ks_p, gp = _grid(S0, t, r, vol_fn_p, q, n, width)
+    ks_q, gq = _grid(S0, t, r, vol_fn_q, q, n, width)
+    # Both grids share the same lo/hi/dK only if the ATM vols match; rebuild q on
+    # p's grid by interpolation so the integrand is well-defined pointwise.
+    dK_q = ks_q[1] - ks_q[0]
+
+    def gq_at(K):
+        if K <= ks_q[0] or K >= ks_q[-1]:
+            return 0.0
+        pos = (K - ks_q[0]) / dK_q
+        i = int(pos)
+        w = pos - i
+        return (1.0 - w) * gq[i] + w * gq[i + 1]
+
+    total = 0.0
+    for i in range(len(ks_p) - 1):
+        k0, k1 = ks_p[i], ks_p[i + 1]
+
+        def term(K, gpK):
+            gqK = gq_at(K)
+            if gpK > 1e-300 and gqK > 1e-300:
+                return gpK * math.log(gpK / gqK)
+            return 0.0
+
+        t0 = term(k0, gp[i])
+        t1 = term(k1, gp[i + 1])
+        total += 0.5 * (t0 + t1) * (k1 - k0)
+    return total

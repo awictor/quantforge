@@ -95,6 +95,7 @@ from .rnd import (
 )
 from .density_metrics import (
     tail_probability, density_entropy, expected_shortfall,
+    kl_divergence_smiles,
 )
 from .multiasset import (
     exchange_option, spread_option, basket_option, best_of_call, worst_of_call,
@@ -224,7 +225,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.160.0"
+__version__ = "1.161.0"
 
 __all__ = [
     "OptionType",
@@ -352,6 +353,7 @@ __all__ = [
     "tail_probability",
     "density_entropy",
     "expected_shortfall",
+    "kl_divergence_smiles",
     "exchange_option",
     "spread_option",
     "basket_option",

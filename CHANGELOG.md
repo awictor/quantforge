@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.161.0] - 2026-09-10
+
+### Added
+- `kl_divergence_smiles` (in `density_metrics.py`): the Kullback-Leibler
+  divergence `KL(g_p || g_q) = integral g_p ln(g_p/g_q) dK` between two
+  smile-implied risk-neutral densities (the second interpolated onto the first's
+  grid). Measures how far one implied distribution sits from another -- two
+  dates, two models, or implied vs a reference.
+- Verified: identical smiles give ~0; differing vols give a positive,
+  asymmetric, non-negative divergence that grows with the vol gap; a skewed
+  smile diverges positively from a flat one.
+
 ## [1.160.0] - 2026-09-10
 
 ### Added

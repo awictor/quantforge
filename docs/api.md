@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.160.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.161.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -642,6 +642,20 @@ Auto-generated from `quantforge` v1.160.0 by `docs/gen_api.py` — do not edit b
 >
 > Returns the conditional expectation of the terminal spot in the tail beyond
 > ``level``; ``nan`` if that tail has zero probability.
+
+### `kl_divergence_smiles(S0, t, r, vol_fn_p, vol_fn_q, q=0.0, n=600, width=8.0)`  _function_
+
+> Kullback-Leibler divergence ``KL(g_p || g_q)`` of two smile densities.
+>
+> Both risk-neutral densities are built on the same strike grid (from
+> ``vol_fn_p`` and ``vol_fn_q``), renormalised to unit mass, and
+>
+>     KL = integral g_p(K) ln( g_p(K) / g_q(K) ) dK
+>
+> is integrated by the trapezoidal rule. Zero iff the two densities coincide,
+> always non-negative, and asymmetric in its arguments. Useful for measuring
+> how far one implied distribution sits from another (two dates, two models,
+> or implied vs a reference).
 
 ### `tail_probability(S0, t, r, vol_fn, level, lower=True, q=0.0, n=600, width=8.0)`  _function_
 
