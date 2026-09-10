@@ -248,6 +248,23 @@ The points `(K, C - K)` vs `P` are linear under parity, so a least-squares fit
 returns both the forward (slope) and discount factor (intercept) at once, and
 the dividend yield follows from `F = S * exp((r - q) t)`.
 
+## Index implied correlation
+
+The dispersion-trading measure: back out the common correlation an index vol
+implies given its members' weights and vols:
+
+```python
+from quantforge import implied_correlation, index_vol_from_correlation
+
+weights = [0.4, 0.35, 0.25]
+vols    = [0.25, 0.30, 0.20]
+implied_correlation(weights, vols, index_vol=0.19)   # rho consistent with the quote
+index_vol_from_correlation(weights, vols, rho=0.3)   # forward map
+```
+
+`rho=0` gives the fully-diversified `dispersion_basket_vol`; `rho=1` gives the
+weighted-average vol.
+
 ## Realized volatility
 
 Estimate historical vol from a price series — close-to-close, EWMA, and the

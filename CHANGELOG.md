@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.28.0] - 2026-09-09
+
+### Added
+- `correlation.py`: index implied correlation. `implied_correlation` inverts
+  the index-variance decomposition for the single common correlation consistent
+  with a quoted index vol; `index_vol_from_correlation` is the forward map; and
+  `dispersion_basket_vol` is the zero-correlation reference. The standard
+  dispersion-trading measure.
+
 ## [1.27.0] - 2026-09-09
 
 ### Added

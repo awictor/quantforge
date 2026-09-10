@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.27.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.28.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -157,6 +157,26 @@ Auto-generated from `quantforge` v1.27.0 by `docs/gen_api.py` — do not edit by
 ### `vega(S, K, t, r, sigma, b=None) -> float`  _function_
 
 > dPrice/dSigma, per 1.0 change in vol (divide by 100 for per-vol-point).
+
+## correlation
+
+### `dispersion_basket_vol(weights: Sequence[float], vols: Sequence[float]) -> float`  _function_
+
+> The zero-correlation ("fully diversified") index vol, sqrt(sum w^2 sig^2).
+>
+> A useful lower reference: the index vol if the members were uncorrelated.
+
+### `implied_correlation(weights: Sequence[float], vols: Sequence[float], index_vol: float) -> float`  _function_
+
+> Common implied correlation consistent with the quoted ``index_vol``.
+>
+> Returns rho in principle within [-1, 1]; a value outside that band signals
+> an index vol inconsistent with the member vols (arbitrage or stale quotes)
+> and is returned unclamped so the caller can see it.
+
+### `index_vol_from_correlation(weights: Sequence[float], vols: Sequence[float], rho: float) -> float`  _function_
+
+> Index volatility implied by member weights/vols and a common correlation.
 
 ## density
 
