@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.14.0] - 2026-09-09
+
+### Added
+- `arithmetic_asian` (in `exotics.py`): closed-form arithmetic-average Asian via
+  Turnbull-Wakeman moment matching (match the average's first two moments to a
+  lognormal, then Black-Scholes). Complements the Monte Carlo pricer and agrees
+  with it to a few cents; arithmetic value dominates the geometric Asian.
+
 ## [1.13.0] - 2026-09-09
 
 ### Added

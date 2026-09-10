@@ -361,6 +361,10 @@ barrier_option(S=100, K=90, H=95, t=0.5, r=0.08, sigma=0.25,
 
 # Geometric-average Asian call (Kemna-Vorst closed form).
 geometric_asian(S=100, K=100, t=1, r=0.05, sigma=0.3, option_type="call")
+
+# Arithmetic-average Asian call (Turnbull-Wakeman moment matching).
+from quantforge import arithmetic_asian
+arithmetic_asian(S=100, K=100, t=1, r=0.05, sigma=0.3, option_type="call")
 ```
 
 Barrier kinds: `Barrier.DOWN_IN`, `DOWN_OUT`, `UP_IN`, `UP_OUT`. In/out parity

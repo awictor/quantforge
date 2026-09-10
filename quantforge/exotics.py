@@ -178,3 +178,48 @@ def geometric_asian(S, K, t, r, sigma, option_type=OptionType.CALL, b=None):
     sigma_a = sigma / math.sqrt(3.0)
     b_a = 0.5 * (b - sigma * sigma / 6.0)
     return bsm_price(S, K, t, r, sigma_a, option_type, b=b_a)
+
+
+# --------------------------------------------------------------------------
+# Arithmetic-average Asian option (Turnbull-Wakeman moment matching)
+# --------------------------------------------------------------------------
+def arithmetic_asian(S, K, t, r, sigma, option_type=OptionType.CALL, b=None):
+    """Continuously-monitored arithmetic-average-price Asian (Turnbull-Wakeman).
+
+    The arithmetic average of a lognormal is not lognormal, so there is no exact
+    closed form. Turnbull-Wakeman (1991) matches the first two moments of the
+    average to a lognormal and prices with a Black-Scholes-style formula on the
+    average's forward. Fast and accurate for typical vols; agrees with the
+    arithmetic-Asian Monte Carlo (:func:`quantforge.arithmetic_asian_mc`) to a
+    few basis points. Averaging runs over the full life ``[0, t]``.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if b is None:
+        b = r
+
+    # First moment of the continuous arithmetic average over [0, t].
+    if abs(b) > 1e-12:
+        M1 = S * (math.exp(b * t) - 1.0) / (b * t)
+    else:
+        M1 = S  # b -> 0 limit
+
+    if t == 0 or sigma == 0:
+        disc = math.exp(-r * t)
+        payoff = max(M1 - K, 0.0) if ot is OptionType.CALL else max(K - M1, 0.0)
+        return disc * payoff
+
+    # Second moment (Turnbull-Wakeman).
+    v2 = sigma * sigma
+    if abs(b) > 1e-12:
+        term1 = (2.0 * S * S * math.exp((2.0 * b + v2) * t)) / ((b + v2) * (2.0 * b + v2) * t * t)
+        term2 = (2.0 * S * S / (b * t * t)) * (1.0 / (2.0 * b + v2)
+                                               - math.exp(b * t) / (b + v2))
+        M2 = term1 + term2
+    else:
+        M2 = (2.0 * S * S / (v2 * v2 * t * t)) * (math.exp(v2 * t) - 1.0 - v2 * t)
+
+    # Match to a lognormal: effective vol and carry from the two moments.
+    sigma_a = math.sqrt(math.log(M2 / (M1 * M1)) / t)
+    b_a = math.log(M1 / S) / t
+    return bsm_price(S, K, t, r, sigma_a, ot, b=b_a)
