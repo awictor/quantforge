@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.64.0] - 2026-09-09
+
+### Added
+- `lookback_greeks` (in `lookback.py`): delta, gamma, vega, and theta of a
+  floating- or fixed-strike lookback by central finite differences on the
+  closed form (`kind="floating"`/`"fixed"`, with the running extreme).
+
 ## [1.63.0] - 2026-09-09
 
 ### Added

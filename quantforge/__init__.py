@@ -33,7 +33,9 @@ from .compound import compound_option
 from .quanto import quanto_option, compo_option
 from .displaced import displaced_diffusion_price
 from .hedging import StickyRule, smile_delta, smile_delta_from_smile, skew_slope
-from .lookback import floating_strike_lookback, fixed_strike_lookback
+from .lookback import (
+    floating_strike_lookback, fixed_strike_lookback, lookback_greeks,
+)
 from .heston import heston_price
 from .bachelier import (
     bachelier_price, bachelier_delta, bachelier_gamma, bachelier_vega,
@@ -120,7 +122,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.63.0"
+__version__ = "1.64.0"
 
 __all__ = [
     "OptionType",
@@ -158,6 +160,7 @@ __all__ = [
     "skew_slope",
     "floating_strike_lookback",
     "fixed_strike_lookback",
+    "lookback_greeks",
     "heston_price",
     "bachelier_price",
     "bachelier_delta",

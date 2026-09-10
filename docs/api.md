@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.63.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.64.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -739,6 +739,16 @@ Auto-generated from `quantforge` v1.63.0 by `docs/gen_api.py` — do not edit by
 >     b: cost of carry (defaults to r).
 >
 > Call payoff: ``S_T - S_min``. Put payoff: ``S_max - S_T``.
+
+### `lookback_greeks(S, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, kind='floating', K=None, s_extreme=None)`  _function_
+
+> Greeks of a lookback option by central finite differences.
+>
+> ``kind`` selects the closed form: ``"floating"``
+> (:func:`floating_strike_lookback`) or ``"fixed"``
+> (:func:`fixed_strike_lookback`, which needs ``K``). Returns a dict with
+> delta, gamma, vega, and theta (calendar, per year). ``s_extreme`` (the
+> running min/max) defaults to the current spot.
 
 ## lsm
 

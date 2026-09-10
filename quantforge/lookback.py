@@ -153,3 +153,48 @@ def fixed_strike_lookback(S, K, t, r, sigma, option_type=OptionType.CALL,
                     ((S / m) ** (-2.0 * b / v2))
                     * norm_cdf(-f1 + 2.0 * b / sigma * math.sqrt(t))
                     - math.exp(b * t) * norm_cdf(-f1)))
+
+
+def lookback_greeks(S, t, r, sigma, option_type=OptionType.CALL, b=None,
+                    kind="floating", K=None, s_extreme=None):
+    """Greeks of a lookback option by central finite differences.
+
+    ``kind`` selects the closed form: ``"floating"``
+    (:func:`floating_strike_lookback`) or ``"fixed"``
+    (:func:`fixed_strike_lookback`, which needs ``K``). Returns a dict with
+    delta, gamma, vega, and theta (calendar, per year). ``s_extreme`` (the
+    running min/max) defaults to the current spot.
+    """
+    ot = _coerce_type(option_type)
+    _check(S, t, sigma, b)
+    if b is None:
+        b = r
+
+    if kind == "floating":
+        def px(S_=S, t_=t, sigma_=sigma):
+            return floating_strike_lookback(S_, t_, r, sigma_, ot,
+                                            s_extreme=s_extreme, b=b)
+    elif kind == "fixed":
+        if K is None:
+            raise ValueError("fixed-strike lookback needs K")
+
+        def px(S_=S, t_=t, sigma_=sigma):
+            return fixed_strike_lookback(S_, K, t_, r, sigma_, ot,
+                                         s_extreme=s_extreme, b=b)
+    else:
+        raise ValueError("kind must be 'floating' or 'fixed'")
+
+    base = px()
+    hS = 1e-3 * S
+    up, dn = px(S_=S + hS), px(S_=S - hS)
+    delta = (up - dn) / (2.0 * hS)
+    gamma = (up - 2.0 * base + dn) / (hS * hS)
+
+    hv = 1e-4
+    vega = (px(sigma_=sigma + hv) - px(sigma_=sigma - hv)) / (2.0 * hv)
+
+    ht = min(1e-4, 0.5 * t)
+    theta = -(px(t_=t + ht) - px(t_=t - ht)) / (2.0 * ht)
+
+    return {"price": base, "delta": delta, "gamma": gamma,
+            "vega": vega, "theta": theta}
