@@ -655,8 +655,16 @@ barrier_greeks(S=100, K=100, H=90, t=0.5, r=0.05, sigma=0.25,
                option_type="call", barrier=Barrier.DOWN_OUT)
 ```
 
-Digitals have unbounded pin risk at the strike, so desks super-replicate them
-with a tight vanilla spread:
+Digitals have unbounded pin risk at the strike — `digital_greeks` shows the
+delta spiking as expiry nears:
+
+```python
+from quantforge import digital_greeks
+
+digital_greeks(S=100, K=100, t=0.02, r=0.05, sigma=0.25)   # large ATM delta
+```
+
+so desks super-replicate them with a tight vanilla spread:
 
 ```python
 from quantforge import digital_call_overhedge

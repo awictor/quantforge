@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.85.0] - 2026-09-10
+
+### Added
+- `digital_greeks` (in `exotics.py`): delta and gamma of a cash-or-nothing
+  digital by finite differences, demonstrating the pin-risk delta spike as
+  expiry nears the strike (the motivation for the call-spread over-hedge).
+- Regression guard test: the Kirk spread at strike 0 matches the exact Margrabe
+  exchange price.
+
 ## [1.84.0] - 2026-09-10
 
 ### Added

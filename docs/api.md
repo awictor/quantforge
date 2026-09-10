@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.84.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.85.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -489,6 +489,15 @@ Auto-generated from `quantforge` v1.84.0 by `docs/gen_api.py` — do not edit by
 > Pays ``cash`` if the option finishes in the money, else 0.
 >
 > Call pays when S_T > K; put pays when S_T < K.
+
+### `digital_greeks(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, cash=1.0)`  _function_
+
+> Delta and gamma of a cash-or-nothing digital by finite differences.
+>
+> Returns a dict with price, delta, and gamma. Near the strike as expiry
+> approaches, the digital's delta spikes (and gamma flips sign across the
+> strike) -- the "pin risk" that makes digitals hard to hedge and motivates
+> the call-spread over-hedge in :mod:`quantforge.overhedge`.
 
 ### `gap_option(S, K_trigger, K_payoff, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
 

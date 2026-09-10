@@ -459,3 +459,28 @@ def barrier_rebate(S, H, t, r, sigma, knock="out", b=None, cash=1.0,
         # A knock-in rebate pays only if the barrier is never hit -> no-touch.
         return no_touch(S, H, t, r, sigma, b=b, cash=cash)
     raise ValueError("knock must be 'out' or 'in'")
+
+
+def digital_greeks(S, K, t, r, sigma, option_type=OptionType.CALL, b=None,
+                   cash=1.0):
+    """Delta and gamma of a cash-or-nothing digital by finite differences.
+
+    Returns a dict with price, delta, and gamma. Near the strike as expiry
+    approaches, the digital's delta spikes (and gamma flips sign across the
+    strike) -- the "pin risk" that makes digitals hard to hedge and motivates
+    the call-spread over-hedge in :mod:`quantforge.overhedge`.
+    """
+    _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if b is None:
+        b = r
+
+    def px(S_):
+        return cash_or_nothing(S_, K, t, r, sigma, option_type, b=b, cash=cash)
+
+    base = px(S)
+    h = 1e-3 * S
+    up, dn = px(S + h), px(S - h)
+    delta = (up - dn) / (2.0 * h)
+    gamma = (up - 2.0 * base + dn) / (h * h)
+    return {"price": base, "delta": delta, "gamma": gamma}

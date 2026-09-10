@@ -101,7 +101,7 @@ from .sabr import SABRParams, sabr_vol, calibrate_sabr
 from .vannavolga import VannaVolgaSmile, pillar_vols
 from .surface import VolSurface, SurfaceSlice, CalendarViolation
 from .exotics import (
-    cash_or_nothing, asset_or_nothing, barrier_option, barrier_greeks,
+    cash_or_nothing, asset_or_nothing, digital_greeks, barrier_option, barrier_greeks,
     geometric_asian, arithmetic_asian, asian_greeks, one_touch, no_touch,
     gap_option, power_option, barrier_rebate, Barrier,
 )
@@ -132,7 +132,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.84.0"
+__version__ = "1.85.0"
 
 __all__ = [
     "OptionType",
@@ -293,6 +293,7 @@ __all__ = [
     "CalendarViolation",
     "cash_or_nothing",
     "asset_or_nothing",
+    "digital_greeks",
     "barrier_option",
     "barrier_greeks",
     "geometric_asian",
