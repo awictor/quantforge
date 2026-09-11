@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.329.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.330.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -986,6 +986,47 @@ Auto-generated from `quantforge` v1.329.0 by `docs/gen_api.py` — do not edit b
 ### `index_vol_from_correlation(weights: Sequence[float], vols: Sequence[float], rho: float) -> float`  _function_
 
 > Index volatility implied by member weights/vols and a common correlation.
+
+## credit
+
+### `SurvivalCurve(times: Sequence[float], hazards: Sequence[float])`  _class_
+
+> Piecewise-constant hazard-rate survival curve.
+>
+> Built from pillar times and the *forward* hazard rate on each segment
+> ``[t_{i-1}, t_i]``. ``survival(t)`` returns ``Q(t) = exp(-integral h)`` and
+> ``default_density(t)`` returns ``h(t) Q(t)``.
+
+### `cds_par_spread(curve: quantforge.credit.SurvivalCurve, pay_times, r, recovery=0.4, n_steps=400)`  _function_
+
+> Fair (par) CDS spread: protection-leg PV divided by the risky annuity.
+
+### `cds_premium_leg(curve: quantforge.credit.SurvivalCurve, spread, pay_times, r, accrual=None)`  _function_
+
+> PV of the CDS premium leg at a given ``spread`` (annualized).
+
+### `cds_protection_leg(curve: quantforge.credit.SurvivalCurve, maturity, r, recovery=0.4, n_steps=400)`  _function_
+
+> PV of the CDS protection (default) leg, ``(1-R) integral DF(t) (-dQ)``.
+>
+> Numerically integrates the loss payment over ``[0, maturity]`` on a uniform
+> grid, paying ``(1 - recovery)`` at the (grid-approximated) default time.
+
+### `cds_value(curve: quantforge.credit.SurvivalCurve, spread, pay_times, r, recovery=0.4, n_steps=400, protection_buyer=True)`  _function_
+
+> Mark-to-market value of a CDS at a contractual ``spread``.
+>
+> Protection buyer is long the protection leg and short the premium leg:
+> ``V = protection - spread * annuity``. Positive when the par spread has
+> widened beyond the contractual spread.
+
+### `risky_annuity(curve: quantforge.credit.SurvivalCurve, pay_times, r, accrual=None)`  _function_
+
+> Risky (survival-weighted) annuity ``sum_i tau_i DF(t_i) Q(t_i)``.
+>
+> ``pay_times`` are the premium payment dates; ``accrual`` is the per-period
+> year fractions (defaults to the gaps between pay times, starting from 0).
+> Discount by flat rate ``r`` or a supplied ``r(t)`` function.
 
 ## density
 

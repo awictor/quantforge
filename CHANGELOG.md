@@ -4,6 +4,21 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.330.0] - 2026-09-11
+
+### Added
+- New module `credit.py` with reduced-form credit pricing: a
+  piecewise-constant-hazard `SurvivalCurve` (survival probability, forward
+  hazard, default density) plus CDS analytics -- `risky_annuity`,
+  `cds_protection_leg`, `cds_premium_leg`, `cds_par_spread`, and `cds_value`.
+  The protection leg integrates the discounted loss over a grid; the par spread
+  is protection PV over the risky annuity.
+- Verified: survival starts at 1 and decreases, matching `e^{-h t}` for a flat
+  hazard; the par spread is near the credit-triangle `h (1 - recovery)`; the CDS
+  value is zero at the par spread; a protection buyer profits below par; a
+  higher hazard widens the spread; the risky annuity is below the risk-free
+  annuity; malformed curves raise.
+
 ## [1.329.0] - 2026-09-11
 
 ### Added
