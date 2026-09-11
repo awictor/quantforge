@@ -50,6 +50,52 @@ def degree_day_swap_payoff(index, strike, tick_value, notional_side=1.0):
     return notional_side * tick_value * (index - strike)
 
 
+def seasonal_mean_temperature(day, a, b, amplitude, phase, period=365.0):
+    """Deterministic seasonal mean temperature on a given day.
+
+    The Alaton-Djehiche-Stillberger seasonal trend
+    ``a + b * day + amplitude * sin(2 pi (day - phase) / period)`` -- a linear
+    warming/cooling trend ``b`` plus an annual sinusoid. Used as the reversion
+    level of the mean-reverting :func:`expected_temperature`.
+    """
+    return a + b * day + amplitude * math.sin(2.0 * math.pi * (day - phase) / period)
+
+
+def expected_temperature(current_temp, seasonal_now, seasonal_future, kappa,
+                         horizon):
+    """Expected temperature under a mean-reverting (OU) temperature model.
+
+    Temperature reverts to its seasonal mean at speed ``kappa``; the deviation from
+    the seasonal curve decays exponentially:
+
+        E[T_h] = seasonal_future + e^{-kappa h} (current_temp - seasonal_now).
+
+    Equals ``current_temp`` at ``horizon = 0`` and relaxes to the future seasonal
+    mean as ``horizon -> inf``.
+    """
+    if kappa <= 0:
+        raise ValueError("kappa must be positive")
+    if horizon < 0:
+        raise ValueError("horizon must be non-negative")
+    return seasonal_future + math.exp(-kappa * horizon) * (current_temp - seasonal_now)
+
+
+def temperature_variance(sigma, kappa, horizon):
+    """Variance of temperature under the OU model ``sigma^2 (1 - e^{-2 kappa h})/(2 kappa)``.
+
+    Zero at ``horizon = 0``, rising monotonically to the stationary variance
+    ``sigma^2 / (2 kappa)`` as ``horizon -> inf`` (same form as the Schwartz
+    commodity model). ``sigma`` is the daily temperature volatility.
+    """
+    if sigma < 0:
+        raise ValueError("sigma must be non-negative")
+    if kappa <= 0:
+        raise ValueError("kappa must be positive")
+    if horizon < 0:
+        raise ValueError("horizon must be non-negative")
+    return sigma * sigma * (1.0 - math.exp(-2.0 * kappa * horizon)) / (2.0 * kappa)
+
+
 def degree_day_swap_rate(expected_index):
     """Fair fixed strike of a degree-day swap: the expected accumulated index.
 

@@ -8,6 +8,7 @@ from quantforge import (
     heating_degree_days, cooling_degree_days, degree_day_index,
     degree_day_swap_payoff, degree_day_option,
     degree_day_swap_rate, degree_day_collar, degree_day_option_mc,
+    seasonal_mean_temperature, expected_temperature, temperature_variance,
 )
 
 
@@ -54,6 +55,42 @@ def test_cap_reduces_call_value():
     capped = degree_day_option(100, 90, 15, 0.03, 0.5, 20, True, cap=15)
     assert capped < uncapped
     assert capped <= math.exp(-0.03 * 0.5) * 20 * 15 + 1e-6
+
+
+def test_seasonal_mean_sinusoid():
+    assert seasonal_mean_temperature(0, 50, 0.001, 20, 80, 365) == pytest.approx(
+        50 + 20 * math.sin(2 * math.pi * (-80) / 365))
+
+
+def test_expected_temperature_zero_horizon():
+    assert expected_temperature(70, 55, 55, 0.2, 0) == pytest.approx(70)
+
+
+def test_expected_temperature_long_run():
+    assert expected_temperature(70, 55, 60, 0.2, 200) == pytest.approx(60, abs=1e-6)
+
+
+def test_expected_temperature_reverts():
+    d1 = abs(expected_temperature(70, 55, 55, 0.2, 1) - 55)
+    d2 = abs(expected_temperature(70, 55, 55, 0.2, 5) - 55)
+    assert d2 < d1
+
+
+def test_temperature_variance_limits():
+    assert temperature_variance(3.0, 0.2, 0) == pytest.approx(0.0, abs=1e-12)
+    assert temperature_variance(3.0, 0.2, 500) == pytest.approx(9 / (2 * 0.2), abs=1e-6)
+
+
+def test_temperature_variance_monotone():
+    vs = [temperature_variance(3.0, 0.2, h) for h in (1, 5, 10, 20, 50)]
+    assert all(vs[i] < vs[i + 1] for i in range(len(vs) - 1))
+
+
+def test_temperature_model_validation():
+    with pytest.raises(ValueError):
+        temperature_variance(3.0, 0, 1)
+    with pytest.raises(ValueError):
+        expected_temperature(70, 55, 55, -1, 1)
 
 
 def test_swap_rate_zeroes_swap():

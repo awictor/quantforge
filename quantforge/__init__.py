@@ -221,6 +221,7 @@ from .weather import (
     heating_degree_days, cooling_degree_days, degree_day_index,
     degree_day_swap_payoff, degree_day_option,
     degree_day_swap_rate, degree_day_collar, degree_day_option_mc,
+    seasonal_mean_temperature, expected_temperature, temperature_variance,
 )
 from .xva import (
     marginal_default_probs, cva, dva, bcva,
@@ -427,7 +428,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.403.0"
+__version__ = "1.404.0"
 
 __all__ = [
     "OptionType",
@@ -785,6 +786,9 @@ __all__ = [
     "degree_day_swap_rate",
     "degree_day_collar",
     "degree_day_option_mc",
+    "seasonal_mean_temperature",
+    "expected_temperature",
+    "temperature_variance",
     "marginal_default_probs",
     "cva",
     "dva",

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.403.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.404.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -7433,12 +7433,41 @@ Auto-generated from `quantforge` v1.403.0 by `docs/gen_api.py` — do not edit b
 > when the strike equals the expected index, so the fair strike is
 > ``expected_index`` itself.
 
+### `expected_temperature(current_temp, seasonal_now, seasonal_future, kappa, horizon)`  _function_
+
+> Expected temperature under a mean-reverting (OU) temperature model.
+>
+> Temperature reverts to its seasonal mean at speed ``kappa``; the deviation from
+> the seasonal curve decays exponentially:
+>
+>     E[T_h] = seasonal_future + e^{-kappa h} (current_temp - seasonal_now).
+>
+> Equals ``current_temp`` at ``horizon = 0`` and relaxes to the future seasonal
+> mean as ``horizon -> inf``.
+
 ### `heating_degree_days(temps, base=65.0)`  _function_
 
 > Accumulated heating degree days ``sum_d max(base - T_d, 0)`` over the period.
 >
 > ``temps`` is the sequence of daily average temperatures. Each cold day (below
 > ``base``) contributes its shortfall; warm days contribute nothing.
+
+### `seasonal_mean_temperature(day, a, b, amplitude, phase, period=365.0)`  _function_
+
+> Deterministic seasonal mean temperature on a given day.
+>
+> The Alaton-Djehiche-Stillberger seasonal trend
+> ``a + b * day + amplitude * sin(2 pi (day - phase) / period)`` -- a linear
+> warming/cooling trend ``b`` plus an annual sinusoid. Used as the reversion
+> level of the mean-reverting :func:`expected_temperature`.
+
+### `temperature_variance(sigma, kappa, horizon)`  _function_
+
+> Variance of temperature under the OU model ``sigma^2 (1 - e^{-2 kappa h})/(2 kappa)``.
+>
+> Zero at ``horizon = 0``, rising monotonically to the stationary variance
+> ``sigma^2 / (2 kappa)`` as ``horizon -> inf`` (same form as the Schwartz
+> commodity model). ``sigma`` is the daily temperature volatility.
 
 ## xva
 
