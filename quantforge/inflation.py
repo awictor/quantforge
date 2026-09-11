@@ -61,3 +61,53 @@ def real_from_breakeven(nominal_yield, breakeven) -> float:
     if breakeven <= -1.0:
         raise ValueError("breakeven must exceed -100%")
     return (1.0 + nominal_yield) / (1.0 + breakeven) - 1.0
+
+
+def linker_price(real_cashflows, real_yield, index_settle, index_base) -> float:
+    """Dirty price of an inflation-linked bond off real cashflows.
+
+    ``real_cashflows`` is ``[(t, real_amount), ...]`` in constant (issue-date)
+    money. Each flow is discounted at the continuously-compounded ``real_yield``
+    and then the whole bond is inflated by the settlement index ratio:
+
+        price = (index_settle / index_base) * sum_i real_amount_i e^{-r t_i}
+
+    Because the index ratio multiplies every flow, the price is degree-one
+    homogeneous in it -- stripping the ratio recovers a standard real-yield bond
+    price (the invariant tested against :mod:`quantforge.bondmath`).
+    """
+    ratio = index_ratio(index_settle, index_base)
+    pv = sum(amt * math.exp(-real_yield * t) for t, amt in real_cashflows)
+    return ratio * pv
+
+
+def linker_real_yield(real_cashflows, price, index_settle, index_base,
+                      tol=1e-10, max_iter=100) -> float:
+    """Continuously-compounded real yield reproducing a linker ``price``.
+
+    Deflates the quoted price by the index ratio and solves the standard real-
+    cashflow bond yield by bisection (price is monotone decreasing in the yield).
+    Inverse of :func:`linker_price`.
+    """
+    if price <= 0:
+        raise ValueError("price must be positive")
+    ratio = index_ratio(index_settle, index_base)
+    target = price / ratio  # real (deflated) price
+
+    def real_px(r):
+        return sum(amt * math.exp(-r * t) for t, amt in real_cashflows)
+
+    lo, hi = -0.5, 5.0
+    p_lo, p_hi = real_px(lo), real_px(hi)
+    if not (min(p_lo, p_hi) - 1e-9 <= target <= max(p_lo, p_hi) + 1e-9):
+        raise ValueError("price outside the achievable yield range")
+    for _ in range(max_iter):
+        mid = 0.5 * (lo + hi)
+        pm = real_px(mid)
+        if abs(pm - target) < tol:
+            return mid
+        if pm > target:   # price too high -> raise yield
+            lo = mid
+        else:
+            hi = mid
+    return 0.5 * (lo + hi)

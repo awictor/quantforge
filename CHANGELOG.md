@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.373.0] - 2026-09-11
+
+### Added
+- `linker_price` and `linker_real_yield` (in `inflation.py`): dirty price of an
+  inflation-linked bond from real (constant-money) cashflows discounted at a
+  continuously-compounded real yield and inflated by the settlement index ratio,
+  and the bisection inverse for the real yield. Because the index ratio multiplies
+  every flow the price is degree-one homogeneous in it; stripping the ratio
+  recovers a standard real-yield bond, cross-checked against `bondmath`'s
+  `bond_price_from_yield` and `yield_to_maturity`.
+
 ## [1.372.0] - 2026-09-11
 
 ### Added

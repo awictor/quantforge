@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.372.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.373.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2910,6 +2910,28 @@ Auto-generated from `quantforge` v1.372.0 by `docs/gen_api.py` — do not edit b
 ### `inflation_adjusted_principal(face, index_settle, index_base) -> float`  _function_
 
 > Inflation-adjusted principal ``face * index_ratio`` (the linker notional).
+
+### `linker_price(real_cashflows, real_yield, index_settle, index_base) -> float`  _function_
+
+> Dirty price of an inflation-linked bond off real cashflows.
+>
+> ``real_cashflows`` is ``[(t, real_amount), ...]`` in constant (issue-date)
+> money. Each flow is discounted at the continuously-compounded ``real_yield``
+> and then the whole bond is inflated by the settlement index ratio:
+>
+>     price = (index_settle / index_base) * sum_i real_amount_i e^{-r t_i}
+>
+> Because the index ratio multiplies every flow, the price is degree-one
+> homogeneous in it -- stripping the ratio recovers a standard real-yield bond
+> price (the invariant tested against :mod:`quantforge.bondmath`).
+
+### `linker_real_yield(real_cashflows, price, index_settle, index_base, tol=1e-10, max_iter=100) -> float`  _function_
+
+> Continuously-compounded real yield reproducing a linker ``price``.
+>
+> Deflates the quoted price by the index ratio and solves the standard real-
+> cashflow bond yield by bisection (price is monotone decreasing in the yield).
+> Inverse of :func:`linker_price`.
 
 ### `real_from_breakeven(nominal_yield, breakeven) -> float`  _function_
 

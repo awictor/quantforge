@@ -206,6 +206,7 @@ from .holee import (
 from .inflation import (
     index_ratio, inflation_adjusted_principal, fisher_real_rate,
     fisher_nominal_rate, breakeven_inflation, real_from_breakeven,
+    linker_price, linker_real_yield,
 )
 from .bondmath import (
     bond_cashflows, dated_bond_cashflows, dated_bond_price, dated_bond_yield,
@@ -391,7 +392,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.372.0"
+__version__ = "1.373.0"
 
 __all__ = [
     "OptionType",
@@ -715,6 +716,8 @@ __all__ = [
     "fisher_nominal_rate",
     "breakeven_inflation",
     "real_from_breakeven",
+    "linker_price",
+    "linker_real_yield",
     "bond_price_from_yield",
     "macaulay_duration",
     "modified_duration",
