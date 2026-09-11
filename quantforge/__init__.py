@@ -47,6 +47,7 @@ from .chooser import (
 from .compound import compound_option, compound_option_greeks
 from .extendible import (
     holder_extendible_call, holder_extendible_call_greeks,
+    holder_extendible_put, holder_extendible_put_greeks,
     writer_extendible_put, writer_extendible_put_greeks,
     writer_extendible_call, writer_extendible_call_greeks,
 )
@@ -323,7 +324,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.302.0"
+__version__ = "1.303.0"
 
 __all__ = [
     "OptionType",
@@ -375,6 +376,8 @@ __all__ = [
     "compound_option_greeks",
     "holder_extendible_call",
     "holder_extendible_call_greeks",
+    "holder_extendible_put",
+    "holder_extendible_put_greeks",
     "writer_extendible_put",
     "writer_extendible_put_greeks",
     "writer_extendible_call",

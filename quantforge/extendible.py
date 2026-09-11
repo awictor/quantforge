@@ -134,6 +134,141 @@ def holder_extendible_call(S, K1, K2, t1, T2, r, sigma, A, b=None) -> float:
     return extension_region + exercise_region
 
 
+def _extend_put_boundaries(K1, K2, tau, r, sigma, b, A):
+    """Two terminal-spot boundaries of a holder-extendible put's extension.
+
+    ``I_low``: exercising equals extending (``K1 - I = P(I, K2, tau) - A``).
+    ``I_high``: extending equals lapsing (``P(I, K2, tau) = A``).
+    Below ``I_low`` the holder exercises; on ``[I_low, I_high]`` it extends;
+    above ``I_high`` it lapses.
+    """
+    def pval(x):
+        return put_price(x, K2, tau, r, sigma, b=b)
+
+    # Lower boundary: K1 - I = P(I) - A  <=>  h(I) = P(I) - A - K1 + I = 0.
+    # h is increasing in I (put delta + 1 in (0, 1)).
+    def h(x):
+        return pval(x) - A - K1 + x
+
+    lo, hi = 1e-8, max(K1, K2)
+    while h(hi) < 0.0:
+        hi *= 2.0
+        if hi > 1e12:
+            break
+    for _ in range(200):
+        mid = 0.5 * (lo + hi)
+        if h(mid) > 0.0:
+            hi = mid
+        else:
+            lo = mid
+    I_low = 0.5 * (lo + hi)
+
+    # Upper boundary: P(I, K2, tau) = A, P decreasing in I.
+    lo2, hi2 = I_low, max(2.0 * K1, 2.0 * K2, I_low * 2.0)
+    while pval(hi2) > A:
+        hi2 *= 2.0
+        if hi2 > 1e12:
+            break
+    for _ in range(200):
+        mid = 0.5 * (lo2 + hi2)
+        if pval(mid) > A:
+            lo2 = mid
+        else:
+            hi2 = mid
+    I_high = 0.5 * (lo2 + hi2)
+    return I_low, I_high
+
+
+def holder_extendible_put(S, K1, K2, t1, T2, r, sigma, A, b=None) -> float:
+    """Holder-extendible put (Longstaff 1990), closed form.
+
+    At the first expiry ``t1`` the holder takes the best of exercising against
+    ``K1`` for ``K1 - S_{t1}``, lapsing, or paying a fee ``A`` to extend to
+    ``T2`` as a put struck at ``K2``:
+
+        payoff(t1) = max(K1 - S_{t1}, P(S_{t1}, K2, T2 - t1) - A, 0).
+
+    The terminal spot splits into exercise (``S < I_low``), extend
+    (``I_low <= S <= I_high``), and lapse (``S > I_high``). The strip is valued
+    with bivariate normals coupling ``t1`` and ``T2``. A very large fee collapses
+    the strip and recovers the vanilla put struck at ``K1`` expiring at ``t1``.
+    """
+    if b is None:
+        b = r
+    _validate(S, K1, t1, sigma)
+    _validate(S, K2, T2, sigma)
+    if T2 <= t1:
+        raise ValueError("require T2 > t1")
+    if A < 0.0:
+        raise ValueError("fee A must be non-negative")
+
+    tau = T2 - t1
+    I_low, I_high = _extend_put_boundaries(K1, K2, tau, r, sigma, b, A)
+    if I_low >= I_high:
+        return put_price(S, K1, t1, r, sigma, b=b)
+
+    v1 = sigma * math.sqrt(t1)
+    st2 = sigma * math.sqrt(T2)
+    rho = math.sqrt(t1 / T2)
+    carry_T2 = math.exp((b - r) * T2)
+    disc_T2 = math.exp(-r * T2)
+    carry_t1 = math.exp((b - r) * t1)
+    disc_t1 = math.exp(-r * t1)
+    mu = b + 0.5 * sigma * sigma
+
+    def z(level):
+        return (math.log(S / level) + mu * t1) / v1
+
+    z_lo, z_hi = z(I_low), z(I_high)
+    y_K2 = (math.log(S / K2) + mu * T2) / st2
+
+    # Strip [I_low, I_high] asset/cash pieces of the extended CALL (N(d1),N(d2)).
+    call_asset = S * carry_T2 * (_bivariate_normal(z_lo, y_K2, rho)
+                                 - _bivariate_normal(z_hi, y_K2, rho))
+    call_cash = K2 * disc_T2 * (_bivariate_normal(z_lo - v1, y_K2 - st2, rho)
+                                - _bivariate_normal(z_hi - v1, y_K2 - st2, rho))
+    # Total (unconditional-on-K2) asset/cash over the strip.
+    tot_asset = S * carry_T2 * (norm_cdf(z_lo) - norm_cdf(z_hi))
+    tot_cash = K2 * disc_T2 * (norm_cdf(z_lo - v1) - norm_cdf(z_hi - v1))
+    # Extended PUT pieces use N(-d) = 1 - N(d): put value = cash(-d2) - asset(-d1).
+    put_cash = tot_cash - call_cash
+    put_asset = tot_asset - call_asset
+    strip_cash = disc_t1 * (norm_cdf(z_lo - v1) - norm_cdf(z_hi - v1))
+    extension_region = put_cash - put_asset - A * strip_cash
+
+    # Exercise region S_{t1} < I_low: discounted E[(K1 - S) 1{S < I_low}].
+    exercise_region = (K1 * disc_t1 * norm_cdf(-(z_lo - v1))
+                       - S * carry_t1 * norm_cdf(-z_lo))
+
+    return extension_region + exercise_region
+
+
+def holder_extendible_put_greeks(S, K1, K2, t1, T2, r, sigma, A, b=None):
+    """Greeks of a holder-extendible put by central finite differences of
+    :func:`holder_extendible_put`: ``delta``, ``gamma``, ``vega``, ``theta``
+    (calendar decay, both expiries shrinking together). Returns a dict with
+    ``price`` and those fields.
+    """
+    if b is None:
+        b = r
+
+    def px(S_=S, sigma_=sigma, shift=0.0):
+        return holder_extendible_put(S_, K1, K2, t1 - shift, T2 - shift, r,
+                                     sigma_, A, b=b)
+
+    base = px()
+    hS = 1e-4 * S
+    up, dn = px(S_=S + hS), px(S_=S - hS)
+    delta = (up - dn) / (2.0 * hS)
+    gamma = (up - 2.0 * base + dn) / (hS * hS)
+    hv = 1e-4
+    vega = (px(sigma_=sigma + hv) - px(sigma_=sigma - hv)) / (2.0 * hv)
+    ht = min(1e-4, 0.25 * t1)
+    theta = -(px(shift=ht) - px(shift=-ht)) / (2.0 * ht)
+    return {"price": base, "delta": delta, "gamma": gamma, "vega": vega,
+            "theta": theta}
+
+
 def writer_extendible_put(S, K1, K2, t1, T2, r, sigma, b=None) -> float:
     """Writer-extendible put (Longstaff 1990), closed form.
 

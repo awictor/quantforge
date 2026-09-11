@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.302.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.303.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1626,6 +1626,28 @@ Auto-generated from `quantforge` v1.302.0 by `docs/gen_api.py` — do not edit b
 
 > Greeks of a holder-extendible call by central finite differences of
 > :func:`holder_extendible_call`: ``delta``, ``gamma``, ``vega``, ``theta``
+> (calendar decay, both expiries shrinking together). Returns a dict with
+> ``price`` and those fields.
+
+### `holder_extendible_put(S, K1, K2, t1, T2, r, sigma, A, b=None) -> float`  _function_
+
+> Holder-extendible put (Longstaff 1990), closed form.
+>
+> At the first expiry ``t1`` the holder takes the best of exercising against
+> ``K1`` for ``K1 - S_{t1}``, lapsing, or paying a fee ``A`` to extend to
+> ``T2`` as a put struck at ``K2``:
+>
+>     payoff(t1) = max(K1 - S_{t1}, P(S_{t1}, K2, T2 - t1) - A, 0).
+>
+> The terminal spot splits into exercise (``S < I_low``), extend
+> (``I_low <= S <= I_high``), and lapse (``S > I_high``). The strip is valued
+> with bivariate normals coupling ``t1`` and ``T2``. A very large fee collapses
+> the strip and recovers the vanilla put struck at ``K1`` expiring at ``t1``.
+
+### `holder_extendible_put_greeks(S, K1, K2, t1, T2, r, sigma, A, b=None)`  _function_
+
+> Greeks of a holder-extendible put by central finite differences of
+> :func:`holder_extendible_put`: ``delta``, ``gamma``, ``vega``, ``theta``
 > (calendar decay, both expiries shrinking together). Returns a dict with
 > ``price`` and those fields.
 

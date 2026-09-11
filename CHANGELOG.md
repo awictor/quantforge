@@ -4,6 +4,22 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.303.0] - 2026-09-11
+
+### Added
+- `holder_extendible_put` and `holder_extendible_put_greeks` (in
+  `extendible.py`): holder-extendible put (Longstaff 1990), completing the full
+  2x2 extendible family (holder/writer x call/put). At the first expiry `t1` the
+  holder takes the best of exercising against `K1`, lapsing, or paying a fee `A`
+  to extend to `T2` as a put struck at `K2`. The terminal spot splits into
+  exercise (`S < I_low`), extend (`I_low <= S <= I_high`), and lapse
+  (`S > I_high`); the extended-put strip is built from the call-strip pieces via
+  `N(-d) = 1 - N(d)`. Greeks by finite difference.
+- Verified: matches a Monte Carlo at the first expiry across three
+  strike/maturity/fee cases to within ~0.03%; a very large fee collapses the
+  strip and recovers the vanilla put to `t1`; a finite fee adds value; a lower
+  fee is worth more; delta is negative and vega positive.
+
 ## [1.302.0] - 2026-09-11
 
 ### Added
