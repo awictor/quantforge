@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.309.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.310.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -548,6 +548,17 @@ Auto-generated from `quantforge` v1.309.0 by `docs/gen_api.py` — do not edit b
 >     q: continuous dividend yield.
 >
 > Puts are obtained by put-call parity.
+
+### `cev_smile(S, strikes, t, r, sigma, beta, q=0.0)`  _function_
+
+> The Black-Scholes implied-vol smile a CEV model produces.
+>
+> Prices a European call at each strike under CEV, then inverts each price to
+> its Black-Scholes implied volatility, returning ``(log_moneyness, vol)``
+> pairs sorted by strike (log-moneyness on the forward ``F = S e^{(r-q) t}``).
+> Because ``sigma`` is calibrated to the ATM instantaneous vol, the smile
+> passes near ``sigma`` at the money; ``beta < 1`` makes local volatility fall
+> as spot rises, producing a downward skew (steeper for smaller ``beta``).
 
 ### `noncentral_chisq_cdf(x: float, k: float, lam: float) -> float`  _function_
 

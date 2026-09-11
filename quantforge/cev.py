@@ -193,3 +193,27 @@ def cev_greeks(S, K, t, r, sigma, beta, option_type=OptionType.CALL, q=0.0):
     theta = -(px(t_=t + ht) - px(t_=t - ht)) / (2.0 * ht)
     return {"price": base, "delta": delta, "gamma": gamma, "vega": vega,
             "theta": theta}
+
+
+def cev_smile(S, strikes, t, r, sigma, beta, q=0.0):
+    """The Black-Scholes implied-vol smile a CEV model produces.
+
+    Prices a European call at each strike under CEV, then inverts each price to
+    its Black-Scholes implied volatility, returning ``(log_moneyness, vol)``
+    pairs sorted by strike (log-moneyness on the forward ``F = S e^{(r-q) t}``).
+    Because ``sigma`` is calibrated to the ATM instantaneous vol, the smile
+    passes near ``sigma`` at the money; ``beta < 1`` makes local volatility fall
+    as spot rises, producing a downward skew (steeper for smaller ``beta``).
+    """
+    from .implied import implied_volatility
+    F = S * math.exp((r - q) * t)
+    b = r - q
+    out = []
+    for K in sorted(strikes):
+        c = cev_price(S, K, t, r, sigma, beta, OptionType.CALL, q=q)
+        try:
+            iv = implied_volatility(c, S, K, t, r, OptionType.CALL, b=b)
+        except ValueError:
+            continue
+        out.append((math.log(K / F), iv))
+    return out

@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.310.0] - 2026-09-11
+
+### Added
+- `cev_smile` (in `cev.py`): the Black-Scholes implied-vol smile a CEV model
+  produces. Prices a call at each strike under CEV and inverts to BS implied
+  vol, returning `(log_moneyness, vol)` pairs on the forward
+  `F = S e^{(r-q) t}`. Mirrors `merton_smile` / `kou_smile`.
+- Verified: the ATM implied vol sits near `sigma` (calibrated to the ATM
+  instantaneous vol); the smile has a downward skew for `beta < 1`, steeper for
+  smaller `beta`; output is sorted by strike; each smile vol reprices to the CEV
+  price it came from.
+
 ## [1.309.0] - 2026-09-11
 
 ### Added
