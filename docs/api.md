@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.375.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.376.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2934,6 +2934,14 @@ Auto-generated from `quantforge` v1.375.0 by `docs/gen_api.py` — do not edit b
 > Above 1 when the price index has risen since issue. Both indices must be
 > positive.
 
+### `index_ratio_interpolated(cpi_month_start, cpi_next_month, day, days_in_month, cpi_base)`  _function_
+
+> Index ratio using the daily-interpolated :func:`reference_cpi`.
+>
+> ``reference_cpi(...) / cpi_base`` -- the ratio a linker actually applies to
+> its principal on a mid-month settlement, versus the month-boundary
+> :func:`index_ratio` which ignores intra-month accrual.
+
 ### `inflation_adjusted_principal(face, index_settle, index_base) -> float`  _function_
 
 > Inflation-adjusted principal ``face * index_ratio`` (the linker notional).
@@ -2977,6 +2985,22 @@ Auto-generated from `quantforge` v1.375.0 by `docs/gen_api.py` — do not edit b
 >
 > ``(1 + nominal)/(1 + breakeven) - 1`` -- inverse of
 > :func:`breakeven_inflation`.
+
+### `reference_cpi(cpi_month_start, cpi_next_month, day, days_in_month)`  _function_
+
+> Daily reference index by linear interpolation between two monthly fixings.
+>
+> Inflation-linked bonds accrue off a *reference index* that interpolates
+> linearly within the month between the anchor CPI for the first of the month
+> and the first of the next month (the standard linker daily-indexation rule,
+> applied to the lagged CPIs). For settlement on the ``day``-th of a month with
+> ``days_in_month`` days:
+>
+>     ref = cpi_month_start + (day - 1)/days_in_month
+>               * (cpi_next_month - cpi_month_start)
+>
+> Equals ``cpi_month_start`` on the 1st and approaches ``cpi_next_month`` at
+> month end.
 
 ### `yoy_inflation_rate(index_prev, index_curr) -> float`  _function_
 

@@ -191,6 +191,43 @@ def yoy_swap_value(notional, fixed_rate, index_levels, discount_factors,
     return notional * value
 
 
+def reference_cpi(cpi_month_start, cpi_next_month, day, days_in_month):
+    """Daily reference index by linear interpolation between two monthly fixings.
+
+    Inflation-linked bonds accrue off a *reference index* that interpolates
+    linearly within the month between the anchor CPI for the first of the month
+    and the first of the next month (the standard linker daily-indexation rule,
+    applied to the lagged CPIs). For settlement on the ``day``-th of a month with
+    ``days_in_month`` days:
+
+        ref = cpi_month_start + (day - 1)/days_in_month
+                  * (cpi_next_month - cpi_month_start)
+
+    Equals ``cpi_month_start`` on the 1st and approaches ``cpi_next_month`` at
+    month end.
+    """
+    if cpi_month_start <= 0 or cpi_next_month <= 0:
+        raise ValueError("CPI levels must be positive")
+    if days_in_month <= 0:
+        raise ValueError("days_in_month must be positive")
+    if not (1 <= day <= days_in_month):
+        raise ValueError("day must be in [1, days_in_month]")
+    frac = (day - 1) / days_in_month
+    return cpi_month_start + frac * (cpi_next_month - cpi_month_start)
+
+
+def index_ratio_interpolated(cpi_month_start, cpi_next_month, day,
+                             days_in_month, cpi_base):
+    """Index ratio using the daily-interpolated :func:`reference_cpi`.
+
+    ``reference_cpi(...) / cpi_base`` -- the ratio a linker actually applies to
+    its principal on a mid-month settlement, versus the month-boundary
+    :func:`index_ratio` which ignores intra-month accrual.
+    """
+    ref = reference_cpi(cpi_month_start, cpi_next_month, day, days_in_month)
+    return index_ratio(ref, cpi_base)
+
+
 def linker_price(real_cashflows, real_yield, index_settle, index_base) -> float:
     """Dirty price of an inflation-linked bond off real cashflows.
 

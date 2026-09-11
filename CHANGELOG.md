@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.376.0] - 2026-09-11
+
+### Added
+- `reference_cpi` and `index_ratio_interpolated` (in `inflation.py`): daily
+  reference index by linear interpolation between two monthly CPI fixings (the
+  standard linker daily-indexation rule), and the corresponding intra-month index
+  ratio. Equals the month-start fixing on the 1st, the mean of the anchors at
+  mid-month, and reduces to the boundary `index_ratio` on day one.
+
 ## [1.375.0] - 2026-09-11
 
 ### Added

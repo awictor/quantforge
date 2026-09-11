@@ -9,6 +9,7 @@ from quantforge import (
     deflation_floored_redemption, deflation_floor_value, yoy_inflation_rate,
     zc_inflation_swap_rate, zc_inflation_swap_value,
     inflation_curve_from_zc_swaps, forward_inflation_rate, yoy_swap_value,
+    reference_cpi, index_ratio_interpolated,
     bond_cashflows, bond_price_from_yield, yield_to_maturity,
 )
 
@@ -167,6 +168,38 @@ def test_curve_forward_validation():
         inflation_curve_from_zc_swaps(100, [1, 2], [0.02])
     with pytest.raises(ValueError):
         yoy_swap_value(1e6, 0.02, [110], [1, 1], 100)
+
+
+def test_reference_cpi_hits_month_start():
+    assert reference_cpi(200, 203, 1, 30) == pytest.approx(200.0)
+
+
+def test_reference_cpi_linear_midpoint():
+    # Day 16 of 30 -> frac 15/30 = 0.5 -> mean of anchors.
+    assert reference_cpi(200, 203, 16, 30) == pytest.approx(201.5)
+
+
+def test_reference_cpi_monotone():
+    vals = [reference_cpi(200, 203, d, 30) for d in range(1, 31)]
+    assert all(vals[i] < vals[i + 1] for i in range(len(vals) - 1))
+
+
+def test_interpolated_ratio_matches_ref_over_base():
+    assert index_ratio_interpolated(200, 203, 16, 30, 190) == pytest.approx(201.5 / 190)
+
+
+def test_interpolated_ratio_day1_equals_plain():
+    assert index_ratio_interpolated(200, 203, 1, 30, 190) == pytest.approx(
+        index_ratio(200, 190))
+
+
+def test_reference_cpi_validation():
+    with pytest.raises(ValueError):
+        reference_cpi(200, 203, 31, 30)
+    with pytest.raises(ValueError):
+        reference_cpi(200, 203, 0, 30)
+    with pytest.raises(ValueError):
+        reference_cpi(-1, 203, 1, 30)
 
 
 def test_validation():
