@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.333.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.334.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1009,6 +1009,16 @@ Auto-generated from `quantforge` v1.333.0 by `docs/gen_api.py` — do not edit b
 > ``n_steps_per_year`` points per year. Returns the calibrated
 > :class:`SurvivalCurve`.
 
+### `cds_accrual_on_default(curve: quantforge.credit.SurvivalCurve, pay_times, r, n_steps=400)`  _function_
+
+> Accrued-premium annuity paid on default between coupon dates.
+>
+> A protection buyer who defaults mid-period still owes the premium accrued
+> since the last coupon. This returns the accrual factor (to be multiplied by
+> the spread): ``integral (t - t_prev) DF(t) (-dQ)`` over each coupon interval,
+> the default time approximated on a uniform sub-grid. Adding this to the
+> :func:`risky_annuity` gives the full premium-leg annuity.
+
 ### `cds_greeks(curve: quantforge.credit.SurvivalCurve, spread, pay_times, r, recovery=0.4, n_steps=400, protection_buyer=True, bump=0.0001)`  _function_
 
 > Risk sensitivities of a CDS mark-to-market by finite difference.
@@ -1027,13 +1037,20 @@ Auto-generated from `quantforge` v1.333.0 by `docs/gen_api.py` — do not edit b
 > recovery rises. Bumps are one-sided by ``bump`` (hazard/rate) or 0.01
 > (recovery).
 
-### `cds_par_spread(curve: quantforge.credit.SurvivalCurve, pay_times, r, recovery=0.4, n_steps=400)`  _function_
+### `cds_par_spread(curve: quantforge.credit.SurvivalCurve, pay_times, r, recovery=0.4, n_steps=400, accrual_on_default=False)`  _function_
 
-> Fair (par) CDS spread: protection-leg PV divided by the risky annuity.
+> Fair (par) CDS spread: protection-leg PV divided by the premium annuity.
+>
+> With ``accrual_on_default=True`` the annuity includes the accrued premium
+> paid on a mid-period default, which lowers the par spread slightly.
 
-### `cds_premium_leg(curve: quantforge.credit.SurvivalCurve, spread, pay_times, r, accrual=None)`  _function_
+### `cds_premium_leg(curve: quantforge.credit.SurvivalCurve, spread, pay_times, r, accrual=None, accrual_on_default=False, n_steps=400)`  _function_
 
 > PV of the CDS premium leg at a given ``spread`` (annualized).
+>
+> With ``accrual_on_default=True`` the accrued premium paid on a mid-period
+> default (:func:`cds_accrual_on_default`) is added to the survival-weighted
+> coupon annuity, the market-standard convention.
 
 ### `cds_protection_leg(curve: quantforge.credit.SurvivalCurve, maturity, r, recovery=0.4, n_steps=400)`  _function_
 

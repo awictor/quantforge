@@ -119,17 +119,58 @@ def cds_protection_leg(curve: SurvivalCurve, maturity, r, recovery=0.4,
     return (1.0 - recovery) * pv
 
 
-def cds_premium_leg(curve: SurvivalCurve, spread, pay_times, r, accrual=None):
-    """PV of the CDS premium leg at a given ``spread`` (annualized)."""
-    return spread * risky_annuity(curve, pay_times, r, accrual)
+def cds_accrual_on_default(curve: SurvivalCurve, pay_times, r, n_steps=400):
+    """Accrued-premium annuity paid on default between coupon dates.
+
+    A protection buyer who defaults mid-period still owes the premium accrued
+    since the last coupon. This returns the accrual factor (to be multiplied by
+    the spread): ``integral (t - t_prev) DF(t) (-dQ)`` over each coupon interval,
+    the default time approximated on a uniform sub-grid. Adding this to the
+    :func:`risky_annuity` gives the full premium-leg annuity.
+    """
+    df = _disc_fn(r)
+    acc = 0.0
+    prev = 0.0
+    for pt in pay_times:
+        m = max(1, int(round(n_steps * (pt - prev) / pay_times[-1])))
+        dt = (pt - prev) / m
+        q_prev = curve.survival(prev)
+        for i in range(1, m + 1):
+            t = prev + i * dt
+            q = curve.survival(t)
+            mid = t - 0.5 * dt
+            acc += (mid - prev) * df(mid) * (q_prev - q)
+            q_prev = q
+        prev = pt
+    return acc
+
+
+def cds_premium_leg(curve: SurvivalCurve, spread, pay_times, r, accrual=None,
+                    accrual_on_default=False, n_steps=400):
+    """PV of the CDS premium leg at a given ``spread`` (annualized).
+
+    With ``accrual_on_default=True`` the accrued premium paid on a mid-period
+    default (:func:`cds_accrual_on_default`) is added to the survival-weighted
+    coupon annuity, the market-standard convention.
+    """
+    ann = risky_annuity(curve, pay_times, r, accrual)
+    if accrual_on_default:
+        ann += cds_accrual_on_default(curve, pay_times, r, n_steps)
+    return spread * ann
 
 
 def cds_par_spread(curve: SurvivalCurve, pay_times, r, recovery=0.4,
-                   n_steps=400):
-    """Fair (par) CDS spread: protection-leg PV divided by the risky annuity."""
+                   n_steps=400, accrual_on_default=False):
+    """Fair (par) CDS spread: protection-leg PV divided by the premium annuity.
+
+    With ``accrual_on_default=True`` the annuity includes the accrued premium
+    paid on a mid-period default, which lowers the par spread slightly.
+    """
     maturity = pay_times[-1]
     prot = cds_protection_leg(curve, maturity, r, recovery, n_steps)
     ann = risky_annuity(curve, pay_times, r)
+    if accrual_on_default:
+        ann += cds_accrual_on_default(curve, pay_times, r, n_steps)
     if ann <= 0:
         raise ValueError("risky annuity must be positive")
     return prot / ann

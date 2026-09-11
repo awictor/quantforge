@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.334.0] - 2026-09-11
+
+### Added
+- `cds_accrual_on_default` (in `credit.py`): the accrued-premium annuity a
+  protection buyer owes on a mid-period default, integrated over each coupon
+  interval. `cds_premium_leg` and `cds_par_spread` gain an
+  `accrual_on_default` flag that folds this term into the premium annuity (the
+  market-standard convention).
+- Verified: the accrual factor is positive and a small fraction of the coupon
+  annuity; including it lowers the par spread and raises the premium-leg PV; it
+  is bounded by the half-period default probability and rises with the hazard.
+
 ## [1.333.0] - 2026-09-11
 
 ### Added
