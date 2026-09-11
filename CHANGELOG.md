@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.318.0] - 2026-09-11
+
+### Fixed
+- `sabr_vol` (lognormal Hagan) no longer divides by zero when the vol-of-vol
+  `nu = 0` (which makes `z = 0` and `x(z) = 0`). The `z / x(z)` ratio now takes
+  its limit of 1, matching the `nu -> 0` behaviour — the same fix already
+  applied to `sabr_normal_vol` in 1.317.0. Nonzero-`nu` values are unchanged.
+- Verified: the `nu = 0` vol matches the `nu -> 0` limit; the smile stays
+  skewed by `beta < 1` when `nu = 0`; the ATM `nu = 0` vol sits at
+  `alpha / F^{1-beta}` up to the small time correction.
+
 ## [1.317.0] - 2026-09-11
 
 ### Added

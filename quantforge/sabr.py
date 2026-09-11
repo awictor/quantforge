@@ -319,9 +319,14 @@ def sabr_vol(F, K, t, alpha, beta, rho, nu) -> float:
     FK_beta = FK ** (one_beta / 2.0)          # (F K)^{(1-beta)/2}
     log_FK2 = logFK * logFK
 
-    # z and x(z).
+    # z and x(z); the ratio z/x(z) -> 1 as the vol-of-vol nu -> 0 (z -> 0).
     z = (nu / alpha) * FK_beta * logFK
-    x_z = math.log((math.sqrt(1.0 - 2.0 * rho * z + z * z) + z - rho) / (1.0 - rho))
+    if abs(z) < 1e-10:
+        z_over_x = 1.0
+    else:
+        x_z = math.log(
+            (math.sqrt(1.0 - 2.0 * rho * z + z * z) + z - rho) / (1.0 - rho))
+        z_over_x = z / x_z
 
     # Prefactor denominator series in log(F/K).
     denom = FK_beta * (1.0
@@ -333,7 +338,7 @@ def sabr_vol(F, K, t, alpha, beta, rho, nu) -> float:
     term3 = (2.0 - 3.0 * rho * rho) / 24.0 * nu * nu
     correction = 1.0 + (term1 + term2 + term3) * t
 
-    return (alpha / denom) * (z / x_z) * correction
+    return (alpha / denom) * z_over_x * correction
 
 
 def sabr_normal_vol(F, K, t, alpha, beta, rho, nu) -> float:

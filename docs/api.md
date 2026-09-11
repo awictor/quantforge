@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.317.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.318.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 

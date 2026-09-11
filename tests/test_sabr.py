@@ -78,3 +78,25 @@ def test_invalid_inputs_rejected():
         sabr_vol(-1, 100, 1.0, 0.2, 0.5, -0.3, 0.4)
     with pytest.raises(ValueError):
         sabr_vol(100, 100, 1.0, 0.0, 0.5, -0.3, 0.4)  # alpha must be > 0
+
+
+def test_zero_vol_of_vol_no_divide_by_zero():
+    # nu = 0 makes z = 0; the z/x(z) ratio must take its limit of 1 rather than
+    # divide by zero. The result matches the nu -> 0 limit.
+    off_atm = sabr_vol(100, 110, 1.0, 0.2, 0.5, -0.3, 0.0)
+    limit = sabr_vol(100, 110, 1.0, 0.2, 0.5, -0.3, 1e-8)
+    assert off_atm == pytest.approx(limit, abs=1e-7)
+
+
+def test_zero_vol_of_vol_still_has_beta_skew():
+    # With nu = 0 the smile is flat in vol-of-vol but still skewed by beta < 1.
+    lo = sabr_vol(100, 80, 1.0, 0.2, 0.5, -0.3, 0.0)
+    hi = sabr_vol(100, 120, 1.0, 0.2, 0.5, -0.3, 0.0)
+    assert lo > hi  # downward skew from beta
+
+
+def test_zero_vol_of_vol_atm_is_alpha_over_fbeta():
+    # ATM with nu = 0, rho = 0: sigma ~ alpha / F^{1-beta} plus a tiny
+    # beta^2 alpha^2 time correction, so it sits just above the leading term.
+    atm = sabr_vol(100, 100, 1.0, 0.2, 0.5, 0.0, 0.0)
+    assert atm == pytest.approx(0.2 / 100 ** 0.5, abs=1e-4)
