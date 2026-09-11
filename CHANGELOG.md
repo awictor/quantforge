@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.365.0] - 2026-09-11
+
+### Added
+- `compounded_overnight_rate` and `simple_average_rate` (in `rates.py`):
+  overnight-rate coupon conventions. The compounded (SOFR/SONIA setting-in-
+  arrears) rate multiplies daily growth factors `(1 + r_i tau_i)` and annualizes
+  by the total accrual; the simple version (Fed-funds style) is the
+  accrual-weighted arithmetic average.
+- Verified: the compounded rate exceeds the simple average for positive fixings
+  (interest-on-interest); the simple average of a flat series is the rate; a
+  single fixing gives both equal to it; the weighted average and the compounded
+  product match hand calculations; length mismatches raise.
+
 ## [1.364.0] - 2026-09-11
 
 ### Added

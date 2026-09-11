@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.364.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.365.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -4766,6 +4766,19 @@ Auto-generated from `quantforge` v1.364.0 by `docs/gen_api.py` — do not edit b
 > The net value is ``cap - floor``; a zero-cost collar is the pair of strikes
 > that makes this zero.
 
+### `compounded_overnight_rate(fixings, accruals) -> float`  _function_
+
+> Annualized rate from daily-compounding overnight fixings (SOFR-style).
+>
+> The compounded setting-in-arrears rate over a period: multiply the daily
+> growth factors ``(1 + r_i tau_i)`` and annualize by the total accrual,
+>
+>     rate = (prod_i (1 + r_i tau_i) - 1) / sum_i tau_i.
+>
+> ``fixings`` are the per-day annualized overnight rates and ``accruals`` the
+> day-count fractions (typically 1/360). This is how compounded SOFR / SONIA
+> coupons are computed.
+
 ### `floor_greeks(periods: Sequence[quantforge.rates.CapletPeriod], strike: float)`  _function_
 
 > Aggregate Greeks of a floor: the summed floorlet Greeks.
@@ -4801,6 +4814,14 @@ Auto-generated from `quantforge` v1.364.0 by `docs/gen_api.py` — do not edit b
 >
 > This is the standard way SABR is used on swaptions: one calibrated smile
 > prices every strike consistently. Returns the swaption present value.
+
+### `simple_average_rate(fixings, accruals) -> float`  _function_
+
+> Accrual-weighted arithmetic average of overnight fixings (Fed-funds style).
+>
+> ``sum_i r_i tau_i / sum_i tau_i`` -- the simple (non-compounded) averaging
+> convention. Lies below the compounded rate when fixings are positive
+> (compounding adds interest-on-interest).
 
 ### `swaption_greeks(swap_rate, strike, expiry, sigma_n, periods, payer=True)`  _function_
 

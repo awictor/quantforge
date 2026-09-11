@@ -36,6 +36,49 @@ class CapletPeriod:
     sigma_n: float          # normal (absolute) volatility of the forward rate
 
 
+def compounded_overnight_rate(fixings, accruals) -> float:
+    """Annualized rate from daily-compounding overnight fixings (SOFR-style).
+
+    The compounded setting-in-arrears rate over a period: multiply the daily
+    growth factors ``(1 + r_i tau_i)`` and annualize by the total accrual,
+
+        rate = (prod_i (1 + r_i tau_i) - 1) / sum_i tau_i.
+
+    ``fixings`` are the per-day annualized overnight rates and ``accruals`` the
+    day-count fractions (typically 1/360). This is how compounded SOFR / SONIA
+    coupons are computed.
+    """
+    if len(fixings) != len(accruals):
+        raise ValueError("fixings and accruals must have equal length")
+    if not fixings:
+        raise ValueError("need at least one fixing")
+    growth = 1.0
+    total = 0.0
+    for r, tau in zip(fixings, accruals):
+        growth *= (1.0 + r * tau)
+        total += tau
+    if total <= 0.0:
+        raise ValueError("total accrual must be positive")
+    return (growth - 1.0) / total
+
+
+def simple_average_rate(fixings, accruals) -> float:
+    """Accrual-weighted arithmetic average of overnight fixings (Fed-funds style).
+
+    ``sum_i r_i tau_i / sum_i tau_i`` -- the simple (non-compounded) averaging
+    convention. Lies below the compounded rate when fixings are positive
+    (compounding adds interest-on-interest).
+    """
+    if len(fixings) != len(accruals):
+        raise ValueError("fixings and accruals must have equal length")
+    if not fixings:
+        raise ValueError("need at least one fixing")
+    total = sum(accruals)
+    if total <= 0.0:
+        raise ValueError("total accrual must be positive")
+    return sum(r * tau for r, tau in zip(fixings, accruals)) / total
+
+
 def caplet_price(period: CapletPeriod, strike: float, is_cap: bool = True) -> float:
     """Price a single caplet (cap) or floorlet (floor).
 

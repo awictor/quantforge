@@ -171,6 +171,7 @@ from .spline import CubicSpline, SmileSpline
 from .rates import (
     CapletPeriod, caplet_price, cap_price, floor_price, collar_price,
     caplet_floorlet_parity, annuity, swaption_price, swaption_parity,
+    compounded_overnight_rate, simple_average_rate,
     caplet_greeks, cap_greeks, floor_greeks, swaption_greeks,
     black_swaption_price, black_swaption_greeks,
     swaption_implied_normal_vol, swaption_implied_black_vol,
@@ -381,7 +382,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.364.0"
+__version__ = "1.365.0"
 
 __all__ = [
     "OptionType",
@@ -641,6 +642,8 @@ __all__ = [
     "annuity",
     "swaption_price",
     "swaption_parity",
+    "compounded_overnight_rate",
+    "simple_average_rate",
     "swaption_greeks",
     "black_swaption_price",
     "black_swaption_greeks",
