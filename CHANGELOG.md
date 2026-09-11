@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.335.0] - 2026-09-11
+
+### Added
+- `garch_term_variance` (in `volatility.py`): the annualized GARCH(1,1) term
+  (average) volatility over the next `horizon` steps -- the vol an option of
+  that maturity is priced off, not a single-step forecast. Uses the closed-form
+  geometric-series average of the mean-reverting per-step variances,
+  `avg = LR + (h_1 - LR)/n (1 - p^n)/(1 - p)`.
+- Verified: it equals the brute-force average of the per-step
+  `garch_forecast` variances; the one-step case matches the point forecast; it
+  converges to the long-run vol as the horizon grows and (from an elevated
+  start) decreases monotonically toward it; a unit-root process falls back to
+  the one-step variance; a zero horizon raises.
+
 ## [1.334.0] - 2026-09-11
 
 ### Added

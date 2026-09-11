@@ -338,3 +338,32 @@ def garch_forecast(params: GarchParams, last_return, last_variance,
     else:
         h = lr + (p ** (horizon - 1)) * (h1 - lr)
     return math.sqrt(h * periods_per_year)
+
+
+def garch_term_variance(params: GarchParams, last_return, last_variance,
+                        horizon, periods_per_year: int = 252):
+    """Annualized GARCH term (average) volatility over the next ``horizon`` steps.
+
+    An option maturing in ``horizon`` periods is priced off the *average* of the
+    per-step conditional variances, not a single step. Summing the mean-reverting
+    forecasts ``E[h_k] = LR + persistence^{k-1} (h_1 - LR)`` gives, for
+    persistence ``p < 1``,
+
+        avg_var = LR + (h_1 - LR)/horizon * (1 - p^horizon)/(1 - p),
+
+    the closed form of the geometric-series average. This is the volatility to
+    feed a Black-Scholes price for that maturity. Returns the annualized term
+    volatility ``sqrt(avg_var * periods_per_year)``.
+    """
+    if horizon < 1:
+        raise ValueError("horizon must be >= 1")
+    h1 = params.omega + params.alpha * last_return * last_return + params.beta * last_variance
+    lr = params.long_run_variance
+    p = params.persistence
+    if p >= 1.0:
+        avg = h1  # unit-root: variance neither reverts nor is finite in LR
+    else:
+        # sum_{k=1}^{n} E[h_k] = n*LR + (h1-LR) * (1 - p^n)/(1 - p); average it.
+        geom = (1.0 - p ** horizon) / (1.0 - p)
+        avg = lr + (h1 - lr) * geom / horizon
+    return math.sqrt(avg * periods_per_year)

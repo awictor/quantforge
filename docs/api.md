@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.334.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.335.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -5991,6 +5991,21 @@ Auto-generated from `quantforge` v1.334.0 by `docs/gen_api.py` — do not edit b
 > that the expected variance mean-reverts toward the long-run level at rate
 > ``persistence`` per step: ``E[h_k] = LR + persistence^{k-1} (h_1 - LR)``.
 > Returns the annualized volatility for the ``horizon``-step-ahead period.
+
+### `garch_term_variance(params: quantforge.volatility.GarchParams, last_return, last_variance, horizon, periods_per_year: int = 252)`  _function_
+
+> Annualized GARCH term (average) volatility over the next ``horizon`` steps.
+>
+> An option maturing in ``horizon`` periods is priced off the *average* of the
+> per-step conditional variances, not a single step. Summing the mean-reverting
+> forecasts ``E[h_k] = LR + persistence^{k-1} (h_1 - LR)`` gives, for
+> persistence ``p < 1``,
+>
+>     avg_var = LR + (h_1 - LR)/horizon * (1 - p^horizon)/(1 - p),
+>
+> the closed form of the geometric-series average. This is the volatility to
+> feed a Black-Scholes price for that maturity. Returns the annualized term
+> volatility ``sqrt(avg_var * periods_per_year)``.
 
 ### `garman_klass(opens, highs, lows, closes, periods_per_year: int = 252) -> float`  _function_
 
