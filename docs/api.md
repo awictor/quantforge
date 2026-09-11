@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.370.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.371.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -371,6 +371,15 @@ Auto-generated from `quantforge` v1.370.0 by `docs/gen_api.py` — do not edit b
 
 > Convexity ``1/price d2Price/dy2``: PV-weighted average of squared time.
 
+### `dated_accrued_interest(settle, prev_coupon_date, next_coupon_date, face, coupon_rate, freq, convention='30/360') -> float`  _function_
+
+> Accrued interest at ``settle`` between two coupon dates, day-count based.
+>
+> Accrues the current coupon ``face * coupon_rate / freq`` by the fraction of
+> the period elapsed, ``year_fraction(prev, settle) / year_fraction(prev,
+> next)``, under the day-count ``convention``. Zero at the coupon date, the
+> full coupon just before the next.
+
 ### `dated_bond_cashflows(start, maturity_years, face, coupon_rate, freq=2, convention='30/360', end_of_month=False, business_day='unadjusted')`  _function_
 
 > Coupon-bond cashflows on a real calendar with day-count accruals.
@@ -402,6 +411,14 @@ Auto-generated from `quantforge` v1.370.0 by `docs/gen_api.py` — do not edit b
 > Bisection on the yield (price is monotone decreasing in it), discounting the
 > :func:`dated_bond_price` cashflows from ``settle``. Inverse of
 > :func:`dated_bond_price`.
+
+### `dated_clean_price(settle, dated_cashflows, y, prev_coupon_date, next_coupon_date, face, coupon_rate, freq, convention='30/360') -> float`  _function_
+
+> Clean (quoted) dated price: dirty price minus dated accrued interest.
+>
+> Combines :func:`dated_bond_price` (the dirty/invoice price discounted from
+> ``settle``) with :func:`dated_accrued_interest`. At a coupon date the clean
+> and dirty prices coincide.
 
 ### `dirty_price(cashflows: Sequence[Tuple[float, float]], y) -> float`  _function_
 

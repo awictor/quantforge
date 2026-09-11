@@ -76,6 +76,40 @@ def dated_bond_cashflows(start, maturity_years, face, coupon_rate, freq=2,
     return flows
 
 
+def dated_accrued_interest(settle, prev_coupon_date, next_coupon_date, face,
+                           coupon_rate, freq, convention="30/360") -> float:
+    """Accrued interest at ``settle`` between two coupon dates, day-count based.
+
+    Accrues the current coupon ``face * coupon_rate / freq`` by the fraction of
+    the period elapsed, ``year_fraction(prev, settle) / year_fraction(prev,
+    next)``, under the day-count ``convention``. Zero at the coupon date, the
+    full coupon just before the next.
+    """
+    from .daycount import year_fraction, _ordinal
+    if not (_ordinal(prev_coupon_date) <= _ordinal(settle) <= _ordinal(next_coupon_date)):
+        raise ValueError("settle must lie in [prev_coupon, next_coupon]")
+    period = year_fraction(prev_coupon_date, next_coupon_date, convention)
+    if period <= 0.0:
+        raise ValueError("coupon period must be positive")
+    elapsed = year_fraction(prev_coupon_date, settle, convention)
+    return face * coupon_rate / freq * (elapsed / period)
+
+
+def dated_clean_price(settle, dated_cashflows, y, prev_coupon_date,
+                      next_coupon_date, face, coupon_rate, freq,
+                      convention="30/360") -> float:
+    """Clean (quoted) dated price: dirty price minus dated accrued interest.
+
+    Combines :func:`dated_bond_price` (the dirty/invoice price discounted from
+    ``settle``) with :func:`dated_accrued_interest`. At a coupon date the clean
+    and dirty prices coincide.
+    """
+    dirty = dated_bond_price(settle, dated_cashflows, y, convention)
+    accrued = dated_accrued_interest(settle, prev_coupon_date, next_coupon_date,
+                                     face, coupon_rate, freq, convention)
+    return dirty - accrued
+
+
 def dated_bond_price(settle, dated_cashflows, y, convention="30/360") -> float:
     """Present value of dated cashflows discounted from a settlement date.
 

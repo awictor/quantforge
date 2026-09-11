@@ -205,6 +205,7 @@ from .holee import (
 )
 from .bondmath import (
     bond_cashflows, dated_bond_cashflows, dated_bond_price, dated_bond_yield,
+    dated_accrued_interest, dated_clean_price,
     bond_price_from_yield, macaulay_duration,
     modified_duration, convexity, dv01 as bond_dv01, yield_to_maturity,
     price_from_curve, key_rate_durations, effective_duration_from_curve,
@@ -386,7 +387,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.370.0"
+__version__ = "1.371.0"
 
 __all__ = [
     "OptionType",
@@ -702,6 +703,8 @@ __all__ = [
     "dated_bond_cashflows",
     "dated_bond_price",
     "dated_bond_yield",
+    "dated_accrued_interest",
+    "dated_clean_price",
     "bond_price_from_yield",
     "macaulay_duration",
     "modified_duration",

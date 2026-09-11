@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.371.0] - 2026-09-11
+
+### Added
+- `dated_accrued_interest` and `dated_clean_price` (in `bondmath.py`): calendar-
+  accurate accrued interest and clean quote. Accrued interest accrues the coupon
+  by the day-count fraction of the current period elapsed at settlement
+  (`year_fraction(prev, settle) / year_fraction(prev, next)`); the clean price
+  is the dated dirty price minus that accrued.
+- Verified: accrued is half a coupon three months into a semiannual period and
+  zero at the coupon date, growing toward the next coupon; the clean price is
+  the dated dirty price minus accrued and coincides with it at a coupon date; a
+  settlement outside the coupon period raises.
+
 ## [1.370.0] - 2026-09-11
 
 ### Added
