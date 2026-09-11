@@ -17,6 +17,9 @@ Pure standard library.
 
 import math
 
+from .cev import noncentral_chisq_cdf
+from .bsm import OptionType, _coerce_type
+
 
 def _AB(t, kappa, theta, sigma):
     g = math.sqrt(kappa * kappa + 2.0 * sigma * sigma)
@@ -74,3 +77,46 @@ def cir_bond_greeks(r0, t, kappa, theta, sigma):
     _A, B = _AB(t, kappa, theta, sigma)
     return {"price": price, "rho_r": -B * price, "gamma_r": B * B * price,
             "duration": B, "convexity": B * B}
+
+
+def cir_bond_option(r0, t_option, t_bond, strike, kappa, theta, sigma,
+                    option_type=OptionType.CALL):
+    """European option on a CIR zero-coupon bond (CIR 1985, exact).
+
+    Option expires at ``t_option`` on a bond maturing at ``t_bond`` (``> t_option``),
+    struck at ``strike`` on the bond price. Uses the noncentral chi-square
+    formula: with ``g = sqrt(kappa^2 + 2 sigma^2)`` and the CIR affine
+    ``A, B`` over ``t_bond - t_option``, the call is
+
+        P(0,t_bond) X2(...; nc1) - strike P(0,t_option) X2(...; nc2),
+
+    with critical rate ``r* = ln(A/strike)/B``. Puts follow from put-call parity.
+    """
+    ot = _coerce_type(option_type)
+    if not (0 < t_option < t_bond):
+        raise ValueError("require 0 < t_option < t_bond")
+    if r0 < 0:
+        raise ValueError("r0 must be non-negative in CIR")
+    if kappa <= 0 or theta < 0 or sigma <= 0:
+        raise ValueError("require kappa > 0, theta >= 0, sigma > 0")
+    PS = cir_zero_coupon_bond(r0, t_option, kappa, theta, sigma)
+    PT = cir_zero_coupon_bond(r0, t_bond, kappa, theta, sigma)
+
+    g = math.sqrt(kappa * kappa + 2.0 * sigma * sigma)
+    emgs = math.exp(g * t_option) - 1.0
+    phi = 2.0 * g / (sigma * sigma * emgs)
+    psi = (kappa + g) / (sigma * sigma)
+    A_TS, B_TS = _AB(t_bond - t_option, kappa, theta, sigma)
+    rstar = math.log(A_TS / strike) / B_TS
+    df = 4.0 * kappa * theta / (sigma * sigma)
+    common = 2.0 * phi * phi * r0 * math.exp(g * t_option)
+    x1 = 2.0 * rstar * (phi + psi + B_TS)
+    nc1 = common / (phi + psi + B_TS)
+    x2 = 2.0 * rstar * (phi + psi)
+    nc2 = common / (phi + psi)
+    call = (PT * noncentral_chisq_cdf(x1, df, nc1)
+            - strike * PS * noncentral_chisq_cdf(x2, df, nc2))
+    if ot is OptionType.CALL:
+        return call
+    # Put-call parity: C - P = P(0,t_bond) - strike P(0,t_option).
+    return call - PT + strike * PS

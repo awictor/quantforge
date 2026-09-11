@@ -151,7 +151,10 @@ from .vasicek import (
     coupon_bond_option as vasicek_coupon_bond_option,
     swaption as vasicek_swaption,
 )
-from .cir import cir_zero_coupon_bond, cir_zero_coupon_yield, cir_bond_greeks
+from .cir import (
+    cir_zero_coupon_bond, cir_zero_coupon_yield, cir_bond_greeks,
+    cir_bond_option,
+)
 from .holee import (
     holee_zero_coupon_bond, holee_zero_coupon_yield, holee_bond_greeks,
     holee_bond_option, holee_coupon_bond_option, holee_swaption,
@@ -279,7 +282,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.247.0"
+__version__ = "1.248.0"
 
 __all__ = [
     "OptionType",
@@ -505,6 +508,7 @@ __all__ = [
     "cir_zero_coupon_bond",
     "cir_zero_coupon_yield",
     "cir_bond_greeks",
+    "cir_bond_option",
     "holee_zero_coupon_bond",
     "holee_zero_coupon_yield",
     "holee_bond_greeks",

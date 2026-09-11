@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.248.0] - 2026-09-10
+
+### Added
+- `cir_bond_option` (in `cir.py`): exact European option on a CIR zero-coupon
+  bond (Cox-Ingersoll-Ross 1985), using the noncentral chi-square CDF already in
+  the library. The call is `P(0,t_bond) X2(...) - strike P(0,t_option) X2(...)`
+  with critical rate `r* = ln(A/strike)/B`; puts follow from put-call parity.
+- Verified: put-call parity `C - P = P(0,t_bond) - strike P(0,t_option)` to
+  1e-9; the call matches a fine-step CIR Monte Carlo (0.02260, slow test); both
+  prices positive; a higher strike lowers the call.
+
 ## [1.247.0] - 2026-09-10
 
 ### Added

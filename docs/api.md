@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.247.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.248.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -615,6 +615,19 @@ Auto-generated from `quantforge` v1.247.0 by `docs/gen_api.py` — do not edit b
 > The rate ``duration`` is ``-1/P dP/dr0 = B`` and ``convexity`` is
 > ``1/P d2P/dr0^2 = B^2``. Returns a dict with ``price``, ``rho_r``,
 > ``gamma_r``, ``duration``, ``convexity``.
+
+### `cir_bond_option(r0, t_option, t_bond, strike, kappa, theta, sigma, option_type=<OptionType.CALL: 'call'>)`  _function_
+
+> European option on a CIR zero-coupon bond (CIR 1985, exact).
+>
+> Option expires at ``t_option`` on a bond maturing at ``t_bond`` (``> t_option``),
+> struck at ``strike`` on the bond price. Uses the noncentral chi-square
+> formula: with ``g = sqrt(kappa^2 + 2 sigma^2)`` and the CIR affine
+> ``A, B`` over ``t_bond - t_option``, the call is
+>
+>     P(0,t_bond) X2(...; nc1) - strike P(0,t_option) X2(...; nc2),
+>
+> with critical rate ``r* = ln(A/strike)/B``. Puts follow from put-call parity.
 
 ### `cir_zero_coupon_bond(r0, t, kappa, theta, sigma)`  _function_
 
