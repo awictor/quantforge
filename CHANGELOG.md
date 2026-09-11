@@ -4,6 +4,22 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.314.0] - 2026-09-11
+
+### Added
+- `black_swaption_price` and `black_swaption_greeks` (in `rates.py`): the Black
+  (lognormal) European swaption, the market-standard counterpart to the normal
+  `swaption_price`. The forward swap rate is lognormal with Black vol
+  `sigma_b`, and the swaption is `annuity * Black76(swap_rate, strike, expiry,
+  sigma_b)`. Payer = call on the rate, receiver = put; requires positive rate
+  and strike. Greeks are the Black-76 rate delta/gamma/vega scaled by the
+  annuity.
+- Verified: payer-minus-receiver equals `annuity * (swap_rate - strike)`
+  exactly; ATM Black matches the Bachelier swaption with
+  `sigma_n = sigma_b * swap_rate`; rate delta matches a finite difference; gamma
+  and vega are positive; payer delta positive and receiver negative; zero expiry
+  returns the intrinsic; negative rate/strike raise.
+
 ## [1.313.0] - 2026-09-11
 
 ### Added

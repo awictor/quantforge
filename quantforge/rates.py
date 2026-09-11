@@ -20,7 +20,10 @@ from typing import Sequence, List
 from .bachelier import (
     bachelier_price, bachelier_delta, bachelier_gamma, bachelier_vega,
 )
-from .bsm import OptionType
+from .bsm import (
+    OptionType, price as bsm_price, delta as bsm_delta, gamma as bsm_gamma,
+    vega as bsm_vega,
+)
 
 
 @dataclass(frozen=True)
@@ -190,3 +193,58 @@ def swaption_greeks(swap_rate, strike, expiry, sigma_n, periods, payer=True):
 def swaption_parity(swap_rate, strike, periods) -> float:
     """Payer - receiver at the same strike = annuity * (swap_rate - strike)."""
     return annuity(periods) * (swap_rate - strike)
+
+
+def black_swaption_price(swap_rate, strike, expiry, sigma_b, periods,
+                         payer=True) -> float:
+    """Black (lognormal) price of a European swaption on the underlying swap.
+
+    The market-standard lognormal counterpart to :func:`swaption_price`: the
+    forward swap rate is modelled as lognormal with (Black) volatility
+    ``sigma_b``, and the swaption is the annuity times a zero-carry Black-76
+    option on the rate:
+
+        V = annuity * Black76(swap_rate, strike, expiry, sigma_b).
+
+    A payer swaption is a call on the rate, a receiver a put. Requires positive
+    ``swap_rate`` and ``strike`` (use :func:`swaption_price` for the normal model
+    when rates may be negative).
+    """
+    if swap_rate <= 0 or strike <= 0:
+        raise ValueError("Black swaption needs positive swap_rate and strike")
+    ann = annuity(periods)
+    ot = OptionType.CALL if payer else OptionType.PUT
+    if expiry <= 0:
+        intrinsic = (max(swap_rate - strike, 0.0) if payer
+                     else max(strike - swap_rate, 0.0))
+        return ann * intrinsic
+    # Black-76: BSM with zero cost of carry (b = 0), undiscounted (r = 0).
+    undiscounted = bsm_price(swap_rate, strike, expiry, 0.0, sigma_b, ot, b=0.0)
+    return ann * undiscounted
+
+
+def black_swaption_greeks(swap_rate, strike, expiry, sigma_b, periods,
+                          payer=True):
+    """Analytic Greeks of a Black (lognormal) European swaption.
+
+    The value is ``annuity * Black76(swap_rate, strike, expiry, sigma_b)``, so
+    the swap-rate Greeks are the Black-76 Greeks scaled by the annuity:
+    ``rate_delta`` (dV/d swap_rate), ``rate_gamma`` (d2V/d swap_rate^2), and
+    ``vega`` (dV/dsigma_b). Returns a dict with ``price``, ``rate_delta``,
+    ``rate_gamma``, ``vega``, ``annuity``.
+    """
+    if swap_rate <= 0 or strike <= 0:
+        raise ValueError("Black swaption needs positive swap_rate and strike")
+    ann = annuity(periods)
+    ot = OptionType.CALL if payer else OptionType.PUT
+    price = black_swaption_price(swap_rate, strike, expiry, sigma_b, periods, payer)
+    if expiry <= 0:
+        itm = (swap_rate > strike) if payer else (swap_rate < strike)
+        rate_delta = ann * ((1.0 if payer else -1.0) if itm else 0.0)
+        return {"price": price, "rate_delta": rate_delta, "rate_gamma": 0.0,
+                "vega": 0.0, "annuity": ann}
+    rate_delta = ann * bsm_delta(swap_rate, strike, expiry, 0.0, sigma_b, ot, b=0.0)
+    rate_gamma = ann * bsm_gamma(swap_rate, strike, expiry, 0.0, sigma_b, b=0.0)
+    vega = ann * bsm_vega(swap_rate, strike, expiry, 0.0, sigma_b, b=0.0)
+    return {"price": price, "rate_delta": rate_delta, "rate_gamma": rate_gamma,
+            "vega": vega, "annuity": ann}

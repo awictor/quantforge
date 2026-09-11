@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.313.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.314.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3920,6 +3920,31 @@ Auto-generated from `quantforge` v1.313.0 by `docs/gen_api.py` — do not edit b
 ### `annuity(periods: Sequence[quantforge.rates.CapletPeriod]) -> float`  _function_
 
 > Present-value annuity (level / PV01) of a swap: sum of accrual*discount.
+
+### `black_swaption_greeks(swap_rate, strike, expiry, sigma_b, periods, payer=True)`  _function_
+
+> Analytic Greeks of a Black (lognormal) European swaption.
+>
+> The value is ``annuity * Black76(swap_rate, strike, expiry, sigma_b)``, so
+> the swap-rate Greeks are the Black-76 Greeks scaled by the annuity:
+> ``rate_delta`` (dV/d swap_rate), ``rate_gamma`` (d2V/d swap_rate^2), and
+> ``vega`` (dV/dsigma_b). Returns a dict with ``price``, ``rate_delta``,
+> ``rate_gamma``, ``vega``, ``annuity``.
+
+### `black_swaption_price(swap_rate, strike, expiry, sigma_b, periods, payer=True) -> float`  _function_
+
+> Black (lognormal) price of a European swaption on the underlying swap.
+>
+> The market-standard lognormal counterpart to :func:`swaption_price`: the
+> forward swap rate is modelled as lognormal with (Black) volatility
+> ``sigma_b``, and the swaption is the annuity times a zero-carry Black-76
+> option on the rate:
+>
+>     V = annuity * Black76(swap_rate, strike, expiry, sigma_b).
+>
+> A payer swaption is a call on the rate, a receiver a put. Requires positive
+> ``swap_rate`` and ``strike`` (use :func:`swaption_price` for the normal model
+> when rates may be negative).
 
 ### `cap_greeks(periods: Sequence[quantforge.rates.CapletPeriod], strike: float)`  _function_
 
