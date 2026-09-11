@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.324.0] - 2026-09-11
+
+### Added
+- `box_spread`, `synthetic_forward`, and `collar` (in `strategy.py`): three more
+  strategy builders. The box (bull call + bear put on the same strikes) is a
+  synthetic zero-coupon bond worth `e^{-rt} (K_high - K_low)` with a constant
+  payoff and flat Greeks; the synthetic forward (long call, short put at one
+  strike) replicates a forward with delta ~1 by put-call parity; the collar
+  (long put floor, short call cap) prices its two option legs.
+- Verified: the box value is the discounted strike width, its payoff is
+  constant across spot, and its delta/gamma/vega are ~zero; the synthetic
+  forward matches `S - e^{-rt} K` with delta ~1; the collar matches its legs;
+  reversed strikes raise.
+
 ## [1.323.0] - 2026-09-11
 
 ### Added

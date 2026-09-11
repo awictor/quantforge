@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.323.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.324.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -5028,6 +5028,17 @@ Auto-generated from `quantforge` v1.323.0 by `docs/gen_api.py` — do not edit b
 > move (unlimited upside for a call backspread) and loses a little in the
 > middle. Returns the leg :class:`Book`.
 
+### `box_spread(S, K_low, K_high, t, r, sigma, b=None, mult=1.0)`  _function_
+
+> Box spread: a bull call spread plus a bear put spread on the same strikes.
+>
+> Long call ``K_low`` / short call ``K_high`` (bull call) combined with long
+> put ``K_high`` / short put ``K_low`` (bear put). The terminal payoff is the
+> constant ``K_high - K_low`` regardless of spot, so the box is a synthetic
+> zero-coupon bond: its fair value is the discounted strike width
+> ``e^{-rt} (K_high - K_low)``, which the net Greeks confirm are ~zero in spot.
+> Returns the leg :class:`Book`.
+
 ### `break_evens(book: quantforge.portfolio.Book, lo: float, hi: float, n: int = 2000) -> List[float]`  _function_
 
 > Find terminal spots where total P&L (payoff - net premium) crosses zero.
@@ -5051,6 +5062,16 @@ Auto-generated from `quantforge` v1.323.0 by `docs/gen_api.py` — do not edit b
 > net Greeks directly. (The expiry payoff diagram is not well defined by
 > intrinsics alone, since the far leg still has time value at the near expiry;
 > use the net Greeks and price for analysis.) Returns the leg :class:`Book`.
+
+### `collar(S, K_put, K_call, t, r, sigma, b=None, mult=1.0)`  _function_
+
+> Protective collar on a long share: long a put at ``K_put`` (floor) and
+> short a call at ``K_call`` (cap), with ``K_put < K_call``.
+>
+> Priced here as the two option legs (the underlying share is held
+> separately); the net option premium is a small debit or credit depending on
+> the skew. The collar caps gains above ``K_call`` and floors losses below
+> ``K_put``. Returns the leg :class:`Book`.
 
 ### `diagonal_spread(S, K_near, K_far, t_near, t_far, r, sigma, kind='call', b=None, mult=1.0)`  _function_
 
@@ -5109,6 +5130,14 @@ Auto-generated from `quantforge` v1.323.0 by `docs/gen_api.py` — do not edit b
 > break-even spots from :func:`break_evens`.
 >
 > P&L is per multiplier, matching :func:`payoff_at_expiry`.
+
+### `synthetic_forward(S, K, t, r, sigma, b=None, mult=1.0)`  _function_
+
+> Synthetic long forward: long a call and short a put at the same strike.
+>
+> By put-call parity the position replicates a forward struck at ``K``: its
+> present value is ``C - P = e^{-bt} S - e^{-rt} K`` (carry ``b``), its delta is
+> ~1, and its gamma/vega net to ~zero. Returns the leg :class:`Book`.
 
 ### `vertical_spread(S, K_long, K_short, t, r, sigma, kind='call', b=None, mult=1.0)`  _function_
 

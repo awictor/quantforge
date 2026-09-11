@@ -230,6 +230,62 @@ def diagonal_spread(S, K_near, K_far, t_near, t_far, r, sigma, kind="call",
     return price_book(legs)
 
 
+def box_spread(S, K_low, K_high, t, r, sigma, b=None, mult=1.0):
+    """Box spread: a bull call spread plus a bear put spread on the same strikes.
+
+    Long call ``K_low`` / short call ``K_high`` (bull call) combined with long
+    put ``K_high`` / short put ``K_low`` (bear put). The terminal payoff is the
+    constant ``K_high - K_low`` regardless of spot, so the box is a synthetic
+    zero-coupon bond: its fair value is the discounted strike width
+    ``e^{-rt} (K_high - K_low)``, which the net Greeks confirm are ~zero in spot.
+    Returns the leg :class:`Book`.
+    """
+    if K_high <= K_low:
+        raise ValueError("K_high must exceed K_low")
+    call = OptionType.CALL
+    put = OptionType.PUT
+    legs = [
+        _leg(S, K_low, t, r, sigma, call, +1, b, mult, f"long call {K_low}"),
+        _leg(S, K_high, t, r, sigma, call, -1, b, mult, f"short call {K_high}"),
+        _leg(S, K_high, t, r, sigma, put, +1, b, mult, f"long put {K_high}"),
+        _leg(S, K_low, t, r, sigma, put, -1, b, mult, f"short put {K_low}"),
+    ]
+    return price_book(legs)
+
+
+def synthetic_forward(S, K, t, r, sigma, b=None, mult=1.0):
+    """Synthetic long forward: long a call and short a put at the same strike.
+
+    By put-call parity the position replicates a forward struck at ``K``: its
+    present value is ``C - P = e^{-bt} S - e^{-rt} K`` (carry ``b``), its delta is
+    ~1, and its gamma/vega net to ~zero. Returns the leg :class:`Book`.
+    """
+    legs = [
+        _leg(S, K, t, r, sigma, OptionType.CALL, +1, b, mult, f"long call {K}"),
+        _leg(S, K, t, r, sigma, OptionType.PUT, -1, b, mult, f"short put {K}"),
+    ]
+    return price_book(legs)
+
+
+def collar(S, K_put, K_call, t, r, sigma, b=None, mult=1.0):
+    """Protective collar on a long share: long a put at ``K_put`` (floor) and
+    short a call at ``K_call`` (cap), with ``K_put < K_call``.
+
+    Priced here as the two option legs (the underlying share is held
+    separately); the net option premium is a small debit or credit depending on
+    the skew. The collar caps gains above ``K_call`` and floors losses below
+    ``K_put``. Returns the leg :class:`Book`.
+    """
+    if K_put >= K_call:
+        raise ValueError("require K_put < K_call")
+    legs = [
+        _leg(S, K_put, t, r, sigma, OptionType.PUT, +1, b, mult, f"long put {K_put}"),
+        _leg(S, K_call, t, r, sigma, OptionType.CALL, -1, b, mult,
+             f"short call {K_call}"),
+    ]
+    return price_book(legs)
+
+
 def strategy_report(book, lo=None, hi=None, n=4000):
     """Summarize a strategy's expiry P&L: max profit, max loss, break-evens.
 
