@@ -22,6 +22,37 @@ def _std(xs, ddof=1):
     return math.sqrt(sum((x - m) ** 2 for x in xs) / (n - ddof))
 
 
+def cumulative_return(returns: Sequence[float]) -> float:
+    """Total compounded return over the series, ``prod(1 + r) - 1``."""
+    growth = 1.0
+    for r in returns:
+        growth *= (1.0 + r)
+    return growth - 1.0
+
+
+def annualized_return(returns: Sequence[float], periods_per_year=252) -> float:
+    """Geometric (compound) annualized return.
+
+    ``(prod(1 + r))^{periods_per_year / n} - 1`` -- the constant per-year rate
+    that compounds to the realized total return over the sample.
+    """
+    n = len(returns)
+    if n < 1:
+        raise ValueError("need at least one return")
+    growth = 1.0
+    for r in returns:
+        growth *= (1.0 + r)
+    return growth ** (periods_per_year / n) - 1.0
+
+
+def annualized_volatility(returns: Sequence[float], periods_per_year=252) -> float:
+    """Annualized volatility: the sample standard deviation times
+    ``sqrt(periods_per_year)``."""
+    if len(returns) < 2:
+        raise ValueError("need at least two returns")
+    return _std(returns) * math.sqrt(periods_per_year)
+
+
 def sharpe_ratio(returns: Sequence[float], risk_free=0.0,
                  periods_per_year=252) -> float:
     """Annualized Sharpe ratio of a periodic return series.

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.363.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.364.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -4221,6 +4221,18 @@ Auto-generated from `quantforge` v1.363.0 by `docs/gen_api.py` — do not edit b
 
 ## perfmetrics
 
+### `annualized_return(returns: Sequence[float], periods_per_year=252) -> float`  _function_
+
+> Geometric (compound) annualized return.
+>
+> ``(prod(1 + r))^{periods_per_year / n} - 1`` -- the constant per-year rate
+> that compounds to the realized total return over the sample.
+
+### `annualized_volatility(returns: Sequence[float], periods_per_year=252) -> float`  _function_
+
+> Annualized volatility: the sample standard deviation times
+> ``sqrt(periods_per_year)``.
+
 ### `calmar_ratio(returns: Sequence[float], periods_per_year=252) -> float`  _function_
 
 > Calmar ratio: annualized return divided by the maximum drawdown.
@@ -4242,6 +4254,10 @@ Auto-generated from `quantforge` v1.363.0 by `docs/gen_api.py` — do not edit b
 > as a positive loss. For a normal series it reduces to the parametric VaR;
 > negative skew and fat tails fatten the left tail and push it above the
 > Gaussian VaR.
+
+### `cumulative_return(returns: Sequence[float]) -> float`  _function_
+
+> Total compounded return over the series, ``prod(1 + r) - 1``.
 
 ### `down_capture(returns, benchmark_returns) -> float`  _function_
 

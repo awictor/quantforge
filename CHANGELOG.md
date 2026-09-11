@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.364.0] - 2026-09-11
+
+### Added
+- `cumulative_return`, `annualized_return`, and `annualized_volatility` (in
+  `perfmetrics.py`): the compounded total return `prod(1+r)-1`, the geometric
+  annualized return `(prod(1+r))^{ppy/n}-1`, and the sample volatility scaled by
+  `sqrt(periods_per_year)`.
+- Verified: cumulative return compounds (+10% then -10% gives -1%); the
+  annualized return is zero for a flat series and matches the compound formula;
+  annualized volatility equals the scaled sample stdev and is zero for a
+  constant series; empty/short series raise.
+
 ## [1.363.0] - 2026-09-11
 
 ### Added
