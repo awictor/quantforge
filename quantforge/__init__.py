@@ -297,6 +297,7 @@ from .fxforward import (
     implied_price_rate, fx_forward_from_curves,
 )
 from .daycount import year_fraction, day_count
+from .schedule import generate_schedule, adjust_business_day
 from .volcube import VolCube
 from .cms import (
     cms_adjustment_standard, cms_rate_convexity_replication, cms_rate,
@@ -384,7 +385,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.367.0"
+__version__ = "1.368.0"
 
 __all__ = [
     "OptionType",
@@ -894,6 +895,8 @@ __all__ = [
     "fx_forward_from_curves",
     "year_fraction",
     "day_count",
+    "generate_schedule",
+    "adjust_business_day",
     "VolCube",
     "cms_adjustment_standard",
     "cms_adjustment_greeks",

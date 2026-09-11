@@ -4,6 +4,21 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.368.0] - 2026-09-11
+
+### Added
+- New module `schedule.py` with `generate_schedule` and `adjust_business_day`
+  over `(year, month, day)` dates. Generates periodic period-end dates from a
+  start, maturity, and tenor in months (with optional end-of-month roll) and
+  adjusts off weekends per `following` / `modified_following` / `preceding` /
+  `unadjusted` conventions.
+- Verified: a quarterly end-of-month schedule snaps to month ends
+  (Apr 30 / Jul 31 / Oct 31 / Jan 31); a 5y semiannual schedule has 10 periods;
+  the month-end roll clamps Jan 31 + 1m to Feb 29 in a leap year; the following
+  convention rolls a Saturday to Monday, preceding to Friday, and
+  modified-following rolls back to stay in-month; unadjusted is identity; bad
+  frequency/maturity/convention raise.
+
 ## [1.367.0] - 2026-09-11
 
 ### Added

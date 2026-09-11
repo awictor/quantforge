@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.367.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.368.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -5364,6 +5364,25 @@ Auto-generated from `quantforge` v1.367.0 by `docs/gen_api.py` — do not edit b
 >
 > Returns a :class:`ScenarioGrid` whose ``pnl[i][j]`` is the change in book
 > market value under ``(spot_shocks[i], vol_shocks[j])``.
+
+## schedule
+
+### `adjust_business_day(d, convention='following')`  _function_
+
+> Adjust a date off weekends per a business-day convention.
+>
+> ``following`` rolls forward to the next weekday; ``preceding`` rolls back;
+> ``modified_following`` rolls forward unless that crosses into the next month,
+> in which case it rolls back. ``unadjusted`` returns the date unchanged.
+
+### `generate_schedule(start, maturity_years, freq_months, end_of_month=False, convention='unadjusted')`  _function_
+
+> Generate period end dates from ``start`` over ``maturity_years``.
+>
+> Steps ``freq_months`` at a time (1=monthly, 3=quarterly, 6=semiannual,
+> 12=annual) until ``maturity_years`` is reached, then applies
+> :func:`adjust_business_day` with ``convention``. Returns the list of adjusted
+> period end dates (the start date itself is not included).
 
 ## sizing
 
