@@ -367,3 +367,26 @@ def garch_term_variance(params: GarchParams, last_return, last_variance,
         geom = (1.0 - p ** horizon) / (1.0 - p)
         avg = lr + (h1 - lr) * geom / horizon
     return math.sqrt(avg * periods_per_year)
+
+
+def garch_option_price(params: GarchParams, last_return, last_variance,
+                       S, K, r, option_type="call", horizon=None, t=None,
+                       periods_per_year: int = 252, b=None):
+    """Black-Scholes price using the GARCH term volatility for the maturity.
+
+    Bridges the GARCH variance forecast to an option price: the annualized term
+    (average) volatility over ``horizon`` steps -- :func:`garch_term_variance` --
+    is fed into the Black-Scholes formula. ``horizon`` is the number of GARCH
+    steps to expiry; the option's year fraction ``t`` defaults to
+    ``horizon / periods_per_year`` but may be passed explicitly (e.g. to use
+    calendar rather than trading time). This lets a fitted GARCH model price
+    options consistently with its own vol term structure -- capturing the vol
+    mean-reversion that a single spot vol misses.
+    """
+    from .bsm import price as bsm_price
+    if horizon is None:
+        raise ValueError("horizon (steps to expiry) is required")
+    sigma = garch_term_variance(params, last_return, last_variance, horizon,
+                                periods_per_year)
+    tt = (horizon / periods_per_year) if t is None else t
+    return bsm_price(S, K, tt, r, sigma, option_type, b=b)

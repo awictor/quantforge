@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.336.0] - 2026-09-11
+
+### Added
+- `garch_option_price` (in `volatility.py`): a Black-Scholes price that uses the
+  GARCH term (average) volatility for the maturity. It feeds
+  `garch_term_variance` over `horizon` steps into the BSM formula, with the year
+  fraction defaulting to `horizon / periods_per_year` (overridable via `t`). A
+  fitted GARCH model then prices options consistently with its own vol
+  mean-reversion rather than a flat spot vol.
+- Verified: it matches BSM priced at the GARCH term vol for calls and puts;
+  respects put-call parity; an elevated starting variance makes a short-dated
+  option richer than one at the long-run vol; the explicit `t` override works;
+  a missing horizon raises.
+
 ## [1.335.0] - 2026-09-11
 
 ### Added

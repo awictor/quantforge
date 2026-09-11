@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.335.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.336.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -5991,6 +5991,19 @@ Auto-generated from `quantforge` v1.335.0 by `docs/gen_api.py` — do not edit b
 > that the expected variance mean-reverts toward the long-run level at rate
 > ``persistence`` per step: ``E[h_k] = LR + persistence^{k-1} (h_1 - LR)``.
 > Returns the annualized volatility for the ``horizon``-step-ahead period.
+
+### `garch_option_price(params: quantforge.volatility.GarchParams, last_return, last_variance, S, K, r, option_type='call', horizon=None, t=None, periods_per_year: int = 252, b=None)`  _function_
+
+> Black-Scholes price using the GARCH term volatility for the maturity.
+>
+> Bridges the GARCH variance forecast to an option price: the annualized term
+> (average) volatility over ``horizon`` steps -- :func:`garch_term_variance` --
+> is fed into the Black-Scholes formula. ``horizon`` is the number of GARCH
+> steps to expiry; the option's year fraction ``t`` defaults to
+> ``horizon / periods_per_year`` but may be passed explicitly (e.g. to use
+> calendar rather than trading time). This lets a fitted GARCH model price
+> options consistently with its own vol term structure -- capturing the vol
+> mean-reversion that a single spot vol misses.
 
 ### `garch_term_variance(params: quantforge.volatility.GarchParams, last_return, last_variance, horizon, periods_per_year: int = 252)`  _function_
 
