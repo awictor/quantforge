@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.401.0] - 2026-09-11
+
+### Documentation
+- README: added a "Counterparty valuation adjustments (XVA)" section covering the
+  `xva` module (CVA/DVA/BCVA, FVA/MVA, EPE/PFE profiles, wrong-way risk, CSA
+  collateral), with a runnable example verified against the installed package.
+
 ## [1.400.0] - 2026-09-11
 
 ### Added

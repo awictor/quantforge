@@ -1203,6 +1203,28 @@ curve = bootstrap_survival_curve([1, 3, 5], [0.008, 0.010, 0.012], r=0.03)
 cds_par_spread(curve, [0.5 * i for i in range(1, 11)], r=0.03, recovery=0.4)
 ```
 
+## Counterparty valuation adjustments (XVA)
+
+CVA / DVA / bilateral CVA off a survival curve, funding and margin adjustments
+(FVA / MVA), analytic swap exposure profiles (EPE / PFE), wrong-way risk, and CSA
+collateralization:
+
+```python
+from quantforge import (SurvivalCurve, swap_expected_exposure, swap_cva,
+                        collateralized_exposure_profile, bcva, mva)
+
+curve = SurvivalCurve([1, 3, 5], [0.02, 0.03, 0.04])
+grid = [1, 2, 3, 4, 5]
+epe = swap_expected_exposure(notional=1e6, sigma=0.01, maturity=5, grid_times=grid)
+swap_cva(curve, 1e6, 0.01, 5, grid, r=0.03, recovery=0.4)
+
+# Collateral (CSA threshold + MTA) caps the exposure and shrinks the CVA.
+col = collateralized_exposure_profile(epe, threshold=5000, min_transfer_amount=1000)
+```
+
+The CVA default buckets are the marginal survival drops `Q(t_{i-1}) - Q(t_i)`;
+`wrong_way_cva` tilts them toward later, higher-exposure dates.
+
 ## FX forwards (covered interest parity)
 
 ```python
