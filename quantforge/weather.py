@@ -50,6 +50,85 @@ def degree_day_swap_payoff(index, strike, tick_value, notional_side=1.0):
     return notional_side * tick_value * (index - strike)
 
 
+def degree_day_swap_rate(expected_index):
+    """Fair fixed strike of a degree-day swap: the expected accumulated index.
+
+    A degree-day swap pays ``tick * (index - strike)``; its expected value is zero
+    when the strike equals the expected index, so the fair strike is
+    ``expected_index`` itself.
+    """
+    return expected_index
+
+
+def degree_day_collar(expected_index, cap_strike, floor_strike, sigma, r,
+                      expiry, tick_value):
+    """Zero-cost-style degree-day collar: long a call, short a put.
+
+    Buys protection above ``cap_strike`` (a call) and finances it by selling a put
+    struck at ``floor_strike``. Value is
+    ``degree_day_option(call, K=cap) - degree_day_option(put, K=floor)``. When both
+    strikes coincide the collar reduces to the discounted forward payoff
+    ``e^{-r T} tick (expected_index - strike)`` by put-call parity.
+    """
+    if floor_strike > cap_strike:
+        raise ValueError("floor_strike must not exceed cap_strike")
+    call = degree_day_option(expected_index, cap_strike, sigma, r, expiry,
+                             tick_value, is_call=True)
+    put = degree_day_option(expected_index, floor_strike, sigma, r, expiry,
+                            tick_value, is_call=False)
+    return call - put
+
+
+def degree_day_option_mc(daily_means, daily_sigma, base, strike, r, expiry,
+                         tick_value, kind="HDD", is_call=True, n_paths=20000,
+                         seed=4321):
+    """Monte Carlo degree-day option over simulated daily temperatures.
+
+    Simulates each day's average temperature as independent normal
+    ``N(daily_means[d], daily_sigma^2)``, accumulates the HDD/CDD index over the
+    period, and averages the discounted option payoff. An independent reference for
+    the Bachelier :func:`degree_day_option` (which approximates the accumulated
+    index as normal). Deterministic per seed.
+    """
+    if daily_sigma < 0:
+        raise ValueError("daily_sigma must be non-negative")
+    if expiry < 0:
+        raise ValueError("expiry must be non-negative")
+    if n_paths < 1:
+        raise ValueError("n_paths must be positive")
+    if kind not in ("HDD", "CDD"):
+        raise ValueError("kind must be 'HDD' or 'CDD'")
+    disc = math.exp(-r * expiry)
+    state = seed & 0xFFFFFFFF
+    def _unif():
+        nonlocal state
+        state = (1103515245 * state + 12345) & 0x7FFFFFFF
+        return (state + 0.5) / 0x80000000
+    total = 0.0
+    n_days = len(daily_means)
+    for _ in range(n_paths):
+        index = 0.0
+        d = 0
+        while d < n_days:
+            u1 = _unif()
+            u2 = _unif()
+            rmag = math.sqrt(-2.0 * math.log(u1))
+            z1 = rmag * math.cos(2.0 * math.pi * u2)
+            z2 = rmag * math.sin(2.0 * math.pi * u2)
+            for z in (z1, z2):
+                if d >= n_days:
+                    break
+                temp = daily_means[d] + daily_sigma * z
+                if kind == "HDD":
+                    index += max(base - temp, 0.0)
+                else:
+                    index += max(temp - base, 0.0)
+                d += 1
+        payoff = max(index - strike, 0.0) if is_call else max(strike - index, 0.0)
+        total += payoff
+    return disc * tick_value * total / n_paths
+
+
 def degree_day_option(expected_index, strike, sigma, r, expiry, tick_value,
                       is_call=True, cap=None):
     """Bachelier price of an option on an accumulated degree-day index.

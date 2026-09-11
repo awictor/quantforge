@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.402.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.403.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -7376,6 +7376,16 @@ Auto-generated from `quantforge` v1.402.0 by `docs/gen_api.py` — do not edit b
 
 > Accumulated cooling degree days ``sum_d max(T_d - base, 0)`` over the period.
 
+### `degree_day_collar(expected_index, cap_strike, floor_strike, sigma, r, expiry, tick_value)`  _function_
+
+> Zero-cost-style degree-day collar: long a call, short a put.
+>
+> Buys protection above ``cap_strike`` (a call) and finances it by selling a put
+> struck at ``floor_strike``. Value is
+> ``degree_day_option(call, K=cap) - degree_day_option(put, K=floor)``. When both
+> strikes coincide the collar reduces to the discounted forward payoff
+> ``e^{-r T} tick (expected_index - strike)`` by put-call parity.
+
 ### `degree_day_index(temps, base=65.0, kind='HDD')`  _function_
 
 > Accumulated degree-day index of the requested ``kind`` ("HDD" or "CDD").
@@ -7397,6 +7407,16 @@ Auto-generated from `quantforge` v1.402.0 by `docs/gen_api.py` — do not edit b
 > as a call spread: ``value(strike) - value(strike + cap)``. Put and call satisfy
 > ``C - P = e^{-r T} tick (expected_index - strike)`` when uncapped.
 
+### `degree_day_option_mc(daily_means, daily_sigma, base, strike, r, expiry, tick_value, kind='HDD', is_call=True, n_paths=20000, seed=4321)`  _function_
+
+> Monte Carlo degree-day option over simulated daily temperatures.
+>
+> Simulates each day's average temperature as independent normal
+> ``N(daily_means[d], daily_sigma^2)``, accumulates the HDD/CDD index over the
+> period, and averages the discounted option payoff. An independent reference for
+> the Bachelier :func:`degree_day_option` (which approximates the accumulated
+> index as normal). Deterministic per seed.
+
 ### `degree_day_swap_payoff(index, strike, tick_value, notional_side=1.0)`  _function_
 
 > Linear (swap) payoff on a degree-day index: ``side * tick * (index - strike)``.
@@ -7404,6 +7424,14 @@ Auto-generated from `quantforge` v1.402.0 by `docs/gen_api.py` — do not edit b
 > ``tick_value`` is the currency amount per index point; ``notional_side`` is
 > ``+1`` for the long-index side (gains when the index exceeds the strike) and
 > ``-1`` for the short.
+
+### `degree_day_swap_rate(expected_index)`  _function_
+
+> Fair fixed strike of a degree-day swap: the expected accumulated index.
+>
+> A degree-day swap pays ``tick * (index - strike)``; its expected value is zero
+> when the strike equals the expected index, so the fair strike is
+> ``expected_index`` itself.
 
 ### `heating_degree_days(temps, base=65.0)`  _function_
 

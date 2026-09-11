@@ -7,6 +7,7 @@ import pytest
 from quantforge import (
     heating_degree_days, cooling_degree_days, degree_day_index,
     degree_day_swap_payoff, degree_day_option,
+    degree_day_swap_rate, degree_day_collar, degree_day_option_mc,
 )
 
 
@@ -53,6 +54,41 @@ def test_cap_reduces_call_value():
     capped = degree_day_option(100, 90, 15, 0.03, 0.5, 20, True, cap=15)
     assert capped < uncapped
     assert capped <= math.exp(-0.03 * 0.5) * 20 * 15 + 1e-6
+
+
+def test_swap_rate_zeroes_swap():
+    ei = 120.0
+    assert degree_day_swap_rate(ei) == ei
+    assert degree_day_swap_payoff(ei, degree_day_swap_rate(ei), 20) == pytest.approx(0.0)
+
+
+def test_collar_same_strike_is_forward():
+    c = degree_day_collar(120, 100, 100, 15, 0.03, 0.5, 20)
+    assert c == pytest.approx(math.exp(-0.03 * 0.5) * 20 * (120 - 100), abs=1e-6)
+
+
+def test_collar_validation():
+    with pytest.raises(ValueError):
+        degree_day_collar(120, 100, 110, 15, 0.03, 0.5, 20)
+
+
+def test_option_mc_deterministic():
+    means = [75.0] * 90
+    a = degree_day_option_mc(means, 3.0, 65.0, 880, 0.03, 0.5, 20, "CDD", True, 5000, 7)
+    b = degree_day_option_mc(means, 3.0, 65.0, 880, 0.03, 0.5, 20, "CDD", True, 5000, 7)
+    assert a == b
+
+
+@pytest.mark.slow
+def test_mc_validates_bachelier_option():
+    means = [75.0] * 90
+    ds, base = 3.0, 65.0
+    ei = cooling_degree_days(means, base)
+    sig_idx = ds * math.sqrt(90)
+    bach = degree_day_option(ei, 880, sig_idx, 0.03, 0.5, 20, True)
+    mcv = degree_day_option_mc(means, ds, base, 880, 0.03, 0.5, 20, "CDD", True,
+                               80000, 7)
+    assert abs(bach - mcv) / bach < 0.1
 
 
 def test_validation():

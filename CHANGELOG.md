@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.403.0] - 2026-09-11
+
+### Added
+- `degree_day_swap_rate`, `degree_day_collar`, `degree_day_option_mc` (in
+  `weather.py`): the fair degree-day swap strike (the expected index), a
+  cap/floor collar (long call, short put; reduces to the discounted forward at a
+  common strike), and a Monte Carlo option over simulated daily temperatures that
+  independently validates the Bachelier `degree_day_option` (agrees within 10%).
+  Cross-checked against the zero-swap-value fair strike, collar/forward parity,
+  and MC agreement.
+
 ## [1.402.0] - 2026-09-11
 
 ### Added
