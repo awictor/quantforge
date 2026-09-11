@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.243.0] - 2026-09-10
+
+### Added
+- `swaption_greeks` (in `rates.py`): analytic Greeks of a normal-model European
+  swaption. The value is `annuity * Bachelier(swap_rate, strike, expiry, 0,
+  sigma_n)`, so `rate_delta`, `rate_gamma`, and `vega` are the Bachelier Greeks
+  scaled by the annuity (also returned).
+- Verified: `rate_delta` matches a finite difference of `swaption_price`; a payer
+  swaption's rate delta is positive and a receiver's negative; the ATM payer
+  delta is exactly `annuity/2` (Bachelier ATM delta 0.5); vega positive.
+
 ## [1.242.0] - 2026-09-10
 
 ### Added

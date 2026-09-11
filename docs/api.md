@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.242.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.243.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3110,6 +3110,17 @@ Auto-generated from `quantforge` v1.242.0 by `docs/gen_api.py` — do not edit b
 ### `floor_price(periods: Sequence[quantforge.rates.CapletPeriod], strike: float) -> float`  _function_
 
 > Price an interest-rate floor as the sum of its floorlets.
+
+### `swaption_greeks(swap_rate, strike, expiry, sigma_n, periods, payer=True)`  _function_
+
+> Analytic Greeks of a European swaption (normal model).
+>
+> The value is ``annuity * Bachelier(swap_rate, strike, expiry, 0, sigma_n)``,
+> so its swap-rate Greeks are the Bachelier Greeks scaled by the annuity:
+> ``rate_delta`` (dV/d swap_rate), ``rate_gamma`` (d2V/d swap_rate^2), and
+> ``vega`` (dV/dsigma_n). A payer swaption is a call on the swap rate (positive
+> rate delta); a receiver is a put (negative). Returns a dict with ``price``,
+> ``rate_delta``, ``rate_gamma``, ``vega``, ``annuity``.
 
 ### `swaption_parity(swap_rate, strike, periods) -> float`  _function_
 
