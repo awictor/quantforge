@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.401.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.402.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -7369,6 +7369,48 @@ Auto-generated from `quantforge` v1.401.0 by `docs/gen_api.py` — do not edit b
 > ``vrp`` (realized - implied; usually negative), ``ratio``
 > (realized / implied), and ``vol_premium`` (implied vol - realized vol, the
 > usual positive number quoted in vol points).
+
+## weather
+
+### `cooling_degree_days(temps, base=65.0)`  _function_
+
+> Accumulated cooling degree days ``sum_d max(T_d - base, 0)`` over the period.
+
+### `degree_day_index(temps, base=65.0, kind='HDD')`  _function_
+
+> Accumulated degree-day index of the requested ``kind`` ("HDD" or "CDD").
+
+### `degree_day_option(expected_index, strike, sigma, r, expiry, tick_value, is_call=True, cap=None)`  _function_
+
+> Bachelier price of an option on an accumulated degree-day index.
+>
+> The seasonal degree-day total is modelled as normal with mean
+> ``expected_index`` and standard deviation ``sigma`` (in index points), so a
+> call (protection against a high index) or put (low index) is priced by the
+> Bachelier formula and scaled by ``tick_value``. With ``m = expected_index -
+> strike`` for a call (``strike - expected_index`` for a put) and ``s = sigma``:
+>
+>     undiscounted = m Phi(m/s) + s phi(m/s)
+>     price = e^{-r T} * tick_value * undiscounted
+>
+> An optional ``cap`` limits the maximum payoff (points), pricing the capped leg
+> as a call spread: ``value(strike) - value(strike + cap)``. Put and call satisfy
+> ``C - P = e^{-r T} tick (expected_index - strike)`` when uncapped.
+
+### `degree_day_swap_payoff(index, strike, tick_value, notional_side=1.0)`  _function_
+
+> Linear (swap) payoff on a degree-day index: ``side * tick * (index - strike)``.
+>
+> ``tick_value`` is the currency amount per index point; ``notional_side`` is
+> ``+1`` for the long-index side (gains when the index exceeds the strike) and
+> ``-1`` for the short.
+
+### `heating_degree_days(temps, base=65.0)`  _function_
+
+> Accumulated heating degree days ``sum_d max(base - T_d, 0)`` over the period.
+>
+> ``temps`` is the sequence of daily average temperatures. Each cold day (below
+> ``base``) contributes its shortfall; warm days contribute nothing.
 
 ## xva
 

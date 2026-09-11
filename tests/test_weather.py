@@ -1,0 +1,64 @@
+"""Weather derivatives: degree days and temperature-index options."""
+
+import math
+
+import pytest
+
+from quantforge import (
+    heating_degree_days, cooling_degree_days, degree_day_index,
+    degree_day_swap_payoff, degree_day_option,
+)
+
+
+TEMPS = [60, 62, 70, 72, 55, 68, 64]
+
+
+def test_hdd_cdd_complementary():
+    # HDD - CDD = sum(base - T) exactly.
+    diff = heating_degree_days(TEMPS, 65) - cooling_degree_days(TEMPS, 65)
+    assert diff == pytest.approx(sum(65 - t for t in TEMPS))
+
+
+def test_hdd_value():
+    assert heating_degree_days(TEMPS, 65) == 5 + 3 + 10 + 1
+
+
+def test_cdd_value():
+    assert cooling_degree_days(TEMPS, 65) == 5 + 7 + 3
+
+
+def test_degree_day_index_dispatch():
+    assert degree_day_index(TEMPS, 65, "HDD") == heating_degree_days(TEMPS, 65)
+    assert degree_day_index(TEMPS, 65, "CDD") == cooling_degree_days(TEMPS, 65)
+
+
+def test_swap_payoff_linear():
+    assert degree_day_swap_payoff(100, 80, 20, 1) == 400
+    assert degree_day_swap_payoff(100, 80, 20, -1) == -400
+
+
+def test_option_put_call_parity():
+    c = degree_day_option(100, 90, 15, 0.03, 0.5, 20, True)
+    p = degree_day_option(100, 90, 15, 0.03, 0.5, 20, False)
+    assert c - p == pytest.approx(math.exp(-0.03 * 0.5) * 20 * (100 - 90), abs=1e-6)
+
+
+def test_option_zero_vol_intrinsic():
+    assert degree_day_option(100, 90, 0.0, 0.03, 0.5, 20, True) == pytest.approx(
+        math.exp(-0.03 * 0.5) * 20 * 10, abs=1e-6)
+
+
+def test_cap_reduces_call_value():
+    uncapped = degree_day_option(100, 90, 15, 0.03, 0.5, 20, True)
+    capped = degree_day_option(100, 90, 15, 0.03, 0.5, 20, True, cap=15)
+    assert capped < uncapped
+    assert capped <= math.exp(-0.03 * 0.5) * 20 * 15 + 1e-6
+
+
+def test_validation():
+    with pytest.raises(ValueError):
+        degree_day_index(TEMPS, 65, "XYZ")
+    with pytest.raises(ValueError):
+        degree_day_option(100, 90, 15, 0.03, 0.5, 20, True, cap=-1)
+    with pytest.raises(ValueError):
+        degree_day_option(100, 90, -1, 0.03, 0.5, 20)

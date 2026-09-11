@@ -217,6 +217,10 @@ from .inflation import (
     yoy_caplet_price_normal, yoy_caplet_implied_normal_vol,
     real_zero_curve, nominal_zero_curve, real_discount_factor,
 )
+from .weather import (
+    heating_degree_days, cooling_degree_days, degree_day_index,
+    degree_day_swap_payoff, degree_day_option,
+)
 from .xva import (
     marginal_default_probs, cva, dva, bcva,
     swap_expected_exposure, fva,
@@ -422,7 +426,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.401.0"
+__version__ = "1.402.0"
 
 __all__ = [
     "OptionType",
@@ -772,6 +776,11 @@ __all__ = [
     "real_zero_curve",
     "nominal_zero_curve",
     "real_discount_factor",
+    "heating_degree_days",
+    "cooling_degree_days",
+    "degree_day_index",
+    "degree_day_swap_payoff",
+    "degree_day_option",
     "marginal_default_probs",
     "cva",
     "dva",

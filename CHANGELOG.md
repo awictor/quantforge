@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.402.0] - 2026-09-11
+
+### Added
+- `weather.py`: weather derivatives. `heating_degree_days` / `cooling_degree_days`
+  accumulate daily degree days versus a base temperature; `degree_day_index`
+  dispatches on kind; `degree_day_swap_payoff` is the linear tick-value swap; and
+  `degree_day_option` prices an option on the accumulated index with the Bachelier
+  (normal) model (appropriate for a sum-of-days total), with an optional payoff
+  cap priced as a call/put spread. Cross-checked against HDD/CDD complementarity,
+  put-call parity, the zero-vol intrinsic, and the cap bound.
+
 ## [1.401.0] - 2026-09-11
 
 ### Documentation
