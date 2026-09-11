@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.347.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.348.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -4239,6 +4239,20 @@ Auto-generated from `quantforge` v1.347.0 by `docs/gen_api.py` — do not edit b
 
 ## portopt
 
+### `black_litterman_returns(cov, market_weights, P, Q, tau=0.05, risk_aversion=2.5, omega=None) -> list`  _function_
+
+> Black-Litterman posterior expected returns blending prior and views.
+>
+> The market-equilibrium prior ``Pi = lambda C w`` is combined with ``k``
+> linear views ``P mu = Q`` (each row of ``P`` a portfolio, ``Q`` its expected
+> return) of uncertainty ``omega`` (defaults to ``diag(tau P C P^T)``). The
+> posterior mean is the standard closed form
+>
+>     mu = [ (tau C)^{-1} + P^T Omega^{-1} P ]^{-1}
+>          [ (tau C)^{-1} Pi + P^T Omega^{-1} Q ].
+>
+> With no views (empty ``P``) it returns the prior ``Pi``.
+
 ### `component_var(weights, cov) -> list`  _function_
 
 > Component (risk-contribution) VaR: each asset's share of portfolio vol.
@@ -4263,6 +4277,14 @@ Auto-generated from `quantforge` v1.347.0 by `docs/gen_api.py` — do not edit b
 > For each requested expected return in ``targets`` solves
 > :func:`target_return_weights` and reports the achieved return with the
 > portfolio standard deviation ``sqrt(w^T C w)``.
+
+### `implied_equilibrium_returns(cov, market_weights, risk_aversion=2.5) -> list`  _function_
+
+> Reverse-optimized (implied) equilibrium excess returns ``Pi = lambda C w``.
+>
+> Given the market-cap weights and a risk-aversion ``lambda``, the returns
+> that make those weights mean-variance optimal are ``lambda C w`` -- the
+> Black-Litterman market prior.
 
 ### `marginal_var(weights, cov, confidence=0.95, horizon=1.0) -> list`  _function_
 

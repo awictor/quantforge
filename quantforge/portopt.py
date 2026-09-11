@@ -164,6 +164,71 @@ def component_var(weights, cov) -> list:
     return [weights[i] * cw[i] / sd for i in range(n)]
 
 
+def implied_equilibrium_returns(cov, market_weights, risk_aversion=2.5) -> list:
+    """Reverse-optimized (implied) equilibrium excess returns ``Pi = lambda C w``.
+
+    Given the market-cap weights and a risk-aversion ``lambda``, the returns
+    that make those weights mean-variance optimal are ``lambda C w`` -- the
+    Black-Litterman market prior.
+    """
+    n = _check_cov(cov)
+    if len(market_weights) != n:
+        raise ValueError("market_weights length must match cov")
+    cw = _matvec(cov, list(market_weights))
+    return [risk_aversion * v for v in cw]
+
+
+def black_litterman_returns(cov, market_weights, P, Q, tau=0.05,
+                            risk_aversion=2.5, omega=None) -> list:
+    """Black-Litterman posterior expected returns blending prior and views.
+
+    The market-equilibrium prior ``Pi = lambda C w`` is combined with ``k``
+    linear views ``P mu = Q`` (each row of ``P`` a portfolio, ``Q`` its expected
+    return) of uncertainty ``omega`` (defaults to ``diag(tau P C P^T)``). The
+    posterior mean is the standard closed form
+
+        mu = [ (tau C)^{-1} + P^T Omega^{-1} P ]^{-1}
+             [ (tau C)^{-1} Pi + P^T Omega^{-1} Q ].
+
+    With no views (empty ``P``) it returns the prior ``Pi``.
+    """
+    n = _check_cov(cov)
+    pi = implied_equilibrium_returns(cov, market_weights, risk_aversion)
+    if not P:
+        return pi
+    k = len(P)
+    if any(len(row) != n for row in P):
+        raise ValueError("each view in P must have length n")
+    if len(Q) != k:
+        raise ValueError("Q length must match the number of views")
+    tau_cov = [[tau * cov[i][j] for j in range(n)] for i in range(n)]
+    inv_tau_cov = _invert(tau_cov)
+    # Omega: default diag(tau P C P^T).
+    if omega is None:
+        omega_diag = []
+        for r in range(k):
+            cp = _matvec(cov, P[r])
+            omega_diag.append(tau * sum(P[r][j] * cp[j] for j in range(n)))
+        omega_inv = [[0.0] * k for _ in range(k)]
+        for r in range(k):
+            if omega_diag[r] <= 0.0:
+                raise ValueError("view has zero prior variance")
+            omega_inv[r][r] = 1.0 / omega_diag[r]
+    else:
+        omega_inv = _invert(omega)
+    # A = inv_tau_cov + P^T Omega^{-1} P ; b = inv_tau_cov Pi + P^T Omega^{-1} Q.
+    # Precompute P^T Omega^{-1}.
+    pt_oi = [[sum(P[r][i] * omega_inv[r][c] for r in range(k)) for c in range(k)]
+             for i in range(n)]
+    ptoip = [[sum(pt_oi[i][c] * P[c][j] for c in range(k)) for j in range(n)]
+             for i in range(n)]
+    A = [[inv_tau_cov[i][j] + ptoip[i][j] for j in range(n)] for i in range(n)]
+    itc_pi = _matvec(inv_tau_cov, pi)
+    ptoi_q = [sum(pt_oi[i][c] * Q[c] for c in range(k)) for i in range(n)]
+    b = [itc_pi[i] + ptoi_q[i] for i in range(n)]
+    return _matvec(_invert(A), b)
+
+
 def marginal_var(weights, cov, confidence=0.95, horizon=1.0) -> list:
     """Marginal VaR: sensitivity of the portfolio VaR to each weight.
 

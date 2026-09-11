@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.348.0] - 2026-09-11
+
+### Added
+- `implied_equilibrium_returns` and `black_litterman_returns` (in `portopt.py`):
+  the reverse-optimized market prior `Pi = lambda C w` and the Black-Litterman
+  posterior expected returns blending that prior with linear views `P mu = Q`
+  (uncertainty `omega`, default `diag(tau P C P^T)`) via the standard closed
+  form.
+- Verified: the equilibrium equals `lambda C w`; with no views the posterior is
+  the prior; a bullish absolute view raises that asset; a relative view moves
+  the posterior spread between the prior and the view; a tighter view
+  uncertainty pulls the posterior closer to the view; malformed views/weights
+  raise.
+
 ## [1.347.0] - 2026-09-11
 
 ### Added
