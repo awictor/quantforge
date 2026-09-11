@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.341.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.342.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -4080,6 +4080,21 @@ Auto-generated from `quantforge` v1.341.0 by `docs/gen_api.py` — do not edit b
 > Annualized return is the geometric ``(prod(1+r))^{periods_per_year/n} - 1``.
 > Raises if there is no drawdown (undefined ratio).
 
+### `down_capture(returns, benchmark_returns) -> float`  _function_
+
+> Down-capture ratio: the asset's geometric return in down-benchmark
+> periods over the benchmark's. Below 1 means the asset falls less than the
+> benchmark in declining markets (good).
+
+### `downside_beta(asset_returns, market_returns) -> float`  _function_
+
+> Beta conditioned on down markets: ``Cov / Var`` over periods where the
+> market return is negative.
+>
+> Measures how much the asset falls with the market on the downside. Computed
+> on the subset of periods with ``market < 0`` using the ordinary sample
+> covariance and variance. Raises if there are fewer than two down periods.
+
 ### `drawdown_curve(returns: Sequence[float]) -> list`  _function_
 
 > Per-period underwater curve: fractional drop from the running peak.
@@ -4171,6 +4186,12 @@ Auto-generated from `quantforge` v1.341.0 by `docs/gen_api.py` — do not edit b
 >
 > ``active_t = r_t - b_t``; the sample standard deviation (ddof=1) scaled by
 > ``sqrt(periods_per_year)``. Series must be equal length.
+
+### `up_capture(returns, benchmark_returns) -> float`  _function_
+
+> Up-capture ratio: the asset's geometric return in up-benchmark periods
+> divided by the benchmark's. Above 1 means the asset outpaces the benchmark
+> in rising markets.
 
 ## perpetual
 

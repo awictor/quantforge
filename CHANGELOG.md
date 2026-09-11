@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.342.0] - 2026-09-11
+
+### Added
+- `up_capture`, `down_capture`, and `downside_beta` (in `perfmetrics.py`):
+  benchmark-conditional statistics. The capture ratios are the asset's
+  geometric per-period return over the benchmark's, taken over the up
+  (`benchmark > 0`) or down (`benchmark < 0`) periods; the downside beta is
+  `Cov/Var` restricted to negative-market periods.
+- Verified: all three equal 1 for an asset that mirrors the market; a 1.5x
+  leveraged asset gives ~1.5 captures and downside beta and a 0.5x defensive
+  one gives captures below 1; the downside beta uses only down periods;
+  mismatched lengths and empty up/down subsets raise.
+
 ## [1.341.0] - 2026-09-11
 
 ### Added

@@ -161,6 +161,66 @@ def calmar_ratio(returns: Sequence[float], periods_per_year=252) -> float:
     return ann_return / mdd
 
 
+def _capture(returns, benchmark_returns, up):
+    """Geometric capture ratio over the up (or down) benchmark periods."""
+    if len(returns) != len(benchmark_returns):
+        raise ValueError("series must be equal length")
+    pa = 1.0
+    pb = 1.0
+    count = 0
+    for r, b in zip(returns, benchmark_returns):
+        if (b > 0.0) if up else (b < 0.0):
+            pa *= (1.0 + r)
+            pb *= (1.0 + b)
+            count += 1
+    if count == 0:
+        raise ValueError("no up-market periods" if up else "no down-market periods")
+    # Geometric mean per period, then the ratio.
+    ga = pa ** (1.0 / count) - 1.0
+    gb = pb ** (1.0 / count) - 1.0
+    if gb == 0.0:
+        raise ValueError("benchmark geometric return is zero over the window")
+    return ga / gb
+
+
+def up_capture(returns, benchmark_returns) -> float:
+    """Up-capture ratio: the asset's geometric return in up-benchmark periods
+    divided by the benchmark's. Above 1 means the asset outpaces the benchmark
+    in rising markets."""
+    return _capture(returns, benchmark_returns, up=True)
+
+
+def down_capture(returns, benchmark_returns) -> float:
+    """Down-capture ratio: the asset's geometric return in down-benchmark
+    periods over the benchmark's. Below 1 means the asset falls less than the
+    benchmark in declining markets (good)."""
+    return _capture(returns, benchmark_returns, up=False)
+
+
+def downside_beta(asset_returns, market_returns) -> float:
+    """Beta conditioned on down markets: ``Cov / Var`` over periods where the
+    market return is negative.
+
+    Measures how much the asset falls with the market on the downside. Computed
+    on the subset of periods with ``market < 0`` using the ordinary sample
+    covariance and variance. Raises if there are fewer than two down periods.
+    """
+    if len(asset_returns) != len(market_returns):
+        raise ValueError("series must be equal length")
+    a = [ar for ar, m in zip(asset_returns, market_returns) if m < 0.0]
+    mk = [m for m in market_returns if m < 0.0]
+    n = len(mk)
+    if n < 2:
+        raise ValueError("need at least two down-market periods")
+    ma = sum(a) / n
+    mm = sum(mk) / n
+    cov = sum((x - ma) * (y - mm) for x, y in zip(a, mk)) / n
+    var = sum((y - mm) ** 2 for y in mk) / n
+    if var <= 0.0:
+        raise ValueError("down-market variance must be positive")
+    return cov / var
+
+
 def tracking_error(returns, benchmark_returns, periods_per_year=252) -> float:
     """Annualized tracking error: stdev of the active (excess) return series.
 
