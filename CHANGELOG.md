@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.278.0] - 2026-09-11
+
+### Added
+- `double_knock_in_call` (in `exotics.py`): double-barrier knock-in call priced
+  by in-out parity, `vanilla - double_knock_out_call`. A knock-in and knock-out
+  with the same strike and corridor partition every path, so they sum to the
+  vanilla call.
+- Verified: `DKI + DKO = vanilla` exactly; wide barriers give a near-zero
+  knock-in; a tighter band raises the knock-in value; the price stays in
+  `[0, vanilla]`.
+
 ## [1.277.0] - 2026-09-11
 
 ### Added

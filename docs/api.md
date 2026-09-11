@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.277.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.278.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1154,6 +1154,18 @@ Auto-generated from `quantforge` v1.277.0 by `docs/gen_api.py` — do not edit b
 > approaches, the digital's delta spikes (and gamma flips sign across the
 > strike) -- the "pin risk" that makes digitals hard to hedge and motivates
 > the call-spread over-hedge in :mod:`quantforge.overhedge`.
+
+### `double_knock_in_call(S, K, L, U, t, r, sigma, b=None, delta1=0.0, delta2=0.0, n_terms=10)`  _function_
+
+> Double-barrier knock-in call: pays the call only if a barrier is touched.
+>
+> The in-out complement of :func:`double_knock_out_call`: a knock-in and a
+> knock-out with the same strike and corridor partition every path, so at expiry
+>
+>     double_knock_in_call + double_knock_out_call = vanilla call.
+>
+> Priced as ``vanilla - double_knock_out_call`` with the vanilla evaluated on the
+> same carry ``b``. Requires ``L < S < U``.
 
 ### `double_knock_out_call(S, K, L, U, t, r, sigma, b=None, delta1=0.0, delta2=0.0, n_terms=10)`  _function_
 

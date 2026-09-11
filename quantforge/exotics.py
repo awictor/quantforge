@@ -444,6 +444,26 @@ def double_knock_out_call(S, K, L, U, t, r, sigma, b=None, delta1=0.0,
     return max(S * disc_q * sum1 - K * disc_r * sum2, 0.0)
 
 
+def double_knock_in_call(S, K, L, U, t, r, sigma, b=None, delta1=0.0,
+                         delta2=0.0, n_terms=10):
+    """Double-barrier knock-in call: pays the call only if a barrier is touched.
+
+    The in-out complement of :func:`double_knock_out_call`: a knock-in and a
+    knock-out with the same strike and corridor partition every path, so at expiry
+
+        double_knock_in_call + double_knock_out_call = vanilla call.
+
+    Priced as ``vanilla - double_knock_out_call`` with the vanilla evaluated on the
+    same carry ``b``. Requires ``L < S < U``.
+    """
+    if b is None:
+        b = r
+    vanilla = bsm_price(S, K, t, r, sigma, OptionType.CALL, b=b)
+    dko = double_knock_out_call(S, K, L, U, t, r, sigma, b=b, delta1=delta1,
+                                delta2=delta2, n_terms=n_terms)
+    return max(vanilla - dko, 0.0)
+
+
 def double_no_touch_greeks(S, L, U, t, r, sigma, b=None, cash=1.0, n_terms=200):
     """Greeks of a double-no-touch by finite differences on the closed form.
 
