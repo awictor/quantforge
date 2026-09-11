@@ -222,6 +222,7 @@ from .xva import (
     swap_expected_exposure, fva,
     swap_potential_future_exposure, wrong_way_cva,
     collateralized_exposure, collateralized_exposure_profile,
+    mva, swap_cva,
 )
 from .commodity import (
     commodity_forward, implied_convenience_yield, implied_storage_cost,
@@ -421,7 +422,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.399.0"
+__version__ = "1.400.0"
 
 __all__ = [
     "OptionType",
@@ -781,6 +782,8 @@ __all__ = [
     "wrong_way_cva",
     "collateralized_exposure",
     "collateralized_exposure_profile",
+    "mva",
+    "swap_cva",
     "commodity_forward",
     "implied_convenience_yield",
     "implied_storage_cost",

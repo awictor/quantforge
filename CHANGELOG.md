@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.400.0] - 2026-09-11
+
+### Added
+- `mva` and `swap_cva` (in `xva.py`): the margin valuation adjustment (funding
+  cost of posted initial margin over the trade's life, proportional to the
+  funding spread and margin, optionally survival-weighted) and a one-shot par-swap
+  CVA convenience that builds the analytic exposure profile and feeds it to `cva`.
+  Cross-checked against MVA proportionality and the manual EPE-then-CVA
+  composition.
+
 ## [1.399.0] - 2026-09-11
 
 ### Added

@@ -176,6 +176,47 @@ def fva(grid_times, expected_exposure, funding_spread, r, survival=None):
     return funding_spread * total
 
 
+def mva(grid_times, initial_margin, funding_spread, r, survival=None):
+    """Margin valuation adjustment: funding cost of posted initial margin.
+
+    Initial margin posted to a CCP or under uncleared-margin rules must be funded
+    at a spread over the risk-free rate for the life of the trade. Discretized as
+
+        MVA = funding_spread * sum_i IM(t_i) DF(t_i) dt_i [* survival(t_i)],
+
+    where ``initial_margin[i]`` is the IM held over bucket ``i`` (often set to a
+    high-quantile :func:`swap_potential_future_exposure`). Proportional to the
+    spread and the margin; zero at zero spread. Same shape as :func:`fva` but on
+    the margin rather than the net exposure.
+    """
+    if len(initial_margin) != len(grid_times):
+        raise ValueError("initial_margin and grid_times must align")
+    df = _disc_fn(r)
+    total = 0.0
+    prev = 0.0
+    for t, im in zip(grid_times, initial_margin):
+        dt = t - prev
+        if dt < 0.0:
+            raise ValueError("grid_times must be non-decreasing")
+        if im < 0.0:
+            raise ValueError("initial margin must be non-negative")
+        w = 1.0 if survival is None else survival(t)
+        total += im * df(t) * dt * w
+        prev = t
+    return funding_spread * total
+
+
+def swap_cva(curve, notional, sigma, maturity, grid_times, r, recovery=0.4):
+    """One-shot unilateral CVA of a par swap from its analytic exposure profile.
+
+    Convenience wrapper: builds the :func:`swap_expected_exposure` profile and
+    feeds it to :func:`cva` against the counterparty ``curve``. Equivalent to
+    composing the two calls by hand.
+    """
+    epe = swap_expected_exposure(notional, sigma, maturity, grid_times)
+    return cva(curve, grid_times, epe, r, recovery)
+
+
 def marginal_default_probs(curve, grid_times):
     """Marginal default probability in each grid bucket ``Q(t_{i-1}) - Q(t_i)``.
 

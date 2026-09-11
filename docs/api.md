@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.399.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.400.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -7442,6 +7442,28 @@ Auto-generated from `quantforge` v1.399.0 by `docs/gen_api.py` — do not edit b
 > first bucket runs from 0. Returns one probability per bucket, each in
 > ``[0, 1]`` and summing to ``1 - Q(t_last)`` (the total default probability by
 > the horizon).
+
+### `mva(grid_times, initial_margin, funding_spread, r, survival=None)`  _function_
+
+> Margin valuation adjustment: funding cost of posted initial margin.
+>
+> Initial margin posted to a CCP or under uncleared-margin rules must be funded
+> at a spread over the risk-free rate for the life of the trade. Discretized as
+>
+>     MVA = funding_spread * sum_i IM(t_i) DF(t_i) dt_i [* survival(t_i)],
+>
+> where ``initial_margin[i]`` is the IM held over bucket ``i`` (often set to a
+> high-quantile :func:`swap_potential_future_exposure`). Proportional to the
+> spread and the margin; zero at zero spread. Same shape as :func:`fva` but on
+> the margin rather than the net exposure.
+
+### `swap_cva(curve, notional, sigma, maturity, grid_times, r, recovery=0.4)`  _function_
+
+> One-shot unilateral CVA of a par swap from its analytic exposure profile.
+>
+> Convenience wrapper: builds the :func:`swap_expected_exposure` profile and
+> feeds it to :func:`cva` against the counterparty ``curve``. Equivalent to
+> composing the two calls by hand.
 
 ### `swap_expected_exposure(notional, sigma, maturity, grid_times)`  _function_
 

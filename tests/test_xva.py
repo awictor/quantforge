@@ -9,6 +9,7 @@ from quantforge import (
     swap_expected_exposure, fva,
     swap_potential_future_exposure, wrong_way_cva,
     collateralized_exposure, collateralized_exposure_profile,
+    mva, swap_cva,
 )
 from quantforge.mathfns import norm_ppf
 
@@ -131,6 +132,35 @@ def test_wrong_way_raises_cva_for_rising_exposure():
     base = cva(CURVE, GRID, ee_up, 0.03)
     assert wrong_way_cva(CURVE, GRID, ee_up, 0.03, 0.4, 0.5) > base
     assert wrong_way_cva(CURVE, GRID, ee_up, 0.03, 0.4, -0.5) < base  # right-way
+
+
+IM = [100, 90, 80, 60, 40]
+
+
+def test_mva_proportional_to_spread():
+    assert mva(GRID, IM, 0.010, 0.03) == pytest.approx(
+        2 * mva(GRID, IM, 0.005, 0.03), abs=1e-9)
+
+
+def test_mva_zero_at_zero_spread():
+    assert mva(GRID, IM, 0.0, 0.03) == pytest.approx(0.0, abs=1e-15)
+
+
+def test_mva_survival_weighting_reduces():
+    curve = SurvivalCurve([5], [0.05])
+    assert mva(GRID, IM, 0.005, 0.03, curve.survival) < mva(GRID, IM, 0.005, 0.03)
+
+
+def test_swap_cva_matches_manual_composition():
+    from quantforge import swap_expected_exposure as see
+    manual = cva(CURVE, GRID, see(1e6, 0.01, 5.0, GRID), 0.03, 0.4)
+    assert swap_cva(CURVE, 1e6, 0.01, 5.0, GRID, 0.03, 0.4) == pytest.approx(
+        manual, abs=1e-15)
+
+
+def test_mva_validation():
+    with pytest.raises(ValueError):
+        mva(GRID, [100], 0.005, 0.03)
 
 
 def test_collateral_below_threshold_unchanged():
