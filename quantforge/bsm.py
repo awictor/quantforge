@@ -94,6 +94,32 @@ def put_price(S, K, t, r, sigma, b=None) -> float:
     return price(S, K, t, r, sigma, OptionType.PUT, b)
 
 
+def forward_price(S, t, r, b=None) -> float:
+    """Forward price of the underlying ``F = S e^{b t}`` (carry ``b``, default r).
+
+    With ``b = r`` this is the cost-of-carry forward on a non-dividend stock;
+    ``b = r - q`` handles a continuous dividend yield and ``b = 0`` a future.
+    """
+    if b is None:
+        b = r
+    return S * math.exp(b * t)
+
+
+def put_call_parity_residual(call, put, S, K, t, r, b=None) -> float:
+    """Put-call parity residual ``(C - P) - e^{-rt}(F - K)``, ``F = S e^{b t}``.
+
+    Zero (up to rounding) when the call and put are arbitrage-consistent. A
+    non-zero value is the parity violation in price terms -- useful for
+    validating quotes or a pricer. For a non-dividend stock (``b = r``) the
+    forward term reduces to ``S - K e^{-rt}``.
+    """
+    if b is None:
+        b = r
+    disc = math.exp(-r * t)
+    fwd = S * math.exp(b * t)
+    return (call - put) - disc * (fwd - K)
+
+
 def delta(S, K, t, r, sigma, option_type=OptionType.CALL, b=None) -> float:
     """dPrice/dS."""
     ot = _coerce_type(option_type)

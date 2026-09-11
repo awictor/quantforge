@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.353.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.354.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -507,6 +507,13 @@ Auto-generated from `quantforge` v1.353.0 by `docs/gen_api.py` — do not edit b
 > put ``+S t e^{(b-r)t} N(-d1)``. Assumes ``b`` moves with ``q`` (the standard
 > dividend-yield case).
 
+### `forward_price(S, t, r, b=None) -> float`  _function_
+
+> Forward price of the underlying ``F = S e^{b t}`` (carry ``b``, default r).
+>
+> With ``b = r`` this is the cost-of-carry forward on a non-dividend stock;
+> ``b = r - q`` handles a continuous dividend yield and ``b = 0`` a future.
+
 ### `gamma(S, K, t, r, sigma, b=None) -> float`  _function_
 
 > d2Price/dS2. Identical for calls and puts.
@@ -527,6 +534,15 @@ Auto-generated from `quantforge` v1.353.0 by `docs/gen_api.py` — do not edit b
 >     sigma: annualized volatility.
 >     option_type: CALL or PUT (also accepts "call"/"put"/"c"/"p").
 >     b: cost of carry. Defaults to ``r`` (non-dividend stock).
+
+### `put_call_parity_residual(call, put, S, K, t, r, b=None) -> float`  _function_
+
+> Put-call parity residual ``(C - P) - e^{-rt}(F - K)``, ``F = S e^{b t}``.
+>
+> Zero (up to rounding) when the call and put are arbitrage-consistent. A
+> non-zero value is the parity violation in price terms -- useful for
+> validating quotes or a pricer. For a non-dividend stock (``b = r``) the
+> forward term reduces to ``S - K e^{-rt}``.
 
 ### `put_price(S, K, t, r, sigma, b=None) -> float`  _function_
 

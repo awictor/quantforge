@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.354.0] - 2026-09-11
+
+### Added
+- `forward_price` and `put_call_parity_residual` (in `bsm.py`): the cost-of-
+  carry forward `F = S e^{b t}` and the put-call parity residual
+  `(C - P) - e^{-rt}(F - K)`, which is zero for arbitrage-consistent quotes and
+  otherwise reports the violation in price terms.
+- Verified: the forward matches `S e^{b t}` (spot for a future `b = 0`, and the
+  dividend case `b = r - q`); Black-Scholes call/put prices give a zero parity
+  residual with and without dividends; a deliberate mispricing surfaces as the
+  exact residual.
+
 ## [1.353.0] - 2026-09-11
 
 ### Added
