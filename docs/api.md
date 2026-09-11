@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.284.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.285.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1322,6 +1322,31 @@ Auto-generated from `quantforge` v1.284.0 by `docs/gen_api.py` — do not edit b
 > ``delta`` (dV/dS), ``gamma`` (d2V/dS2), ``vega`` (dV/dsigma), and ``theta``
 > (calendar decay, ``-dV/dt``). At ``power = 1`` these reduce to the vanilla
 > Black-Scholes Greeks. Returns a dict with ``price`` and those fields.
+
+### `powered_option(S, K, t, r, sigma, power, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> Powered option: payoff ``max(S_T - K, 0)**power`` (call) or
+> ``max(K - S_T, 0)**power`` (put), for a positive **integer** ``power``.
+>
+> Distinct from :func:`power_option` (whose payoff is ``max(S_T**power - K, 0)``):
+> here the *option payoff itself* is raised to a power, so the payoff has a
+> higher-order convexity in the terminal spot. Because the payoff is a
+> polynomial in ``S_T`` on the exercise region, it decomposes by the binomial
+> theorem into a sum of ``S_T**j`` truncated moments, each of which has a
+> closed form (Esser 2003; Heynen-Kat 1996). ``power = 1`` recovers the
+> vanilla Black-Scholes option.
+>
+> With ``F_j = E[S_T**j] = S**j exp(j b t + 0.5 j (j-1) sigma^2 t)`` and
+> ``d_j = (ln(S/K) + (b + (j - 0.5) sigma^2) t) / (sigma sqrt(t))``, a call is
+> ``disc * sum_j C(p,j) (-K)^{p-j} F_j N(d_j)`` and a put is
+> ``disc * sum_j C(p,j) K^{p-j} (-1)^j F_j N(-d_j)``.
+
+### `powered_option_greeks(S, K, t, r, sigma, power, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> Greeks of a powered option by central finite differences of
+> :func:`powered_option`: ``delta`` (dV/dS), ``gamma`` (d2V/dS2), ``vega``
+> (dV/dsigma), ``theta`` (calendar decay, ``-dV/dt``). Returns a dict with
+> ``price`` and those fields.
 
 ## forward
 

@@ -791,6 +791,79 @@ def power_option_greeks(S, K, t, r, sigma, power, option_type=OptionType.CALL,
             "theta": theta}
 
 
+def powered_option(S, K, t, r, sigma, power, option_type=OptionType.CALL,
+                   b=None):
+    """Powered option: payoff ``max(S_T - K, 0)**power`` (call) or
+    ``max(K - S_T, 0)**power`` (put), for a positive **integer** ``power``.
+
+    Distinct from :func:`power_option` (whose payoff is ``max(S_T**power - K, 0)``):
+    here the *option payoff itself* is raised to a power, so the payoff has a
+    higher-order convexity in the terminal spot. Because the payoff is a
+    polynomial in ``S_T`` on the exercise region, it decomposes by the binomial
+    theorem into a sum of ``S_T**j`` truncated moments, each of which has a
+    closed form (Esser 2003; Heynen-Kat 1996). ``power = 1`` recovers the
+    vanilla Black-Scholes option.
+
+    With ``F_j = E[S_T**j] = S**j exp(j b t + 0.5 j (j-1) sigma^2 t)`` and
+    ``d_j = (ln(S/K) + (b + (j - 0.5) sigma^2) t) / (sigma sqrt(t))``, a call is
+    ``disc * sum_j C(p,j) (-K)^{p-j} F_j N(d_j)`` and a put is
+    ``disc * sum_j C(p,j) K^{p-j} (-1)^j F_j N(-d_j)``.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if b is None:
+        b = r
+    if not isinstance(power, int) or power < 1:
+        raise ValueError("power must be a positive integer")
+    disc = math.exp(-r * t)
+    if t == 0 or sigma == 0:
+        fwd = S * math.exp(b * t)
+        intrinsic = (max(fwd - K, 0.0) if ot is OptionType.CALL
+                     else max(K - fwd, 0.0))
+        return disc * intrinsic ** power
+    vsqrt = sigma * math.sqrt(t)
+    total = 0.0
+    for j in range(power + 1):
+        c = math.comb(power, j)
+        fwd_j = S ** j * math.exp(j * b * t + 0.5 * j * (j - 1) * sigma * sigma * t)
+        d_j = (math.log(S / K) + (b + (j - 0.5) * sigma * sigma) * t) / vsqrt
+        if ot is OptionType.CALL:
+            total += c * (-K) ** (power - j) * fwd_j * norm_cdf(d_j)
+        else:
+            total += c * K ** (power - j) * (-1) ** j * fwd_j * norm_cdf(-d_j)
+    return disc * total
+
+
+def powered_option_greeks(S, K, t, r, sigma, power,
+                          option_type=OptionType.CALL, b=None):
+    """Greeks of a powered option by central finite differences of
+    :func:`powered_option`: ``delta`` (dV/dS), ``gamma`` (d2V/dS2), ``vega``
+    (dV/dsigma), ``theta`` (calendar decay, ``-dV/dt``). Returns a dict with
+    ``price`` and those fields.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if b is None:
+        b = r
+    if not isinstance(power, int) or power < 1:
+        raise ValueError("power must be a positive integer")
+
+    def px(S_=S, t_=t, sigma_=sigma):
+        return powered_option(S_, K, t_, r, sigma_, power, ot, b=b)
+
+    base = px()
+    hS = 1e-4 * S
+    up, dn = px(S_=S + hS), px(S_=S - hS)
+    delta = (up - dn) / (2.0 * hS)
+    gamma = (up - 2.0 * base + dn) / (hS * hS)
+    hv = 1e-4
+    vega = (px(sigma_=sigma + hv) - px(sigma_=sigma - hv)) / (2.0 * hv)
+    ht = min(1e-4, 0.25 * t)
+    theta = -(px(t_=t + ht) - px(t_=t - ht)) / (2.0 * ht)
+    return {"price": base, "delta": delta, "gamma": gamma, "vega": vega,
+            "theta": theta}
+
+
 def barrier_rebate(S, H, t, r, sigma, knock="out", b=None, cash=1.0,
                    payoff_at_hit=True):
     """Standalone rebate cashflow attached to a barrier.

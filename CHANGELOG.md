@@ -4,6 +4,21 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.285.0] - 2026-09-11
+
+### Added
+- `powered_option` and `powered_option_greeks` (in `exotics.py`): the powered
+  option, payoff `max(S_T - K, 0)**p` (call) or `max(K - S_T, 0)**p` (put) for
+  a positive integer power `p`. Distinct from `power_option` (payoff
+  `max(S_T**p - K, 0)`): here the option payoff itself is raised to a power.
+  Closed form by binomial expansion of the polynomial payoff into truncated
+  moments `E[S_T**j] N(d_j)` (Esser 2003; Heynen-Kat 1996). Greeks by finite
+  difference.
+- Verified: `p = 1` recovers the vanilla Black-Scholes price and Greeks;
+  matches an antithetic Monte Carlo for `p = 2` (call/put) and `p = 3` (call)
+  to within statistical error; zero-vol limit equals the discounted powered
+  intrinsic; delta/gamma/vega positive for the call.
+
 ## [1.284.0] - 2026-09-11
 
 ### Added
