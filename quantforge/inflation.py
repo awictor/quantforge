@@ -63,6 +63,67 @@ def real_from_breakeven(nominal_yield, breakeven) -> float:
     return (1.0 + nominal_yield) / (1.0 + breakeven) - 1.0
 
 
+def deflation_floored_redemption(face, index_settle, index_base) -> float:
+    """TIPS-style redemption with the deflation floor: principal never below par.
+
+    Real (TIPS) principal redeems at ``face * max(index_ratio, 1)`` -- the index
+    ratio inflates the principal in inflation, but a cumulative deflation over the
+    bond's life cannot pull the redemption below the original face. Equals
+    :func:`inflation_adjusted_principal` whenever the index has risen since issue
+    (ratio >= 1), and is floored to ``face`` otherwise.
+    """
+    return face * max(index_ratio(index_settle, index_base), 1.0)
+
+
+def deflation_floor_value(face, index_settle, index_base) -> float:
+    """Intrinsic value of the deflation floor: floored redemption minus unfloored.
+
+    ``face * (max(ratio, 1) - ratio)`` -- zero when the index has risen (the floor
+    is out of the money), positive under net deflation. The realized payoff of the
+    embedded floor option, ignoring optionality/time value.
+    """
+    ratio = index_ratio(index_settle, index_base)
+    return face * (max(ratio, 1.0) - ratio)
+
+
+def yoy_inflation_rate(index_prev, index_curr) -> float:
+    """Year-on-year inflation ``index_curr / index_prev - 1`` between two fixings."""
+    if index_prev <= 0 or index_curr <= 0:
+        raise ValueError("index levels must be positive")
+    return index_curr / index_prev - 1.0
+
+
+def zc_inflation_swap_rate(index_start, index_end, years) -> float:
+    """Fair annualized rate of a zero-coupon inflation swap.
+
+    A ZC inflation swap exchanges ``(1 + k)^T - 1`` (fixed) for the realized index
+    growth ``I_T / I_0 - 1`` (float) at maturity. The par fixed rate that zeroes
+    the swap is the annualized index growth ``(I_T / I_0)^(1/T) - 1``, so that
+    ``(1 + k)^T * I_0 == I_T`` (the compounding identity tested against).
+    """
+    if index_start <= 0 or index_end <= 0:
+        raise ValueError("index levels must be positive")
+    if years <= 0:
+        raise ValueError("years must be positive")
+    return (index_end / index_start) ** (1.0 / years) - 1.0
+
+
+def zc_inflation_swap_value(notional, fixed_rate, index_start, index_end,
+                            years, discount_factor=1.0) -> float:
+    """Value of the inflation leg minus the fixed leg of a ZC inflation swap.
+
+    Inflation-leg receiver's value: ``notional * (I_T/I_0 - (1+k)^T)`` at maturity,
+    discounted by ``discount_factor``. Zero at the par :func:`zc_inflation_swap_rate`.
+    """
+    if index_start <= 0 or index_end <= 0:
+        raise ValueError("index levels must be positive")
+    if years <= 0:
+        raise ValueError("years must be positive")
+    realized = index_end / index_start
+    fixed = (1.0 + fixed_rate) ** years
+    return notional * (realized - fixed) * discount_factor
+
+
 def linker_price(real_cashflows, real_yield, index_settle, index_base) -> float:
     """Dirty price of an inflation-linked bond off real cashflows.
 

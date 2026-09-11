@@ -6,6 +6,8 @@ from quantforge import (
     index_ratio, inflation_adjusted_principal, fisher_real_rate,
     fisher_nominal_rate, breakeven_inflation, real_from_breakeven,
     linker_price, linker_real_yield,
+    deflation_floored_redemption, deflation_floor_value, yoy_inflation_rate,
+    zc_inflation_swap_rate, zc_inflation_swap_value,
     bond_cashflows, bond_price_from_yield, yield_to_maturity,
 )
 
@@ -81,6 +83,48 @@ def test_linker_validation():
         linker_price(CF, 0.015, 100, 0)
     with pytest.raises(ValueError):
         linker_real_yield(CF, -5, 100, 100)
+
+
+def test_floor_ootm_in_inflation():
+    # Ratio > 1: redemption equals adjusted principal, floor worthless.
+    assert deflation_floored_redemption(1000, 120, 100) == pytest.approx(
+        inflation_adjusted_principal(1000, 120, 100))
+    assert deflation_floor_value(1000, 120, 100) == pytest.approx(0.0, abs=1e-12)
+
+
+def test_floor_binds_in_deflation():
+    assert deflation_floored_redemption(1000, 90, 100) == pytest.approx(1000.0)
+    assert deflation_floor_value(1000, 90, 100) == pytest.approx(100.0)
+
+
+def test_floor_never_below_par():
+    for idx in (60, 90, 100, 150):
+        assert deflation_floored_redemption(1000, idx, 100) >= 1000 - 1e-9
+
+
+def test_yoy():
+    assert yoy_inflation_rate(100, 103) == pytest.approx(0.03)
+
+
+def test_zc_swap_rate_compounding_identity():
+    k = zc_inflation_swap_rate(100, 133.1, 3)
+    assert (1 + k) ** 3 * 100 == pytest.approx(133.1, abs=1e-9)
+
+
+def test_zc_swap_value_zero_at_par():
+    k = zc_inflation_swap_rate(100, 133.1, 3)
+    assert zc_inflation_swap_value(1e6, k, 100, 133.1, 3) == pytest.approx(0.0, abs=1e-3)
+
+
+def test_zc_swap_receiver_gains_above_par():
+    assert zc_inflation_swap_value(1e6, 0.05, 100, 133.1, 3) > 0
+
+
+def test_inflation_swap_validation():
+    with pytest.raises(ValueError):
+        zc_inflation_swap_rate(100, 133, 0)
+    with pytest.raises(ValueError):
+        yoy_inflation_rate(0, 100)
 
 
 def test_validation():

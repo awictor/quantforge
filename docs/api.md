@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.373.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.374.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2889,6 +2889,24 @@ Auto-generated from `quantforge` v1.373.0 by `docs/gen_api.py` — do not edit b
 > an inflation-linked bond of the same maturity have equal return. The market's
 > inflation expectation (plus risk premium).
 
+### `deflation_floor_value(face, index_settle, index_base) -> float`  _function_
+
+> Intrinsic value of the deflation floor: floored redemption minus unfloored.
+>
+> ``face * (max(ratio, 1) - ratio)`` -- zero when the index has risen (the floor
+> is out of the money), positive under net deflation. The realized payoff of the
+> embedded floor option, ignoring optionality/time value.
+
+### `deflation_floored_redemption(face, index_settle, index_base) -> float`  _function_
+
+> TIPS-style redemption with the deflation floor: principal never below par.
+>
+> Real (TIPS) principal redeems at ``face * max(index_ratio, 1)`` -- the index
+> ratio inflates the principal in inflation, but a cumulative deflation over the
+> bond's life cannot pull the redemption below the original face. Equals
+> :func:`inflation_adjusted_principal` whenever the index has risen since issue
+> (ratio >= 1), and is floored to ``face`` otherwise.
+
 ### `fisher_nominal_rate(real, inflation) -> float`  _function_
 
 > Exact Fisher nominal rate ``(1 + real)(1 + inflation) - 1``.
@@ -2939,6 +2957,26 @@ Auto-generated from `quantforge` v1.373.0 by `docs/gen_api.py` — do not edit b
 >
 > ``(1 + nominal)/(1 + breakeven) - 1`` -- inverse of
 > :func:`breakeven_inflation`.
+
+### `yoy_inflation_rate(index_prev, index_curr) -> float`  _function_
+
+> Year-on-year inflation ``index_curr / index_prev - 1`` between two fixings.
+
+### `zc_inflation_swap_rate(index_start, index_end, years) -> float`  _function_
+
+> Fair annualized rate of a zero-coupon inflation swap.
+>
+> A ZC inflation swap exchanges ``(1 + k)^T - 1`` (fixed) for the realized index
+> growth ``I_T / I_0 - 1`` (float) at maturity. The par fixed rate that zeroes
+> the swap is the annualized index growth ``(I_T / I_0)^(1/T) - 1``, so that
+> ``(1 + k)^T * I_0 == I_T`` (the compounding identity tested against).
+
+### `zc_inflation_swap_value(notional, fixed_rate, index_start, index_end, years, discount_factor=1.0) -> float`  _function_
+
+> Value of the inflation leg minus the fixed leg of a ZC inflation swap.
+>
+> Inflation-leg receiver's value: ``notional * (I_T/I_0 - (1+k)^T)`` at maturity,
+> discounted by ``discount_factor``. Zero at the par :func:`zc_inflation_swap_rate`.
 
 ## kim
 

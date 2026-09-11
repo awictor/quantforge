@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.374.0] - 2026-09-11
+
+### Added
+- `deflation_floored_redemption` and `deflation_floor_value` (in `inflation.py`):
+  TIPS-style principal redemption floored at par, `face * max(index_ratio, 1)`,
+  and the intrinsic value of the embedded deflation floor. Equals the adjusted
+  principal in inflation and binds to par under net deflation.
+- `yoy_inflation_rate`, `zc_inflation_swap_rate`, `zc_inflation_swap_value`
+  (in `inflation.py`): year-on-year inflation between fixings, the par rate of a
+  zero-coupon inflation swap `(I_T/I_0)^(1/T) - 1`, and the inflation-leg-receiver
+  swap value. Par rate cross-checked against the compounding identity
+  `(1+k)^T * I_0 == I_T` and the par swap value being zero.
+
 ## [1.373.0] - 2026-09-11
 
 ### Added
