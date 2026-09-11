@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.378.0] - 2026-09-11
+
+### Added
+- `normalize_seasonal_factors`, `apply_seasonality`, `deseasonalize` (in
+  `inflation.py`): CPI seasonal adjustment. Twelve monthly factors are normalized
+  to a geometric mean of one so they multiply to one over the year (no trend
+  shift); apply/remove multiply/divide the index by the monthly factor and round-
+  trip to the identity. Normalization is idempotent and preserves the relative
+  month-to-month shape.
+
 ## [1.377.0] - 2026-09-11
 
 ### Added

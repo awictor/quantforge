@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.377.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.378.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2881,6 +2881,14 @@ Auto-generated from `quantforge` v1.377.0 by `docs/gen_api.py` — do not edit b
 
 ## inflation
 
+### `apply_seasonality(deseasonalized_index, seasonal_factor)`  _function_
+
+> Add the seasonal component back: ``deseasonalized_index * seasonal_factor``.
+>
+> Inverse of :func:`deseasonalize`. With a :func:`normalize_seasonal_factors`
+> factor this raises or lowers the observed index around its trend without
+> shifting the annual average.
+
 ### `breakeven_inflation(nominal_yield, real_yield) -> float`  _function_
 
 > Breakeven inflation implied by a nominal and a real yield (Fisher).
@@ -2906,6 +2914,13 @@ Auto-generated from `quantforge` v1.377.0 by `docs/gen_api.py` — do not edit b
 > bond's life cannot pull the redemption below the original face. Equals
 > :func:`inflation_adjusted_principal` whenever the index has risen since issue
 > (ratio >= 1), and is floored to ``face`` otherwise.
+
+### `deseasonalize(observed_index, seasonal_factor)`  _function_
+
+> Strip the seasonal component: ``observed_index / seasonal_factor``.
+>
+> Inverse of :func:`apply_seasonality`; recovers the trend index used for
+> projecting forward fixings free of the within-year seasonal pattern.
 
 ### `fisher_nominal_rate(real, inflation) -> float`  _function_
 
@@ -3002,6 +3017,16 @@ Auto-generated from `quantforge` v1.377.0 by `docs/gen_api.py` — do not edit b
 > Deflates the quoted price by the index ratio and solves the standard real-
 > cashflow bond yield by bisection (price is monotone decreasing in the yield).
 > Inverse of :func:`linker_price`.
+
+### `normalize_seasonal_factors(raw_factors)`  _function_
+
+> Scale 12 monthly seasonal factors to a geometric mean of one.
+>
+> Seasonal adjustment must not change the trend level over a full year, so the
+> monthly factors are normalized by their geometric mean:
+> ``f_i / (prod f_j)^(1/12)``. The result multiplies to one across the year, so
+> compounding all twelve leaves the annual index unchanged. Raw factors must be
+> positive.
 
 ### `real_from_breakeven(nominal_yield, breakeven) -> float`  _function_
 

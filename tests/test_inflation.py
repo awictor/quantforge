@@ -11,8 +11,13 @@ from quantforge import (
     zc_inflation_swap_rate, zc_inflation_swap_value,
     inflation_curve_from_zc_swaps, forward_inflation_rate, yoy_swap_value,
     reference_cpi, index_ratio_interpolated,
+    normalize_seasonal_factors, apply_seasonality, deseasonalize,
     bond_cashflows, bond_price_from_yield, yield_to_maturity,
 )
+
+
+RAW_SEASONAL = [1.02, 0.99, 1.01, 1.00, 0.98, 1.03,
+                1.01, 0.97, 1.02, 1.00, 0.99, 1.01]
 from quantforge import modified_duration, convexity, bond_dv01
 
 
@@ -243,6 +248,41 @@ def test_real_dv01_scales_with_ratio():
 def test_real_risk_validation():
     with pytest.raises(ValueError):
         linker_real_duration([(1, -100)], 5.0)
+
+
+def test_seasonal_factors_product_one():
+    f = normalize_seasonal_factors(RAW_SEASONAL)
+    prod = 1.0
+    for x in f:
+        prod *= x
+    assert prod == pytest.approx(1.0, abs=1e-12)
+
+
+def test_seasonal_normalization_idempotent():
+    f = normalize_seasonal_factors(RAW_SEASONAL)
+    f2 = normalize_seasonal_factors(f)
+    assert all(f[i] == pytest.approx(f2[i], abs=1e-12) for i in range(12))
+
+
+def test_seasonal_preserves_relative_shape():
+    f = normalize_seasonal_factors(RAW_SEASONAL)
+    assert f[0] / f[1] == pytest.approx(RAW_SEASONAL[0] / RAW_SEASONAL[1])
+
+
+def test_apply_deseasonalize_roundtrip():
+    f = normalize_seasonal_factors(RAW_SEASONAL)
+    assert deseasonalize(apply_seasonality(250.0, f[3]), f[3]) == pytest.approx(250.0)
+
+
+def test_seasonal_validation():
+    with pytest.raises(ValueError):
+        normalize_seasonal_factors([1, 2, 3])
+    with pytest.raises(ValueError):
+        normalize_seasonal_factors([1] * 11 + [-1])
+    with pytest.raises(ValueError):
+        apply_seasonality(-1, 1.0)
+    with pytest.raises(ValueError):
+        deseasonalize(100, 0)
 
 
 def test_validation():

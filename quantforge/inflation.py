@@ -191,6 +191,51 @@ def yoy_swap_value(notional, fixed_rate, index_levels, discount_factors,
     return notional * value
 
 
+def normalize_seasonal_factors(raw_factors):
+    """Scale 12 monthly seasonal factors to a geometric mean of one.
+
+    Seasonal adjustment must not change the trend level over a full year, so the
+    monthly factors are normalized by their geometric mean:
+    ``f_i / (prod f_j)^(1/12)``. The result multiplies to one across the year, so
+    compounding all twelve leaves the annual index unchanged. Raw factors must be
+    positive.
+    """
+    if len(raw_factors) != 12:
+        raise ValueError("need exactly 12 monthly factors")
+    if any(f <= 0 for f in raw_factors):
+        raise ValueError("seasonal factors must be positive")
+    log_mean = sum(math.log(f) for f in raw_factors) / 12.0
+    geo_mean = math.exp(log_mean)
+    return [f / geo_mean for f in raw_factors]
+
+
+def apply_seasonality(deseasonalized_index, seasonal_factor):
+    """Add the seasonal component back: ``deseasonalized_index * seasonal_factor``.
+
+    Inverse of :func:`deseasonalize`. With a :func:`normalize_seasonal_factors`
+    factor this raises or lowers the observed index around its trend without
+    shifting the annual average.
+    """
+    if deseasonalized_index <= 0:
+        raise ValueError("index must be positive")
+    if seasonal_factor <= 0:
+        raise ValueError("seasonal_factor must be positive")
+    return deseasonalized_index * seasonal_factor
+
+
+def deseasonalize(observed_index, seasonal_factor):
+    """Strip the seasonal component: ``observed_index / seasonal_factor``.
+
+    Inverse of :func:`apply_seasonality`; recovers the trend index used for
+    projecting forward fixings free of the within-year seasonal pattern.
+    """
+    if observed_index <= 0:
+        raise ValueError("index must be positive")
+    if seasonal_factor <= 0:
+        raise ValueError("seasonal_factor must be positive")
+    return observed_index / seasonal_factor
+
+
 def reference_cpi(cpi_month_start, cpi_next_month, day, days_in_month):
     """Daily reference index by linear interpolation between two monthly fixings.
 
