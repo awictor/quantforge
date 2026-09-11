@@ -4,6 +4,26 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.309.0] - 2026-09-11
+
+### Added
+- `bjerksund_stensland_boundary` (in `american.py`): the Bjerksund-Stensland
+  (2002) flat exercise trigger `I` at inception — a call is exercised for
+  `S >= I`, a put for `S <= I`. Returns `None` when early exercise is never
+  optimal (an American call with `b >= r`). The put trigger follows from the
+  same put-call transformation the pricer uses: the transformed call's
+  spot-axis trigger `I2t` maps back to `K^2 / I2t`.
+
+### Changed
+- Extracted the BS2002 trigger computation into a shared `_bs2002_triggers`
+  helper used by both the call pricer and the new boundary function (prices
+  unchanged).
+- Verified: the call boundary lies above the strike and the put below; the
+  BS2002 price equals the exercise intrinsic exactly at the boundary; a spot
+  just inside the boundary has continuation value strictly above intrinsic; the
+  boundary sits within ~10% of the Barone-Adesi-Whaley one (both flat
+  approximations); the refactor leaves the reference prices unchanged.
+
 ## [1.308.0] - 2026-09-11
 
 ### Added

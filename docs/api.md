@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.308.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.309.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -20,6 +20,20 @@ Auto-generated from `quantforge` v1.308.0 by `docs/gen_api.py` — do not edit b
 > model (:func:`bjerksund_stensland`): it uses one flat exercise boundary. Calls
 > are priced directly; puts via the exact transformation
 > ``P(S,K,r,b) = C(K,S,r-b,-b)``.
+
+### `bjerksund_stensland_boundary(K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> Bjerksund-Stensland (2002) flat exercise trigger ``I`` at inception.
+>
+> Immediate exercise is optimal for a call at ``S >= I`` and for a put at
+> ``S <= I``. Returns ``None`` when early exercise is never optimal (an
+> American call with ``b >= r``). This is the model's flat-boundary
+> approximation to the true (curved) early-exercise frontier -- the level
+> where the BS2002 price equals the exercise intrinsic.
+>
+> The put trigger follows from the same put-call transformation used by the
+> pricer, ``P(S, K, r, b) = C(K, S, r - b, -b)``: the transformed call's
+> spot-axis trigger ``I2t`` maps back to the put boundary ``K^2 / I2t``.
 
 ### `bjerksund_stensland_greeks(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
 

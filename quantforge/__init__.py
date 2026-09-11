@@ -287,7 +287,7 @@ from .greeks2 import (
 from .scenario import ScenarioGrid, stress_grid, spot_ladder
 from .american import (
     bjerksund_stensland, bjerksund_stensland_greeks, early_exercise_premium,
-    bjerksund_stensland_1993,
+    bjerksund_stensland_1993, bjerksund_stensland_boundary,
 )
 from .kim import (
     kim_american_put, kim_american_call, kim_exercise_boundary, kim_put_greeks,
@@ -327,7 +327,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.308.0"
+__version__ = "1.309.0"
 
 __all__ = [
     "OptionType",
@@ -833,6 +833,7 @@ __all__ = [
     "bjerksund_stensland",
     "bjerksund_stensland_greeks",
     "bjerksund_stensland_1993",
+    "bjerksund_stensland_boundary",
     "early_exercise_premium",
     "kim_american_put",
     "kim_american_call",

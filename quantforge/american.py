@@ -104,23 +104,31 @@ def _bivariate_normal(a, b, rho):
     return max(0.0, min(1.0, bvn))
 
 
+def _bs2002_triggers(K, t, r, b, sigma):
+    """The two Bjerksund-Stensland flat-boundary trigger prices ``(I1, I2)``.
+
+    ``I2`` is the exercise trigger over ``[0, t]`` and ``I1`` the trigger over
+    the intermediate sub-period ``[0, t1]`` with ``t1 = (sqrt 5 - 1)/2 * t``.
+    """
+    v2 = sigma * sigma
+    beta = (0.5 - b / v2) + math.sqrt((b / v2 - 0.5) ** 2 + 2.0 * r / v2)
+    b_inf = beta / (beta - 1.0) * K
+    b0 = max(K, r / (r - b) * K)
+    t1 = 0.5 * (math.sqrt(5.0) - 1.0) * t
+    h1 = -(b * t1 + 2.0 * sigma * math.sqrt(t1)) * K * K / ((b_inf - b0) * b0)
+    h2 = -(b * t + 2.0 * sigma * math.sqrt(t)) * K * K / ((b_inf - b0) * b0)
+    I1 = b0 + (b_inf - b0) * (1.0 - math.exp(h1))
+    I2 = b0 + (b_inf - b0) * (1.0 - math.exp(h2))
+    return beta, I1, I2, t1
+
+
 def _bs2002_call(S, K, t, r, b, sigma):
     """American call via the Bjerksund-Stensland 2002 two-region model."""
     # No early exercise if carry >= rate: American call == European call.
     if b >= r:
         return bsm_price(S, K, t, r, sigma, OptionType.CALL, b=b)
 
-    v2 = sigma * sigma
-    beta = (0.5 - b / v2) + math.sqrt((b / v2 - 0.5) ** 2 + 2.0 * r / v2)
-    b_inf = beta / (beta - 1.0) * K
-    b0 = max(K, r / (r - b) * K)
-
-    t1 = 0.5 * (math.sqrt(5.0) - 1.0) * t
-
-    h1 = -(b * t1 + 2.0 * sigma * math.sqrt(t1)) * K * K / ((b_inf - b0) * b0)
-    h2 = -(b * t + 2.0 * sigma * math.sqrt(t)) * K * K / ((b_inf - b0) * b0)
-    I1 = b0 + (b_inf - b0) * (1.0 - math.exp(h1))
-    I2 = b0 + (b_inf - b0) * (1.0 - math.exp(h2))
+    beta, I1, I2, t1 = _bs2002_triggers(K, t, r, b, sigma)
 
     alpha1 = (I1 - K) * I1 ** (-beta)
     alpha2 = (I2 - K) * I2 ** (-beta)
@@ -166,6 +174,38 @@ def bjerksund_stensland(S, K, t, r, sigma, option_type=OptionType.CALL, b=None):
         return _bs2002_call(S, K, t, r, b, sigma)
     # Put via transformation.
     return _bs2002_call(K, S, t, r - b, -b, sigma)
+
+
+def bjerksund_stensland_boundary(K, t, r, sigma, option_type=OptionType.CALL,
+                                 b=None):
+    """Bjerksund-Stensland (2002) flat exercise trigger ``I`` at inception.
+
+    Immediate exercise is optimal for a call at ``S >= I`` and for a put at
+    ``S <= I``. Returns ``None`` when early exercise is never optimal (an
+    American call with ``b >= r``). This is the model's flat-boundary
+    approximation to the true (curved) early-exercise frontier -- the level
+    where the BS2002 price equals the exercise intrinsic.
+
+    The put trigger follows from the same put-call transformation used by the
+    pricer, ``P(S, K, r, b) = C(K, S, r - b, -b)``: the transformed call's
+    spot-axis trigger ``I2t`` maps back to the put boundary ``K^2 / I2t``.
+    """
+    ot = _coerce_type(option_type)
+    _validate(1.0, K, t, sigma)
+    if b is None:
+        b = r
+    if ot is OptionType.CALL:
+        if b >= r:
+            return None  # never exercise a no-dividend American call early
+        _, _, I2, _ = _bs2002_triggers(K, t, r, b, sigma)
+        return I2
+    # Put: transformed call has spot-axis strike K, rate r-b, carry -b.
+    rt, bt = r - b, -b
+    if bt >= rt:
+        # Transformed call never exercised early -> American put never either.
+        return None
+    _, _, I2t, _ = _bs2002_triggers(K, t, rt, bt, sigma)
+    return K * K / I2t
 
 
 def bjerksund_stensland_greeks(S, K, t, r, sigma, option_type=OptionType.CALL,
