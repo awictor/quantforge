@@ -11,6 +11,7 @@ from quantforge import (
     schwartz_log_mean, schwartz_log_variance, schwartz_forward,
     schwartz_option, mean_reversion_half_life, schwartz_implied_alpha,
     roll_yield, carry_roll_yield, schwartz_futures_volatility,
+    margrabe_exchange_option, kirk_spread_option,
 )
 
 
@@ -186,6 +187,41 @@ def test_roll_yield_validation():
         roll_yield(100, 100, 2, 1)
     with pytest.raises(ValueError):
         schwartz_futures_volatility(0.3, 0, 1)
+
+
+SP_F1, SP_F2, SP_S1, SP_S2, SP_RHO, SP_R, SP_T = 100.0, 90.0, 0.3, 0.25, 0.4, 0.05, 1.0
+
+
+def test_kirk_reduces_to_margrabe_at_zero_strike():
+    m = margrabe_exchange_option(SP_F1, SP_F2, SP_S1, SP_S2, SP_RHO, SP_R, SP_T)
+    k = kirk_spread_option(SP_F1, SP_F2, 0.0, SP_S1, SP_S2, SP_RHO, SP_R, SP_T, True)
+    assert k == pytest.approx(m, abs=1e-9)
+
+
+def test_kirk_put_call_parity():
+    c = kirk_spread_option(SP_F1, SP_F2, 5.0, SP_S1, SP_S2, SP_RHO, SP_R, SP_T, True)
+    p = kirk_spread_option(SP_F1, SP_F2, 5.0, SP_S1, SP_S2, SP_RHO, SP_R, SP_T, False)
+    assert c - p == pytest.approx(math.exp(-SP_R * SP_T) * (SP_F1 - SP_F2 - 5.0), abs=1e-9)
+
+
+def test_spread_option_correlation_monotone():
+    lo = kirk_spread_option(SP_F1, SP_F2, 5.0, SP_S1, SP_S2, 0.0, SP_R, SP_T)
+    hi = kirk_spread_option(SP_F1, SP_F2, 5.0, SP_S1, SP_S2, 0.8, SP_R, SP_T)
+    assert hi < lo  # higher correlation shrinks the spread vol
+    assert margrabe_exchange_option(SP_F1, SP_F2, SP_S1, SP_S2, 0.9, SP_R, SP_T) < \
+        margrabe_exchange_option(SP_F1, SP_F2, SP_S1, SP_S2, 0.0, SP_R, SP_T)
+
+
+def test_spread_option_positive():
+    assert margrabe_exchange_option(SP_F1, SP_F2, SP_S1, SP_S2, SP_RHO, SP_R, SP_T) > 0
+    assert kirk_spread_option(SP_F1, SP_F2, 5.0, SP_S1, SP_S2, SP_RHO, SP_R, SP_T) > 0
+
+
+def test_spread_option_validation():
+    with pytest.raises(ValueError):
+        kirk_spread_option(SP_F1, SP_F2, -200, SP_S1, SP_S2, SP_RHO, SP_R, SP_T)
+    with pytest.raises(ValueError):
+        margrabe_exchange_option(-1, SP_F2, SP_S1, SP_S2, SP_RHO, SP_R, SP_T)
 
 
 def test_validation():

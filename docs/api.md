@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.387.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.388.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1125,6 +1125,35 @@ Auto-generated from `quantforge` v1.387.0 by `docs/gen_api.py` — do not edit b
 > Backwardation occurs when the convenience yield exceeds the financing-plus-
 > storage carry, so the net carry :func:`net_cost_of_carry` is negative and
 > forwards fall with maturity.
+
+### `kirk_spread_option(f1, f2, strike, sigma1, sigma2, rho, r, expiry, is_call=True)`  _function_
+
+> Kirk (1995) approximation for a spread option on two forwards.
+>
+> Prices ``max(F1 - F2 - K, 0)`` (call) or ``max(K - (F1 - F2), 0)`` (put) by
+> treating ``F2 + K`` as a single lognormal asset and applying Black with an
+> effective spread volatility
+>
+>     sigma_K = sqrt(sigma1^2 - 2 rho sigma1 sigma2 w + sigma2^2 w^2),
+>     w = F2 / (F2 + K).
+>
+> At ``K = 0`` (``w = 1``) it collapses exactly to the
+> :func:`margrabe_exchange_option`. Call and put satisfy
+> ``C - P = e^{-r T} (F1 - F2 - K)``.
+
+### `margrabe_exchange_option(f1, f2, sigma1, sigma2, rho, r, expiry)`  _function_
+
+> Margrabe (1978) option to exchange asset 2 for asset 1, on forwards.
+>
+> Exact closed form for the payoff ``max(F1 - F2, 0)`` (a zero-strike spread
+> option). With the spread volatility
+> ``sigma = sqrt(sigma1^2 - 2 rho sigma1 sigma2 + sigma2^2)``:
+>
+>     price = e^{-r T} [F1 Phi(d1) - F2 Phi(d2)]
+>     d1 = (ln(F1/F2) + 0.5 sigma^2 T) / (sigma sqrt(T)),  d2 = d1 - sigma sqrt(T)
+>
+> The building block the :func:`kirk_spread_option` approximation reduces to at
+> zero strike.
 
 ### `mean_reversion_half_life(kappa)`  _function_
 

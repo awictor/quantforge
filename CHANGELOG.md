@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.388.0] - 2026-09-11
+
+### Added
+- `margrabe_exchange_option` and `kirk_spread_option` (in `commodity.py`): the
+  exact Margrabe (1978) option to exchange one forward for another (zero-strike
+  spread) and the Kirk (1995) approximation for a struck spread option on two
+  forwards (crack/spark spreads). Kirk collapses exactly to Margrabe at zero
+  strike, call/put satisfy `C - P = e^{-rT}(F1 - F2 - K)`, and both fall as
+  correlation rises (the spread vol shrinks). Cross-checked on all three.
+
 ## [1.387.0] - 2026-09-11
 
 ### Added

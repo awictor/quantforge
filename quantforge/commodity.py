@@ -189,6 +189,72 @@ def schwartz_implied_alpha(spot, forward, kappa, sigma, maturity):
     return (math.log(forward) - 0.5 * var - decay * math.log(spot)) / (1.0 - decay)
 
 
+def margrabe_exchange_option(f1, f2, sigma1, sigma2, rho, r, expiry):
+    """Margrabe (1978) option to exchange asset 2 for asset 1, on forwards.
+
+    Exact closed form for the payoff ``max(F1 - F2, 0)`` (a zero-strike spread
+    option). With the spread volatility
+    ``sigma = sqrt(sigma1^2 - 2 rho sigma1 sigma2 + sigma2^2)``:
+
+        price = e^{-r T} [F1 Phi(d1) - F2 Phi(d2)]
+        d1 = (ln(F1/F2) + 0.5 sigma^2 T) / (sigma sqrt(T)),  d2 = d1 - sigma sqrt(T)
+
+    The building block the :func:`kirk_spread_option` approximation reduces to at
+    zero strike.
+    """
+    from .mathfns import norm_cdf
+    if f1 <= 0 or f2 <= 0:
+        raise ValueError("forwards must be positive")
+    if expiry < 0:
+        raise ValueError("expiry must be non-negative")
+    disc = math.exp(-r * expiry)
+    var = sigma1 * sigma1 - 2.0 * rho * sigma1 * sigma2 + sigma2 * sigma2
+    if var <= 0.0 or expiry == 0.0:
+        return disc * max(f1 - f2, 0.0)
+    vsqrt = math.sqrt(var * expiry)
+    d1 = (math.log(f1 / f2) + 0.5 * var * expiry) / vsqrt
+    d2 = d1 - vsqrt
+    return disc * (f1 * norm_cdf(d1) - f2 * norm_cdf(d2))
+
+
+def kirk_spread_option(f1, f2, strike, sigma1, sigma2, rho, r, expiry,
+                       is_call=True):
+    """Kirk (1995) approximation for a spread option on two forwards.
+
+    Prices ``max(F1 - F2 - K, 0)`` (call) or ``max(K - (F1 - F2), 0)`` (put) by
+    treating ``F2 + K`` as a single lognormal asset and applying Black with an
+    effective spread volatility
+
+        sigma_K = sqrt(sigma1^2 - 2 rho sigma1 sigma2 w + sigma2^2 w^2),
+        w = F2 / (F2 + K).
+
+    At ``K = 0`` (``w = 1``) it collapses exactly to the
+    :func:`margrabe_exchange_option`. Call and put satisfy
+    ``C - P = e^{-r T} (F1 - F2 - K)``.
+    """
+    from .mathfns import norm_cdf
+    if f1 <= 0 or f2 <= 0:
+        raise ValueError("forwards must be positive")
+    if f2 + strike <= 0:
+        raise ValueError("F2 + strike must be positive for the Kirk approximation")
+    if expiry < 0:
+        raise ValueError("expiry must be non-negative")
+    disc = math.exp(-r * expiry)
+    spread = f1 - f2 - strike
+    denom = f2 + strike
+    w = f2 / denom
+    var = sigma1 * sigma1 - 2.0 * rho * sigma1 * sigma2 * w + sigma2 * sigma2 * w * w
+    if var <= 0.0 or expiry == 0.0:
+        intrinsic = max(spread, 0.0) if is_call else max(-spread, 0.0)
+        return disc * intrinsic
+    vsqrt = math.sqrt(var * expiry)
+    d1 = (math.log(f1 / denom) + 0.5 * var * expiry) / vsqrt
+    d2 = d1 - vsqrt
+    if is_call:
+        return disc * (f1 * norm_cdf(d1) - denom * norm_cdf(d2))
+    return disc * (denom * norm_cdf(-d2) - f1 * norm_cdf(-d1))
+
+
 def roll_yield(near_forward, far_forward, t_near, t_far):
     """Annualized roll yield between two forwards ``ln(F_near/F_far)/(t_far-t_near)``.
 
