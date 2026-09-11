@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.247.0] - 2026-09-10
+
+### Added
+- `holee_bond_option`, `holee_coupon_bond_option`, `holee_swaption` (in
+  `holee.py`): exact Ho-Lee zero-coupon-bond option (Black-style with bond vol
+  `sigma (t_bond - t_option) sqrt(t_option)`), coupon-bond option by Jamshidian
+  decomposition, and European swaption via the coupon-bond-option identity (payer
+  = put on the fixed-leg coupon bond struck at notional).
+- Verified: a single cashflow reduces to the scaled zero-coupon bond option;
+  the bond option satisfies put-call parity; swaption parity
+  `payer - receiver = annuity (swap_rate - strike)` holds to 1e-8; both swaption
+  legs positive.
+
 ## [1.246.0] - 2026-09-10
 
 ### Added
