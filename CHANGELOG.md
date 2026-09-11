@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.273.0] - 2026-09-10
+
+### Added
+- `volatility_swap_bounds_from_smile` (in `varswap.py`): brackets the fair
+  volatility-swap strike between the at-the-money-forward implied vol (lower --
+  the Carr-Lee zero-correlation proxy) and `sqrt(K_var)` (upper -- the Jensen
+  bound from the variance-swap strike). The bracket width is the convexity /
+  vol-of-vol premium the smile implies.
+- Verified: a flat smile collapses the bracket; a convex smile keeps
+  `lower < upper`; the upper bound equals `sqrt` of the variance-swap strike and
+  the lower equals the ATMF vol; the premium widens with SVI curvature.
+
 ## [1.272.0] - 2026-09-10
 
 ### Changed

@@ -87,6 +87,37 @@ def volatility_swap_strike(S0, t, r, put_strikes, put_prices,
     return math.sqrt(max(var, 0.0))
 
 
+def volatility_swap_bounds_from_smile(S0, t, r, vol_fn, q=0.0, n_strikes=401,
+                                      width=8.0):
+    """Bracket the fair volatility-swap strike from a smile: ``(lower, upper)``.
+
+    The fair vol-swap strike ``E[sqrt(RV)]`` has no model-free replication (unlike
+    the variance swap), but it is pinned between two computable levels:
+
+      * upper -- ``sqrt(K_var)`` with ``K_var`` the variance-swap strike, since
+        ``E[sqrt(RV)] <= sqrt(E[RV])`` by Jensen (the convexity/vol-of-vol gap).
+      * lower -- the at-the-money-forward implied vol ``vol_fn(F)``. Carr-Lee
+        (2009) show the fair vol-swap strike equals the ATMF implied vol exactly
+        when spot/vol correlation is zero, and the ATMF vol lies below
+        ``sqrt(K_var)`` whenever the smile is convex; it is the standard
+        first-order proxy.
+
+    Returns ``(atmf_vol, sqrt_var_strike)`` with ``lower <= upper``. A flat smile
+    collapses the bracket to that flat vol (zero convexity). The true strike sits
+    inside; the width ``upper - lower`` is the convexity premium the smile implies.
+    """
+    F = S0 * math.exp((r - q) * t)
+    lower = vol_fn(F)
+    var = variance_swap_from_smile(S0, t, r, vol_fn, q=q, n_strikes=n_strikes,
+                                   width=width)
+    upper = math.sqrt(max(var, 0.0))
+    if lower > upper:
+        # A non-convex (or numerically flat) smile can invert the pair; clamp so
+        # the documented ordering always holds.
+        lower = upper
+    return lower, upper
+
+
 def variance_swap_from_smile(S0, t, r, vol_fn, q=0.0, n_strikes=401,
                              width=8.0, split=None):
     """Fair variance-swap strike from a volatility *smile* ``vol_fn(K)``.

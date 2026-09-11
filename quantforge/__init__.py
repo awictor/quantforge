@@ -101,6 +101,7 @@ from .density import (
 )
 from .varswap import (
     variance_swap_strike, volatility_swap_strike, variance_swap_from_smile,
+    volatility_swap_bounds_from_smile,
     corridor_variance_swap_from_smile, gamma_swap_from_smile,
     forward_variance_swap_from_smile, variance_term_structure,
 )
@@ -297,7 +298,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.272.0"
+__version__ = "1.273.0"
 
 __all__ = [
     "OptionType",
@@ -434,6 +435,7 @@ __all__ = [
     "variance_swap_strike",
     "volatility_swap_strike",
     "variance_swap_from_smile",
+    "volatility_swap_bounds_from_smile",
     "corridor_variance_swap_from_smile",
     "gamma_swap_from_smile",
     "forward_variance_swap_from_smile",
