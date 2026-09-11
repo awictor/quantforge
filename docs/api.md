@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.326.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.327.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2370,6 +2370,14 @@ Auto-generated from `quantforge` v1.326.0 by `docs/gen_api.py` — do not edit b
 > ``strike``, then sum the ``c_i``-weighted zero-coupon-bond options struck at
 > ``K_i = P(t_option, t_i | r*)``. Exact.
 
+### `holee_expected_rate(r0, t, theta, sigma=0.0)`  _function_
+
+> Expected Ho-Lee short rate ``E[r_t] = r0 + theta t``.
+>
+> With constant drift and no mean reversion the rate is
+> ``r_t = r0 + theta t + sigma W_t``, so the mean drifts linearly at rate
+> ``theta`` (``sigma`` does not enter the mean).
+
 ### `holee_floor(r0, dates, strike, theta, sigma, notional=1.0)`  _function_
 
 > Ho-Lee floor: strip of floorlets over successive ``dates``.
@@ -2377,6 +2385,13 @@ Auto-generated from `quantforge` v1.326.0 by `docs/gen_api.py` — do not edit b
 ### `holee_floorlet(r0, reset, pay, strike, theta, sigma, notional=1.0)`  _function_
 
 > Floorlet on ``[reset, pay]`` under Ho-Lee via the bond-call identity.
+
+### `holee_rate_variance(t, sigma)`  _function_
+
+> Variance of the Ho-Lee short rate ``Var[r_t] = sigma^2 t``.
+>
+> The rate is a drifted Brownian motion, so its variance grows linearly and
+> without bound -- there is no stationary distribution (no mean reversion).
 
 ### `holee_swaption(r0, expiry, pay_times, fixed_rate, theta, sigma, payer=True, notional=1.0)`  _function_
 

@@ -45,6 +45,29 @@ def holee_zero_coupon_yield(r0, t, theta, sigma):
     return r0 + 0.5 * theta * t - sigma * sigma * t * t / 6.0
 
 
+def holee_expected_rate(r0, t, theta, sigma=0.0):
+    """Expected Ho-Lee short rate ``E[r_t] = r0 + theta t``.
+
+    With constant drift and no mean reversion the rate is
+    ``r_t = r0 + theta t + sigma W_t``, so the mean drifts linearly at rate
+    ``theta`` (``sigma`` does not enter the mean).
+    """
+    if t < 0:
+        raise ValueError("t must be non-negative")
+    return r0 + theta * t
+
+
+def holee_rate_variance(t, sigma):
+    """Variance of the Ho-Lee short rate ``Var[r_t] = sigma^2 t``.
+
+    The rate is a drifted Brownian motion, so its variance grows linearly and
+    without bound -- there is no stationary distribution (no mean reversion).
+    """
+    if t < 0:
+        raise ValueError("t must be non-negative")
+    return sigma * sigma * t
+
+
 def holee_bond_greeks(r0, t, theta, sigma):
     """Exact rate sensitivities of a Ho-Lee zero-coupon bond.
 

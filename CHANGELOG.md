@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.327.0] - 2026-09-11
+
+### Added
+- `holee_expected_rate` and `holee_rate_variance` (in `holee.py`): analytic
+  moments of the Ho-Lee short rate. With constant drift the rate is a drifted
+  Brownian motion `r_t = r0 + theta t + sigma W_t`, so the mean is `r0 + theta t`
+  and the variance `sigma^2 t` -- both linear in time, with no stationary law
+  (no mean reversion). Completes the short-rate moment set alongside Vasicek and
+  CIR.
+- Verified: the mean and variance match their formulas and an Euler Monte Carlo
+  of the SDE; the variance grows without bound; negative time raises.
+
 ## [1.326.0] - 2026-09-11
 
 ### Added
