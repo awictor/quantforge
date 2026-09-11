@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.293.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.294.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3110,6 +3110,22 @@ Auto-generated from `quantforge` v1.293.0 by `docs/gen_api.py` — do not edit b
 >     spots, weights, sigmas: length-``n`` sequences.
 >     corr: ``n x n`` correlation matrix (list of lists).
 >     q: optional length-``n`` dividend yields; defaults to zeros.
+
+### `implied_geometric_basket_correlation(target_price, spots, weights, K, t, r, sigmas, q=None, option_type=<OptionType.CALL: 'call'>, tol=1e-08, max_iter=100)`  _function_
+
+> Back out the uniform pairwise correlation implied by a geometric-basket
+> price.
+>
+> Assumes a single off-diagonal correlation ``rho`` shared by every pair
+> (an equicorrelation matrix ``corr[i][j] = rho`` for ``i != j``, ``1`` on the
+> diagonal). The basket log-variance
+> ``t sum_ij w_i w_j corr[i][j] sigma_i sigma_j`` rises with ``rho``, so a
+> geometric-basket call is monotone increasing in ``rho`` (a put decreasing),
+> and a bisection recovers the correlation consistent with the quote.
+>
+> The search is bounded below by ``-1/(n-1)`` (the smallest ``rho`` keeping the
+> equicorrelation matrix positive semidefinite) and above by ``1``. Raises if
+> the quote lies outside the price range those bounds span.
 
 ### `implied_spread_correlation(target_price, S1, S2, K, t, r, sigma1, sigma2, q1=0.0, q2=0.0, option_type=<OptionType.CALL: 'call'>, tol=1e-08, max_iter=100)`  _function_
 

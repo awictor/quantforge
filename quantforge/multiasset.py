@@ -919,3 +919,57 @@ def implied_spread_correlation_bs(target_price, S1, S2, K, t, r, sigma1, sigma2,
         else:
             hi = mid
     return 0.5 * (lo + hi)
+
+
+def implied_geometric_basket_correlation(target_price, spots, weights, K, t, r,
+                                         sigmas, q=None,
+                                         option_type=OptionType.CALL,
+                                         tol=1e-8, max_iter=100):
+    """Back out the uniform pairwise correlation implied by a geometric-basket
+    price.
+
+    Assumes a single off-diagonal correlation ``rho`` shared by every pair
+    (an equicorrelation matrix ``corr[i][j] = rho`` for ``i != j``, ``1`` on the
+    diagonal). The basket log-variance
+    ``t sum_ij w_i w_j corr[i][j] sigma_i sigma_j`` rises with ``rho``, so a
+    geometric-basket call is monotone increasing in ``rho`` (a put decreasing),
+    and a bisection recovers the correlation consistent with the quote.
+
+    The search is bounded below by ``-1/(n-1)`` (the smallest ``rho`` keeping the
+    equicorrelation matrix positive semidefinite) and above by ``1``. Raises if
+    the quote lies outside the price range those bounds span.
+    """
+    ot = _coerce_type(option_type)
+    n = len(spots)
+    if n < 2:
+        raise ValueError("need at least two assets")
+
+    def corr_of(rho):
+        return [[1.0 if i == j else rho for j in range(n)] for i in range(n)]
+
+    def px(rho):
+        return geometric_basket_option(spots, weights, K, t, r, sigmas,
+                                       corr_of(rho), q, ot)
+
+    lo = -1.0 / (n - 1) + 1e-9
+    hi = 0.999999
+    p_lo, p_hi = px(lo), px(hi)
+    if not (min(p_lo, p_hi) - 1e-10 <= target_price <= max(p_lo, p_hi) + 1e-10):
+        raise ValueError(
+            f"price {target_price} outside the rho-range [{min(p_lo, p_hi):.6g}, "
+            f"{max(p_lo, p_hi):.6g}]"
+        )
+    # Both call and put prices increase in rho: higher correlation raises the
+    # basket variance, and the strike-independent parity C - P = disc(F - K)
+    # forces dC/drho = dP/drho > 0. So a model price above the quote means rho
+    # is too high.
+    for _ in range(max_iter):
+        mid = 0.5 * (lo + hi)
+        pm = px(mid)
+        if abs(pm - target_price) < tol:
+            return mid
+        if pm > target_price:
+            hi = mid
+        else:
+            lo = mid
+    return 0.5 * (lo + hi)

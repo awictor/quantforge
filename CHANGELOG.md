@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.294.0] - 2026-09-11
+
+### Added
+- `implied_geometric_basket_correlation` (in `multiasset.py`): backs out the
+  uniform pairwise correlation implied by a geometric-basket quote, assuming an
+  equicorrelation matrix (`corr[i][j] = rho` off-diagonal). The basket
+  log-variance rises with `rho`, so both call and put prices increase in `rho`
+  (parity `C - P = disc(F - K)` is strike-independent), and a bisection over
+  `[-1/(n-1), 1]` — the PSD-preserving range — recovers it.
+- Verified: round-trips the correlation for calls and puts across
+  `rho in {-0.3, 0, 0.4, 0.8}` and for a two-asset basket; raises when the quote
+  lies outside the `rho`-range; requires at least two assets.
+
 ## [1.293.0] - 2026-09-11
 
 ### Added
