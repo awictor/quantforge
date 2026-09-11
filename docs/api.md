@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.300.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.301.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1626,6 +1626,35 @@ Auto-generated from `quantforge` v1.300.0 by `docs/gen_api.py` — do not edit b
 
 > Greeks of a holder-extendible call by central finite differences of
 > :func:`holder_extendible_call`: ``delta``, ``gamma``, ``vega``, ``theta``
+> (calendar decay, both expiries shrinking together). Returns a dict with
+> ``price`` and those fields.
+
+### `writer_extendible_put(S, K1, K2, t1, T2, r, sigma, b=None) -> float`  _function_
+
+> Writer-extendible put (Longstaff 1990), closed form.
+>
+> At the first expiry ``t1`` the put is exercised if it finishes in the money
+> (``S_{t1} < K1``, paying ``K1 - S_{t1}``); otherwise the writer's obligation
+> is automatically extended to ``T2`` as a put struck at ``K2`` (no fee). The
+> terminal-``t1`` payoff is therefore
+>
+>     payoff(t1) = (K1 - S_{t1})           if S_{t1} < K1
+>                = P(S_{t1}, K2, T2 - t1)  if S_{t1} >= K1.
+>
+> The value is a vanilla put to ``t1`` plus the extended-put value collected on
+> ``S_{t1} >= K1``, expressed with bivariate normals coupling ``t1`` and
+> ``T2`` (correlation ``rho = sqrt(t1/T2)``):
+>
+>     W = p(S, K1, t1)
+>         + K2 e^{-r T2} M(z2, -y2; -rho) - S e^{(b-r)T2} M(z1, -y1; -rho),
+>
+> with ``z2, y2`` the ``d2``-type arguments at ``K1`` (over ``t1``) and ``K2``
+> (over ``T2``) and ``z1 = z2 + sigma sqrt(t1)``, ``y1 = y2 + sigma sqrt(T2)``.
+
+### `writer_extendible_put_greeks(S, K1, K2, t1, T2, r, sigma, b=None)`  _function_
+
+> Greeks of a writer-extendible put by central finite differences of
+> :func:`writer_extendible_put`: ``delta``, ``gamma``, ``vega``, ``theta``
 > (calendar decay, both expiries shrinking together). Returns a dict with
 > ``price`` and those fields.
 
