@@ -145,3 +145,46 @@ def bond_option_greeks(P0S, P0T, a, b, sigma, eta, rho, expiry, maturity,
         (2.0 * hv) if eta - hv >= 0 else hv)
     return {"price": price, "delta_T": delta_T, "delta_S": delta_S,
             "vega_sigma": vega_sigma, "vega_eta": vega_eta}
+
+
+def floorlet(P0_reset, P0_pay, a, b, sigma, eta, rho, reset, pay, strike,
+             notional=1.0):
+    """Floorlet on ``[reset, pay]`` under G2++ via the bond-call identity."""
+    tau = pay - reset
+    K_bond = 1.0 / (1.0 + strike * tau)
+    call = bond_option(P0_reset, P0_pay, a, b, sigma, eta, rho, reset, pay,
+                       K_bond, is_call=True)
+    return notional * (1.0 + strike * tau) * call
+
+
+def cap(discounts, a, b, sigma, eta, rho, strike, notional=1.0):
+    """G2++ cap: strip of caplets over successive periods.
+
+    ``discounts`` is an increasing list of ``(t_i, P(0, t_i))`` reset/pay dates
+    (the first pair is the first reset, then each consecutive pair is a caplet
+    ``[t_{i-1}, t_i]``). Returns the summed caplet value.
+    """
+    ds = sorted(discounts)
+    if len(ds) < 2:
+        raise ValueError("need >= 2 dates (one caplet)")
+    total = 0.0
+    for i in range(1, len(ds)):
+        reset, P_reset = ds[i - 1]
+        pay, P_pay = ds[i]
+        total += caplet(P_reset, P_pay, a, b, sigma, eta, rho, reset, pay,
+                        strike, notional)
+    return total
+
+
+def floor(discounts, a, b, sigma, eta, rho, strike, notional=1.0):
+    """G2++ floor: strip of floorlets over successive periods (see :func:`cap`)."""
+    ds = sorted(discounts)
+    if len(ds) < 2:
+        raise ValueError("need >= 2 dates (one floorlet)")
+    total = 0.0
+    for i in range(1, len(ds)):
+        reset, P_reset = ds[i - 1]
+        pay, P_pay = ds[i]
+        total += floorlet(P_reset, P_pay, a, b, sigma, eta, rho, reset, pay,
+                          strike, notional)
+    return total

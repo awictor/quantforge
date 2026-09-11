@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.252.0] - 2026-09-10
+
+### Added
+- `g2pp_floorlet`, `g2pp_cap`, `g2pp_floor` (in `g2pp.py`): G2++ floorlet (via
+  the bond-call identity) and cap/floor as strips of caplets/floorlets over a
+  schedule of `(t_i, P(0, t_i))` dates.
+- Verified: `cap - floor` equals the underlying swap value (put-call parity) to
+  1e-8; the cap and floor equal the sums of their caplets/floorlets; both
+  positive; a higher strike lowers the cap and raises the floor.
+
 ## [1.251.0] - 2026-09-10
 
 ### Added

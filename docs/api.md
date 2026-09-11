@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.251.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.252.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1359,9 +1359,25 @@ Auto-generated from `quantforge` v1.251.0 by `docs/gen_api.py` — do not edit b
 > Returns a dict with ``price``, ``delta_T``, ``delta_S``, ``vega_sigma``,
 > ``vega_eta``.
 
+### `g2pp_cap(discounts, a, b, sigma, eta, rho, strike, notional=1.0)`  _function_
+
+> G2++ cap: strip of caplets over successive periods.
+>
+> ``discounts`` is an increasing list of ``(t_i, P(0, t_i))`` reset/pay dates
+> (the first pair is the first reset, then each consecutive pair is a caplet
+> ``[t_{i-1}, t_i]``). Returns the summed caplet value.
+
 ### `g2pp_caplet(P0_reset, P0_pay, a, b, sigma, eta, rho, reset, pay, strike, notional=1.0)`  _function_
 
 > Caplet on ``[reset, pay]`` under G2++ via the bond-put identity.
+
+### `g2pp_floor(discounts, a, b, sigma, eta, rho, strike, notional=1.0)`  _function_
+
+> G2++ floor: strip of floorlets over successive periods (see :func:`cap`).
+
+### `g2pp_floorlet(P0_reset, P0_pay, a, b, sigma, eta, rho, reset, pay, strike, notional=1.0)`  _function_
+
+> Floorlet on ``[reset, pay]`` under G2++ via the bond-call identity.
 
 ### `g2pp_zero_bond(P0T, P0t, x, y, a, b, sigma, eta, rho, t, T)`  _function_
 
