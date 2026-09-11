@@ -4,6 +4,22 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.305.0] - 2026-09-11
+
+### Added
+- `discrete_barrier_option` (in `exotics.py`): discretely-monitored
+  single-barrier option via the Broadie-Glasserman-Kou (1999) continuity
+  correction. A barrier checked at `n_fixings` equally-spaced dates is breached
+  less often than a continuous one, so the correction shifts the barrier away
+  from the spot by `exp(+/- beta sigma sqrt(dt))` (up for up-barriers, down for
+  down-barriers, `beta ~ 0.5826`) and prices with the continuous
+  `barrier_option`. Applies to all four knock in/out types.
+- Verified: matches a path Monte Carlo at `n = 50` across all four barrier
+  types (down/up x in/out) to within ~3%; a discrete knock-out sits above and a
+  knock-in below the continuous price; in-out parity holds exactly at the
+  shifted barrier (KI + KO = vanilla); converges to the continuous barrier on a
+  fine grid.
+
 ## [1.304.0] - 2026-09-11
 
 ### Added

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.304.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.305.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1268,6 +1268,24 @@ Auto-generated from `quantforge` v1.304.0 by `docs/gen_api.py` — do not edit b
 > differences of :func:`discrete_arithmetic_asian`: ``delta`` (dV/dS),
 > ``gamma`` (d2V/dS2), ``vega`` (dV/dsigma), ``theta`` (calendar decay).
 > Returns a dict with ``price`` and those fields.
+
+### `discrete_barrier_option(S, K, H, t, r, sigma, n_fixings, option_type=<OptionType.CALL: 'call'>, barrier=<Barrier.DOWN_OUT: 'down-out'>, b=None, rebate=0.0)`  _function_
+
+> Discretely-monitored single-barrier option (Broadie-Glasserman-Kou 1999).
+>
+> A barrier checked at ``n_fixings`` equally-spaced dates is breached less
+> often than one monitored continuously, so a knock-out is worth more and a
+> knock-in worth less. Broadie-Glasserman-Kou give an asymptotic continuity
+> correction: price with the continuous :func:`barrier_option` but shift the
+> barrier away from the spot by ``exp(+/- beta sigma sqrt(dt))`` -- up for an
+> up-barrier, down for a down-barrier -- with ``beta ~ 0.5826`` and
+> ``dt = t / n_fixings``. As ``n_fixings -> infinity`` the shift vanishes and
+> the price converges to the continuous barrier.
+>
+> Accurate to a fraction of a percent for ``n_fixings`` of ~50 or more; the
+> correction is asymptotic, so a handful of monitoring dates carries a larger
+> error. The shift is applied identically to knock-in and knock-out (they sum
+> to the vanilla with the *same* shifted barrier via in-out parity).
 
 ### `discrete_geometric_asian(S, K, t, r, sigma, n_fixings=None, fixing_times=None, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
 

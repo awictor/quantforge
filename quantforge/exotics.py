@@ -1354,6 +1354,48 @@ def barrier_greeks(S, K, H, t, r, sigma, option_type=OptionType.CALL,
             "vega": vega, "theta": theta}
 
 
+# Broadie-Glasserman-Kou (1999) continuity-correction constant.
+_BGK_BETA = 0.5826
+
+
+def discrete_barrier_option(S, K, H, t, r, sigma, n_fixings,
+                            option_type=OptionType.CALL,
+                            barrier=Barrier.DOWN_OUT, b=None, rebate=0.0):
+    """Discretely-monitored single-barrier option (Broadie-Glasserman-Kou 1999).
+
+    A barrier checked at ``n_fixings`` equally-spaced dates is breached less
+    often than one monitored continuously, so a knock-out is worth more and a
+    knock-in worth less. Broadie-Glasserman-Kou give an asymptotic continuity
+    correction: price with the continuous :func:`barrier_option` but shift the
+    barrier away from the spot by ``exp(+/- beta sigma sqrt(dt))`` -- up for an
+    up-barrier, down for a down-barrier -- with ``beta ~ 0.5826`` and
+    ``dt = t / n_fixings``. As ``n_fixings -> infinity`` the shift vanishes and
+    the price converges to the continuous barrier.
+
+    Accurate to a fraction of a percent for ``n_fixings`` of ~50 or more; the
+    correction is asymptotic, so a handful of monitoring dates carries a larger
+    error. The shift is applied identically to knock-in and knock-out (they sum
+    to the vanilla with the *same* shifted barrier via in-out parity).
+    """
+    barrier = Barrier(barrier)
+    _validate(S, K, t, sigma)
+    if H <= 0:
+        raise ValueError("barrier H must be positive")
+    if n_fixings < 1:
+        raise ValueError("n_fixings must be >= 1")
+    if b is None:
+        b = r
+    if t == 0 or sigma == 0:
+        return barrier_option(S, K, H, t, r, sigma, option_type, barrier,
+                              b=b, rebate=rebate)
+    dt = t / n_fixings
+    shift = math.exp(_BGK_BETA * sigma * math.sqrt(dt))
+    is_up = barrier in (Barrier.UP_IN, Barrier.UP_OUT)
+    H_eff = H * shift if is_up else H / shift
+    return barrier_option(S, K, H_eff, t, r, sigma, option_type, barrier,
+                          b=b, rebate=rebate)
+
+
 # --------------------------------------------------------------------------
 # Asian option Greeks (finite differences on the closed forms)
 # --------------------------------------------------------------------------
