@@ -211,6 +211,7 @@ from .ssvi import (
 from .sabr import (
     SABRParams, sabr_vol, calibrate_sabr, calibrate_sabr_lm,
     sabr_sensitivities, sabr_jacobian, sabr_option_greeks,
+    sabr_variance_swap_strike, sabr_vix,
     sabr_density, sabr_butterfly_arbitrage, sabr_is_arbitrage_free,
     sabr_repair_butterfly,
 )
@@ -289,7 +290,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.258.0"
+__version__ = "1.259.0"
 
 __all__ = [
     "OptionType",
@@ -632,6 +633,8 @@ __all__ = [
     "sabr_sensitivities",
     "sabr_jacobian",
     "sabr_option_greeks",
+    "sabr_variance_swap_strike",
+    "sabr_vix",
     "sabr_density",
     "sabr_butterfly_arbitrage",
     "sabr_is_arbitrage_free",

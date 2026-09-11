@@ -216,6 +216,38 @@ def sabr_option_greeks(F, K, t, alpha, beta, rho, nu,
             "black_delta": black_delta, "vega": vega, "gamma": gamma}
 
 
+def sabr_variance_swap_strike(F, t, r, alpha, beta, rho, nu, q=0.0,
+                              n_strikes=401, width=8.0):
+    """Fair variance-swap strike (annualized *variance*) implied by SABR.
+
+    Replicates the variance swap from the SABR smile: each strike is priced at
+    ``sabr_vol(F, K, ...)`` and fed to :func:`quantforge.variance_swap_from_smile`.
+    ``F`` is the forward; the spot is ``S0 = F e^{-(r-q) t}``. Returns the fair
+    variance; take ``sqrt`` for the fair volatility.
+    """
+    from .varswap import variance_swap_from_smile
+
+    S0 = F * math.exp(-(r - q) * t)
+    return variance_swap_from_smile(
+        S0, t, r, lambda K: sabr_vol(F, K, t, alpha, beta, rho, nu),
+        q=q, n_strikes=n_strikes, width=width)
+
+
+def sabr_vix(F, t, r, alpha, beta, rho, nu, q=0.0, n_strikes=201, width=6.0):
+    """VIX-style index (``~= 100 * sigma``) implied by a SABR smile.
+
+    Prices each strike at ``sabr_vol(F, K, ...)`` and applies
+    :func:`quantforge.vix_from_smile`. ``F`` is the forward; ``S0 = F e^{-(r-q)t}``.
+    """
+    from .vix import vix_from_smile
+
+    S0 = F * math.exp(-(r - q) * t)
+    _var, vix = vix_from_smile(
+        S0, t, r, lambda K: sabr_vol(F, K, t, alpha, beta, rho, nu),
+        q=q, n_strikes=n_strikes, width=width)
+    return vix
+
+
 def sabr_jacobian(F, t, strikes: Sequence[float], alpha, beta, rho, nu):
     """Calibration Jacobian ``d sabr_vol(K_i) / d (alpha, rho, nu)``.
 

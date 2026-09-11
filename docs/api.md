@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.258.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.259.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3537,6 +3537,22 @@ Auto-generated from `quantforge` v1.258.0 by `docs/gen_api.py` — do not edit b
 > At exactly ``F == K`` the ATM branch of :func:`sabr_vol` is used, whose
 > F/K partials describe that branch (a finite-difference bump moves off ATM);
 > the alpha/rho/nu partials are exact everywhere.
+
+### `sabr_variance_swap_strike(F, t, r, alpha, beta, rho, nu, q=0.0, n_strikes=401, width=8.0)`  _function_
+
+> Fair variance-swap strike (annualized *variance*) implied by SABR.
+>
+> Replicates the variance swap from the SABR smile: each strike is priced at
+> ``sabr_vol(F, K, ...)`` and fed to :func:`quantforge.variance_swap_from_smile`.
+> ``F`` is the forward; the spot is ``S0 = F e^{-(r-q) t}``. Returns the fair
+> variance; take ``sqrt`` for the fair volatility.
+
+### `sabr_vix(F, t, r, alpha, beta, rho, nu, q=0.0, n_strikes=201, width=6.0)`  _function_
+
+> VIX-style index (``~= 100 * sigma``) implied by a SABR smile.
+>
+> Prices each strike at ``sabr_vol(F, K, ...)`` and applies
+> :func:`quantforge.vix_from_smile`. ``F`` is the forward; ``S0 = F e^{-(r-q)t}``.
 
 ### `sabr_vol(F, K, t, alpha, beta, rho, nu) -> float`  _function_
 

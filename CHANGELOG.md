@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.259.0] - 2026-09-10
+
+### Added
+- `sabr_variance_swap_strike` and `sabr_vix` (in `sabr.py`): the fair
+  variance-swap strike (annualized variance) and the VIX-style index implied by
+  a SABR smile, each pricing the strike chain at `sabr_vol(F, K, ...)` and
+  replicating via `variance_swap_from_smile` / `vix_from_smile`.
+- Verified: at `beta = 1`, `nu -> 0` the strike is `alpha^2` and the VIX is
+  `100 * alpha`; a skewed slice's variance exceeds the ATM variance; higher
+  vol-of-vol raises the strike.
+
 ## [1.258.0] - 2026-09-10
 
 ### Added
