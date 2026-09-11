@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.388.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.389.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1067,6 +1067,22 @@ Auto-generated from `quantforge` v1.388.0 by `docs/gen_api.py` — do not edit b
 
 ## commodity
 
+### `bachelier_spread_option(f1, f2, strike, sigma1, sigma2, rho, r, expiry, is_call=True)`  _function_
+
+> Bachelier (normal-model) spread option on two forwards.
+>
+> Models each forward as arithmetic Brownian motion, so the spread ``F1 - F2``
+> is normal with volatility
+> ``sigma = sqrt(sigma1^2 - 2 rho sigma1 sigma2 + sigma2^2)`` (absolute, price
+> units). Unlike the lognormal :func:`kirk_spread_option` this prices spreads
+> that are or can go negative -- the norm for crack and location spreads. With
+> ``m = F1 - F2 - K`` and ``s = sigma sqrt(T)``:
+>
+>     call = e^{-r T} [m Phi(m/s) + s phi(m/s)]
+>     put  = e^{-r T} [-m Phi(-m/s) + s phi(m/s)]
+>
+> Put and call satisfy ``C - P = e^{-r T} (F1 - F2 - K)``.
+
 ### `carry_roll_yield(r, storage_cost=0.0, convenience_yield=0.0)`  _function_
 
 > Roll yield implied by the cost-of-carry model ``y - r - u`` (= -net carry).
@@ -1250,6 +1266,16 @@ Auto-generated from `quantforge` v1.388.0 by `docs/gen_api.py` — do not edit b
 > forward for the delivery month's seasonal pattern (e.g. gas in winter). With
 > a :func:`quantforge.normalize_seasonal_factors` factor the annual average is
 > unchanged.
+
+### `spread_option_mc(f1, f2, strike, sigma1, sigma2, rho, r, expiry, n_paths=100000, seed=12345, is_call=True)`  _function_
+
+> Monte Carlo price of a spread option under bivariate lognormal forwards.
+>
+> Simulates ``F1 e^{-0.5 sigma1^2 T + sigma1 sqrt(T) Z1}`` and the analogous
+> ``F2`` with correlated normals ``corr(Z1, Z2) = rho`` (Cholesky), averaging the
+> discounted payoff ``max(F1 - F2 - K, 0)`` (call) or its put. An independent
+> reference for the :func:`kirk_spread_option` approximation. Uses a
+> deterministic linear-congruential stream so results are reproducible.
 
 ## compound
 

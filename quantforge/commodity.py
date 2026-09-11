@@ -255,6 +255,84 @@ def kirk_spread_option(f1, f2, strike, sigma1, sigma2, rho, r, expiry,
     return disc * (denom * norm_cdf(-d2) - f1 * norm_cdf(-d1))
 
 
+def bachelier_spread_option(f1, f2, strike, sigma1, sigma2, rho, r, expiry,
+                            is_call=True):
+    """Bachelier (normal-model) spread option on two forwards.
+
+    Models each forward as arithmetic Brownian motion, so the spread ``F1 - F2``
+    is normal with volatility
+    ``sigma = sqrt(sigma1^2 - 2 rho sigma1 sigma2 + sigma2^2)`` (absolute, price
+    units). Unlike the lognormal :func:`kirk_spread_option` this prices spreads
+    that are or can go negative -- the norm for crack and location spreads. With
+    ``m = F1 - F2 - K`` and ``s = sigma sqrt(T)``:
+
+        call = e^{-r T} [m Phi(m/s) + s phi(m/s)]
+        put  = e^{-r T} [-m Phi(-m/s) + s phi(m/s)]
+
+    Put and call satisfy ``C - P = e^{-r T} (F1 - F2 - K)``.
+    """
+    from .mathfns import norm_cdf
+    if expiry < 0:
+        raise ValueError("expiry must be non-negative")
+    if sigma1 < 0 or sigma2 < 0:
+        raise ValueError("volatilities must be non-negative")
+    disc = math.exp(-r * expiry)
+    m = f1 - f2 - strike
+    var = sigma1 * sigma1 - 2.0 * rho * sigma1 * sigma2 + sigma2 * sigma2
+    if var <= 0.0 or expiry == 0.0:
+        intrinsic = max(m, 0.0) if is_call else max(-m, 0.0)
+        return disc * intrinsic
+    s = math.sqrt(var * expiry)
+    d = m / s
+    pdf = math.exp(-0.5 * d * d) / math.sqrt(2.0 * math.pi)
+    if is_call:
+        return disc * (m * norm_cdf(d) + s * pdf)
+    return disc * (-m * norm_cdf(-d) + s * pdf)
+
+
+def spread_option_mc(f1, f2, strike, sigma1, sigma2, rho, r, expiry,
+                     n_paths=100000, seed=12345, is_call=True):
+    """Monte Carlo price of a spread option under bivariate lognormal forwards.
+
+    Simulates ``F1 e^{-0.5 sigma1^2 T + sigma1 sqrt(T) Z1}`` and the analogous
+    ``F2`` with correlated normals ``corr(Z1, Z2) = rho`` (Cholesky), averaging the
+    discounted payoff ``max(F1 - F2 - K, 0)`` (call) or its put. An independent
+    reference for the :func:`kirk_spread_option` approximation. Uses a
+    deterministic linear-congruential stream so results are reproducible.
+    """
+    if f1 <= 0 or f2 <= 0:
+        raise ValueError("forwards must be positive")
+    if expiry < 0:
+        raise ValueError("expiry must be non-negative")
+    if n_paths < 1:
+        raise ValueError("n_paths must be positive")
+    # Deterministic LCG -> uniforms -> Box-Muller normals (no external deps).
+    state = seed & 0xFFFFFFFF
+    def _unif():
+        nonlocal state
+        state = (1103515245 * state + 12345) & 0x7FFFFFFF
+        return (state + 0.5) / 0x80000000
+    disc = math.exp(-r * expiry)
+    sq = math.sqrt(expiry)
+    chol = math.sqrt(max(1.0 - rho * rho, 0.0))
+    drift1 = -0.5 * sigma1 * sigma1 * expiry
+    drift2 = -0.5 * sigma2 * sigma2 * expiry
+    total = 0.0
+    for _ in range(n_paths):
+        u1 = _unif()
+        u2 = _unif()
+        rmag = math.sqrt(-2.0 * math.log(u1))
+        z1 = rmag * math.cos(2.0 * math.pi * u2)
+        z2 = rmag * math.sin(2.0 * math.pi * u2)
+        w2 = rho * z1 + chol * z2
+        s1 = f1 * math.exp(drift1 + sigma1 * sq * z1)
+        s2 = f2 * math.exp(drift2 + sigma2 * sq * w2)
+        spread = s1 - s2 - strike
+        payoff = max(spread, 0.0) if is_call else max(-spread, 0.0)
+        total += payoff
+    return disc * total / n_paths
+
+
 def roll_yield(near_forward, far_forward, t_near, t_far):
     """Annualized roll yield between two forwards ``ln(F_near/F_far)/(t_far-t_near)``.
 

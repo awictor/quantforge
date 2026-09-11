@@ -12,6 +12,7 @@ from quantforge import (
     schwartz_option, mean_reversion_half_life, schwartz_implied_alpha,
     roll_yield, carry_roll_yield, schwartz_futures_volatility,
     margrabe_exchange_option, kirk_spread_option,
+    bachelier_spread_option, spread_option_mc,
 )
 
 
@@ -222,6 +223,38 @@ def test_spread_option_validation():
         kirk_spread_option(SP_F1, SP_F2, -200, SP_S1, SP_S2, SP_RHO, SP_R, SP_T)
     with pytest.raises(ValueError):
         margrabe_exchange_option(-1, SP_F2, SP_S1, SP_S2, SP_RHO, SP_R, SP_T)
+
+
+def test_bachelier_spread_parity():
+    c = bachelier_spread_option(SP_F1, SP_F2, 5.0, SP_S1, SP_S2, SP_RHO, SP_R, SP_T, True)
+    p = bachelier_spread_option(SP_F1, SP_F2, 5.0, SP_S1, SP_S2, SP_RHO, SP_R, SP_T, False)
+    assert c - p == pytest.approx(math.exp(-SP_R * SP_T) * (SP_F1 - SP_F2 - 5.0), abs=1e-9)
+
+
+def test_bachelier_prices_negative_spread():
+    # F1 < F2: lognormal Kirk struggles, Bachelier handles it.
+    assert bachelier_spread_option(80, 90, 0, SP_S1, SP_S2, SP_RHO, SP_R, SP_T, True) > 0
+
+
+def test_spread_option_mc_deterministic():
+    a = spread_option_mc(SP_F1, SP_F2, 5.0, SP_S1, SP_S2, SP_RHO, SP_R, SP_T, 50000, 42)
+    b = spread_option_mc(SP_F1, SP_F2, 5.0, SP_S1, SP_S2, SP_RHO, SP_R, SP_T, 50000, 42)
+    assert a == b
+
+
+def test_spread_option_validation():
+    with pytest.raises(ValueError):
+        spread_option_mc(-1, SP_F2, 5.0, SP_S1, SP_S2, SP_RHO, SP_R, SP_T)
+    with pytest.raises(ValueError):
+        bachelier_spread_option(SP_F1, SP_F2, 5.0, -1, SP_S2, SP_RHO, SP_R, SP_T)
+
+
+@pytest.mark.slow
+def test_mc_validates_kirk():
+    kc = kirk_spread_option(SP_F1, SP_F2, 5.0, SP_S1, SP_S2, SP_RHO, SP_R, SP_T, True)
+    mcc = spread_option_mc(SP_F1, SP_F2, 5.0, SP_S1, SP_S2, SP_RHO, SP_R, SP_T,
+                           400000, 777, True)
+    assert abs(kc - mcc) / kc < 0.02
 
 
 def test_validation():

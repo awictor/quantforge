@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.389.0] - 2026-09-11
+
+### Added
+- `bachelier_spread_option` and `spread_option_mc` (in `commodity.py`): a normal-
+  model spread option that prices negative or through-zero spreads where the
+  lognormal Kirk struggles (crack/location spreads), and a bivariate-lognormal
+  Monte Carlo pricer that independently validates `kirk_spread_option` (agrees
+  within 2% at 400k paths). Normal call/put satisfy `C - P = e^{-rT}(F1-F2-K)`;
+  the MC stream is deterministic per seed.
+
 ## [1.388.0] - 2026-09-11
 
 ### Added
