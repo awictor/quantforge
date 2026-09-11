@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.244.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.245.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -4244,6 +4244,22 @@ Auto-generated from `quantforge` v1.244.0 by `docs/gen_api.py` — do not edit b
 > ``vega`` (dV/dsigma). A bond call *falls* as the short rate rises (higher
 > rates discount the bond harder), so ``rho_r < 0`` for a call. Returns a dict
 > with ``price``, ``rho_r``, ``gamma_r``, ``vega``.
+
+### `vasicek_coupon_bond_option(r0, t_option, cashflows, strike, kappa, theta, sigma, option_type=<OptionType.CALL: 'call'>)`  _function_
+
+> European option on a coupon bond under Vasicek (Jamshidian decomposition).
+>
+> ``cashflows`` is a list of ``(t_i, c_i)`` pairs with ``t_i > t_option``: the
+> underlying coupon bond pays ``c_i`` at each ``t_i`` (the last usually
+> includes the principal). The option pays ``max(B(t_option) - strike, 0)``
+> (call) on the bond's value ``B``.
+>
+> Since the Vasicek short rate is one-factor and every zero-coupon bond is
+> monotone decreasing in ``r``, Jamshidian's trick applies: find the critical
+> rate ``r*`` where the bond value at expiry equals ``strike``, split ``strike``
+> into per-cashflow strikes ``K_i = P(t_option, t_i | r*)``, and the coupon-bond
+> option is the ``c_i``-weighted sum of zero-coupon-bond options struck at each
+> ``K_i``. Exact (no simulation).
 
 ### `zero_coupon_bond(r0, t, kappa, theta, sigma)`  _function_
 

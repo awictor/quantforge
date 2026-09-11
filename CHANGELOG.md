@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.245.0] - 2026-09-10
+
+### Added
+- `vasicek_coupon_bond_option` (in `vasicek.py`): European option on a
+  coupon bond under Vasicek by Jamshidian's decomposition. Solves for the
+  critical short rate `r*` where the bond value at expiry equals the strike, then
+  prices the option as the `c_i`-weighted sum of zero-coupon-bond options struck
+  at `K_i = P(t_option, t_i | r*)` -- exact, no simulation.
+- Verified: a single cashflow reduces to the scaled zero-coupon `bond_option`;
+  put-call parity `C - P = sum c_i P(0,t_i) - K P(0,t_option)` holds to 1e-8;
+  prices positive; a higher strike lowers the call.
+
 ## [1.244.0] - 2026-09-10
 
 ### Added

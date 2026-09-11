@@ -86,6 +86,57 @@ def bond_option(r0, t_option, t_bond, strike, kappa, theta, sigma,
     return strike * P_opt * norm_cdf(-d2) - P_bond * norm_cdf(-d1)
 
 
+def coupon_bond_option(r0, t_option, cashflows, strike, kappa, theta, sigma,
+                       option_type=OptionType.CALL):
+    """European option on a coupon bond under Vasicek (Jamshidian decomposition).
+
+    ``cashflows`` is a list of ``(t_i, c_i)`` pairs with ``t_i > t_option``: the
+    underlying coupon bond pays ``c_i`` at each ``t_i`` (the last usually
+    includes the principal). The option pays ``max(B(t_option) - strike, 0)``
+    (call) on the bond's value ``B``.
+
+    Since the Vasicek short rate is one-factor and every zero-coupon bond is
+    monotone decreasing in ``r``, Jamshidian's trick applies: find the critical
+    rate ``r*`` where the bond value at expiry equals ``strike``, split ``strike``
+    into per-cashflow strikes ``K_i = P(t_option, t_i | r*)``, and the coupon-bond
+    option is the ``c_i``-weighted sum of zero-coupon-bond options struck at each
+    ``K_i``. Exact (no simulation).
+    """
+    ot = _coerce_type(option_type)
+    cfs = sorted(cashflows)
+    if not cfs or any(ti <= t_option for ti, _ in cfs):
+        raise ValueError("all cashflow times must exceed t_option")
+
+    def bond_value_at(r):
+        return sum(c * zero_coupon_bond(r, ti - t_option, kappa, theta, sigma)
+                   for ti, c in cfs)
+
+    # Bisection for r* : bond_value_at(r*) = strike (value is decreasing in r).
+    lo, hi = -1.0, 1.0
+    # Expand until the strike is bracketed (value decreasing).
+    while bond_value_at(lo) < strike:
+        lo -= 1.0
+        if lo < -50.0:
+            break
+    while bond_value_at(hi) > strike:
+        hi += 1.0
+        if hi > 50.0:
+            break
+    for _ in range(200):
+        mid = 0.5 * (lo + hi)
+        if bond_value_at(mid) > strike:
+            lo = mid
+        else:
+            hi = mid
+    rstar = 0.5 * (lo + hi)
+
+    total = 0.0
+    for ti, c in cfs:
+        Ki = zero_coupon_bond(rstar, ti - t_option, kappa, theta, sigma)
+        total += c * bond_option(r0, t_option, ti, Ki, kappa, theta, sigma, ot)
+    return total
+
+
 def bond_option_greeks(r0, t_option, t_bond, strike, kappa, theta, sigma,
                        option_type=OptionType.CALL):
     """Greeks of a Vasicek zero-coupon-bond option by central finite differences.
