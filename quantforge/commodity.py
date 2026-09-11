@@ -585,6 +585,68 @@ def schwartz_futures_volatility(sigma, kappa, maturity):
     return sigma * math.exp(-kappa * maturity)
 
 
+def schwartz_smith_log_mean(chi0, xi0, kappa, mu_xi, maturity):
+    """Risk-neutral mean of log-spot under the Schwartz-Smith two-factor model.
+
+    Log-spot decomposes as ``ln S = chi + xi``: a short-term deviation ``chi``
+    that mean-reverts to zero at speed ``kappa`` (Ornstein-Uhlenbeck) and a
+    long-term equilibrium ``xi`` that drifts as arithmetic Brownian motion with
+    risk-neutral rate ``mu_xi``. The conditional mean is
+
+        E[ln S_T] = e^{-kappa T} chi0 + xi0 + mu_xi T,
+
+    starting at ``chi0 + xi0`` for ``T = 0``; the short-term contribution decays
+    while the long-term level persists and drifts.
+    """
+    if kappa <= 0:
+        raise ValueError("kappa must be positive")
+    if maturity < 0:
+        raise ValueError("maturity must be non-negative")
+    return math.exp(-kappa * maturity) * chi0 + xi0 + mu_xi * maturity
+
+
+def schwartz_smith_log_variance(kappa, sigma_chi, sigma_xi, rho, maturity):
+    """Variance of log-spot under the Schwartz-Smith two-factor model.
+
+    Combines the mean-reverting short-term variance, the linearly-growing
+    long-term variance, and their covariance:
+
+        Var[ln S_T] = (1 - e^{-2 kappa T}) sigma_chi^2 / (2 kappa)
+                      + sigma_xi^2 T
+                      + 2 (1 - e^{-kappa T}) / kappa * rho sigma_chi sigma_xi.
+
+    Zero at ``T = 0``; as ``T -> inf`` the short-term term saturates and the total
+    variance grows like ``sigma_xi^2 T`` (long-term factor dominates).
+    """
+    if kappa <= 0:
+        raise ValueError("kappa must be positive")
+    if sigma_chi < 0 or sigma_xi < 0:
+        raise ValueError("volatilities must be non-negative")
+    if maturity < 0:
+        raise ValueError("maturity must be non-negative")
+    short = (1.0 - math.exp(-2.0 * kappa * maturity)) * sigma_chi * sigma_chi \
+        / (2.0 * kappa)
+    long = sigma_xi * sigma_xi * maturity
+    cov = 2.0 * (1.0 - math.exp(-kappa * maturity)) / kappa \
+        * rho * sigma_chi * sigma_xi
+    return short + long + cov
+
+
+def schwartz_smith_forward(chi0, xi0, kappa, mu_xi, sigma_chi, sigma_xi, rho,
+                           maturity):
+    """Commodity forward under the Schwartz-Smith (2000) two-factor model.
+
+    With log-spot lognormal, ``F(T) = exp(E[ln S_T] + 0.5 Var[ln S_T])`` from
+    :func:`schwartz_smith_log_mean` and :func:`schwartz_smith_log_variance`.
+    Equals the spot ``exp(chi0 + xi0)`` at ``T = 0``. The two factors let the
+    front of the curve move on short-term shocks while the back tracks the drifting
+    equilibrium -- richer than the single-factor :func:`schwartz_forward`.
+    """
+    mean = schwartz_smith_log_mean(chi0, xi0, kappa, mu_xi, maturity)
+    var = schwartz_smith_log_variance(kappa, sigma_chi, sigma_xi, rho, maturity)
+    return math.exp(mean + 0.5 * var)
+
+
 def commodity_calendar_spread(spot, r, t_near, t_far, storage_cost=0.0,
                               convenience_yield=0.0):
     """Far-minus-near forward spread under one carry rate.

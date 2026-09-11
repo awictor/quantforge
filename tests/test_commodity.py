@@ -11,6 +11,7 @@ from quantforge import (
     schwartz_log_mean, schwartz_log_variance, schwartz_forward,
     schwartz_option, mean_reversion_half_life, schwartz_implied_alpha,
     roll_yield, carry_roll_yield, schwartz_futures_volatility,
+    schwartz_smith_log_mean, schwartz_smith_log_variance, schwartz_smith_forward,
     margrabe_exchange_option, kirk_spread_option,
     bachelier_spread_option, spread_option_mc,
     commodity_swap_rate, commodity_swap_value, asian_commodity_option,
@@ -391,6 +392,49 @@ def test_swap_asian_validation():
         commodity_swap_rate([50], [0.9, 0.8])
     with pytest.raises(ValueError):
         asian_commodity_option(52, 50, 0.3, 0.05, 1.0, 1.5)
+
+
+SS_CHI, SS_XI, SS_K, SS_MU, SS_SC, SS_SX, SS_RHO = 0.1, 4.0, 1.5, 0.02, 0.3, 0.15, 0.2
+
+
+def test_schwartz_smith_zero_maturity():
+    assert schwartz_smith_log_mean(SS_CHI, SS_XI, SS_K, SS_MU, 0) == pytest.approx(
+        SS_CHI + SS_XI)
+    assert schwartz_smith_log_variance(SS_K, SS_SC, SS_SX, SS_RHO, 0) == pytest.approx(
+        0.0, abs=1e-12)
+    assert schwartz_smith_forward(SS_CHI, SS_XI, SS_K, SS_MU, SS_SC, SS_SX, SS_RHO, 0) \
+        == pytest.approx(math.exp(SS_CHI + SS_XI), abs=1e-9)
+
+
+def test_schwartz_smith_short_factor_decays():
+    # Long-run mean loses the chi term, keeps xi + drift.
+    assert schwartz_smith_log_mean(SS_CHI, SS_XI, SS_K, SS_MU, 50) == pytest.approx(
+        SS_XI + SS_MU * 50, abs=1e-6)
+
+
+def test_schwartz_smith_long_factor_dominates_variance():
+    T = 100.0
+    v = schwartz_smith_log_variance(SS_K, SS_SC, SS_SX, SS_RHO, T)
+    assert v / T == pytest.approx(SS_SX ** 2, abs=1e-3)
+
+
+def test_schwartz_smith_variance_monotone():
+    vs = [schwartz_smith_log_variance(SS_K, SS_SC, SS_SX, SS_RHO, T)
+          for T in (0.1, 0.5, 1, 2, 5, 10)]
+    assert all(vs[i] < vs[i + 1] for i in range(len(vs) - 1))
+
+
+def test_schwartz_smith_reduces_to_one_factor():
+    # sigma_xi = 0, mu = 0, xi constant -> single mean-reverting factor.
+    spot = math.exp(SS_CHI + SS_XI)
+    f_ss = schwartz_smith_forward(SS_CHI, SS_XI, SS_K, 0.0, SS_SC, 0.0, 0.0, 2.0)
+    f_1f = schwartz_forward(spot, SS_K, SS_XI, SS_SC, 2.0)
+    assert f_ss == pytest.approx(f_1f, abs=1e-9)
+
+
+def test_schwartz_smith_validation():
+    with pytest.raises(ValueError):
+        schwartz_smith_log_variance(0, SS_SC, SS_SX, SS_RHO, 1)
 
 
 def test_validation():

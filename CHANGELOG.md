@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.394.0] - 2026-09-11
+
+### Added
+- `schwartz_smith_log_mean`, `schwartz_smith_log_variance`,
+  `schwartz_smith_forward` (in `commodity.py`): the Schwartz-Smith (2000)
+  two-factor model, decomposing log-spot into a mean-reverting short-term
+  deviation and a drifting long-term equilibrium. Equals the spot at `T = 0`; the
+  short-term contribution decays while the long-term factor dominates the variance
+  (growing like `sigma_xi^2 T`) at long horizons. Reduces exactly to the
+  one-factor `schwartz_forward` when the long-term vol, drift, and equilibrium are
+  turned off.
+
 ## [1.393.0] - 2026-09-11
 
 ### Documentation

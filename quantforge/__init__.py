@@ -224,6 +224,7 @@ from .commodity import (
     schwartz_log_mean, schwartz_log_variance, schwartz_forward,
     schwartz_option, mean_reversion_half_life, schwartz_implied_alpha,
     roll_yield, carry_roll_yield, schwartz_futures_volatility,
+    schwartz_smith_log_mean, schwartz_smith_log_variance, schwartz_smith_forward,
     margrabe_exchange_option, kirk_spread_option,
     bachelier_spread_option, spread_option_mc,
     commodity_swap_rate, commodity_swap_value, asian_commodity_option,
@@ -413,7 +414,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.393.0"
+__version__ = "1.394.0"
 
 __all__ = [
     "OptionType",
@@ -781,6 +782,9 @@ __all__ = [
     "roll_yield",
     "carry_roll_yield",
     "schwartz_futures_volatility",
+    "schwartz_smith_log_mean",
+    "schwartz_smith_log_variance",
+    "schwartz_smith_forward",
     "margrabe_exchange_option",
     "kirk_spread_option",
     "bachelier_spread_option",
