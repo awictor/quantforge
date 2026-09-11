@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.292.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.293.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3082,6 +3082,34 @@ Auto-generated from `quantforge` v1.292.0 by `docs/gen_api.py` — do not edit b
 >
 > Exact closed form; independent of the risk-free rate (the two assets'
 > financing cancels), depending only on the dividend yields.
+
+### `geometric_basket_greeks(spots, weights, K, t, r, sigmas, corr, q=None, option_type=<OptionType.CALL: 'call'>)`  _function_
+
+> Greeks of a geometric-basket option by central finite differences of
+> :func:`geometric_basket_option`. Returns ``price`` plus per-asset ``delta``
+> and ``gamma`` lists (dV/dS_i, d2V/dS_i^2) and the total ``vega`` (bumping all
+> sigmas together) and ``theta`` (calendar decay).
+
+### `geometric_basket_option(spots, weights, K, t, r, sigmas, corr, q=None, option_type=<OptionType.CALL: 'call'>) -> float`  _function_
+
+> Weighted geometric-average basket option on ``prod_i S_i^{w_i}`` (exact).
+>
+> Unlike the arithmetic :func:`basket_option`, the weighted geometric average
+> ``B = prod_i S_i^{w_i}`` of correlated lognormal assets is *itself*
+> lognormal, so this has an exact closed form for any number of assets ``n``.
+> With each asset ``S_i(t) = S_i exp((r - q_i - sigma_i^2/2) t + sigma_i W_i)``
+> and correlations ``corr[i][j]``, ``log B`` is Gaussian with
+>
+>     mean = sum_i w_i (log S_i + (r - q_i - sigma_i^2/2) t)
+>     var  = t sum_i sum_j w_i w_j corr[i][j] sigma_i sigma_j,
+>
+> and the price is a Black-Scholes-style formula on the basket forward
+> ``F = exp(mean + var/2)`` discounted at ``r``.
+>
+> Args:
+>     spots, weights, sigmas: length-``n`` sequences.
+>     corr: ``n x n`` correlation matrix (list of lists).
+>     q: optional length-``n`` dividend yields; defaults to zeros.
 
 ### `implied_spread_correlation(target_price, S1, S2, K, t, r, sigma1, sigma2, q1=0.0, q2=0.0, option_type=<OptionType.CALL: 'call'>, tol=1e-08, max_iter=100)`  _function_
 

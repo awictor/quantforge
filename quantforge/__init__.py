@@ -131,6 +131,7 @@ from .density_metrics import (
 from .density_var import density_var_es
 from .multiasset import (
     exchange_option, spread_option, spread_option_bs, basket_option,
+    geometric_basket_option, geometric_basket_greeks,
     best_of_call, worst_of_call,
     best_of_call_closed, worst_of_call_closed,
     best_of_put_closed, worst_of_put_closed, two_asset_digital,
@@ -312,7 +313,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.292.0"
+__version__ = "1.293.0"
 
 __all__ = [
     "OptionType",
@@ -494,6 +495,8 @@ __all__ = [
     "spread_option",
     "spread_option_bs",
     "basket_option",
+    "geometric_basket_option",
+    "geometric_basket_greeks",
     "best_of_call",
     "worst_of_call",
     "best_of_call_closed",

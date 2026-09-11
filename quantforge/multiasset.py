@@ -180,6 +180,102 @@ def basket_option(spots, weights, K, t, r, sigmas, corr, q=None,
     return disc * (K * norm_cdf(-d2) - M1 * norm_cdf(-d1))
 
 
+def geometric_basket_option(spots, weights, K, t, r, sigmas, corr, q=None,
+                            option_type=OptionType.CALL) -> float:
+    """Weighted geometric-average basket option on ``prod_i S_i^{w_i}`` (exact).
+
+    Unlike the arithmetic :func:`basket_option`, the weighted geometric average
+    ``B = prod_i S_i^{w_i}`` of correlated lognormal assets is *itself*
+    lognormal, so this has an exact closed form for any number of assets ``n``.
+    With each asset ``S_i(t) = S_i exp((r - q_i - sigma_i^2/2) t + sigma_i W_i)``
+    and correlations ``corr[i][j]``, ``log B`` is Gaussian with
+
+        mean = sum_i w_i (log S_i + (r - q_i - sigma_i^2/2) t)
+        var  = t sum_i sum_j w_i w_j corr[i][j] sigma_i sigma_j,
+
+    and the price is a Black-Scholes-style formula on the basket forward
+    ``F = exp(mean + var/2)`` discounted at ``r``.
+
+    Args:
+        spots, weights, sigmas: length-``n`` sequences.
+        corr: ``n x n`` correlation matrix (list of lists).
+        q: optional length-``n`` dividend yields; defaults to zeros.
+    """
+    ot = _coerce_type(option_type)
+    n = len(spots)
+    if len(weights) != n or len(sigmas) != n:
+        raise ValueError("spots, weights, sigmas must have equal length")
+    if len(corr) != n or any(len(row) != n for row in corr):
+        raise ValueError("corr must be an n x n matrix")
+    if q is None:
+        q = [0.0] * n
+    elif len(q) != n:
+        raise ValueError("q must have length n")
+    if any(S <= 0.0 for S in spots):
+        raise ValueError("spots must be positive")
+    if K <= 0.0:
+        raise ValueError("strike must be positive")
+    disc = math.exp(-r * t)
+    mean = sum(weights[i] * (math.log(spots[i])
+                             + (r - q[i] - 0.5 * sigmas[i] * sigmas[i]) * t)
+               for i in range(n))
+    var = 0.0
+    for i in range(n):
+        for j in range(n):
+            var += (weights[i] * weights[j] * corr[i][j]
+                    * sigmas[i] * sigmas[j])
+    var *= t
+    if t == 0 or var <= 0.0:
+        basket = 1.0
+        for i in range(n):
+            basket *= spots[i] ** weights[i]
+        payoff = max(basket - K, 0.0) if ot is OptionType.CALL else max(K - basket, 0.0)
+        return disc * payoff if t > 0 else payoff
+    fwd = math.exp(mean + 0.5 * var)
+    sd = math.sqrt(var)
+    d1 = (mean + var - math.log(K)) / sd
+    d2 = d1 - sd
+    if ot is OptionType.CALL:
+        return disc * (fwd * norm_cdf(d1) - K * norm_cdf(d2))
+    return disc * (K * norm_cdf(-d2) - fwd * norm_cdf(-d1))
+
+
+def geometric_basket_greeks(spots, weights, K, t, r, sigmas, corr, q=None,
+                            option_type=OptionType.CALL):
+    """Greeks of a geometric-basket option by central finite differences of
+    :func:`geometric_basket_option`. Returns ``price`` plus per-asset ``delta``
+    and ``gamma`` lists (dV/dS_i, d2V/dS_i^2) and the total ``vega`` (bumping all
+    sigmas together) and ``theta`` (calendar decay).
+    """
+    ot = _coerce_type(option_type)
+    n = len(spots)
+    spots = [float(x) for x in spots]
+    sigmas = [float(x) for x in sigmas]
+
+    def px(sp=None, sg=None, t_=t):
+        sp = spots if sp is None else sp
+        sg = sigmas if sg is None else sg
+        return geometric_basket_option(sp, weights, K, t_, r, sg, corr, q, ot)
+
+    base = px()
+    deltas, gammas = [], []
+    for i in range(n):
+        hS = 1e-4 * spots[i]
+        up = spots[:]; up[i] += hS
+        dn = spots[:]; dn[i] -= hS
+        pu, pd = px(sp=up), px(sp=dn)
+        deltas.append((pu - pd) / (2.0 * hS))
+        gammas.append((pu - 2.0 * base + pd) / (hS * hS))
+    hv = 1e-4
+    sup = [s + hv for s in sigmas]
+    sdn = [s - hv for s in sigmas]
+    vega = (px(sg=sup) - px(sg=sdn)) / (2.0 * hv)
+    ht = min(1e-4, 0.25 * t)
+    theta = -(px(t_=t + ht) - px(t_=t - ht)) / (2.0 * ht)
+    return {"price": base, "delta": deltas, "gamma": gammas, "vega": vega,
+            "theta": theta}
+
+
 def _rainbow_mc(S1, S2, K, t, r, sigma1, sigma2, rho, q1, q2, kind, ot,
                 n_paths, antithetic, seed):
     """Shared correlated-GBM Monte Carlo for best-of / worst-of payoffs."""

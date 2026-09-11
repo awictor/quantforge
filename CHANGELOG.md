@@ -4,6 +4,22 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.293.0] - 2026-09-11
+
+### Added
+- `geometric_basket_option` and `geometric_basket_greeks` (in `multiasset.py`):
+  weighted geometric-average basket option on `prod_i S_i^{w_i}` for any number
+  of assets. Unlike the arithmetic `basket_option` (a Levy moment-match), the
+  weighted geometric average of correlated lognormals is itself lognormal, so
+  this is exact: `log B` is Gaussian with variance
+  `t sum_ij w_i w_j corr[i][j] sigma_i sigma_j`, priced by a Black-Scholes
+  formula on the basket forward. Greeks return per-asset delta/gamma lists plus
+  total vega and theta.
+- Verified: a single unit-weight asset recovers the vanilla Black-Scholes
+  price; put-call parity equals the discounted basket forward minus strike;
+  matches a Cholesky Monte Carlo (3 correlated assets) to within ~0.2%;
+  per-asset deltas and vega are positive.
+
 ## [1.292.0] - 2026-09-11
 
 ### Added
