@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.356.0] - 2026-09-11
+
+### Added
+- `implied_discount_factor` (in `bsm.py`): the discount factor to expiry read
+  from two same-expiry call-put pairs, `DF = [(C1 - P1) - (C2 - P2)]/(K2 - K1)`.
+  Subtracting the two put-call parity relations cancels the forward, so this is
+  model-free -- no rate and no volatility.
+- Verified: it recovers `e^{-rt}` from Black-Scholes pairs (with and without
+  dividends), is independent of strike order, and together with
+  `implied_forward_from_parity` reconstructs each pair's `C - P`; equal strikes
+  raise.
+
 ## [1.355.0] - 2026-09-11
 
 ### Added

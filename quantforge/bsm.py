@@ -116,6 +116,23 @@ def implied_forward(call, put, K, t, r) -> float:
     return K + math.exp(r * t) * (call - put)
 
 
+def implied_discount_factor(call1, put1, K1, call2, put2, K2) -> float:
+    """Discount factor implied by call-put pairs at two strikes.
+
+    Put-call parity at each strike is ``C_i - P_i = DF (F - K_i)``; subtracting
+    the two eliminates the forward and leaves
+
+        DF = [ (C1 - P1) - (C2 - P2) ] / (K2 - K1).
+
+    A model-free read of the discount factor to expiry straight off two
+    same-expiry option pairs, needing neither a rate nor a volatility. Combine
+    with :func:`implied_forward_from_parity` to also back out the forward.
+    """
+    if K1 == K2:
+        raise ValueError("strikes must differ")
+    return ((call1 - put1) - (call2 - put2)) / (K2 - K1)
+
+
 def put_call_parity_residual(call, put, S, K, t, r, b=None) -> float:
     """Put-call parity residual ``(C - P) - e^{-rt}(F - K)``, ``F = S e^{b t}``.
 

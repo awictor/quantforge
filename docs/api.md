@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.355.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.356.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -521,6 +521,19 @@ Auto-generated from `quantforge` v1.355.0 by `docs/gen_api.py` — do not edit b
 ### `greeks(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None) -> quantforge.bsm.Greeks`  _function_
 
 > Compute price and all first/second-order Greeks in one call.
+
+### `implied_discount_factor(call1, put1, K1, call2, put2, K2) -> float`  _function_
+
+> Discount factor implied by call-put pairs at two strikes.
+>
+> Put-call parity at each strike is ``C_i - P_i = DF (F - K_i)``; subtracting
+> the two eliminates the forward and leaves
+>
+>     DF = [ (C1 - P1) - (C2 - P2) ] / (K2 - K1).
+>
+> A model-free read of the discount factor to expiry straight off two
+> same-expiry option pairs, needing neither a rate nor a volatility. Combine
+> with :func:`implied_forward_from_parity` to also back out the forward.
 
 ### `implied_forward_from_parity(call, put, K, t, r) -> float`  _function_
 
