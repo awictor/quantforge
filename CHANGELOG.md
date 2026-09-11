@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.284.0] - 2026-09-11
+
+### Added
+- `ultima` (in `greeks2.py`): the third-order vega Greek,
+  `d(vomma)/d(sigma) = d^3(price)/d(sigma)^3`, useful for the convexity of a
+  volga hedge. Analytic: `ultima = -(vega/sigma^2) * [d1 d2 (1 - d1 d2) + d1^2 + d2^2]`.
+  Same for calls and puts.
+- Verified: matches a central finite difference of `vomma` in sigma to
+  6-7 digits; matches a central third difference of the BSM price in sigma;
+  call equals put; ATM ultima is negative (volga concave in sigma there).
+
 ## [1.283.0] - 2026-09-11
 
 ### Added

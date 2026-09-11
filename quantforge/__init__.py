@@ -259,7 +259,9 @@ from .volatility import (
     yang_zhang, vol_report, VolReport, vol_cone, VolConePoint,
     fit_garch, garch_forecast, GarchParams,
 )
-from .greeks2 import vanna, vomma, volga, charm, veta, speed, zomma, color
+from .greeks2 import (
+    vanna, vomma, volga, charm, veta, speed, zomma, color, ultima,
+)
 from .scenario import ScenarioGrid, stress_grid, spot_ladder
 from .american import (
     bjerksund_stensland, bjerksund_stensland_greeks, early_exercise_premium,
@@ -303,7 +305,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.283.0"
+__version__ = "1.284.0"
 
 __all__ = [
     "OptionType",
@@ -759,6 +761,7 @@ __all__ = [
     "speed",
     "zomma",
     "color",
+    "ultima",
     "price_array",
     "delta_array",
     "gamma_array",

@@ -48,6 +48,21 @@ def vomma(S, K, t, r, sigma, b=None) -> float:
 volga = vomma
 
 
+def ultima(S, K, t, r, sigma, b=None) -> float:
+    """d(vomma)/d(sigma) = d^3(price)/d(sigma)^3. Same for calls and puts.
+
+    The third-order vega sensitivity, useful for the convexity of the volga
+    hedge. With vega ``v = S e^{(b-r)t} phi(d1) sqrt(t)``,
+
+        ultima = -(v / sigma^2)
+                 * [ d1 d2 (1 - d1 d2) + d1^2 + d2^2 ].
+    """
+    d1, d2, carry, b = _prep(S, K, t, r, sigma, b)
+    vega = S * carry * norm_pdf(d1) * math.sqrt(t)
+    return -(vega / (sigma * sigma)) * (
+        d1 * d2 * (1.0 - d1 * d2) + d1 * d1 + d2 * d2)
+
+
 def charm(S, K, t, r, sigma, option_type=OptionType.CALL, b=None) -> float:
     """Calendar charm = -d(delta)/d(t_expiry): the drift of delta over time."""
     ot = _coerce_type(option_type)

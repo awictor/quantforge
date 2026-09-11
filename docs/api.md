@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.283.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.284.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1570,6 +1570,16 @@ Auto-generated from `quantforge` v1.283.0 by `docs/gen_api.py` — do not edit b
 ### `speed(S, K, t, r, sigma, b=None) -> float`  _function_
 
 > d(gamma)/d(spot). Third-order in spot; same for calls and puts.
+
+### `ultima(S, K, t, r, sigma, b=None) -> float`  _function_
+
+> d(vomma)/d(sigma) = d^3(price)/d(sigma)^3. Same for calls and puts.
+>
+> The third-order vega sensitivity, useful for the convexity of the volga
+> hedge. With vega ``v = S e^{(b-r)t} phi(d1) sqrt(t)``,
+>
+>     ultima = -(v / sigma^2)
+>              * [ d1 d2 (1 - d1 d2) + d1^2 + d2^2 ].
 
 ### `vanna(S, K, t, r, sigma, b=None) -> float`  _function_
 
