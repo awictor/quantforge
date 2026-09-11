@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.298.0] - 2026-09-11
+
+### Changed
+- `supershare_greeks` now computes `delta` and `gamma` analytically instead of
+  by finite difference. With price `A S (N(d1_lo) - N(d1_hi))`, `A = e^{(b-r)t}/K_low`,
+  the spot derivatives are
+  `delta = A (dN + dphi/(sigma sqrt t))` and
+  `gamma = A/(S sigma sqrt t) (dphi - (d1_lo phi(d1_lo) - d1_hi phi(d1_hi))/(sigma sqrt t))`,
+  where `dN`, `dphi` are the differences of the two `N`/`phi` at the corridor
+  edges. `vega` and `theta` remain finite differences.
+- Verified: analytic delta and gamma match central finite differences across
+  four strike/vol/maturity cases.
+
 ## [1.297.0] - 2026-09-11
 
 ### Changed

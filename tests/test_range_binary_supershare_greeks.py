@@ -58,6 +58,21 @@ def test_supershare_price_field_and_delta_matches_fd():
     assert g["delta"] == pytest.approx(fd, abs=1e-5)
 
 
+@pytest.mark.parametrize("S,Kl,Kh,t,r,sig", [
+    (100.0, 95.0, 110.0, 1.0, 0.05, 0.2),
+    (100.0, 90.0, 105.0, 0.5, 0.03, 0.3),
+    (80.0, 70.0, 120.0, 2.0, 0.02, 0.25),
+    (100.0, 100.0, 130.0, 1.5, 0.04, 0.28),
+])
+def test_supershare_gamma_matches_fd(S, Kl, Kh, t, r, sig):
+    g = supershare_greeks(S, Kl, Kh, t, r, sig)
+    h = 1e-4 * S
+    fd = (supershare(S + h, Kl, Kh, t, r, sig)
+          - 2 * supershare(S, Kl, Kh, t, r, sig)
+          + supershare(S - h, Kl, Kh, t, r, sig)) / (h * h)
+    assert g["gamma"] == pytest.approx(fd, abs=1e-4)
+
+
 def test_validation():
     with pytest.raises(ValueError):
         range_binary_greeks(100.0, 110.0, 95.0, 1.0, 0.05, 0.2)

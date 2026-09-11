@@ -176,10 +176,19 @@ def supershare_greeks(S, K_low, K_high, t, r, sigma, b=None):
         return supershare(S_, K_low, K_high, t_, r, sigma_, b=b)
 
     base = px()
-    hS = 1e-4 * S
-    up, dn = px(S_=S + hS), px(S_=S - hS)
-    delta = (up - dn) / (2.0 * hS)
-    gamma = (up - 2.0 * base + dn) / (hS * hS)
+    carry = math.exp((b - r) * t)
+    vsqrt = sigma * math.sqrt(t)
+    d1_lo = (math.log(S / K_low) + (b + 0.5 * sigma * sigma) * t) / vsqrt
+    d1_hi = (math.log(S / K_high) + (b + 0.5 * sigma * sigma) * t) / vsqrt
+    plo, phi = norm_pdf(d1_lo), norm_pdf(d1_hi)
+    dN = norm_cdf(d1_lo) - norm_cdf(d1_hi)
+    dphi = plo - phi
+    A = carry / K_low
+    # price = A S (N(d1_lo) - N(d1_hi)); d(d1)/dS = 1/(S vsqrt).
+    delta = A * (dN + dphi / vsqrt)
+    # gamma = d(delta)/dS, using d(phi(d1))/dS = -d1 phi(d1)/(S vsqrt).
+    gamma = A / (S * vsqrt) * (
+        dphi - (d1_lo * plo - d1_hi * phi) / vsqrt)
     hv = 1e-4
     vega = (px(sigma_=sigma + hv) - px(sigma_=sigma - hv)) / (2.0 * hv)
     ht = min(1e-4, 0.25 * t)
