@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.264.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.265.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3406,6 +3406,21 @@ Auto-generated from `quantforge` v1.264.0 by `docs/gen_api.py` — do not edit b
 > that is not arbitrage-free at ``K``). A flat smile recovers the Black-Scholes
 > ``N(-d2)``.
 
+### `risk_neutral_cvar_from_smile(S0, t, r, vol_fn, alpha=0.99, q=0.0, n=8000, width=12.0)`  _function_
+
+> Risk-neutral Conditional VaR (expected shortfall) of the terminal return.
+>
+> ``CVaR_alpha = E[L | L >= VaR_alpha]``, the average loss in the worst
+> ``1 - alpha`` tail. With the loss ``L = 1 - S_T / S0`` and the tail threshold
+> ``K = Q(1 - alpha)`` (so ``P(S_T <= K) = 1 - alpha``),
+>
+>     CVaR_alpha = 1 - E[S_T ; S_T <= K] / (S0 (1 - alpha)),
+>
+> where the truncated expectation ``E[S_T ; S_T <= K] = integral_0^K S g(S) dS``
+> is taken against the Breeden-Litzenberger density ``g``. Returned as a
+> positive fraction of ``S0`` and always ``>= VaR_alpha``. A flat smile matches
+> the lognormal expected shortfall.
+
 ### `risk_neutral_density_from_smile(S0, t, r, vol_fn, K, q=0.0, dK=None)`  _function_
 
 > Breeden-Litzenberger risk-neutral density ``g(K)`` at strike ``K``.
@@ -3420,6 +3435,20 @@ Auto-generated from `quantforge` v1.264.0 by `docs/gen_api.py` — do not edit b
 > Bisection on :func:`risk_neutral_cdf_from_smile` over a log-moneyness bracket
 > of ``+/- width`` forward standard deviations. ``p`` in ``(0, 1)``. Requires the
 > smile CDF to be monotone on the bracket (true for an arbitrage-free smile).
+
+### `risk_neutral_var_from_smile(S0, t, r, vol_fn, alpha=0.99, q=0.0, dK=None, width=12.0)`  _function_
+
+> Risk-neutral Value-at-Risk of the terminal simple return over ``[0, t]``.
+>
+> Works with the loss ``L = 1 - S_T / S0`` (a positive number is a loss). The
+> ``alpha``-VaR is the ``alpha``-quantile of ``L``: with probability ``alpha``
+> the loss does not exceed it. Since ``L <= v`` iff ``S_T >= S0 (1 - v)``,
+>
+>     VaR_alpha = 1 - Q(1 - alpha) / S0,
+>
+> where ``Q`` is :func:`risk_neutral_quantile_from_smile`. Returned as a
+> positive fraction of ``S0`` (e.g. ``0.18`` = an 18% loss). A flat smile
+> matches the lognormal VaR.
 
 ## rough_heston
 

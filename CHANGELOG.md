@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.265.0] - 2026-09-10
+
+### Added
+- `risk_neutral_var_from_smile` and `risk_neutral_cvar_from_smile` (in `rnd.py`):
+  risk-neutral Value-at-Risk and Conditional VaR (expected shortfall) of the
+  terminal simple return `L = 1 - S_T/S0`, from an implied-vol smile.
+  `VaR_alpha = 1 - Q(1-alpha)/S0` via the inverse smile CDF; CVaR integrates the
+  truncated first moment `E[S_T ; S_T <= K]` against the Breeden-Litzenberger
+  density.
+- Verified against closed-form lognormal VaR/expected-shortfall on a flat smile;
+  CVaR >= VaR; VaR rises with confidence; an equity-skew smile raises both tail
+  metrics.
+
 ## [1.264.0] - 2026-09-10
 
 ### Added
