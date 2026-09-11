@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.352.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.353.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2385,6 +2385,24 @@ Auto-generated from `quantforge` v1.352.0 by `docs/gen_api.py` — do not edit b
 ### `color(S, K, t, r, sigma, b=None) -> float`  _function_
 
 > Calendar color = -d(gamma)/d(t_expiry): the decay of gamma over time.
+
+### `dual_delta(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None) -> float`  _function_
+
+> d(price)/d(strike). For a call ``-e^{-rt} N(d2)``, for a put
+> ``e^{-rt} N(-d2)``.
+>
+> The strike sensitivity. Its negative (for a call) is the discounted
+> risk-neutral probability of finishing in the money, so
+> ``-dual_delta_call = e^{-rt} N(d2)`` is exactly the cash-or-nothing digital
+> value -- the link to :func:`quantforge.risk_neutral_cdf`.
+
+### `dual_gamma(S, K, t, r, sigma, b=None) -> float`  _function_
+
+> d^2(price)/d(strike)^2 = e^{-rt} phi(d2) / (K sigma sqrt(t)).
+>
+> Same for calls and puts. By Breeden-Litzenberger this is exactly the
+> discounted risk-neutral probability density of the terminal price at ``K``,
+> so it is always non-negative in an arbitrage-free market.
 
 ### `speed(S, K, t, r, sigma, b=None) -> float`  _function_
 

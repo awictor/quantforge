@@ -48,6 +48,35 @@ def vomma(S, K, t, r, sigma, b=None) -> float:
 volga = vomma
 
 
+def dual_delta(S, K, t, r, sigma, option_type=OptionType.CALL, b=None) -> float:
+    """d(price)/d(strike). For a call ``-e^{-rt} N(d2)``, for a put
+    ``e^{-rt} N(-d2)``.
+
+    The strike sensitivity. Its negative (for a call) is the discounted
+    risk-neutral probability of finishing in the money, so
+    ``-dual_delta_call = e^{-rt} N(d2)`` is exactly the cash-or-nothing digital
+    value -- the link to :func:`quantforge.risk_neutral_cdf`.
+    """
+    ot = _coerce_type(option_type)
+    d1, d2, carry, b = _prep(S, K, t, r, sigma, b)
+    disc = math.exp(-r * t)
+    if ot is OptionType.CALL:
+        return -disc * norm_cdf(d2)
+    return disc * norm_cdf(-d2)
+
+
+def dual_gamma(S, K, t, r, sigma, b=None) -> float:
+    """d^2(price)/d(strike)^2 = e^{-rt} phi(d2) / (K sigma sqrt(t)).
+
+    Same for calls and puts. By Breeden-Litzenberger this is exactly the
+    discounted risk-neutral probability density of the terminal price at ``K``,
+    so it is always non-negative in an arbitrage-free market.
+    """
+    d1, d2, carry, b = _prep(S, K, t, r, sigma, b)
+    disc = math.exp(-r * t)
+    return disc * norm_pdf(d2) / (K * sigma * math.sqrt(t))
+
+
 def ultima(S, K, t, r, sigma, b=None) -> float:
     """d(vomma)/d(sigma) = d^3(price)/d(sigma)^3. Same for calls and puts.
 

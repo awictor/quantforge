@@ -327,6 +327,7 @@ from .volatility import (
 )
 from .greeks2 import (
     vanna, vomma, volga, charm, veta, speed, zomma, color, ultima,
+    dual_delta, dual_gamma,
 )
 from .scenario import ScenarioGrid, stress_grid, spot_ladder
 from .american import (
@@ -371,7 +372,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.352.0"
+__version__ = "1.353.0"
 
 __all__ = [
     "OptionType",
@@ -960,6 +961,8 @@ __all__ = [
     "zomma",
     "color",
     "ultima",
+    "dual_delta",
+    "dual_gamma",
     "price_array",
     "delta_array",
     "gamma_array",

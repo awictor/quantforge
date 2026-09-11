@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.353.0] - 2026-09-11
+
+### Added
+- `dual_delta` and `dual_gamma` (in `greeks2.py`): strike sensitivities of the
+  Black-Scholes price. `dual_delta = d(price)/d(strike)` is `-e^{-rt} N(d2)`
+  (call) / `e^{-rt} N(-d2)` (put); `dual_gamma = d^2(price)/d(strike)^2 =
+  e^{-rt} phi(d2)/(K sigma sqrt t)`, the Breeden-Litzenberger risk-neutral
+  density (same for calls and puts, non-negative).
+- Verified: dual delta matches a central finite difference of the price in the
+  strike for calls and puts; the negated call dual delta equals the
+  cash-or-nothing digital; dual gamma matches the second strike difference and
+  is non-negative; call minus put dual delta equals `-e^{-rt}` (parity).
+
 ## [1.352.0] - 2026-09-11
 
 ### Added
