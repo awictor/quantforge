@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.380.0] - 2026-09-11
+
+### Added
+- `yoy_cap_price` and `yoy_cap_implied_vol` (in `inflation.py`): a year-on-year
+  inflation cap/floor as a strip of Black-76 caplets across periods at a common
+  strike and flat vol, plus the bisection inverse for the flat implied vol. A
+  single-period strip equals the caplet; cap minus floor telescopes to
+  `sum_i DF_i * N * (F_i - K)`; implied vol round-trips.
+
 ## [1.379.0] - 2026-09-11
 
 ### Added

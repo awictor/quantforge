@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.379.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.380.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3050,6 +3050,23 @@ Auto-generated from `quantforge` v1.379.0 by `docs/gen_api.py` — do not edit b
 >
 > Equals ``cpi_month_start`` on the 1st and approaches ``cpi_next_month`` at
 > month end.
+
+### `yoy_cap_implied_vol(price, forward_rates, strike, expiries, discount_factors, notional=1.0, is_cap=True, tol=1e-10, max_iter=100)`  _function_
+
+> Flat Black vol reproducing a year-on-year cap/floor ``price``.
+>
+> Bisection on the common ``sigma`` (cap value is monotone increasing in vol),
+> inverting :func:`yoy_cap_price`. The price must lie between the zero-vol
+> intrinsic and the vol -> infinity bound.
+
+### `yoy_cap_price(forward_rates, strike, expiries, sigma, discount_factors, notional=1.0, is_cap=True)`  _function_
+
+> Year-on-year inflation cap/floor: a strip of :func:`yoy_caplet_price`.
+>
+> Sums the Black-76 caplet (or floorlet) values across each YoY period, one per
+> ``(forward_rate, expiry, discount_factor)`` triple, at a common ``strike`` and
+> flat ``sigma``. A single-period strip equals the caplet; cap minus floor
+> telescopes to ``sum_i DF_i * N * (F_i - K)``.
 
 ### `yoy_caplet_price(forward_rate, strike, expiry, sigma, discount_factor, notional=1.0, is_cap=True)`  _function_
 

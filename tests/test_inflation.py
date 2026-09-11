@@ -12,9 +12,14 @@ from quantforge import (
     inflation_curve_from_zc_swaps, forward_inflation_rate, yoy_swap_value,
     reference_cpi, index_ratio_interpolated,
     normalize_seasonal_factors, apply_seasonality, deseasonalize,
-    yoy_caplet_price,
+    yoy_caplet_price, yoy_cap_price, yoy_cap_implied_vol,
     bond_cashflows, bond_price_from_yield, yield_to_maturity,
 )
+
+
+CAP_F = [0.03, 0.028, 0.031]
+CAP_T = [1, 2, 3]
+CAP_DF = [0.97, 0.94, 0.91]
 
 
 RAW_SEASONAL = [1.02, 0.99, 1.01, 1.00, 0.98, 1.03,
@@ -316,6 +321,40 @@ def test_yoy_caplet_validation():
         yoy_caplet_price(-0.01, 0.02, 2.0, 0.4, 0.95)
     with pytest.raises(ValueError):
         yoy_caplet_price(0.03, 0.02, -1.0, 0.4, 0.95)
+
+
+def test_yoy_cap_single_period_equals_caplet():
+    assert yoy_cap_price([0.03], 0.025, [1], 0.4, [0.97], 1e6, True) == pytest.approx(
+        yoy_caplet_price(0.03, 0.025, 1, 0.4, 0.97, 1e6, True), abs=1e-9)
+
+
+def test_yoy_cap_floor_parity_telescopes():
+    K, s = 0.025, 0.4
+    c = yoy_cap_price(CAP_F, K, CAP_T, s, CAP_DF, 1e6, True)
+    f = yoy_cap_price(CAP_F, K, CAP_T, s, CAP_DF, 1e6, False)
+    tel = sum(CAP_DF[i] * 1e6 * (CAP_F[i] - K) for i in range(3))
+    assert c - f == pytest.approx(tel, abs=1e-3)
+
+
+def test_yoy_cap_implied_vol_round_trip():
+    K, s = 0.025, 0.4
+    c = yoy_cap_price(CAP_F, K, CAP_T, s, CAP_DF, 1e6, True)
+    assert yoy_cap_implied_vol(c, CAP_F, K, CAP_T, CAP_DF, 1e6, True) == pytest.approx(
+        s, abs=1e-7)
+
+
+def test_yoy_cap_monotone_in_vol():
+    K = 0.025
+    lo = yoy_cap_price(CAP_F, K, CAP_T, 0.4, CAP_DF, 1e6, True)
+    hi = yoy_cap_price(CAP_F, K, CAP_T, 0.6, CAP_DF, 1e6, True)
+    assert hi > lo
+
+
+def test_yoy_cap_validation():
+    with pytest.raises(ValueError):
+        yoy_cap_price([0.03], 0.025, [1, 2], 0.4, [0.97])
+    with pytest.raises(ValueError):
+        yoy_cap_implied_vol(1e18, CAP_F, 0.025, CAP_T, CAP_DF)
 
 
 def test_validation():

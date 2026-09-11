@@ -308,6 +308,55 @@ def yoy_caplet_price(forward_rate, strike, expiry, sigma, discount_factor,
     return discount_factor * notional * val
 
 
+def yoy_cap_price(forward_rates, strike, expiries, sigma, discount_factors,
+                  notional=1.0, is_cap=True):
+    """Year-on-year inflation cap/floor: a strip of :func:`yoy_caplet_price`.
+
+    Sums the Black-76 caplet (or floorlet) values across each YoY period, one per
+    ``(forward_rate, expiry, discount_factor)`` triple, at a common ``strike`` and
+    flat ``sigma``. A single-period strip equals the caplet; cap minus floor
+    telescopes to ``sum_i DF_i * N * (F_i - K)``.
+    """
+    n = len(forward_rates)
+    if not (len(expiries) == len(discount_factors) == n):
+        raise ValueError("forward_rates, expiries, discount_factors must align")
+    total = 0.0
+    for F, T, df in zip(forward_rates, expiries, discount_factors):
+        total += yoy_caplet_price(F, strike, T, sigma, df, notional, is_cap)
+    return total
+
+
+def yoy_cap_implied_vol(price, forward_rates, strike, expiries, discount_factors,
+                        notional=1.0, is_cap=True, tol=1e-10, max_iter=100):
+    """Flat Black vol reproducing a year-on-year cap/floor ``price``.
+
+    Bisection on the common ``sigma`` (cap value is monotone increasing in vol),
+    inverting :func:`yoy_cap_price`. The price must lie between the zero-vol
+    intrinsic and the vol -> infinity bound.
+    """
+    if price < 0:
+        raise ValueError("price must be non-negative")
+
+    def cap(sig):
+        return yoy_cap_price(forward_rates, strike, expiries, sig,
+                             discount_factors, notional, is_cap)
+
+    lo, hi = 0.0, 5.0
+    p_lo, p_hi = cap(lo), cap(hi)
+    if not (p_lo - 1e-9 <= price <= p_hi + 1e-9):
+        raise ValueError("price outside the achievable vol range")
+    for _ in range(max_iter):
+        mid = 0.5 * (lo + hi)
+        pm = cap(mid)
+        if abs(pm - price) < tol:
+            return mid
+        if pm < price:
+            lo = mid
+        else:
+            hi = mid
+    return 0.5 * (lo + hi)
+
+
 def linker_price(real_cashflows, real_yield, index_settle, index_base) -> float:
     """Dirty price of an inflation-linked bond off real cashflows.
 
