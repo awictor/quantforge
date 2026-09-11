@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.343.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.344.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -4239,6 +4239,14 @@ Auto-generated from `quantforge` v1.343.0 by `docs/gen_api.py` — do not edit b
 
 ## portopt
 
+### `efficient_frontier(mean_returns, cov, targets) -> list`  _function_
+
+> Efficient frontier as ``(target_return, portfolio_std)`` pairs.
+>
+> For each requested expected return in ``targets`` solves
+> :func:`target_return_weights` and reports the achieved return with the
+> portfolio standard deviation ``sqrt(w^T C w)``.
+
 ### `max_sharpe_weights(mean_returns, cov, risk_free=0.0) -> list`  _function_
 
 > Tangency (max-Sharpe) weights ``C^{-1} (mu - rf) / sum(...)``.
@@ -4269,6 +4277,20 @@ Auto-generated from `quantforge` v1.343.0 by `docs/gen_api.py` — do not edit b
 > ``w_i (C w)_i`` are equal, by the standard fixed-point iteration
 > ``w_i <- (target / (C w)_i)`` renormalized -- convergent for a positive-
 > definite covariance. Weights are long-only and sum to 1.
+
+### `target_return_weights(mean_returns, cov, target) -> list`  _function_
+
+> Minimum-variance weights achieving an exact expected return ``target``.
+>
+> Solves ``min w^T C w`` subject to ``w^T 1 = 1`` and ``w^T mu = target`` by
+> the two-constraint Lagrangian. With the efficient-frontier scalars
+> ``A = 1^T C^{-1} 1``, ``B = 1^T C^{-1} mu``, ``C2 = mu^T C^{-1} mu`` and
+> ``D = A C2 - B^2``, the weights are
+>
+>     w = C^{-1} [ (C2 - B target)/D * 1 + (A target - B)/D * mu ].
+>
+> Fully invested; may be long/short. Sweeping ``target`` traces the efficient
+> frontier.
 
 ## qmc
 

@@ -93,6 +93,52 @@ def max_sharpe_weights(mean_returns, cov, risk_free=0.0) -> list:
     return [zi / total for zi in z]
 
 
+def target_return_weights(mean_returns, cov, target) -> list:
+    """Minimum-variance weights achieving an exact expected return ``target``.
+
+    Solves ``min w^T C w`` subject to ``w^T 1 = 1`` and ``w^T mu = target`` by
+    the two-constraint Lagrangian. With the efficient-frontier scalars
+    ``A = 1^T C^{-1} 1``, ``B = 1^T C^{-1} mu``, ``C2 = mu^T C^{-1} mu`` and
+    ``D = A C2 - B^2``, the weights are
+
+        w = C^{-1} [ (C2 - B target)/D * 1 + (A target - B)/D * mu ].
+
+    Fully invested; may be long/short. Sweeping ``target`` traces the efficient
+    frontier.
+    """
+    n = _check_cov(cov)
+    if len(mean_returns) != n:
+        raise ValueError("mean_returns length must match cov")
+    inv = _invert(cov)
+    ones = [1.0] * n
+    mu = list(mean_returns)
+    inv1 = _matvec(inv, ones)
+    invmu = _matvec(inv, mu)
+    A = sum(inv1)
+    B = sum(mu[i] * inv1[i] for i in range(n))
+    C2 = sum(mu[i] * invmu[i] for i in range(n))
+    D = A * C2 - B * B
+    if abs(D) < 1e-14:
+        raise ValueError("degenerate frontier (returns collinear with ones)")
+    g = (C2 - B * target) / D
+    h = (A * target - B) / D
+    return [g * inv1[i] + h * invmu[i] for i in range(n)]
+
+
+def efficient_frontier(mean_returns, cov, targets) -> list:
+    """Efficient frontier as ``(target_return, portfolio_std)`` pairs.
+
+    For each requested expected return in ``targets`` solves
+    :func:`target_return_weights` and reports the achieved return with the
+    portfolio standard deviation ``sqrt(w^T C w)``.
+    """
+    out = []
+    for tgt in targets:
+        w = target_return_weights(mean_returns, cov, tgt)
+        out.append((tgt, math.sqrt(portfolio_variance(w, cov))))
+    return out
+
+
 def risk_parity_weights(cov, tol=1e-10, max_iter=1000) -> list:
     """Equal-risk-contribution (risk-parity) weights.
 

@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.344.0] - 2026-09-11
+
+### Added
+- `target_return_weights` and `efficient_frontier` (in `portopt.py`):
+  minimum-variance weights that hit an exact expected return via the
+  two-constraint Lagrangian (efficient-frontier scalars `A, B, C, D`), and a
+  helper that sweeps target returns into `(return, portfolio_std)` frontier
+  points.
+- Verified: the weights hit the requested return exactly and sum to 1; at the
+  global min-variance return they reproduce `min_variance_weights`; the frontier
+  standard deviation is lowest at the min-variance return; requested returns are
+  echoed with positive std; a target-return portfolio's variance is at least the
+  global minimum; a length mismatch raises.
+
 ## [1.343.0] - 2026-09-11
 
 ### Added
