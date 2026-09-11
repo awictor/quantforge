@@ -789,3 +789,37 @@ def implied_spread_correlation(target_price, S1, S2, K, t, r, sigma1, sigma2,
         else:
             hi = mid
     return 0.5 * (lo + hi)
+
+
+def implied_spread_correlation_bs(target_price, S1, S2, K, t, r, sigma1, sigma2,
+                                  q1=0.0, q2=0.0, option_type=OptionType.CALL,
+                                  tol=1e-8, max_iter=100):
+    """Correlation implied by a spread-option price under Bjerksund-Stensland 2014.
+
+    Identical bisection to :func:`implied_spread_correlation` but inverts
+    :func:`spread_option_bs` instead of the Kirk approximation. The BS spread
+    price is likewise monotone decreasing in ``rho`` (higher correlation lowers
+    the spread vol), so ``rho in (-1, 1)`` is recovered by bisection. Raises if
+    the quote lies outside the price range spanned by ``rho = -1 .. 1``.
+    """
+    ot = _coerce_type(option_type)
+
+    def px(rho):
+        return spread_option_bs(S1, S2, K, t, r, sigma1, sigma2, rho, q1, q2, ot)
+
+    lo, hi = -0.999999, 0.999999
+    p_lo, p_hi = px(lo), px(hi)      # p_lo is the highest price (rho=-1)
+    if not (min(p_lo, p_hi) - 1e-10 <= target_price <= max(p_lo, p_hi) + 1e-10):
+        raise ValueError(
+            f"price {target_price} outside the rho-range [{p_hi:.6g}, {p_lo:.6g}]"
+        )
+    for _ in range(max_iter):
+        mid = 0.5 * (lo + hi)
+        pm = px(mid)
+        if abs(pm - target_price) < tol:
+            return mid
+        if pm > target_price:
+            lo = mid
+        else:
+            hi = mid
+    return 0.5 * (lo + hi)

@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.268.0] - 2026-09-10
+
+### Added
+- `implied_spread_correlation_bs` (in `multiasset.py`): the correlation implied
+  by a spread-option price under the Bjerksund-Stensland (2014) model, recovered
+  by bisection on the price (monotone decreasing in `rho`). Companion to the Kirk
+  `implied_spread_correlation`.
+- Verified: round-trips a known `rho` for both calls and puts; the price is
+  monotone decreasing in correlation; a quote above the `rho = -1` maximum
+  raises.
+
 ## [1.267.0] - 2026-09-10
 
 ### Added

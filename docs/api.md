@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.267.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.268.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2758,6 +2758,16 @@ Auto-generated from `quantforge` v1.267.0 by `docs/gen_api.py` — do not edit b
 > lowers the spread volatility), so a bisection on ``rho in (-1, 1)`` recovers
 > the correlation consistent with the quote. Raises if the quote lies outside
 > the price range spanned by ``rho = -1 .. 1``.
+
+### `implied_spread_correlation_bs(target_price, S1, S2, K, t, r, sigma1, sigma2, q1=0.0, q2=0.0, option_type=<OptionType.CALL: 'call'>, tol=1e-08, max_iter=100)`  _function_
+
+> Correlation implied by a spread-option price under Bjerksund-Stensland 2014.
+>
+> Identical bisection to :func:`implied_spread_correlation` but inverts
+> :func:`spread_option_bs` instead of the Kirk approximation. The BS spread
+> price is likewise monotone decreasing in ``rho`` (higher correlation lowers
+> the spread vol), so ``rho in (-1, 1)`` is recovered by bisection. Raises if
+> the quote lies outside the price range spanned by ``rho = -1 .. 1``.
 
 ### `rainbow_greeks(S1, S2, K, t, r, sigma1, sigma2, rho, kind='best', option_type=<OptionType.CALL: 'call'>, q1=0.0, q2=0.0)`  _function_
 
