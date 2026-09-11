@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.306.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.307.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -130,6 +130,23 @@ Auto-generated from `quantforge` v1.306.0 by `docs/gen_api.py` — do not edit b
 
 ## bachelier
 
+### `bachelier_asset_or_nothing(F, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>) -> float`  _function_
+
+> Bachelier asset-or-nothing digital: pays the forward ``F_T`` if in the money.
+>
+> With ``F_T`` Gaussian, ``E[F_T 1_{F_T > K}] = F N(d) + sigma sqrt(t) phi(d)``
+> (call), discounted at ``r``. Note the vanilla Bachelier call equals this
+> asset-or-nothing minus ``K`` times the cash-or-nothing, mirroring the
+> Black-Scholes decomposition.
+
+### `bachelier_cash_or_nothing(F, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, cash=1.0) -> float`  _function_
+
+> Bachelier cash-or-nothing digital: pays ``cash`` if in the money.
+>
+> In the normal model ``F_T`` is Gaussian, so with ``d = (F - K)/(sigma sqrt t)``
+> a call (pays when ``F_T > K``) is ``cash e^{-rt} N(d)`` and a put is
+> ``cash e^{-rt} N(-d)``.
+
 ### `bachelier_delta(F, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>) -> float`  _function_
 
 > dPrice/dF (in the forward). Call delta is e^{-rt} N(d).
@@ -161,6 +178,20 @@ Auto-generated from `quantforge` v1.306.0 by `docs/gen_api.py` — do not edit b
 >
 > ``sigma`` is the normal (absolute) volatility. ``r`` discounts the payoff
 > from expiry; pass ``r=0`` to price on the forward directly.
+
+### `bachelier_theta(F, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>) -> float`  _function_
+
+> Calendar theta ``-dPrice/dt`` in the Bachelier (normal) model, analytic.
+>
+> Differentiating the discounted normal price gives, for a call,
+>
+>     theta = r * price - e^{-rt} [ sigma phi(d) / (2 sqrt(t)) ],
+>
+> where ``d = (F - K)/(sigma sqrt(t))``. The normal-model time value grows
+> with maturity (the ``sigma phi/(2 sqrt t)`` piece, same for calls and puts,
+> enters ``-dP/dt`` with a minus sign); the ``r * price`` piece is the
+> discount drift. At ``r = 0`` this is the pure decay
+> ``-sigma phi(d)/(2 sqrt(t))``.
 
 ### `bachelier_vega(F, K, t, r, sigma) -> float`  _function_
 

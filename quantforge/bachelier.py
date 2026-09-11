@@ -85,6 +85,71 @@ def bachelier_vega(F, K, t, r, sigma) -> float:
     return math.exp(-r * t) * math.sqrt(t) * norm_pdf(d)
 
 
+def bachelier_theta(F, K, t, r, sigma, option_type=OptionType.CALL) -> float:
+    """Calendar theta ``-dPrice/dt`` in the Bachelier (normal) model, analytic.
+
+    Differentiating the discounted normal price gives, for a call,
+
+        theta = r * price - e^{-rt} [ sigma phi(d) / (2 sqrt(t)) ],
+
+    where ``d = (F - K)/(sigma sqrt(t))``. The normal-model time value grows
+    with maturity (the ``sigma phi/(2 sqrt t)`` piece, same for calls and puts,
+    enters ``-dP/dt`` with a minus sign); the ``r * price`` piece is the
+    discount drift. At ``r = 0`` this is the pure decay
+    ``-sigma phi(d)/(2 sqrt(t))``.
+    """
+    ot = _coerce_type(option_type)
+    _validate(F, K, t, sigma)
+    if t == 0 or sigma == 0:
+        return 0.0
+    disc = math.exp(-r * t)
+    vsqrt = sigma * math.sqrt(t)
+    d = (F - K) / vsqrt
+    price = bachelier_price(F, K, t, r, sigma, ot)
+    decay = disc * sigma * norm_pdf(d) / (2.0 * math.sqrt(t))
+    return r * price - decay
+
+
+def bachelier_cash_or_nothing(F, K, t, r, sigma, option_type=OptionType.CALL,
+                              cash=1.0) -> float:
+    """Bachelier cash-or-nothing digital: pays ``cash`` if in the money.
+
+    In the normal model ``F_T`` is Gaussian, so with ``d = (F - K)/(sigma sqrt t)``
+    a call (pays when ``F_T > K``) is ``cash e^{-rt} N(d)`` and a put is
+    ``cash e^{-rt} N(-d)``.
+    """
+    ot = _coerce_type(option_type)
+    _validate(F, K, t, sigma)
+    disc = math.exp(-r * t)
+    if t == 0 or sigma == 0:
+        itm = F > K if ot is OptionType.CALL else F < K
+        return disc * cash if itm else 0.0
+    d = (F - K) / (sigma * math.sqrt(t))
+    return cash * disc * (norm_cdf(d) if ot is OptionType.CALL else norm_cdf(-d))
+
+
+def bachelier_asset_or_nothing(F, K, t, r, sigma,
+                               option_type=OptionType.CALL) -> float:
+    """Bachelier asset-or-nothing digital: pays the forward ``F_T`` if in the money.
+
+    With ``F_T`` Gaussian, ``E[F_T 1_{F_T > K}] = F N(d) + sigma sqrt(t) phi(d)``
+    (call), discounted at ``r``. Note the vanilla Bachelier call equals this
+    asset-or-nothing minus ``K`` times the cash-or-nothing, mirroring the
+    Black-Scholes decomposition.
+    """
+    ot = _coerce_type(option_type)
+    _validate(F, K, t, sigma)
+    disc = math.exp(-r * t)
+    if t == 0 or sigma == 0:
+        itm = F > K if ot is OptionType.CALL else F < K
+        return disc * F if itm else 0.0
+    vsqrt = sigma * math.sqrt(t)
+    d = (F - K) / vsqrt
+    if ot is OptionType.CALL:
+        return disc * (F * norm_cdf(d) + vsqrt * norm_pdf(d))
+    return disc * (F * norm_cdf(-d) - vsqrt * norm_pdf(d))
+
+
 def bachelier_implied_vol(target_price, F, K, t, r, option_type=OptionType.CALL,
                           tol=1e-10, max_iter=100) -> float:
     """Solve for the normal volatility that reproduces ``target_price``.
@@ -148,8 +213,6 @@ def bachelier_greeks(F, K, t, r, sigma, option_type=OptionType.CALL):
     delta = bachelier_delta(F, K, t, r, sigma, ot)
     gamma = bachelier_gamma(F, K, t, r, sigma)
     vega = bachelier_vega(F, K, t, r, sigma)
-    ht = min(1e-4, 0.25 * t) if t > 0 else 1e-4
-    theta = -(bachelier_price(F, K, t + ht, r, sigma, ot)
-              - bachelier_price(F, K, t - ht, r, sigma, ot)) / (2.0 * ht)
+    theta = bachelier_theta(F, K, t, r, sigma, ot)
     return {"price": price, "delta": delta, "gamma": gamma, "vega": vega,
             "theta": theta}

@@ -4,6 +4,21 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.307.0] - 2026-09-11
+
+### Added
+- `bachelier_theta` (in `bachelier.py`): analytic calendar theta of the normal
+  (Bachelier) model, `theta = r * price - e^{-rt} sigma phi(d) / (2 sqrt(t))`.
+  `bachelier_greeks` now uses it instead of a finite difference.
+- `bachelier_cash_or_nothing` and `bachelier_asset_or_nothing` (in
+  `bachelier.py`): normal-model digitals. `F_T` is Gaussian, so a cash-or-nothing
+  call is `cash e^{-rt} N(d)` and an asset-or-nothing call is
+  `e^{-rt} (F N(d) + sigma sqrt(t) phi(d))`, with `d = (F - K)/(sigma sqrt t)`.
+- Verified: analytic theta matches central finite differences at, above, and
+  below the strike for calls and puts; cash-digital call/put parity sums to the
+  discount factor; the vanilla Bachelier price decomposes into asset-or-nothing
+  minus `K` cash-or-nothing; both digitals match a Gaussian Monte Carlo.
+
 ## [1.306.0] - 2026-09-11
 
 ### Added
