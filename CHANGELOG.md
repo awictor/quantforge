@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.319.0] - 2026-09-11
+
+### Added
+- `caplet_implied_normal_vol` (in `rates.py`): invert a caplet/floorlet price
+  back to its normal (Bachelier) volatility. Divides out the
+  `discount * accrual` factor to recover the undiscounted option value, then
+  inverts with `bachelier_implied_vol` — the inverse of `caplet_price`.
+- Verified: round-trips the input vol to 1e-8 across strikes, vols, and
+  cap/floor; works with a negative forward (normal model); rejects an expired
+  caplet.
+
 ## [1.318.0] - 2026-09-11
 
 ### Fixed

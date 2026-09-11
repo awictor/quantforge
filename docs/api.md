@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.318.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.319.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3972,6 +3972,14 @@ Auto-generated from `quantforge` v1.318.0 by `docs/gen_api.py` — do not edit b
 > (d2V/dF2), and ``vega`` (dV/dsigma_n). A caplet is a call on the forward, so
 > its rate delta is positive; a floorlet's is negative. Returns a dict with
 > ``price``, ``rate_delta``, ``rate_gamma``, ``vega``.
+
+### `caplet_implied_normal_vol(price, period: quantforge.rates.CapletPeriod, strike, is_cap=True) -> float`  _function_
+
+> Normal (Bachelier) implied vol of a caplet/floorlet from its price.
+>
+> Divides out the ``discount * accrual`` factor to recover the undiscounted
+> Bachelier option value, then inverts it with :func:`bachelier_implied_vol`.
+> Inverse of :func:`caplet_price` in the forward rate.
 
 ### `caplet_price(period: quantforge.rates.CapletPeriod, strike: float, is_cap: bool = True) -> float`  _function_
 

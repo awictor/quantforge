@@ -132,6 +132,25 @@ def _sabr_caplet_price(period, strike, alpha, beta, rho, nu, is_cap):
     return period.discount * period.accrual * undiscounted
 
 
+def caplet_implied_normal_vol(price, period: CapletPeriod, strike,
+                              is_cap=True) -> float:
+    """Normal (Bachelier) implied vol of a caplet/floorlet from its price.
+
+    Divides out the ``discount * accrual`` factor to recover the undiscounted
+    Bachelier option value, then inverts it with :func:`bachelier_implied_vol`.
+    Inverse of :func:`caplet_price` in the forward rate.
+    """
+    if period.expiry <= 0:
+        raise ValueError("cannot imply vol at or past expiry")
+    scale = period.discount * period.accrual
+    if scale <= 0:
+        raise ValueError("discount * accrual must be positive")
+    ot = OptionType.CALL if is_cap else OptionType.PUT
+    undiscounted = price / scale
+    return bachelier_implied_vol(undiscounted, period.forward, strike,
+                                 period.expiry, 0.0, ot)
+
+
 def sabr_cap_price(periods: Sequence[CapletPeriod], strike,
                    alpha, beta, rho, nu) -> float:
     """Price a cap under a single SABR smile (normal model).
