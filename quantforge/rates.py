@@ -112,6 +112,46 @@ def floor_price(periods: Sequence[CapletPeriod], strike: float) -> float:
     return sum(caplet_price(p, strike, is_cap=False) for p in periods)
 
 
+def _sabr_caplet_price(period, strike, alpha, beta, rho, nu, is_cap):
+    """One caplet/floorlet priced at its own SABR normal vol.
+
+    Each caplet sets on its forward ``period.forward`` at ``period.expiry``, so
+    the SABR normal vol is read at that ``(F, K, expiry)`` point and used in the
+    Bachelier caplet formula (rates can be negative, hence the normal model).
+    """
+    from .sabr import sabr_normal_vol
+    ot = OptionType.CALL if is_cap else OptionType.PUT
+    if period.expiry <= 0:
+        intrinsic = (max(period.forward - strike, 0.0) if is_cap
+                     else max(strike - period.forward, 0.0))
+        return period.discount * period.accrual * intrinsic
+    vol = sabr_normal_vol(period.forward, strike, period.expiry,
+                          alpha, beta, rho, nu)
+    undiscounted = bachelier_price(period.forward, strike, period.expiry, 0.0,
+                                   vol, ot)
+    return period.discount * period.accrual * undiscounted
+
+
+def sabr_cap_price(periods: Sequence[CapletPeriod], strike,
+                   alpha, beta, rho, nu) -> float:
+    """Price a cap under a single SABR smile (normal model).
+
+    Sums caplets, each valued at the SABR normal vol read at its own forward and
+    expiry -- so one calibrated ``(alpha, beta, rho, nu)`` prices the whole cap
+    consistently across the smile, rather than a flat per-period ``sigma_n``.
+    """
+    return sum(_sabr_caplet_price(p, strike, alpha, beta, rho, nu, True)
+               for p in periods)
+
+
+def sabr_floor_price(periods: Sequence[CapletPeriod], strike,
+                     alpha, beta, rho, nu) -> float:
+    """Price a floor under a single SABR smile (normal model): the sum of
+    floorlets, each at the SABR normal vol of its own forward and expiry."""
+    return sum(_sabr_caplet_price(p, strike, alpha, beta, rho, nu, False)
+               for p in periods)
+
+
 def collar_price(periods: Sequence[CapletPeriod], cap_strike: float,
                  floor_strike: float) -> float:
     """Price a collar: long a cap at ``cap_strike``, short a floor at ``floor_strike``.

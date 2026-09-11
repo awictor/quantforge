@@ -369,8 +369,16 @@ def sabr_normal_vol(F, K, t, alpha, beta, rho, nu) -> float:
 
     FK_beta = FK ** (one_beta / 2.0)
     z = (nu / alpha) * FK_beta * logFK
-    x_z = math.log((math.sqrt(1.0 - 2.0 * rho * z + z * z) + z - rho) / (1.0 - rho))
-    return nu * (F - K) / x_z * correction
+    # Rewrite the leading factor as alpha (F-K)/((FK)^{beta/2} log(F/K)) * z/x(z)
+    # so the vol-of-vol -> 0 limit (z -> 0, z/x(z) -> 1) is finite.
+    lead = alpha * (F - K) / (FK_beta * logFK)
+    if abs(z) < 1e-10:
+        z_over_x = 1.0
+    else:
+        x_z = math.log(
+            (math.sqrt(1.0 - 2.0 * rho * z + z * z) + z - rho) / (1.0 - rho))
+        z_over_x = z / x_z
+    return lead * z_over_x * correction
 
 
 def calibrate_sabr(

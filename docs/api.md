@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.316.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.317.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3996,6 +3996,19 @@ Auto-generated from `quantforge` v1.316.0 by `docs/gen_api.py` — do not edit b
 ### `floor_price(periods: Sequence[quantforge.rates.CapletPeriod], strike: float) -> float`  _function_
 
 > Price an interest-rate floor as the sum of its floorlets.
+
+### `sabr_cap_price(periods: Sequence[quantforge.rates.CapletPeriod], strike, alpha, beta, rho, nu) -> float`  _function_
+
+> Price a cap under a single SABR smile (normal model).
+>
+> Sums caplets, each valued at the SABR normal vol read at its own forward and
+> expiry -- so one calibrated ``(alpha, beta, rho, nu)`` prices the whole cap
+> consistently across the smile, rather than a flat per-period ``sigma_n``.
+
+### `sabr_floor_price(periods: Sequence[quantforge.rates.CapletPeriod], strike, alpha, beta, rho, nu) -> float`  _function_
+
+> Price a floor under a single SABR smile (normal model): the sum of
+> floorlets, each at the SABR normal vol of its own forward and expiry.
 
 ### `sabr_swaption_price(swap_rate, strike, expiry, periods, alpha, beta, rho, nu, payer=True, model='black')`  _function_
 

@@ -4,6 +4,27 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.317.0] - 2026-09-11
+
+### Added
+- `sabr_cap_price` and `sabr_floor_price` (in `rates.py`): price an
+  interest-rate cap/floor under a single SABR smile (normal model). Each caplet
+  is valued at the SABR normal vol read at its own forward and expiry, so one
+  calibrated `(alpha, beta, rho, nu)` prices the whole strip consistently across
+  the smile rather than a flat per-period `sigma_n`.
+
+### Fixed
+- `sabr_normal_vol` no longer divides by zero when the vol-of-vol `nu = 0`. The
+  leading factor is rewritten as `alpha (F - K)/((FK)^{beta/2} log(F/K)) *
+  z/x(z)` with the `z -> 0` limit `z/x(z) = 1`, so the degenerate case returns
+  the finite lognormal-spacing vol (nonzero-`nu` values are unchanged).
+
+### Verified
+- SABR cap equals the sum of caplets each priced at its own SABR vol;
+  cap-floor parity equals `sum disc * accrual * (F - K)`; a `beta = nu = 0` SABR
+  cap is within ~2% of a flat normal cap at `sigma_n = alpha`; prices are
+  positive; `nu = 0` no longer crashes.
+
 ## [1.316.0] - 2026-09-11
 
 ### Added
