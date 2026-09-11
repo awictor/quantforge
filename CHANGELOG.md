@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.337.0] - 2026-09-11
+
+### Added
+- `ewma_covariance`, `ewma_correlation`, and `realized_beta` (in
+  `correlation.py`): return-series risk estimators. The EWMA covariance/
+  correlation use the RiskMetrics decay recursion (default `lam = 0.94`),
+  weighting recent observations more; `realized_beta` is the ordinary sample
+  `Cov(asset, market) / Var(market)` regression slope.
+- Verified: the realized beta recovers a known 1.5 slope and is 1 for the
+  market against itself; the EWMA correlation stays in `[-1, 1]`, is 1 for a
+  series with itself and -1 against its negation; EWMA self-covariance is
+  positive; mismatched lengths, a bad decay, and too-short series raise.
+
 ## [1.336.0] - 2026-09-11
 
 ### Added

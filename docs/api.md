@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.336.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.337.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -975,6 +975,22 @@ Auto-generated from `quantforge` v1.336.0 by `docs/gen_api.py` — do not edit b
 >
 > A useful lower reference: the index vol if the members were uncorrelated.
 
+### `ewma_correlation(returns_x, returns_y, lam=0.94)`  _function_
+
+> Exponentially-weighted correlation of two aligned return series.
+>
+> The EWMA covariance divided by the product of the EWMA volatilities (all on
+> the same decay), so it stays in ``[-1, 1]``.
+
+### `ewma_covariance(returns_x, returns_y, lam=0.94)`  _function_
+
+> Exponentially-weighted covariance of two aligned return series.
+>
+> RiskMetrics-style recursion ``s_t = lam s_{t-1} + (1-lam) x_t y_t`` seeded
+> from the first product, giving more weight to recent observations. ``lam``
+> is the decay (0.94 for daily data). The series must be equal length and
+> zero-mean is assumed (the RiskMetrics convention for returns).
+
 ### `implied_correlation(weights: Sequence[float], vols: Sequence[float], index_vol: float) -> float`  _function_
 
 > Common implied correlation consistent with the quoted ``index_vol``.
@@ -986,6 +1002,13 @@ Auto-generated from `quantforge` v1.336.0 by `docs/gen_api.py` — do not edit b
 ### `index_vol_from_correlation(weights: Sequence[float], vols: Sequence[float], rho: float) -> float`  _function_
 
 > Index volatility implied by member weights/vols and a common correlation.
+
+### `realized_beta(asset_returns, market_returns)`  _function_
+
+> Realized beta of an asset to the market: ``Cov(a, m) / Var(m)``.
+>
+> Ordinary (equal-weight) sample covariance over variance, the slope of a
+> regression of asset returns on market returns. Series must be equal length.
 
 ## credit
 

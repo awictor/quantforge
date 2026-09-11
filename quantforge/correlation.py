@@ -98,3 +98,58 @@ def correlation_term_structure(weights, member_vol_curves, index_vol_curve,
         rho = implied_correlation(weights, vols_j, index_vol_curve[j])
         out.append((expiries[j], rho))
     return out
+
+
+def ewma_covariance(returns_x, returns_y, lam=0.94):
+    """Exponentially-weighted covariance of two aligned return series.
+
+    RiskMetrics-style recursion ``s_t = lam s_{t-1} + (1-lam) x_t y_t`` seeded
+    from the first product, giving more weight to recent observations. ``lam``
+    is the decay (0.94 for daily data). The series must be equal length and
+    zero-mean is assumed (the RiskMetrics convention for returns).
+    """
+    if len(returns_x) != len(returns_y):
+        raise ValueError("return series must be equal length")
+    if len(returns_x) < 2:
+        raise ValueError("need at least two observations")
+    if not (0.0 < lam < 1.0):
+        raise ValueError("lam must be in (0, 1)")
+    s = returns_x[0] * returns_y[0]
+    for x, y in zip(returns_x[1:], returns_y[1:]):
+        s = lam * s + (1.0 - lam) * x * y
+    return s
+
+
+def ewma_correlation(returns_x, returns_y, lam=0.94):
+    """Exponentially-weighted correlation of two aligned return series.
+
+    The EWMA covariance divided by the product of the EWMA volatilities (all on
+    the same decay), so it stays in ``[-1, 1]``.
+    """
+    cov = ewma_covariance(returns_x, returns_y, lam)
+    vx = ewma_covariance(returns_x, returns_x, lam)
+    vy = ewma_covariance(returns_y, returns_y, lam)
+    denom = math.sqrt(vx * vy)
+    if denom <= 0.0:
+        raise ValueError("degenerate (zero-variance) series")
+    return cov / denom
+
+
+def realized_beta(asset_returns, market_returns):
+    """Realized beta of an asset to the market: ``Cov(a, m) / Var(m)``.
+
+    Ordinary (equal-weight) sample covariance over variance, the slope of a
+    regression of asset returns on market returns. Series must be equal length.
+    """
+    n = len(asset_returns)
+    if n != len(market_returns):
+        raise ValueError("return series must be equal length")
+    if n < 2:
+        raise ValueError("need at least two observations")
+    ma = sum(asset_returns) / n
+    mm = sum(market_returns) / n
+    cov = sum((a - ma) * (m - mm) for a, m in zip(asset_returns, market_returns)) / n
+    var = sum((m - mm) ** 2 for m in market_returns) / n
+    if var <= 0.0:
+        raise ValueError("market variance must be positive")
+    return cov / var
