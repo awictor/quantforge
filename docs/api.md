@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.325.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.326.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -759,6 +759,13 @@ Auto-generated from `quantforge` v1.325.0 by `docs/gen_api.py` — do not edit b
 > ``strike``, then sum the ``c_i``-weighted CIR zero-coupon-bond options
 > (:func:`cir_bond_option`) struck at ``K_i = P(t_option, t_i | r*)``. Exact.
 
+### `cir_expected_rate(r0, t, kappa, theta, sigma=0.0)`  _function_
+
+> Expected CIR short rate ``E[r_t] = theta + (r0 - theta) e^{-kappa t}``.
+>
+> The square-root diffusion does not change the mean, so it matches the
+> Vasicek/OU mean (``sigma`` is accepted only for a uniform signature).
+
 ### `cir_floor(r0, dates, strike, kappa, theta, sigma, notional=1.0)`  _function_
 
 > CIR floor: strip of floorlets over successive ``dates``.
@@ -766,6 +773,27 @@ Auto-generated from `quantforge` v1.325.0 by `docs/gen_api.py` — do not edit b
 ### `cir_floorlet(r0, reset, pay, strike, kappa, theta, sigma, notional=1.0)`  _function_
 
 > Floorlet on ``[reset, pay]`` under CIR via the bond-call identity.
+
+### `cir_rate_variance(r0, t, kappa, theta, sigma)`  _function_
+
+> Variance of the CIR short rate at horizon ``t``.
+>
+>     Var[r_t] = r0 (sigma^2/kappa)(e^{-kappa t} - e^{-2 kappa t})
+>              + theta (sigma^2/(2 kappa))(1 - e^{-kappa t})^2.
+>
+> Unlike Vasicek the variance depends on ``r0`` (state-dependent diffusion);
+> as ``t -> infinity`` it approaches the stationary variance
+> ``theta sigma^2/(2 kappa)``.
+
+### `cir_stationary_distribution(kappa, theta, sigma)`  _function_
+
+> Long-run (stationary) distribution of the CIR rate as a Gamma law.
+>
+> Returns ``(shape, scale, mean, variance)``. As ``t -> infinity`` the rate is
+> Gamma with shape ``2 kappa theta / sigma^2`` and scale ``sigma^2/(2 kappa)``,
+> hence mean ``theta`` and variance ``theta sigma^2/(2 kappa)``. The Feller
+> condition ``2 kappa theta >= sigma^2`` (shape >= 1) keeps the rate strictly
+> positive.
 
 ### `cir_swaption(r0, expiry, pay_times, fixed_rate, kappa, theta, sigma, payer=True, notional=1.0)`  _function_
 

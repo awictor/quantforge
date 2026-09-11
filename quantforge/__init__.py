@@ -187,6 +187,7 @@ from .cir import (
     cir_zero_coupon_bond, cir_zero_coupon_yield, cir_bond_greeks,
     cir_bond_option, cir_coupon_bond_option, cir_swaption,
     cir_caplet, cir_floorlet, cir_cap, cir_floor,
+    cir_expected_rate, cir_rate_variance, cir_stationary_distribution,
 )
 from .holee import (
     holee_zero_coupon_bond, holee_zero_coupon_yield, holee_bond_greeks,
@@ -337,7 +338,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.325.0"
+__version__ = "1.326.0"
 
 __all__ = [
     "OptionType",
@@ -624,6 +625,9 @@ __all__ = [
     "cir_floorlet",
     "cir_cap",
     "cir_floor",
+    "cir_expected_rate",
+    "cir_rate_variance",
+    "cir_stationary_distribution",
     "holee_zero_coupon_bond",
     "holee_zero_coupon_yield",
     "holee_bond_greeks",

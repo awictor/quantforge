@@ -4,6 +4,21 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.326.0] - 2026-09-11
+
+### Added
+- `cir_expected_rate`, `cir_rate_variance`, and `cir_stationary_distribution`
+  (in `cir.py`): analytic moments of the Cox-Ingersoll-Ross square-root rate.
+  The mean `theta + (r0 - theta) e^{-kappa t}` matches Vasicek, but the variance
+  `r0 (sigma^2/kappa)(e^{-kappa t} - e^{-2 kappa t}) + theta (sigma^2/(2 kappa))
+  (1 - e^{-kappa t})^2` is state-dependent. The stationary law is Gamma with
+  shape `2 kappa theta / sigma^2` and scale `sigma^2/(2 kappa)` (Feller
+  condition `shape >= 1`).
+- Verified: mean and variance match a full-truncation Euler Monte Carlo of the
+  CIR SDE; the variance grows to the stationary value and rises with the
+  starting rate `r0`; the stationary Gamma's shape*scale and shape*scale^2
+  reproduce mean `theta` and variance; `kappa <= 0` or `sigma <= 0` raise.
+
 ## [1.325.0] - 2026-09-11
 
 ### Added

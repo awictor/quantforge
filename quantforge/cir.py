@@ -55,6 +55,55 @@ def cir_zero_coupon_yield(r0, t, kappa, theta, sigma):
     return -math.log(cir_zero_coupon_bond(r0, t, kappa, theta, sigma)) / t
 
 
+def cir_expected_rate(r0, t, kappa, theta, sigma=0.0):
+    """Expected CIR short rate ``E[r_t] = theta + (r0 - theta) e^{-kappa t}``.
+
+    The square-root diffusion does not change the mean, so it matches the
+    Vasicek/OU mean (``sigma`` is accepted only for a uniform signature).
+    """
+    if t < 0:
+        raise ValueError("t must be non-negative")
+    if kappa <= 0:
+        raise ValueError("kappa must be positive")
+    return theta + (r0 - theta) * math.exp(-kappa * t)
+
+
+def cir_rate_variance(r0, t, kappa, theta, sigma):
+    """Variance of the CIR short rate at horizon ``t``.
+
+        Var[r_t] = r0 (sigma^2/kappa)(e^{-kappa t} - e^{-2 kappa t})
+                 + theta (sigma^2/(2 kappa))(1 - e^{-kappa t})^2.
+
+    Unlike Vasicek the variance depends on ``r0`` (state-dependent diffusion);
+    as ``t -> infinity`` it approaches the stationary variance
+    ``theta sigma^2/(2 kappa)``.
+    """
+    if t < 0:
+        raise ValueError("t must be non-negative")
+    if kappa <= 0:
+        raise ValueError("kappa must be positive")
+    ek = math.exp(-kappa * t)
+    v2 = sigma * sigma
+    return (r0 * (v2 / kappa) * (ek - ek * ek)
+            + theta * (v2 / (2.0 * kappa)) * (1.0 - ek) ** 2)
+
+
+def cir_stationary_distribution(kappa, theta, sigma):
+    """Long-run (stationary) distribution of the CIR rate as a Gamma law.
+
+    Returns ``(shape, scale, mean, variance)``. As ``t -> infinity`` the rate is
+    Gamma with shape ``2 kappa theta / sigma^2`` and scale ``sigma^2/(2 kappa)``,
+    hence mean ``theta`` and variance ``theta sigma^2/(2 kappa)``. The Feller
+    condition ``2 kappa theta >= sigma^2`` (shape >= 1) keeps the rate strictly
+    positive.
+    """
+    if kappa <= 0 or sigma <= 0:
+        raise ValueError("require kappa > 0 and sigma > 0")
+    shape = 2.0 * kappa * theta / (sigma * sigma)
+    scale = sigma * sigma / (2.0 * kappa)
+    return shape, scale, theta, theta * sigma * sigma / (2.0 * kappa)
+
+
 def cir_bond_greeks(r0, t, kappa, theta, sigma):
     """Rate sensitivities of a CIR zero-coupon bond, exact.
 
