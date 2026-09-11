@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.391.0] - 2026-09-11
+
+### Added
+- `geometric_asian_option` and `asian_commodity_option_mc` (in `commodity.py`):
+  the exact discrete geometric-average Asian option (the geometric average of
+  lognormals is lognormal, giving a closed form) and a discrete-path Monte Carlo
+  Asian pricer (arithmetic or geometric). The geometric closed form is a lower
+  bound for the arithmetic `asian_commodity_option` (AM-GM); MC validates the
+  geometric closed form (within 2%) and the arithmetic 1/3-variance approximation
+  (within 5%). Put-call parity holds on the geometric-average forward.
+
 ## [1.390.0] - 2026-09-11
 
 ### Added

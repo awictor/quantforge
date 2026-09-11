@@ -403,6 +403,101 @@ def asian_commodity_option(avg_forward, strike, sigma, r, expiry, reset_var_frac
     return disc * (strike * norm_cdf(-d2) - avg_forward * norm_cdf(-d1))
 
 
+def geometric_asian_option(forward, strike, sigma, r, expiry, n_avg,
+                           is_call=True):
+    """Exact geometric-average Asian commodity option (discrete monitoring).
+
+    For ``n_avg`` equally-spaced monitoring dates the geometric average of
+    lognormals is itself lognormal, giving an exact Black-style price. With
+    monitoring at ``t_i = i T / n`` (``i = 1..n``), the geometric-average forward
+    and its variance are
+
+        F_G  = forward * exp(-0.5 sigma^2 (T - t_bar)),  t_bar = mean(t_i)
+        v_G  = sigma^2 / n^2 * sum_i (2 i - 1) (n - i + 1) * (T / n)   [= adj var]
+
+    Because the geometric mean is below the arithmetic mean (AM-GM), this is a
+    lower bound for the arithmetic :func:`asian_commodity_option`. Put and call
+    satisfy ``C - P = e^{-r T}(F_G - K)``.
+    """
+    from .mathfns import norm_cdf
+    if forward <= 0 or strike <= 0:
+        raise ValueError("forward and strike must be positive")
+    if expiry < 0 or sigma < 0:
+        raise ValueError("expiry and sigma must be non-negative")
+    if n_avg < 1:
+        raise ValueError("n_avg must be a positive integer")
+    disc = math.exp(-r * expiry)
+    dt = expiry / n_avg
+    times = [(i + 1) * dt for i in range(n_avg)]
+    t_bar = sum(times) / n_avg
+    # Variance of the average of the log-prices (arithmetic avg of correlated
+    # lognormal exponents): (sigma^2/n^2) sum_i sum_j min(t_i, t_j).
+    var = 0.0
+    for i in range(n_avg):
+        for j in range(n_avg):
+            var += min(times[i], times[j])
+    var *= sigma * sigma / (n_avg * n_avg)
+    # E[G] = exp(mean(ln G) + 0.5 var), mean(ln G) = ln F - 0.5 sigma^2 t_bar.
+    fg = forward * math.exp(-0.5 * sigma * sigma * t_bar + 0.5 * var)
+    if var <= 0.0:
+        intrinsic = max(fg - strike, 0.0) if is_call else max(strike - fg, 0.0)
+        return disc * intrinsic
+    vsqrt = math.sqrt(var)
+    d1 = (math.log(fg / strike) + 0.5 * var) / vsqrt
+    d2 = d1 - vsqrt
+    if is_call:
+        return disc * (fg * norm_cdf(d1) - strike * norm_cdf(d2))
+    return disc * (strike * norm_cdf(-d2) - fg * norm_cdf(-d1))
+
+
+def asian_commodity_option_mc(forward, strike, sigma, r, expiry, n_avg,
+                              n_paths=100000, seed=2024, is_call=True,
+                              geometric=False):
+    """Monte Carlo Asian commodity option over a discrete monitoring path.
+
+    Simulates a driftless (forward-measure) GBM ``F(t) = forward
+    exp(-0.5 sigma^2 t + sigma W_t)`` on ``n_avg`` equally-spaced dates, averages
+    (arithmetic by default, geometric if ``geometric=True``), and discounts the
+    payoff. Independent reference validating both the arithmetic 1/3-variance
+    :func:`asian_commodity_option` and the exact
+    :func:`geometric_asian_option`. Deterministic per seed.
+    """
+    if forward <= 0 or strike <= 0:
+        raise ValueError("forward and strike must be positive")
+    if expiry < 0 or sigma < 0:
+        raise ValueError("expiry and sigma must be non-negative")
+    if n_avg < 1 or n_paths < 1:
+        raise ValueError("n_avg and n_paths must be positive")
+    state = seed & 0xFFFFFFFF
+    def _unif():
+        nonlocal state
+        state = (1103515245 * state + 12345) & 0x7FFFFFFF
+        return (state + 0.5) / 0x80000000
+    disc = math.exp(-r * expiry)
+    dt = expiry / n_avg
+    sq = math.sqrt(dt)
+    total = 0.0
+    for _ in range(n_paths):
+        logF = math.log(forward)
+        arith_sum = 0.0
+        log_sum = 0.0
+        for _step in range(n_avg):
+            u1 = _unif()
+            u2 = _unif()
+            z = math.sqrt(-2.0 * math.log(u1)) * math.cos(2.0 * math.pi * u2)
+            logF += -0.5 * sigma * sigma * dt + sigma * sq * z
+            price = math.exp(logF)
+            arith_sum += price
+            log_sum += logF
+        if geometric:
+            avg = math.exp(log_sum / n_avg)
+        else:
+            avg = arith_sum / n_avg
+        payoff = max(avg - strike, 0.0) if is_call else max(strike - avg, 0.0)
+        total += payoff
+    return disc * total / n_paths
+
+
 def roll_yield(near_forward, far_forward, t_near, t_far):
     """Annualized roll yield between two forwards ``ln(F_near/F_far)/(t_far-t_near)``.
 

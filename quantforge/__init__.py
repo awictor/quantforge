@@ -227,6 +227,7 @@ from .commodity import (
     margrabe_exchange_option, kirk_spread_option,
     bachelier_spread_option, spread_option_mc,
     commodity_swap_rate, commodity_swap_value, asian_commodity_option,
+    geometric_asian_option, asian_commodity_option_mc,
 )
 from .bondmath import (
     bond_cashflows, dated_bond_cashflows, dated_bond_price, dated_bond_yield,
@@ -412,7 +413,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.390.0"
+__version__ = "1.391.0"
 
 __all__ = [
     "OptionType",
@@ -787,6 +788,8 @@ __all__ = [
     "commodity_swap_rate",
     "commodity_swap_value",
     "asian_commodity_option",
+    "geometric_asian_option",
+    "asian_commodity_option_mc",
     "bond_price_from_yield",
     "macaulay_duration",
     "modified_duration",

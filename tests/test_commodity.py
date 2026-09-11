@@ -14,6 +14,7 @@ from quantforge import (
     margrabe_exchange_option, kirk_spread_option,
     bachelier_spread_option, spread_option_mc,
     commodity_swap_rate, commodity_swap_value, asian_commodity_option,
+    geometric_asian_option, asian_commodity_option_mc,
 )
 
 
@@ -293,6 +294,53 @@ def test_asian_cheaper_than_vanilla():
 def test_asian_zero_variance_intrinsic():
     assert asian_commodity_option(52, 50, 0.3, 0.05, 1.0, 0.0, True) == pytest.approx(
         math.exp(-0.05) * max(52 - 50, 0.0), abs=1e-9)
+
+
+def test_geometric_parity():
+    F, K, sig, r, T, n = 52.0, 50.0, 0.3, 0.05, 1.0, 12
+    c = geometric_asian_option(F, K, sig, r, T, n, True)
+    p = geometric_asian_option(F, K, sig, r, T, n, False)
+    tb = sum((i + 1) * T / n for i in range(n)) / n
+    var = sum(min((i + 1) * T / n, (j + 1) * T / n)
+              for i in range(n) for j in range(n)) * sig * sig / n ** 2
+    fg = F * math.exp(-0.5 * sig * sig * tb + 0.5 * var)
+    assert c - p == pytest.approx(math.exp(-r * T) * (fg - K), abs=1e-9)
+
+
+def test_geometric_below_arithmetic():
+    # AM-GM: geometric-average option is a lower bound.
+    g = geometric_asian_option(52, 50, 0.3, 0.05, 1.0, 12, True)
+    a = asian_commodity_option(52, 50, 0.3, 0.05, 1.0, 1 / 3, True)
+    assert g <= a + 1e-9
+
+
+def test_asian_mc_deterministic():
+    a = asian_commodity_option_mc(52, 50, 0.3, 0.05, 1.0, 12, 20000, 7)
+    b = asian_commodity_option_mc(52, 50, 0.3, 0.05, 1.0, 12, 20000, 7)
+    assert a == b
+
+
+def test_geometric_asian_validation():
+    with pytest.raises(ValueError):
+        geometric_asian_option(52, 50, 0.3, 0.05, 1.0, 0)
+    with pytest.raises(ValueError):
+        asian_commodity_option_mc(-1, 50, 0.3, 0.05, 1.0, 12)
+
+
+@pytest.mark.slow
+def test_geometric_mc_validates_closed_form():
+    g = geometric_asian_option(52, 50, 0.3, 0.05, 1.0, 12, True)
+    gmc = asian_commodity_option_mc(52, 50, 0.3, 0.05, 1.0, 12, 400000, 111,
+                                    True, True)
+    assert abs(g - gmc) / g < 0.02
+
+
+@pytest.mark.slow
+def test_arithmetic_mc_validates_third_variance():
+    a = asian_commodity_option(52, 50, 0.3, 0.05, 1.0, 1 / 3, True)
+    amc = asian_commodity_option_mc(52, 50, 0.3, 0.05, 1.0, 52, 400000, 111,
+                                    True, False)
+    assert abs(a - amc) / a < 0.05
 
 
 def test_swap_asian_validation():

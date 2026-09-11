@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.390.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.391.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1082,6 +1082,17 @@ Auto-generated from `quantforge` v1.390.0 by `docs/gen_api.py` — do not edit b
 > The variance reduction makes the Asian cheaper than the vanilla on the same
 > forward. Put and call satisfy ``C - P = e^{-r T}(F - K)``.
 
+### `asian_commodity_option_mc(forward, strike, sigma, r, expiry, n_avg, n_paths=100000, seed=2024, is_call=True, geometric=False)`  _function_
+
+> Monte Carlo Asian commodity option over a discrete monitoring path.
+>
+> Simulates a driftless (forward-measure) GBM ``F(t) = forward
+> exp(-0.5 sigma^2 t + sigma W_t)`` on ``n_avg`` equally-spaced dates, averages
+> (arithmetic by default, geometric if ``geometric=True``), and discounts the
+> payoff. Independent reference validating both the arithmetic 1/3-variance
+> :func:`asian_commodity_option` and the exact
+> :func:`geometric_asian_option`. Deterministic per seed.
+
 ### `bachelier_spread_option(f1, f2, strike, sigma1, sigma2, rho, r, expiry, is_call=True)`  _function_
 
 > Bachelier (normal-model) spread option on two forwards.
@@ -1152,6 +1163,22 @@ Auto-generated from `quantforge` v1.390.0 by `docs/gen_api.py` — do not edit b
 > ``forward_quotes`` is ``[(T, F(T)), ...]``. Inverts each quote with
 > :func:`implied_convenience_yield` at a common ``storage_cost``, so recomputing
 > the forward at each ``(T, y_T)`` reprices the input strip exactly.
+
+### `geometric_asian_option(forward, strike, sigma, r, expiry, n_avg, is_call=True)`  _function_
+
+> Exact geometric-average Asian commodity option (discrete monitoring).
+>
+> For ``n_avg`` equally-spaced monitoring dates the geometric average of
+> lognormals is itself lognormal, giving an exact Black-style price. With
+> monitoring at ``t_i = i T / n`` (``i = 1..n``), the geometric-average forward
+> and its variance are
+>
+>     F_G  = forward * exp(-0.5 sigma^2 (T - t_bar)),  t_bar = mean(t_i)
+>     v_G  = sigma^2 / n^2 * sum_i (2 i - 1) (n - i + 1) * (T / n)   [= adj var]
+>
+> Because the geometric mean is below the arithmetic mean (AM-GM), this is a
+> lower bound for the arithmetic :func:`asian_commodity_option`. Put and call
+> satisfy ``C - P = e^{-r T}(F_G - K)``.
 
 ### `implied_convenience_yield(spot, forward, r, maturity, storage_cost=0.0)`  _function_
 
