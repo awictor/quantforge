@@ -1132,6 +1132,85 @@ compo_option(S=100, K=100, t=1.0, r_domestic=0.05, r_foreign=0.05,
              sigma_asset=0.2, sigma_fx=0.1, rho=0.5, option_type="call")
 ```
 
+## Fixed income
+
+Coupon-bond analytics off an explicit cashflow schedule, plus curve-based risk:
+
+```python
+from quantforge import (bond_cashflows, yield_to_maturity, macaulay_duration,
+                        convexity, key_rate_durations, clean_price)
+
+cf = bond_cashflows(face=100, coupon_rate=0.05, maturity=5, freq=2)
+y = yield_to_maturity(cf, price=104.0)
+macaulay_duration(cf, y); convexity(cf, y)
+key_rate_durations(cf, [0.5, 1, 2, 3, 5], [0.03, 0.032, 0.035, 0.037, 0.04])
+```
+
+The three short-rate models expose analytic rate moments too —
+`vasicek_expected_rate` / `vasicek_rate_variance` / `vasicek_stationary_distribution`
+(Normal), the CIR equivalents (Gamma), and Ho-Lee (drifted Brownian).
+
+## Credit (reduced-form)
+
+Piecewise-constant-hazard survival curves, CDS pricing/greeks/bootstrap, and
+defaultable bonds:
+
+```python
+from quantforge import (SurvivalCurve, cds_par_spread, bootstrap_survival_curve,
+                        risky_bond_price)
+
+curve = bootstrap_survival_curve([1, 3, 5], [0.008, 0.010, 0.012], r=0.03)
+cds_par_spread(curve, [0.5 * i for i in range(1, 11)], r=0.03, recovery=0.4)
+```
+
+## FX forwards (covered interest parity)
+
+```python
+from quantforge import fx_forward, forward_points, implied_base_rate
+
+fx_forward(spot=1.10, r_price=0.05, r_base=0.03, t=1.0)   # EURUSD-style
+```
+
+## Portfolio optimization
+
+Mean-variance optimizers and risk decomposition from a covariance matrix, plus
+Black-Litterman:
+
+```python
+from quantforge import (min_variance_weights, max_sharpe_weights,
+                        risk_parity_weights, efficient_frontier,
+                        black_litterman_weights, portfolio_var, var_budget)
+
+cov = [[0.04, 0.01, 0.0], [0.01, 0.09, 0.02], [0.0, 0.02, 0.16]]
+min_variance_weights(cov)
+risk_parity_weights(cov)          # equal risk contributions
+var_budget([0.4, 0.4, 0.2], cov)  # % risk per position
+```
+
+## Performance metrics
+
+Track-record statistics from a return series:
+
+```python
+from quantforge import (sharpe_ratio, sortino_ratio, max_drawdown,
+                        calmar_ratio, information_ratio, up_capture)
+
+sharpe_ratio(returns); max_drawdown(returns); calmar_ratio(returns)
+```
+
+## GARCH volatility
+
+Fit GARCH(1,1), forecast the term volatility, and price consistently with the
+vol mean-reversion:
+
+```python
+from quantforge import fit_garch, garch_term_variance, garch_option_price
+
+params = fit_garch(returns)
+garch_option_price(params, last_return, last_variance,
+                   S=100, K=100, r=0.05, option_type="call", horizon=21)
+```
+
 ## Model coverage
 
 | Instrument            | Set the carry `b` to | Function            |
