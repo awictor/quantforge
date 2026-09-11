@@ -50,3 +50,27 @@ def cir_zero_coupon_yield(r0, t, kappa, theta, sigma):
     if t <= 0:
         raise ValueError("t must be positive")
     return -math.log(cir_zero_coupon_bond(r0, t, kappa, theta, sigma)) / t
+
+
+def cir_bond_greeks(r0, t, kappa, theta, sigma):
+    """Rate sensitivities of a CIR zero-coupon bond, exact.
+
+    The bond is ``P = A(t) e^{-B(t) r0}``, so its short-rate sensitivities are
+    closed form: ``rho_r = dP/dr0 = -B P`` and ``gamma_r = d2P/dr0^2 = B^2 P``.
+    The rate ``duration`` is ``-1/P dP/dr0 = B`` and ``convexity`` is
+    ``1/P d2P/dr0^2 = B^2``. Returns a dict with ``price``, ``rho_r``,
+    ``gamma_r``, ``duration``, ``convexity``.
+    """
+    if t < 0:
+        raise ValueError("t must be non-negative")
+    if r0 < 0:
+        raise ValueError("r0 must be non-negative in CIR")
+    if kappa <= 0 or theta < 0 or sigma <= 0:
+        raise ValueError("require kappa > 0, theta >= 0, sigma > 0")
+    price = cir_zero_coupon_bond(r0, t, kappa, theta, sigma)
+    if t == 0:
+        return {"price": 1.0, "rho_r": 0.0, "gamma_r": 0.0,
+                "duration": 0.0, "convexity": 0.0}
+    _A, B = _AB(t, kappa, theta, sigma)
+    return {"price": price, "rho_r": -B * price, "gamma_r": B * B * price,
+            "duration": B, "convexity": B * B}

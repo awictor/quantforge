@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.237.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.238.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -589,6 +589,16 @@ Auto-generated from `quantforge` v1.237.0 by `docs/gen_api.py` — do not edit b
 > difference. Returns a dict with ``price``, ``delta``, ``gamma``, ``vega``.
 
 ## cir
+
+### `cir_bond_greeks(r0, t, kappa, theta, sigma)`  _function_
+
+> Rate sensitivities of a CIR zero-coupon bond, exact.
+>
+> The bond is ``P = A(t) e^{-B(t) r0}``, so its short-rate sensitivities are
+> closed form: ``rho_r = dP/dr0 = -B P`` and ``gamma_r = d2P/dr0^2 = B^2 P``.
+> The rate ``duration`` is ``-1/P dP/dr0 = B`` and ``convexity`` is
+> ``1/P d2P/dr0^2 = B^2``. Returns a dict with ``price``, ``rho_r``,
+> ``gamma_r``, ``duration``, ``convexity``.
 
 ### `cir_zero_coupon_bond(r0, t, kappa, theta, sigma)`  _function_
 

@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.238.0] - 2026-09-10
+
+### Added
+- `cir_bond_greeks` (in `cir.py`): exact rate sensitivities of a CIR
+  zero-coupon bond. Since `P = A(t) e^{-B(t) r0}`, the short-rate delta is
+  `rho_r = -B P`, gamma `gamma_r = B^2 P`, rate duration `B`, and convexity
+  `B^2` -- all closed form.
+- Verified: `rho_r` and `gamma_r` match finite differences of
+  `cir_zero_coupon_bond`; `rho_r < 0`, `gamma_r > 0`, `convexity = duration^2`,
+  `duration = -rho_r / price`; a zero-maturity bond is flat.
+
 ## [1.237.0] - 2026-09-10
 
 ### Added
