@@ -53,3 +53,36 @@ def test_dv01_matches_pv01_scale():
 def test_bad_forward_time_raises():
     with pytest.raises(ValueError):
         _flat().instantaneous_forward(-1.0)
+
+
+def _upward():
+    return DiscountCurve.from_zero_rates(
+        [0.5, 1, 2, 3, 4, 5], [0.03, 0.032, 0.035, 0.037, 0.038, 0.04])
+
+
+def test_forward_swap_start_zero_equals_par():
+    c = _upward()
+    assert c.forward_swap_rate(0.0, PAY) == pytest.approx(c.par_swap_rate(PAY), abs=1e-12)
+
+
+def test_forward_swap_balances_legs():
+    # At the forward par rate the fixed leg equals the forward float leg.
+    c = _upward()
+    pt = [3, 4, 5]
+    fsr = c.forward_swap_rate(2.0, pt)
+    ann = c.forward_annuity(2.0, pt)
+    flt = c.df(2.0) - c.df(5.0)
+    assert fsr * ann == pytest.approx(flt, abs=1e-12)
+
+
+def test_forward_swap_above_spot_on_upward_curve():
+    c = _upward()
+    fwd = c.forward_swap_rate(2.0, [3, 4, 5])
+    spot = c.par_swap_rate(PAY)
+    assert fwd > spot
+
+
+def test_forward_annuity_rejects_early_pay():
+    c = _upward()
+    with pytest.raises(ValueError):
+        c.forward_annuity(2.0, [1.5, 3, 4])

@@ -125,6 +125,35 @@ class DiscountCurve:
             prev = Ti
         return (1.0 - self.df(pay_times[-1])) / annuity
 
+    def forward_annuity(self, start, pay_times):
+        """Annuity (PV01) of a leg whose accruals begin at ``start``.
+
+        ``sum_i tau_i DF(T_i)`` where the first accrual runs from ``start`` to
+        the first pay date; ``pay_times`` are absolute times ``> start``.
+        """
+        if any(Ti <= start + 1e-12 for Ti in pay_times):
+            raise ValueError("pay_times must exceed the start date")
+        a = 0.0
+        prev = start
+        for Ti in pay_times:
+            a += (Ti - prev) * self.df(Ti)
+            prev = Ti
+        return a
+
+    def forward_swap_rate(self, start, pay_times):
+        """Par rate of a forward-starting swap that begins accruing at ``start``.
+
+        The float leg of a spot-value forward swap is worth
+        ``DF(start) - DF(T_n)``, so the fair fixed rate is
+
+            fwd = (DF(start) - DF(T_n)) / sum_i tau_i DF(T_i).
+
+        With ``start = 0`` this reduces to :func:`par_swap_rate`. This is the
+        underlying swap rate a swaption is written on.
+        """
+        annuity = self.forward_annuity(start, pay_times)
+        return (self.df(start) - self.df(pay_times[-1])) / annuity
+
 
 def bootstrap_from_swaps(swap_maturities, par_rates, freq=1.0):
     """Bootstrap a :class:`DiscountCurve` from par swap rates.

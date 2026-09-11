@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.313.0] - 2026-09-11
+
+### Added
+- `DiscountCurve.forward_swap_rate` and `DiscountCurve.forward_annuity` (in
+  `discount_curve.py`): the par rate and PV01 of a forward-starting swap that
+  begins accruing at a future date. The forward float leg is
+  `DF(start) - DF(T_n)`, so `fwd = (DF(start) - DF(T_n)) / sum_i tau_i DF(T_i)`
+  over the forward schedule — the underlying rate a swaption is written on.
+- Verified: with `start = 0` the forward swap rate reduces to
+  `par_swap_rate`; at the forward par rate the fixed leg exactly balances the
+  forward float leg; on an upward curve the forward rate exceeds the spot par
+  rate; a pay date at or before the start is rejected.
+
 ## [1.312.0] - 2026-09-11
 
 ### Added
