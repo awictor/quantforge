@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.366.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.367.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1209,6 +1209,19 @@ Auto-generated from `quantforge` v1.366.0 by `docs/gen_api.py` — do not edit b
 > such that discounting the *promised* cashflows at ``r + s`` (no explicit
 > default/recovery) gives the same value -- the bond's z-spread-like quote.
 > Solved by bisection (price is monotone decreasing in the spread).
+
+## daycount
+
+### `day_count(start, end) -> int`  _function_
+
+> Actual number of days between two ``(y, m, d)`` dates.
+
+### `year_fraction(start, end, convention='act/365') -> float`  _function_
+
+> Year fraction between ``start`` and ``end`` under ``convention``.
+>
+> Both dates are ``(year, month, day)`` tuples with ``end >= start``. Negative
+> intervals raise.
 
 ## density
 

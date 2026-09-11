@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.367.0] - 2026-09-11
+
+### Added
+- New module `daycount.py` with `year_fraction` and `day_count` over
+  `(year, month, day)` dates, covering the standard market conventions:
+  `act/360`, `act/365`, `30/360` (US bond basis), `30E/360` (Eurobond), and
+  `act/act` (ISDA, split across year boundaries).
+- Verified: act/360 over 180 days is 0.5; a full leap year is 366/365 under
+  act/365 and exactly 1 under act/act; 30/360 gives a clean year and applies the
+  month-end rule (Jan 31 -> Feb 28 = 28 days); 30E/360 caps the day at 30;
+  act/act across a year boundary splits the leap/non-leap stubs; reversed dates
+  and unknown conventions raise.
+
 ## [1.366.0] - 2026-09-11
 
 ### Added
