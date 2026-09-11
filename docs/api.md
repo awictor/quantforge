@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.322.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.323.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -5038,6 +5038,29 @@ Auto-generated from `quantforge` v1.322.0 by `docs/gen_api.py` — do not edit b
 ### `butterfly(S, K_low, K_mid, K_high, t, r, sigma, kind='call', b=None, mult=1.0)`  _function_
 
 > Long butterfly: +1 K_low, -2 K_mid, +1 K_high (equally spaced strikes).
+
+### `calendar_spread(S, K, t_near, t_far, r, sigma, kind='call', b=None, mult=1.0)`  _function_
+
+> Calendar (horizontal) spread: short the near expiry, long the far, same
+> strike ``K``.
+>
+> A long calendar is short one near-dated option and long one far-dated option
+> at the same strike, financed by the faster time decay of the near leg. The
+> two legs carry different maturities (``t_near < t_far``), which the
+> per-contract ``t`` supports, so ``price_book`` gives the net debit and the
+> net Greeks directly. (The expiry payoff diagram is not well defined by
+> intrinsics alone, since the far leg still has time value at the near expiry;
+> use the net Greeks and price for analysis.) Returns the leg :class:`Book`.
+
+### `diagonal_spread(S, K_near, K_far, t_near, t_far, r, sigma, kind='call', b=None, mult=1.0)`  _function_
+
+> Diagonal spread: short the near expiry at ``K_near``, long the far expiry
+> at ``K_far`` -- a calendar with different strikes on the two legs.
+>
+> Combines the horizontal (time) and vertical (strike) spreads. Requires
+> ``t_near < t_far``; strikes may differ freely. Returns the leg :class:`Book`;
+> net price and Greeks come from ``price_book`` (see :func:`calendar_spread` on
+> the expiry-payoff caveat).
 
 ### `iron_condor(S, K_put_long, K_put_short, K_call_short, K_call_long, t, r, sigma, b=None, mult=1.0)`  _function_
 

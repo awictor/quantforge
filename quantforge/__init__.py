@@ -157,7 +157,7 @@ from .multiasset import (
 from .strategy import (
     payoff_at_expiry, payoff_profile, break_evens,
     vertical_spread, straddle, strangle, risk_reversal, butterfly, iron_condor,
-    ratio_spread, backspread, strategy_report,
+    ratio_spread, backspread, calendar_spread, diagonal_spread, strategy_report,
 )
 from .localvol import dupire_local_vol, local_vol_from_implied, sabr_local_vol
 from .spline import CubicSpline, SmileSpline
@@ -333,7 +333,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.322.0"
+__version__ = "1.323.0"
 
 __all__ = [
     "OptionType",
@@ -564,6 +564,8 @@ __all__ = [
     "iron_condor",
     "ratio_spread",
     "backspread",
+    "calendar_spread",
+    "diagonal_spread",
     "strategy_report",
     "dupire_local_vol",
     "local_vol_from_implied",

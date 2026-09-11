@@ -185,6 +185,51 @@ def backspread(S, K_short, K_long, t, r, sigma, kind="call", ratio=2,
     return price_book(legs)
 
 
+def calendar_spread(S, K, t_near, t_far, r, sigma, kind="call",
+                    b=None, mult=1.0):
+    """Calendar (horizontal) spread: short the near expiry, long the far, same
+    strike ``K``.
+
+    A long calendar is short one near-dated option and long one far-dated option
+    at the same strike, financed by the faster time decay of the near leg. The
+    two legs carry different maturities (``t_near < t_far``), which the
+    per-contract ``t`` supports, so ``price_book`` gives the net debit and the
+    net Greeks directly. (The expiry payoff diagram is not well defined by
+    intrinsics alone, since the far leg still has time value at the near expiry;
+    use the net Greeks and price for analysis.) Returns the leg :class:`Book`.
+    """
+    ot = _coerce_type(kind)
+    if not (0.0 < t_near < t_far):
+        raise ValueError("require 0 < t_near < t_far")
+    legs = [
+        _leg(S, K, t_near, r, sigma, ot, -1, b, mult, f"short {kind} {K} @{t_near}"),
+        _leg(S, K, t_far, r, sigma, ot, +1, b, mult, f"long {kind} {K} @{t_far}"),
+    ]
+    return price_book(legs)
+
+
+def diagonal_spread(S, K_near, K_far, t_near, t_far, r, sigma, kind="call",
+                    b=None, mult=1.0):
+    """Diagonal spread: short the near expiry at ``K_near``, long the far expiry
+    at ``K_far`` -- a calendar with different strikes on the two legs.
+
+    Combines the horizontal (time) and vertical (strike) spreads. Requires
+    ``t_near < t_far``; strikes may differ freely. Returns the leg :class:`Book`;
+    net price and Greeks come from ``price_book`` (see :func:`calendar_spread` on
+    the expiry-payoff caveat).
+    """
+    ot = _coerce_type(kind)
+    if not (0.0 < t_near < t_far):
+        raise ValueError("require 0 < t_near < t_far")
+    legs = [
+        _leg(S, K_near, t_near, r, sigma, ot, -1, b, mult,
+             f"short {kind} {K_near} @{t_near}"),
+        _leg(S, K_far, t_far, r, sigma, ot, +1, b, mult,
+             f"long {kind} {K_far} @{t_far}"),
+    ]
+    return price_book(legs)
+
+
 def strategy_report(book, lo=None, hi=None, n=4000):
     """Summarize a strategy's expiry P&L: max profit, max loss, break-evens.
 

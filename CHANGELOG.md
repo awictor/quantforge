@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.323.0] - 2026-09-11
+
+### Added
+- `calendar_spread` and `diagonal_spread` (in `strategy.py`): multi-expiry
+  option-strategy builders. A calendar shorts the near expiry and longs the far
+  at the same strike; a diagonal does the same with different strikes. Both use
+  the per-contract maturity, so `price_book` gives the net debit and net Greeks
+  directly. Require `t_near < t_far`.
+- Verified: the net value equals the far-leg price minus the near-leg price
+  (call and put); a long calendar is a net debit and long vega; the diagonal net
+  matches its two legs; a reversed expiry order raises.
+
 ## [1.322.0] - 2026-09-11
 
 ### Added
