@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.257.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.258.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -4186,6 +4186,15 @@ Auto-generated from `quantforge` v1.257.0 by `docs/gen_api.py` — do not edit b
 >
 > Returns the local volatility ``sqrt(sigma_loc^2)``.
 
+### `svi_svix(p: quantforge.svi.SVIParams, S0, t, r, q=0.0, n_strikes=201, width=6.0)`  _function_
+
+> Martin (2013) SVIX index implied by a raw-SVI slice.
+>
+> Maps each strike to ``p.implied_vol(ln(K/F), t)`` and feeds the smile to
+> :func:`quantforge.svix_from_smile` (the ``1/F^2``-weighted, put-call-symmetric
+> variance index that lower-bounds the equity premium), reported as
+> ``100 * SVIX``. A flat slice returns approximately ``100 * sigma``.
+
 ### `svi_variance_swap_strike(p: quantforge.svi.SVIParams, S0, t, r, q=0.0, n_strikes=401, width=8.0)`  _function_
 
 > Fair variance-swap strike (annualized *variance*) implied by a raw-SVI slice.
@@ -4198,6 +4207,13 @@ Auto-generated from `quantforge` v1.257.0 by `docs/gen_api.py` — do not edit b
 > to vol with ``sqrt``); a flat slice (``b = 0``) returns that flat variance
 > ``sigma^2``, and a skewed slice returns a variance above the ATM variance (the
 > convexity/skew premium).
+
+### `svi_vix(p: quantforge.svi.SVIParams, S0, t, r, q=0.0, n_strikes=201, width=6.0)`  _function_
+
+> VIX-style index (``~= 100 * sigma``) implied by a raw-SVI slice.
+>
+> Maps each strike to ``p.implied_vol(ln(K/F), t)`` and feeds the smile to
+> :func:`quantforge.vix_from_smile`. A flat slice returns ``100 * sigma``.
 
 ## trinomial
 

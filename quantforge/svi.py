@@ -165,6 +165,38 @@ def svi_variance_swap_strike(p: SVIParams, S0, t, r, q=0.0, n_strikes=401,
                                     width=width)
 
 
+def svi_vix(p: SVIParams, S0, t, r, q=0.0, n_strikes=201, width=6.0):
+    """VIX-style index (``~= 100 * sigma``) implied by a raw-SVI slice.
+
+    Maps each strike to ``p.implied_vol(ln(K/F), t)`` and feeds the smile to
+    :func:`quantforge.vix_from_smile`. A flat slice returns ``100 * sigma``.
+    """
+    from .vix import vix_from_smile
+
+    F = S0 * math.exp((r - q) * t)
+    _var, vix = vix_from_smile(S0, t, r,
+                               lambda K: p.implied_vol(math.log(K / F), t),
+                               q=q, n_strikes=n_strikes, width=width)
+    return vix
+
+
+def svi_svix(p: SVIParams, S0, t, r, q=0.0, n_strikes=201, width=6.0):
+    """Martin (2013) SVIX index implied by a raw-SVI slice.
+
+    Maps each strike to ``p.implied_vol(ln(K/F), t)`` and feeds the smile to
+    :func:`quantforge.svix_from_smile` (the ``1/F^2``-weighted, put-call-symmetric
+    variance index that lower-bounds the equity premium), reported as
+    ``100 * SVIX``. A flat slice returns approximately ``100 * sigma``.
+    """
+    from .vix import svix_from_smile
+
+    F = S0 * math.exp((r - q) * t)
+    _var, svix = svix_from_smile(S0, t, r,
+                                 lambda K: p.implied_vol(math.log(K / F), t),
+                                 q=q, n_strikes=n_strikes, width=width)
+    return svix
+
+
 def svi_g(p: SVIParams, k):
     """Gatheral-Jacquier g-function of a raw-SVI slice at log-moneyness ``k``.
 

@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.258.0] - 2026-09-10
+
+### Added
+- `svi_vix` and `svi_svix` (in `svi.py`): the VIX-style and Martin SVIX indices
+  implied by a raw-SVI slice, mapping each strike to `p.implied_vol(ln(K/F), t)`
+  and replicating via `vix_from_smile` / `svix_from_smile` (both reported as
+  `100 * index`).
+- Verified: a flat slice returns `100 * sigma` for both; a skewed slice lifts the
+  VIX above `100 *` the ATM vol; higher convexity (`b`) raises the index.
+
 ## [1.257.0] - 2026-09-10
 
 ### Added

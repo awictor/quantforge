@@ -200,7 +200,7 @@ from .svi import (
     SVIParams, calibrate_svi, svi_g, svi_butterfly_arbitrage, svi_is_butterfly_free,
     lee_wing_slopes, lee_bounds_ok, svi_repair_butterfly,
     svi_local_variance, svi_surface_local_vol, calibrate_svi_from_prices,
-    svi_variance_swap_strike,
+    svi_variance_swap_strike, svi_vix, svi_svix,
 )
 from .ssvi import (
     SSVIParams, ssvi_phi, ssvi_total_variance, calibrate_ssvi,
@@ -289,7 +289,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.257.0"
+__version__ = "1.258.0"
 
 __all__ = [
     "OptionType",
@@ -611,6 +611,8 @@ __all__ = [
     "svi_surface_local_vol",
     "calibrate_svi_from_prices",
     "svi_variance_swap_strike",
+    "svi_vix",
+    "svi_svix",
     "SSVIParams",
     "ssvi_phi",
     "ssvi_total_variance",
