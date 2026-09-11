@@ -207,6 +207,8 @@ from .ssvi import (
     ssvi_butterfly_free, ssvi_calendar_free, ssvi_is_arbitrage_free,
     ssvi_local_variance, ssvi_local_vol_from_params,
     ssvi_local_vol_fn, ssvi_reprice_mc, calibrate_ssvi_arbitrage_free,
+    ssvi_variance_swap_strike, ssvi_vix, ssvi_svix, ssvi_density,
+    ssvi_bkm_moments,
 )
 from .sabr import (
     SABRParams, sabr_vol, calibrate_sabr, calibrate_sabr_lm,
@@ -290,7 +292,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.262.0"
+__version__ = "1.263.0"
 
 __all__ = [
     "OptionType",
@@ -628,6 +630,11 @@ __all__ = [
     "ssvi_local_vol_from_params",
     "ssvi_local_vol_fn",
     "ssvi_reprice_mc",
+    "ssvi_variance_swap_strike",
+    "ssvi_vix",
+    "ssvi_svix",
+    "ssvi_density",
+    "ssvi_bkm_moments",
     "SABRParams",
     "sabr_vol",
     "calibrate_sabr",

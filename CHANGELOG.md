@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.263.0] - 2026-09-10
+
+### Added
+- SSVI surface smile consumers at a fitted expiry (in `ssvi.py`):
+  `ssvi_variance_swap_strike`, `ssvi_vix`, `ssvi_svix`, `ssvi_density`
+  (Breeden-Litzenberger), and `ssvi_bkm_moments`. Each maps a strike to the
+  surface's Black vol `implied_vol(ln(K/F), t)` on the forward and feeds the
+  existing smile machinery.
+- Verified: on a flat-ATM (`theta_t = sigma^2 t`) surface the var-swap and
+  VIX/SVIX recover `sigma`; the density integrates to 1 and has mean equal to
+  the forward and is non-negative on an arbitrage-free slice; BKM skewness
+  tracks the sign of the surface `rho`. Requesting an unfitted expiry raises.
+
 ## [1.262.0] - 2026-09-10
 
 ### Added

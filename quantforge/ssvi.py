@@ -370,3 +370,69 @@ def calibrate_ssvi_arbitrage_free(
         if ssvi_is_arbitrage_free(params):
             break
     return params, rmse
+
+
+def _ssvi_vol_fn(params: SSVIParams, t, S0, r, q):
+    """Strike -> Black implied vol for the SSVI slice at fitted expiry ``t``."""
+    if t not in params.thetas:
+        raise ValueError("t must be one of the fitted expiries: "
+                         + repr(sorted(params.thetas)))
+    F = S0 * math.exp((r - q) * t)
+    return lambda K: params.implied_vol(math.log(K / F), t)
+
+
+def ssvi_variance_swap_strike(params: SSVIParams, t, S0, r, q=0.0,
+                              n_strikes=401, width=8.0):
+    """Fair variance-swap strike (annualized *variance*) of an SSVI slice at ``t``.
+
+    Replicates the variance swap from the surface's smile at the fitted expiry
+    ``t``: each strike carries the Black vol ``implied_vol(ln(K/F), t)`` on the
+    forward ``F = S0 e^{(r-q)t}``, fed to
+    :func:`quantforge.variance_swap_from_smile`. Returns the fair *variance*
+    (``sqrt`` it back to vol); ``t`` must be a fitted expiry.
+    """
+    from .varswap import variance_swap_from_smile
+    return variance_swap_from_smile(S0, t, r, _ssvi_vol_fn(params, t, S0, r, q),
+                                    q=q, n_strikes=n_strikes, width=width)
+
+
+def ssvi_vix(params: SSVIParams, t, S0, r, q=0.0, n_strikes=201, width=6.0):
+    """VIX-style index (``~= 100 * sigma``) of an SSVI slice at fitted expiry ``t``."""
+    from .vix import vix_from_smile
+    _var, vix = vix_from_smile(S0, t, r, _ssvi_vol_fn(params, t, S0, r, q),
+                               q=q, n_strikes=n_strikes, width=width)
+    return vix
+
+
+def ssvi_svix(params: SSVIParams, t, S0, r, q=0.0, n_strikes=201, width=6.0):
+    """Martin (2013) SVIX index of an SSVI slice at fitted expiry ``t`` (``100 * SVIX``)."""
+    from .vix import svix_from_smile
+    _var, svix = svix_from_smile(S0, t, r, _ssvi_vol_fn(params, t, S0, r, q),
+                                 q=q, n_strikes=n_strikes, width=width)
+    return svix
+
+
+def ssvi_density(params: SSVIParams, t, S0, r, K, q=0.0, dK=None):
+    """Breeden-Litzenberger risk-neutral density ``g(K)`` of an SSVI slice at ``t``.
+
+    ``g(K) = e^{rt} d^2C/dK^2`` with the call priced at the surface's smile vol on
+    the forward ``F = S0 e^{(r-q)t}``. Non-negative wherever the slice is
+    butterfly-arbitrage-free (:func:`ssvi_butterfly_free`); ``t`` must be fitted.
+    """
+    from .rnd import risk_neutral_density_from_smile
+    return risk_neutral_density_from_smile(
+        S0, t, r, _ssvi_vol_fn(params, t, S0, r, q), K, q=q, dK=dK)
+
+
+def ssvi_bkm_moments(params: SSVIParams, t, S0, r, q=0.0, n_strikes=401,
+                     width=8.0):
+    """Risk-neutral (variance, skewness, excess kurtosis) of an SSVI slice at ``t``.
+
+    Applies Bakshi-Kapadia-Madan moment replication
+    (:func:`quantforge.bkm_moments_from_smile`) to the surface's smile at the
+    fitted expiry ``t``. A negative surface ``rho`` (equity skew) yields negative
+    risk-neutral skewness; ``t`` must be a fitted expiry.
+    """
+    from .bkm import bkm_moments_from_smile
+    return bkm_moments_from_smile(S0, t, r, _ssvi_vol_fn(params, t, S0, r, q),
+                                  q=q, n_strikes=n_strikes, width=width)

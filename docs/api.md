@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.262.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.263.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3931,6 +3931,15 @@ Auto-generated from `quantforge` v1.262.0 by `docs/gen_api.py` — do not edit b
 > passes :func:`ssvi_is_arbitrage_free` (or the last, most-penalised fit if
 > none does). Trades a little fit RMSE for a guaranteed no-arbitrage surface.
 
+### `ssvi_bkm_moments(params: quantforge.ssvi.SSVIParams, t, S0, r, q=0.0, n_strikes=401, width=8.0)`  _function_
+
+> Risk-neutral (variance, skewness, excess kurtosis) of an SSVI slice at ``t``.
+>
+> Applies Bakshi-Kapadia-Madan moment replication
+> (:func:`quantforge.bkm_moments_from_smile`) to the surface's smile at the
+> fitted expiry ``t``. A negative surface ``rho`` (equity skew) yields negative
+> risk-neutral skewness; ``t`` must be a fitted expiry.
+
 ### `ssvi_butterfly_free(theta: float, rho: float, eta: float, gamma: float, tol: float = 1e-09) -> bool`  _function_
 
 > Gatheral-Jacquier sufficient condition for a butterfly-arbitrage-free slice.
@@ -3947,6 +3956,14 @@ Auto-generated from `quantforge` v1.262.0 by `docs/gen_api.py` — do not edit b
 > Calendar arbitrage is absent when total variance is non-decreasing in
 > maturity at every log-moneyness: ``w(k, t_{i+1}) >= w(k, t_i)``. Checked on a
 > grid of ``k`` across each adjacent pair of the fitted expiries.
+
+### `ssvi_density(params: quantforge.ssvi.SSVIParams, t, S0, r, K, q=0.0, dK=None)`  _function_
+
+> Breeden-Litzenberger risk-neutral density ``g(K)`` of an SSVI slice at ``t``.
+>
+> ``g(K) = e^{rt} d^2C/dK^2`` with the call priced at the surface's smile vol on
+> the forward ``F = S0 e^{(r-q)t}``. Non-negative wherever the slice is
+> butterfly-arbitrage-free (:func:`ssvi_butterfly_free`); ``t`` must be fitted.
 
 ### `ssvi_is_arbitrage_free(params: quantforge.ssvi.SSVIParams, ks: Sequence[float] = None) -> bool`  _function_
 
@@ -4004,9 +4021,27 @@ Auto-generated from `quantforge` v1.262.0 by `docs/gen_api.py` — do not edit b
 > reprices the SSVI *implied* smile, so this Monte Carlo price should match the
 > closed-form Black-Scholes price at the SSVI implied vol for that strike.
 
+### `ssvi_svix(params: quantforge.ssvi.SSVIParams, t, S0, r, q=0.0, n_strikes=201, width=6.0)`  _function_
+
+> Martin (2013) SVIX index of an SSVI slice at fitted expiry ``t`` (``100 * SVIX``).
+
 ### `ssvi_total_variance(k: float, theta: float, rho: float, eta: float, gamma: float) -> float`  _function_
 
 > SSVI total implied variance w(k, theta).
+
+### `ssvi_variance_swap_strike(params: quantforge.ssvi.SSVIParams, t, S0, r, q=0.0, n_strikes=401, width=8.0)`  _function_
+
+> Fair variance-swap strike (annualized *variance*) of an SSVI slice at ``t``.
+>
+> Replicates the variance swap from the surface's smile at the fitted expiry
+> ``t``: each strike carries the Black vol ``implied_vol(ln(K/F), t)`` on the
+> forward ``F = S0 e^{(r-q)t}``, fed to
+> :func:`quantforge.variance_swap_from_smile`. Returns the fair *variance*
+> (``sqrt`` it back to vol); ``t`` must be a fitted expiry.
+
+### `ssvi_vix(params: quantforge.ssvi.SSVIParams, t, S0, r, q=0.0, n_strikes=201, width=6.0)`  _function_
+
+> VIX-style index (``~= 100 * sigma``) of an SSVI slice at fitted expiry ``t``.
 
 ## strategy
 
