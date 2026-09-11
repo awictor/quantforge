@@ -229,6 +229,106 @@ def _geom_fixing_times(t, n):
     return [t * i / n for i in range(1, n + 1)]
 
 
+def average_strike_geometric_asian(S, t, r, sigma, n_fixings=None,
+                                   fixing_times=None,
+                                   option_type=OptionType.CALL, b=None):
+    """Average-strike (floating-strike) discrete geometric Asian option (exact).
+
+    The strike is the realized geometric average rather than a fixed level:
+    a call pays ``max(S_T - G, 0)`` and a put ``max(G - S_T, 0)``, where
+    ``G = (prod_i S_{t_i})^{1/n}`` is the geometric average over the fixing
+    dates. The terminal price ``S_T`` and the average ``G`` are jointly
+    lognormal, so this is an exchange option between two lognormal assets and
+    has an exact Margrabe-style closed form.
+
+    With ``E[S_T] = S e^{bt}``, ``E[G] = exp(m_G + v_G/2)`` (the lognormal
+    average forward), and the variance of ``log S_T - log G``
+
+        Var = sigma^2 t + v_G - 2 sigma^2 mean(t_i),
+        v_G = (sigma^2/n^2) sum_ij min(t_i, t_j),
+
+    a call is ``e^{-rt} (E[S_T] N(d1) - E[G] N(d2))`` with
+    ``d1 = (log(E[S_T]/E[G]) + Var/2)/sqrt(Var)`` and ``d2 = d1 - sqrt(Var)``.
+
+    Provide either ``n_fixings`` (equally-spaced dates ``t*i/n``, last at
+    expiry) or an explicit ``fixing_times`` sequence in ``(0, t]``.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, 1.0, t, sigma)  # K unused; validate S, t, sigma
+    if b is None:
+        b = r
+    if fixing_times is None:
+        if n_fixings is None:
+            raise ValueError("provide n_fixings or fixing_times")
+        times = _geom_fixing_times(t, n_fixings)
+    else:
+        times = [float(x) for x in fixing_times]
+        if not times:
+            raise ValueError("fixing_times must be non-empty")
+        if any(x <= 0.0 or x > t + 1e-12 for x in times):
+            raise ValueError("fixing_times must lie in (0, t]")
+    n = len(times)
+    disc = math.exp(-r * t)
+    v2 = sigma * sigma
+    mean_t = sum(times) / n
+    # Lognormal parameters of the geometric average G.
+    m_G = math.log(S) + (b - 0.5 * v2) * mean_t
+    dbl = 0.0
+    for ti in times:
+        for tj in times:
+            dbl += ti if ti < tj else tj
+    v_G = v2 * dbl / (n * n)
+    E_ST = S * math.exp(b * t)
+    E_G = math.exp(m_G + 0.5 * v_G)
+    # cov(log S_T, log G) = (sigma^2/n) sum_i min(T, t_i) = sigma^2 mean(t_i).
+    cov = v2 * mean_t
+    var = v2 * t + v_G - 2.0 * cov
+    if var <= 0.0:
+        payoff = (max(E_ST - E_G, 0.0) if ot is OptionType.CALL
+                  else max(E_G - E_ST, 0.0))
+        return disc * payoff
+    sd = math.sqrt(var)
+    d1 = (math.log(E_ST / E_G) + 0.5 * var) / sd
+    d2 = d1 - sd
+    if ot is OptionType.CALL:
+        return disc * (E_ST * norm_cdf(d1) - E_G * norm_cdf(d2))
+    return disc * (E_G * norm_cdf(-d2) - E_ST * norm_cdf(-d1))
+
+
+def average_strike_geometric_asian_greeks(S, t, r, sigma, n_fixings=None,
+                                          fixing_times=None,
+                                          option_type=OptionType.CALL, b=None):
+    """Greeks of an average-strike geometric Asian by central finite
+    differences of :func:`average_strike_geometric_asian`: ``delta`` (dV/dS),
+    ``gamma`` (d2V/dS2), ``vega`` (dV/dsigma), ``theta`` (calendar decay).
+    Returns a dict with ``price`` and those fields.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, 1.0, t, sigma)
+    if b is None:
+        b = r
+
+    def px(S_=S, t_=t, sigma_=sigma):
+        # Scale the schedule with t so a calendar bump preserves the fixing
+        # shape and stays within (0, t_].
+        ft = (None if fixing_times is None
+              else [x * t_ / t for x in fixing_times])
+        return average_strike_geometric_asian(S_, t_, r, sigma_, n_fixings,
+                                              ft, ot, b=b)
+
+    base = px()
+    hS = 1e-4 * S
+    up, dn = px(S_=S + hS), px(S_=S - hS)
+    delta = (up - dn) / (2.0 * hS)
+    gamma = (up - 2.0 * base + dn) / (hS * hS)
+    hv = 1e-4
+    vega = (px(sigma_=sigma + hv) - px(sigma_=sigma - hv)) / (2.0 * hv)
+    ht = min(1e-4, 0.25 * t)
+    theta = -(px(t_=t + ht) - px(t_=t - ht)) / (2.0 * ht)
+    return {"price": base, "delta": delta, "gamma": gamma, "vega": vega,
+            "theta": theta}
+
+
 def discrete_geometric_asian(S, K, t, r, sigma, n_fixings=None,
                              fixing_times=None, option_type=OptionType.CALL,
                              b=None):

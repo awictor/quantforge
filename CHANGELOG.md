@@ -4,6 +4,21 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.291.0] - 2026-09-11
+
+### Added
+- `average_strike_geometric_asian` and `average_strike_geometric_asian_greeks`
+  (in `exotics.py`): average-strike (floating-strike) discrete geometric Asian.
+  The strike is the realized geometric average, so a call pays
+  `max(S_T - G, 0)`. `S_T` and `G` are jointly lognormal, making this an
+  exchange option with an exact Margrabe-style closed form on the spread
+  variance `sigma^2 t + v_G - 2 sigma^2 mean(t_i)`. Greeks by finite
+  difference.
+- Verified: put-call parity equals the discounted exchange forward
+  `E[S_T] - E[G]` exactly; matches an antithetic Monte Carlo (n=12, call/put)
+  to within ~0.1%; explicit equally-spaced times match the `n_fixings` grid;
+  gamma and vega are positive.
+
 ## [1.290.0] - 2026-09-11
 
 ### Added

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.290.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.291.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1102,6 +1102,36 @@ Auto-generated from `quantforge` v1.290.0 by `docs/gen_api.py` — do not edit b
 ### `asset_or_nothing(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
 
 > Pays the asset value S_T if in the money, else 0.
+
+### `average_strike_geometric_asian(S, t, r, sigma, n_fixings=None, fixing_times=None, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> Average-strike (floating-strike) discrete geometric Asian option (exact).
+>
+> The strike is the realized geometric average rather than a fixed level:
+> a call pays ``max(S_T - G, 0)`` and a put ``max(G - S_T, 0)``, where
+> ``G = (prod_i S_{t_i})^{1/n}`` is the geometric average over the fixing
+> dates. The terminal price ``S_T`` and the average ``G`` are jointly
+> lognormal, so this is an exchange option between two lognormal assets and
+> has an exact Margrabe-style closed form.
+>
+> With ``E[S_T] = S e^{bt}``, ``E[G] = exp(m_G + v_G/2)`` (the lognormal
+> average forward), and the variance of ``log S_T - log G``
+>
+>     Var = sigma^2 t + v_G - 2 sigma^2 mean(t_i),
+>     v_G = (sigma^2/n^2) sum_ij min(t_i, t_j),
+>
+> a call is ``e^{-rt} (E[S_T] N(d1) - E[G] N(d2))`` with
+> ``d1 = (log(E[S_T]/E[G]) + Var/2)/sqrt(Var)`` and ``d2 = d1 - sqrt(Var)``.
+>
+> Provide either ``n_fixings`` (equally-spaced dates ``t*i/n``, last at
+> expiry) or an explicit ``fixing_times`` sequence in ``(0, t]``.
+
+### `average_strike_geometric_asian_greeks(S, t, r, sigma, n_fixings=None, fixing_times=None, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> Greeks of an average-strike geometric Asian by central finite
+> differences of :func:`average_strike_geometric_asian`: ``delta`` (dV/dS),
+> ``gamma`` (d2V/dS2), ``vega`` (dV/dsigma), ``theta`` (calendar decay).
+> Returns a dict with ``price`` and those fields.
 
 ### `barrier_greeks(S, K, H, t, r, sigma, option_type=<OptionType.CALL: 'call'>, barrier=<Barrier.DOWN_OUT: 'down-out'>, b=None, rebate=0.0)`  _function_
 
