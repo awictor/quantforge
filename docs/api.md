@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.378.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.379.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3050,6 +3050,22 @@ Auto-generated from `quantforge` v1.378.0 by `docs/gen_api.py` — do not edit b
 >
 > Equals ``cpi_month_start`` on the 1st and approaches ``cpi_next_month`` at
 > month end.
+
+### `yoy_caplet_price(forward_rate, strike, expiry, sigma, discount_factor, notional=1.0, is_cap=True)`  _function_
+
+> Black-76 price of a year-on-year inflation cap/floor let.
+>
+> Prices a single YoY period whose payoff is ``max(YoY - K, 0)`` (caplet) or
+> ``max(K - YoY, 0)`` (floorlet), with the year-on-year inflation rate modelled
+> as lognormal around its ``forward_rate`` (from :func:`forward_inflation_rate`)
+> with volatility ``sigma`` to ``expiry``. Standard Black-76:
+>
+>     caplet  = DF * N * [F Phi(d1) - K Phi(d2)]
+>     floorlet= DF * N * [K Phi(-d2) - F Phi(-d1)]
+>     d1,2    = (ln(F/K) +/- 0.5 sigma^2 T) / (sigma sqrt(T))
+>
+> Requires positive ``forward_rate`` and ``strike`` (lognormal support). At zero
+> vol it collapses to the discounted intrinsic ``DF*N*max(F-K,0)`` (cap).
 
 ### `yoy_inflation_rate(index_prev, index_curr) -> float`  _function_
 

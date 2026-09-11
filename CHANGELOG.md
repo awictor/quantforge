@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.379.0] - 2026-09-11
+
+### Added
+- `yoy_caplet_price` (in `inflation.py`): Black-76 price of a single year-on-year
+  inflation caplet or floorlet, modelling the YoY rate as lognormal around its
+  forward with volatility to expiry. Cross-checked against cap/floor parity
+  `cap - floor = DF*N*(F-K)`, the zero-vol discounted intrinsic, monotonicity in
+  vol, and ATM cap/floor symmetry.
+
 ## [1.378.0] - 2026-09-11
 
 ### Added

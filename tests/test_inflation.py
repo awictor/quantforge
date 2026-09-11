@@ -12,6 +12,7 @@ from quantforge import (
     inflation_curve_from_zc_swaps, forward_inflation_rate, yoy_swap_value,
     reference_cpi, index_ratio_interpolated,
     normalize_seasonal_factors, apply_seasonality, deseasonalize,
+    yoy_caplet_price,
     bond_cashflows, bond_price_from_yield, yield_to_maturity,
 )
 
@@ -283,6 +284,38 @@ def test_seasonal_validation():
         apply_seasonality(-1, 1.0)
     with pytest.raises(ValueError):
         deseasonalize(100, 0)
+
+
+def test_yoy_caplet_floorlet_parity():
+    F, K, T, s, df = 0.03, 0.025, 2.0, 0.4, 0.95
+    cap = yoy_caplet_price(F, K, T, s, df, 1e6, True)
+    flr = yoy_caplet_price(F, K, T, s, df, 1e6, False)
+    assert cap - flr == pytest.approx(df * 1e6 * (F - K), abs=1e-6)
+
+
+def test_yoy_caplet_zero_vol_intrinsic():
+    F, K, T, df = 0.03, 0.025, 2.0, 0.95
+    assert yoy_caplet_price(F, K, T, 0.0, df, 1e6, True) == pytest.approx(
+        df * 1e6 * (F - K), abs=1e-6)
+    assert yoy_caplet_price(F, K, T, 0.0, df, 1e6, False) == pytest.approx(0.0, abs=1e-9)
+
+
+def test_yoy_caplet_monotone_in_vol():
+    F, K, T, df = 0.03, 0.025, 2.0, 0.95
+    assert yoy_caplet_price(F, K, T, 0.6, df, 1e6) > yoy_caplet_price(F, K, T, 0.4, df, 1e6)
+
+
+def test_yoy_caplet_atm_symmetry():
+    cap = yoy_caplet_price(0.03, 0.03, 2.0, 0.4, 0.95, 1e6, True)
+    flr = yoy_caplet_price(0.03, 0.03, 2.0, 0.4, 0.95, 1e6, False)
+    assert cap == pytest.approx(flr, abs=1e-6)
+
+
+def test_yoy_caplet_validation():
+    with pytest.raises(ValueError):
+        yoy_caplet_price(-0.01, 0.02, 2.0, 0.4, 0.95)
+    with pytest.raises(ValueError):
+        yoy_caplet_price(0.03, 0.02, -1.0, 0.4, 0.95)
 
 
 def test_validation():

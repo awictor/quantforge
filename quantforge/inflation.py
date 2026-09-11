@@ -273,6 +273,41 @@ def index_ratio_interpolated(cpi_month_start, cpi_next_month, day,
     return index_ratio(ref, cpi_base)
 
 
+def yoy_caplet_price(forward_rate, strike, expiry, sigma, discount_factor,
+                     notional=1.0, is_cap=True):
+    """Black-76 price of a year-on-year inflation cap/floor let.
+
+    Prices a single YoY period whose payoff is ``max(YoY - K, 0)`` (caplet) or
+    ``max(K - YoY, 0)`` (floorlet), with the year-on-year inflation rate modelled
+    as lognormal around its ``forward_rate`` (from :func:`forward_inflation_rate`)
+    with volatility ``sigma`` to ``expiry``. Standard Black-76:
+
+        caplet  = DF * N * [F Phi(d1) - K Phi(d2)]
+        floorlet= DF * N * [K Phi(-d2) - F Phi(-d1)]
+        d1,2    = (ln(F/K) +/- 0.5 sigma^2 T) / (sigma sqrt(T))
+
+    Requires positive ``forward_rate`` and ``strike`` (lognormal support). At zero
+    vol it collapses to the discounted intrinsic ``DF*N*max(F-K,0)`` (cap).
+    """
+    from .mathfns import norm_cdf
+    if forward_rate <= 0 or strike <= 0:
+        raise ValueError("forward_rate and strike must be positive for Black-76")
+    if expiry < 0 or sigma < 0:
+        raise ValueError("expiry and sigma must be non-negative")
+    if expiry == 0.0 or sigma == 0.0:
+        intrinsic = max(forward_rate - strike, 0.0) if is_cap \
+            else max(strike - forward_rate, 0.0)
+        return discount_factor * notional * intrinsic
+    vsqrt = sigma * math.sqrt(expiry)
+    d1 = (math.log(forward_rate / strike) + 0.5 * vsqrt * vsqrt) / vsqrt
+    d2 = d1 - vsqrt
+    if is_cap:
+        val = forward_rate * norm_cdf(d1) - strike * norm_cdf(d2)
+    else:
+        val = strike * norm_cdf(-d2) - forward_rate * norm_cdf(-d1)
+    return discount_factor * notional * val
+
+
 def linker_price(real_cashflows, real_yield, index_settle, index_base) -> float:
     """Dirty price of an inflation-linked bond off real cashflows.
 

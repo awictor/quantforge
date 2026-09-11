@@ -213,6 +213,7 @@ from .inflation import (
     inflation_curve_from_zc_swaps, forward_inflation_rate, yoy_swap_value,
     reference_cpi, index_ratio_interpolated,
     normalize_seasonal_factors, apply_seasonality, deseasonalize,
+    yoy_caplet_price,
 )
 from .bondmath import (
     bond_cashflows, dated_bond_cashflows, dated_bond_price, dated_bond_yield,
@@ -398,7 +399,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.378.0"
+__version__ = "1.379.0"
 
 __all__ = [
     "OptionType",
@@ -740,6 +741,7 @@ __all__ = [
     "normalize_seasonal_factors",
     "apply_seasonality",
     "deseasonalize",
+    "yoy_caplet_price",
     "bond_price_from_yield",
     "macaulay_duration",
     "modified_duration",
