@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.244.0] - 2026-09-10
+
+### Added
+- `cms_adjustment_greeks` (in `cms.py`): sensitivities of the standard-model CMS
+  convexity adjustment -- `d_forward` and `d_sigma` by central finite differences
+  on `cms_adjustment_standard`.
+- Verified: both match finite differences; `d_sigma > 0` (more vol means more
+  convexity, a larger adjustment); a zero-vol adjustment has zero sensitivity.
+
 ## [1.243.0] - 2026-09-10
 
 ### Added

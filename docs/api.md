@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.243.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.244.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -627,6 +627,16 @@ Auto-generated from `quantforge` v1.243.0 by `docs/gen_api.py` — do not edit b
 > Continuously-compounded yield of the CIR zero-coupon bond to ``t``.
 
 ## cms
+
+### `cms_adjustment_greeks(forward, sigma, expiry, tenor, freq=1.0, pay_lag=0.0)`  _function_
+
+> Sensitivities of the standard-model CMS convexity adjustment.
+>
+> Central finite differences of :func:`cms_adjustment_standard` for
+> ``d_forward`` (d(CA)/d forward) and ``d_sigma`` (d(CA)/d sigma). The
+> adjustment is monotone increasing in the vol (more convexity), so
+> ``d_sigma > 0``. Returns a dict with ``adjustment``, ``d_forward``,
+> ``d_sigma``.
 
 ### `cms_adjustment_standard(forward, sigma, expiry, tenor, freq=1.0, pay_lag=0.0)`  _function_
 

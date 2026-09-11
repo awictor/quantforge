@@ -210,6 +210,7 @@ from .fxdelta import (
 from .volcube import VolCube
 from .cms import (
     cms_adjustment_standard, cms_rate_convexity_replication, cms_rate,
+    cms_adjustment_greeks,
 )
 from .surface import VolSurface, SurfaceSlice, CalendarViolation
 from .exotics import (
@@ -275,7 +276,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.243.0"
+__version__ = "1.244.0"
 
 __all__ = [
     "OptionType",
@@ -606,6 +607,7 @@ __all__ = [
     "rr_bf_to_pillars",
     "VolCube",
     "cms_adjustment_standard",
+    "cms_adjustment_greeks",
     "cms_rate_convexity_replication",
     "cms_rate",
     "VolSurface",

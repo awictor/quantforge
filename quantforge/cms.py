@@ -108,3 +108,24 @@ def cms_rate(forward, sigma, expiry, tenor, freq=1.0, pay_lag=0.0):
     """Convexity-adjusted expected CMS rate under the standard model."""
     return forward + cms_adjustment_standard(forward, sigma, expiry, tenor,
                                              freq, pay_lag)
+
+
+def cms_adjustment_greeks(forward, sigma, expiry, tenor, freq=1.0, pay_lag=0.0):
+    """Sensitivities of the standard-model CMS convexity adjustment.
+
+    Central finite differences of :func:`cms_adjustment_standard` for
+    ``d_forward`` (d(CA)/d forward) and ``d_sigma`` (d(CA)/d sigma). The
+    adjustment is monotone increasing in the vol (more convexity), so
+    ``d_sigma > 0``. Returns a dict with ``adjustment``, ``d_forward``,
+    ``d_sigma``.
+    """
+    def ca(f=forward, sig=sigma):
+        return cms_adjustment_standard(f, sig, expiry, tenor, freq, pay_lag)
+
+    base = ca()
+    hf = 1e-6 * max(abs(forward), 1e-4)
+    d_forward = (ca(f=forward + hf) - ca(f=forward - hf)) / (2.0 * hf)
+    hv = 1e-6
+    d_sigma = (ca(sig=sigma + hv) - ca(sig=max(sigma - hv, 0.0))) / (
+        (2.0 * hv) if sigma - hv >= 0 else hv)
+    return {"adjustment": base, "d_forward": d_forward, "d_sigma": d_sigma}
