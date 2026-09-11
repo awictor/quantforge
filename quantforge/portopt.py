@@ -93,6 +93,40 @@ def max_sharpe_weights(mean_returns, cov, risk_free=0.0) -> list:
     return [zi / total for zi in z]
 
 
+def diversification_ratio(weights, cov) -> float:
+    """Diversification ratio ``(sum_i w_i sigma_i) / sqrt(w^T C w)``.
+
+    The weighted average of the assets' standalone volatilities over the
+    portfolio volatility. Equals 1 for a single asset (or perfectly correlated
+    assets) and rises as diversification lowers the portfolio vol below the
+    weighted-average vol.
+    """
+    n = _check_cov(cov)
+    sig = [math.sqrt(cov[i][i]) for i in range(n)]
+    wavg = sum(weights[i] * sig[i] for i in range(n))
+    pv = portfolio_variance(weights, cov)
+    if pv <= 0.0:
+        raise ValueError("portfolio variance must be positive")
+    return wavg / math.sqrt(pv)
+
+
+def max_diversification_weights(cov) -> list:
+    """Most-diversified portfolio: maximizes the diversification ratio.
+
+    The maximizer of ``(w^T sigma) / sqrt(w^T C w)`` is proportional to
+    ``C^{-1} sigma`` (the tangency portfolio in the assets' own volatilities),
+    normalized to sum to 1. Fully invested; may be long/short.
+    """
+    n = _check_cov(cov)
+    inv = _invert(cov)
+    sig = [math.sqrt(cov[i][i]) for i in range(n)]
+    z = _matvec(inv, sig)
+    total = sum(z)
+    if abs(total) < 1e-14:
+        raise ValueError("degenerate covariance for max diversification")
+    return [zi / total for zi in z]
+
+
 def target_return_weights(mean_returns, cov, target) -> list:
     """Minimum-variance weights achieving an exact expected return ``target``.
 

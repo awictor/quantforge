@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.344.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.345.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -4239,6 +4239,15 @@ Auto-generated from `quantforge` v1.344.0 by `docs/gen_api.py` — do not edit b
 
 ## portopt
 
+### `diversification_ratio(weights, cov) -> float`  _function_
+
+> Diversification ratio ``(sum_i w_i sigma_i) / sqrt(w^T C w)``.
+>
+> The weighted average of the assets' standalone volatilities over the
+> portfolio volatility. Equals 1 for a single asset (or perfectly correlated
+> assets) and rises as diversification lowers the portfolio vol below the
+> weighted-average vol.
+
 ### `efficient_frontier(mean_returns, cov, targets) -> list`  _function_
 
 > Efficient frontier as ``(target_return, portfolio_std)`` pairs.
@@ -4246,6 +4255,14 @@ Auto-generated from `quantforge` v1.344.0 by `docs/gen_api.py` — do not edit b
 > For each requested expected return in ``targets`` solves
 > :func:`target_return_weights` and reports the achieved return with the
 > portfolio standard deviation ``sqrt(w^T C w)``.
+
+### `max_diversification_weights(cov) -> list`  _function_
+
+> Most-diversified portfolio: maximizes the diversification ratio.
+>
+> The maximizer of ``(w^T sigma) / sqrt(w^T C w)`` is proportional to
+> ``C^{-1} sigma`` (the tangency portfolio in the assets' own volatilities),
+> normalized to sum to 1. Fully invested; may be long/short.
 
 ### `max_sharpe_weights(mean_returns, cov, risk_free=0.0) -> list`  _function_
 

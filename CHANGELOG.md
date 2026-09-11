@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.345.0] - 2026-09-11
+
+### Added
+- `max_diversification_weights` and `diversification_ratio` (in `portopt.py`):
+  the most-diversified portfolio (weights proportional to `C^{-1} sigma`,
+  normalized) and the diversification ratio `(w^T sigma)/sqrt(w^T C w)`.
+- Verified: the weights sum to 1 and maximize the diversification ratio versus
+  the min-variance, risk-parity, and equal-weight portfolios; the ratio is at
+  least 1, near 1 for highly-correlated assets, and exactly 1 for a single
+  asset; a singular covariance raises.
+
 ## [1.344.0] - 2026-09-11
 
 ### Added
