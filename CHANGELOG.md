@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.302.0] - 2026-09-11
+
+### Added
+- `writer_extendible_call` and `writer_extendible_call_greeks` (in
+  `extendible.py`): writer-extendible call (Longstaff 1990), completing the
+  extendible family. At the first expiry `t1` the call is exercised if in the
+  money (`S_{t1} > K1`); otherwise the writer's obligation extends automatically
+  to `T2` as a call struck at `K2` (no fee). Closed form: a vanilla call to `t1`
+  plus the extended-call value collected on `S_{t1} <= K1`, via bivariate
+  normals coupling `t1` and `T2`. Greeks by finite difference.
+- Verified: matches a Monte Carlo at the first expiry across three
+  strike/maturity cases to within ~0.1%; the automatic extension makes it worth
+  more than a plain call to `t1`; delta is positive and vega positive.
+
 ## [1.301.0] - 2026-09-11
 
 ### Added

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.301.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.302.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1626,6 +1626,33 @@ Auto-generated from `quantforge` v1.301.0 by `docs/gen_api.py` — do not edit b
 
 > Greeks of a holder-extendible call by central finite differences of
 > :func:`holder_extendible_call`: ``delta``, ``gamma``, ``vega``, ``theta``
+> (calendar decay, both expiries shrinking together). Returns a dict with
+> ``price`` and those fields.
+
+### `writer_extendible_call(S, K1, K2, t1, T2, r, sigma, b=None) -> float`  _function_
+
+> Writer-extendible call (Longstaff 1990), closed form.
+>
+> At the first expiry ``t1`` the call is exercised if it finishes in the money
+> (``S_{t1} > K1``, paying ``S_{t1} - K1``); otherwise the writer's obligation
+> is automatically extended to ``T2`` as a call struck at ``K2`` (no fee):
+>
+>     payoff(t1) = (S_{t1} - K1)            if S_{t1} > K1
+>                = C(S_{t1}, K2, T2 - t1)   if S_{t1} <= K1.
+>
+> The value is a vanilla call to ``t1`` plus the extended-call value collected
+> on ``S_{t1} <= K1``, via bivariate normals coupling ``t1`` and ``T2``:
+>
+>     W = c(S, K1, t1)
+>         + S e^{(b-r)T2} M(-z1, y1; -rho) - K2 e^{-r T2} M(-z2, y2; -rho),
+>
+> with ``z1, z2`` the ``d1/d2`` arguments at ``K1`` over ``t1``, ``y1, y2`` the
+> same at ``K2`` over ``T2``, and ``rho = sqrt(t1/T2)``.
+
+### `writer_extendible_call_greeks(S, K1, K2, t1, T2, r, sigma, b=None)`  _function_
+
+> Greeks of a writer-extendible call by central finite differences of
+> :func:`writer_extendible_call`: ``delta``, ``gamma``, ``vega``, ``theta``
 > (calendar decay, both expiries shrinking together). Returns a dict with
 > ``price`` and those fields.
 

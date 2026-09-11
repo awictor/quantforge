@@ -176,6 +176,72 @@ def writer_extendible_put(S, K1, K2, t1, T2, r, sigma, b=None) -> float:
     return base + extension
 
 
+def writer_extendible_call(S, K1, K2, t1, T2, r, sigma, b=None) -> float:
+    """Writer-extendible call (Longstaff 1990), closed form.
+
+    At the first expiry ``t1`` the call is exercised if it finishes in the money
+    (``S_{t1} > K1``, paying ``S_{t1} - K1``); otherwise the writer's obligation
+    is automatically extended to ``T2`` as a call struck at ``K2`` (no fee):
+
+        payoff(t1) = (S_{t1} - K1)            if S_{t1} > K1
+                   = C(S_{t1}, K2, T2 - t1)   if S_{t1} <= K1.
+
+    The value is a vanilla call to ``t1`` plus the extended-call value collected
+    on ``S_{t1} <= K1``, via bivariate normals coupling ``t1`` and ``T2``:
+
+        W = c(S, K1, t1)
+            + S e^{(b-r)T2} M(-z1, y1; -rho) - K2 e^{-r T2} M(-z2, y2; -rho),
+
+    with ``z1, z2`` the ``d1/d2`` arguments at ``K1`` over ``t1``, ``y1, y2`` the
+    same at ``K2`` over ``T2``, and ``rho = sqrt(t1/T2)``.
+    """
+    if b is None:
+        b = r
+    _validate(S, K1, t1, sigma)
+    _validate(S, K2, T2, sigma)
+    if T2 <= t1:
+        raise ValueError("require T2 > t1")
+
+    v1 = sigma * math.sqrt(t1)
+    st2 = sigma * math.sqrt(T2)
+    rho = math.sqrt(t1 / T2)
+    mu = b - 0.5 * sigma * sigma
+    z2 = (math.log(S / K1) + mu * t1) / v1
+    y2 = (math.log(S / K2) + mu * T2) / st2
+    z1 = z2 + v1
+    y1 = y2 + st2
+    base = call_price(S, K1, t1, r, sigma, b=b)
+    extension = (S * math.exp((b - r) * T2) * _bivariate_normal(-z1, y1, -rho)
+                 - K2 * math.exp(-r * T2) * _bivariate_normal(-z2, y2, -rho))
+    return base + extension
+
+
+def writer_extendible_call_greeks(S, K1, K2, t1, T2, r, sigma, b=None):
+    """Greeks of a writer-extendible call by central finite differences of
+    :func:`writer_extendible_call`: ``delta``, ``gamma``, ``vega``, ``theta``
+    (calendar decay, both expiries shrinking together). Returns a dict with
+    ``price`` and those fields.
+    """
+    if b is None:
+        b = r
+
+    def px(S_=S, sigma_=sigma, shift=0.0):
+        return writer_extendible_call(S_, K1, K2, t1 - shift, T2 - shift, r,
+                                      sigma_, b=b)
+
+    base = px()
+    hS = 1e-4 * S
+    up, dn = px(S_=S + hS), px(S_=S - hS)
+    delta = (up - dn) / (2.0 * hS)
+    gamma = (up - 2.0 * base + dn) / (hS * hS)
+    hv = 1e-4
+    vega = (px(sigma_=sigma + hv) - px(sigma_=sigma - hv)) / (2.0 * hv)
+    ht = min(1e-4, 0.25 * t1)
+    theta = -(px(shift=ht) - px(shift=-ht)) / (2.0 * ht)
+    return {"price": base, "delta": delta, "gamma": gamma, "vega": vega,
+            "theta": theta}
+
+
 def writer_extendible_put_greeks(S, K1, K2, t1, T2, r, sigma, b=None):
     """Greeks of a writer-extendible put by central finite differences of
     :func:`writer_extendible_put`: ``delta``, ``gamma``, ``vega``, ``theta``
