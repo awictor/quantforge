@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.281.0] - 2026-09-11
+
+### Added
+- `surface_arbitrage_report` and `surface_is_arbitrage_free` (in `rnd.py`):
+  combine the butterfly (per-slice density-sign) and calendar (total-variance
+  monotonicity) static-arbitrage checks into one surface-level verdict. Takes
+  smiles in log-moneyness (one per expiry) and returns
+  `{"butterfly": {t: [strikes]}, "calendar": [(k, t_lo, t_hi)]}`.
+- Verified: an arbitrage-free SSVI surface passes (agreeing with SSVI's own
+  check); a butterfly-violating slice is reported under its expiry; a
+  calendar-violating term structure is reported; a flat surface is free.
+
 ## [1.280.0] - 2026-09-11
 
 ### Added

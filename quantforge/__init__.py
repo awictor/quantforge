@@ -121,7 +121,8 @@ from .rnd import (
     risk_neutral_quantile_from_smile, risk_neutral_var_from_smile,
     risk_neutral_cvar_from_smile, smile_arbitrage_violations,
     smile_is_arbitrage_free, calendar_arbitrage_violations,
-    surface_is_calendar_arbitrage_free,
+    surface_is_calendar_arbitrage_free, surface_arbitrage_report,
+    surface_is_arbitrage_free,
 )
 from .density_metrics import (
     tail_probability, density_entropy, expected_shortfall,
@@ -301,7 +302,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.280.0"
+__version__ = "1.281.0"
 
 __all__ = [
     "OptionType",
@@ -468,6 +469,8 @@ __all__ = [
     "smile_is_arbitrage_free",
     "calendar_arbitrage_violations",
     "surface_is_calendar_arbitrage_free",
+    "surface_arbitrage_report",
+    "surface_is_arbitrage_free",
     "risk_neutral_quantile_from_smile",
     "risk_neutral_var_from_smile",
     "risk_neutral_cvar_from_smile",

@@ -122,6 +122,53 @@ def surface_is_calendar_arbitrage_free(expiries, vol_fns, ks=None,
     return not calendar_arbitrage_violations(expiries, vol_fns, ks=ks, tol=tol)
 
 
+def surface_arbitrage_report(S0, r, expiries, vol_fns, q=0.0, n=200, width=8.0,
+                             ks=None, tol=1e-9):
+    """Full static-arbitrage report for a smile *surface* (butterfly + calendar).
+
+    Combines the two model-free static-arbitrage tests:
+
+      * **butterfly** (per slice): the Breeden-Litzenberger density must stay
+        non-negative at every strike (see :func:`smile_arbitrage_violations`);
+      * **calendar** (across slices): total implied variance ``sigma^2 t`` must be
+        non-decreasing in maturity at fixed log-moneyness (see
+        :func:`calendar_arbitrage_violations`).
+
+    ``vol_fns`` are smiles in *log-moneyness* ``k = ln(K / F_t)`` (one per expiry,
+    matching ``expiries``), the same convention as
+    :func:`calendar_arbitrage_violations`. Each is wrapped to a strike-based
+    ``vol_fn(K)`` on that expiry's forward for the butterfly scan.
+
+    Returns a dict ``{"butterfly": {t: [strikes]}, "calendar": [(k, t_lo, t_hi)]}``
+    listing every violation; both empty means the surface is free of static
+    arbitrage on the scanned grid.
+    """
+    if len(expiries) != len(vol_fns):
+        raise ValueError("expiries and vol_fns must match in length")
+    ts = list(expiries)
+    butterfly = {}
+    for t, fn in zip(ts, vol_fns):
+        F = S0 * math.exp((r - q) * t)
+        strike_fn = (lambda K, fn=fn, F=F: fn(math.log(K / F)))
+        bad = smile_arbitrage_violations(S0, t, r, strike_fn, q=q, n=n,
+                                         width=width, tol=tol)
+        if bad:
+            butterfly[t] = bad
+    calendar = calendar_arbitrage_violations(ts, vol_fns, ks=ks, tol=tol)
+    return {"butterfly": butterfly, "calendar": calendar}
+
+
+def surface_is_arbitrage_free(S0, r, expiries, vol_fns, q=0.0, n=200,
+                              width=8.0, ks=None, tol=1e-9) -> bool:
+    """True if a smile surface is free of both butterfly and calendar arbitrage.
+
+    Convenience wrapper over :func:`surface_arbitrage_report`.
+    """
+    rep = surface_arbitrage_report(S0, r, expiries, vol_fns, q=q, n=n,
+                                   width=width, ks=ks, tol=tol)
+    return not rep["butterfly"] and not rep["calendar"]
+
+
 def risk_neutral_cdf_from_smile(S0, t, r, vol_fn, K, q=0.0, dK=None):
     """Risk-neutral CDF ``F(K) = P(S_T <= K)`` implied by an implied-vol smile.
 
