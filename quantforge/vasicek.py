@@ -137,6 +137,38 @@ def coupon_bond_option(r0, t_option, cashflows, strike, kappa, theta, sigma,
     return total
 
 
+def swaption(r0, expiry, pay_times, fixed_rate, kappa, theta, sigma,
+             payer=True, notional=1.0):
+    """European swaption under Vasicek via the coupon-bond-option identity (exact).
+
+    A physically-settled European swaption is an option on the underlying swap.
+    The fixed leg plus notional at maturity is a coupon bond with cashflows
+    ``fixed_rate * tau_i`` at each ``pay_times[i]`` and the notional at the last
+    date. Entering a *payer* swap (pay fixed, receive float) at ``expiry`` is
+    worth ``notional - couponbond``, so a payer swaption is a *put* on that coupon
+    bond struck at the notional, and a receiver swaption a *call* -- both priced
+    exactly by :func:`coupon_bond_option` (Jamshidian), no approximation.
+
+    ``pay_times`` are the fixed-leg payment dates (all ``> expiry``); accruals
+    ``tau_i`` are the gaps between them, with the first gap measured from
+    ``expiry``.
+    """
+    times = sorted(pay_times)
+    if not times or any(t <= expiry for t in times):
+        raise ValueError("all pay_times must exceed expiry")
+    prev = expiry
+    cfs = []
+    for i, ti in enumerate(times):
+        tau = ti - prev
+        prev = ti
+        c = fixed_rate * tau * notional
+        if i == len(times) - 1:
+            c += notional          # principal at maturity
+        cfs.append((ti, c))
+    ot = OptionType.PUT if payer else OptionType.CALL
+    return coupon_bond_option(r0, expiry, cfs, notional, kappa, theta, sigma, ot)
+
+
 def bond_option_greeks(r0, t_option, t_bond, strike, kappa, theta, sigma,
                        option_type=OptionType.CALL):
     """Greeks of a Vasicek zero-coupon-bond option by central finite differences.

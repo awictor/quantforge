@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.245.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.246.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -4260,6 +4260,22 @@ Auto-generated from `quantforge` v1.245.0 by `docs/gen_api.py` — do not edit b
 > into per-cashflow strikes ``K_i = P(t_option, t_i | r*)``, and the coupon-bond
 > option is the ``c_i``-weighted sum of zero-coupon-bond options struck at each
 > ``K_i``. Exact (no simulation).
+
+### `vasicek_swaption(r0, expiry, pay_times, fixed_rate, kappa, theta, sigma, payer=True, notional=1.0)`  _function_
+
+> European swaption under Vasicek via the coupon-bond-option identity (exact).
+>
+> A physically-settled European swaption is an option on the underlying swap.
+> The fixed leg plus notional at maturity is a coupon bond with cashflows
+> ``fixed_rate * tau_i`` at each ``pay_times[i]`` and the notional at the last
+> date. Entering a *payer* swap (pay fixed, receive float) at ``expiry`` is
+> worth ``notional - couponbond``, so a payer swaption is a *put* on that coupon
+> bond struck at the notional, and a receiver swaption a *call* -- both priced
+> exactly by :func:`coupon_bond_option` (Jamshidian), no approximation.
+>
+> ``pay_times`` are the fixed-leg payment dates (all ``> expiry``); accruals
+> ``tau_i`` are the gaps between them, with the first gap measured from
+> ``expiry``.
 
 ### `zero_coupon_bond(r0, t, kappa, theta, sigma)`  _function_
 

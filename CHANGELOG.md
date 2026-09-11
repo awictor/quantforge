@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.246.0] - 2026-09-10
+
+### Added
+- `vasicek_swaption` (in `vasicek.py`): exact European swaption under Vasicek via
+  the coupon-bond-option identity. The fixed leg plus notional is a coupon bond;
+  a payer swaption is a put on it struck at the notional and a receiver a call,
+  both priced by the Jamshidian `coupon_bond_option` -- no normal-model
+  approximation.
+- Verified: swaption parity `payer - receiver = annuity (swap_rate - strike)`
+  holds to 1e-8; at the forward swap rate payer equals receiver; a higher strike
+  lowers the payer; both legs positive.
+
 ## [1.245.0] - 2026-09-10
 
 ### Added
