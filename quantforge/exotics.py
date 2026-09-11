@@ -222,6 +222,102 @@ def geometric_asian_greeks(S, K, t, r, sigma, option_type=OptionType.CALL,
             "theta": theta, "rho": rho}
 
 
+def _geom_fixing_times(t, n):
+    """Equally-spaced fixing times ``t*i/n`` for ``i = 1..n`` (last at expiry)."""
+    if n < 1:
+        raise ValueError("n_fixings must be >= 1")
+    return [t * i / n for i in range(1, n + 1)]
+
+
+def discrete_geometric_asian(S, K, t, r, sigma, n_fixings=None,
+                             fixing_times=None, option_type=OptionType.CALL,
+                             b=None):
+    """Discretely-monitored geometric-average-price Asian option (exact).
+
+    The geometric average ``G = (prod_i S_{t_i})^{1/n}`` over the monitoring
+    dates ``t_i`` is lognormal, because ``log G`` is a linear combination of the
+    jointly-Gaussian log-prices. With ``m = log S + (b - sigma^2/2) * mean(t_i)``
+    and ``v = (sigma^2 / n^2) * sum_i sum_j min(t_i, t_j)``, ``log G`` is
+    ``Normal(m, v)`` and the price is a Black-Scholes-style closed form on the
+    forward ``F = exp(m + v/2)`` discounted at ``r``:
+
+        d1 = (m + v - log K) / sqrt(v),  d2 = d1 - sqrt(v)
+        call = e^{-rt} (F N(d1) - K N(d2)).
+
+    Provide either ``n_fixings`` (equally-spaced dates ``t*i/n``, last at expiry)
+    or an explicit ``fixing_times`` sequence in ``(0, t]``. A single fixing at
+    ``t`` recovers the vanilla Black-Scholes price; as ``n_fixings -> infinity``
+    the price converges to the continuous Kemna-Vorst :func:`geometric_asian`.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if b is None:
+        b = r
+    if fixing_times is None:
+        if n_fixings is None:
+            raise ValueError("provide n_fixings or fixing_times")
+        times = _geom_fixing_times(t, n_fixings)
+    else:
+        times = [float(x) for x in fixing_times]
+        if not times:
+            raise ValueError("fixing_times must be non-empty")
+        if any(x <= 0.0 or x > t + 1e-12 for x in times):
+            raise ValueError("fixing_times must lie in (0, t]")
+    n = len(times)
+    disc = math.exp(-r * t)
+    mean_t = sum(times) / n
+    m = math.log(S) + (b - 0.5 * sigma * sigma) * mean_t
+    # v = (sigma^2 / n^2) * sum_i sum_j min(t_i, t_j).
+    dbl = 0.0
+    for ti in times:
+        for tj in times:
+            dbl += ti if ti < tj else tj
+    v = sigma * sigma * dbl / (n * n)
+    if v <= 0.0:
+        fwd = math.exp(m)
+        payoff = max(fwd - K, 0.0) if ot is OptionType.CALL else max(K - fwd, 0.0)
+        return disc * payoff
+    fwd = math.exp(m + 0.5 * v)
+    sd = math.sqrt(v)
+    d1 = (m + v - math.log(K)) / sd
+    d2 = d1 - sd
+    if ot is OptionType.CALL:
+        return disc * (fwd * norm_cdf(d1) - K * norm_cdf(d2))
+    return disc * (K * norm_cdf(-d2) - fwd * norm_cdf(-d1))
+
+
+def discrete_geometric_asian_greeks(S, K, t, r, sigma, n_fixings=None,
+                                    fixing_times=None,
+                                    option_type=OptionType.CALL, b=None):
+    """Greeks of a discrete geometric-average Asian option by central finite
+    differences of :func:`discrete_geometric_asian`: ``delta`` (dV/dS),
+    ``gamma`` (d2V/dS2), ``vega`` (dV/dsigma), ``theta`` (calendar decay). When
+    ``fixing_times`` is given it is held fixed; with ``n_fixings`` the equally-
+    spaced grid rescales with ``t`` (matching the continuous convention).
+    Returns a dict with ``price`` and those fields.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if b is None:
+        b = r
+
+    def px(S_=S, t_=t, sigma_=sigma):
+        return discrete_geometric_asian(S_, K, t_, r, sigma_, n_fixings,
+                                        fixing_times, ot, b=b)
+
+    base = px()
+    hS = 1e-4 * S
+    up, dn = px(S_=S + hS), px(S_=S - hS)
+    delta = (up - dn) / (2.0 * hS)
+    gamma = (up - 2.0 * base + dn) / (hS * hS)
+    hv = 1e-4
+    vega = (px(sigma_=sigma + hv) - px(sigma_=sigma - hv)) / (2.0 * hv)
+    ht = min(1e-4, 0.25 * t)
+    theta = -(px(t_=t + ht) - px(t_=t - ht)) / (2.0 * ht)
+    return {"price": base, "delta": delta, "gamma": gamma, "vega": vega,
+            "theta": theta}
+
+
 # --------------------------------------------------------------------------
 # Arithmetic-average Asian option (Turnbull-Wakeman moment matching)
 # --------------------------------------------------------------------------

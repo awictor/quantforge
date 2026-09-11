@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.285.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.286.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1154,6 +1154,34 @@ Auto-generated from `quantforge` v1.285.0 by `docs/gen_api.py` — do not edit b
 > approaches, the digital's delta spikes (and gamma flips sign across the
 > strike) -- the "pin risk" that makes digitals hard to hedge and motivates
 > the call-spread over-hedge in :mod:`quantforge.overhedge`.
+
+### `discrete_geometric_asian(S, K, t, r, sigma, n_fixings=None, fixing_times=None, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> Discretely-monitored geometric-average-price Asian option (exact).
+>
+> The geometric average ``G = (prod_i S_{t_i})^{1/n}`` over the monitoring
+> dates ``t_i`` is lognormal, because ``log G`` is a linear combination of the
+> jointly-Gaussian log-prices. With ``m = log S + (b - sigma^2/2) * mean(t_i)``
+> and ``v = (sigma^2 / n^2) * sum_i sum_j min(t_i, t_j)``, ``log G`` is
+> ``Normal(m, v)`` and the price is a Black-Scholes-style closed form on the
+> forward ``F = exp(m + v/2)`` discounted at ``r``:
+>
+>     d1 = (m + v - log K) / sqrt(v),  d2 = d1 - sqrt(v)
+>     call = e^{-rt} (F N(d1) - K N(d2)).
+>
+> Provide either ``n_fixings`` (equally-spaced dates ``t*i/n``, last at expiry)
+> or an explicit ``fixing_times`` sequence in ``(0, t]``. A single fixing at
+> ``t`` recovers the vanilla Black-Scholes price; as ``n_fixings -> infinity``
+> the price converges to the continuous Kemna-Vorst :func:`geometric_asian`.
+
+### `discrete_geometric_asian_greeks(S, K, t, r, sigma, n_fixings=None, fixing_times=None, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> Greeks of a discrete geometric-average Asian option by central finite
+> differences of :func:`discrete_geometric_asian`: ``delta`` (dV/dS),
+> ``gamma`` (d2V/dS2), ``vega`` (dV/dsigma), ``theta`` (calendar decay). When
+> ``fixing_times`` is given it is held fixed; with ``n_fixings`` the equally-
+> spaced grid rescales with ``t`` (matching the continuous convention).
+> Returns a dict with ``price`` and those fields.
 
 ### `double_knock_in_call(S, K, L, U, t, r, sigma, b=None, delta1=0.0, delta2=0.0, n_terms=10)`  _function_
 

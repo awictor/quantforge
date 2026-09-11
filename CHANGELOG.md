@@ -4,6 +4,22 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.286.0] - 2026-09-11
+
+### Added
+- `discrete_geometric_asian` and `discrete_geometric_asian_greeks` (in
+  `exotics.py`): exact closed form for a discretely-monitored geometric-average
+  Asian option. `log G` over the fixing dates is Gaussian with mean
+  `log S + (b - sigma^2/2) mean(t_i)` and variance
+  `(sigma^2/n^2) sum_ij min(t_i, t_j)`, giving a Black-Scholes-style price on
+  the lognormal average. Accepts equally-spaced `n_fixings` or an explicit
+  `fixing_times` sequence. Greeks by finite difference.
+- Verified: a single fixing recovers the vanilla Black-Scholes price; the price
+  converges (monotonically, from above) to the continuous Kemna-Vorst
+  `geometric_asian` as `n_fixings` grows; explicit equally-spaced fixing times
+  match the `n_fixings` grid; a discrete geo Asian call is cheaper than the
+  vanilla call; matches a path Monte Carlo (n=12, call/put) to within 1%.
+
 ## [1.285.0] - 2026-09-11
 
 ### Added
