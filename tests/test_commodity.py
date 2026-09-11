@@ -13,7 +13,12 @@ from quantforge import (
     roll_yield, carry_roll_yield, schwartz_futures_volatility,
     margrabe_exchange_option, kirk_spread_option,
     bachelier_spread_option, spread_option_mc,
+    commodity_swap_rate, commodity_swap_value, asian_commodity_option,
 )
+
+
+SWAP_F = [50.0, 52.0, 54.0, 53.0]
+SWAP_DF = [0.99, 0.97, 0.95, 0.93]
 
 
 S, R, T, U, Y = 100.0, 0.05, 2.0, 0.02, 0.03
@@ -255,6 +260,46 @@ def test_mc_validates_kirk():
     mcc = spread_option_mc(SP_F1, SP_F2, 5.0, SP_S1, SP_S2, SP_RHO, SP_R, SP_T,
                            400000, 777, True)
     assert abs(kc - mcc) / kc < 0.02
+
+
+def test_swap_rate_zeroes_pv():
+    fair = commodity_swap_rate(SWAP_F, SWAP_DF)
+    assert commodity_swap_value(SWAP_F, SWAP_DF, fair) == pytest.approx(0.0, abs=1e-9)
+
+
+def test_swap_rate_is_df_weighted_average():
+    fair = commodity_swap_rate(SWAP_F, SWAP_DF)
+    expect = sum(SWAP_DF[i] * SWAP_F[i] for i in range(4)) / sum(SWAP_DF)
+    assert fair == pytest.approx(expect)
+
+
+def test_swap_value_sign():
+    assert commodity_swap_value(SWAP_F, SWAP_DF, 40.0, 1, True) > 0
+    assert commodity_swap_value(SWAP_F, SWAP_DF, 40.0, 1, False) < 0
+
+
+def test_asian_option_parity():
+    c = asian_commodity_option(52, 50, 0.3, 0.05, 1.0, 1 / 3, True)
+    p = asian_commodity_option(52, 50, 0.3, 0.05, 1.0, 1 / 3, False)
+    assert c - p == pytest.approx(math.exp(-0.05) * (52 - 50), abs=1e-9)
+
+
+def test_asian_cheaper_than_vanilla():
+    asian = asian_commodity_option(52, 50, 0.3, 0.05, 1.0, 1 / 3, True)
+    vanilla = asian_commodity_option(52, 50, 0.3, 0.05, 1.0, 1.0, True)
+    assert asian < vanilla
+
+
+def test_asian_zero_variance_intrinsic():
+    assert asian_commodity_option(52, 50, 0.3, 0.05, 1.0, 0.0, True) == pytest.approx(
+        math.exp(-0.05) * max(52 - 50, 0.0), abs=1e-9)
+
+
+def test_swap_asian_validation():
+    with pytest.raises(ValueError):
+        commodity_swap_rate([50], [0.9, 0.8])
+    with pytest.raises(ValueError):
+        asian_commodity_option(52, 50, 0.3, 0.05, 1.0, 1.5)
 
 
 def test_validation():

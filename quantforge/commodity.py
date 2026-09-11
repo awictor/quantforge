@@ -333,6 +333,76 @@ def spread_option_mc(f1, f2, strike, sigma1, sigma2, rho, r, expiry,
     return disc * total / n_paths
 
 
+def commodity_swap_rate(forward_quotes, discount_factors):
+    """Fair fixed price of a commodity swap: DF-weighted average of the forwards.
+
+    A commodity swap exchanges a fixed price for the floating settlement (the
+    forward) on each reset. The fair fixed price zeroing the swap is the
+    discount-factor-weighted average of the reset forwards
+    ``sum_i DF_i F_i / sum_i DF_i`` -- so paying this fixed against the floating
+    forwards has zero present value.
+    """
+    if len(forward_quotes) != len(discount_factors):
+        raise ValueError("forward_quotes and discount_factors must align")
+    if not forward_quotes:
+        raise ValueError("need at least one reset")
+    num = sum(df * F for F, df in zip(forward_quotes, discount_factors))
+    den = sum(discount_factors)
+    if den <= 0:
+        raise ValueError("discount factors must sum to a positive number")
+    return num / den
+
+
+def commodity_swap_value(forward_quotes, discount_factors, fixed_price,
+                         notional=1.0, pay_fixed=True):
+    """Present value of a commodity swap versus a fixed price.
+
+    Fixed-payer value ``notional * sum_i DF_i (F_i - fixed_price)`` (receiver is
+    the negative). Zero when ``fixed_price`` equals :func:`commodity_swap_rate`.
+    """
+    if len(forward_quotes) != len(discount_factors):
+        raise ValueError("forward_quotes and discount_factors must align")
+    pv = sum(df * (F - fixed_price)
+             for F, df in zip(forward_quotes, discount_factors))
+    return notional * (pv if pay_fixed else -pv)
+
+
+def asian_commodity_option(avg_forward, strike, sigma, r, expiry, reset_var_frac=1.0 / 3.0,
+                           is_call=True):
+    """Average-price (Asian) commodity option, Black on the average forward.
+
+    Prices an option on the arithmetic average of a commodity's price over the
+    averaging window. The average of lognormals is not lognormal, so the average
+    forward's variance is reduced by ``reset_var_frac`` (the continuous-averaging
+    limit is ``1/3`` of the terminal variance): effective total variance
+    ``v = reset_var_frac * sigma^2 * T``. Then Black on ``avg_forward``:
+
+        call = e^{-r T} [F Phi(d1) - K Phi(d2)],  d1,2 = (ln(F/K) +/- 0.5 v)/sqrt(v)
+
+    The variance reduction makes the Asian cheaper than the vanilla on the same
+    forward. Put and call satisfy ``C - P = e^{-r T}(F - K)``.
+    """
+    from .mathfns import norm_cdf
+    if avg_forward <= 0 or strike <= 0:
+        raise ValueError("avg_forward and strike must be positive")
+    if expiry < 0 or sigma < 0:
+        raise ValueError("expiry and sigma must be non-negative")
+    if not (0.0 <= reset_var_frac <= 1.0):
+        raise ValueError("reset_var_frac must be in [0, 1]")
+    disc = math.exp(-r * expiry)
+    var = reset_var_frac * sigma * sigma * expiry
+    if var <= 0.0:
+        intrinsic = max(avg_forward - strike, 0.0) if is_call \
+            else max(strike - avg_forward, 0.0)
+        return disc * intrinsic
+    vsqrt = math.sqrt(var)
+    d1 = (math.log(avg_forward / strike) + 0.5 * var) / vsqrt
+    d2 = d1 - vsqrt
+    if is_call:
+        return disc * (avg_forward * norm_cdf(d1) - strike * norm_cdf(d2))
+    return disc * (strike * norm_cdf(-d2) - avg_forward * norm_cdf(-d1))
+
+
 def roll_yield(near_forward, far_forward, t_near, t_far):
     """Annualized roll yield between two forwards ``ln(F_near/F_far)/(t_far-t_near)``.
 

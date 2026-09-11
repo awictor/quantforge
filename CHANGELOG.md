@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.390.0] - 2026-09-11
+
+### Added
+- `commodity_swap_rate`, `commodity_swap_value`, `asian_commodity_option` (in
+  `commodity.py`): the fair fixed price of a commodity swap (DF-weighted average
+  of the reset forwards, zeroing the swap PV), the swap value versus a fixed
+  price, and an average-price (Asian) commodity option priced Black on the
+  average forward with the variance reduced toward the continuous-averaging `1/3`
+  limit. Cross-checked against zero-PV at the fair rate, put-call parity, and the
+  Asian being cheaper than the vanilla on the same forward.
+
 ## [1.389.0] - 2026-09-11
 
 ### Added

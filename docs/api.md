@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.389.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.390.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1067,6 +1067,21 @@ Auto-generated from `quantforge` v1.389.0 by `docs/gen_api.py` — do not edit b
 
 ## commodity
 
+### `asian_commodity_option(avg_forward, strike, sigma, r, expiry, reset_var_frac=0.3333333333333333, is_call=True)`  _function_
+
+> Average-price (Asian) commodity option, Black on the average forward.
+>
+> Prices an option on the arithmetic average of a commodity's price over the
+> averaging window. The average of lognormals is not lognormal, so the average
+> forward's variance is reduced by ``reset_var_frac`` (the continuous-averaging
+> limit is ``1/3`` of the terminal variance): effective total variance
+> ``v = reset_var_frac * sigma^2 * T``. Then Black on ``avg_forward``:
+>
+>     call = e^{-r T} [F Phi(d1) - K Phi(d2)],  d1,2 = (ln(F/K) +/- 0.5 v)/sqrt(v)
+>
+> The variance reduction makes the Asian cheaper than the vanilla on the same
+> forward. Put and call satisfy ``C - P = e^{-r T}(F - K)``.
+
 ### `bachelier_spread_option(f1, f2, strike, sigma1, sigma2, rho, r, expiry, is_call=True)`  _function_
 
 > Bachelier (normal-model) spread option on two forwards.
@@ -1112,6 +1127,23 @@ Auto-generated from `quantforge` v1.389.0 by `docs/gen_api.py` — do not edit b
 > Forward prices across a list of maturities under one carry rate.
 >
 > Returns ``[(T, F(T)), ...]`` from :func:`commodity_forward` at each maturity.
+
+### `commodity_swap_rate(forward_quotes, discount_factors)`  _function_
+
+> Fair fixed price of a commodity swap: DF-weighted average of the forwards.
+>
+> A commodity swap exchanges a fixed price for the floating settlement (the
+> forward) on each reset. The fair fixed price zeroing the swap is the
+> discount-factor-weighted average of the reset forwards
+> ``sum_i DF_i F_i / sum_i DF_i`` -- so paying this fixed against the floating
+> forwards has zero present value.
+
+### `commodity_swap_value(forward_quotes, discount_factors, fixed_price, notional=1.0, pay_fixed=True)`  _function_
+
+> Present value of a commodity swap versus a fixed price.
+>
+> Fixed-payer value ``notional * sum_i DF_i (F_i - fixed_price)`` (receiver is
+> the negative). Zero when ``fixed_price`` equals :func:`commodity_swap_rate`.
 
 ### `convenience_yield_curve(spot, r, forward_quotes, storage_cost=0.0)`  _function_
 
