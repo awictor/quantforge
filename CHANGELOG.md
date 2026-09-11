@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.338.0] - 2026-09-11
+
+### Added
+- New module `perfmetrics.py` with track-record statistics from a periodic
+  return series: `sharpe_ratio` and `sortino_ratio` (annualized),
+  `max_drawdown` of the compounded equity curve, `calmar_ratio` (annualized
+  return over max drawdown), `hit_rate`, and `profit_factor`.
+- Verified: the Sharpe matches the manual mean/stdev formula; the Sortino
+  exceeds the Sharpe on a mixed series; a known -50% peak-to-trough gives a 0.5
+  max drawdown and an all-rising series gives 0; the hit rate and profit factor
+  match hand counts (with an infinite profit factor when there are no losses);
+  the Calmar is positive and raises without a drawdown; degenerate inputs raise.
+
 ## [1.337.0] - 2026-09-11
 
 ### Added

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.337.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.338.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -4070,6 +4070,49 @@ Auto-generated from `quantforge` v1.337.0 by `docs/gen_api.py` — do not edit b
 > ``A_t = (1/t) int_0^t S_u du``.
 >
 > Returns the value at spot ``S`` (the running integral starts at 0).
+
+## perfmetrics
+
+### `calmar_ratio(returns: Sequence[float], periods_per_year=252) -> float`  _function_
+
+> Calmar ratio: annualized return divided by the maximum drawdown.
+>
+> Annualized return is the geometric ``(prod(1+r))^{periods_per_year/n} - 1``.
+> Raises if there is no drawdown (undefined ratio).
+
+### `hit_rate(returns: Sequence[float]) -> float`  _function_
+
+> Fraction of periods with a strictly positive return.
+
+### `max_drawdown(returns: Sequence[float]) -> float`  _function_
+
+> Maximum peak-to-trough drawdown of the cumulative-return curve.
+>
+> Compounds the periodic returns into an equity curve and returns the largest
+> fractional drop from a running peak, as a non-negative number (0.2 = a 20%
+> drawdown). Empty or all-rising series give 0.
+
+### `profit_factor(returns: Sequence[float]) -> float`  _function_
+
+> Gross profits divided by gross losses (absolute).
+>
+> Returns ``inf`` when there are no losing periods. Raises if there are no
+> gains and no losses.
+
+### `sharpe_ratio(returns: Sequence[float], risk_free=0.0, periods_per_year=252) -> float`  _function_
+
+> Annualized Sharpe ratio of a periodic return series.
+>
+> ``(mean_excess / stdev) * sqrt(periods_per_year)`` where ``risk_free`` is the
+> per-period risk-free return. Sample standard deviation (ddof=1).
+
+### `sortino_ratio(returns: Sequence[float], risk_free=0.0, target=0.0, periods_per_year=252) -> float`  _function_
+
+> Annualized Sortino ratio: excess mean over downside deviation.
+>
+> Downside deviation uses only returns below ``target`` (root-mean-square of
+> the shortfalls, divided by the full sample count -- the standard
+> convention). Raises if there is no downside.
 
 ## perpetual
 
