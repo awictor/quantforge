@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.255.0] - 2026-09-10
+
+### Added
+- Ho-Lee caps and floors: `holee_caplet`, `holee_floorlet`, `holee_cap`,
+  `holee_floor`, each a strip via the bond-put/call identity. Completes cap/floor
+  coverage across every short-rate model (Vasicek, CIR, Ho-Lee, Cheyette) plus
+  G2++.
+- Verified: `cap - floor` equals the underlying swap value (parity) to 1e-8; the
+  cap equals the sum of its caplets; positive and monotone in strike.
+
 ## [1.254.0] - 2026-09-10
 
 ### Added

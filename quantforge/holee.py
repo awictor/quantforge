@@ -150,3 +150,37 @@ def holee_swaption(r0, expiry, pay_times, fixed_rate, theta, sigma, payer=True,
     is_call = not payer   # payer swaption = put on the coupon bond
     return holee_coupon_bond_option(r0, expiry, cfs, notional, theta, sigma,
                                     is_call)
+
+
+def holee_caplet(r0, reset, pay, strike, theta, sigma, notional=1.0):
+    """Caplet on ``[reset, pay]`` under Ho-Lee via the bond-put identity."""
+    tau = pay - reset
+    K_bond = 1.0 / (1.0 + strike * tau)
+    put = holee_bond_option(r0, reset, pay, K_bond, theta, sigma, is_call=False)
+    return notional * (1.0 + strike * tau) * put
+
+
+def holee_floorlet(r0, reset, pay, strike, theta, sigma, notional=1.0):
+    """Floorlet on ``[reset, pay]`` under Ho-Lee via the bond-call identity."""
+    tau = pay - reset
+    K_bond = 1.0 / (1.0 + strike * tau)
+    call = holee_bond_option(r0, reset, pay, K_bond, theta, sigma, is_call=True)
+    return notional * (1.0 + strike * tau) * call
+
+
+def holee_cap(r0, dates, strike, theta, sigma, notional=1.0):
+    """Ho-Lee cap: strip of caplets over successive ``dates`` (increasing times)."""
+    ts = sorted(dates)
+    if len(ts) < 2:
+        raise ValueError("need >= 2 dates (one caplet)")
+    return sum(holee_caplet(r0, ts[i - 1], ts[i], strike, theta, sigma, notional)
+               for i in range(1, len(ts)))
+
+
+def holee_floor(r0, dates, strike, theta, sigma, notional=1.0):
+    """Ho-Lee floor: strip of floorlets over successive ``dates``."""
+    ts = sorted(dates)
+    if len(ts) < 2:
+        raise ValueError("need >= 2 dates (one floorlet)")
+    return sum(holee_floorlet(r0, ts[i - 1], ts[i], strike, theta, sigma,
+                              notional) for i in range(1, len(ts)))

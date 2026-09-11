@@ -161,6 +161,7 @@ from .cir import (
 from .holee import (
     holee_zero_coupon_bond, holee_zero_coupon_yield, holee_bond_greeks,
     holee_bond_option, holee_coupon_bond_option, holee_swaption,
+    holee_caplet, holee_floorlet, holee_cap, holee_floor,
 )
 from .overhedge import (
     Overhedge, digital_call_overhedge, digital_put_overhedge, overhedge_payoff,
@@ -287,7 +288,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.254.0"
+__version__ = "1.255.0"
 
 __all__ = [
     "OptionType",
@@ -530,6 +531,10 @@ __all__ = [
     "holee_bond_option",
     "holee_coupon_bond_option",
     "holee_swaption",
+    "holee_caplet",
+    "holee_floorlet",
+    "holee_cap",
+    "holee_floor",
     "Overhedge",
     "digital_call_overhedge",
     "digital_put_overhedge",

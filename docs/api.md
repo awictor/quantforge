@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.254.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.255.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1675,6 +1675,14 @@ Auto-generated from `quantforge` v1.254.0 by `docs/gen_api.py` — do not edit b
 > ``sigma_p = sigma * (t_bond - t_option) * sqrt(t_option)`` (the Ho-Lee
 > ``B(tau) = tau`` gives the linear maturity factor).
 
+### `holee_cap(r0, dates, strike, theta, sigma, notional=1.0)`  _function_
+
+> Ho-Lee cap: strip of caplets over successive ``dates`` (increasing times).
+
+### `holee_caplet(r0, reset, pay, strike, theta, sigma, notional=1.0)`  _function_
+
+> Caplet on ``[reset, pay]`` under Ho-Lee via the bond-put identity.
+
 ### `holee_coupon_bond_option(r0, t_option, cashflows, strike, theta, sigma, is_call=True)`  _function_
 
 > European option on a coupon bond under Ho-Lee (Jamshidian decomposition).
@@ -1684,6 +1692,14 @@ Auto-generated from `quantforge` v1.254.0 by `docs/gen_api.py` — do not edit b
 > for the critical rate ``r*`` where the coupon bond's value at expiry equals
 > ``strike``, then sum the ``c_i``-weighted zero-coupon-bond options struck at
 > ``K_i = P(t_option, t_i | r*)``. Exact.
+
+### `holee_floor(r0, dates, strike, theta, sigma, notional=1.0)`  _function_
+
+> Ho-Lee floor: strip of floorlets over successive ``dates``.
+
+### `holee_floorlet(r0, reset, pay, strike, theta, sigma, notional=1.0)`  _function_
+
+> Floorlet on ``[reset, pay]`` under Ho-Lee via the bond-call identity.
 
 ### `holee_swaption(r0, expiry, pay_times, fixed_rate, theta, sigma, payer=True, notional=1.0)`  _function_
 
