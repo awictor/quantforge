@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.343.0] - 2026-09-11
+
+### Added
+- New module `portopt.py` for mean-variance portfolio optimization from a
+  covariance matrix (pure-Python Gauss-Jordan inverse): `min_variance_weights`
+  (`C^{-1}1` normalized), `max_sharpe_weights` (tangency `C^{-1}(mu-rf)`),
+  `risk_parity_weights` (equal-risk-contribution by sqrt-damped fixed point),
+  plus `portfolio_variance` and `portfolio_return` helpers.
+- Verified: min-variance on a diagonal covariance gives inverse-variance
+  weights and beats equal-weight variance; risk parity equalizes the per-asset
+  risk contributions and reduces to inverse-sigma on a diagonal covariance;
+  max-Sharpe weights sum to 1; the helpers match hand calculations; a singular
+  covariance raises.
+
 ## [1.342.0] - 2026-09-11
 
 ### Added

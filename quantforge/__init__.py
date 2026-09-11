@@ -237,6 +237,10 @@ from .perfmetrics import (
     up_capture, down_capture, downside_beta,
 )
 from .cev import cev_price, cev_greeks, cev_smile, noncentral_chisq_cdf
+from .portopt import (
+    min_variance_weights, max_sharpe_weights, risk_parity_weights,
+    portfolio_variance, portfolio_return,
+)
 from .sizing import (
     delta_hedge_shares, neutralize, vega_neutral_quantity, gamma_neutral_quantity,
     kelly_fraction_binary, kelly_fraction_continuous, kelly_growth_rate,
@@ -357,7 +361,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.342.0"
+__version__ = "1.343.0"
 
 __all__ = [
     "OptionType",
@@ -743,6 +747,11 @@ __all__ = [
     "up_capture",
     "down_capture",
     "downside_beta",
+    "min_variance_weights",
+    "max_sharpe_weights",
+    "risk_parity_weights",
+    "portfolio_variance",
+    "portfolio_return",
     "cev_price",
     "cev_greeks",
     "cev_smile",

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.342.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.343.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -4236,6 +4236,39 @@ Auto-generated from `quantforge` v1.342.0 by `docs/gen_api.py` — do not edit b
 >
 > Returns a ``Book`` with per-position detail and a ``net`` ``BookRisk`` of
 > position-scaled (qty * multiplier) sums.
+
+## portopt
+
+### `max_sharpe_weights(mean_returns, cov, risk_free=0.0) -> list`  _function_
+
+> Tangency (max-Sharpe) weights ``C^{-1} (mu - rf) / sum(...)``.
+>
+> Maximizes the portfolio Sharpe ratio over fully-invested long/short
+> weights. Requires the excess returns not to be orthogonal to ``C^{-1} 1``.
+
+### `min_variance_weights(cov) -> list`  _function_
+
+> Global minimum-variance weights ``C^{-1} 1 / (1^T C^{-1} 1)``.
+>
+> Fully invested (weights sum to 1); may be long/short. Requires a
+> non-singular covariance matrix.
+
+### `portfolio_return(weights, mean_returns) -> float`  _function_
+
+> Expected portfolio return ``w^T mu``.
+
+### `portfolio_variance(weights, cov) -> float`  _function_
+
+> Portfolio variance ``w^T C w``.
+
+### `risk_parity_weights(cov, tol=1e-10, max_iter=1000) -> list`  _function_
+
+> Equal-risk-contribution (risk-parity) weights.
+>
+> Solves for positive weights whose marginal risk contributions
+> ``w_i (C w)_i`` are equal, by the standard fixed-point iteration
+> ``w_i <- (target / (C w)_i)`` renormalized -- convergent for a positive-
+> definite covariance. Weights are long-only and sum to 1.
 
 ## qmc
 
