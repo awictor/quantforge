@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.327.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.328.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -329,6 +329,46 @@ Auto-generated from `quantforge` v1.327.0 by `docs/gen_api.py` — do not edit b
 ### `skew_swap_from_smile(S0, t, r, vol_fn, q=0.0, n_strikes=401, width=8.0)`  _function_
 
 > Fair skew-swap value: the risk-neutral skewness from the BKM moments.
+
+## bondmath
+
+### `bond_cashflows(face, coupon_rate, maturity, freq=2) -> List[Tuple[float, float]]`  _function_
+
+> Level-coupon schedule ``[(t, amount), ...]`` for a vanilla bond.
+>
+> ``freq`` coupons per year of ``face * coupon_rate / freq`` each, with the
+> face repaid alongside the final coupon at ``maturity``.
+
+### `bond_dv01(cashflows: Sequence[Tuple[float, float]], y) -> float`  _function_
+
+> Dollar value of a 1bp yield rise (negative: prices fall as yields rise).
+>
+> ``DV01 = dPrice/dy * 1e-4 = -modified_duration * price * 1e-4``.
+
+### `bond_price_from_yield(cashflows: Sequence[Tuple[float, float]], y) -> float`  _function_
+
+> Present value of the cashflows at continuously-compounded yield ``y``.
+
+### `convexity(cashflows: Sequence[Tuple[float, float]], y) -> float`  _function_
+
+> Convexity ``1/price d2Price/dy2``: PV-weighted average of squared time.
+
+### `macaulay_duration(cashflows: Sequence[Tuple[float, float]], y) -> float`  _function_
+
+> Macaulay duration (years): PV-weighted average cashflow time.
+
+### `modified_duration(cashflows: Sequence[Tuple[float, float]], y) -> float`  _function_
+
+> Modified duration ``-1/price dPrice/dy``.
+>
+> Under continuous compounding this equals the Macaulay duration.
+
+### `yield_to_maturity(cashflows: Sequence[Tuple[float, float]], price, tol=1e-10, max_iter=100) -> float`  _function_
+
+> Solve the continuously-compounded yield reproducing ``price``.
+>
+> Newton on the price/yield relation (derivative is ``-D * price``) with a
+> bracketing bisection fallback, since price is monotone decreasing in yield.
 
 ## bookgreeks
 

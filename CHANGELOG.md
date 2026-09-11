@@ -4,6 +4,21 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.328.0] - 2026-09-11
+
+### Added
+- New module `bondmath.py` with single-yield coupon-bond analytics:
+  `bond_cashflows` (level-coupon schedule), `bond_price_from_yield`,
+  `macaulay_duration`, `modified_duration`, `convexity`, `bond_dv01`, and
+  `yield_to_maturity`. All work off an explicit `(time, amount)` schedule and a
+  continuously-compounded yield (so modified and Macaulay duration coincide);
+  YTM is solved by Newton with a bisection fallback.
+- Verified: YTM round-trips the yield from a price; duration and convexity match
+  central finite differences of the price/yield curve; duration lies below
+  maturity and convexity is positive; DV01 equals `-modified_duration * price *
+  1e-4`; a zero-coupon bond's duration equals its maturity; bad price/maturity
+  inputs raise.
+
 ## [1.327.0] - 2026-09-11
 
 ### Added
