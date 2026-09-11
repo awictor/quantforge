@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.387.0] - 2026-09-11
+
+### Added
+- `roll_yield`, `carry_roll_yield`, `schwartz_futures_volatility` (in
+  `commodity.py`): annualized roll yield `ln(F_near/F_far)/(t_far-t_near)`
+  (positive in backwardation), the carry-model roll yield `-net_cost_of_carry`
+  (matching the forward-implied roll yield exactly), and the Schwartz futures
+  return volatility `sigma e^{-kappa T}` capturing the Samuelson effect (front
+  contracts more volatile than deferred). Cross-checked against the carry sign,
+  carry/roll consistency, and monotone vol decay.
+
 ## [1.386.0] - 2026-09-11
 
 ### Added

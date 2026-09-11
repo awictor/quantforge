@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.386.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.387.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1067,6 +1067,14 @@ Auto-generated from `quantforge` v1.386.0 by `docs/gen_api.py` — do not edit b
 
 ## commodity
 
+### `carry_roll_yield(r, storage_cost=0.0, convenience_yield=0.0)`  _function_
+
+> Roll yield implied by the cost-of-carry model ``y - r - u`` (= -net carry).
+>
+> Under constant carry ``F(T) = S e^{(r+u-y)T}`` the roll yield is exactly the
+> negative net carry :func:`net_cost_of_carry`, so it equals the convenience
+> yield net of financing and storage. Positive precisely in backwardation.
+
 ### `commodity_calendar_spread(spot, r, t_near, t_far, storage_cost=0.0, convenience_yield=0.0)`  _function_
 
 > Far-minus-near forward spread under one carry rate.
@@ -1129,6 +1137,15 @@ Auto-generated from `quantforge` v1.386.0 by `docs/gen_api.py` — do not edit b
 
 > Net proportional carry rate ``r + u - y`` (the forward's growth rate).
 
+### `roll_yield(near_forward, far_forward, t_near, t_far)`  _function_
+
+> Annualized roll yield between two forwards ``ln(F_near/F_far)/(t_far-t_near)``.
+>
+> The return earned rolling a long position from the far to the near contract as
+> time passes, assuming spot is unchanged. Positive in backwardation (near above
+> far) and negative in contango, so its sign is the opposite of the
+> :func:`commodity_calendar_spread` sign.
+
 ### `schwartz_forward(spot, kappa, alpha_star, sigma, maturity)`  _function_
 
 > Commodity forward under the Schwartz (1997) one-factor model.
@@ -1138,6 +1155,15 @@ Auto-generated from `quantforge` v1.386.0 by `docs/gen_api.py` — do not edit b
 > at ``T = 0`` and converges to the risk-neutral long-run forward
 > ``exp(alpha_star + sigma^2/(4 kappa))`` as ``T -> inf`` -- the mean-reverting
 > alternative to the constant-carry :func:`commodity_forward`.
+
+### `schwartz_futures_volatility(sigma, kappa, maturity)`  _function_
+
+> Instantaneous return volatility of the ``maturity``-future under Schwartz.
+>
+> Because log-spot mean-reverts, the futures return volatility decays with time
+> to maturity: ``sigma_F(T) = sigma e^{-kappa T}``. It equals the spot vol
+> ``sigma`` for the front (``T = 0``) and falls for longer maturities -- the
+> Samuelson effect (near contracts more volatile than deferred).
 
 ### `schwartz_implied_alpha(spot, forward, kappa, sigma, maturity)`  _function_
 

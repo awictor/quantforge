@@ -10,6 +10,7 @@ from quantforge import (
     commodity_calendar_spread, convenience_yield_curve, seasonal_forward,
     schwartz_log_mean, schwartz_log_variance, schwartz_forward,
     schwartz_option, mean_reversion_half_life, schwartz_implied_alpha,
+    roll_yield, carry_roll_yield, schwartz_futures_volatility,
 )
 
 
@@ -147,6 +148,44 @@ def test_schwartz_option_calibration_validation():
         schwartz_option(SK, SKAPPA, SALPHA, SSIG, -1, 0.05, 2.0)
     with pytest.raises(ValueError):
         mean_reversion_half_life(0)
+
+
+def test_roll_yield_positive_in_backwardation():
+    Fn = commodity_forward(S, R, 1, 0.0, 0.10)
+    Ff = commodity_forward(S, R, 2, 0.0, 0.10)
+    assert roll_yield(Fn, Ff, 1, 2) > 0
+
+
+def test_roll_yield_negative_in_contango():
+    Fn = commodity_forward(S, R, 1, 0.02, 0.01)
+    Ff = commodity_forward(S, R, 2, 0.02, 0.01)
+    assert roll_yield(Fn, Ff, 1, 2) < 0
+
+
+def test_carry_roll_yield_is_negative_net_carry():
+    assert carry_roll_yield(R, 0.02, 0.03) == pytest.approx(
+        -net_cost_of_carry(R, 0.02, 0.03))
+
+
+def test_roll_yield_matches_carry_model():
+    Fn = commodity_forward(S, R, 1, 0.02, 0.01)
+    Ff = commodity_forward(S, R, 2, 0.02, 0.01)
+    assert roll_yield(Fn, Ff, 1, 2) == pytest.approx(carry_roll_yield(R, 0.02, 0.01))
+
+
+def test_schwartz_futures_vol_samuelson():
+    assert schwartz_futures_volatility(0.3, 1.5, 0) == pytest.approx(0.3)
+    vs = [schwartz_futures_volatility(0.3, 1.5, T) for T in (0, 0.5, 1, 2, 5)]
+    assert all(vs[i] > vs[i + 1] for i in range(len(vs) - 1))
+
+
+def test_roll_yield_validation():
+    with pytest.raises(ValueError):
+        roll_yield(-1, 100, 1, 2)
+    with pytest.raises(ValueError):
+        roll_yield(100, 100, 2, 1)
+    with pytest.raises(ValueError):
+        schwartz_futures_volatility(0.3, 0, 1)
 
 
 def test_validation():

@@ -189,6 +189,48 @@ def schwartz_implied_alpha(spot, forward, kappa, sigma, maturity):
     return (math.log(forward) - 0.5 * var - decay * math.log(spot)) / (1.0 - decay)
 
 
+def roll_yield(near_forward, far_forward, t_near, t_far):
+    """Annualized roll yield between two forwards ``ln(F_near/F_far)/(t_far-t_near)``.
+
+    The return earned rolling a long position from the far to the near contract as
+    time passes, assuming spot is unchanged. Positive in backwardation (near above
+    far) and negative in contango, so its sign is the opposite of the
+    :func:`commodity_calendar_spread` sign.
+    """
+    if near_forward <= 0 or far_forward <= 0:
+        raise ValueError("forwards must be positive")
+    if t_far <= t_near:
+        raise ValueError("t_far must exceed t_near")
+    return math.log(near_forward / far_forward) / (t_far - t_near)
+
+
+def carry_roll_yield(r, storage_cost=0.0, convenience_yield=0.0):
+    """Roll yield implied by the cost-of-carry model ``y - r - u`` (= -net carry).
+
+    Under constant carry ``F(T) = S e^{(r+u-y)T}`` the roll yield is exactly the
+    negative net carry :func:`net_cost_of_carry`, so it equals the convenience
+    yield net of financing and storage. Positive precisely in backwardation.
+    """
+    return -net_cost_of_carry(r, storage_cost, convenience_yield)
+
+
+def schwartz_futures_volatility(sigma, kappa, maturity):
+    """Instantaneous return volatility of the ``maturity``-future under Schwartz.
+
+    Because log-spot mean-reverts, the futures return volatility decays with time
+    to maturity: ``sigma_F(T) = sigma e^{-kappa T}``. It equals the spot vol
+    ``sigma`` for the front (``T = 0``) and falls for longer maturities -- the
+    Samuelson effect (near contracts more volatile than deferred).
+    """
+    if sigma < 0:
+        raise ValueError("sigma must be non-negative")
+    if kappa <= 0:
+        raise ValueError("kappa must be positive")
+    if maturity < 0:
+        raise ValueError("maturity must be non-negative")
+    return sigma * math.exp(-kappa * maturity)
+
+
 def commodity_calendar_spread(spot, r, t_near, t_far, storage_cost=0.0,
                               convenience_yield=0.0):
     """Far-minus-near forward spread under one carry rate.
