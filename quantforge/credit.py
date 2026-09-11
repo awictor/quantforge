@@ -185,6 +185,65 @@ def bootstrap_survival_curve(quote_maturities, quote_spreads, r, recovery=0.4,
     return SurvivalCurve(times, hazards)
 
 
+def risky_bond_price(curve: SurvivalCurve, cashflows, r, recovery=0.4,
+                     face=100.0, n_steps=400):
+    """Price a defaultable coupon bond under a hazard-rate survival curve.
+
+    Each scheduled cashflow ``(t, amount)`` is received only if the issuer
+    survives to ``t``, so its PV is ``amount DF(t) Q(t)``. On default the holder
+    recovers ``recovery * face``, modelled as a payment at the (grid-approximated)
+    default time over ``[0, last cashflow]``:
+
+        price = sum_i CF_i DF(t_i) Q(t_i)
+              + recovery * face * integral DF(t) (-dQ).
+
+    With ``recovery = 0`` and no defaults this collapses to the survival-weighted
+    cashflow PV; with a zero hazard it recovers the risk-free bond price. Uses a
+    flat rate ``r`` or a supplied discount function.
+    """
+    df = _disc_fn(r)
+    surv_pv = sum(cf * df(t) * curve.survival(t) for t, cf in cashflows)
+    maturity = max(t for t, _ in cashflows)
+    dt = maturity / n_steps
+    rec_pv = 0.0
+    q_prev = curve.survival(0.0)
+    for i in range(1, n_steps + 1):
+        t = i * dt
+        q = curve.survival(t)
+        rec_pv += df(t - 0.5 * dt) * (q_prev - q)
+        q_prev = q
+    return surv_pv + recovery * face * rec_pv
+
+
+def risky_bond_yield_spread(curve: SurvivalCurve, cashflows, r, recovery=0.4,
+                            face=100.0, n_steps=400, tol=1e-10, max_iter=100):
+    """Constant credit spread ``s`` over ``r`` that reproduces the risky price.
+
+    Prices the bond with :func:`risky_bond_price`, then finds the flat spread
+    such that discounting the *promised* cashflows at ``r + s`` (no explicit
+    default/recovery) gives the same value -- the bond's z-spread-like quote.
+    Solved by bisection (price is monotone decreasing in the spread).
+    """
+    target = risky_bond_price(curve, cashflows, r, recovery, face, n_steps)
+    base_df = _disc_fn(r)
+
+    def price_at(s):
+        return sum(cf * base_df(t) * math.exp(-s * t) for t, cf in cashflows)
+
+    lo, hi = -0.5, 5.0
+    # price decreases in s; bracket the target.
+    for _ in range(max_iter):
+        mid = 0.5 * (lo + hi)
+        pm = price_at(mid)
+        if abs(pm - target) < tol:
+            return mid
+        if pm > target:
+            lo = mid
+        else:
+            hi = mid
+    return 0.5 * (lo + hi)
+
+
 def cds_greeks(curve: SurvivalCurve, spread, pay_times, r, recovery=0.4,
                n_steps=400, protection_buyer=True, bump=1e-4):
     """Risk sensitivities of a CDS mark-to-market by finite difference.

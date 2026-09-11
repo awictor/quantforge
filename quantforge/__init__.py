@@ -203,6 +203,7 @@ from .bondmath import (
 from .credit import (
     SurvivalCurve, risky_annuity, cds_protection_leg, cds_premium_leg,
     cds_par_spread, cds_value, cds_greeks, bootstrap_survival_curve,
+    risky_bond_price, risky_bond_yield_spread,
 )
 from .overhedge import (
     Overhedge, digital_call_overhedge, digital_put_overhedge, overhedge_payoff,
@@ -348,7 +349,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.332.0"
+__version__ = "1.333.0"
 
 __all__ = [
     "OptionType",
@@ -668,6 +669,8 @@ __all__ = [
     "cds_value",
     "cds_greeks",
     "bootstrap_survival_curve",
+    "risky_bond_price",
+    "risky_bond_yield_spread",
     "Overhedge",
     "digital_call_overhedge",
     "digital_put_overhedge",

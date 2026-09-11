@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.332.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.333.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1057,6 +1057,31 @@ Auto-generated from `quantforge` v1.332.0 by `docs/gen_api.py` — do not edit b
 > ``pay_times`` are the premium payment dates; ``accrual`` is the per-period
 > year fractions (defaults to the gaps between pay times, starting from 0).
 > Discount by flat rate ``r`` or a supplied ``r(t)`` function.
+
+### `risky_bond_price(curve: quantforge.credit.SurvivalCurve, cashflows, r, recovery=0.4, face=100.0, n_steps=400)`  _function_
+
+> Price a defaultable coupon bond under a hazard-rate survival curve.
+>
+> Each scheduled cashflow ``(t, amount)`` is received only if the issuer
+> survives to ``t``, so its PV is ``amount DF(t) Q(t)``. On default the holder
+> recovers ``recovery * face``, modelled as a payment at the (grid-approximated)
+> default time over ``[0, last cashflow]``:
+>
+>     price = sum_i CF_i DF(t_i) Q(t_i)
+>           + recovery * face * integral DF(t) (-dQ).
+>
+> With ``recovery = 0`` and no defaults this collapses to the survival-weighted
+> cashflow PV; with a zero hazard it recovers the risk-free bond price. Uses a
+> flat rate ``r`` or a supplied discount function.
+
+### `risky_bond_yield_spread(curve: quantforge.credit.SurvivalCurve, cashflows, r, recovery=0.4, face=100.0, n_steps=400, tol=1e-10, max_iter=100)`  _function_
+
+> Constant credit spread ``s`` over ``r`` that reproduces the risky price.
+>
+> Prices the bond with :func:`risky_bond_price`, then finds the flat spread
+> such that discounting the *promised* cashflows at ``r + s`` (no explicit
+> default/recovery) gives the same value -- the bond's z-spread-like quote.
+> Solved by bisection (price is monotone decreasing in the spread).
 
 ## density
 

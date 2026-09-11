@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.333.0] - 2026-09-11
+
+### Added
+- `risky_bond_price` and `risky_bond_yield_spread` (in `credit.py`): price a
+  defaultable coupon bond under a hazard-rate survival curve. Each cashflow is
+  survival-weighted (`CF DF(t) Q(t)`) and a `recovery * face` payment is
+  grid-integrated over the default time; `risky_bond_yield_spread` finds the
+  flat credit spread over `r` that reproduces that price from the promised
+  cashflows.
+- Verified: a zero hazard recovers the risk-free bond price (and a zero yield
+  spread); a positive hazard prices below risk-free and falls with higher
+  hazard; higher recovery raises the price; the fitted spread is positive and
+  reprices the bond when the promised cashflows are discounted at `r + spread`.
+
 ## [1.332.0] - 2026-09-11
 
 ### Added
