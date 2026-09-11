@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.405.0] - 2026-09-11
+
+### Added
+- `spark_spread_option` (in `commodity.py`): a spark/dark-spread option on a power
+  generator's clean margin `power - heat_rate * fuel - emissions_rate * carbon`,
+  built on the normal `bachelier_spread_option` (generation margins routinely go
+  negative). The heat rate scales both the fuel forward and its volatility, and an
+  optional carbon adder charges emissions. Cross-checked against the underlying
+  Bachelier price, put-call parity (including the carbon leg), negative margins,
+  and the emissions effect.
+
 ## [1.404.0] - 2026-09-11
 
 ### Added

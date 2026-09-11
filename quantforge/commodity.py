@@ -255,6 +255,36 @@ def kirk_spread_option(f1, f2, strike, sigma1, sigma2, rho, r, expiry,
     return disc * (denom * norm_cdf(-d2) - f1 * norm_cdf(-d1))
 
 
+def spark_spread_option(power_forward, fuel_forward, heat_rate, strike,
+                        sigma_power, sigma_fuel, rho, r, expiry, is_call=True,
+                        emissions_rate=0.0, carbon_forward=0.0):
+    """Spark-spread (or dark-spread) option on a power generator's margin.
+
+    A gas/coal plant's clean generation margin per MWh is
+
+        spread = power - heat_rate * fuel - emissions_rate * carbon,
+
+    where ``heat_rate`` converts fuel price into fuel cost per MWh (MMBtu/MWh) and
+    the optional emissions term charges carbon. This prices ``max(spread - K, 0)``
+    (a call, the option to run the plant) via the normal
+    :func:`bachelier_spread_option`, treating the scaled fuel-plus-carbon leg as a
+    single lognormal-free asset with volatility ``heat_rate * sigma_fuel`` (the
+    carbon leg is taken as a deterministic adder). Because generation margins are
+    routinely negative or near zero, the Bachelier model is used rather than Kirk.
+    Put and call satisfy ``C - P = e^{-r T}(power - heat_rate*fuel -
+    emissions_rate*carbon - K)``.
+    """
+    if heat_rate < 0:
+        raise ValueError("heat_rate must be non-negative")
+    if emissions_rate < 0:
+        raise ValueError("emissions_rate must be non-negative")
+    # Combined short leg: scaled fuel forward plus deterministic carbon cost.
+    f2 = heat_rate * fuel_forward + emissions_rate * carbon_forward
+    sigma2 = heat_rate * sigma_fuel
+    return bachelier_spread_option(power_forward, f2, strike, sigma_power, sigma2,
+                                   rho, r, expiry, is_call)
+
+
 def bachelier_spread_option(f1, f2, strike, sigma1, sigma2, rho, r, expiry,
                             is_call=True):
     """Bachelier (normal-model) spread option on two forwards.

@@ -14,7 +14,7 @@ from quantforge import (
     schwartz_smith_log_mean, schwartz_smith_log_variance, schwartz_smith_forward,
     schwartz_smith_futures_volatility,
     margrabe_exchange_option, kirk_spread_option,
-    bachelier_spread_option, spread_option_mc,
+    bachelier_spread_option, spread_option_mc, spark_spread_option,
     commodity_swap_rate, commodity_swap_value, asian_commodity_option,
     geometric_asian_option, asian_commodity_option_mc, turnbull_wakeman_asian,
 )
@@ -231,6 +231,38 @@ def test_spread_option_validation():
         kirk_spread_option(SP_F1, SP_F2, -200, SP_S1, SP_S2, SP_RHO, SP_R, SP_T)
     with pytest.raises(ValueError):
         margrabe_exchange_option(-1, SP_F2, SP_S1, SP_S2, SP_RHO, SP_R, SP_T)
+
+
+def test_spark_spread_matches_bachelier():
+    c = spark_spread_option(50, 3, 8, 2, 10, 0.5, 0.3, 0.05, 1.0, True)
+    manual = bachelier_spread_option(50, 8 * 3, 2, 10, 8 * 0.5, 0.3, 0.05, 1.0, True)
+    assert c == pytest.approx(manual, abs=1e-12)
+
+
+def test_spark_spread_parity():
+    c = spark_spread_option(50, 3, 8, 2, 10, 0.5, 0.3, 0.05, 1.0, True)
+    p = spark_spread_option(50, 3, 8, 2, 10, 0.5, 0.3, 0.05, 1.0, False)
+    assert c - p == pytest.approx(math.exp(-0.05) * (50 - 8 * 3 - 2), abs=1e-9)
+
+
+def test_spark_spread_negative_margin():
+    assert spark_spread_option(20, 3, 8, 0, 10, 0.5, 0.3, 0.05, 1.0, True) > 0
+
+
+def test_spark_spread_emissions_lower_call_and_parity():
+    base = spark_spread_option(50, 3, 8, 2, 10, 0.5, 0.3, 0.05, 1.0, True)
+    ce = spark_spread_option(50, 3, 8, 2, 10, 0.5, 0.3, 0.05, 1.0, True,
+                             emissions_rate=0.5, carbon_forward=20.0)
+    assert ce < base
+    pe = spark_spread_option(50, 3, 8, 2, 10, 0.5, 0.3, 0.05, 1.0, False,
+                             emissions_rate=0.5, carbon_forward=20.0)
+    margin = 50 - 8 * 3 - 0.5 * 20
+    assert ce - pe == pytest.approx(math.exp(-0.05) * (margin - 2), abs=1e-9)
+
+
+def test_spark_spread_validation():
+    with pytest.raises(ValueError):
+        spark_spread_option(50, 3, -1, 2, 10, 0.5, 0.3, 0.05, 1.0)
 
 
 def test_bachelier_spread_parity():
