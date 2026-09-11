@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.269.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.270.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1437,9 +1437,28 @@ Auto-generated from `quantforge` v1.269.0 by `docs/gen_api.py` — do not edit b
 >     excess_kurt: excess kurtosis (kurtosis - 3).
 >     b: cost of carry (defaults to r). skew=kurt=0 => Black-Scholes.
 
+### `corrado_su_implied_vol(S, K, t, r, sigma, skew=0.0, excess_kurt=0.0, b=None) -> float`  _function_
+
+> Black-Scholes implied vol of a Corrado-Su price at a single strike.
+>
+> Prices the option with :func:`corrado_su_price` at the Gram-Charlier
+> parameters, then inverts Black-Scholes for the vol that reproduces it. With
+> ``skew = excess_kurt = 0`` this returns ``sigma`` at every strike (a flat
+> smile); non-zero moments trace the characteristic Gram-Charlier skew/smile:
+> negative skew lifts the low-strike (put) wing, positive excess kurtosis lifts
+> both wings relative to the at-the-money level.
+
 ### `corrado_su_price(S, K, t, r, sigma, skew=0.0, excess_kurt=0.0, option_type=<OptionType.CALL: 'call'>, b=None) -> float`  _function_
 
 > Corrado-Su price for a call or put (put via put-call parity).
+
+### `corrado_su_smile(S, t, r, sigma, strikes, skew=0.0, excess_kurt=0.0, b=None)`  _function_
+
+> Corrado-Su implied-vol smile: ``(strikes, implied_vols)`` over ``strikes``.
+>
+> Convenience wrapper mapping each strike through
+> :func:`corrado_su_implied_vol`. Useful for plotting the skew/kurtosis smile
+> or seeding an SVI/SABR fit from Gram-Charlier moments.
 
 ### `realized_excess_kurtosis(returns: Sequence[float]) -> float`  _function_
 

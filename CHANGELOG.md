@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.270.0] - 2026-09-10
+
+### Added
+- `corrado_su_implied_vol` and `corrado_su_smile` (in `gramcharlier.py`): the
+  Black-Scholes implied vol of a Corrado-Su price at a strike, and the smile over
+  a strike grid. Turns Gram-Charlier `(sigma, skew, excess_kurt)` into an
+  implied-vol curve for plotting or seeding an SVI/SABR fit.
+- Verified: zero moments give a flat smile at `sigma`; negative skew lifts the
+  low-strike put wing (monotone-decreasing smile); positive excess kurtosis lifts
+  both wings above the at-the-money level; the implied vol reprices the
+  Corrado-Su value; the smile round-trips through `calibrate_corrado_su`.
+
 ## [1.269.0] - 2026-09-10
 
 ### Added

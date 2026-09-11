@@ -112,6 +112,38 @@ def calibrate_corrado_su(S, t, r, strikes, call_prices, b=None,
     return sigma, skew, kurt, price_rmse
 
 
+def corrado_su_implied_vol(S, K, t, r, sigma, skew=0.0, excess_kurt=0.0,
+                           b=None) -> float:
+    """Black-Scholes implied vol of a Corrado-Su price at a single strike.
+
+    Prices the option with :func:`corrado_su_price` at the Gram-Charlier
+    parameters, then inverts Black-Scholes for the vol that reproduces it. With
+    ``skew = excess_kurt = 0`` this returns ``sigma`` at every strike (a flat
+    smile); non-zero moments trace the characteristic Gram-Charlier skew/smile:
+    negative skew lifts the low-strike (put) wing, positive excess kurtosis lifts
+    both wings relative to the at-the-money level.
+    """
+    from .implied import implied_volatility
+    if b is None:
+        b = r
+    price = corrado_su_price(S, K, t, r, sigma, skew, excess_kurt,
+                             option_type=OptionType.CALL, b=b)
+    return implied_volatility(price, S, K, t, r, OptionType.CALL, b=b)
+
+
+def corrado_su_smile(S, t, r, sigma, strikes, skew=0.0, excess_kurt=0.0,
+                     b=None):
+    """Corrado-Su implied-vol smile: ``(strikes, implied_vols)`` over ``strikes``.
+
+    Convenience wrapper mapping each strike through
+    :func:`corrado_su_implied_vol`. Useful for plotting the skew/kurtosis smile
+    or seeding an SVI/SABR fit from Gram-Charlier moments.
+    """
+    vols = [corrado_su_implied_vol(S, K, t, r, sigma, skew, excess_kurt, b=b)
+            for K in strikes]
+    return list(strikes), vols
+
+
 def realized_skewness(returns: Sequence[float]) -> float:
     """Sample skewness of a return series (bias-corrected denominator n)."""
     n = len(returns)
