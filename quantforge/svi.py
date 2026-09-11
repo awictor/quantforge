@@ -165,6 +165,21 @@ def svi_variance_swap_strike(p: SVIParams, S0, t, r, q=0.0, n_strikes=401,
                                     width=width)
 
 
+def svi_density(p: SVIParams, S0, t, r, K, q=0.0, dK=None):
+    """Breeden-Litzenberger risk-neutral density ``g(K)`` implied by an SVI slice.
+
+    ``g(K) = e^{r t} d^2 C / dK^2`` with the call priced at the slice's smile vol
+    ``p.implied_vol(ln(K/F), t)`` on the forward ``F = S0 e^{(r-q)t}``. Non-
+    negative wherever the slice is butterfly-arbitrage-free (see
+    :func:`svi_is_butterfly_free`); a negative value flags a density violation.
+    """
+    from .rnd import risk_neutral_density_from_smile
+
+    F = S0 * math.exp((r - q) * t)
+    return risk_neutral_density_from_smile(
+        S0, t, r, lambda k: p.implied_vol(math.log(k / F), t), K, q=q, dK=dK)
+
+
 def svi_bkm_moments(p: SVIParams, S0, t, r, q=0.0, n_strikes=401, width=8.0):
     """Risk-neutral (variance, skewness, excess kurtosis) implied by an SVI slice.
 

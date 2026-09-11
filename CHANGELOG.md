@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.262.0] - 2026-09-10
+
+### Added
+- `svi_density` (in `svi.py`): Breeden-Litzenberger risk-neutral density `g(K)`
+  implied by a raw-SVI slice, `g(K) = e^{rt} d^2C/dK^2` with the call priced at
+  the slice's smile vol on the forward.
+- Verified: a flat slice matches the closed-form lognormal density; the density
+  is non-negative on a butterfly-arbitrage-free slice, integrates to 1, and has
+  mean equal to the forward; a wing-ok but butterfly-violating slice produces a
+  negative density exactly where `svi_g < 0`.
+
 ## [1.261.0] - 2026-09-10
 
 ### Added

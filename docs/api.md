@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.261.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.262.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -4168,6 +4168,15 @@ Auto-generated from `quantforge` v1.261.0 by `docs/gen_api.py` — do not edit b
 >
 > Scans ``ks`` (default a wide grid) and reports those where ``g(k) < -tol``.
 > An empty list means the slice is butterfly-arbitrage-free on the grid.
+
+### `svi_density(p: quantforge.svi.SVIParams, S0, t, r, K, q=0.0, dK=None)`  _function_
+
+> Breeden-Litzenberger risk-neutral density ``g(K)`` implied by an SVI slice.
+>
+> ``g(K) = e^{r t} d^2 C / dK^2`` with the call priced at the slice's smile vol
+> ``p.implied_vol(ln(K/F), t)`` on the forward ``F = S0 e^{(r-q)t}``. Non-
+> negative wherever the slice is butterfly-arbitrage-free (see
+> :func:`svi_is_butterfly_free`); a negative value flags a density violation.
 
 ### `svi_g(p: quantforge.svi.SVIParams, k)`  _function_
 
