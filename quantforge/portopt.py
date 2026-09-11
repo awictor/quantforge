@@ -164,6 +164,38 @@ def component_var(weights, cov) -> list:
     return [weights[i] * cw[i] / sd for i in range(n)]
 
 
+def marginal_var(weights, cov, confidence=0.95, horizon=1.0) -> list:
+    """Marginal VaR: sensitivity of the portfolio VaR to each weight.
+
+    ``dVaR/dw_i = z sqrt(horizon) (C w)_i / sigma_p`` (the zero-mean parametric
+    VaR). Multiplying by ``w_i`` gives the component VaR, and the dot product
+    ``sum_i w_i * marginal_i`` recovers the total VaR (VaR is homogeneous of
+    degree 1 in the weights).
+    """
+    n = _check_cov(cov)
+    cw = _matvec(cov, list(weights))
+    sd = math.sqrt(portfolio_variance(weights, cov))
+    if sd <= 0.0:
+        raise ValueError("portfolio variance must be positive")
+    z = _norm_ppf(confidence) * math.sqrt(horizon)
+    return [z * cw[i] / sd for i in range(n)]
+
+
+def var_budget(weights, cov) -> list:
+    """Percentage VaR budget: each asset's fractional share of portfolio risk.
+
+    ``w_i (C w)_i / (w^T C w)`` -- the component VaRs normalized to sum to 1.
+    Independent of the confidence level and horizon (they cancel). Shows how the
+    total risk is distributed across positions; equal entries mean risk parity.
+    """
+    n = _check_cov(cov)
+    cw = _matvec(cov, list(weights))
+    total = portfolio_variance(weights, cov)
+    if total <= 0.0:
+        raise ValueError("portfolio variance must be positive")
+    return [weights[i] * cw[i] / total for i in range(n)]
+
+
 def diversification_ratio(weights, cov) -> float:
     """Diversification ratio ``(sum_i w_i sigma_i) / sqrt(w^T C w)``.
 

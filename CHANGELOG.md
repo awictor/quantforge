@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.347.0] - 2026-09-11
+
+### Added
+- `marginal_var` and `var_budget` (in `portopt.py`): the sensitivity of the
+  portfolio VaR to each weight (`z sqrt(horizon) (C w)_i / sigma_p`) and the
+  percentage VaR budget (`w_i (C w)_i / (w^T C w)`, summing to 1 and level-
+  independent).
+- Verified: the weight-dot-marginal Euler sum recovers the total VaR; the
+  weight-times-marginal equals the component VaR up to the z-scaling; the
+  budget sums to 1 and is equal across assets for a risk-parity portfolio;
+  a zero-variance portfolio raises.
+
 ## [1.346.0] - 2026-09-11
 
 ### Added

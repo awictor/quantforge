@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.346.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.347.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -4264,6 +4264,15 @@ Auto-generated from `quantforge` v1.346.0 by `docs/gen_api.py` — do not edit b
 > :func:`target_return_weights` and reports the achieved return with the
 > portfolio standard deviation ``sqrt(w^T C w)``.
 
+### `marginal_var(weights, cov, confidence=0.95, horizon=1.0) -> list`  _function_
+
+> Marginal VaR: sensitivity of the portfolio VaR to each weight.
+>
+> ``dVaR/dw_i = z sqrt(horizon) (C w)_i / sigma_p`` (the zero-mean parametric
+> VaR). Multiplying by ``w_i`` gives the component VaR, and the dot product
+> ``sum_i w_i * marginal_i`` recovers the total VaR (VaR is homogeneous of
+> degree 1 in the weights).
+
 ### `max_diversification_weights(cov) -> list`  _function_
 
 > Most-diversified portfolio: maximizes the diversification ratio.
@@ -4332,6 +4341,14 @@ Auto-generated from `quantforge` v1.346.0 by `docs/gen_api.py` — do not edit b
 >
 > Fully invested; may be long/short. Sweeping ``target`` traces the efficient
 > frontier.
+
+### `var_budget(weights, cov) -> list`  _function_
+
+> Percentage VaR budget: each asset's fractional share of portfolio risk.
+>
+> ``w_i (C w)_i / (w^T C w)`` -- the component VaRs normalized to sum to 1.
+> Independent of the confidence level and horizon (they cancel). Shows how the
+> total risk is distributed across positions; equal entries mean risk parity.
 
 ## qmc
 
