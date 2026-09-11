@@ -330,6 +330,61 @@ def no_touch(S, H, t, r, sigma, b=None, cash=1.0):
     return cash * disc - hit
 
 
+def double_no_touch(S, L, U, t, r, sigma, b=None, cash=1.0, n_terms=200):
+    """Double-no-touch: pays ``cash`` at expiry if spot stays inside ``(L, U)``.
+
+    Continuously monitored: the option survives only if the spot never touches
+    either the lower barrier ``L`` or the upper barrier ``U`` before expiry. The
+    survival probability of driftful Brownian motion in a strip has the classic
+    Fourier (eigenfunction) expansion; with ``x = ln(S/L)``, ``Z = ln(U/L)``,
+    ``m = b - sigma^2/2`` and ``beta = m/sigma^2``,
+
+        P(survive) = (2/Z) e^{-beta x - m^2 t / (2 sigma^2)}
+            * sum_{n>=1} sin(k_n x) e^{-k_n^2 sigma^2 t / 2}
+                         * k_n (1 - (-1)^n e^{beta Z}) / (beta^2 + k_n^2),
+
+    with ``k_n = n pi / Z``. The value is ``cash e^{-rt} P(survive)``. As
+    ``U -> infinity`` it collapses to the single lower :func:`no_touch`, and as
+    ``L -> 0`` to the upper one. Requires ``L < S < U``.
+    """
+    _validate(S, L, t, sigma)
+    if not (0.0 < L < S < U):
+        raise ValueError("need 0 < L < S < U")
+    if b is None:
+        b = r
+    disc = math.exp(-r * t)
+    if t == 0 or sigma == 0:
+        return cash * disc  # cannot touch in zero time while strictly inside
+
+    x0 = math.log(S / L)
+    Z = math.log(U / L)
+    m = b - 0.5 * sigma * sigma
+    beta = m / (sigma * sigma)
+    var = sigma * sigma * t
+    pref = (2.0 / Z) * math.exp(-beta * x0 - m * m * t / (2.0 * sigma * sigma))
+    total = 0.0
+    for n in range(1, n_terms + 1):
+        kn = n * math.pi / Z
+        total += (math.sin(kn * x0) * math.exp(-0.5 * kn * kn * var)
+                  * kn * (1.0 - ((-1) ** n) * math.exp(beta * Z))
+                  / (beta * beta + kn * kn))
+    surv = pref * total
+    # Clamp tiny numerical negatives/overshoots from the truncated series.
+    surv = min(1.0, max(0.0, surv))
+    return cash * disc * surv
+
+
+def double_one_touch(S, L, U, t, r, sigma, b=None, cash=1.0, n_terms=200):
+    """Double-one-touch: pays ``cash`` at expiry if spot touches ``L`` or ``U``.
+
+    The expiry-settled complement of :func:`double_no_touch`:
+    ``double_one_touch = cash e^{-rt} - double_no_touch``. Requires ``L < S < U``.
+    """
+    disc = math.exp(-r * t)
+    dnt = double_no_touch(S, L, U, t, r, sigma, b=b, cash=cash, n_terms=n_terms)
+    return cash * disc - dnt
+
+
 # --------------------------------------------------------------------------
 # Barrier option Greeks (finite differences on the closed form)
 # --------------------------------------------------------------------------

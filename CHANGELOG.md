@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.275.0] - 2026-09-11
+
+### Added
+- `double_no_touch` and `double_one_touch` (in `exotics.py`): continuously
+  monitored double-barrier binaries paying `cash` if the spot stays inside
+  `(L, U)` to expiry (DNT), or if it touches either barrier (DOT). DNT uses the
+  Fourier eigenfunction expansion of the driftful survival probability in a
+  strip.
+- Verified: `U -> infinity` collapses DNT to the lower `no_touch`, `L -> 0` to
+  the upper; `DNT + DOT = cash e^{-rt}`; a narrower band and higher vol both
+  lower survival; and DNT matches a fine-step (4000-step) continuously-monitored
+  Monte Carlo.
+
 ## [1.274.0] - 2026-09-10
 
 ### Added (tests)

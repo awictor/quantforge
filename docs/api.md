@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.273.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.275.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1154,6 +1154,31 @@ Auto-generated from `quantforge` v1.273.0 by `docs/gen_api.py` — do not edit b
 > approaches, the digital's delta spikes (and gamma flips sign across the
 > strike) -- the "pin risk" that makes digitals hard to hedge and motivates
 > the call-spread over-hedge in :mod:`quantforge.overhedge`.
+
+### `double_no_touch(S, L, U, t, r, sigma, b=None, cash=1.0, n_terms=200)`  _function_
+
+> Double-no-touch: pays ``cash`` at expiry if spot stays inside ``(L, U)``.
+>
+> Continuously monitored: the option survives only if the spot never touches
+> either the lower barrier ``L`` or the upper barrier ``U`` before expiry. The
+> survival probability of driftful Brownian motion in a strip has the classic
+> Fourier (eigenfunction) expansion; with ``x = ln(S/L)``, ``Z = ln(U/L)``,
+> ``m = b - sigma^2/2`` and ``beta = m/sigma^2``,
+>
+>     P(survive) = (2/Z) e^{-beta x - m^2 t / (2 sigma^2)}
+>         * sum_{n>=1} sin(k_n x) e^{-k_n^2 sigma^2 t / 2}
+>                      * k_n (1 - (-1)^n e^{beta Z}) / (beta^2 + k_n^2),
+>
+> with ``k_n = n pi / Z``. The value is ``cash e^{-rt} P(survive)``. As
+> ``U -> infinity`` it collapses to the single lower :func:`no_touch`, and as
+> ``L -> 0`` to the upper one. Requires ``L < S < U``.
+
+### `double_one_touch(S, L, U, t, r, sigma, b=None, cash=1.0, n_terms=200)`  _function_
+
+> Double-one-touch: pays ``cash`` at expiry if spot touches ``L`` or ``U``.
+>
+> The expiry-settled complement of :func:`double_no_touch`:
+> ``double_one_touch = cash e^{-rt} - double_no_touch``. Requires ``L < S < U``.
 
 ### `gap_option(S, K_trigger, K_payoff, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
 
