@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.360.0] - 2026-09-11
+
+### Added
+- `rho_discount` (in `bsm.py`): discount-only rho `dPrice/dr` holding the cost
+  of carry `b` fixed, which equals `-t * price` for both calls and puts. This is
+  the correct rate sensitivity when the carry is independent of the funding rate
+  (Black-76 on a future, an FX or commodity forward), where a rate change moves
+  only the discount factor -- contrast `rho`, which assumes `b` moves with `r`.
+- Verified: it matches a central finite difference of the price in `r` at fixed
+  `b = 0` for calls and puts across rates; equals `-t * price`; is negative for
+  both; a zero maturity gives zero.
+
 ## [1.359.0] - 2026-09-11
 
 ### Changed

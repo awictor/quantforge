@@ -281,6 +281,22 @@ def epsilon(S, K, t, r, sigma, option_type=OptionType.CALL, b=None) -> float:
     return S * t * carry * norm_cdf(-d1)
 
 
+def rho_discount(S, K, t, r, sigma, option_type=OptionType.CALL, b=None) -> float:
+    """Discount-only rho ``dPrice/dr`` holding the carry ``b`` fixed.
+
+    When the cost of carry is independent of the funding rate (Black-76 on a
+    future, an FX or commodity forward), a change in ``r`` moves only the
+    discount factor, not the forward. Then ``dPrice/dr = -t * price`` for both
+    calls and puts. Contrast :func:`rho`, which assumes ``b`` moves with ``r``
+    (the plain stock case).
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if b is None:
+        b = r
+    return -t * price(S, K, t, r, sigma, ot, b=b)
+
+
 @dataclass(frozen=True)
 class Greeks:
     price: float

@@ -17,6 +17,7 @@ from .bsm import (
     implied_forward as implied_forward_from_parity,
     implied_discount_factor,
     box_spread_implied_rate,
+    rho_discount,
     delta,
     gamma,
     vega,
@@ -377,7 +378,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.359.0"
+__version__ = "1.360.0"
 
 __all__ = [
     "OptionType",
@@ -389,6 +390,7 @@ __all__ = [
     "implied_forward_from_parity",
     "implied_discount_factor",
     "box_spread_implied_rate",
+    "rho_discount",
     "delta",
     "gamma",
     "vega",

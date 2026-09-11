@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.359.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.360.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -591,6 +591,16 @@ Auto-generated from `quantforge` v1.359.0 by `docs/gen_api.py` — do not edit b
 > Assumes carry moves with the rate (the plain BSM stock case). For models
 > where ``b`` is fixed independently of ``r`` (e.g. Black-76), pass ``b`` and
 > interpret accordingly.
+
+### `rho_discount(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None) -> float`  _function_
+
+> Discount-only rho ``dPrice/dr`` holding the carry ``b`` fixed.
+>
+> When the cost of carry is independent of the funding rate (Black-76 on a
+> future, an FX or commodity forward), a change in ``r`` moves only the
+> discount factor, not the forward. Then ``dPrice/dr = -t * price`` for both
+> calls and puts. Contrast :func:`rho`, which assumes ``b`` moves with ``r``
+> (the plain stock case).
 
 ### `theta(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None) -> float`  _function_
 
