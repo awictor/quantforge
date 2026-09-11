@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.385.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.386.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1118,6 +1118,13 @@ Auto-generated from `quantforge` v1.385.0 by `docs/gen_api.py` — do not edit b
 > storage carry, so the net carry :func:`net_cost_of_carry` is negative and
 > forwards fall with maturity.
 
+### `mean_reversion_half_life(kappa)`  _function_
+
+> Half-life of mean reversion ``ln(2) / kappa`` (years).
+>
+> Time for a shock to log-spot to decay to half its size under the Schwartz OU
+> dynamics; falls as the mean-reversion speed ``kappa`` rises.
+
 ### `net_cost_of_carry(r, storage_cost=0.0, convenience_yield=0.0)`  _function_
 
 > Net proportional carry rate ``r + u - y`` (the forward's growth rate).
@@ -1131,6 +1138,17 @@ Auto-generated from `quantforge` v1.385.0 by `docs/gen_api.py` — do not edit b
 > at ``T = 0`` and converges to the risk-neutral long-run forward
 > ``exp(alpha_star + sigma^2/(4 kappa))`` as ``T -> inf`` -- the mean-reverting
 > alternative to the constant-carry :func:`commodity_forward`.
+
+### `schwartz_implied_alpha(spot, forward, kappa, sigma, maturity)`  _function_
+
+> Risk-neutral long-run log level implied by a single forward quote.
+>
+> Inverts :func:`schwartz_forward` for ``alpha_star``:
+>
+>     alpha_star = [ln F - 0.5 Var[X_T] - e^{-kappa T} ln S] / (1 - e^{-kappa T}).
+>
+> Requires ``maturity > 0`` (at ``T = 0`` the forward carries no information
+> about the long-run level). Round-trips with :func:`schwartz_forward`.
 
 ### `schwartz_log_mean(spot, kappa, alpha_star, maturity)`  _function_
 
@@ -1152,6 +1170,22 @@ Auto-generated from `quantforge` v1.385.0 by `docs/gen_api.py` — do not edit b
 > ``Var[X_T] = sigma^2 (1 - e^{-2 kappa T}) / (2 kappa)`` -- zero at ``T = 0``,
 > rising monotonically to the stationary ``sigma^2 / (2 kappa)`` as
 > ``T -> inf``.
+
+### `schwartz_option(spot, kappa, alpha_star, sigma, strike, r, expiry, is_call=True)`  _function_
+
+> European spot option under the Schwartz one-factor model.
+>
+> At expiry the spot is lognormal with mean :func:`schwartz_log_mean` and
+> variance :func:`schwartz_log_variance`, so the option is a Black-style price
+> off the model forward ``F* = schwartz_forward`` and total variance
+> ``v = Var[X_T]``:
+>
+>     d1 = (ln(F*/K) + 0.5 v) / sqrt(v),  d2 = d1 - sqrt(v)
+>     call = e^{-r T} [F* Phi(d1) - K Phi(d2)]
+>     put  = e^{-r T} [K Phi(-d2) - F* Phi(-d1)]
+>
+> Put and call satisfy ``C - P = e^{-r T} (F* - K)``. At zero variance the price
+> is the discounted intrinsic on ``F*``.
 
 ### `seasonal_forward(spot, r, maturity, seasonal_factor, storage_cost=0.0, convenience_yield=0.0)`  _function_
 

@@ -9,6 +9,7 @@ from quantforge import (
     net_cost_of_carry, commodity_forward_curve, is_backwardation,
     commodity_calendar_spread, convenience_yield_curve, seasonal_forward,
     schwartz_log_mean, schwartz_log_variance, schwartz_forward,
+    schwartz_option, mean_reversion_half_life, schwartz_implied_alpha,
 )
 
 
@@ -112,6 +113,40 @@ def test_schwartz_validation():
         schwartz_forward(-1, SKAPPA, SALPHA, SSIG, 1)
     with pytest.raises(ValueError):
         schwartz_log_variance(SSIG, 0, 1)
+
+
+def test_schwartz_option_put_call_parity():
+    F = schwartz_forward(SK, SKAPPA, SALPHA, SSIG, 2.0)
+    c = schwartz_option(SK, SKAPPA, SALPHA, SSIG, 55.0, 0.05, 2.0, True)
+    p = schwartz_option(SK, SKAPPA, SALPHA, SSIG, 55.0, 0.05, 2.0, False)
+    assert c - p == pytest.approx(math.exp(-0.05 * 2.0) * (F - 55.0), abs=1e-9)
+
+
+def test_schwartz_option_zero_vol_intrinsic():
+    F = schwartz_forward(SK, SKAPPA, SALPHA, 0.0, 2.0)
+    c = schwartz_option(SK, SKAPPA, SALPHA, 0.0, 55.0, 0.05, 2.0, True)
+    assert c == pytest.approx(math.exp(-0.05 * 2.0) * max(F - 55.0, 0.0), abs=1e-9)
+
+
+def test_mean_reversion_half_life():
+    assert mean_reversion_half_life(SKAPPA) == pytest.approx(math.log(2) / SKAPPA)
+    assert mean_reversion_half_life(3.0) < mean_reversion_half_life(1.0)
+
+
+def test_schwartz_implied_alpha_round_trip():
+    F = schwartz_forward(SK, SKAPPA, SALPHA, SSIG, 2.0)
+    alpha = schwartz_implied_alpha(SK, F, SKAPPA, SSIG, 2.0)
+    assert alpha == pytest.approx(SALPHA, abs=1e-9)
+    assert schwartz_forward(SK, SKAPPA, alpha, SSIG, 2.0) == pytest.approx(F, abs=1e-9)
+
+
+def test_schwartz_option_calibration_validation():
+    with pytest.raises(ValueError):
+        schwartz_implied_alpha(SK, 50.0, SKAPPA, SSIG, 0)
+    with pytest.raises(ValueError):
+        schwartz_option(SK, SKAPPA, SALPHA, SSIG, -1, 0.05, 2.0)
+    with pytest.raises(ValueError):
+        mean_reversion_half_life(0)
 
 
 def test_validation():

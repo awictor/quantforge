@@ -122,6 +122,73 @@ def schwartz_forward(spot, kappa, alpha_star, sigma, maturity):
     return math.exp(mean + 0.5 * var)
 
 
+def schwartz_option(spot, kappa, alpha_star, sigma, strike, r, expiry,
+                    is_call=True):
+    """European spot option under the Schwartz one-factor model.
+
+    At expiry the spot is lognormal with mean :func:`schwartz_log_mean` and
+    variance :func:`schwartz_log_variance`, so the option is a Black-style price
+    off the model forward ``F* = schwartz_forward`` and total variance
+    ``v = Var[X_T]``:
+
+        d1 = (ln(F*/K) + 0.5 v) / sqrt(v),  d2 = d1 - sqrt(v)
+        call = e^{-r T} [F* Phi(d1) - K Phi(d2)]
+        put  = e^{-r T} [K Phi(-d2) - F* Phi(-d1)]
+
+    Put and call satisfy ``C - P = e^{-r T} (F* - K)``. At zero variance the price
+    is the discounted intrinsic on ``F*``.
+    """
+    from .mathfns import norm_cdf
+    if strike <= 0:
+        raise ValueError("strike must be positive")
+    if expiry < 0:
+        raise ValueError("expiry must be non-negative")
+    fwd = schwartz_forward(spot, kappa, alpha_star, sigma, expiry)
+    disc = math.exp(-r * expiry)
+    var = schwartz_log_variance(sigma, kappa, expiry)
+    if var <= 0.0:
+        intrinsic = max(fwd - strike, 0.0) if is_call else max(strike - fwd, 0.0)
+        return disc * intrinsic
+    vsqrt = math.sqrt(var)
+    d1 = (math.log(fwd / strike) + 0.5 * var) / vsqrt
+    d2 = d1 - vsqrt
+    if is_call:
+        return disc * (fwd * norm_cdf(d1) - strike * norm_cdf(d2))
+    return disc * (strike * norm_cdf(-d2) - fwd * norm_cdf(-d1))
+
+
+def mean_reversion_half_life(kappa):
+    """Half-life of mean reversion ``ln(2) / kappa`` (years).
+
+    Time for a shock to log-spot to decay to half its size under the Schwartz OU
+    dynamics; falls as the mean-reversion speed ``kappa`` rises.
+    """
+    if kappa <= 0:
+        raise ValueError("kappa must be positive")
+    return math.log(2.0) / kappa
+
+
+def schwartz_implied_alpha(spot, forward, kappa, sigma, maturity):
+    """Risk-neutral long-run log level implied by a single forward quote.
+
+    Inverts :func:`schwartz_forward` for ``alpha_star``:
+
+        alpha_star = [ln F - 0.5 Var[X_T] - e^{-kappa T} ln S] / (1 - e^{-kappa T}).
+
+    Requires ``maturity > 0`` (at ``T = 0`` the forward carries no information
+    about the long-run level). Round-trips with :func:`schwartz_forward`.
+    """
+    if spot <= 0 or forward <= 0:
+        raise ValueError("spot and forward must be positive")
+    if kappa <= 0:
+        raise ValueError("kappa must be positive")
+    if maturity <= 0:
+        raise ValueError("maturity must be positive")
+    decay = math.exp(-kappa * maturity)
+    var = schwartz_log_variance(sigma, kappa, maturity)
+    return (math.log(forward) - 0.5 * var - decay * math.log(spot)) / (1.0 - decay)
+
+
 def commodity_calendar_spread(spot, r, t_near, t_far, storage_cost=0.0,
                               convenience_yield=0.0):
     """Far-minus-near forward spread under one carry rate.

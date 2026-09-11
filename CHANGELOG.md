@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.386.0] - 2026-09-11
+
+### Added
+- `schwartz_option`, `mean_reversion_half_life`, `schwartz_implied_alpha` (in
+  `commodity.py`): European spot option under the Schwartz one-factor model
+  (Black-form off the model forward and log-spot variance), the mean-reversion
+  half-life `ln(2)/kappa`, and calibration of the risk-neutral long-run level
+  `alpha*` from a single forward quote. Cross-checked against put-call parity
+  `C - P = e^{-rT}(F* - K)`, the zero-vol intrinsic, and calibration round-trip.
+
 ## [1.385.0] - 2026-09-11
 
 ### Added
