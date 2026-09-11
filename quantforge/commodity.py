@@ -647,6 +647,33 @@ def schwartz_smith_forward(chi0, xi0, kappa, mu_xi, sigma_chi, sigma_xi, rho,
     return math.exp(mean + 0.5 * var)
 
 
+def schwartz_smith_futures_volatility(kappa, sigma_chi, sigma_xi, rho, maturity):
+    """Instantaneous return volatility of the ``maturity``-future (Schwartz-Smith).
+
+    The two-factor analogue of :func:`schwartz_futures_volatility`. A future's log
+    return loads fully on the persistent long-term factor and on the decaying
+    short-term factor with weight ``e^{-kappa T}``, so
+
+        sigma_F(T) = sqrt(e^{-2 kappa T} sigma_chi^2 + sigma_xi^2
+                          + 2 e^{-kappa T} rho sigma_chi sigma_xi).
+
+    Falls from the front (short-term shocks fully felt) toward the long-term floor
+    ``sigma_xi`` as ``T -> inf`` -- the Samuelson effect with a non-zero long-end
+    asymptote. Reduces to the one-factor ``sigma_chi e^{-kappa T}`` when
+    ``sigma_xi = 0``.
+    """
+    if kappa <= 0:
+        raise ValueError("kappa must be positive")
+    if sigma_chi < 0 or sigma_xi < 0:
+        raise ValueError("volatilities must be non-negative")
+    if maturity < 0:
+        raise ValueError("maturity must be non-negative")
+    decay = math.exp(-kappa * maturity)
+    var = decay * decay * sigma_chi * sigma_chi + sigma_xi * sigma_xi \
+        + 2.0 * decay * rho * sigma_chi * sigma_xi
+    return math.sqrt(max(var, 0.0))
+
+
 def commodity_calendar_spread(spot, r, t_near, t_far, storage_cost=0.0,
                               convenience_yield=0.0):
     """Far-minus-near forward spread under one carry rate.

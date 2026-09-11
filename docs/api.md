@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.394.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.395.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1326,6 +1326,22 @@ Auto-generated from `quantforge` v1.394.0 by `docs/gen_api.py` — do not edit b
 > Equals the spot ``exp(chi0 + xi0)`` at ``T = 0``. The two factors let the
 > front of the curve move on short-term shocks while the back tracks the drifting
 > equilibrium -- richer than the single-factor :func:`schwartz_forward`.
+
+### `schwartz_smith_futures_volatility(kappa, sigma_chi, sigma_xi, rho, maturity)`  _function_
+
+> Instantaneous return volatility of the ``maturity``-future (Schwartz-Smith).
+>
+> The two-factor analogue of :func:`schwartz_futures_volatility`. A future's log
+> return loads fully on the persistent long-term factor and on the decaying
+> short-term factor with weight ``e^{-kappa T}``, so
+>
+>     sigma_F(T) = sqrt(e^{-2 kappa T} sigma_chi^2 + sigma_xi^2
+>                       + 2 e^{-kappa T} rho sigma_chi sigma_xi).
+>
+> Falls from the front (short-term shocks fully felt) toward the long-term floor
+> ``sigma_xi`` as ``T -> inf`` -- the Samuelson effect with a non-zero long-end
+> asymptote. Reduces to the one-factor ``sigma_chi e^{-kappa T}`` when
+> ``sigma_xi = 0``.
 
 ### `schwartz_smith_log_mean(chi0, xi0, kappa, mu_xi, maturity)`  _function_
 

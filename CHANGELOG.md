@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.395.0] - 2026-09-11
+
+### Added
+- `schwartz_smith_futures_volatility` (in `commodity.py`): instantaneous return
+  volatility of a maturity-`T` future under the Schwartz-Smith two-factor model,
+  `sqrt(e^{-2 kappa T} sigma_chi^2 + sigma_xi^2 + 2 e^{-kappa T} rho sigma_chi
+  sigma_xi)`. Falls from the front toward the long-term floor `sigma_xi` as
+  `T -> inf` (Samuelson effect with a non-zero long-end asymptote) and reduces to
+  the one-factor `schwartz_futures_volatility` when `sigma_xi = 0`.
+
 ## [1.394.0] - 2026-09-11
 
 ### Added

@@ -12,6 +12,7 @@ from quantforge import (
     schwartz_option, mean_reversion_half_life, schwartz_implied_alpha,
     roll_yield, carry_roll_yield, schwartz_futures_volatility,
     schwartz_smith_log_mean, schwartz_smith_log_variance, schwartz_smith_forward,
+    schwartz_smith_futures_volatility,
     margrabe_exchange_option, kirk_spread_option,
     bachelier_spread_option, spread_option_mc,
     commodity_swap_rate, commodity_swap_value, asian_commodity_option,
@@ -432,9 +433,30 @@ def test_schwartz_smith_reduces_to_one_factor():
     assert f_ss == pytest.approx(f_1f, abs=1e-9)
 
 
+def test_schwartz_smith_futures_vol_long_run_floor():
+    assert schwartz_smith_futures_volatility(SS_K, SS_SC, SS_SX, SS_RHO, 100) == \
+        pytest.approx(SS_SX, abs=1e-9)
+
+
+def test_schwartz_smith_futures_vol_samuelson():
+    vs = [schwartz_smith_futures_volatility(SS_K, SS_SC, SS_SX, SS_RHO, T)
+          for T in (0, 0.5, 1, 2, 5, 10)]
+    assert all(vs[i] >= vs[i + 1] - 1e-12 for i in range(len(vs) - 1))
+    assert vs[0] > vs[-1]
+    assert all(v >= SS_SX - 1e-12 for v in vs)  # never below the long-term floor
+
+
+def test_schwartz_smith_futures_vol_reduces_to_one_factor():
+    for T in (0, 0.5, 1, 2, 5):
+        assert schwartz_smith_futures_volatility(SS_K, SS_SC, 0.0, 0.0, T) == \
+            pytest.approx(schwartz_futures_volatility(SS_SC, SS_K, T), abs=1e-12)
+
+
 def test_schwartz_smith_validation():
     with pytest.raises(ValueError):
         schwartz_smith_log_variance(0, SS_SC, SS_SX, SS_RHO, 1)
+    with pytest.raises(ValueError):
+        schwartz_smith_futures_volatility(0, SS_SC, SS_SX, SS_RHO, 1)
 
 
 def test_validation():
