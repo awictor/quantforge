@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.281.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.282.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1183,6 +1183,18 @@ Auto-generated from `quantforge` v1.281.0 by `docs/gen_api.py` — do not edit b
 >
 > truncated at ``|n| <= n_terms`` (the series converges geometrically). Requires
 > ``L < S < U`` and ``K < U`` for a non-trivial payoff.
+
+### `double_knock_out_call_greeks(S, K, L, U, t, r, sigma, b=None, delta1=0.0, delta2=0.0, n_terms=10)`  _function_
+
+> Greeks of an Ikeda-Kunitomo double knock-out call by finite differences.
+>
+> Central differences of :func:`double_knock_out_call` for ``delta`` (dV/dS),
+> ``gamma`` (d2V/dS2), ``vega`` (dV/dsigma), ``theta`` (calendar decay
+> ``-dV/dt``), and the two barrier sensitivities ``dV/dL`` and ``dV/dU``. The
+> value is a knock-out, so more volatility raises the knock probability and
+> ``vega < 0`` near the middle of the corridor, and widening either barrier
+> raises the value (``dV/dL < 0``, ``dV/dU > 0``). Returns a dict with those
+> fields.
 
 ### `double_no_touch(S, L, U, t, r, sigma, b=None, cash=1.0, n_terms=200)`  _function_
 

@@ -464,6 +464,47 @@ def double_knock_in_call(S, K, L, U, t, r, sigma, b=None, delta1=0.0,
     return max(vanilla - dko, 0.0)
 
 
+def double_knock_out_call_greeks(S, K, L, U, t, r, sigma, b=None, delta1=0.0,
+                                 delta2=0.0, n_terms=10):
+    """Greeks of an Ikeda-Kunitomo double knock-out call by finite differences.
+
+    Central differences of :func:`double_knock_out_call` for ``delta`` (dV/dS),
+    ``gamma`` (d2V/dS2), ``vega`` (dV/dsigma), ``theta`` (calendar decay
+    ``-dV/dt``), and the two barrier sensitivities ``dV/dL`` and ``dV/dU``. The
+    value is a knock-out, so more volatility raises the knock probability and
+    ``vega < 0`` near the middle of the corridor, and widening either barrier
+    raises the value (``dV/dL < 0``, ``dV/dU > 0``). Returns a dict with those
+    fields.
+    """
+    _validate(S, K, t, sigma)
+    if not (0.0 < L < S < U):
+        raise ValueError("need 0 < L < S < U")
+    if b is None:
+        b = r
+
+    def px(S_=S, sigma_=sigma, t_=t, L_=L, U_=U):
+        return double_knock_out_call(S_, K, L_, U_, t_, r, sigma_, b=b,
+                                     delta1=delta1, delta2=delta2,
+                                     n_terms=n_terms)
+
+    base = px()
+    # Keep spot bumps well inside the corridor so S +/- h stays in (L, U).
+    hS = min(1e-4 * S, 0.25 * (S - L), 0.25 * (U - S))
+    up, dn = px(S_=S + hS), px(S_=S - hS)
+    delta = (up - dn) / (2.0 * hS)
+    gamma = (up - 2.0 * base + dn) / (hS * hS)
+    hv = 1e-4
+    vega = (px(sigma_=sigma + hv) - px(sigma_=sigma - hv)) / (2.0 * hv)
+    ht = min(1e-4, 0.25 * t)
+    theta = -(px(t_=t + ht) - px(t_=t - ht)) / (2.0 * ht)
+    hL = min(1e-4 * S, 0.25 * (S - L))
+    dV_dL = (px(L_=L + hL) - px(L_=L - hL)) / (2.0 * hL)
+    hU = min(1e-4 * S, 0.25 * (U - S))
+    dV_dU = (px(U_=U + hU) - px(U_=U - hU)) / (2.0 * hU)
+    return {"price": base, "delta": delta, "gamma": gamma, "vega": vega,
+            "theta": theta, "dV_dL": dV_dL, "dV_dU": dV_dU}
+
+
 def double_no_touch_greeks(S, L, U, t, r, sigma, b=None, cash=1.0, n_terms=200):
     """Greeks of a double-no-touch by finite differences on the closed form.
 

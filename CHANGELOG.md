@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.282.0] - 2026-09-11
+
+### Added
+- `double_knock_out_call_greeks` (in `exotics.py`): finite-difference Greeks of
+  the Ikeda-Kunitomo double knock-out call — `delta`, `gamma`, `vega`, `theta`,
+  plus the two barrier sensitivities `dV/dL` and `dV/dU`.
+- Verified: `delta` matches an independent bump; `vega < 0` (short vol);
+  widening the corridor raises value (`dV/dL < 0`, `dV/dU > 0`), both matching
+  direct bumps; the price field matches the pricer.
+
 ## [1.281.0] - 2026-09-11
 
 ### Added
