@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.278.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.279.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3579,6 +3579,24 @@ Auto-generated from `quantforge` v1.278.0 by `docs/gen_api.py` — do not edit b
 > where ``Q`` is :func:`risk_neutral_quantile_from_smile`. Returned as a
 > positive fraction of ``S0`` (e.g. ``0.18`` = an 18% loss). A flat smile
 > matches the lognormal VaR.
+
+### `smile_arbitrage_violations(S0, t, r, vol_fn, q=0.0, n=400, width=8.0, tol=1e-09)`  _function_
+
+> Strikes where an implied-vol smile has butterfly (density) arbitrage.
+>
+> Scans a log-moneyness grid of ``width`` forward standard deviations and returns
+> the strikes where the Breeden-Litzenberger density
+> (:func:`risk_neutral_density_from_smile`) is negative beyond ``-tol``. A
+> negative density means the call price is locally concave in strike -- a
+> butterfly spread with a negative cost -- so the smile admits static arbitrage
+> there. An empty list means the smile is butterfly-arbitrage-free on the grid.
+> Model-free: works for any ``vol_fn`` (SVI, SABR, vanna-volga, raw quotes).
+
+### `smile_is_arbitrage_free(S0, t, r, vol_fn, q=0.0, n=400, width=8.0, tol=1e-09) -> bool`  _function_
+
+> True if the smile has no butterfly arbitrage on the scanned grid.
+>
+> Convenience wrapper: ``not smile_arbitrage_violations(...)``.
 
 ## rough_heston
 
