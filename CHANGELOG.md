@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.352.0] - 2026-09-11
+
+### Added
+- `fx_forward_from_curves` (in `fxforward.py`): the FX forward from two discount
+  curves, `S * DF_base(t) / DF_price(t)` (curve-based covered interest parity).
+  Each curve is any `curve.df(t)` or plain callable.
+- Verified: it matches the closed-form `fx_forward` on flat curves; a higher
+  base-currency rate gives a forward discount; plain callables work; a zero
+  tenor returns spot; bad spot/tenor raise.
+
 ## [1.351.0] - 2026-09-11
 
 ### Added

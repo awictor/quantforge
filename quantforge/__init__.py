@@ -283,7 +283,7 @@ from .fxdelta import (
 )
 from .fxforward import (
     fx_forward, forward_points, fx_swap_points, implied_base_rate,
-    implied_price_rate,
+    implied_price_rate, fx_forward_from_curves,
 )
 from .volcube import VolCube
 from .cms import (
@@ -371,7 +371,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.351.0"
+__version__ = "1.352.0"
 
 __all__ = [
     "OptionType",
@@ -859,6 +859,7 @@ __all__ = [
     "fx_swap_points",
     "implied_base_rate",
     "implied_price_rate",
+    "fx_forward_from_curves",
     "VolCube",
     "cms_adjustment_standard",
     "cms_adjustment_greeks",

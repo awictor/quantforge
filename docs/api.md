@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.351.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.352.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2236,6 +2236,17 @@ Auto-generated from `quantforge` v1.351.0 by `docs/gen_api.py` — do not edit b
 >
 > A base currency yielding more than the price currency (``r_base > r_price``)
 > trades at a forward discount (``F < S``), and vice versa.
+
+### `fx_forward_from_curves(spot, price_curve, base_curve, t) -> float`  _function_
+
+> FX forward from two discount curves: ``S * DF_base(t) / DF_price(t)``.
+>
+> Curve-based covered interest parity: a base currency that discounts more
+> steeply (higher rates, lower ``DF_base``) trades at a forward discount. Each
+> curve is anything callable as ``curve.df(t)`` (e.g.
+> :class:`quantforge.DiscountCurve`) or a plain ``curve(t)`` returning the
+> discount factor. Consistent with :func:`fx_forward` when the curves are flat
+> exponentials.
 
 ### `fx_swap_points(spot, r_price, r_base, t_near, t_far) -> float`  _function_
 
