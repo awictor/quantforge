@@ -403,6 +403,51 @@ def asian_commodity_option(avg_forward, strike, sigma, r, expiry, reset_var_frac
     return disc * (strike * norm_cdf(-d2) - avg_forward * norm_cdf(-d1))
 
 
+def turnbull_wakeman_asian(forward, strike, sigma, r, expiry, n_avg,
+                           is_call=True):
+    """Turnbull-Wakeman arithmetic-average Asian option (two-moment match).
+
+    The arithmetic average of lognormals is not lognormal, so Turnbull-Wakeman
+    (1991) matches its first two moments to a lognormal and applies Black. For
+    ``n_avg`` equally-spaced driftless (forward-measure) monitoring dates
+    ``t_i = i T / n``:
+
+        M1 = forward
+        M2 = forward^2 / n^2 * sum_i sum_j exp(sigma^2 min(t_i, t_j))
+
+    The effective total variance is ``v = ln(M2 / M1^2)`` and the price is Black on
+    ``forward`` with variance ``v``. More accurate than the fixed 1/3-variance
+    :func:`asian_commodity_option`; at ``n = 1`` (``v = sigma^2 T``) it reduces to
+    the vanilla. Put and call satisfy ``C - P = e^{-r T}(forward - K)``.
+    """
+    from .mathfns import norm_cdf
+    if forward <= 0 or strike <= 0:
+        raise ValueError("forward and strike must be positive")
+    if expiry < 0 or sigma < 0:
+        raise ValueError("expiry and sigma must be non-negative")
+    if n_avg < 1:
+        raise ValueError("n_avg must be a positive integer")
+    disc = math.exp(-r * expiry)
+    dt = expiry / n_avg
+    times = [(i + 1) * dt for i in range(n_avg)]
+    m2_sum = 0.0
+    for i in range(n_avg):
+        for j in range(n_avg):
+            m2_sum += math.exp(sigma * sigma * min(times[i], times[j]))
+    m2 = forward * forward / (n_avg * n_avg) * m2_sum
+    var = math.log(m2 / (forward * forward))  # ln(M2 / M1^2)
+    if var <= 0.0:
+        intrinsic = max(forward - strike, 0.0) if is_call \
+            else max(strike - forward, 0.0)
+        return disc * intrinsic
+    vsqrt = math.sqrt(var)
+    d1 = (math.log(forward / strike) + 0.5 * var) / vsqrt
+    d2 = d1 - vsqrt
+    if is_call:
+        return disc * (forward * norm_cdf(d1) - strike * norm_cdf(d2))
+    return disc * (strike * norm_cdf(-d2) - forward * norm_cdf(-d1))
+
+
 def geometric_asian_option(forward, strike, sigma, r, expiry, n_avg,
                            is_call=True):
     """Exact geometric-average Asian commodity option (discrete monitoring).

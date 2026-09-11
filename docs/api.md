@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.391.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.392.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1335,6 +1335,23 @@ Auto-generated from `quantforge` v1.391.0 by `docs/gen_api.py` — do not edit b
 > discounted payoff ``max(F1 - F2 - K, 0)`` (call) or its put. An independent
 > reference for the :func:`kirk_spread_option` approximation. Uses a
 > deterministic linear-congruential stream so results are reproducible.
+
+### `turnbull_wakeman_asian(forward, strike, sigma, r, expiry, n_avg, is_call=True)`  _function_
+
+> Turnbull-Wakeman arithmetic-average Asian option (two-moment match).
+>
+> The arithmetic average of lognormals is not lognormal, so Turnbull-Wakeman
+> (1991) matches its first two moments to a lognormal and applies Black. For
+> ``n_avg`` equally-spaced driftless (forward-measure) monitoring dates
+> ``t_i = i T / n``:
+>
+>     M1 = forward
+>     M2 = forward^2 / n^2 * sum_i sum_j exp(sigma^2 min(t_i, t_j))
+>
+> The effective total variance is ``v = ln(M2 / M1^2)`` and the price is Black on
+> ``forward`` with variance ``v``. More accurate than the fixed 1/3-variance
+> :func:`asian_commodity_option`; at ``n = 1`` (``v = sigma^2 T``) it reduces to
+> the vanilla. Put and call satisfy ``C - P = e^{-r T}(forward - K)``.
 
 ## compound
 

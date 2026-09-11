@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.392.0] - 2026-09-11
+
+### Added
+- `turnbull_wakeman_asian` (in `commodity.py`): Turnbull-Wakeman (1991) two-moment
+  matched arithmetic-average Asian option. Matches the exact first two moments of
+  the arithmetic average of lognormals to a lognormal (effective variance
+  `ln(M2/M1^2)`) and applies Black. More accurate than the fixed 1/3-variance
+  `asian_commodity_option` -- closer to a 5-seed 400k-path Monte Carlo mean --
+  reduces to the vanilla at `n = 1`, stays above the geometric-average lower
+  bound, and satisfies put-call parity.
+
 ## [1.391.0] - 2026-09-11
 
 ### Added

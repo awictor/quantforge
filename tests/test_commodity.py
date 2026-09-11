@@ -14,7 +14,7 @@ from quantforge import (
     margrabe_exchange_option, kirk_spread_option,
     bachelier_spread_option, spread_option_mc,
     commodity_swap_rate, commodity_swap_value, asian_commodity_option,
-    geometric_asian_option, asian_commodity_option_mc,
+    geometric_asian_option, asian_commodity_option_mc, turnbull_wakeman_asian,
 )
 
 
@@ -294,6 +294,49 @@ def test_asian_cheaper_than_vanilla():
 def test_asian_zero_variance_intrinsic():
     assert asian_commodity_option(52, 50, 0.3, 0.05, 1.0, 0.0, True) == pytest.approx(
         math.exp(-0.05) * max(52 - 50, 0.0), abs=1e-9)
+
+
+def test_turnbull_wakeman_parity():
+    F, K, sig, r, T, n = 52.0, 50.0, 0.3, 0.05, 1.0, 52
+    c = turnbull_wakeman_asian(F, K, sig, r, T, n, True)
+    p = turnbull_wakeman_asian(F, K, sig, r, T, n, False)
+    assert c - p == pytest.approx(math.exp(-r * T) * (F - K), abs=1e-9)
+
+
+def test_turnbull_wakeman_n1_is_vanilla():
+    F, K, sig, r, T = 52.0, 50.0, 0.3, 0.05, 1.0
+    from quantforge.mathfns import norm_cdf
+    v = sig * sig * T
+    vs = math.sqrt(v)
+    d1 = (math.log(F / K) + 0.5 * v) / vs
+    d2 = d1 - vs
+    vanilla = math.exp(-r * T) * (F * norm_cdf(d1) - K * norm_cdf(d2))
+    assert turnbull_wakeman_asian(F, K, sig, r, T, 1, True) == pytest.approx(
+        vanilla, abs=1e-9)
+
+
+def test_turnbull_wakeman_above_geometric():
+    F, K, sig, r, T, n = 52.0, 50.0, 0.3, 0.05, 1.0, 52
+    tw = turnbull_wakeman_asian(F, K, sig, r, T, n, True)
+    g = geometric_asian_option(F, K, sig, r, T, n, True)
+    assert tw >= g - 1e-9
+
+
+def test_turnbull_wakeman_validation():
+    with pytest.raises(ValueError):
+        turnbull_wakeman_asian(52, 50, 0.3, 0.05, 1.0, 0)
+
+
+@pytest.mark.slow
+def test_turnbull_wakeman_beats_third_variance_vs_mc():
+    F, K, sig, r, T, n = 52.0, 50.0, 0.3, 0.05, 1.0, 52
+    tw = turnbull_wakeman_asian(F, K, sig, r, T, n, True)
+    ap = asian_commodity_option(F, K, sig, r, T, 1 / 3, True)
+    # Average several seeds to beat down MC noise.
+    vals = [asian_commodity_option_mc(F, K, sig, r, T, n, 400000, s, True, False)
+            for s in (11, 23, 37, 59, 71)]
+    mcv = sum(vals) / len(vals)
+    assert abs(tw - mcv) < abs(ap - mcv)
 
 
 def test_geometric_parity():
