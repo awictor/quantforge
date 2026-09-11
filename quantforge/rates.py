@@ -251,6 +251,31 @@ def black_swaption_greeks(swap_rate, strike, expiry, sigma_b, periods,
             "vega": vega, "annuity": ann}
 
 
+def sabr_swaption_price(swap_rate, strike, expiry, periods,
+                        alpha, beta, rho, nu, payer=True, model="black"):
+    """Price a European swaption whose smile is described by a SABR model.
+
+    Reads the SABR-implied volatility at the (forward swap rate, strike, expiry)
+    point and feeds it into the matching swaption pricer:
+
+      * ``model="black"``  -> Hagan lognormal vol :func:`quantforge.sabr_vol`
+        into :func:`black_swaption_price` (requires positive rate and strike);
+      * ``model="normal"`` -> Hagan normal vol :func:`quantforge.sabr_normal_vol`
+        into :func:`swaption_price` (handles negative rates).
+
+    This is the standard way SABR is used on swaptions: one calibrated smile
+    prices every strike consistently. Returns the swaption present value.
+    """
+    from .sabr import sabr_vol, sabr_normal_vol
+    if model == "black":
+        vol = sabr_vol(swap_rate, strike, expiry, alpha, beta, rho, nu)
+        return black_swaption_price(swap_rate, strike, expiry, vol, periods, payer)
+    if model == "normal":
+        vol = sabr_normal_vol(swap_rate, strike, expiry, alpha, beta, rho, nu)
+        return swaption_price(swap_rate, strike, expiry, vol, periods, payer)
+    raise ValueError("model must be 'black' or 'normal'")
+
+
 def swaption_implied_normal_vol(price, swap_rate, strike, expiry, periods,
                                 payer=True) -> float:
     """Normal (Bachelier) implied vol of a swaption from its price.

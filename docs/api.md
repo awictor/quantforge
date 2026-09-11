@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.315.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.316.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3996,6 +3996,21 @@ Auto-generated from `quantforge` v1.315.0 by `docs/gen_api.py` — do not edit b
 ### `floor_price(periods: Sequence[quantforge.rates.CapletPeriod], strike: float) -> float`  _function_
 
 > Price an interest-rate floor as the sum of its floorlets.
+
+### `sabr_swaption_price(swap_rate, strike, expiry, periods, alpha, beta, rho, nu, payer=True, model='black')`  _function_
+
+> Price a European swaption whose smile is described by a SABR model.
+>
+> Reads the SABR-implied volatility at the (forward swap rate, strike, expiry)
+> point and feeds it into the matching swaption pricer:
+>
+>   * ``model="black"``  -> Hagan lognormal vol :func:`quantforge.sabr_vol`
+>     into :func:`black_swaption_price` (requires positive rate and strike);
+>   * ``model="normal"`` -> Hagan normal vol :func:`quantforge.sabr_normal_vol`
+>     into :func:`swaption_price` (handles negative rates).
+>
+> This is the standard way SABR is used on swaptions: one calibrated smile
+> prices every strike consistently. Returns the swaption present value.
 
 ### `swaption_greeks(swap_rate, strike, expiry, sigma_n, periods, payer=True)`  _function_
 

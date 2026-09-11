@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.316.0] - 2026-09-11
+
+### Added
+- `sabr_swaption_price` (in `rates.py`): price a European swaption whose smile
+  is a SABR model. Reads the SABR-implied vol at the (forward swap rate, strike,
+  expiry) point and feeds it into the matching pricer — `sabr_vol` into
+  `black_swaption_price` for `model="black"`, or `sabr_normal_vol` into
+  `swaption_price` for `model="normal"`. One calibrated smile prices every
+  strike consistently.
+- Verified: the resulting price inverts back to exactly the SABR vol it was
+  built from (both Black and normal, across strikes); prices are positive; an
+  in-the-money payer exceeds the receiver; an unknown model raises.
+
 ## [1.315.0] - 2026-09-11
 
 ### Added
