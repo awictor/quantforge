@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.354.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.355.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -521,6 +521,15 @@ Auto-generated from `quantforge` v1.354.0 by `docs/gen_api.py` — do not edit b
 ### `greeks(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None) -> quantforge.bsm.Greeks`  _function_
 
 > Compute price and all first/second-order Greeks in one call.
+
+### `implied_forward_from_parity(call, put, K, t, r) -> float`  _function_
+
+> Forward price implied by a call-put pair at strike ``K`` (invert parity).
+>
+> Put-call parity ``C - P = e^{-rt}(F - K)`` solves for the forward
+> ``F = K + e^{rt}(C - P)`` -- the market's forward read straight off a
+> same-strike call and put, with no volatility input. Combined across two
+> strikes it also pins the implied discount factor.
 
 ### `price(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None) -> float`  _function_
 

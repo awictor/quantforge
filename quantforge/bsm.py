@@ -105,6 +105,17 @@ def forward_price(S, t, r, b=None) -> float:
     return S * math.exp(b * t)
 
 
+def implied_forward(call, put, K, t, r) -> float:
+    """Forward price implied by a call-put pair at strike ``K`` (invert parity).
+
+    Put-call parity ``C - P = e^{-rt}(F - K)`` solves for the forward
+    ``F = K + e^{rt}(C - P)`` -- the market's forward read straight off a
+    same-strike call and put, with no volatility input. Combined across two
+    strikes it also pins the implied discount factor.
+    """
+    return K + math.exp(r * t) * (call - put)
+
+
 def put_call_parity_residual(call, put, S, K, t, r, b=None) -> float:
     """Put-call parity residual ``(C - P) - e^{-rt}(F - K)``, ``F = S e^{b t}``.
 

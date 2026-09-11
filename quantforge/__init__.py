@@ -14,6 +14,7 @@ from .bsm import (
     put_price,
     forward_price,
     put_call_parity_residual,
+    implied_forward as implied_forward_from_parity,
     delta,
     gamma,
     vega,
@@ -374,7 +375,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.354.0"
+__version__ = "1.355.0"
 
 __all__ = [
     "OptionType",
@@ -383,6 +384,7 @@ __all__ = [
     "put_price",
     "forward_price",
     "put_call_parity_residual",
+    "implied_forward_from_parity",
     "delta",
     "gamma",
     "vega",

@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.355.0] - 2026-09-11
+
+### Added
+- `implied_forward_from_parity` (in `bsm.py`, exported under that name to avoid
+  clashing with the chain-based `implied_forward`): the forward implied by a
+  same-strike call-put pair, `F = K + e^{rt}(C - P)`, from put-call parity with
+  no volatility input.
+- Verified: it recovers the cost-of-carry forward from Black-Scholes call/put
+  prices with and without dividends; it is strike-independent across three
+  strikes; at the forward strike the call and put are equal and the implied
+  forward equals that strike.
+
 ## [1.354.0] - 2026-09-11
 
 ### Added
