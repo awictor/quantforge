@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.288.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.289.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1405,6 +1405,30 @@ Auto-generated from `quantforge` v1.288.0 by `docs/gen_api.py` — do not edit b
 > :func:`powered_option`: ``delta`` (dV/dS), ``gamma`` (d2V/dS2), ``vega``
 > (dV/dsigma), ``theta`` (calendar decay, ``-dV/dt``). Returns a dict with
 > ``price`` and those fields.
+
+### `seasoned_arithmetic_asian(S, K, t, r, sigma, observed_prices, n_total, remaining_fixing_times=None, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> Seasoned (in-progress) discrete arithmetic-average Asian (Levy match).
+>
+> Prices an arithmetic Asian partway through its averaging window, when some
+> fixings are already observed. The final average is
+> ``A = (Q + sum_j S_{tau_j}) / n`` where ``Q = sum(observed_prices)`` is a
+> known constant and the ``k`` remaining prices are lognormal. A call payoff
+> ``max(A - K, 0) = (1/n) max(sum_j S_{tau_j} - (n K - Q), 0)`` is therefore an
+> arithmetic-average option on the *remaining* fixings with the shifted strike
+> ``K' = n K - Q``, scaled by ``1/n``. The remaining sum's first two moments
+> are exact,
+>
+>     m1 = S sum_j exp(b tau_j)
+>     m2 = S^2 sum_ij exp(b (tau_i + tau_j) + sigma^2 min(tau_i, tau_j)),
+>
+> and Levy (1992) matches them to a lognormal priced by Black-Scholes.
+>
+> Special cases handled exactly: if ``K' <= 0`` the call is always in the
+> money and worth ``e^{-rt} (E[A] - K)`` (the put is worthless), and vice
+> versa. With no observations this reduces to :func:`discrete_arithmetic_asian`;
+> with all fixings observed the payoff is the deterministic arithmetic
+> intrinsic.
 
 ### `seasoned_geometric_asian(S, K, t, r, sigma, observed_prices, n_total, remaining_fixing_times=None, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
 

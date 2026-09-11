@@ -4,6 +4,22 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.289.0] - 2026-09-11
+
+### Added
+- `seasoned_arithmetic_asian` (in `exotics.py`): prices an in-progress discrete
+  arithmetic-average Asian where some fixings are already observed. Writing the
+  average as `A = (Q + sum remaining)/n` with `Q = sum(observed)` known, a call
+  payoff is an arithmetic-average option on the remaining fixings with the
+  shifted strike `K' = nK - Q`, scaled by `1/n`. The remaining sum's two exact
+  moments are matched to a lognormal (Levy 1992). Deep-in/out branches (`K' <=
+  0`) are priced exactly as `disc*(E[A] - K)` / zero.
+- Verified: with no observations it reduces to `discrete_arithmetic_asian`;
+  all-observed gives the deterministic arithmetic intrinsic; the `K' <= 0`
+  branch equals the discounted expected-average payoff; a partial window
+  matches a path Monte Carlo (n=12, 6 observed) to within 1%; the seasoned
+  arithmetic price sits above the seasoned geometric one (AM-GM).
+
 ## [1.288.0] - 2026-09-11
 
 ### Added

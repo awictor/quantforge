@@ -435,6 +435,86 @@ def seasoned_geometric_asian(S, K, t, r, sigma, observed_prices, n_total,
     return disc * (K * norm_cdf(-d2) - fwd * norm_cdf(-d1))
 
 
+def seasoned_arithmetic_asian(S, K, t, r, sigma, observed_prices, n_total,
+                              remaining_fixing_times=None,
+                              option_type=OptionType.CALL, b=None):
+    """Seasoned (in-progress) discrete arithmetic-average Asian (Levy match).
+
+    Prices an arithmetic Asian partway through its averaging window, when some
+    fixings are already observed. The final average is
+    ``A = (Q + sum_j S_{tau_j}) / n`` where ``Q = sum(observed_prices)`` is a
+    known constant and the ``k`` remaining prices are lognormal. A call payoff
+    ``max(A - K, 0) = (1/n) max(sum_j S_{tau_j} - (n K - Q), 0)`` is therefore an
+    arithmetic-average option on the *remaining* fixings with the shifted strike
+    ``K' = n K - Q``, scaled by ``1/n``. The remaining sum's first two moments
+    are exact,
+
+        m1 = S sum_j exp(b tau_j)
+        m2 = S^2 sum_ij exp(b (tau_i + tau_j) + sigma^2 min(tau_i, tau_j)),
+
+    and Levy (1992) matches them to a lognormal priced by Black-Scholes.
+
+    Special cases handled exactly: if ``K' <= 0`` the call is always in the
+    money and worth ``e^{-rt} (E[A] - K)`` (the put is worthless), and vice
+    versa. With no observations this reduces to :func:`discrete_arithmetic_asian`;
+    with all fixings observed the payoff is the deterministic arithmetic
+    intrinsic.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if b is None:
+        b = r
+    obs = [float(x) for x in observed_prices]
+    if any(x <= 0.0 for x in obs):
+        raise ValueError("observed_prices must be positive")
+    m_obs = len(obs)
+    if n_total < 1:
+        raise ValueError("n_total must be >= 1")
+    if m_obs > n_total:
+        raise ValueError("more observed fixings than n_total")
+    k = n_total - m_obs
+    if remaining_fixing_times is None:
+        times = [t * i / k for i in range(1, k + 1)] if k > 0 else []
+    else:
+        times = [float(x) for x in remaining_fixing_times]
+        if len(times) != k:
+            raise ValueError("remaining_fixing_times must have length n_total - len(observed_prices)")
+        if any(x <= 0.0 or x > t + 1e-12 for x in times):
+            raise ValueError("remaining_fixing_times must lie in (0, t]")
+    disc = math.exp(-r * t)
+    n = n_total
+    Q = sum(obs)
+    if k == 0:
+        A = Q / n
+        payoff = max(A - K, 0.0) if ot is OptionType.CALL else max(K - A, 0.0)
+        return disc * payoff
+    v2 = sigma * sigma
+    m1 = S * sum(math.exp(b * tj) for tj in times)
+    dbl = 0.0
+    for ti in times:
+        for tj in times:
+            dbl += math.exp(b * (ti + tj) + v2 * (ti if ti < tj else tj))
+    m2 = S * S * dbl
+    Kp = n * K - Q  # shifted strike on the remaining sum
+    # Expected average for the always-in-the-money branches.
+    EA = (Q + m1) / n
+    if Kp <= 0.0:
+        # Remaining sum is always >= Kp (=0 or negative): call always ITM.
+        if ot is OptionType.CALL:
+            return disc * (EA - K)
+        return 0.0
+    V = math.log(m2 / (m1 * m1))
+    if V <= 0.0:
+        payoff = max(m1 - Kp, 0.0) if ot is OptionType.CALL else max(Kp - m1, 0.0)
+        return disc * payoff / n
+    sd = math.sqrt(V)
+    d1 = (math.log(m1 / Kp) + 0.5 * V) / sd
+    d2 = d1 - sd
+    if ot is OptionType.CALL:
+        return disc * (m1 * norm_cdf(d1) - Kp * norm_cdf(d2)) / n
+    return disc * (Kp * norm_cdf(-d2) - m1 * norm_cdf(-d1)) / n
+
+
 def discrete_arithmetic_asian(S, K, t, r, sigma, n_fixings=None,
                               fixing_times=None, option_type=OptionType.CALL,
                               b=None):
