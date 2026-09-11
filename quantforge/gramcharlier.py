@@ -15,10 +15,11 @@ can feed the price directly.
 """
 
 import math
-from typing import Sequence
+from typing import Sequence, Tuple
 
 from .mathfns import norm_cdf, norm_pdf
 from .bsm import call_price, OptionType, _coerce_type, _validate
+from .optimize import nelder_mead
 
 
 def corrado_su_call(S, K, t, r, sigma, skew=0.0, excess_kurt=0.0, b=None) -> float:
@@ -60,6 +61,55 @@ def corrado_su_price(S, K, t, r, sigma, skew=0.0, excess_kurt=0.0,
     if ot is OptionType.CALL:
         return call
     return call - S * math.exp((b - r) * t) + K * math.exp(-r * t)
+
+
+def calibrate_corrado_su(S, t, r, strikes, call_prices, b=None,
+                         initial=None, max_iter=4000) -> Tuple[float, float, float, float]:
+    """Fit Corrado-Su ``(sigma, skew, excess_kurt)`` to market call prices.
+
+    Minimizes the sum of squared price errors of :func:`corrado_su_call` over the
+    given strikes with Nelder-Mead, using a smooth reparametrization that keeps
+    ``sigma > 0`` (the skew and excess-kurtosis coefficients are unconstrained).
+    A flat Black-Scholes surface calibrates to ``skew = kurt = 0`` and the input
+    vol.
+
+    Returns ``(sigma, skew, excess_kurt, price_rmse)``.
+    """
+    if b is None:
+        b = r
+    strikes = [float(k) for k in strikes]
+    call_prices = [float(c) for c in call_prices]
+    n = len(strikes)
+    if n != len(call_prices) or n < 3:
+        raise ValueError("need at least three matching (strike, call) quotes")
+
+    if initial is None:
+        initial = (0.2, 0.0, 0.0)
+
+    def softplus(x):
+        return math.log1p(math.exp(-abs(x))) + max(x, 0.0)
+
+    def inv_softplus(y):
+        y = max(y, 1e-9)
+        return math.log(math.expm1(y)) if y < 30 else y
+
+    def unpack(p):
+        ps, skew, kurt = p
+        return softplus(ps) + 1e-8, skew, kurt
+
+    def objective(p):
+        sigma, skew, kurt = unpack(p)
+        sse = 0.0
+        for K, c in zip(strikes, call_prices):
+            model = corrado_su_call(S, K, t, r, sigma, skew, kurt, b=b)
+            sse += (model - c) ** 2
+        return sse
+
+    p0 = [inv_softplus(initial[0]), initial[1], initial[2]]
+    best, f = nelder_mead(objective, p0, step=0.2, max_iter=max_iter, tol=1e-16)
+    sigma, skew, kurt = unpack(best)
+    price_rmse = math.sqrt(f / n)
+    return sigma, skew, kurt, price_rmse
 
 
 def realized_skewness(returns: Sequence[float]) -> float:

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.268.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.269.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1415,6 +1415,18 @@ Auto-generated from `quantforge` v1.268.0 by `docs/gen_api.py` — do not edit b
 > G2++ zero-coupon bond ``P(t,T)`` given the factor state ``(x, y)``.
 
 ## gramcharlier
+
+### `calibrate_corrado_su(S, t, r, strikes, call_prices, b=None, initial=None, max_iter=4000) -> Tuple[float, float, float, float]`  _function_
+
+> Fit Corrado-Su ``(sigma, skew, excess_kurt)`` to market call prices.
+>
+> Minimizes the sum of squared price errors of :func:`corrado_su_call` over the
+> given strikes with Nelder-Mead, using a smooth reparametrization that keeps
+> ``sigma > 0`` (the skew and excess-kurtosis coefficients are unconstrained).
+> A flat Black-Scholes surface calibrates to ``skew = kurt = 0`` and the input
+> vol.
+>
+> Returns ``(sigma, skew, excess_kurt, price_rmse)``.
 
 ### `corrado_su_call(S, K, t, r, sigma, skew=0.0, excess_kurt=0.0, b=None) -> float`  _function_
 

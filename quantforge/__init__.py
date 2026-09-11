@@ -198,6 +198,7 @@ from .sizing import (
 )
 from .gramcharlier import (
     corrado_su_call, corrado_su_price, realized_skewness, realized_excess_kurtosis,
+    calibrate_corrado_su,
 )
 from .portfolio import Contract, Position, BookRisk, Book, price_book
 from .svi import (
@@ -296,7 +297,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.268.0"
+__version__ = "1.269.0"
 
 __all__ = [
     "OptionType",
@@ -606,6 +607,7 @@ __all__ = [
     "kelly_growth_rate",
     "corrado_su_call",
     "corrado_su_price",
+    "calibrate_corrado_su",
     "realized_skewness",
     "realized_excess_kurtosis",
     "Contract",

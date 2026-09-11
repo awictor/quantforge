@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.269.0] - 2026-09-10
+
+### Added
+- `calibrate_corrado_su` (in `gramcharlier.py`): fits the Corrado-Su
+  `(sigma, skew, excess_kurt)` to a set of market call prices by Nelder-Mead
+  least squares, with a smooth reparametrization keeping `sigma > 0`. Returns the
+  three parameters plus the price RMSE.
+- Verified: recovers known `(sigma, skew, kurt)` from synthetic Corrado-Su
+  prices to 1e-2; a flat Black-Scholes surface calibrates to zero skew and
+  excess kurtosis at the input vol; reprices every strike within RMSE.
+
 ## [1.268.0] - 2026-09-10
 
 ### Added
