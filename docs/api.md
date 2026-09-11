@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.349.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.350.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -332,6 +332,16 @@ Auto-generated from `quantforge` v1.349.0 by `docs/gen_api.py` — do not edit b
 
 ## bondmath
 
+### `accrued_interest(face, coupon_rate, freq, fraction_elapsed) -> float`  _function_
+
+> Accrued interest since the last coupon, straight-line within the period.
+>
+> ``fraction_elapsed`` in ``[0, 1]`` is the share of the current coupon period
+> that has passed at settlement. The accrual is
+> ``face * coupon_rate / freq * fraction_elapsed`` -- the linear (actual/
+> actual-in-period) convention. The buyer pays this on top of the quoted
+> clean price.
+
 ### `bond_cashflows(face, coupon_rate, maturity, freq=2) -> List[Tuple[float, float]]`  _function_
 
 > Level-coupon schedule ``[(t, amount), ...]`` for a vanilla bond.
@@ -349,9 +359,24 @@ Auto-generated from `quantforge` v1.349.0 by `docs/gen_api.py` — do not edit b
 
 > Present value of the cashflows at continuously-compounded yield ``y``.
 
+### `clean_price(cashflows: Sequence[Tuple[float, float]], y, face, coupon_rate, freq, fraction_elapsed) -> float`  _function_
+
+> Clean (quoted) price: dirty price minus accrued interest.
+>
+> ``clean = dirty - accrued``. At a coupon date (``fraction_elapsed = 0``) the
+> clean and dirty prices coincide; mid-period the clean price strips out the
+> accrued coupon so the quote does not saw-tooth across coupon dates.
+
 ### `convexity(cashflows: Sequence[Tuple[float, float]], y) -> float`  _function_
 
 > Convexity ``1/price d2Price/dy2``: PV-weighted average of squared time.
+
+### `dirty_price(cashflows: Sequence[Tuple[float, float]], y) -> float`  _function_
+
+> Dirty (invoice) price: the full present value of the remaining cashflows.
+>
+> Alias of :func:`bond_price_from_yield` -- the cash amount actually paid at
+> settlement, before subtracting accrued interest to get the clean quote.
 
 ### `effective_duration_from_curve(cashflows, pillar_times, zero_rates, bump=0.0001)`  _function_
 

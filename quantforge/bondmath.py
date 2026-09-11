@@ -41,6 +41,44 @@ def bond_cashflows(face, coupon_rate, maturity, freq=2) -> List[Tuple[float, flo
     return flows
 
 
+def accrued_interest(face, coupon_rate, freq, fraction_elapsed) -> float:
+    """Accrued interest since the last coupon, straight-line within the period.
+
+    ``fraction_elapsed`` in ``[0, 1]`` is the share of the current coupon period
+    that has passed at settlement. The accrual is
+    ``face * coupon_rate / freq * fraction_elapsed`` -- the linear (actual/
+    actual-in-period) convention. The buyer pays this on top of the quoted
+    clean price.
+    """
+    if not (0.0 <= fraction_elapsed <= 1.0):
+        raise ValueError("fraction_elapsed must be in [0, 1]")
+    if freq < 1:
+        raise ValueError("freq must be >= 1")
+    return face * coupon_rate / freq * fraction_elapsed
+
+
+def dirty_price(cashflows: Sequence[Tuple[float, float]], y) -> float:
+    """Dirty (invoice) price: the full present value of the remaining cashflows.
+
+    Alias of :func:`bond_price_from_yield` -- the cash amount actually paid at
+    settlement, before subtracting accrued interest to get the clean quote.
+    """
+    return bond_price_from_yield(cashflows, y)
+
+
+def clean_price(cashflows: Sequence[Tuple[float, float]], y, face,
+                coupon_rate, freq, fraction_elapsed) -> float:
+    """Clean (quoted) price: dirty price minus accrued interest.
+
+    ``clean = dirty - accrued``. At a coupon date (``fraction_elapsed = 0``) the
+    clean and dirty prices coincide; mid-period the clean price strips out the
+    accrued coupon so the quote does not saw-tooth across coupon dates.
+    """
+    dirty = bond_price_from_yield(cashflows, y)
+    accrued = accrued_interest(face, coupon_rate, freq, fraction_elapsed)
+    return dirty - accrued
+
+
 def bond_price_from_yield(cashflows: Sequence[Tuple[float, float]], y) -> float:
     """Present value of the cashflows at continuously-compounded yield ``y``."""
     return sum(cf * math.exp(-y * t) for t, cf in cashflows)

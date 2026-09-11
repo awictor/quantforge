@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.350.0] - 2026-09-11
+
+### Added
+- `accrued_interest`, `dirty_price`, and `clean_price` (in `bondmath.py`): bond
+  settlement mechanics. Accrued interest is the straight-line share of the
+  current coupon (`face * coupon/freq * fraction_elapsed`); the dirty price is
+  the full present value of the remaining cashflows; the clean (quoted) price
+  is dirty minus accrued.
+- Verified: accrued is half a coupon at mid-period and zero at a coupon date;
+  the dirty price equals `bond_price_from_yield`; clean equals dirty minus
+  accrued and coincides with dirty at a coupon date; bad fraction/freq raise.
+
 ## [1.349.0] - 2026-09-11
 
 ### Added
