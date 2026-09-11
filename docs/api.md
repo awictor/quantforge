@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.238.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.239.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1534,6 +1534,16 @@ Auto-generated from `quantforge` v1.238.0 by `docs/gen_api.py` — do not edit b
 > taking the put payoff (parity holds path-by-path at the terminal spot).
 
 ## holee
+
+### `holee_bond_greeks(r0, t, theta, sigma)`  _function_
+
+> Exact rate sensitivities of a Ho-Lee zero-coupon bond.
+>
+> ``P = exp(-r0 t - ...)`` is linear in ``r0`` inside the exponent, so
+> ``rho_r = dP/dr0 = -t P``, ``gamma_r = d2P/dr0^2 = t^2 P``, and the rate
+> ``duration`` is exactly ``t`` (a Ho-Lee bond has duration equal to its
+> maturity), with ``convexity = t^2``. Returns a dict with ``price``,
+> ``rho_r``, ``gamma_r``, ``duration``, ``convexity``.
 
 ### `holee_zero_coupon_bond(r0, t, theta, sigma)`  _function_
 
@@ -4143,6 +4153,14 @@ Auto-generated from `quantforge` v1.238.0 by `docs/gen_api.py` — do not edit b
 >
 > A call pays ``max(P(t_option, t_bond) - strike, 0)`` at the option expiry.
 > Uses the closed-form bond-price volatility.
+
+### `vasicek_bond_greeks(r0, t, kappa, theta, sigma)`  _function_
+
+> Exact rate sensitivities of a Vasicek zero-coupon bond.
+>
+> ``P = A(t) e^{-B(t) r0}`` (with ``B = _B(kappa, t)``), so ``rho_r = -B P``,
+> ``gamma_r = B^2 P``, rate ``duration = B``, and ``convexity = B^2``. Returns
+> a dict with ``price``, ``rho_r``, ``gamma_r``, ``duration``, ``convexity``.
 
 ### `vasicek_bond_option_greeks(r0, t_option, t_bond, strike, kappa, theta, sigma, option_type=<OptionType.CALL: 'call'>)`  _function_
 

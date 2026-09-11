@@ -41,3 +41,21 @@ def holee_zero_coupon_yield(r0, t, theta, sigma):
     if t <= 0:
         raise ValueError("t must be positive")
     return r0 + 0.5 * theta * t - sigma * sigma * t * t / 6.0
+
+
+def holee_bond_greeks(r0, t, theta, sigma):
+    """Exact rate sensitivities of a Ho-Lee zero-coupon bond.
+
+    ``P = exp(-r0 t - ...)`` is linear in ``r0`` inside the exponent, so
+    ``rho_r = dP/dr0 = -t P``, ``gamma_r = d2P/dr0^2 = t^2 P``, and the rate
+    ``duration`` is exactly ``t`` (a Ho-Lee bond has duration equal to its
+    maturity), with ``convexity = t^2``. Returns a dict with ``price``,
+    ``rho_r``, ``gamma_r``, ``duration``, ``convexity``.
+    """
+    if t < 0:
+        raise ValueError("t must be non-negative")
+    if sigma < 0:
+        raise ValueError("sigma must be non-negative")
+    price = holee_zero_coupon_bond(r0, t, theta, sigma)
+    return {"price": price, "rho_r": -t * price, "gamma_r": t * t * price,
+            "duration": t, "convexity": t * t}

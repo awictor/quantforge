@@ -112,3 +112,21 @@ def bond_option_greeks(r0, t_option, t_bond, strike, kappa, theta, sigma,
     vega = (px(sig=sigma + hv) - px(sig=max(sigma - hv, 0.0))) / (
         (2.0 * hv) if sigma - hv >= 0 else hv)
     return {"price": base, "rho_r": rho_r, "gamma_r": gamma_r, "vega": vega}
+
+
+def bond_greeks(r0, t, kappa, theta, sigma):
+    """Exact rate sensitivities of a Vasicek zero-coupon bond.
+
+    ``P = A(t) e^{-B(t) r0}`` (with ``B = _B(kappa, t)``), so ``rho_r = -B P``,
+    ``gamma_r = B^2 P``, rate ``duration = B``, and ``convexity = B^2``. Returns
+    a dict with ``price``, ``rho_r``, ``gamma_r``, ``duration``, ``convexity``.
+    """
+    if t < 0:
+        raise ValueError("t must be non-negative")
+    price = zero_coupon_bond(r0, t, kappa, theta, sigma)
+    if t == 0:
+        return {"price": 1.0, "rho_r": 0.0, "gamma_r": 0.0,
+                "duration": 0.0, "convexity": 0.0}
+    B = _B(kappa, t)
+    return {"price": price, "rho_r": -B * price, "gamma_r": B * B * price,
+            "duration": B, "convexity": B * B}

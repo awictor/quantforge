@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.239.0] - 2026-09-10
+
+### Added
+- `vasicek_bond_greeks` (in `vasicek.py`) and `holee_bond_greeks` (in
+  `holee.py`): exact rate sensitivities of the Vasicek and Ho-Lee zero-coupon
+  bonds (`rho_r`, `gamma_r`, `duration`, `convexity`). Vasicek uses the affine
+  `B(t)`; Ho-Lee is linear in `r0` inside the exponent, so its duration is
+  exactly the maturity `t` and convexity `t^2`.
+- Verified: both `rho_r` match finite differences of their bond prices;
+  `convexity = duration^2`; the Ho-Lee duration equals the maturity; zero-
+  maturity bonds are flat.
+
 ## [1.238.0] - 2026-09-10
 
 ### Added
