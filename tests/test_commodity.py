@@ -8,6 +8,7 @@ from quantforge import (
     commodity_forward, implied_convenience_yield, implied_storage_cost,
     net_cost_of_carry, commodity_forward_curve, is_backwardation,
     commodity_calendar_spread, convenience_yield_curve, seasonal_forward,
+    schwartz_log_mean, schwartz_log_variance, schwartz_forward,
 )
 
 
@@ -76,6 +77,41 @@ def test_spread_seasonal_validation():
         commodity_calendar_spread(S, R, 2, 1)
     with pytest.raises(ValueError):
         seasonal_forward(S, R, 1, -1)
+
+
+SK, SKAPPA, SALPHA, SSIG = 50.0, 1.5, 4.0, 0.3
+
+
+def test_schwartz_zero_maturity_is_spot():
+    assert schwartz_log_mean(SK, SKAPPA, SALPHA, 0) == pytest.approx(math.log(SK))
+    assert schwartz_log_variance(SSIG, SKAPPA, 0) == pytest.approx(0.0, abs=1e-12)
+    assert schwartz_forward(SK, SKAPPA, SALPHA, SSIG, 0) == pytest.approx(SK, abs=1e-9)
+
+
+def test_schwartz_long_run_limits():
+    assert schwartz_log_mean(SK, SKAPPA, SALPHA, 100) == pytest.approx(SALPHA, abs=1e-9)
+    assert schwartz_log_variance(SSIG, SKAPPA, 100) == pytest.approx(
+        SSIG ** 2 / (2 * SKAPPA), abs=1e-9)
+    assert schwartz_forward(SK, SKAPPA, SALPHA, SSIG, 100) == pytest.approx(
+        math.exp(SALPHA + SSIG ** 2 / (4 * SKAPPA)), abs=1e-6)
+
+
+def test_schwartz_variance_monotone():
+    vs = [schwartz_log_variance(SSIG, SKAPPA, T) for T in (0.1, 0.5, 1, 2, 5, 10)]
+    assert all(vs[i] < vs[i + 1] for i in range(len(vs) - 1))
+
+
+def test_schwartz_mean_reverts_upward():
+    # Spot below long-run level -> mean rises toward alpha.
+    ms = [schwartz_log_mean(SK, SKAPPA, SALPHA, T) for T in (0.1, 0.5, 1, 2, 5)]
+    assert all(ms[i] < ms[i + 1] for i in range(len(ms) - 1))
+
+
+def test_schwartz_validation():
+    with pytest.raises(ValueError):
+        schwartz_forward(-1, SKAPPA, SALPHA, SSIG, 1)
+    with pytest.raises(ValueError):
+        schwartz_log_variance(SSIG, 0, 1)
 
 
 def test_validation():

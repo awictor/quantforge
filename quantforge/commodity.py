@@ -70,6 +70,58 @@ def commodity_forward_curve(spot, r, maturities, storage_cost=0.0,
             for T in maturities]
 
 
+def schwartz_log_mean(spot, kappa, alpha_star, maturity):
+    """Risk-neutral mean of log-spot under the Schwartz one-factor model.
+
+    Log-spot ``X = ln S`` follows a mean-reverting Ornstein-Uhlenbeck process
+    ``dX = kappa (alpha_star - X) dt + sigma dW`` under the pricing measure, where
+    ``alpha_star`` is the risk-adjusted long-run log level. The conditional mean is
+
+        E[X_T] = e^{-kappa T} ln S + (1 - e^{-kappa T}) alpha_star,
+
+    starting at ``ln S`` for ``T = 0`` and relaxing to ``alpha_star`` as
+    ``T -> inf``.
+    """
+    if spot <= 0:
+        raise ValueError("spot must be positive")
+    if kappa <= 0:
+        raise ValueError("kappa must be positive")
+    if maturity < 0:
+        raise ValueError("maturity must be non-negative")
+    decay = math.exp(-kappa * maturity)
+    return decay * math.log(spot) + (1.0 - decay) * alpha_star
+
+
+def schwartz_log_variance(sigma, kappa, maturity):
+    """Variance of log-spot under the Schwartz one-factor model.
+
+    ``Var[X_T] = sigma^2 (1 - e^{-2 kappa T}) / (2 kappa)`` -- zero at ``T = 0``,
+    rising monotonically to the stationary ``sigma^2 / (2 kappa)`` as
+    ``T -> inf``.
+    """
+    if sigma < 0:
+        raise ValueError("sigma must be non-negative")
+    if kappa <= 0:
+        raise ValueError("kappa must be positive")
+    if maturity < 0:
+        raise ValueError("maturity must be non-negative")
+    return sigma * sigma * (1.0 - math.exp(-2.0 * kappa * maturity)) / (2.0 * kappa)
+
+
+def schwartz_forward(spot, kappa, alpha_star, sigma, maturity):
+    """Commodity forward under the Schwartz (1997) one-factor model.
+
+    With log-spot lognormal, ``F(T) = exp(E[X_T] + 0.5 Var[X_T])`` from
+    :func:`schwartz_log_mean` and :func:`schwartz_log_variance`. Equals the spot
+    at ``T = 0`` and converges to the risk-neutral long-run forward
+    ``exp(alpha_star + sigma^2/(4 kappa))`` as ``T -> inf`` -- the mean-reverting
+    alternative to the constant-carry :func:`commodity_forward`.
+    """
+    mean = schwartz_log_mean(spot, kappa, alpha_star, maturity)
+    var = schwartz_log_variance(sigma, kappa, maturity)
+    return math.exp(mean + 0.5 * var)
+
+
 def commodity_calendar_spread(spot, r, t_near, t_far, storage_cost=0.0,
                               convenience_yield=0.0):
     """Far-minus-near forward spread under one carry rate.

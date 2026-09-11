@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.385.0] - 2026-09-11
+
+### Added
+- `schwartz_log_mean`, `schwartz_log_variance`, `schwartz_forward` (in
+  `commodity.py`): Schwartz (1997) one-factor mean-reverting model for commodity
+  forwards. Log-spot follows a risk-neutral Ornstein-Uhlenbeck process; the
+  forward is `exp(E[X_T] + 0.5 Var[X_T])`. Equals the spot at `T = 0` and
+  converges to the long-run forward `exp(alpha* + sigma^2/(4 kappa))` as
+  `T -> inf`, with variance rising monotonically to `sigma^2/(2 kappa)` -- the
+  mean-reverting alternative to the constant-carry forward.
+
 ## [1.384.0] - 2026-09-11
 
 ### Added

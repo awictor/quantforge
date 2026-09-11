@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.384.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.385.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1121,6 +1121,37 @@ Auto-generated from `quantforge` v1.384.0 by `docs/gen_api.py` — do not edit b
 ### `net_cost_of_carry(r, storage_cost=0.0, convenience_yield=0.0)`  _function_
 
 > Net proportional carry rate ``r + u - y`` (the forward's growth rate).
+
+### `schwartz_forward(spot, kappa, alpha_star, sigma, maturity)`  _function_
+
+> Commodity forward under the Schwartz (1997) one-factor model.
+>
+> With log-spot lognormal, ``F(T) = exp(E[X_T] + 0.5 Var[X_T])`` from
+> :func:`schwartz_log_mean` and :func:`schwartz_log_variance`. Equals the spot
+> at ``T = 0`` and converges to the risk-neutral long-run forward
+> ``exp(alpha_star + sigma^2/(4 kappa))`` as ``T -> inf`` -- the mean-reverting
+> alternative to the constant-carry :func:`commodity_forward`.
+
+### `schwartz_log_mean(spot, kappa, alpha_star, maturity)`  _function_
+
+> Risk-neutral mean of log-spot under the Schwartz one-factor model.
+>
+> Log-spot ``X = ln S`` follows a mean-reverting Ornstein-Uhlenbeck process
+> ``dX = kappa (alpha_star - X) dt + sigma dW`` under the pricing measure, where
+> ``alpha_star`` is the risk-adjusted long-run log level. The conditional mean is
+>
+>     E[X_T] = e^{-kappa T} ln S + (1 - e^{-kappa T}) alpha_star,
+>
+> starting at ``ln S`` for ``T = 0`` and relaxing to ``alpha_star`` as
+> ``T -> inf``.
+
+### `schwartz_log_variance(sigma, kappa, maturity)`  _function_
+
+> Variance of log-spot under the Schwartz one-factor model.
+>
+> ``Var[X_T] = sigma^2 (1 - e^{-2 kappa T}) / (2 kappa)`` -- zero at ``T = 0``,
+> rising monotonically to the stationary ``sigma^2 / (2 kappa)`` as
+> ``T -> inf``.
 
 ### `seasonal_forward(spot, r, maturity, seasonal_factor, storage_cost=0.0, convenience_yield=0.0)`  _function_
 
