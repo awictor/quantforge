@@ -141,6 +141,30 @@ def _svi_derivs(p: SVIParams, k):
     return w, wp, wpp
 
 
+def svi_variance_swap_strike(p: SVIParams, S0, t, r, q=0.0, n_strikes=401,
+                             width=8.0):
+    """Fair variance-swap strike (annualized *variance*) implied by a raw-SVI slice.
+
+    Replicates the variance swap from the SVI smile: at each strike the Black
+    implied vol is ``p.implied_vol(k, t)`` with ``k = ln(K / F)`` the
+    log-moneyness on the forward ``F = S0 e^{(r-q)t}``. Feeds the smile to
+    :func:`quantforge.variance_swap_from_smile`, so the result is model-
+    consistent with the fitted slice. Returns the fair *variance* (square it back
+    to vol with ``sqrt``); a flat slice (``b = 0``) returns that flat variance
+    ``sigma^2``, and a skewed slice returns a variance above the ATM variance (the
+    convexity/skew premium).
+    """
+    from .varswap import variance_swap_from_smile
+
+    F = S0 * math.exp((r - q) * t)
+
+    def vol_fn(K):
+        return p.implied_vol(math.log(K / F), t)
+
+    return variance_swap_from_smile(S0, t, r, vol_fn, q=q, n_strikes=n_strikes,
+                                    width=width)
+
+
 def svi_g(p: SVIParams, k):
     """Gatheral-Jacquier g-function of a raw-SVI slice at log-moneyness ``k``.
 

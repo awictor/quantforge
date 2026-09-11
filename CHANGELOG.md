@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.257.0] - 2026-09-10
+
+### Added
+- `svi_variance_swap_strike` (in `svi.py`): fair variance-swap strike
+  (annualized variance) replicated model-consistently from a raw-SVI slice --
+  maps each strike to `p.implied_vol(ln(K/F), t)` and feeds the smile to
+  `variance_swap_from_smile`.
+- Verified: a flat slice (`b = 0`) returns the flat variance `sigma^2`; a
+  skewed/convex slice returns a variance above the ATM variance (the convexity
+  premium); higher `b` (more convexity) raises the strike.
+
 ## [1.256.0] - 2026-09-10
 
 ### Added

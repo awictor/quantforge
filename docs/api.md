@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.256.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.257.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -4185,6 +4185,19 @@ Auto-generated from `quantforge` v1.256.0 by `docs/gen_api.py` — do not edit b
 > ``t``. ``t`` must lie within the fitted expiry range.
 >
 > Returns the local volatility ``sqrt(sigma_loc^2)``.
+
+### `svi_variance_swap_strike(p: quantforge.svi.SVIParams, S0, t, r, q=0.0, n_strikes=401, width=8.0)`  _function_
+
+> Fair variance-swap strike (annualized *variance*) implied by a raw-SVI slice.
+>
+> Replicates the variance swap from the SVI smile: at each strike the Black
+> implied vol is ``p.implied_vol(k, t)`` with ``k = ln(K / F)`` the
+> log-moneyness on the forward ``F = S0 e^{(r-q)t}``. Feeds the smile to
+> :func:`quantforge.variance_swap_from_smile`, so the result is model-
+> consistent with the fitted slice. Returns the fair *variance* (square it back
+> to vol with ``sqrt``); a flat slice (``b = 0``) returns that flat variance
+> ``sigma^2``, and a skewed slice returns a variance above the ATM variance (the
+> convexity/skew premium).
 
 ## trinomial
 
