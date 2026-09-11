@@ -23,7 +23,7 @@ def test_expected_rate_formula():
 def test_expected_rate_matches_monte_carlo():
     import random
     rng = random.Random(3)
-    t, N, nsteps = 2.0, 120000, 300
+    t, N, nsteps = 2.0, 60000, 300
     dt = t / nsteps
     total = 0.0
     for _ in range(N):

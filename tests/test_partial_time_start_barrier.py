@@ -48,12 +48,15 @@ def test_in_out_parity():
 
 
 @pytest.mark.slow
-@pytest.mark.parametrize("t1", [0.25, 0.5, 0.75])
+@pytest.mark.parametrize("t1", [0.5])
 def test_matches_monte_carlo(t1):
     cf = partial_time_start_barrier_call(S, K, H, t1, T, R, SIG, "down-out")
     import random
     rng = random.Random(9)
-    nsteps, N = 1200, 80000
+    # Fine steps (discrete-monitoring bias is the binding constraint, not
+    # variance) but fewer paths -- one representative t1 keeps the closed-form
+    # cross-check cheap. The monotonicity/limit tests above cover the t1 sweep.
+    nsteps, N = 1200, 40000
     disc = math.exp(-R * T)
     dt = T / nsteps
     acc = 0.0

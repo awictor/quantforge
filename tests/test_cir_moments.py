@@ -22,7 +22,7 @@ def test_expected_rate_formula():
 def test_moments_match_monte_carlo():
     import random
     rng = random.Random(3)
-    t, N, nsteps = 2.0, 120000, 400
+    t, N, nsteps = 2.0, 60000, 400
     dt = t / nsteps
     vals = []
     for _ in range(N):

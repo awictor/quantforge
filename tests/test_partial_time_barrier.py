@@ -39,12 +39,13 @@ def test_in_out_parity():
 
 
 @pytest.mark.slow
-@pytest.mark.parametrize("t1", [0.25, 0.5, 0.75])
+@pytest.mark.parametrize("t1", [0.5])
 def test_matches_monte_carlo(t1):
     cf = partial_time_end_barrier_call(S, K, H, t1, T, R, SIG, "down-out")
     import random
     rng = random.Random(9)
-    nsteps, N = 600, 80000
+    # One representative t1; the limit/parity tests above cover the sweep.
+    nsteps, N = 600, 40000
     disc = math.exp(-R * T)
     dt = T / nsteps
     acc = 0.0

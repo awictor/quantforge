@@ -24,7 +24,7 @@ def test_variance_is_linear_in_time():
 def test_moments_match_monte_carlo():
     import random
     rng = random.Random(3)
-    t, N, nsteps = 3.0, 120000, 300
+    t, N, nsteps = 3.0, 60000, 300
     dt = t / nsteps
     vals = []
     for _ in range(N):

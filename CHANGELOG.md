@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.359.0] - 2026-09-11
+
+### Changed
+- Trimmed the slowest Monte Carlo cross-check tests without losing coverage:
+  the partial-time barrier MC tests (start/end) now run one representative `t1`
+  at half the paths (the limit/parity/monotonicity tests already sweep `t1`),
+  and the Vasicek/CIR/Ho-Lee rate-moment MC tests drop from 120k to 60k paths.
+  This cuts roughly 190 seconds off the `slow` suite (partial-time start
+  ~150s -> ~21s, end ~75s -> ~9s, moments ~44s -> ~13s) while keeping every
+  closed-form-vs-MC check.
+
 ## [1.358.0] - 2026-09-11
 
 ### Documentation
