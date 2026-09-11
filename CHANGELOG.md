@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.256.0] - 2026-09-10
+
+### Added
+- `DiscountCurve` analytics methods: `instantaneous_forward` (`-d ln DF/dT` by
+  central FD), `annuity` (fixed-leg PV01), `swap_value` (unit-notional payer/
+  receiver), and `swap_dv01` (value change for a 1bp parallel curve drop via a
+  shifted-curve wrapper).
+- Verified: on a flat curve the instantaneous forward equals the zero rate; a
+  par-struck swap has zero value; the annuity matches a manual sum; a payer's
+  DV01 is negative on a rate drop and a receiver's positive, of order
+  annuity x 1bp.
+
 ## [1.255.0] - 2026-09-10
 
 ### Added

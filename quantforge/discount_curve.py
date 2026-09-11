@@ -70,6 +70,48 @@ class DiscountCurve:
             raise ValueError("need T2 > T1")
         return (math.log(self.df(T1)) - math.log(self.df(T2))) / (T2 - T1)
 
+    def instantaneous_forward(self, T, h=1e-5):
+        """Instantaneous forward rate ``f(T) = -d ln DF / dT`` by central FD.
+
+        As ``T -> 0`` this approaches the short rate; over a flat curve it equals
+        the constant zero rate at every tenor.
+        """
+        if T < 0:
+            raise ValueError("T must be non-negative")
+        lo = max(T - h, 0.0)
+        hi = T + h
+        return -(math.log(self.df(hi)) - math.log(self.df(lo))) / (hi - lo)
+
+    def annuity(self, pay_times):
+        """Fixed-leg annuity (PV01) ``sum_i tau_i DF(T_i)`` over the schedule."""
+        a = 0.0
+        prev = 0.0
+        for Ti in pay_times:
+            a += (Ti - prev) * self.df(Ti)
+            prev = Ti
+        return a
+
+    def swap_value(self, pay_times, fixed_rate, payer=True):
+        """Value of a unit-notional swap; payer pays fixed, receives float."""
+        flt = 1.0 - self.df(pay_times[-1])
+        fixed = fixed_rate * self.annuity(pay_times)
+        return (flt - fixed) if payer else (fixed - flt)
+
+    def swap_dv01(self, pay_times, fixed_rate, payer=True, bump=1e-4):
+        """DV01: value change of the swap for a 1bp parallel *drop* in the curve.
+
+        The curve is shifted by scaling every discount factor ``DF(T) e^{+bump T}``
+        (a parallel fall of the zero rates by ``bump``). Returns the change in
+        :func:`swap_value` -- negative for a payer (falling rates lower the payer
+        value).
+        """
+        base = self.swap_value(pay_times, fixed_rate, payer)
+        shifted = _ShiftedDiscountCurve(self, -bump)
+        flt = 1.0 - shifted.df(pay_times[-1])
+        fixed = fixed_rate * shifted.annuity(pay_times)
+        val = (flt - fixed) if payer else (fixed - flt)
+        return val - base
+
     def par_swap_rate(self, pay_times):
         """Par (fair fixed) rate of a swap with the given annual pay schedule.
 
@@ -135,3 +177,22 @@ def bootstrap_from_swaps(swap_maturities, par_rates, freq=1.0):
         dfs.append(DF_n)
 
     return DiscountCurve(times, dfs)
+
+
+class _ShiftedDiscountCurve:
+    """A curve with all zero rates shifted by ``dr`` (``DF(T) e^{-dr T}``)."""
+
+    def __init__(self, curve, dr):
+        self._curve = curve
+        self._dr = dr
+
+    def df(self, T):
+        return self._curve.df(T) * math.exp(-self._dr * T)
+
+    def annuity(self, pay_times):
+        a = 0.0
+        prev = 0.0
+        for Ti in pay_times:
+            a += (Ti - prev) * self.df(Ti)
+            prev = Ti
+        return a
