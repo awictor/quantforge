@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.271.0] - 2026-09-10
+
+### Added
+- `VannaVolgaSmile.vol_at_delta`, `.risk_reversal`, and `.butterfly` (in
+  `vannavolga.py`): query the FX smile in delta space. `vol_at_delta` solves the
+  fixed point `sigma = vol(strike_from_delta(sigma))`; `risk_reversal` and
+  `butterfly` recompute the delta-consistent skew and convexity at any delta.
+- Verified: at 25-delta the risk reversal and butterfly recover the inputs used
+  to build the smile, and the pillar vols are returned exactly; a ~50-delta
+  option sits near the ATM vol; a negative RR makes the 25d put richer than the
+  25d call; a convex smile has a larger 10-delta butterfly than 25-delta.
+
 ## [1.270.0] - 2026-09-10
 
 ### Added

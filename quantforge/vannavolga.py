@@ -105,6 +105,44 @@ class VannaVolgaSmile:
         """Return the three (strike, vol) pillar points, sorted by strike."""
         return [(k, self.sig[k]) for k in self._ks]
 
+    def vol_at_delta(self, delta, is_call, tol=1e-10, max_iter=100):
+        """Smile vol at a target (forward) Black-Scholes delta.
+
+        The strike of a given delta depends on the vol at that strike, which the
+        smile itself sets, so this solves the fixed point
+        ``sigma = vol(strike_from_delta(sigma))`` by iteration seeded at the ATM
+        vol. ``delta`` is the unsigned delta magnitude (e.g. ``0.25``); a put uses
+        ``is_call=False``. At the pillar deltas it returns the pillar vols.
+        """
+        if not 0.0 < delta < 1.0:
+            raise ValueError("delta magnitude must lie in (0, 1)")
+        target = delta if is_call else -delta
+        sigma = self.atm
+        for _ in range(max_iter):
+            K = _strike_from_delta(self.F, self.t, sigma, target, is_call)
+            new = self.vol(K)
+            if abs(new - sigma) < tol:
+                return new
+            sigma = new
+        return sigma
+
+    def risk_reversal(self, delta=0.25):
+        """Smile-implied risk reversal at a given delta: ``sigma_call - sigma_put``.
+
+        Recomputes the delta-consistent call and put vols from the fitted smile;
+        at ``delta = 0.25`` this returns the input ``rr`` used to build the smile.
+        """
+        return (self.vol_at_delta(delta, True)
+                - self.vol_at_delta(delta, False))
+
+    def butterfly(self, delta=0.25):
+        """Smile-implied butterfly at a given delta: ``(sigma_call + sigma_put)/2 - atm``.
+
+        At ``delta = 0.25`` this returns the input ``bf`` used to build the smile.
+        """
+        return 0.5 * (self.vol_at_delta(delta, True)
+                      + self.vol_at_delta(delta, False)) - self.atm
+
     def _cm_weights(self, K):
         """Vanna-volga replication weights x1, x2, x3 for strike ``K``.
 
