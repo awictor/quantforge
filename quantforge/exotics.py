@@ -385,6 +385,65 @@ def double_one_touch(S, L, U, t, r, sigma, b=None, cash=1.0, n_terms=200):
     return cash * disc - dnt
 
 
+def double_knock_out_call(S, K, L, U, t, r, sigma, b=None, delta1=0.0,
+                          delta2=0.0, n_terms=10):
+    """Ikeda-Kunitomo (1992) double-barrier knock-out call: payoff max(S_T - K, 0).
+
+    Pays the vanilla call payoff only if the continuously-monitored spot stays
+    strictly inside the (possibly exponentially curved) corridor bounded below by
+    ``L e^{delta1 s}`` and above by ``U e^{delta2 s}`` over ``[0, t]``. With
+    ``delta1 = delta2 = 0`` the barriers are flat at ``L`` and ``U``. The price is
+    the Ikeda-Kunitomo image series
+
+        C = S e^{(b-r)t} sum_n [ (U^n/L^n)^{mu1} (L^n/S)^{mu2} (N(d1)-N(d2))
+                                 - (L^{n+1}/(U^n S))^{mu3} (N(d3)-N(d4)) ]
+            - K e^{-rt} sum_n [ ... same with mu-2 and d-sigma sqrt(t) ... ],
+
+    truncated at ``|n| <= n_terms`` (the series converges geometrically). Requires
+    ``L < S < U`` and ``K < U`` for a non-trivial payoff.
+    """
+    _validate(S, K, t, sigma)
+    if not (0.0 < L < S < U):
+        raise ValueError("need 0 < L < S < U")
+    if b is None:
+        b = r
+    if t == 0 or sigma == 0:
+        return max(S - K, 0.0) if L < S < U else 0.0
+
+    vt = sigma * math.sqrt(t)
+    V = sigma * sigma
+    F = U  # upper barrier level in the payoff cap
+    E = max(K, L)  # the call is worthless below max(K, L)
+    disc_q = math.exp((b - r) * t)
+    disc_r = math.exp(-r * t)
+
+    sum1 = 0.0
+    sum2 = 0.0
+    for n in range(-n_terms, n_terms + 1):
+        mu1 = 2.0 * (b - delta2 - n * (delta1 - delta2)) / V + 1.0
+        mu2 = 2.0 * n * (delta1 - delta2) / V
+        mu3 = 2.0 * (b - delta2 + n * (delta1 - delta2)) / V + 1.0
+        d1 = (math.log(S * U ** (2 * n) / (E * L ** (2 * n)))
+              + (b + 0.5 * V) * t) / vt
+        d2 = (math.log(S * U ** (2 * n) / (F * L ** (2 * n)))
+              + (b + 0.5 * V) * t) / vt
+        d3 = (math.log(L ** (2 * n + 2) / (E * S * U ** (2 * n)))
+              + (b + 0.5 * V) * t) / vt
+        d4 = (math.log(L ** (2 * n + 2) / (F * S * U ** (2 * n)))
+              + (b + 0.5 * V) * t) / vt
+        term1 = ((U ** n / L ** n) ** mu1 * (L ** n / S) ** mu2
+                 * (norm_cdf(d1) - norm_cdf(d2))
+                 - (L ** (n + 1) / (U ** n * S)) ** mu3
+                 * (norm_cdf(d3) - norm_cdf(d4)))
+        term2 = ((U ** n / L ** n) ** (mu1 - 2.0) * (L ** n / S) ** mu2
+                 * (norm_cdf(d1 - vt) - norm_cdf(d2 - vt))
+                 - (L ** (n + 1) / (U ** n * S)) ** (mu3 - 2.0)
+                 * (norm_cdf(d3 - vt) - norm_cdf(d4 - vt)))
+        sum1 += term1
+        sum2 += term2
+    return max(S * disc_q * sum1 - K * disc_r * sum2, 0.0)
+
+
 def double_no_touch_greeks(S, L, U, t, r, sigma, b=None, cash=1.0, n_terms=200):
     """Greeks of a double-no-touch by finite differences on the closed form.
 

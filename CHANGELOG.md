@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.277.0] - 2026-09-11
+
+### Added
+- `double_knock_out_call` (in `exotics.py`): the Ikeda-Kunitomo (1992)
+  double-barrier knock-out call — payoff `max(S_T - K, 0)` paid only if the
+  continuously-monitored spot stays inside a corridor `(L e^{delta1 s},
+  U e^{delta2 s})`. Prices via the truncated Ikeda-Kunitomo image series
+  (`delta1 = delta2 = 0` gives flat barriers).
+- Verified: wide barriers recover the vanilla call; a tighter band and higher
+  vol both lower the value; the price stays in `[0, vanilla]`; and it matches a
+  fine-step (6000-step) continuously-monitored Monte Carlo (which sits just above
+  the closed form by the usual discrete-monitoring bias).
+
 ## [1.276.0] - 2026-09-11
 
 ### Added

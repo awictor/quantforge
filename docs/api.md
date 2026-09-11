@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.275.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.277.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1155,6 +1155,23 @@ Auto-generated from `quantforge` v1.275.0 by `docs/gen_api.py` — do not edit b
 > strike) -- the "pin risk" that makes digitals hard to hedge and motivates
 > the call-spread over-hedge in :mod:`quantforge.overhedge`.
 
+### `double_knock_out_call(S, K, L, U, t, r, sigma, b=None, delta1=0.0, delta2=0.0, n_terms=10)`  _function_
+
+> Ikeda-Kunitomo (1992) double-barrier knock-out call: payoff max(S_T - K, 0).
+>
+> Pays the vanilla call payoff only if the continuously-monitored spot stays
+> strictly inside the (possibly exponentially curved) corridor bounded below by
+> ``L e^{delta1 s}`` and above by ``U e^{delta2 s}`` over ``[0, t]``. With
+> ``delta1 = delta2 = 0`` the barriers are flat at ``L`` and ``U``. The price is
+> the Ikeda-Kunitomo image series
+>
+>     C = S e^{(b-r)t} sum_n [ (U^n/L^n)^{mu1} (L^n/S)^{mu2} (N(d1)-N(d2))
+>                              - (L^{n+1}/(U^n S))^{mu3} (N(d3)-N(d4)) ]
+>         - K e^{-rt} sum_n [ ... same with mu-2 and d-sigma sqrt(t) ... ],
+>
+> truncated at ``|n| <= n_terms`` (the series converges geometrically). Requires
+> ``L < S < U`` and ``K < U`` for a non-trivial payoff.
+
 ### `double_no_touch(S, L, U, t, r, sigma, b=None, cash=1.0, n_terms=200)`  _function_
 
 > Double-no-touch: pays ``cash`` at expiry if spot stays inside ``(L, U)``.
@@ -1172,6 +1189,17 @@ Auto-generated from `quantforge` v1.275.0 by `docs/gen_api.py` — do not edit b
 > with ``k_n = n pi / Z``. The value is ``cash e^{-rt} P(survive)``. As
 > ``U -> infinity`` it collapses to the single lower :func:`no_touch`, and as
 > ``L -> 0`` to the upper one. Requires ``L < S < U``.
+
+### `double_no_touch_greeks(S, L, U, t, r, sigma, b=None, cash=1.0, n_terms=200)`  _function_
+
+> Greeks of a double-no-touch by finite differences on the closed form.
+>
+> Central differences of :func:`double_no_touch` for ``delta`` (dV/dS),
+> ``gamma`` (d2V/dS2), ``vega`` (dV/dsigma), ``theta`` (calendar decay
+> ``-dV/dt``), and the two barrier sensitivities ``dV/dL`` and ``dV/dU``. A DNT
+> is a bet on low realized range, so ``vega < 0`` (more vol -> more likely to
+> knock) and widening either barrier raises the value (``dV/dL < 0`` since a
+> lower ``L`` widens the band, ``dV/dU > 0``). Returns a dict with those fields.
 
 ### `double_one_touch(S, L, U, t, r, sigma, b=None, cash=1.0, n_terms=200)`  _function_
 
