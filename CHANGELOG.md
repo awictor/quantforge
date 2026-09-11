@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.321.0] - 2026-09-11
+
+### Added
+- `implied_exchange_correlation` (in `multiasset.py`): back out the correlation
+  implied by a Margrabe exchange-option price. The price depends on `rho` only
+  through the spread vol `sqrt(sigma1^2 - 2 rho sigma1 sigma2 + sigma2^2)`, which
+  falls as `rho` rises, so the price is monotone decreasing in `rho` and a
+  bisection on `(-1, 1)` recovers it. Complements the spread and
+  geometric-basket implied-correlation solvers.
+- Verified: round-trips the correlation across `rho in {-0.5, 0, 0.3, 0.7}`
+  (with and without dividends); the price is monotone decreasing in `rho`; a
+  quote outside the `rho`-range raises.
+
 ## [1.320.0] - 2026-09-11
 
 ### Added

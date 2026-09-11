@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.320.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.321.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3443,6 +3443,16 @@ Auto-generated from `quantforge` v1.320.0 by `docs/gen_api.py` — do not edit b
 >     spots, weights, sigmas: length-``n`` sequences.
 >     corr: ``n x n`` correlation matrix (list of lists).
 >     q: optional length-``n`` dividend yields; defaults to zeros.
+
+### `implied_exchange_correlation(target_price, S1, S2, t, sigma1, sigma2, q1=0.0, q2=0.0, tol=1e-10, max_iter=100)`  _function_
+
+> Back out the correlation implied by a Margrabe exchange-option price.
+>
+> The exchange price depends on ``rho`` only through the spread vol
+> ``sqrt(sigma1^2 - 2 rho sigma1 sigma2 + sigma2^2)``, which falls as ``rho``
+> rises, so the price is monotone decreasing in ``rho`` -- a bisection on
+> ``rho in (-1, 1)`` recovers it. Raises if the quote lies outside the range
+> spanned by ``rho = -1 .. 1``.
 
 ### `implied_geometric_basket_correlation(target_price, spots, weights, K, t, r, sigmas, q=None, option_type=<OptionType.CALL: 'call'>, tol=1e-08, max_iter=100)`  _function_
 

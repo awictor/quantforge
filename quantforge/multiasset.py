@@ -853,6 +853,38 @@ def rainbow_greeks(S1, S2, K, t, r, sigma1, sigma2, rho, kind="best",
             "corr_vega": corr_vega}
 
 
+def implied_exchange_correlation(target_price, S1, S2, t, sigma1, sigma2,
+                                 q1=0.0, q2=0.0, tol=1e-10, max_iter=100):
+    """Back out the correlation implied by a Margrabe exchange-option price.
+
+    The exchange price depends on ``rho`` only through the spread vol
+    ``sqrt(sigma1^2 - 2 rho sigma1 sigma2 + sigma2^2)``, which falls as ``rho``
+    rises, so the price is monotone decreasing in ``rho`` -- a bisection on
+    ``rho in (-1, 1)`` recovers it. Raises if the quote lies outside the range
+    spanned by ``rho = -1 .. 1``.
+    """
+    def px(rho):
+        return exchange_option(S1, S2, t, sigma1, sigma2, rho, q1, q2)
+
+    lo, hi = -0.999999, 0.999999
+    p_lo, p_hi = px(lo), px(hi)      # p_lo (rho=-1) is the highest price
+    if not (min(p_lo, p_hi) - 1e-10 <= target_price <= max(p_lo, p_hi) + 1e-10):
+        raise ValueError(
+            f"price {target_price} outside the rho-range [{p_hi:.6g}, {p_lo:.6g}]"
+        )
+    for _ in range(max_iter):
+        mid = 0.5 * (lo + hi)
+        pm = px(mid)
+        if abs(pm - target_price) < tol:
+            return mid
+        # Price decreases in rho: model price too high -> raise rho.
+        if pm > target_price:
+            lo = mid
+        else:
+            hi = mid
+    return 0.5 * (lo + hi)
+
+
 def implied_spread_correlation(target_price, S1, S2, K, t, r, sigma1, sigma2,
                                q1=0.0, q2=0.0, option_type=OptionType.CALL,
                                tol=1e-8, max_iter=100):

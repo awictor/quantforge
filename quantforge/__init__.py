@@ -152,7 +152,7 @@ from .multiasset import (
     exchange_greeks, spread_greeks, spread_option_bs_greeks, basket_greeks,
     rainbow_greeks,
     implied_spread_correlation, implied_spread_correlation_bs,
-    implied_geometric_basket_correlation,
+    implied_geometric_basket_correlation, implied_exchange_correlation,
 )
 from .strategy import (
     payoff_at_expiry, payoff_profile, break_evens,
@@ -333,7 +333,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.320.0"
+__version__ = "1.321.0"
 
 __all__ = [
     "OptionType",
@@ -549,6 +549,7 @@ __all__ = [
     "basket_greeks",
     "rainbow_greeks",
     "implied_spread_correlation",
+    "implied_exchange_correlation",
     "implied_spread_correlation_bs",
     "implied_geometric_basket_correlation",
     "payoff_at_expiry",
