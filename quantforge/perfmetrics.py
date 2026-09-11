@@ -161,6 +161,56 @@ def calmar_ratio(returns: Sequence[float], periods_per_year=252) -> float:
     return ann_return / mdd
 
 
+def _percentile(sorted_vals, p):
+    """Linear-interpolated percentile ``p`` in [0, 100] of a sorted list."""
+    n = len(sorted_vals)
+    if n == 1:
+        return sorted_vals[0]
+    rank = (p / 100.0) * (n - 1)
+    lo = int(math.floor(rank))
+    hi = min(lo + 1, n - 1)
+    frac = rank - lo
+    return sorted_vals[lo] * (1.0 - frac) + sorted_vals[hi] * frac
+
+
+def omega_ratio(returns: Sequence[float], threshold=0.0) -> float:
+    """Omega ratio: probability-weighted gains over losses about a threshold.
+
+    ``sum(max(r - threshold, 0)) / sum(max(threshold - r, 0))`` -- the ratio of
+    upside to downside area relative to ``threshold``. Values above 1 mean more
+    gain mass than loss mass. Returns ``inf`` when there is no downside; raises
+    if there is neither upside nor downside.
+    """
+    if not returns:
+        raise ValueError("need at least one return")
+    up = sum(max(r - threshold, 0.0) for r in returns)
+    down = sum(max(threshold - r, 0.0) for r in returns)
+    if up == 0.0 and down == 0.0:
+        raise ValueError("all returns equal the threshold")
+    if down == 0.0:
+        return float("inf")
+    return up / down
+
+
+def tail_ratio(returns: Sequence[float], pct=5.0) -> float:
+    """Tail ratio: the right tail's magnitude over the left tail's.
+
+    ``|percentile(100 - pct)| / |percentile(pct)|`` -- by default the 95th over
+    the 5th percentile (in absolute value). Above 1 means the upside tail is
+    fatter than the downside. Raises if the lower tail percentile is zero.
+    """
+    if len(returns) < 2:
+        raise ValueError("need at least two returns")
+    if not (0.0 < pct < 50.0):
+        raise ValueError("pct must be in (0, 50)")
+    s = sorted(returns)
+    right = abs(_percentile(s, 100.0 - pct))
+    left = abs(_percentile(s, pct))
+    if left == 0.0:
+        raise ValueError("lower-tail percentile is zero")
+    return right / left
+
+
 def hit_rate(returns: Sequence[float]) -> float:
     """Fraction of periods with a strictly positive return."""
     if not returns:

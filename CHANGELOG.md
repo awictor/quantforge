@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.340.0] - 2026-09-11
+
+### Added
+- `omega_ratio` and `tail_ratio` (in `perfmetrics.py`): the Omega ratio
+  (upside over downside area about a threshold) and the tail ratio (right-tail
+  magnitude over left-tail, default 95th over 5th percentile).
+- Verified: Omega matches the manual gain/loss-sum formula, exceeds 1 for a
+  net-positive series, is `inf` without downside and 1 for a symmetric series;
+  the tail ratio is 1 for a symmetric series and above 1 for a right-skewed
+  one; degenerate inputs and out-of-range percentiles raise.
+
 ## [1.339.0] - 2026-09-11
 
 ### Added

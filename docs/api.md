@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.339.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.340.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -4108,6 +4108,15 @@ Auto-generated from `quantforge` v1.339.0 by `docs/gen_api.py` — do not edit b
 > fractional drop from a running peak, as a non-negative number (0.2 = a 20%
 > drawdown). Empty or all-rising series give 0.
 
+### `omega_ratio(returns: Sequence[float], threshold=0.0) -> float`  _function_
+
+> Omega ratio: probability-weighted gains over losses about a threshold.
+>
+> ``sum(max(r - threshold, 0)) / sum(max(threshold - r, 0))`` -- the ratio of
+> upside to downside area relative to ``threshold``. Values above 1 mean more
+> gain mass than loss mass. Returns ``inf`` when there is no downside; raises
+> if there is neither upside nor downside.
+
 ### `profit_factor(returns: Sequence[float]) -> float`  _function_
 
 > Gross profits divided by gross losses (absolute).
@@ -4138,6 +4147,14 @@ Auto-generated from `quantforge` v1.339.0 by `docs/gen_api.py` — do not edit b
 > Downside deviation uses only returns below ``target`` (root-mean-square of
 > the shortfalls, divided by the full sample count -- the standard
 > convention). Raises if there is no downside.
+
+### `tail_ratio(returns: Sequence[float], pct=5.0) -> float`  _function_
+
+> Tail ratio: the right tail's magnitude over the left tail's.
+>
+> ``|percentile(100 - pct)| / |percentile(pct)|`` -- by default the 95th over
+> the 5th percentile (in absolute value). Above 1 means the upside tail is
+> fatter than the downside. Raises if the lower tail percentile is zero.
 
 ## perpetual
 
