@@ -116,6 +116,29 @@ def implied_forward(call, put, K, t, r) -> float:
     return K + math.exp(r * t) * (call - put)
 
 
+def box_spread_implied_rate(box_price, K1, K2, t) -> float:
+    """Continuously-compounded rate implied by a box-spread price.
+
+    A box (bull call spread + bear put spread on strikes ``K1 < K2``) has the
+    riskless terminal payoff ``K2 - K1``, so its fair value is
+    ``e^{-rt} (K2 - K1)`` and the implied financing rate is
+
+        r = -ln(box_price / (K2 - K1)) / t.
+
+    This is the synthetic-lending rate the options market prices, independent of
+    the underlying. Requires ``0 < box_price < K2 - K1`` (a positive rate) or
+    allows a negative rate if the box trades above its notional.
+    """
+    if K2 <= K1:
+        raise ValueError("require K2 > K1")
+    if t <= 0:
+        raise ValueError("t must be positive")
+    width = K2 - K1
+    if box_price <= 0:
+        raise ValueError("box price must be positive")
+    return -math.log(box_price / width) / t
+
+
 def implied_discount_factor(call1, put1, K1, call2, put2, K2) -> float:
     """Discount factor implied by call-put pairs at two strikes.
 

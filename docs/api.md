@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.356.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.357.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -488,6 +488,20 @@ Auto-generated from `quantforge` v1.356.0 by `docs/gen_api.py` — do not edit b
 > or repr(object).
 > encoding defaults to 'utf-8'.
 > errors defaults to 'strict'.
+
+### `box_spread_implied_rate(box_price, K1, K2, t) -> float`  _function_
+
+> Continuously-compounded rate implied by a box-spread price.
+>
+> A box (bull call spread + bear put spread on strikes ``K1 < K2``) has the
+> riskless terminal payoff ``K2 - K1``, so its fair value is
+> ``e^{-rt} (K2 - K1)`` and the implied financing rate is
+>
+>     r = -ln(box_price / (K2 - K1)) / t.
+>
+> This is the synthetic-lending rate the options market prices, independent of
+> the underlying. Requires ``0 < box_price < K2 - K1`` (a positive rate) or
+> allows a negative rate if the box trades above its notional.
 
 ### `call_price(S, K, t, r, sigma, b=None) -> float`  _function_
 

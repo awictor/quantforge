@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.357.0] - 2026-09-11
+
+### Added
+- `box_spread_implied_rate` (in `bsm.py`): the continuously-compounded
+  financing rate implied by a box-spread price, `r = -ln(box/(K2 - K1))/t`. The
+  box has a riskless `K2 - K1` payoff, so its price pins the synthetic-lending
+  rate the options market charges, independent of the underlying.
+- Verified: it recovers the input rate from a `box_spread` priced at that rate
+  (for two rates); a box above its notional implies a negative rate and one at
+  notional a zero rate; reversed strikes, zero time, and a non-positive price
+  raise.
+
 ## [1.356.0] - 2026-09-11
 
 ### Added
