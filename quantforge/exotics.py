@@ -18,7 +18,8 @@ from enum import Enum
 from .mathfns import norm_cdf
 from .bsm import (
     OptionType, _coerce_type, _validate, price as bsm_price,
-    delta as bsm_delta, gamma as bsm_gamma,
+    delta as bsm_delta, gamma as bsm_gamma, vega as bsm_vega,
+    theta as bsm_theta,
 )
 
 
@@ -503,6 +504,39 @@ def double_knock_out_call_greeks(S, K, L, U, t, r, sigma, b=None, delta1=0.0,
     dV_dU = (px(U_=U + hU) - px(U_=U - hU)) / (2.0 * hU)
     return {"price": base, "delta": delta, "gamma": gamma, "vega": vega,
             "theta": theta, "dV_dL": dV_dL, "dV_dU": dV_dU}
+
+
+def double_knock_in_call_greeks(S, K, L, U, t, r, sigma, b=None, delta1=0.0,
+                                delta2=0.0, n_terms=10):
+    """Greeks of a double-barrier knock-in call by in-out parity.
+
+    Differentiating ``knock_in = vanilla - knock_out`` term by term, the spot,
+    vol and time Greeks are the vanilla Black-Scholes Greek minus the double
+    knock-out Greek (:func:`double_knock_out_call_greeks`). The vanilla has no
+    barrier dependence, so the knock-in's barrier sensitivities are the negatives
+    of the knock-out's (widening the corridor lowers the knock-in). Returns the
+    same dict layout: ``price``, ``delta``, ``gamma``, ``vega``, ``theta``,
+    ``dV_dL``, ``dV_dU``.
+    """
+    if b is None:
+        b = r
+    ot = OptionType.CALL
+    ko = double_knock_out_call_greeks(S, K, L, U, t, r, sigma, b=b,
+                                      delta1=delta1, delta2=delta2,
+                                      n_terms=n_terms)
+    # Vanilla Greeks (theta by the same -dV/dt convention as the KO greeks).
+    ht = min(1e-4, 0.25 * t)
+    van_theta = -(bsm_price(S, K, t + ht, r, sigma, ot, b=b)
+                  - bsm_price(S, K, t - ht, r, sigma, ot, b=b)) / (2.0 * ht)
+    return {
+        "price": bsm_price(S, K, t, r, sigma, ot, b=b) - ko["price"],
+        "delta": bsm_delta(S, K, t, r, sigma, ot, b=b) - ko["delta"],
+        "gamma": bsm_gamma(S, K, t, r, sigma, b=b) - ko["gamma"],
+        "vega": bsm_vega(S, K, t, r, sigma, b=b) - ko["vega"],
+        "theta": van_theta - ko["theta"],
+        "dV_dL": -ko["dV_dL"],
+        "dV_dU": -ko["dV_dU"],
+    }
 
 
 def double_no_touch_greeks(S, L, U, t, r, sigma, b=None, cash=1.0, n_terms=200):

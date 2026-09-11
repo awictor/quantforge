@@ -241,7 +241,7 @@ from .exotics import (
     geometric_asian, geometric_asian_greeks, arithmetic_asian, asian_greeks,
     one_touch, no_touch, double_no_touch, double_one_touch,
     double_no_touch_greeks, double_knock_out_call, double_knock_in_call,
-    double_knock_out_call_greeks,
+    double_knock_out_call_greeks, double_knock_in_call_greeks,
     gap_option, gap_option_greeks, power_option, power_option_greeks,
     barrier_rebate, Barrier,
 )
@@ -303,7 +303,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.282.0"
+__version__ = "1.283.0"
 
 __all__ = [
     "OptionType",
@@ -708,6 +708,7 @@ __all__ = [
     "double_knock_out_call",
     "double_knock_in_call",
     "double_knock_out_call_greeks",
+    "double_knock_in_call_greeks",
     "gap_option",
     "gap_option_greeks",
     "power_option",

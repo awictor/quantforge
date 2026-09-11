@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.283.0] - 2026-09-11
+
+### Added
+- `double_knock_in_call_greeks` (in `exotics.py`): Greeks of a double-barrier
+  knock-in call by in-out parity. Spot/vol/time Greeks are the vanilla
+  Black-Scholes Greek minus the double knock-out Greek; barrier sensitivities
+  are the negatives of the knock-out's (the vanilla has no barrier dependence).
+- Verified: `knock_in + knock_out` Greeks sum to the vanilla Greek; `dV/dL` and
+  `dV/dU` negate the knock-out's; a wider corridor lowers the knock-in
+  (`dV/dL > 0`, `dV/dU < 0`); the price field matches the pricer.
+
 ## [1.282.0] - 2026-09-11
 
 ### Added

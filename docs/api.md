@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.282.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.283.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1166,6 +1166,18 @@ Auto-generated from `quantforge` v1.282.0 by `docs/gen_api.py` — do not edit b
 >
 > Priced as ``vanilla - double_knock_out_call`` with the vanilla evaluated on the
 > same carry ``b``. Requires ``L < S < U``.
+
+### `double_knock_in_call_greeks(S, K, L, U, t, r, sigma, b=None, delta1=0.0, delta2=0.0, n_terms=10)`  _function_
+
+> Greeks of a double-barrier knock-in call by in-out parity.
+>
+> Differentiating ``knock_in = vanilla - knock_out`` term by term, the spot,
+> vol and time Greeks are the vanilla Black-Scholes Greek minus the double
+> knock-out Greek (:func:`double_knock_out_call_greeks`). The vanilla has no
+> barrier dependence, so the knock-in's barrier sensitivities are the negatives
+> of the knock-out's (widening the corridor lowers the knock-in). Returns the
+> same dict layout: ``price``, ``delta``, ``gamma``, ``vega``, ``theta``,
+> ``dV_dL``, ``dV_dU``.
 
 ### `double_knock_out_call(S, K, L, U, t, r, sigma, b=None, delta1=0.0, delta2=0.0, n_terms=10)`  _function_
 
