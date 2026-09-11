@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.299.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.300.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1606,6 +1606,28 @@ Auto-generated from `quantforge` v1.299.0 by `docs/gen_api.py` — do not edit b
 > :func:`supershare`: ``delta`` (dV/dS), ``gamma`` (d2V/dS2), ``vega``
 > (dV/dsigma), ``theta`` (calendar decay). Returns a dict with ``price`` and
 > those fields.
+
+## extendible
+
+### `holder_extendible_call(S, K1, K2, t1, T2, r, sigma, A, b=None) -> float`  _function_
+
+> Holder-extendible call (Longstaff 1990), closed form.
+>
+> Args:
+>     K1: strike applying at the first expiry ``t1``.
+>     K2: strike of the extended option (life ``T2``).
+>     t1: first expiry (years); T2: extended expiry (years, ``> t1``).
+>     A: fee paid at ``t1`` to extend.
+>
+> Reduces to a vanilla call struck at ``K1`` expiring at ``t1`` when extending
+> is never worthwhile (very large ``A``).
+
+### `holder_extendible_call_greeks(S, K1, K2, t1, T2, r, sigma, A, b=None)`  _function_
+
+> Greeks of a holder-extendible call by central finite differences of
+> :func:`holder_extendible_call`: ``delta``, ``gamma``, ``vega``, ``theta``
+> (calendar decay, both expiries shrinking together). Returns a dict with
+> ``price`` and those fields.
 
 ## forward
 

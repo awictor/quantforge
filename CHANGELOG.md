@@ -4,6 +4,21 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.300.0] - 2026-09-11
+
+### Added
+- `holder_extendible_call` and `holder_extendible_call_greeks` (new module
+  `extendible.py`): holder-extendible call (Longstaff 1990). At the first expiry
+  `t1` the holder takes the best of exercising against `K1`, lapsing, or paying
+  a fee `A` to extend the life to `T2` with strike `K2`. Priced in closed form
+  by splitting the terminal spot into three regions (lapse / extend / exercise)
+  and valuing the extension strip with bivariate normals coupling `t1` and `T2`;
+  the strip boundaries are found by bisection. Greeks by finite difference.
+- Verified: matches a Monte Carlo at the first expiry across three
+  strike/maturity/fee cases to within ~0.15%; a very large fee collapses the
+  extension strip and recovers the vanilla call to `t1`; a finite fee adds value
+  over that plain call; a lower fee is worth more.
+
 ## [1.299.0] - 2026-09-11
 
 ### Added
