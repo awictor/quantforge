@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.406.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.407.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3947,6 +3947,57 @@ Auto-generated from `quantforge` v1.406.0 by `docs/gen_api.py` — do not edit b
 >
 > Returns ``leverage`` -- a dict ``{t: {k_center: L}}`` -- and the callable
 > ``lev_fn(spot, t)`` that interpolates it, suitable for an LSV Monte Carlo.
+
+## mbs
+
+### `amortization_schedule(balance, annual_rate, term_months)`  _function_
+
+> Level-payment amortization schedule with no prepayment.
+>
+> Returns ``[(month, interest, principal, ending_balance), ...]``. The balance
+> amortizes to (floating-point) zero at the final month.
+
+### `cpr_to_smm(cpr)`  _function_
+
+> Single monthly mortality from an annual CPR: ``1 - (1 - CPR)^{1/12}``.
+
+### `mbs_cashflows(balance, annual_rate, term_months, smm=0.0)`  _function_
+
+> Projected MBS cashflows with a constant SMM prepayment.
+>
+> Each month pays scheduled interest and principal on the surviving balance,
+> plus a prepayment of ``smm`` times the balance remaining after the scheduled
+> principal. Returns ``[(month, interest, scheduled_principal, prepayment,
+> total_principal, ending_balance), ...]``. With ``smm = 0`` the total principal
+> matches :func:`amortization_schedule`.
+
+### `monthly_payment(balance, annual_rate, term_months)`  _function_
+
+> Level fully-amortizing monthly payment for a fixed-rate mortgage.
+>
+> ``P = B * i / (1 - (1 + i)^{-n})`` with monthly rate ``i = annual_rate / 12``.
+> At zero rate this is the straight-line ``balance / term_months``.
+
+### `psa_cpr(month, psa=100.0)`  _function_
+
+> CPR on the PSA ramp at a given loan age, for ``psa`` percent of the model.
+>
+> Standard 100 PSA: ``CPR = 0.06 * min(month, 30) / 30`` (0.2%/month ramp to 6%
+> at month 30, flat after). Scaled by ``psa / 100`` for other speeds.
+
+### `smm_to_cpr(smm)`  _function_
+
+> Annual CPR from a single monthly mortality: ``1 - (1 - SMM)^{12}``.
+>
+> Inverse of :func:`cpr_to_smm`.
+
+### `weighted_average_life(cashflows, balance)`  _function_
+
+> Weighted-average life (years) from projected principal cashflows.
+>
+> ``WAL = sum_m (month/12) * total_principal_m / balance``. Uses the
+> ``total_principal`` column (index 4) of :func:`mbs_cashflows`. Falls as
+> prepayment speeds up (principal returns sooner).
 
 ## mc_greeks
 

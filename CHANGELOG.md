@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.407.0] - 2026-09-11
+
+### Added
+- `mbs.py`: mortgage-backed security cashflows and prepayment conventions.
+  `monthly_payment` (level fully-amortizing payment), `amortization_schedule`,
+  `cpr_to_smm` / `smm_to_cpr` (annual/monthly prepayment conversions), `psa_cpr`
+  (the PSA ramp), `mbs_cashflows` (scheduled plus prepaid principal at a constant
+  SMM), and `weighted_average_life`. Cross-checked: the balance amortizes to zero,
+  principal sums to the original balance with and without prepayment, CPR/SMM
+  round-trips, and the WAL shortens as prepayment speeds up.
+
 ## [1.406.0] - 2026-09-11
 
 ### Added

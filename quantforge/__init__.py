@@ -217,6 +217,10 @@ from .inflation import (
     yoy_caplet_price_normal, yoy_caplet_implied_normal_vol,
     real_zero_curve, nominal_zero_curve, real_discount_factor,
 )
+from .mbs import (
+    monthly_payment, cpr_to_smm, smm_to_cpr, psa_cpr, amortization_schedule,
+    mbs_cashflows, weighted_average_life,
+)
 from .weather import (
     heating_degree_days, cooling_degree_days, degree_day_index,
     degree_day_swap_payoff, degree_day_option,
@@ -428,7 +432,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.406.0"
+__version__ = "1.407.0"
 
 __all__ = [
     "OptionType",
@@ -778,6 +782,13 @@ __all__ = [
     "real_zero_curve",
     "nominal_zero_curve",
     "real_discount_factor",
+    "monthly_payment",
+    "cpr_to_smm",
+    "smm_to_cpr",
+    "psa_cpr",
+    "amortization_schedule",
+    "mbs_cashflows",
+    "weighted_average_life",
     "heating_degree_days",
     "cooling_degree_days",
     "degree_day_index",
