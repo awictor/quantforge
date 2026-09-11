@@ -198,6 +198,7 @@ from .holee import (
 from .bondmath import (
     bond_cashflows, bond_price_from_yield, macaulay_duration,
     modified_duration, convexity, dv01 as bond_dv01, yield_to_maturity,
+    price_from_curve, key_rate_durations, effective_duration_from_curve,
 )
 from .overhedge import (
     Overhedge, digital_call_overhedge, digital_put_overhedge, overhedge_payoff,
@@ -343,7 +344,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.328.0"
+__version__ = "1.329.0"
 
 __all__ = [
     "OptionType",
@@ -652,6 +653,9 @@ __all__ = [
     "convexity",
     "bond_dv01",
     "yield_to_maturity",
+    "price_from_curve",
+    "key_rate_durations",
+    "effective_duration_from_curve",
     "Overhedge",
     "digital_call_overhedge",
     "digital_put_overhedge",

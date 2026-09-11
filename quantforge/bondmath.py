@@ -79,6 +79,69 @@ def dv01(cashflows: Sequence[Tuple[float, float]], y) -> float:
     return -modified_duration(cashflows, y) * price * 1e-4
 
 
+def price_from_curve(cashflows: Sequence[Tuple[float, float]], curve) -> float:
+    """Present value of the cashflows off a discount curve.
+
+    ``curve`` is anything callable as ``curve.df(t)`` (e.g.
+    :class:`quantforge.DiscountCurve`) or a plain ``curve(t)`` returning the
+    discount factor ``P(0, t)``.
+    """
+    df = curve.df if hasattr(curve, "df") else curve
+    return sum(cf * df(t) for t, cf in cashflows)
+
+
+def key_rate_durations(cashflows, pillar_times, zero_rates, bump=1e-4):
+    """Key-rate (partial) durations of a bond against a zero-rate curve.
+
+    Builds a log-linear :class:`quantforge.DiscountCurve` from the pillar zero
+    rates, then bumps each pillar's zero rate up by ``bump`` in turn and measures
+    the fractional price change ``-dP/P / bump``. Returns a list of key-rate
+    durations aligned with ``pillar_times``; their sum approximates the bond's
+    effective duration (a parallel shift is the sum of the pillar bumps).
+
+    Continuously-compounded zero rates; ``DF = e^{-z t}`` at each pillar.
+    """
+    from .discount_curve import DiscountCurve
+    if len(pillar_times) != len(zero_rates):
+        raise ValueError("pillar_times and zero_rates must have equal length")
+    base_curve = DiscountCurve.from_zero_rates(pillar_times, zero_rates)
+    base = price_from_curve(cashflows, base_curve)
+    if base <= 0:
+        raise ValueError("bond price must be positive")
+    krds = []
+    for i in range(len(pillar_times)):
+        bumped = list(zero_rates)
+        bumped[i] += bump
+        up = price_from_curve(cashflows,
+                              DiscountCurve.from_zero_rates(pillar_times, bumped))
+        krds.append(-(up - base) / base / bump)
+    return krds
+
+
+def effective_duration_from_curve(cashflows, pillar_times, zero_rates,
+                                  bump=1e-4):
+    """Effective duration under a parallel shift of the whole zero curve.
+
+    Shifts every pillar zero rate by +/- ``bump`` and central-differences the
+    fractional price change. Equals the sum of the :func:`key_rate_durations` to
+    first order.
+    """
+    from .discount_curve import DiscountCurve
+    if len(pillar_times) != len(zero_rates):
+        raise ValueError("pillar_times and zero_rates must have equal length")
+    up = price_from_curve(
+        cashflows, DiscountCurve.from_zero_rates(
+            pillar_times, [z + bump for z in zero_rates]))
+    dn = price_from_curve(
+        cashflows, DiscountCurve.from_zero_rates(
+            pillar_times, [z - bump for z in zero_rates]))
+    base = price_from_curve(
+        cashflows, DiscountCurve.from_zero_rates(pillar_times, zero_rates))
+    if base <= 0:
+        raise ValueError("bond price must be positive")
+    return -(up - dn) / (2.0 * bump) / base
+
+
 def yield_to_maturity(cashflows: Sequence[Tuple[float, float]], price,
                       tol=1e-10, max_iter=100) -> float:
     """Solve the continuously-compounded yield reproducing ``price``.

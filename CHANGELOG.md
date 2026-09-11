@@ -4,6 +4,21 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.329.0] - 2026-09-11
+
+### Added
+- `price_from_curve`, `key_rate_durations`, and `effective_duration_from_curve`
+  (in `bondmath.py`): curve-based bond risk. `price_from_curve` discounts the
+  cashflows off any `curve.df(t)` (or plain callable); `key_rate_durations`
+  bumps each pillar zero rate in turn and returns the partial durations aligned
+  with the pillars; `effective_duration_from_curve` central-differences a
+  parallel shift of the whole zero curve.
+- Verified: the sum of the key-rate durations equals the effective (parallel)
+  duration to first order; on a flat curve that sum matches the single-yield
+  Macaulay duration; a bullet bond's largest key-rate duration is at the final
+  pillar and all are non-negative; `price_from_curve` matches a manual discount
+  and accepts a plain callable; length-mismatched pillars/rates raise.
+
 ## [1.328.0] - 2026-09-11
 
 ### Added
