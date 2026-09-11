@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.339.0] - 2026-09-11
+
+### Added
+- `drawdown_curve`, `longest_drawdown_duration`, and `rolling_sharpe` (in
+  `perfmetrics.py`): the per-period underwater curve (fractional drop from the
+  running peak, whose max is `max_drawdown`), the longest run of consecutive
+  underwater periods, and the annualized Sharpe over each trailing window
+  (`nan` for a zero-variance window so the series stays aligned).
+- Verified: the underwater curve is non-negative, length-matched, its max
+  equals `max_drawdown`, and a known series gives `[0, 0.5, 0.4]`; the drawdown
+  duration counts the underwater run and resets on recovery; the rolling Sharpe
+  has the right length and its first window matches `sharpe_ratio`, with a flat
+  window returning `nan`; bad windows raise.
+
 ## [1.338.0] - 2026-09-11
 
 ### Added

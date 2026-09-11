@@ -78,6 +78,71 @@ def max_drawdown(returns: Sequence[float]) -> float:
     return mdd
 
 
+def drawdown_curve(returns: Sequence[float]) -> list:
+    """Per-period underwater curve: fractional drop from the running peak.
+
+    Compounds the returns into an equity curve and returns, for each period, the
+    non-negative drawdown ``(peak - equity)/peak`` at that point (0 at a new
+    high). The maximum of this curve is :func:`max_drawdown`.
+    """
+    out = []
+    equity = 1.0
+    peak = 1.0
+    for r in returns:
+        equity *= (1.0 + r)
+        if equity > peak:
+            peak = equity
+        out.append((peak - equity) / peak)
+    return out
+
+
+def longest_drawdown_duration(returns: Sequence[float]) -> int:
+    """Longest run of consecutive underwater periods (below a prior peak).
+
+    Counts the maximum number of periods between a peak and the point the equity
+    curve first recovers to (or exceeds) it. A series that never falls below its
+    running peak returns 0.
+    """
+    equity = 1.0
+    peak = 1.0
+    longest = 0
+    current = 0
+    for r in returns:
+        equity *= (1.0 + r)
+        if equity >= peak:
+            peak = equity
+            current = 0
+        else:
+            current += 1
+            if current > longest:
+                longest = current
+    return longest
+
+
+def rolling_sharpe(returns: Sequence[float], window: int, risk_free=0.0,
+                   periods_per_year=252) -> list:
+    """Annualized Sharpe ratio over each trailing window of ``window`` periods.
+
+    Returns one Sharpe per window position (``len(returns) - window + 1``
+    values), each computed by :func:`sharpe_ratio` on that slice. A
+    zero-variance window yields ``float('nan')`` rather than raising, so the
+    series stays aligned.
+    """
+    n = len(returns)
+    if window < 2:
+        raise ValueError("window must be >= 2")
+    if window > n:
+        raise ValueError("window longer than the series")
+    out = []
+    for i in range(n - window + 1):
+        chunk = returns[i:i + window]
+        try:
+            out.append(sharpe_ratio(chunk, risk_free, periods_per_year))
+        except ValueError:
+            out.append(float("nan"))
+    return out
+
+
 def calmar_ratio(returns: Sequence[float], periods_per_year=252) -> float:
     """Calmar ratio: annualized return divided by the maximum drawdown.
 

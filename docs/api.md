@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.338.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.339.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -4080,9 +4080,25 @@ Auto-generated from `quantforge` v1.338.0 by `docs/gen_api.py` — do not edit b
 > Annualized return is the geometric ``(prod(1+r))^{periods_per_year/n} - 1``.
 > Raises if there is no drawdown (undefined ratio).
 
+### `drawdown_curve(returns: Sequence[float]) -> list`  _function_
+
+> Per-period underwater curve: fractional drop from the running peak.
+>
+> Compounds the returns into an equity curve and returns, for each period, the
+> non-negative drawdown ``(peak - equity)/peak`` at that point (0 at a new
+> high). The maximum of this curve is :func:`max_drawdown`.
+
 ### `hit_rate(returns: Sequence[float]) -> float`  _function_
 
 > Fraction of periods with a strictly positive return.
+
+### `longest_drawdown_duration(returns: Sequence[float]) -> int`  _function_
+
+> Longest run of consecutive underwater periods (below a prior peak).
+>
+> Counts the maximum number of periods between a peak and the point the equity
+> curve first recovers to (or exceeds) it. A series that never falls below its
+> running peak returns 0.
 
 ### `max_drawdown(returns: Sequence[float]) -> float`  _function_
 
@@ -4098,6 +4114,15 @@ Auto-generated from `quantforge` v1.338.0 by `docs/gen_api.py` — do not edit b
 >
 > Returns ``inf`` when there are no losing periods. Raises if there are no
 > gains and no losses.
+
+### `rolling_sharpe(returns: Sequence[float], window: int, risk_free=0.0, periods_per_year=252) -> list`  _function_
+
+> Annualized Sharpe ratio over each trailing window of ``window`` periods.
+>
+> Returns one Sharpe per window position (``len(returns) - window + 1``
+> values), each computed by :func:`sharpe_ratio` on that slice. A
+> zero-variance window yields ``float('nan')`` rather than raising, so the
+> series stays aligned.
 
 ### `sharpe_ratio(returns: Sequence[float], risk_free=0.0, periods_per_year=252) -> float`  _function_
 
