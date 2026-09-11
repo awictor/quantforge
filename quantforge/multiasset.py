@@ -80,6 +80,56 @@ def spread_option(S1, S2, K, t, r, sigma1, sigma2, rho,
     return call - disc * (F1 - F2 - K)
 
 
+def spread_option_bs(S1, S2, K, t, r, sigma1, sigma2, rho,
+                     q1=0.0, q2=0.0, option_type=OptionType.CALL) -> float:
+    """Bjerksund-Stensland (2014) spread-option approximation: max(S1 - S2 - K, 0).
+
+    A three-``d`` closed form that is generally more accurate than Kirk
+    (:func:`spread_option`) at wide strikes, high volatility, or when the two
+    legs' vols differ sharply, while still reducing to the exact Margrabe value
+    at ``K = 0``. Treats ``F2 + K`` as the effective second asset with weight
+    ``b = F2 / (F2 + K)`` and prices
+
+        C = e^{-rt} [ F1 N(d1) - F2 N(d2) - K N(d3) ],
+
+    where each ``d`` uses the blended spread vol
+    ``sigma = sqrt(sigma1^2 - 2 b rho sigma1 sigma2 + b^2 sigma2^2)``. Puts follow
+    from parity on the spread ``S1 - S2``.
+    """
+    ot = _coerce_type(option_type)
+    if S1 <= 0 or S2 <= 0:
+        raise ValueError("prices must be positive")
+
+    F1 = S1 * math.exp((r - q1) * t)
+    F2 = S2 * math.exp((r - q2) * t)
+    disc = math.exp(-r * t)
+
+    if t == 0:
+        payoff = (max(S1 - S2 - K, 0.0) if ot is OptionType.CALL
+                  else max(K - (S1 - S2), 0.0))
+        return payoff
+    if F2 + K <= 0:
+        raise ValueError("Bjerksund-Stensland spread requires F2 + K > 0")
+
+    a = F2 + K
+    b = F2 / a
+    sigma = math.sqrt(sigma1 * sigma1
+                      - 2.0 * b * rho * sigma1 * sigma2
+                      + b * b * sigma2 * sigma2)
+    vt = sigma * math.sqrt(t)
+    lnfa = math.log(F1 / a)
+    d1 = (lnfa + (0.5 * sigma1 * sigma1 - b * rho * sigma1 * sigma2
+                  + 0.5 * b * b * sigma2 * sigma2) * t) / vt
+    d2 = (lnfa + (-0.5 * sigma1 * sigma1 + rho * sigma1 * sigma2
+                  + 0.5 * b * b * sigma2 * sigma2 - b * sigma2 * sigma2) * t) / vt
+    d3 = (lnfa + (-0.5 * sigma1 * sigma1 + 0.5 * b * b * sigma2 * sigma2) * t) / vt
+    call = disc * (F1 * norm_cdf(d1) - F2 * norm_cdf(d2) - K * norm_cdf(d3))
+    if ot is OptionType.CALL:
+        return call
+    # Put via parity: C - P = disc*(F1 - F2 - K).
+    return call - disc * (F1 - F2 - K)
+
+
 def basket_option(spots, weights, K, t, r, sigmas, corr, q=None,
                   option_type=OptionType.CALL) -> float:
     """Two-asset basket call/put on ``w1 S1 + w2 S2`` via lognormal moment match.

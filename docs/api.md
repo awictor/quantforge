@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.265.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.266.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2789,6 +2789,22 @@ Auto-generated from `quantforge` v1.265.0 by `docs/gen_api.py` — do not edit b
 >
 > Reduces to an exact Margrabe formula when K = 0. Puts follow from parity on
 > the spread ``S1 - S2``.
+
+### `spread_option_bs(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0, option_type=<OptionType.CALL: 'call'>) -> float`  _function_
+
+> Bjerksund-Stensland (2014) spread-option approximation: max(S1 - S2 - K, 0).
+>
+> A three-``d`` closed form that is generally more accurate than Kirk
+> (:func:`spread_option`) at wide strikes, high volatility, or when the two
+> legs' vols differ sharply, while still reducing to the exact Margrabe value
+> at ``K = 0``. Treats ``F2 + K`` as the effective second asset with weight
+> ``b = F2 / (F2 + K)`` and prices
+>
+>     C = e^{-rt} [ F1 N(d1) - F2 N(d2) - K N(d3) ],
+>
+> where each ``d`` uses the blended spread vol
+> ``sigma = sqrt(sigma1^2 - 2 b rho sigma1 sigma2 + b^2 sigma2^2)``. Puts follow
+> from parity on the spread ``S1 - S2``.
 
 ### `two_asset_asset_or_nothing(S1, S2, K1, K2, t, r, sigma1, sigma2, rho, cond1='above', cond2='above', q1=0.0, q2=0.0)`  _function_
 

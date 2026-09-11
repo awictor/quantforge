@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.266.0] - 2026-09-10
+
+### Added
+- `spread_option_bs` (in `multiasset.py`): the Bjerksund-Stensland (2014)
+  three-`d` closed-form spread-option approximation for `max(S1 - S2 - K, 0)`,
+  generally more accurate than the Kirk approximation at wide strikes, high
+  volatility, or dispersed leg vols, and exact (Margrabe) at `K = 0`.
+- Verified: matches Margrabe at `K = 0`; satisfies put-call parity on the
+  spread; agrees with 200k-400k-path Latin-hypercube Monte Carlo within a few
+  standard errors; sits at least as close to MC as Kirk at a wide, dispersed-vol
+  strike; the call decreases in correlation.
+
 ## [1.265.0] - 2026-09-10
 
 ### Added
