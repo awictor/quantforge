@@ -22,6 +22,10 @@ from dataclasses import dataclass
 from typing import Sequence, Tuple
 
 from .optimize import nelder_mead
+from .bsm import (
+    price as bsm_price, delta as bsm_delta, vega as bsm_vega, OptionType,
+    _coerce_type,
+)
 
 
 # --------------------------------------------------------------------------
@@ -169,6 +173,34 @@ def sabr_sensitivities(F, K, t, alpha, beta, rho, nu):
         "d_dF": g[0], "d_dK": g[1],
         "d_dalpha": g[2], "d_drho": g[3], "d_dnu": g[4],
     }
+
+
+def sabr_option_greeks(F, K, t, alpha, beta, rho, nu,
+                       option_type=OptionType.CALL, discount=1.0):
+    """Greeks of an option priced at the SABR smile volatility.
+
+    The option is a Black-76 call/put on the forward ``F`` at the Hagan SABR
+    implied vol ``sigma(F, K)``. Its **total** delta includes the smile backbone:
+
+        delta = dPrice/dF = black_delta + black_vega * dsigma/dF,
+
+    where ``dsigma/dF`` is the exact (AD) backbone from
+    :func:`sabr_sensitivities`. This differs from the pure Black delta because
+    moving the forward also moves the SABR vol. Returns a dict with ``price``,
+    ``vol``, ``delta`` (total, backbone-adjusted), ``black_delta`` (vol held
+    fixed), and ``vega`` (dPrice/dsigma). Prices/greeks are on the *forward*
+    (carry ``b = 0``); pass ``discount`` = P(0,T) to scale to present value.
+    """
+    ot = _coerce_type(option_type)
+    sens = sabr_sensitivities(F, K, t, alpha, beta, rho, nu)
+    vol = sens["vol"]
+    dvol_dF = sens["d_dF"]
+    price = discount * bsm_price(F, K, t, 0.0, vol, ot, b=0.0)
+    black_delta = discount * bsm_delta(F, K, t, 0.0, vol, ot, b=0.0)
+    vega = discount * bsm_vega(F, K, t, 0.0, vol, b=0.0)
+    delta = black_delta + vega * dvol_dF
+    return {"price": price, "vol": vol, "delta": delta,
+            "black_delta": black_delta, "vega": vega}
 
 
 def sabr_jacobian(F, t, strikes: Sequence[float], alpha, beta, rho, nu):

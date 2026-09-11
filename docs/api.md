@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.249.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.250.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3431,6 +3431,22 @@ Auto-generated from `quantforge` v1.249.0 by `docs/gen_api.py` — do not edit b
 > the exact dual-number partials. This is the ``J`` a Gauss-Newton or
 > Levenberg-Marquardt step needs, and ``(J^T J)^{-1}`` gives the asymptotic
 > parameter covariance for standard errors on a fit.
+
+### `sabr_option_greeks(F, K, t, alpha, beta, rho, nu, option_type=<OptionType.CALL: 'call'>, discount=1.0)`  _function_
+
+> Greeks of an option priced at the SABR smile volatility.
+>
+> The option is a Black-76 call/put on the forward ``F`` at the Hagan SABR
+> implied vol ``sigma(F, K)``. Its **total** delta includes the smile backbone:
+>
+>     delta = dPrice/dF = black_delta + black_vega * dsigma/dF,
+>
+> where ``dsigma/dF`` is the exact (AD) backbone from
+> :func:`sabr_sensitivities`. This differs from the pure Black delta because
+> moving the forward also moves the SABR vol. Returns a dict with ``price``,
+> ``vol``, ``delta`` (total, backbone-adjusted), ``black_delta`` (vol held
+> fixed), and ``vega`` (dPrice/dsigma). Prices/greeks are on the *forward*
+> (carry ``b = 0``); pass ``discount`` = P(0,T) to scale to present value.
 
 ### `sabr_repair_butterfly(F, t, params, r=0.0, strikes=None, max_iter=200, factor=0.95)`  _function_
 

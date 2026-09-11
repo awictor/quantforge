@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.250.0] - 2026-09-10
+
+### Added
+- `sabr_option_greeks` (in `sabr.py`): Greeks of a Black-76 option priced at the
+  Hagan SABR smile vol. The total `delta = black_delta + vega * dsigma/dF`
+  includes the smile backbone (the exact AD `dsigma/dF` from
+  `sabr_sensitivities`), so it differs from the vol-fixed Black delta. Returns
+  `price`, `vol`, `delta` (backbone-adjusted), `black_delta`, and `vega`, with an
+  optional `discount` to scale the forward figures to present value.
+- Verified: the total delta matches a finite difference that recomputes the SABR
+  vol at each bumped forward; it differs measurably from the Black delta; vega
+  positive; `vol` equals `sabr_vol`; price and delta scale linearly in `discount`.
+
 ## [1.249.0] - 2026-09-10
 
 ### Added
