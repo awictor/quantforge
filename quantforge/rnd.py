@@ -36,6 +36,62 @@ def risk_neutral_density_from_smile(S0, t, r, vol_fn, K, q=0.0, dK=None):
     return math.exp(r * t) * d2
 
 
+def risk_neutral_cdf_from_smile(S0, t, r, vol_fn, K, q=0.0, dK=None):
+    """Risk-neutral CDF ``F(K) = P(S_T <= K)`` implied by an implied-vol smile.
+
+    From Breeden-Litzenberger, the digital-put price is ``e^{-rt} P(S_T <= K)`` and
+    equals ``-dC/dK`` discounted, so
+
+        F(K) = 1 + e^{r t} dC/dK,
+
+    with the call priced at the smile vol ``vol_fn`` and ``dC/dK`` a central
+    difference. Clamped to ``[0, 1]`` (a value hitting the clamp flags a smile
+    that is not arbitrage-free at ``K``). A flat smile recovers the Black-Scholes
+    ``N(-d2)``.
+    """
+    from .bsm import call_price
+    if dK is None:
+        dK = 1e-3 * S0
+    h = min(dK, 0.5 * K)
+
+    def C(k):
+        return call_price(S0, k, t, r, vol_fn(k), b=r - q)
+
+    dCdK = (C(K + h) - C(K - h)) / (2.0 * h)
+    F = 1.0 + math.exp(r * t) * dCdK
+    return min(1.0, max(0.0, F))
+
+
+def risk_neutral_quantile_from_smile(S0, t, r, vol_fn, p, q=0.0, dK=None,
+                                     width=12.0, tol=1e-8, max_iter=200):
+    """Inverse risk-neutral CDF: the strike ``K`` with ``P(S_T <= K) = p``.
+
+    Bisection on :func:`risk_neutral_cdf_from_smile` over a log-moneyness bracket
+    of ``+/- width`` forward standard deviations. ``p`` in ``(0, 1)``. Requires the
+    smile CDF to be monotone on the bracket (true for an arbitrage-free smile).
+    """
+    if not 0.0 < p < 1.0:
+        raise ValueError("p must lie strictly in (0, 1)")
+    F = S0 * math.exp((r - q) * t)
+    sd = vol_fn(F) * math.sqrt(t)
+    lo = F * math.exp(-width * sd)
+    hi = F * math.exp(width * sd)
+
+    def cdf(K):
+        return risk_neutral_cdf_from_smile(S0, t, r, vol_fn, K, q=q, dK=dK)
+
+    for _ in range(max_iter):
+        mid = 0.5 * (lo + hi)
+        fm = cdf(mid)
+        if abs(fm - p) < tol or (hi - lo) < tol * F:
+            return mid
+        if fm < p:
+            lo = mid
+        else:
+            hi = mid
+    return 0.5 * (lo + hi)
+
+
 def density_grid_from_smile(S0, t, r, vol_fn, q=0.0, n=400, width=8.0):
     """Return ``(strikes, density)`` of the risk-neutral density on a grid.
 

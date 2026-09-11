@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.263.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.264.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3392,12 +3392,34 @@ Auto-generated from `quantforge` v1.263.0 by `docs/gen_api.py` — do not edit b
 > the Breeden-Litzenberger density grid. A flat smile reprices vanillas and
 > digitals to Black-Scholes.
 
+### `risk_neutral_cdf_from_smile(S0, t, r, vol_fn, K, q=0.0, dK=None)`  _function_
+
+> Risk-neutral CDF ``F(K) = P(S_T <= K)`` implied by an implied-vol smile.
+>
+> From Breeden-Litzenberger, the digital-put price is ``e^{-rt} P(S_T <= K)`` and
+> equals ``-dC/dK`` discounted, so
+>
+>     F(K) = 1 + e^{r t} dC/dK,
+>
+> with the call priced at the smile vol ``vol_fn`` and ``dC/dK`` a central
+> difference. Clamped to ``[0, 1]`` (a value hitting the clamp flags a smile
+> that is not arbitrage-free at ``K``). A flat smile recovers the Black-Scholes
+> ``N(-d2)``.
+
 ### `risk_neutral_density_from_smile(S0, t, r, vol_fn, K, q=0.0, dK=None)`  _function_
 
 > Breeden-Litzenberger risk-neutral density ``g(K)`` at strike ``K``.
 >
 > ``g(K) = e^{r t} d^2 C / dK^2`` with the call priced at the smile vol; a
 > negative value flags butterfly arbitrage in the smile there.
+
+### `risk_neutral_quantile_from_smile(S0, t, r, vol_fn, p, q=0.0, dK=None, width=12.0, tol=1e-08, max_iter=200)`  _function_
+
+> Inverse risk-neutral CDF: the strike ``K`` with ``P(S_T <= K) = p``.
+>
+> Bisection on :func:`risk_neutral_cdf_from_smile` over a log-moneyness bracket
+> of ``+/- width`` forward standard deviations. ``p`` in ``(0, 1)``. Requires the
+> smile CDF to be monotone on the bracket (true for an arbitrage-free smile).
 
 ## rough_heston
 

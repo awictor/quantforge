@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.264.0] - 2026-09-10
+
+### Added
+- `risk_neutral_cdf_from_smile` and `risk_neutral_quantile_from_smile` (in
+  `rnd.py`): the Breeden-Litzenberger risk-neutral CDF `F(K) = 1 + e^{rt} dC/dK`
+  of the terminal spot from an implied-vol smile, and its inverse (bisection over
+  a forward-standard-deviation bracket).
+- Verified: a flat smile recovers the Black-Scholes `N(-d2)`; the CDF is monotone
+  in `[0, 1]`; the quantile inverts the CDF; the CDF equals the integral of the
+  Breeden-Litzenberger density; the median matches the lognormal
+  `F e^{-sigma^2 t / 2}`; an equity-skew smile fattens the left tail.
+
 ## [1.263.0] - 2026-09-10
 
 ### Added

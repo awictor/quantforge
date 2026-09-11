@@ -116,7 +116,8 @@ from .mc_greeks import (
 from .moment_premium import moment_risk_premia
 from .rnd import (
     risk_neutral_density_from_smile, density_grid_from_smile,
-    price_payoff_from_density,
+    price_payoff_from_density, risk_neutral_cdf_from_smile,
+    risk_neutral_quantile_from_smile,
 )
 from .density_metrics import (
     tail_probability, density_entropy, expected_shortfall,
@@ -292,7 +293,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.263.0"
+__version__ = "1.264.0"
 
 __all__ = [
     "OptionType",
@@ -453,6 +454,8 @@ __all__ = [
     "risk_neutral_density_from_smile",
     "density_grid_from_smile",
     "price_payoff_from_density",
+    "risk_neutral_cdf_from_smile",
+    "risk_neutral_quantile_from_smile",
     "tail_probability",
     "density_entropy",
     "expected_shortfall",
