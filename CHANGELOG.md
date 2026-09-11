@@ -4,6 +4,23 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.287.0] - 2026-09-11
+
+### Added
+- `discrete_arithmetic_asian` and `discrete_arithmetic_asian_greeks` (in
+  `exotics.py`): discretely-monitored arithmetic-average Asian by Levy (1992)
+  two-moment lognormal matching. The average's first two moments over the
+  fixing dates are exact — `M1 = (S/n) sum_i exp(b t_i)` and
+  `M2 = (S^2/n^2) sum_ij exp(b(t_i+t_j) + sigma^2 min(t_i,t_j))` — and are
+  matched to a lognormal priced with a Black-Scholes formula on `M1` with
+  variance `log(M2/M1^2)`. Accepts `n_fixings` or explicit `fixing_times`.
+  Greeks by finite difference.
+- Verified: a single fixing recovers the vanilla Black-Scholes price; the
+  arithmetic Asian sits above the exact discrete geometric Asian (AM-GM) and
+  below the vanilla call; explicit equally-spaced times match the `n_fixings`
+  grid; matches a geometric-control-variate Monte Carlo (n=12, call/put) to
+  within 1%.
+
 ## [1.286.0] - 2026-09-11
 
 ### Added

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.286.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.287.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1154,6 +1154,36 @@ Auto-generated from `quantforge` v1.286.0 by `docs/gen_api.py` — do not edit b
 > approaches, the digital's delta spikes (and gamma flips sign across the
 > strike) -- the "pin risk" that makes digitals hard to hedge and motivates
 > the call-spread over-hedge in :mod:`quantforge.overhedge`.
+
+### `discrete_arithmetic_asian(S, K, t, r, sigma, n_fixings=None, fixing_times=None, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> Discretely-monitored arithmetic-average-price Asian option (Levy
+> moment-matching approximation).
+>
+> The arithmetic average ``A = (1/n) sum_i S_{t_i}`` is not lognormal, but its
+> first two moments over the fixing dates have exact closed forms:
+>
+>     M1 = (S/n) sum_i exp(b t_i)
+>     M2 = (S^2/n^2) sum_i sum_j exp(b (t_i + t_j) + sigma^2 min(t_i, t_j)).
+>
+> Levy (1992) matches these to a lognormal and prices with a Black-Scholes
+> formula on the average's forward ``M1`` and effective variance
+> ``V = log(M2/M1^2)``:
+>
+>     d1 = (log(M1/K) + V/2) / sqrt(V),  d2 = d1 - sqrt(V)
+>     call = e^{-rt} (M1 N(d1) - K N(d2)).
+>
+> Provide either ``n_fixings`` (equally-spaced dates ``t*i/n``, last at expiry)
+> or an explicit ``fixing_times`` sequence in ``(0, t]``. A single fixing at
+> ``t`` recovers the vanilla Black-Scholes price. The geometric-average
+> Asian is an exact lower bound; this arithmetic price sits above it.
+
+### `discrete_arithmetic_asian_greeks(S, K, t, r, sigma, n_fixings=None, fixing_times=None, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> Greeks of a discrete arithmetic-average Asian option by central finite
+> differences of :func:`discrete_arithmetic_asian`: ``delta`` (dV/dS),
+> ``gamma`` (d2V/dS2), ``vega`` (dV/dsigma), ``theta`` (calendar decay).
+> Returns a dict with ``price`` and those fields.
 
 ### `discrete_geometric_asian(S, K, t, r, sigma, n_fixings=None, fixing_times=None, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
 

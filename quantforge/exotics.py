@@ -363,6 +363,95 @@ def arithmetic_asian(S, K, t, r, sigma, option_type=OptionType.CALL, b=None):
     return bsm_price(S, K, t, r, sigma_a, ot, b=b_a)
 
 
+def discrete_arithmetic_asian(S, K, t, r, sigma, n_fixings=None,
+                              fixing_times=None, option_type=OptionType.CALL,
+                              b=None):
+    """Discretely-monitored arithmetic-average-price Asian option (Levy
+    moment-matching approximation).
+
+    The arithmetic average ``A = (1/n) sum_i S_{t_i}`` is not lognormal, but its
+    first two moments over the fixing dates have exact closed forms:
+
+        M1 = (S/n) sum_i exp(b t_i)
+        M2 = (S^2/n^2) sum_i sum_j exp(b (t_i + t_j) + sigma^2 min(t_i, t_j)).
+
+    Levy (1992) matches these to a lognormal and prices with a Black-Scholes
+    formula on the average's forward ``M1`` and effective variance
+    ``V = log(M2/M1^2)``:
+
+        d1 = (log(M1/K) + V/2) / sqrt(V),  d2 = d1 - sqrt(V)
+        call = e^{-rt} (M1 N(d1) - K N(d2)).
+
+    Provide either ``n_fixings`` (equally-spaced dates ``t*i/n``, last at expiry)
+    or an explicit ``fixing_times`` sequence in ``(0, t]``. A single fixing at
+    ``t`` recovers the vanilla Black-Scholes price. The geometric-average
+    Asian is an exact lower bound; this arithmetic price sits above it.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if b is None:
+        b = r
+    if fixing_times is None:
+        if n_fixings is None:
+            raise ValueError("provide n_fixings or fixing_times")
+        times = _geom_fixing_times(t, n_fixings)
+    else:
+        times = [float(x) for x in fixing_times]
+        if not times:
+            raise ValueError("fixing_times must be non-empty")
+        if any(x <= 0.0 or x > t + 1e-12 for x in times):
+            raise ValueError("fixing_times must lie in (0, t]")
+    n = len(times)
+    disc = math.exp(-r * t)
+    v2 = sigma * sigma
+    M1 = (S / n) * sum(math.exp(b * ti) for ti in times)
+    dbl = 0.0
+    for ti in times:
+        for tj in times:
+            dbl += math.exp(b * (ti + tj) + v2 * (ti if ti < tj else tj))
+    M2 = (S * S / (n * n)) * dbl
+    V = math.log(M2 / (M1 * M1))
+    if V <= 0.0:
+        payoff = max(M1 - K, 0.0) if ot is OptionType.CALL else max(K - M1, 0.0)
+        return disc * payoff
+    sd = math.sqrt(V)
+    d1 = (math.log(M1 / K) + 0.5 * V) / sd
+    d2 = d1 - sd
+    if ot is OptionType.CALL:
+        return disc * (M1 * norm_cdf(d1) - K * norm_cdf(d2))
+    return disc * (K * norm_cdf(-d2) - M1 * norm_cdf(-d1))
+
+
+def discrete_arithmetic_asian_greeks(S, K, t, r, sigma, n_fixings=None,
+                                     fixing_times=None,
+                                     option_type=OptionType.CALL, b=None):
+    """Greeks of a discrete arithmetic-average Asian option by central finite
+    differences of :func:`discrete_arithmetic_asian`: ``delta`` (dV/dS),
+    ``gamma`` (d2V/dS2), ``vega`` (dV/dsigma), ``theta`` (calendar decay).
+    Returns a dict with ``price`` and those fields.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if b is None:
+        b = r
+
+    def px(S_=S, t_=t, sigma_=sigma):
+        return discrete_arithmetic_asian(S_, K, t_, r, sigma_, n_fixings,
+                                         fixing_times, ot, b=b)
+
+    base = px()
+    hS = 1e-4 * S
+    up, dn = px(S_=S + hS), px(S_=S - hS)
+    delta = (up - dn) / (2.0 * hS)
+    gamma = (up - 2.0 * base + dn) / (hS * hS)
+    hv = 1e-4
+    vega = (px(sigma_=sigma + hv) - px(sigma_=sigma - hv)) / (2.0 * hv)
+    ht = min(1e-4, 0.25 * t)
+    theta = -(px(t_=t + ht) - px(t_=t - ht)) / (2.0 * ht)
+    return {"price": base, "delta": delta, "gamma": gamma, "vega": vega,
+            "theta": theta}
+
+
 # --------------------------------------------------------------------------
 # One-touch / no-touch binaries (touch options)
 # --------------------------------------------------------------------------
