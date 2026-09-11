@@ -214,6 +214,7 @@ from .inflation import (
     reference_cpi, index_ratio_interpolated,
     normalize_seasonal_factors, apply_seasonality, deseasonalize,
     yoy_caplet_price, yoy_cap_price, yoy_cap_implied_vol,
+    yoy_caplet_price_normal, yoy_caplet_implied_normal_vol,
 )
 from .bondmath import (
     bond_cashflows, dated_bond_cashflows, dated_bond_price, dated_bond_yield,
@@ -399,7 +400,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.380.0"
+__version__ = "1.381.0"
 
 __all__ = [
     "OptionType",
@@ -744,6 +745,8 @@ __all__ = [
     "yoy_caplet_price",
     "yoy_cap_price",
     "yoy_cap_implied_vol",
+    "yoy_caplet_price_normal",
+    "yoy_caplet_implied_normal_vol",
     "bond_price_from_yield",
     "macaulay_duration",
     "modified_duration",

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.380.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.381.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3068,6 +3068,14 @@ Auto-generated from `quantforge` v1.380.0 by `docs/gen_api.py` — do not edit b
 > flat ``sigma``. A single-period strip equals the caplet; cap minus floor
 > telescopes to ``sum_i DF_i * N * (F_i - K)``.
 
+### `yoy_caplet_implied_normal_vol(price, forward_rate, strike, expiry, discount_factor, notional=1.0, is_cap=True, tol=1e-12, max_iter=100)`  _function_
+
+> Normal (Bachelier) vol reproducing a YoY caplet/floorlet ``price``.
+>
+> Bisection on ``sigma`` (price is monotone increasing in normal vol), inverting
+> :func:`yoy_caplet_price_normal`. Works for any real forward/strike, including
+> negative inflation forwards.
+
 ### `yoy_caplet_price(forward_rate, strike, expiry, sigma, discount_factor, notional=1.0, is_cap=True)`  _function_
 
 > Black-76 price of a year-on-year inflation cap/floor let.
@@ -3083,6 +3091,21 @@ Auto-generated from `quantforge` v1.380.0 by `docs/gen_api.py` — do not edit b
 >
 > Requires positive ``forward_rate`` and ``strike`` (lognormal support). At zero
 > vol it collapses to the discounted intrinsic ``DF*N*max(F-K,0)`` (cap).
+
+### `yoy_caplet_price_normal(forward_rate, strike, expiry, sigma, discount_factor, notional=1.0, is_cap=True)`  _function_
+
+> Bachelier (normal-model) price of a year-on-year inflation cap/floor let.
+>
+> Models the YoY rate as *arithmetic* Brownian motion around its forward, so it
+> admits zero and negative inflation (where the lognormal
+> :func:`yoy_caplet_price` cannot price). Bachelier:
+>
+>     caplet   = DF * N * [(F - K) Phi(d) + sigma sqrt(T) phi(d)]
+>     floorlet = DF * N * [(K - F) Phi(-d) + sigma sqrt(T) phi(d)]
+>     d        = (F - K) / (sigma sqrt(T))
+>
+> ``sigma`` is a normal (absolute-rate) vol. At zero vol it collapses to the
+> discounted intrinsic; the ATM caplet equals ``DF*N*sigma*sqrt(T/(2 pi))``.
 
 ### `yoy_inflation_rate(index_prev, index_curr) -> float`  _function_
 

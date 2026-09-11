@@ -308,6 +308,69 @@ def yoy_caplet_price(forward_rate, strike, expiry, sigma, discount_factor,
     return discount_factor * notional * val
 
 
+def yoy_caplet_price_normal(forward_rate, strike, expiry, sigma, discount_factor,
+                            notional=1.0, is_cap=True):
+    """Bachelier (normal-model) price of a year-on-year inflation cap/floor let.
+
+    Models the YoY rate as *arithmetic* Brownian motion around its forward, so it
+    admits zero and negative inflation (where the lognormal
+    :func:`yoy_caplet_price` cannot price). Bachelier:
+
+        caplet   = DF * N * [(F - K) Phi(d) + sigma sqrt(T) phi(d)]
+        floorlet = DF * N * [(K - F) Phi(-d) + sigma sqrt(T) phi(d)]
+        d        = (F - K) / (sigma sqrt(T))
+
+    ``sigma`` is a normal (absolute-rate) vol. At zero vol it collapses to the
+    discounted intrinsic; the ATM caplet equals ``DF*N*sigma*sqrt(T/(2 pi))``.
+    """
+    from .mathfns import norm_cdf
+    if expiry < 0 or sigma < 0:
+        raise ValueError("expiry and sigma must be non-negative")
+    if expiry == 0.0 or sigma == 0.0:
+        intrinsic = max(forward_rate - strike, 0.0) if is_cap \
+            else max(strike - forward_rate, 0.0)
+        return discount_factor * notional * intrinsic
+    vsqrt = sigma * math.sqrt(expiry)
+    d = (forward_rate - strike) / vsqrt
+    pdf = math.exp(-0.5 * d * d) / math.sqrt(2.0 * math.pi)
+    if is_cap:
+        val = (forward_rate - strike) * norm_cdf(d) + vsqrt * pdf
+    else:
+        val = (strike - forward_rate) * norm_cdf(-d) + vsqrt * pdf
+    return discount_factor * notional * val
+
+
+def yoy_caplet_implied_normal_vol(price, forward_rate, strike, expiry,
+                                  discount_factor, notional=1.0, is_cap=True,
+                                  tol=1e-12, max_iter=100):
+    """Normal (Bachelier) vol reproducing a YoY caplet/floorlet ``price``.
+
+    Bisection on ``sigma`` (price is monotone increasing in normal vol), inverting
+    :func:`yoy_caplet_price_normal`. Works for any real forward/strike, including
+    negative inflation forwards.
+    """
+    if price < 0:
+        raise ValueError("price must be non-negative")
+
+    def px(sig):
+        return yoy_caplet_price_normal(forward_rate, strike, expiry, sig,
+                                       discount_factor, notional, is_cap)
+
+    lo, hi = 0.0, 1.0
+    if not (px(lo) - 1e-12 <= price <= px(hi) + 1e-12):
+        raise ValueError("price outside the achievable vol range")
+    for _ in range(max_iter):
+        mid = 0.5 * (lo + hi)
+        pm = px(mid)
+        if abs(pm - price) < tol:
+            return mid
+        if pm < price:
+            lo = mid
+        else:
+            hi = mid
+    return 0.5 * (lo + hi)
+
+
 def yoy_cap_price(forward_rates, strike, expiries, sigma, discount_factors,
                   notional=1.0, is_cap=True):
     """Year-on-year inflation cap/floor: a strip of :func:`yoy_caplet_price`.

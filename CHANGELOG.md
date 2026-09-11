@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.381.0] - 2026-09-11
+
+### Added
+- `yoy_caplet_price_normal` and `yoy_caplet_implied_normal_vol` (in
+  `inflation.py`): Bachelier (normal-model) year-on-year inflation caplet/floorlet
+  and its implied-normal-vol inverse. Arithmetic Brownian dynamics admit zero and
+  negative inflation forwards where the lognormal Black-76 breaks down.
+  Cross-checked against normal cap/floor parity, the zero-vol intrinsic, the ATM
+  closed form `DF*N*sigma*sqrt(T/2pi)`, and implied-vol round-trip (including a
+  negative forward).
+
 ## [1.380.0] - 2026-09-11
 
 ### Added

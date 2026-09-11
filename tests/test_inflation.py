@@ -13,8 +13,10 @@ from quantforge import (
     reference_cpi, index_ratio_interpolated,
     normalize_seasonal_factors, apply_seasonality, deseasonalize,
     yoy_caplet_price, yoy_cap_price, yoy_cap_implied_vol,
+    yoy_caplet_price_normal, yoy_caplet_implied_normal_vol,
     bond_cashflows, bond_price_from_yield, yield_to_maturity,
 )
+import math
 
 
 CAP_F = [0.03, 0.028, 0.031]
@@ -355,6 +357,51 @@ def test_yoy_cap_validation():
         yoy_cap_price([0.03], 0.025, [1, 2], 0.4, [0.97])
     with pytest.raises(ValueError):
         yoy_cap_implied_vol(1e18, CAP_F, 0.025, CAP_T, CAP_DF)
+
+
+def test_normal_caplet_parity():
+    F, K, T, s, df = 0.03, 0.025, 2.0, 0.01, 0.95
+    c = yoy_caplet_price_normal(F, K, T, s, df, 1e6, True)
+    f = yoy_caplet_price_normal(F, K, T, s, df, 1e6, False)
+    assert c - f == pytest.approx(df * 1e6 * (F - K), abs=1e-6)
+
+
+def test_normal_caplet_negative_forward():
+    # Lognormal cannot price this; Bachelier can.
+    assert yoy_caplet_price_normal(-0.01, -0.02, 2.0, 0.01, 0.95, 1e6, True) > 0
+
+
+def test_normal_caplet_zero_vol_intrinsic():
+    F, K, T, df = 0.03, 0.025, 2.0, 0.95
+    assert yoy_caplet_price_normal(F, K, T, 0.0, df, 1e6, True) == pytest.approx(
+        df * 1e6 * (F - K), abs=1e-6)
+
+
+def test_normal_caplet_atm_closed_form():
+    T, s, df = 2.0, 0.01, 0.95
+    atm = yoy_caplet_price_normal(0.03, 0.03, T, s, df, 1e6, True)
+    assert atm == pytest.approx(df * 1e6 * s * math.sqrt(T / (2 * math.pi)), abs=1e-4)
+
+
+def test_normal_implied_vol_round_trip():
+    F, K, T, s, df = 0.03, 0.025, 2.0, 0.01, 0.95
+    c = yoy_caplet_price_normal(F, K, T, s, df, 1e6, True)
+    assert yoy_caplet_implied_normal_vol(c, F, K, T, df, 1e6, True) == pytest.approx(
+        s, abs=1e-10)
+
+
+def test_normal_implied_vol_negative_forward():
+    F, K, T, s, df = -0.01, -0.02, 2.0, 0.01, 0.95
+    c = yoy_caplet_price_normal(F, K, T, s, df, 1e6, True)
+    assert yoy_caplet_implied_normal_vol(c, F, K, T, df, 1e6, True) == pytest.approx(
+        s, abs=1e-10)
+
+
+def test_normal_caplet_validation():
+    with pytest.raises(ValueError):
+        yoy_caplet_price_normal(0.03, 0.02, -1.0, 0.01, 0.95)
+    with pytest.raises(ValueError):
+        yoy_caplet_implied_normal_vol(1e18, 0.03, 0.02, 2.0, 0.95)
 
 
 def test_validation():
