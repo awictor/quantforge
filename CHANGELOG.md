@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.260.0] - 2026-09-10
+
+### Added
+- `svi_bkm_moments` (in `svi.py`): risk-neutral variance, skewness, and excess
+  kurtosis implied by a raw-SVI slice via the Bakshi-Kapadia-Madan moment
+  replication of the slice's smile.
+- Verified: a flat slice is near-symmetric (skew ~ 0, excess kurtosis ~ 0);
+  negative SVI `rho` gives negative risk-neutral skew and positive `rho`
+  positive skew; a convex slice has positive excess kurtosis.
+
 ## [1.259.0] - 2026-09-10
 
 ### Added

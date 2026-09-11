@@ -165,6 +165,24 @@ def svi_variance_swap_strike(p: SVIParams, S0, t, r, q=0.0, n_strikes=401,
                                     width=width)
 
 
+def svi_bkm_moments(p: SVIParams, S0, t, r, q=0.0, n_strikes=401, width=8.0):
+    """Risk-neutral (variance, skewness, excess kurtosis) implied by an SVI slice.
+
+    Maps each strike to ``p.implied_vol(ln(K/F), t)`` and applies the
+    Bakshi-Kapadia-Madan moment replication
+    (:func:`quantforge.bkm_moments_from_smile`). Returns
+    ``(variance, skewness, excess_kurtosis)`` of the ``t``-horizon risk-neutral
+    log-return. A negative SVI ``rho`` (equity skew) produces negative
+    risk-neutral skewness; a flat slice is near-symmetric.
+    """
+    from .bkm import bkm_moments_from_smile
+
+    F = S0 * math.exp((r - q) * t)
+    return bkm_moments_from_smile(
+        S0, t, r, lambda K: p.implied_vol(math.log(K / F), t),
+        q=q, n_strikes=n_strikes, width=width)
+
+
 def svi_vix(p: SVIParams, S0, t, r, q=0.0, n_strikes=201, width=6.0):
     """VIX-style index (``~= 100 * sigma``) implied by a raw-SVI slice.
 

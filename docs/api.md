@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.259.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.260.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -4140,6 +4140,17 @@ Auto-generated from `quantforge` v1.259.0 by `docs/gen_api.py` — do not edit b
 > Lee's moment formula caps the slope of *total variance* at 2 for a valid
 > (arbitrage-free-wing) surface, so both slopes must be <= 2. Returns
 > ``(left_slope, right_slope)``.
+
+### `svi_bkm_moments(p: quantforge.svi.SVIParams, S0, t, r, q=0.0, n_strikes=401, width=8.0)`  _function_
+
+> Risk-neutral (variance, skewness, excess kurtosis) implied by an SVI slice.
+>
+> Maps each strike to ``p.implied_vol(ln(K/F), t)`` and applies the
+> Bakshi-Kapadia-Madan moment replication
+> (:func:`quantforge.bkm_moments_from_smile`). Returns
+> ``(variance, skewness, excess_kurtosis)`` of the ``t``-horizon risk-neutral
+> log-return. A negative SVI ``rho`` (equity skew) produces negative
+> risk-neutral skewness; a flat slice is near-symmetric.
 
 ### `svi_butterfly_arbitrage(p: quantforge.svi.SVIParams, ks=None, tol=1e-10)`  _function_
 
