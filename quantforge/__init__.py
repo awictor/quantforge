@@ -233,7 +233,7 @@ from .correlation import (
 from .perfmetrics import (
     sharpe_ratio, sortino_ratio, max_drawdown, calmar_ratio, hit_rate,
     profit_factor, drawdown_curve, longest_drawdown_duration, rolling_sharpe,
-    omega_ratio, tail_ratio,
+    omega_ratio, tail_ratio, tracking_error, information_ratio,
 )
 from .cev import cev_price, cev_greeks, cev_smile, noncentral_chisq_cdf
 from .sizing import (
@@ -356,7 +356,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.340.0"
+__version__ = "1.341.0"
 
 __all__ = [
     "OptionType",
@@ -737,6 +737,8 @@ __all__ = [
     "rolling_sharpe",
     "omega_ratio",
     "tail_ratio",
+    "tracking_error",
+    "information_ratio",
     "cev_price",
     "cev_greeks",
     "cev_smile",

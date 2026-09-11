@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.340.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.341.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -4092,6 +4092,15 @@ Auto-generated from `quantforge` v1.340.0 by `docs/gen_api.py` — do not edit b
 
 > Fraction of periods with a strictly positive return.
 
+### `information_ratio(returns, benchmark_returns, periods_per_year=252) -> float`  _function_
+
+> Information ratio: annualized active return over the tracking error.
+>
+> ``mean(active) * periods_per_year / tracking_error`` where the tracking
+> error is itself annualized, so this equals
+> ``mean(active) / stdev(active) * sqrt(periods_per_year)`` -- the Sharpe of
+> the active-return series. Raises if the active returns have no variance.
+
 ### `longest_drawdown_duration(returns: Sequence[float]) -> int`  _function_
 
 > Longest run of consecutive underwater periods (below a prior peak).
@@ -4155,6 +4164,13 @@ Auto-generated from `quantforge` v1.340.0 by `docs/gen_api.py` — do not edit b
 > ``|percentile(100 - pct)| / |percentile(pct)|`` -- by default the 95th over
 > the 5th percentile (in absolute value). Above 1 means the upside tail is
 > fatter than the downside. Raises if the lower tail percentile is zero.
+
+### `tracking_error(returns, benchmark_returns, periods_per_year=252) -> float`  _function_
+
+> Annualized tracking error: stdev of the active (excess) return series.
+>
+> ``active_t = r_t - b_t``; the sample standard deviation (ddof=1) scaled by
+> ``sqrt(periods_per_year)``. Series must be equal length.
 
 ## perpetual
 

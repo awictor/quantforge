@@ -161,6 +161,39 @@ def calmar_ratio(returns: Sequence[float], periods_per_year=252) -> float:
     return ann_return / mdd
 
 
+def tracking_error(returns, benchmark_returns, periods_per_year=252) -> float:
+    """Annualized tracking error: stdev of the active (excess) return series.
+
+    ``active_t = r_t - b_t``; the sample standard deviation (ddof=1) scaled by
+    ``sqrt(periods_per_year)``. Series must be equal length.
+    """
+    if len(returns) != len(benchmark_returns):
+        raise ValueError("series must be equal length")
+    if len(returns) < 2:
+        raise ValueError("need at least two observations")
+    active = [r - b for r, b in zip(returns, benchmark_returns)]
+    return _std(active) * math.sqrt(periods_per_year)
+
+
+def information_ratio(returns, benchmark_returns, periods_per_year=252) -> float:
+    """Information ratio: annualized active return over the tracking error.
+
+    ``mean(active) * periods_per_year / tracking_error`` where the tracking
+    error is itself annualized, so this equals
+    ``mean(active) / stdev(active) * sqrt(periods_per_year)`` -- the Sharpe of
+    the active-return series. Raises if the active returns have no variance.
+    """
+    if len(returns) != len(benchmark_returns):
+        raise ValueError("series must be equal length")
+    if len(returns) < 2:
+        raise ValueError("need at least two observations")
+    active = [r - b for r, b in zip(returns, benchmark_returns)]
+    sd = _std(active)
+    if sd <= 0.0:
+        raise ValueError("zero active-return variance")
+    return _mean(active) / sd * math.sqrt(periods_per_year)
+
+
 def _percentile(sorted_vals, p):
     """Linear-interpolated percentile ``p`` in [0, 100] of a sorted list."""
     n = len(sorted_vals)

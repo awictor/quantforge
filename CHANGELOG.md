@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.341.0] - 2026-09-11
+
+### Added
+- `tracking_error` and `information_ratio` (in `perfmetrics.py`): benchmark-
+  relative statistics from a portfolio and benchmark return series. Tracking
+  error is the annualized standard deviation of the active (excess) returns;
+  the information ratio is the annualized active return over that tracking
+  error -- equivalently the Sharpe of the active-return series.
+- Verified: tracking error matches the annualized active-return stdev; the
+  information ratio equals `sharpe_ratio` of the active series and is positive
+  for a positive active mean; a zero-active benchmark gives zero tracking error;
+  zero active variance, length mismatch, and too-short series raise.
+
 ## [1.340.0] - 2026-09-11
 
 ### Added
