@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.396.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.397.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -7400,6 +7400,20 @@ Auto-generated from `quantforge` v1.396.0 by `docs/gen_api.py` — do not edit b
 > *our* marginal default probability from ``own_curve`` and ``LGD``. A benefit to
 > us, so it is subtracted from CVA in the bilateral adjustment.
 
+### `fva(grid_times, expected_exposure, funding_spread, r, survival=None)`  _function_
+
+> Funding valuation adjustment on an uncollateralized exposure.
+>
+> The cost of funding the expected positive exposure at a ``funding_spread`` over
+> the risk-free rate:
+>
+>     FVA = funding_spread * sum_i EE(t_i) DF(t_i) [S(t_{i-1}) - ... ] approx
+>         = funding_spread * sum_i EE(t_i) DF(t_i) dt_i * survival(t_i)
+>
+> Here it is discretized as ``funding_spread * sum_i EE_i DF_i dt_i`` optionally
+> weighted by a survival probability ``survival(t)`` (both counterparties alive).
+> Proportional to the spread and the exposure; zero at zero spread.
+
 ### `marginal_default_probs(curve, grid_times)`  _function_
 
 > Marginal default probability in each grid bucket ``Q(t_{i-1}) - Q(t_i)``.
@@ -7408,3 +7422,16 @@ Auto-generated from `quantforge` v1.396.0 by `docs/gen_api.py` — do not edit b
 > first bucket runs from 0. Returns one probability per bucket, each in
 > ``[0, 1]`` and summing to ``1 - Q(t_last)`` (the total default probability by
 > the horizon).
+
+### `swap_expected_exposure(notional, sigma, maturity, grid_times)`  _function_
+
+> Expected positive exposure profile of a single-rate swap/forward.
+>
+> A par swap starts at zero value and matures at zero, with its mark-to-market
+> diffusing in between. Modelling the value as a driftless Brownian motion with
+> per-year volatility ``sigma`` (in value units per unit notional), the value at
+> ``t`` is normal with standard deviation ``notional * sigma * sqrt(t)`` scaled by
+> the remaining life ``(maturity - t)/maturity`` (linear amortization of the
+> remaining risk). The expected positive exposure of a mean-zero normal is
+> ``EPE(t) = std(t) / sqrt(2 pi)``. Returns one EPE per grid time; zero at
+> ``t = 0`` and ``t = maturity``, humped in between.

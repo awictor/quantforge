@@ -2,8 +2,11 @@
 
 import pytest
 
+import math
+
 from quantforge import (
     SurvivalCurve, marginal_default_probs, cva, dva, bcva,
+    swap_expected_exposure, fva,
 )
 
 
@@ -56,6 +59,52 @@ def test_bcva_is_cva_minus_dva():
 def test_bcva_symmetric_is_zero():
     # Identical curves and exposures: CVA and DVA cancel.
     assert bcva(CURVE, CURVE, GRID, EPE, EPE, 0.03) == pytest.approx(0.0, abs=1e-15)
+
+
+EE_GRID = [0, 1, 2, 3, 4, 5]
+
+
+def test_swap_exposure_zero_at_ends():
+    ee = swap_expected_exposure(1e6, 0.01, 5.0, EE_GRID)
+    assert ee[0] == pytest.approx(0.0, abs=1e-12)
+    assert ee[-1] == pytest.approx(0.0, abs=1e-12)
+
+
+def test_swap_exposure_humped_and_nonneg():
+    ee = swap_expected_exposure(1e6, 0.01, 5.0, EE_GRID)
+    assert all(x >= 0 for x in ee)
+    peak = ee.index(max(ee))
+    assert 0 < peak < len(ee) - 1
+
+
+def test_swap_exposure_formula():
+    ee = swap_expected_exposure(1e6, 0.01, 5.0, EE_GRID)
+    std = 1e6 * 0.01 * math.sqrt(2) * (5 - 2) / 5
+    assert ee[2] == pytest.approx(std / math.sqrt(2 * math.pi), abs=1e-6)
+
+
+def test_fva_proportional_to_spread():
+    ee = swap_expected_exposure(1e6, 0.01, 5.0, EE_GRID)
+    assert fva(EE_GRID, ee, 0.010, 0.03) == pytest.approx(
+        2 * fva(EE_GRID, ee, 0.005, 0.03), abs=1e-9)
+
+
+def test_fva_zero_at_zero_spread():
+    ee = swap_expected_exposure(1e6, 0.01, 5.0, EE_GRID)
+    assert fva(EE_GRID, ee, 0.0, 0.03) == pytest.approx(0.0, abs=1e-15)
+
+
+def test_fva_survival_weighting_reduces():
+    ee = swap_expected_exposure(1e6, 0.01, 5.0, EE_GRID)
+    curve = SurvivalCurve([5], [0.05])
+    assert fva(EE_GRID, ee, 0.005, 0.03, curve.survival) < fva(EE_GRID, ee, 0.005, 0.03)
+
+
+def test_swap_exposure_fva_validation():
+    with pytest.raises(ValueError):
+        swap_expected_exposure(1e6, 0.01, 5.0, [6])
+    with pytest.raises(ValueError):
+        swap_expected_exposure(1e6, 0.01, 0, EE_GRID)
 
 
 def test_validation():

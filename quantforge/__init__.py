@@ -219,6 +219,7 @@ from .inflation import (
 )
 from .xva import (
     marginal_default_probs, cva, dva, bcva,
+    swap_expected_exposure, fva,
 )
 from .commodity import (
     commodity_forward, implied_convenience_yield, implied_storage_cost,
@@ -418,7 +419,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.396.0"
+__version__ = "1.397.0"
 
 __all__ = [
     "OptionType",
@@ -772,6 +773,8 @@ __all__ = [
     "cva",
     "dva",
     "bcva",
+    "swap_expected_exposure",
+    "fva",
     "commodity_forward",
     "implied_convenience_yield",
     "implied_storage_cost",
