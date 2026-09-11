@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.280.0] - 2026-09-11
+
+### Added
+- `calendar_arbitrage_violations` and `surface_is_calendar_arbitrage_free` (in
+  `rnd.py`): model-free calendar-arbitrage detection across a smile term
+  structure. Flags `(k, t_lo, t_hi)` points where total implied variance
+  `w(k, t) = sigma^2 t` decreases with maturity — a horizontal-spread arbitrage.
+  Works for any smiles expressed in log-moneyness (SVI, SABR, vanna-volga, raw).
+- Verified: a flat-vol term structure is arbitrage-free; a dropping total
+  variance is flagged; the verdict agrees with SSVI's own calendar check;
+  length-mismatch and non-increasing expiries raise.
+
 ## [1.279.0] - 2026-09-11
 
 ### Added

@@ -73,6 +73,55 @@ def smile_is_arbitrage_free(S0, t, r, vol_fn, q=0.0, n=400, width=8.0,
                                           width=width, tol=tol)
 
 
+def calendar_arbitrage_violations(expiries, vol_fns, ks=None, tol=1e-9):
+    """Log-moneyness/expiry pairs where a smile term structure has calendar arbitrage.
+
+    Calendar (horizontal-spread) arbitrage is absent when total implied variance
+    ``w(k, t) = sigma(k, t)^2 t`` is non-decreasing in maturity at every fixed
+    log-moneyness ``k = ln(K / F_t)``. This scans each adjacent expiry pair and
+    reports the ``(k, t_lo, t_hi)`` points where ``w`` *decreases*
+    (``w(k, t_hi) < w(k, t_lo) - tol``), which would let one buy the cheaper
+    longer-dated variance and sell the richer shorter-dated one for a riskless
+    profit.
+
+    Args:
+        expiries: increasing list of expiries (years).
+        vol_fns: one smile ``vol_fn(k)`` per expiry, taking *log-moneyness* ``k``
+            and returning the Black implied vol. Order matches ``expiries``.
+        ks: log-moneyness grid to check (default ``[-1.5, 1.5]`` in 0.1 steps).
+
+    Returns the list of violating ``(k, t_lo, t_hi)`` tuples; empty means the
+    surface is calendar-arbitrage-free on the grid. Model-free: pass any smiles
+    (SVI, SABR, vanna-volga, raw quotes) expressed in log-moneyness.
+    """
+    if len(expiries) != len(vol_fns):
+        raise ValueError("expiries and vol_fns must match in length")
+    ts = list(expiries)
+    if any(ts[i] >= ts[i + 1] for i in range(len(ts) - 1)):
+        raise ValueError("expiries must be strictly increasing")
+    if ks is None:
+        ks = [(-1.5 + 0.1 * i) for i in range(31)]
+    bad = []
+    for i in range(len(ts) - 1):
+        t_lo, t_hi = ts[i], ts[i + 1]
+        fn_lo, fn_hi = vol_fns[i], vol_fns[i + 1]
+        for k in ks:
+            w_lo = fn_lo(k) ** 2 * t_lo
+            w_hi = fn_hi(k) ** 2 * t_hi
+            if w_hi < w_lo - tol:
+                bad.append((k, t_lo, t_hi))
+    return bad
+
+
+def surface_is_calendar_arbitrage_free(expiries, vol_fns, ks=None,
+                                       tol=1e-9) -> bool:
+    """True if the smile term structure has no calendar arbitrage on the grid.
+
+    Convenience wrapper: ``not calendar_arbitrage_violations(...)``.
+    """
+    return not calendar_arbitrage_violations(expiries, vol_fns, ks=ks, tol=tol)
+
+
 def risk_neutral_cdf_from_smile(S0, t, r, vol_fn, K, q=0.0, dK=None):
     """Risk-neutral CDF ``F(K) = P(S_T <= K)`` implied by an implied-vol smile.
 

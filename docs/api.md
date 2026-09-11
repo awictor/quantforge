@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.279.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.280.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3507,6 +3507,28 @@ Auto-generated from `quantforge` v1.279.0 by `docs/gen_api.py` — do not edit b
 
 ## rnd
 
+### `calendar_arbitrage_violations(expiries, vol_fns, ks=None, tol=1e-09)`  _function_
+
+> Log-moneyness/expiry pairs where a smile term structure has calendar arbitrage.
+>
+> Calendar (horizontal-spread) arbitrage is absent when total implied variance
+> ``w(k, t) = sigma(k, t)^2 t`` is non-decreasing in maturity at every fixed
+> log-moneyness ``k = ln(K / F_t)``. This scans each adjacent expiry pair and
+> reports the ``(k, t_lo, t_hi)`` points where ``w`` *decreases*
+> (``w(k, t_hi) < w(k, t_lo) - tol``), which would let one buy the cheaper
+> longer-dated variance and sell the richer shorter-dated one for a riskless
+> profit.
+>
+> Args:
+>     expiries: increasing list of expiries (years).
+>     vol_fns: one smile ``vol_fn(k)`` per expiry, taking *log-moneyness* ``k``
+>         and returning the Black implied vol. Order matches ``expiries``.
+>     ks: log-moneyness grid to check (default ``[-1.5, 1.5]`` in 0.1 steps).
+>
+> Returns the list of violating ``(k, t_lo, t_hi)`` tuples; empty means the
+> surface is calendar-arbitrage-free on the grid. Model-free: pass any smiles
+> (SVI, SABR, vanna-volga, raw quotes) expressed in log-moneyness.
+
 ### `density_grid_from_smile(S0, t, r, vol_fn, q=0.0, n=400, width=8.0)`  _function_
 
 > Return ``(strikes, density)`` of the risk-neutral density on a grid.
@@ -3597,6 +3619,12 @@ Auto-generated from `quantforge` v1.279.0 by `docs/gen_api.py` — do not edit b
 > True if the smile has no butterfly arbitrage on the scanned grid.
 >
 > Convenience wrapper: ``not smile_arbitrage_violations(...)``.
+
+### `surface_is_calendar_arbitrage_free(expiries, vol_fns, ks=None, tol=1e-09) -> bool`  _function_
+
+> True if the smile term structure has no calendar arbitrage on the grid.
+>
+> Convenience wrapper: ``not calendar_arbitrage_violations(...)``.
 
 ## rough_heston
 
