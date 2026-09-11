@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.330.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.331.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -996,6 +996,18 @@ Auto-generated from `quantforge` v1.330.0 by `docs/gen_api.py` — do not edit b
 > Built from pillar times and the *forward* hazard rate on each segment
 > ``[t_{i-1}, t_i]``. ``survival(t)`` returns ``Q(t) = exp(-integral h)`` and
 > ``default_density(t)`` returns ``h(t) Q(t)``.
+
+### `bootstrap_survival_curve(quote_maturities, quote_spreads, r, recovery=0.4, freq=4, n_steps_per_year=100, tol=1e-10, max_iter=100)`  _function_
+
+> Bootstrap a piecewise-constant hazard curve from par CDS quotes.
+>
+> Given increasing ``quote_maturities`` and their par ``quote_spreads``, solve
+> each tenor's forward hazard in turn (holding earlier segments fixed) so that
+> the model par spread of :func:`cds_par_spread` reproduces the quote. Uses a
+> bisection on the hazard, which is monotone in the par spread. Premium legs
+> pay ``freq`` times a year; the protection-leg grid uses
+> ``n_steps_per_year`` points per year. Returns the calibrated
+> :class:`SurvivalCurve`.
 
 ### `cds_par_spread(curve: quantforge.credit.SurvivalCurve, pay_times, r, recovery=0.4, n_steps=400)`  _function_
 

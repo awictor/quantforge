@@ -135,6 +135,56 @@ def cds_par_spread(curve: SurvivalCurve, pay_times, r, recovery=0.4,
     return prot / ann
 
 
+def bootstrap_survival_curve(quote_maturities, quote_spreads, r, recovery=0.4,
+                             freq=4, n_steps_per_year=100, tol=1e-10,
+                             max_iter=100):
+    """Bootstrap a piecewise-constant hazard curve from par CDS quotes.
+
+    Given increasing ``quote_maturities`` and their par ``quote_spreads``, solve
+    each tenor's forward hazard in turn (holding earlier segments fixed) so that
+    the model par spread of :func:`cds_par_spread` reproduces the quote. Uses a
+    bisection on the hazard, which is monotone in the par spread. Premium legs
+    pay ``freq`` times a year; the protection-leg grid uses
+    ``n_steps_per_year`` points per year. Returns the calibrated
+    :class:`SurvivalCurve`.
+    """
+    n = len(quote_maturities)
+    if len(quote_spreads) != n:
+        raise ValueError("maturities and spreads must have equal length")
+    if n == 0:
+        raise ValueError("need at least one CDS quote")
+    times = list(quote_maturities)
+    hazards = []
+    for i in range(n):
+        T = times[i]
+        pay = [k / freq for k in range(1, int(round(T * freq)) + 1)]
+        n_steps = max(1, int(round(T * n_steps_per_year)))
+        target = quote_spreads[i]
+
+        def par_with(h):
+            trial = SurvivalCurve(times[: i + 1], hazards + [h])
+            return cds_par_spread(trial, pay, r, recovery, n_steps)
+
+        # Par spread increases with the current-segment hazard: bracket + bisect.
+        lo, hi = 1e-8, 1.0
+        while par_with(hi) < target:
+            hi *= 2.0
+            if hi > 1e3:
+                break
+        for _ in range(max_iter):
+            mid = 0.5 * (lo + hi)
+            pm = par_with(mid)
+            if abs(pm - target) < tol:
+                lo = hi = mid
+                break
+            if pm < target:
+                lo = mid
+            else:
+                hi = mid
+        hazards.append(0.5 * (lo + hi))
+    return SurvivalCurve(times, hazards)
+
+
 def cds_value(curve: SurvivalCurve, spread, pay_times, r, recovery=0.4,
               n_steps=400, protection_buyer=True):
     """Mark-to-market value of a CDS at a contractual ``spread``.

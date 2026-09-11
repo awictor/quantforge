@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.331.0] - 2026-09-11
+
+### Added
+- `bootstrap_survival_curve` (in `credit.py`): calibrate a piecewise-constant
+  hazard `SurvivalCurve` from par CDS quotes. Solves each tenor's forward hazard
+  in turn (holding earlier segments fixed) by bisection so the model par spread
+  matches the quote, since the par spread is monotone in the current-segment
+  hazard.
+- Verified: the calibrated curve reprices every input quote to 1e-6; it returns
+  a `SurvivalCurve` on the quote pillars with monotone-decreasing survival; an
+  upward-sloping spread curve produces rising hazards; a flat spread curve gives
+  a nearly constant hazard; mismatched or empty quotes raise.
+
 ## [1.330.0] - 2026-09-11
 
 ### Added
