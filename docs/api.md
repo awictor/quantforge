@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.321.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.322.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2615,6 +2615,14 @@ Auto-generated from `quantforge` v1.321.0 by `docs/gen_api.py` — do not edit b
 > Accurate to a few tenths of a percent for ``n_fixings`` of ~50 or more; the
 > correction is asymptotic, so coarse monitoring (a handful of dates) carries a
 > larger error.
+
+### `discrete_fixed_strike_lookback_greeks(S, K, t, r, sigma, n_fixings, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> Greeks of a discretely-monitored fixed-strike lookback by central finite
+> differences of :func:`discrete_fixed_strike_lookback`: ``delta`` (dV/dS),
+> ``gamma`` (d2V/dS2), ``vega`` (dV/dsigma), ``theta`` (calendar decay). The
+> number of monitoring dates ``n_fixings`` is held fixed. Returns a dict with
+> ``price`` and those fields.
 
 ### `fixed_strike_lookback(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, s_extreme=None, b=None) -> float`  _function_
 

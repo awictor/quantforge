@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.322.0] - 2026-09-11
+
+### Added
+- `discrete_fixed_strike_lookback_greeks` (in `lookback.py`): finite-difference
+  delta, gamma, vega, theta of the discretely-monitored fixed-strike lookback
+  (`discrete_fixed_strike_lookback`), holding the monitoring count `n_fixings`
+  fixed.
+- Verified: delta matches a central finite difference for calls and puts; the
+  `price` field matches the pricer; the call delta is positive, put delta
+  negative, and gamma/vega positive.
+
 ## [1.321.0] - 2026-09-11
 
 ### Added

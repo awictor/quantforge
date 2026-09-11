@@ -238,3 +238,33 @@ def lookback_greeks(S, t, r, sigma, option_type=OptionType.CALL, b=None,
 
     return {"price": base, "delta": delta, "gamma": gamma,
             "vega": vega, "theta": theta}
+
+
+def discrete_fixed_strike_lookback_greeks(S, K, t, r, sigma, n_fixings,
+                                          option_type=OptionType.CALL, b=None):
+    """Greeks of a discretely-monitored fixed-strike lookback by central finite
+    differences of :func:`discrete_fixed_strike_lookback`: ``delta`` (dV/dS),
+    ``gamma`` (d2V/dS2), ``vega`` (dV/dsigma), ``theta`` (calendar decay). The
+    number of monitoring dates ``n_fixings`` is held fixed. Returns a dict with
+    ``price`` and those fields.
+    """
+    ot = _coerce_type(option_type)
+    _check(S, t, sigma, b)
+    if b is None:
+        b = r
+
+    def px(S_=S, t_=t, sigma_=sigma):
+        return discrete_fixed_strike_lookback(S_, K, t_, r, sigma_, n_fixings,
+                                              ot, b=b)
+
+    base = px()
+    hS = 1e-4 * S
+    up, dn = px(S_=S + hS), px(S_=S - hS)
+    delta = (up - dn) / (2.0 * hS)
+    gamma = (up - 2.0 * base + dn) / (hS * hS)
+    hv = 1e-4
+    vega = (px(sigma_=sigma + hv) - px(sigma_=sigma - hv)) / (2.0 * hv)
+    ht = min(1e-4, 0.25 * t)
+    theta = -(px(t_=t + ht) - px(t_=t - ht)) / (2.0 * ht)
+    return {"price": base, "delta": delta, "gamma": gamma, "vega": vega,
+            "theta": theta}
