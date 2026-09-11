@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.362.0] - 2026-09-11
+
+### Added
+- `cornish_fisher_var` (in `perfmetrics.py`): skew/kurtosis-adjusted historical
+  Value-at-Risk. Expands the lower-tail normal quantile with the sample skewness
+  and excess kurtosis (Cornish-Fisher) so the VaR reflects a fat or asymmetric
+  return distribution, then scales the mean linearly and the deviation by
+  `sqrt(horizon)`. Returned as a positive loss.
+- Verified: it reduces to the parametric VaR on a normal sample; is a positive
+  loss; a negative-skew (fat left tail) series pushes it above the Gaussian VaR;
+  rises with confidence and horizon; zero-variance/too-short series raise.
+
 ## [1.361.0] - 2026-09-11
 
 ### Added

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.361.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.362.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -4227,6 +4227,21 @@ Auto-generated from `quantforge` v1.361.0 by `docs/gen_api.py` — do not edit b
 >
 > Annualized return is the geometric ``(prod(1+r))^{periods_per_year/n} - 1``.
 > Raises if there is no drawdown (undefined ratio).
+
+### `cornish_fisher_var(returns, confidence=0.95, horizon=1.0) -> float`  _function_
+
+> Cornish-Fisher (skew/kurtosis-adjusted) Value-at-Risk, as a positive loss.
+>
+> Expands the standard-normal quantile ``z`` at ``confidence`` with the sample
+> skewness ``S`` and excess kurtosis ``K`` of the returns,
+>
+>     z_cf = z + (z^2-1) S/6 + (z^3-3z) K/24 - (2z^3-5z) S^2/36,
+>
+> evaluated at the lower-tail quantile ``z = Phi^{-1}(1-confidence)`` (a
+> negative number), then ``VaR = -(mean*horizon + z_cf*sigma*sqrt(horizon))``
+> as a positive loss. For a normal series it reduces to the parametric VaR;
+> negative skew and fat tails fatten the left tail and push it above the
+> Gaussian VaR.
 
 ### `down_capture(returns, benchmark_returns) -> float`  _function_
 
