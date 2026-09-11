@@ -281,6 +281,10 @@ from .vannavolga import VannaVolgaSmile, pillar_vols
 from .fxdelta import (
     atm_dns_strike, strike_from_delta, delta_from_strike, rr_bf_to_pillars,
 )
+from .fxforward import (
+    fx_forward, forward_points, fx_swap_points, implied_base_rate,
+    implied_price_rate,
+)
 from .volcube import VolCube
 from .cms import (
     cms_adjustment_standard, cms_rate_convexity_replication, cms_rate,
@@ -367,7 +371,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.350.0"
+__version__ = "1.351.0"
 
 __all__ = [
     "OptionType",
@@ -850,6 +854,11 @@ __all__ = [
     "strike_from_delta",
     "delta_from_strike",
     "rr_bf_to_pillars",
+    "fx_forward",
+    "forward_points",
+    "fx_swap_points",
+    "implied_base_rate",
+    "implied_price_rate",
     "VolCube",
     "cms_adjustment_standard",
     "cms_adjustment_greeks",

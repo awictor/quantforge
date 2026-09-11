@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.351.0] - 2026-09-11
+
+### Added
+- New module `fxforward.py` for FX forwards under covered interest parity:
+  `fx_forward` (`S exp((r_price - r_base) t)`), `forward_points`,
+  `fx_swap_points` (forward-forward), and `implied_base_rate` /
+  `implied_price_rate` (invert CIP from a quoted forward).
+- Verified: the forward matches the CIP formula and shows a base premium when
+  the price-currency rate is higher (discount otherwise); forward points equal
+  `F - S`; the implied rates round-trip; swap points are positive for a
+  premium; a zero tenor returns spot; bad inputs raise.
+
 ## [1.350.0] - 2026-09-11
 
 ### Added

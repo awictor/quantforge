@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.350.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.351.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2223,6 +2223,38 @@ Auto-generated from `quantforge` v1.350.0 by `docs/gen_api.py` — do not edit b
 >         otherwise a forward delta.
 >
 > Returns the strike ``K``.
+
+## fxforward
+
+### `forward_points(spot, r_price, r_base, t) -> float`  _function_
+
+> Forward points ``F - S`` (positive when the base is at a forward premium).
+
+### `fx_forward(spot, r_price, r_base, t) -> float`  _function_
+
+> Covered-interest-parity forward FX rate ``S exp((r_price - r_base) t)``.
+>
+> A base currency yielding more than the price currency (``r_base > r_price``)
+> trades at a forward discount (``F < S``), and vice versa.
+
+### `fx_swap_points(spot, r_price, r_base, t_near, t_far) -> float`  _function_
+
+> FX-swap points between two tenors: ``F(t_far) - F(t_near)``.
+>
+> The pips exchanged in a forward-forward FX swap rolling from the near to the
+> far date.
+
+### `implied_base_rate(spot, forward, r_price, t) -> float`  _function_
+
+> Base-currency rate implied by a quoted forward (invert CIP).
+>
+> ``r_base = r_price - ln(forward / spot) / t``.
+
+### `implied_price_rate(spot, forward, r_base, t) -> float`  _function_
+
+> Price-currency rate implied by a quoted forward (invert CIP).
+>
+> ``r_price = r_base + ln(forward / spot) / t``.
 
 ## g2pp
 
