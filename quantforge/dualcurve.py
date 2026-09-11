@@ -70,6 +70,54 @@ def swap_value(ois_curve, proj_curve, pay_times, fixed_rate, payer=True,
     return (flt - fixed) if payer else (fixed - flt)
 
 
+class _ShiftedCurve:
+    """A curve whose zero rates are shifted by a constant ``dr`` (continuous).
+
+    ``df_shifted(T) = df(T) * exp(-dr * T)``: a positive ``dr`` raises the zero
+    rate at every tenor by ``dr``. Used for parallel-shift risk on a curve that
+    exposes only ``df``.
+    """
+
+    def __init__(self, curve, dr):
+        self._curve = curve
+        self._dr = dr
+
+    def df(self, T):
+        return self._curve.df(T) * math.exp(-self._dr * T)
+
+
+def swap_dv01(ois_curve, proj_curve, pay_times, fixed_rate, payer=True,
+              basis=0.0, bump=1e-4):
+    """Risk of a dual-curve swap by finite differences.
+
+    Returns a dict with:
+
+      * ``pv01`` = the fixed-leg annuity ``sum tau_i P_ois(T_i)`` -- the exact
+        ``|dV/d(fixed_rate)|``; a payer's ``dV/d(fixed_rate)`` is ``-pv01``;
+      * ``dv01`` = the value change for a 1bp parallel *drop* in **both** curves
+        (OIS and projection shifted together), the total delta risk;
+      * ``ois_dv01`` / ``proj_dv01`` = the same 1bp-drop risk from shifting only
+        the discount (OIS) or only the projection curve.
+
+    ``bump`` is the parallel shift (default 1bp). All figures are per unit
+    notional.
+    """
+    base = swap_value(ois_curve, proj_curve, pay_times, fixed_rate, payer, basis)
+    pv01 = annuity(ois_curve, pay_times)
+
+    def val(o, p):
+        return swap_value(o, p, pay_times, fixed_rate, payer, basis)
+
+    # 1bp parallel *drop*: zero rates fall by ``bump`` -> dr = -bump.
+    ois_dn = _ShiftedCurve(ois_curve, -bump)
+    proj_dn = _ShiftedCurve(proj_curve, -bump)
+    dv01 = val(ois_dn, proj_dn) - base
+    ois_dv01 = val(ois_dn, proj_curve) - base
+    proj_dv01 = val(ois_curve, proj_dn) - base
+    return {"value": base, "pv01": pv01, "dv01": dv01,
+            "ois_dv01": ois_dv01, "proj_dv01": proj_dv01}
+
+
 def calibrate_basis(ois_curve, proj_curve, swap_maturities, par_rates,
                     freq=1.0):
     """Solve the constant basis spread that reprices the given par swap rates.

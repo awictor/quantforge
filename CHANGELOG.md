@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.241.0] - 2026-09-10
+
+### Added
+- `dual_swap_dv01` (in `dualcurve.py`): risk of a dual-curve (OIS-discounted,
+  projection-forward) swap -- the exact fixed-leg `pv01` (annuity), the total
+  `dv01` for a 1bp parallel drop of both curves, and the split `ois_dv01` /
+  `proj_dv01` from shifting only the discount or only the projection curve.
+  Curve shifts use a light `_ShiftedCurve` wrapper (`df(T) e^{-dr T}`).
+- Verified: `pv01` equals `-dV/d(fixed_rate)` for a payer to machine precision;
+  the total `dv01` is the sum of the per-curve DV01s to first order; a payer's
+  `dv01` is negative on a rate drop and a receiver's positive.
+
 ## [1.240.0] - 2026-09-10
 
 ### Added

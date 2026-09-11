@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.240.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.241.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -950,6 +950,22 @@ Auto-generated from `quantforge` v1.240.0 by `docs/gen_api.py` — do not edit b
 ### `dual_par_swap_rate(ois_curve, proj_curve, pay_times, basis=0.0)`  _function_
 
 > Dual-curve par (fair fixed) rate: float-leg value over the OIS annuity.
+
+### `dual_swap_dv01(ois_curve, proj_curve, pay_times, fixed_rate, payer=True, basis=0.0, bump=0.0001)`  _function_
+
+> Risk of a dual-curve swap by finite differences.
+>
+> Returns a dict with:
+>
+>   * ``pv01`` = the fixed-leg annuity ``sum tau_i P_ois(T_i)`` -- the exact
+>     ``|dV/d(fixed_rate)|``; a payer's ``dV/d(fixed_rate)`` is ``-pv01``;
+>   * ``dv01`` = the value change for a 1bp parallel *drop* in **both** curves
+>     (OIS and projection shifted together), the total delta risk;
+>   * ``ois_dv01`` / ``proj_dv01`` = the same 1bp-drop risk from shifting only
+>     the discount (OIS) or only the projection curve.
+>
+> ``bump`` is the parallel shift (default 1bp). All figures are per unit
+> notional.
 
 ### `dual_swap_value(ois_curve, proj_curve, pay_times, fixed_rate, payer=True, basis=0.0)`  _function_
 
