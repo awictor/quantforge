@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.239.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.240.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -227,6 +227,22 @@ Auto-generated from `quantforge` v1.239.0 by `docs/gen_api.py` — do not edit b
 >
 > Returns the Bermudan swaption price (today's value). Uses a
 > money-market numeraire built from one-period bonds along each path.
+
+### `bermudan_swaption_g2pp_greeks(P0, exercise_times, fixed_rate, a, b, sigma, eta, rho, payer=True, n_paths=20000, seed=None)`  _function_
+
+> Greeks of a G2++ Bermudan swaption by common-random-number bumps.
+>
+> Reprices :func:`bermudan_swaption_g2pp` on the *same* seed at bumped inputs,
+> so the two simulations share their G2++ state paths and the finite
+> differences are low-variance. Returns a dict with ``price`` and:
+>
+>   * ``d_fixed`` = dV/d(fixed_rate) -- negative for a payer (paying a higher
+>     fixed rate is worth less), positive for a receiver;
+>   * ``curve_dv01`` = the value change for a 1bp parallel *drop* in the
+>     zero curve (applied as ``P0(T) -> P0(T) e^{+1e-4 T}``), the standard
+>     DV01 sign convention (positive for a payer).
+>
+> A fixed ``seed`` is required for the CRN differences to be meaningful.
 
 ## binomial
 

@@ -193,3 +193,37 @@ def bermudan_swaption_g2pp(P0, exercise_times, fixed_rate, a, b, sigma, eta, rho
                     cash[p] = imm[p][k] * disc[p][k]
         # (paths not exercised keep their existing discounted cashflow)
     return sum(cash) / n_paths
+
+
+def bermudan_swaption_g2pp_greeks(P0, exercise_times, fixed_rate, a, b, sigma,
+                                  eta, rho, payer=True, n_paths=20000,
+                                  seed=None):
+    """Greeks of a G2++ Bermudan swaption by common-random-number bumps.
+
+    Reprices :func:`bermudan_swaption_g2pp` on the *same* seed at bumped inputs,
+    so the two simulations share their G2++ state paths and the finite
+    differences are low-variance. Returns a dict with ``price`` and:
+
+      * ``d_fixed`` = dV/d(fixed_rate) -- negative for a payer (paying a higher
+        fixed rate is worth less), positive for a receiver;
+      * ``curve_dv01`` = the value change for a 1bp parallel *drop* in the
+        zero curve (applied as ``P0(T) -> P0(T) e^{+1e-4 T}``), the standard
+        DV01 sign convention (positive for a payer).
+
+    A fixed ``seed`` is required for the CRN differences to be meaningful.
+    """
+    if seed is None:
+        seed = 0
+
+    def price(fr=fixed_rate, curve=P0):
+        return bermudan_swaption_g2pp(curve, exercise_times, fr, a, b, sigma,
+                                      eta, rho, payer, n_paths, seed=seed)
+
+    base = price()
+    hk = 1e-5
+    d_fixed = (price(fr=fixed_rate + hk) - price(fr=fixed_rate - hk)) / (2.0 * hk)
+    # 1bp parallel curve drop: discount factors rise by e^{+dr * T}.
+    dr = 1e-4
+    up_curve = lambda T: P0(T) * math.exp(+dr * T)
+    curve_dv01 = price(curve=up_curve) - base
+    return {"price": base, "d_fixed": d_fixed, "curve_dv01": curve_dv01}

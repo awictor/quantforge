@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.240.0] - 2026-09-10
+
+### Added
+- `bermudan_swaption_g2pp_greeks` (in `bermudan_swaption.py`): Greeks of a G2++
+  Bermudan swaption by common-random-number bumps on `bermudan_swaption_g2pp` --
+  `d_fixed` (dV/d fixed_rate) and `curve_dv01` (value change for a 1bp parallel
+  curve drop). Same-seed repricing shares the G2++ state paths for low-variance
+  differences.
+- Verified: `d_fixed` matches a CRN finite difference; it is negative for a payer
+  (paying a higher fixed rate is worth less) and positive for a receiver;
+  reproducible under a fixed seed.
+
 ## [1.239.0] - 2026-09-10
 
 ### Added

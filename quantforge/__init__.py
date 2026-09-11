@@ -255,7 +255,9 @@ from .g2pp import (
     g2pp_V, zero_bond as g2pp_zero_bond, bond_option as g2pp_bond_option,
     caplet as g2pp_caplet, bond_option_greeks as g2pp_bond_option_greeks,
 )
-from .bermudan_swaption import bermudan_swaption_g2pp
+from .bermudan_swaption import (
+    bermudan_swaption_g2pp, bermudan_swaption_g2pp_greeks,
+)
 from .discount_curve import DiscountCurve, bootstrap_from_swaps
 from .dualcurve import (
     forward_rate as dual_forward_rate, par_swap_rate as dual_par_swap_rate,
@@ -272,7 +274,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.239.0"
+__version__ = "1.240.0"
 
 __all__ = [
     "OptionType",
@@ -699,6 +701,7 @@ __all__ = [
     "g2pp_bond_option_greeks",
     "g2pp_caplet",
     "bermudan_swaption_g2pp",
+    "bermudan_swaption_g2pp_greeks",
     "DiscountCurve",
     "bootstrap_from_swaps",
     "dual_forward_rate",
