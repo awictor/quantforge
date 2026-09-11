@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.396.0] - 2026-09-11
+
+### Added
+- `xva.py`: counterparty valuation adjustments. `marginal_default_probs` buckets
+  a `SurvivalCurve` into per-step default probabilities; `cva` discounts the
+  expected loss `LGD * sum EE(t) DF(t) dQ(t)` from counterparty default; `dva` is
+  the mirror on our own default; `bcva = cva - dva` is the bilateral adjustment.
+  Cross-checked: CVA non-negative, zero without exposure, monotone in hazard and
+  exposure, exact LGD scaling, and BCVA zero for identical curves/exposures.
+
 ## [1.395.0] - 2026-09-11
 
 ### Added

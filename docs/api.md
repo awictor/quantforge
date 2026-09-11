@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.395.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.396.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -7369,3 +7369,42 @@ Auto-generated from `quantforge` v1.395.0 by `docs/gen_api.py` — do not edit b
 > ``vrp`` (realized - implied; usually negative), ``ratio``
 > (realized / implied), and ``vol_premium`` (implied vol - realized vol, the
 > usual positive number quoted in vol points).
+
+## xva
+
+### `bcva(cpty_curve, own_curve, grid_times, epe, ene, r, cpty_recovery=0.4, own_recovery=0.4)`  _function_
+
+> Bilateral CVA ``BCVA = CVA - DVA``.
+>
+> ``epe`` is the expected positive exposure profile (counterparty default risk)
+> and ``ene`` the expected negative exposure profile (our default benefit).
+> Returns the net adjustment to the risk-free value; positive when counterparty
+> risk dominates.
+
+### `cva(curve, grid_times, expected_exposure, r, recovery=0.4)`  _function_
+
+> Unilateral CVA from an expected-exposure profile and a survival curve.
+>
+> ``expected_exposure[i]`` is the positive expected exposure at ``grid_times[i]``
+> (the representative exposure over bucket ``i``), discounted by ``DF`` (flat
+> rate ``r`` or a callable ``r(t)``) and weighted by the counterparty's marginal
+> default probability :func:`marginal_default_probs`. Scaled by
+> ``LGD = 1 - recovery``. Non-negative, increasing in exposure and in hazard.
+
+### `dva(own_curve, grid_times, negative_expected_exposure, r, recovery=0.4)`  _function_
+
+> Debit valuation adjustment: the mirror of :func:`cva` on our own default.
+>
+> ``negative_expected_exposure[i]`` is the expected exposure of the counterparty
+> to us (our negative exposure, entered as a non-negative magnitude). Weighted by
+> *our* marginal default probability from ``own_curve`` and ``LGD``. A benefit to
+> us, so it is subtracted from CVA in the bilateral adjustment.
+
+### `marginal_default_probs(curve, grid_times)`  _function_
+
+> Marginal default probability in each grid bucket ``Q(t_{i-1}) - Q(t_i)``.
+>
+> ``grid_times`` are the bucket end points (strictly increasing, positive); the
+> first bucket runs from 0. Returns one probability per bucket, each in
+> ``[0, 1]`` and summing to ``1 - Q(t_last)`` (the total default probability by
+> the horizon).
