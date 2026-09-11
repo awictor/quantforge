@@ -4,6 +4,22 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.288.0] - 2026-09-11
+
+### Added
+- `seasoned_geometric_asian` (in `exotics.py`): prices an in-progress discrete
+  geometric-average Asian where some fixings have already been observed. The
+  observed prices contribute a known constant `A = sum log(S_obs)` and the `k`
+  remaining log-prices stay jointly Gaussian, so `log G` is still
+  `Normal(m, v)` with `m = (A + k log S + (b - sigma^2/2) sum tau_j)/n` and
+  `v = (sigma^2/n^2) sum_ij min(tau_i, tau_j)` — an exact Black-Scholes-style
+  closed form on the remaining window.
+- Verified: with no observations it reduces exactly to
+  `discrete_geometric_asian`; with all fixings observed the payoff is the
+  deterministic discounted geometric intrinsic; a partial-window case matches a
+  path Monte Carlo (n=12, 6 observed) to within 1%; locking in high observed
+  fixings raises the call versus at-the-money observations.
+
 ## [1.287.0] - 2026-09-11
 
 ### Added

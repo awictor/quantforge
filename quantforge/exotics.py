@@ -363,6 +363,78 @@ def arithmetic_asian(S, K, t, r, sigma, option_type=OptionType.CALL, b=None):
     return bsm_price(S, K, t, r, sigma_a, ot, b=b_a)
 
 
+def seasoned_geometric_asian(S, K, t, r, sigma, observed_prices, n_total,
+                             remaining_fixing_times=None,
+                             option_type=OptionType.CALL, b=None):
+    """Seasoned (in-progress) discrete geometric-average Asian option (exact).
+
+    Prices a geometric Asian partway through its averaging window, when some
+    fixings have already been observed. With ``n_total`` fixings in all, of
+    which ``observed_prices`` are already fixed and ``k`` remain at future
+    times ``remaining_fixing_times`` (in ``(0, t]``, measured from now), the
+    final average ``G = (prod_{i=1}^{n} S_{t_i})^{1/n}`` is still lognormal: the
+    observed factors contribute a known constant ``A = sum log(S_obs)`` and the
+    ``k`` future log-prices are jointly Gaussian. Hence ``log G`` is
+    ``Normal(m, v)`` with
+
+        m = (A + k log S + (b - sigma^2/2) sum_j tau_j) / n
+        v = (sigma^2 / n^2) sum_i sum_j min(tau_i, tau_j),
+
+    and the price is a Black-Scholes-style closed form on ``F = exp(m + v/2)``
+    discounted at ``r``. When no fixings are observed this reduces exactly to
+    :func:`discrete_geometric_asian`. When all ``n_total`` fixings are observed
+    the average is known and the payoff is deterministic.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if b is None:
+        b = r
+    obs = [float(x) for x in observed_prices]
+    if any(x <= 0.0 for x in obs):
+        raise ValueError("observed_prices must be positive")
+    m_obs = len(obs)
+    if n_total < 1:
+        raise ValueError("n_total must be >= 1")
+    if m_obs > n_total:
+        raise ValueError("more observed fixings than n_total")
+    k = n_total - m_obs
+    if remaining_fixing_times is None:
+        # Default: the remaining fixings are the last k of an equally-spaced
+        # grid over [0, t] (so tau_j = t*(m_obs + j)/n_total for j=1..k, but
+        # re-based to now they span (0, t]). Use an evenly-spaced future grid.
+        times = [t * i / k for i in range(1, k + 1)] if k > 0 else []
+    else:
+        times = [float(x) for x in remaining_fixing_times]
+        if len(times) != k:
+            raise ValueError("remaining_fixing_times must have length n_total - len(observed_prices)")
+        if any(x <= 0.0 or x > t + 1e-12 for x in times):
+            raise ValueError("remaining_fixing_times must lie in (0, t]")
+    disc = math.exp(-r * t)
+    A = sum(math.log(x) for x in obs)
+    n = n_total
+    if k == 0:
+        G = math.exp(A / n)
+        payoff = max(G - K, 0.0) if ot is OptionType.CALL else max(K - G, 0.0)
+        return disc * payoff
+    m_mean = (A + k * math.log(S) + (b - 0.5 * sigma * sigma) * sum(times)) / n
+    dbl = 0.0
+    for ti in times:
+        for tj in times:
+            dbl += ti if ti < tj else tj
+    v = sigma * sigma * dbl / (n * n)
+    if v <= 0.0:
+        fwd = math.exp(m_mean)
+        payoff = max(fwd - K, 0.0) if ot is OptionType.CALL else max(K - fwd, 0.0)
+        return disc * payoff
+    fwd = math.exp(m_mean + 0.5 * v)
+    sd = math.sqrt(v)
+    d1 = (m_mean + v - math.log(K)) / sd
+    d2 = d1 - sd
+    if ot is OptionType.CALL:
+        return disc * (fwd * norm_cdf(d1) - K * norm_cdf(d2))
+    return disc * (K * norm_cdf(-d2) - fwd * norm_cdf(-d1))
+
+
 def discrete_arithmetic_asian(S, K, t, r, sigma, n_fixings=None,
                               fixing_times=None, option_type=OptionType.CALL,
                               b=None):

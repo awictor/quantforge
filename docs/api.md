@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.287.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.288.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1405,6 +1405,27 @@ Auto-generated from `quantforge` v1.287.0 by `docs/gen_api.py` — do not edit b
 > :func:`powered_option`: ``delta`` (dV/dS), ``gamma`` (d2V/dS2), ``vega``
 > (dV/dsigma), ``theta`` (calendar decay, ``-dV/dt``). Returns a dict with
 > ``price`` and those fields.
+
+### `seasoned_geometric_asian(S, K, t, r, sigma, observed_prices, n_total, remaining_fixing_times=None, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> Seasoned (in-progress) discrete geometric-average Asian option (exact).
+>
+> Prices a geometric Asian partway through its averaging window, when some
+> fixings have already been observed. With ``n_total`` fixings in all, of
+> which ``observed_prices`` are already fixed and ``k`` remain at future
+> times ``remaining_fixing_times`` (in ``(0, t]``, measured from now), the
+> final average ``G = (prod_{i=1}^{n} S_{t_i})^{1/n}`` is still lognormal: the
+> observed factors contribute a known constant ``A = sum log(S_obs)`` and the
+> ``k`` future log-prices are jointly Gaussian. Hence ``log G`` is
+> ``Normal(m, v)`` with
+>
+>     m = (A + k log S + (b - sigma^2/2) sum_j tau_j) / n
+>     v = (sigma^2 / n^2) sum_i sum_j min(tau_i, tau_j),
+>
+> and the price is a Black-Scholes-style closed form on ``F = exp(m + v/2)``
+> discounted at ``r``. When no fixings are observed this reduces exactly to
+> :func:`discrete_geometric_asian`. When all ``n_total`` fixings are observed
+> the average is known and the payoff is deterministic.
 
 ## forward
 
