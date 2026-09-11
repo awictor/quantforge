@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.248.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.249.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -628,6 +628,25 @@ Auto-generated from `quantforge` v1.248.0 by `docs/gen_api.py` — do not edit b
 >     P(0,t_bond) X2(...; nc1) - strike P(0,t_option) X2(...; nc2),
 >
 > with critical rate ``r* = ln(A/strike)/B``. Puts follow from put-call parity.
+
+### `cir_coupon_bond_option(r0, t_option, cashflows, strike, kappa, theta, sigma, option_type=<OptionType.CALL: 'call'>)`  _function_
+
+> European option on a coupon bond under CIR (Jamshidian decomposition).
+>
+> ``cashflows`` is ``[(t_i, c_i), ...]`` with ``t_i > t_option``. The CIR bond
+> is monotone decreasing in ``r0``, so Jamshidian applies: solve for the
+> critical rate ``r*`` where the coupon bond's value at expiry equals
+> ``strike``, then sum the ``c_i``-weighted CIR zero-coupon-bond options
+> (:func:`cir_bond_option`) struck at ``K_i = P(t_option, t_i | r*)``. Exact.
+
+### `cir_swaption(r0, expiry, pay_times, fixed_rate, kappa, theta, sigma, payer=True, notional=1.0)`  _function_
+
+> European swaption under CIR via the coupon-bond-option identity (exact).
+>
+> A payer swaption is a put on the fixed-leg coupon bond struck at the
+> notional; a receiver is a call. Priced by :func:`cir_coupon_bond_option`.
+> ``pay_times`` are the fixed-leg payment dates (all ``> expiry``); accruals
+> are the gaps, the first measured from ``expiry``.
 
 ### `cir_zero_coupon_bond(r0, t, kappa, theta, sigma)`  _function_
 

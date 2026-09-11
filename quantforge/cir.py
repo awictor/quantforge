@@ -120,3 +120,70 @@ def cir_bond_option(r0, t_option, t_bond, strike, kappa, theta, sigma,
         return call
     # Put-call parity: C - P = P(0,t_bond) - strike P(0,t_option).
     return call - PT + strike * PS
+
+
+def cir_coupon_bond_option(r0, t_option, cashflows, strike, kappa, theta, sigma,
+                           option_type=OptionType.CALL):
+    """European option on a coupon bond under CIR (Jamshidian decomposition).
+
+    ``cashflows`` is ``[(t_i, c_i), ...]`` with ``t_i > t_option``. The CIR bond
+    is monotone decreasing in ``r0``, so Jamshidian applies: solve for the
+    critical rate ``r*`` where the coupon bond's value at expiry equals
+    ``strike``, then sum the ``c_i``-weighted CIR zero-coupon-bond options
+    (:func:`cir_bond_option`) struck at ``K_i = P(t_option, t_i | r*)``. Exact.
+    """
+    ot = _coerce_type(option_type)
+    cfs = sorted(cashflows)
+    if not cfs or any(ti <= t_option for ti, _ in cfs):
+        raise ValueError("all cashflow times must exceed t_option")
+    if r0 < 0:
+        raise ValueError("r0 must be non-negative in CIR")
+
+    def bond_value_at(r):
+        return sum(c * cir_zero_coupon_bond(r, ti - t_option, kappa, theta, sigma)
+                   for ti, c in cfs)
+
+    # CIR keeps r >= 0; bracket the critical rate on [0, hi].
+    lo, hi = 0.0, 1.0
+    while bond_value_at(hi) > strike and hi < 50.0:
+        hi += 1.0
+    for _ in range(200):
+        mid = 0.5 * (lo + hi)
+        if bond_value_at(mid) > strike:
+            lo = mid
+        else:
+            hi = mid
+    rstar = 0.5 * (lo + hi)
+
+    total = 0.0
+    for ti, c in cfs:
+        Ki = cir_zero_coupon_bond(rstar, ti - t_option, kappa, theta, sigma)
+        total += c * cir_bond_option(r0, t_option, ti, Ki, kappa, theta, sigma,
+                                     ot)
+    return total
+
+
+def cir_swaption(r0, expiry, pay_times, fixed_rate, kappa, theta, sigma,
+                 payer=True, notional=1.0):
+    """European swaption under CIR via the coupon-bond-option identity (exact).
+
+    A payer swaption is a put on the fixed-leg coupon bond struck at the
+    notional; a receiver is a call. Priced by :func:`cir_coupon_bond_option`.
+    ``pay_times`` are the fixed-leg payment dates (all ``> expiry``); accruals
+    are the gaps, the first measured from ``expiry``.
+    """
+    times = sorted(pay_times)
+    if not times or any(t <= expiry for t in times):
+        raise ValueError("all pay_times must exceed expiry")
+    prev = expiry
+    cfs = []
+    for i, ti in enumerate(times):
+        tau = ti - prev
+        prev = ti
+        c = fixed_rate * tau * notional
+        if i == len(times) - 1:
+            c += notional
+        cfs.append((ti, c))
+    ot = OptionType.PUT if payer else OptionType.CALL
+    return cir_coupon_bond_option(r0, expiry, cfs, notional, kappa, theta,
+                                  sigma, ot)

@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.249.0] - 2026-09-10
+
+### Added
+- `cir_coupon_bond_option` and `cir_swaption` (in `cir.py`): exact European
+  coupon-bond option and swaption under CIR by Jamshidian decomposition. The CIR
+  bond is monotone in `r0`, so the critical-rate `r*` split into per-cashflow CIR
+  zero-coupon-bond options (`cir_bond_option`) is exact; a payer swaption is a put
+  on the fixed-leg coupon bond struck at the notional. Completes the full option
+  chain (bond -> coupon-bond option -> swaption) for all three affine short-rate
+  models: Vasicek, Ho-Lee, CIR.
+- Verified: a single cashflow reduces to the scaled `cir_bond_option`; swaption
+  parity `payer - receiver = annuity (swap_rate - strike)` holds to 1e-7; both
+  legs positive; a higher strike lowers the payer.
+
 ## [1.248.0] - 2026-09-10
 
 ### Added
