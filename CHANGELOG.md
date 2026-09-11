@@ -4,6 +4,21 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.299.0] - 2026-09-11
+
+### Added
+- `complex_chooser_option` and `complex_chooser_option_greeks` (in
+  `chooser.py`): complex chooser (Rubinstein 1991), where at the choice date the
+  holder keeps whichever is worth more of a call (strike `Kc`, expiry `Tc`) or a
+  put (strike `Kp`, expiry `Tp`) — the two legs may differ in both strike and
+  maturity. Priced by Rubinstein's bivariate-normal formula, with the critical
+  spot (where the two legs are equal at the choice date) found by bisection.
+  Greeks by finite difference.
+- Verified: equal strikes and maturities reduce exactly to the simple
+  `chooser_option`; matches a Monte Carlo at the choice date to within ~0.14%;
+  the chooser is worth more than either leg valued outright today; delta matches
+  a finite difference.
+
 ## [1.298.0] - 2026-09-11
 
 ### Changed

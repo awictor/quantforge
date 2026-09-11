@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.298.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.299.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -618,6 +618,31 @@ Auto-generated from `quantforge` v1.298.0 by `docs/gen_api.py` — do not edit b
 > (the put's strike does not depend on either), so ``delta``, ``gamma``, and
 > ``vega`` are the exact sums of the two legs' BSM Greeks -- no finite
 > difference. Returns a dict with ``price``, ``delta``, ``gamma``, ``vega``.
+
+### `complex_chooser_option(S, Kc, Kp, t_choose, Tc, Tp, r, sigma, b=None) -> float`  _function_
+
+> Complex chooser option (Rubinstein 1991), closed form.
+>
+> At the choice date ``t_choose`` the holder keeps whichever is worth more: a
+> call struck at ``Kc`` expiring at ``Tc``, or a put struck at ``Kp`` expiring
+> at ``Tp`` (the two legs may differ in both strike and maturity). Rubinstein's
+> formula prices this with bivariate normals coupling the choice date to each
+> leg's expiry:
+>
+>     V = S e^{(b-r)Tc} M(d1, y1; rho_c) - Kc e^{-r Tc} M(d2, y1 - sig sqrt Tc; rho_c)
+>         - S e^{(b-r)Tp} M(-d1, -y2; rho_p) + Kp e^{-r Tp} M(-d2, -y2 + sig sqrt Tp; rho_p)
+>
+> where ``d1,d2`` use the critical spot ``I`` (the level where the two legs are
+> equal at ``t_choose``), ``y1,y2`` use ``Kc,Kp``, and
+> ``rho_c = sqrt(t_choose/Tc)``, ``rho_p = sqrt(t_choose/Tp)``.
+
+### `complex_chooser_option_greeks(S, Kc, Kp, t_choose, Tc, Tp, r, sigma, b=None)`  _function_
+
+> Greeks of a complex chooser by central finite differences of
+> :func:`complex_chooser_option`: ``delta`` (dV/dS), ``gamma`` (d2V/dS2),
+> ``vega`` (dV/dsigma), ``theta`` (calendar decay -- all maturities and the
+> choice date shrink together). Returns a dict with ``price`` and those
+> fields.
 
 ## cir
 

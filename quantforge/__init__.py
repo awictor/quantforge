@@ -40,7 +40,10 @@ from .forward import implied_forward, ForwardResult, dividend_curve
 from .forwardstart import (
     forward_start_price, forward_start_greeks, cliquet_price, cliquet_greeks,
 )
-from .chooser import chooser_option, chooser_option_greeks
+from .chooser import (
+    chooser_option, chooser_option_greeks,
+    complex_chooser_option, complex_chooser_option_greeks,
+)
 from .compound import compound_option, compound_option_greeks
 from .quanto import (
     quanto_option, compo_option, quanto_option_greeks, compo_option_greeks,
@@ -315,7 +318,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.298.0"
+__version__ = "1.299.0"
 
 __all__ = [
     "OptionType",
@@ -361,6 +364,8 @@ __all__ = [
     "cliquet_greeks",
     "chooser_option",
     "chooser_option_greeks",
+    "complex_chooser_option",
+    "complex_chooser_option_greeks",
     "compound_option",
     "compound_option_greeks",
     "quanto_option",
