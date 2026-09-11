@@ -233,6 +233,24 @@ def sabr_variance_swap_strike(F, t, r, alpha, beta, rho, nu, q=0.0,
         q=q, n_strikes=n_strikes, width=width)
 
 
+def sabr_bkm_moments(F, t, r, alpha, beta, rho, nu, q=0.0, n_strikes=401,
+                     width=8.0):
+    """Risk-neutral (variance, skewness, excess kurtosis) implied by a SABR smile.
+
+    Prices the strike chain at ``sabr_vol(F, K, ...)`` and applies the
+    Bakshi-Kapadia-Madan moment replication
+    (:func:`quantforge.bkm_moments_from_smile`). ``F`` is the forward;
+    ``S0 = F e^{-(r-q)t}``. A negative correlation ``rho`` (equity skew) produces
+    negative risk-neutral skewness; higher vol-of-vol raises the excess kurtosis.
+    """
+    from .bkm import bkm_moments_from_smile
+
+    S0 = F * math.exp(-(r - q) * t)
+    return bkm_moments_from_smile(
+        S0, t, r, lambda K: sabr_vol(F, K, t, alpha, beta, rho, nu),
+        q=q, n_strikes=n_strikes, width=width)
+
+
 def sabr_vix(F, t, r, alpha, beta, rho, nu, q=0.0, n_strikes=201, width=6.0):
     """VIX-style index (``~= 100 * sigma``) implied by a SABR smile.
 

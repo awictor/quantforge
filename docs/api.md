@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.260.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.261.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3463,6 +3463,16 @@ Auto-generated from `quantforge` v1.260.0 by `docs/gen_api.py` — do not edit b
 > ``-1 < rho < 1``) by clamping each proposed step.
 >
 > Returns ``(params, rmse, n_iter)``.
+
+### `sabr_bkm_moments(F, t, r, alpha, beta, rho, nu, q=0.0, n_strikes=401, width=8.0)`  _function_
+
+> Risk-neutral (variance, skewness, excess kurtosis) implied by a SABR smile.
+>
+> Prices the strike chain at ``sabr_vol(F, K, ...)`` and applies the
+> Bakshi-Kapadia-Madan moment replication
+> (:func:`quantforge.bkm_moments_from_smile`). ``F`` is the forward;
+> ``S0 = F e^{-(r-q)t}``. A negative correlation ``rho`` (equity skew) produces
+> negative risk-neutral skewness; higher vol-of-vol raises the excess kurtosis.
 
 ### `sabr_butterfly_arbitrage(F, t, alpha, beta, rho, nu, strikes=None, r=0.0, tol=1e-08)`  _function_
 

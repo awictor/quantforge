@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.261.0] - 2026-09-10
+
+### Added
+- `sabr_bkm_moments` (in `sabr.py`): risk-neutral variance, skewness, and excess
+  kurtosis implied by a SABR smile via Bakshi-Kapadia-Madan moment replication.
+- Verified: a near-flat slice is symmetric; negative `rho` gives negative
+  risk-neutral skew (positive `rho` positive); higher vol-of-vol raises the
+  excess kurtosis.
+
 ## [1.260.0] - 2026-09-10
 
 ### Added
