@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.399.0] - 2026-09-11
+
+### Added
+- `collateralized_exposure` and `collateralized_exposure_profile` (in `xva.py`):
+  residual exposure under a CSA collateral agreement,
+  `max(min(E, threshold + MTA) - independent_amount, 0)`. An infinite threshold
+  recovers the uncollateralized exposure, a zero threshold with no MTA leaves only
+  the independent-amount offset, and collateralization reduces the CVA. Applied
+  across a profile with the vector helper.
+
 ## [1.398.0] - 2026-09-11
 
 ### Added

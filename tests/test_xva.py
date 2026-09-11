@@ -8,6 +8,7 @@ from quantforge import (
     SurvivalCurve, marginal_default_probs, cva, dva, bcva,
     swap_expected_exposure, fva,
     swap_potential_future_exposure, wrong_way_cva,
+    collateralized_exposure, collateralized_exposure_profile,
 )
 from quantforge.mathfns import norm_ppf
 
@@ -130,6 +131,39 @@ def test_wrong_way_raises_cva_for_rising_exposure():
     base = cva(CURVE, GRID, ee_up, 0.03)
     assert wrong_way_cva(CURVE, GRID, ee_up, 0.03, 0.4, 0.5) > base
     assert wrong_way_cva(CURVE, GRID, ee_up, 0.03, 0.4, -0.5) < base  # right-way
+
+
+def test_collateral_below_threshold_unchanged():
+    assert collateralized_exposure(5, 10) == 5
+
+
+def test_collateral_caps_at_threshold_plus_mta():
+    assert collateralized_exposure(20, 10, 2) == 12
+
+
+def test_collateral_infinite_threshold_is_uncollateralized():
+    assert collateralized_exposure(20, 1e18) == 20
+
+
+def test_collateral_zero_threshold():
+    assert collateralized_exposure(20, 0, 0) == 0
+
+
+def test_independent_amount_offset():
+    assert collateralized_exposure(20, 10, 0, 3) == 7
+    assert collateralized_exposure(5, 10, 0, 8) == 0  # floored at 0
+
+
+def test_collateral_profile_reduces_cva():
+    prof = [10, 9, 8, 6, 4]
+    col = collateralized_exposure_profile(prof, 5, 1)
+    assert all(col[i] <= prof[i] for i in range(len(prof)))
+    assert cva(CURVE, GRID, col, 0.03) < cva(CURVE, GRID, prof, 0.03)
+
+
+def test_collateral_validation():
+    with pytest.raises(ValueError):
+        collateralized_exposure(20, -1)
 
 
 def test_pfe_wrong_way_validation():

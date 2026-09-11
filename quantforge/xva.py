@@ -79,6 +79,37 @@ def swap_potential_future_exposure(notional, sigma, maturity, grid_times,
     return out
 
 
+def collateralized_exposure(uncollateralized_exposure, threshold,
+                            min_transfer_amount=0.0, independent_amount=0.0):
+    """Exposure remaining after a CSA collateral agreement.
+
+    Under a credit-support annex the counterparty posts collateral once the
+    uncollateralized exposure exceeds a ``threshold`` (plus the minimum transfer
+    amount ``min_transfer_amount``), and an ``independent_amount`` of collateral is
+    held unconditionally. The residual exposure is
+
+        max(min(E, threshold + MTA) - independent_amount, 0)
+
+    -- exposure below the call level is uncollateralized, and above it only the
+    threshold + MTA remains at risk (before default-time gap risk). An infinite
+    threshold recovers the uncollateralized exposure; a zero threshold with no MTA
+    leaves only the independent-amount offset.
+    """
+    if threshold < 0.0 or min_transfer_amount < 0.0 or independent_amount < 0.0:
+        raise ValueError("threshold, MTA, and IA must be non-negative")
+    capped = min(uncollateralized_exposure, threshold + min_transfer_amount)
+    return max(capped - independent_amount, 0.0)
+
+
+def collateralized_exposure_profile(uncollateralized_profile, threshold,
+                                    min_transfer_amount=0.0,
+                                    independent_amount=0.0):
+    """Apply :func:`collateralized_exposure` across an exposure profile."""
+    return [collateralized_exposure(e, threshold, min_transfer_amount,
+                                    independent_amount)
+            for e in uncollateralized_profile]
+
+
 def wrong_way_cva(curve, grid_times, expected_exposure, r, recovery=0.4,
                   alpha=0.0):
     """CVA with a linear wrong-way-risk scaling of the default buckets.
