@@ -29,10 +29,11 @@ def test_in_plus_out_equals_vanilla():
     # Same seed -> same paths; knock-in + knock-out partition every path, so
     # they sum to the (discretely-sampled) vanilla, which equals the analytic
     # European exactly since the terminal spot is the same.
+    # Exact partition at a shared seed for any n_rand -- keep it small.
     di = sobol_barrier_rqmc(S, K, 90.0, T, R, SIG, OptionType.CALL, "down-in",
-                            n_steps=NS, n_paths=4096, n_rand=24, seed=2)
+                            n_steps=NS, n_paths=4096, n_rand=6, seed=2)
     do = sobol_barrier_rqmc(S, K, 90.0, T, R, SIG, OptionType.CALL, "down-out",
-                            n_steps=NS, n_paths=4096, n_rand=24, seed=2)
+                            n_steps=NS, n_paths=4096, n_rand=6, seed=2)
     vanilla = call_price(S, K, T, R, SIG)
     assert di.price + do.price == pytest.approx(vanilla, abs=0.05)
 

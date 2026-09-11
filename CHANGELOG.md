@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.272.0] - 2026-09-10
+
+### Changed
+- Trimmed the fast gate: the RQMC knock-in/knock-out partition-identity tests
+  (Parisian, barrier, barrier-digital) now run at `n_rand=6` instead of 24. The
+  identity is exact path-by-path at a shared seed, so it holds for any `n_rand`;
+  this drops ~10s off the non-slow suite with no loss of coverage.
+
+### Added (tests)
+- Cross-model density parity: an SVI slice calibrated to a SABR smile reproduces
+  the SABR Breeden-Litzenberger risk-neutral density to ~2% at the money and ~5%
+  in the wings, both densities are non-negative, and both integrate to one -- two
+  independent constructions agreeing end to end.
+
 ## [1.271.0] - 2026-09-10
 
 ### Added

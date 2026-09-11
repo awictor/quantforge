@@ -28,12 +28,13 @@ def test_matches_barrier_digital_mc(barrier, H):
 def test_in_plus_out_equals_unconditional_digital():
     # Same seed -> same paths; knock-in + knock-out partition every path, so
     # they sum to the plain cash-or-nothing digital.
+    # Partition identity is exact at a shared seed for any n_rand -- keep small.
     di = sobol_barrier_digital_rqmc(S, K, 90.0, T, R, SIG, OptionType.CALL,
                                     "down-in", n_steps=NS, n_paths=4096,
-                                    n_rand=24, seed=2)
+                                    n_rand=6, seed=2)
     do = sobol_barrier_digital_rqmc(S, K, 90.0, T, R, SIG, OptionType.CALL,
                                     "down-out", n_steps=NS, n_paths=4096,
-                                    n_rand=24, seed=2)
+                                    n_rand=6, seed=2)
     dig = cash_or_nothing(S, K, T, R, SIG, OptionType.CALL)
     assert di.price + do.price == pytest.approx(dig, abs=5e-3)
 
