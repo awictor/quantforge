@@ -7,6 +7,7 @@ import pytest
 from quantforge import (
     commodity_forward, implied_convenience_yield, implied_storage_cost,
     net_cost_of_carry, commodity_forward_curve, is_backwardation,
+    commodity_calendar_spread, convenience_yield_curve, seasonal_forward,
 )
 
 
@@ -49,6 +50,32 @@ def test_forward_curve_rises_in_contango():
 
 def test_forward_at_zero_maturity_is_spot():
     assert commodity_forward(S, R, 0.0, U, Y) == pytest.approx(S)
+
+
+def test_calendar_spread_sign_tracks_carry():
+    assert commodity_calendar_spread(S, R, 1, 2, 0.02, 0.01) > 0   # contango
+    assert commodity_calendar_spread(S, R, 1, 2, 0.0, 0.10) < 0    # backwardation
+
+
+def test_convenience_yield_curve_reprices_forwards():
+    quotes = commodity_forward_curve(S, R, [0.5, 1, 2], 0.02, 0.03)
+    ys = convenience_yield_curve(S, R, quotes, 0.02)
+    for i, (T, F) in enumerate(quotes):
+        assert commodity_forward(S, R, T, 0.02, ys[i][1]) == pytest.approx(F, abs=1e-9)
+        assert ys[i][1] == pytest.approx(0.03, abs=1e-12)
+
+
+def test_seasonal_forward_scales():
+    base = commodity_forward(S, R, 1, 0.02, 0.01)
+    assert seasonal_forward(S, R, 1, 1.0, 0.02, 0.01) == pytest.approx(base)
+    assert seasonal_forward(S, R, 1, 1.1, 0.02, 0.01) > base
+
+
+def test_spread_seasonal_validation():
+    with pytest.raises(ValueError):
+        commodity_calendar_spread(S, R, 2, 1)
+    with pytest.raises(ValueError):
+        seasonal_forward(S, R, 1, -1)
 
 
 def test_validation():

@@ -70,6 +70,49 @@ def commodity_forward_curve(spot, r, maturities, storage_cost=0.0,
             for T in maturities]
 
 
+def commodity_calendar_spread(spot, r, t_near, t_far, storage_cost=0.0,
+                              convenience_yield=0.0):
+    """Far-minus-near forward spread under one carry rate.
+
+    ``F(t_far) - F(t_near)`` from :func:`commodity_forward`. Positive in contango
+    (net carry ``r + u - y > 0``, the far contract richer) and negative in
+    backwardation, so its sign matches :func:`net_cost_of_carry`.
+    """
+    if t_far <= t_near:
+        raise ValueError("t_far must exceed t_near")
+    near = commodity_forward(spot, r, t_near, storage_cost, convenience_yield)
+    far = commodity_forward(spot, r, t_far, storage_cost, convenience_yield)
+    return far - near
+
+
+def convenience_yield_curve(spot, r, forward_quotes, storage_cost=0.0):
+    """Per-tenor convenience yields implied by a forward strip.
+
+    ``forward_quotes`` is ``[(T, F(T)), ...]``. Inverts each quote with
+    :func:`implied_convenience_yield` at a common ``storage_cost``, so recomputing
+    the forward at each ``(T, y_T)`` reprices the input strip exactly.
+    """
+    if spot <= 0:
+        raise ValueError("spot must be positive")
+    return [(T, implied_convenience_yield(spot, F, r, T, storage_cost))
+            for T, F in forward_quotes]
+
+
+def seasonal_forward(spot, r, maturity, seasonal_factor, storage_cost=0.0,
+                     convenience_yield=0.0):
+    """Cost-of-carry forward scaled by a multiplicative seasonal factor.
+
+    ``seasonal_factor * commodity_forward(...)`` -- lifts or discounts the carry
+    forward for the delivery month's seasonal pattern (e.g. gas in winter). With
+    a :func:`quantforge.normalize_seasonal_factors` factor the annual average is
+    unchanged.
+    """
+    if seasonal_factor <= 0:
+        raise ValueError("seasonal_factor must be positive")
+    return seasonal_factor * commodity_forward(spot, r, maturity, storage_cost,
+                                               convenience_yield)
+
+
 def is_backwardation(r, storage_cost=0.0, convenience_yield=0.0):
     """True when the curve is in backwardation (``y > r + u``, forwards below spot).
 

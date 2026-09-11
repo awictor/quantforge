@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.384.0] - 2026-09-11
+
+### Added
+- `commodity_calendar_spread`, `convenience_yield_curve`, `seasonal_forward` (in
+  `commodity.py`): far-minus-near forward spread (sign tracks the net carry, so
+  positive in contango and negative in backwardation), per-tenor convenience
+  yields bootstrapped from a forward strip (reprices each quote), and a
+  seasonally-scaled carry forward. Cross-checked against the carry sign, exact
+  repricing, and the unit-factor limit.
+
 ## [1.383.0] - 2026-09-11
 
 ### Added

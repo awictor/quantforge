@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.383.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.384.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1067,6 +1067,14 @@ Auto-generated from `quantforge` v1.383.0 by `docs/gen_api.py` — do not edit b
 
 ## commodity
 
+### `commodity_calendar_spread(spot, r, t_near, t_far, storage_cost=0.0, convenience_yield=0.0)`  _function_
+
+> Far-minus-near forward spread under one carry rate.
+>
+> ``F(t_far) - F(t_near)`` from :func:`commodity_forward`. Positive in contango
+> (net carry ``r + u - y > 0``, the far contract richer) and negative in
+> backwardation, so its sign matches :func:`net_cost_of_carry`.
+
 ### `commodity_forward(spot, r, maturity, storage_cost=0.0, convenience_yield=0.0)`  _function_
 
 > Cost-of-carry forward ``S * exp((r + u - y) * T)``.
@@ -1080,6 +1088,14 @@ Auto-generated from `quantforge` v1.383.0 by `docs/gen_api.py` — do not edit b
 > Forward prices across a list of maturities under one carry rate.
 >
 > Returns ``[(T, F(T)), ...]`` from :func:`commodity_forward` at each maturity.
+
+### `convenience_yield_curve(spot, r, forward_quotes, storage_cost=0.0)`  _function_
+
+> Per-tenor convenience yields implied by a forward strip.
+>
+> ``forward_quotes`` is ``[(T, F(T)), ...]``. Inverts each quote with
+> :func:`implied_convenience_yield` at a common ``storage_cost``, so recomputing
+> the forward at each ``(T, y_T)`` reprices the input strip exactly.
 
 ### `implied_convenience_yield(spot, forward, r, maturity, storage_cost=0.0)`  _function_
 
@@ -1105,6 +1121,15 @@ Auto-generated from `quantforge` v1.383.0 by `docs/gen_api.py` — do not edit b
 ### `net_cost_of_carry(r, storage_cost=0.0, convenience_yield=0.0)`  _function_
 
 > Net proportional carry rate ``r + u - y`` (the forward's growth rate).
+
+### `seasonal_forward(spot, r, maturity, seasonal_factor, storage_cost=0.0, convenience_yield=0.0)`  _function_
+
+> Cost-of-carry forward scaled by a multiplicative seasonal factor.
+>
+> ``seasonal_factor * commodity_forward(...)`` -- lifts or discounts the carry
+> forward for the delivery month's seasonal pattern (e.g. gas in winter). With
+> a :func:`quantforge.normalize_seasonal_factors` factor the annual average is
+> unchanged.
 
 ## compound
 
