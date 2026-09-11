@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.376.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.377.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2970,6 +2970,30 @@ Auto-generated from `quantforge` v1.376.0 by `docs/gen_api.py` — do not edit b
 > Because the index ratio multiplies every flow, the price is degree-one
 > homogeneous in it -- stripping the ratio recovers a standard real-yield bond
 > price (the invariant tested against :mod:`quantforge.bondmath`).
+
+### `linker_real_convexity(real_cashflows, real_yield) -> float`  _function_
+
+> Convexity of a linker w.r.t. its real yield ``1/P d2P/dr2``.
+>
+> PV-weighted average of squared cashflow time on the real cashflows; the index
+> ratio cancels, matching :func:`quantforge.convexity`.
+
+### `linker_real_duration(real_cashflows, real_yield) -> float`  _function_
+
+> Modified duration of a linker w.r.t. its real yield (years).
+>
+> ``-1/P dP/dr``. Since the settlement index ratio multiplies the whole price it
+> cancels in the fractional sensitivity, so the real duration is the PV-weighted
+> average cashflow time of the *real* cashflows -- identical to the standard
+> :func:`quantforge.modified_duration` on those flows, independent of the index
+> level.
+
+### `linker_real_dv01(real_cashflows, real_yield, index_settle, index_base) -> float`  _function_
+
+> Dollar value of a 1bp real-yield rise for a linker (negative).
+>
+> ``dP/dr * 1e-4 = -duration * price * 1e-4`` on the inflated (dirty) price, so
+> unlike the fractional duration this DOES scale with the index ratio.
 
 ### `linker_real_yield(real_cashflows, price, index_settle, index_base, tol=1e-10, max_iter=100) -> float`  _function_
 

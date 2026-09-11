@@ -207,6 +207,7 @@ from .inflation import (
     index_ratio, inflation_adjusted_principal, fisher_real_rate,
     fisher_nominal_rate, breakeven_inflation, real_from_breakeven,
     linker_price, linker_real_yield,
+    linker_real_duration, linker_real_convexity, linker_real_dv01,
     deflation_floored_redemption, deflation_floor_value, yoy_inflation_rate,
     zc_inflation_swap_rate, zc_inflation_swap_value,
     inflation_curve_from_zc_swaps, forward_inflation_rate, yoy_swap_value,
@@ -396,7 +397,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.376.0"
+__version__ = "1.377.0"
 
 __all__ = [
     "OptionType",
@@ -722,6 +723,9 @@ __all__ = [
     "real_from_breakeven",
     "linker_price",
     "linker_real_yield",
+    "linker_real_duration",
+    "linker_real_convexity",
+    "linker_real_dv01",
     "deflation_floored_redemption",
     "deflation_floor_value",
     "yoy_inflation_rate",

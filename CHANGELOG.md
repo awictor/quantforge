@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.377.0] - 2026-09-11
+
+### Added
+- `linker_real_duration`, `linker_real_convexity`, `linker_real_dv01` (in
+  `inflation.py`): real-yield risk of an inflation-linked bond. The index ratio
+  multiplies the whole price so it cancels in the fractional duration and
+  convexity -- these equal `bondmath`'s `modified_duration`/`convexity` on the
+  real cashflows, independent of the index level -- while the dollar DV01 scales
+  with the ratio. Cross-checked against `bondmath` and central finite differences.
+
 ## [1.376.0] - 2026-09-11
 
 ### Added

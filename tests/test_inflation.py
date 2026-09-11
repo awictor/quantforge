@@ -6,12 +6,14 @@ from quantforge import (
     index_ratio, inflation_adjusted_principal, fisher_real_rate,
     fisher_nominal_rate, breakeven_inflation, real_from_breakeven,
     linker_price, linker_real_yield,
+    linker_real_duration, linker_real_convexity, linker_real_dv01,
     deflation_floored_redemption, deflation_floor_value, yoy_inflation_rate,
     zc_inflation_swap_rate, zc_inflation_swap_value,
     inflation_curve_from_zc_swaps, forward_inflation_rate, yoy_swap_value,
     reference_cpi, index_ratio_interpolated,
     bond_cashflows, bond_price_from_yield, yield_to_maturity,
 )
+from quantforge import modified_duration, convexity, bond_dv01
 
 
 TENORS = [1, 2, 3, 5]
@@ -200,6 +202,47 @@ def test_reference_cpi_validation():
         reference_cpi(200, 203, 0, 30)
     with pytest.raises(ValueError):
         reference_cpi(-1, 203, 1, 30)
+
+
+def test_real_duration_matches_bondmath():
+    assert linker_real_duration(CF, 0.015) == pytest.approx(
+        modified_duration(CF, 0.015), abs=1e-12)
+
+
+def test_real_convexity_matches_bondmath():
+    assert linker_real_convexity(CF, 0.015) == pytest.approx(
+        convexity(CF, 0.015), abs=1e-12)
+
+
+def test_real_duration_index_independent():
+    # Fractional duration cancels the index ratio.
+    d1 = linker_real_duration(CF, 0.015)
+    assert d1 == modified_duration(CF, 0.015)
+
+
+def test_real_duration_finite_difference():
+    r, h = 0.015, 1e-6
+    P = lambda y: linker_price(CF, y, 120, 100)
+    fd = -(P(r + h) - P(r - h)) / (2 * h) / P(r)
+    assert linker_real_duration(CF, r) == pytest.approx(fd, abs=1e-5)
+
+
+def test_real_convexity_finite_difference():
+    r, h = 0.015, 1e-6
+    P = lambda y: linker_price(CF, y, 120, 100)
+    fd = (P(r + h) - 2 * P(r) + P(r - h)) / h ** 2 / P(r)
+    assert linker_real_convexity(CF, r) == pytest.approx(fd, abs=1e-3)
+
+
+def test_real_dv01_scales_with_ratio():
+    assert linker_real_dv01(CF, 0.015, 120, 100) == pytest.approx(
+        1.2 * bond_dv01(CF, 0.015), abs=1e-9)
+    assert linker_real_dv01(CF, 0.015, 120, 100) < 0
+
+
+def test_real_risk_validation():
+    with pytest.raises(ValueError):
+        linker_real_duration([(1, -100)], 5.0)
 
 
 def test_validation():

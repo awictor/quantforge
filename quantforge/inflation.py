@@ -246,6 +246,44 @@ def linker_price(real_cashflows, real_yield, index_settle, index_base) -> float:
     return ratio * pv
 
 
+def linker_real_duration(real_cashflows, real_yield) -> float:
+    """Modified duration of a linker w.r.t. its real yield (years).
+
+    ``-1/P dP/dr``. Since the settlement index ratio multiplies the whole price it
+    cancels in the fractional sensitivity, so the real duration is the PV-weighted
+    average cashflow time of the *real* cashflows -- identical to the standard
+    :func:`quantforge.modified_duration` on those flows, independent of the index
+    level.
+    """
+    price = sum(amt * math.exp(-real_yield * t) for t, amt in real_cashflows)
+    if price <= 0:
+        raise ValueError("real cashflow price must be positive")
+    return sum(t * amt * math.exp(-real_yield * t) for t, amt in real_cashflows) / price
+
+
+def linker_real_convexity(real_cashflows, real_yield) -> float:
+    """Convexity of a linker w.r.t. its real yield ``1/P d2P/dr2``.
+
+    PV-weighted average of squared cashflow time on the real cashflows; the index
+    ratio cancels, matching :func:`quantforge.convexity`.
+    """
+    price = sum(amt * math.exp(-real_yield * t) for t, amt in real_cashflows)
+    if price <= 0:
+        raise ValueError("real cashflow price must be positive")
+    return sum(t * t * amt * math.exp(-real_yield * t)
+               for t, amt in real_cashflows) / price
+
+
+def linker_real_dv01(real_cashflows, real_yield, index_settle, index_base) -> float:
+    """Dollar value of a 1bp real-yield rise for a linker (negative).
+
+    ``dP/dr * 1e-4 = -duration * price * 1e-4`` on the inflated (dirty) price, so
+    unlike the fractional duration this DOES scale with the index ratio.
+    """
+    price = linker_price(real_cashflows, real_yield, index_settle, index_base)
+    return -linker_real_duration(real_cashflows, real_yield) * price * 1e-4
+
+
 def linker_real_yield(real_cashflows, price, index_settle, index_base,
                       tol=1e-10, max_iter=100) -> float:
     """Continuously-compounded real yield reproducing a linker ``price``.
