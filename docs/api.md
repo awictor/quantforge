@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.368.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.369.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -370,6 +370,20 @@ Auto-generated from `quantforge` v1.368.0 by `docs/gen_api.py` — do not edit b
 ### `convexity(cashflows: Sequence[Tuple[float, float]], y) -> float`  _function_
 
 > Convexity ``1/price d2Price/dy2``: PV-weighted average of squared time.
+
+### `dated_bond_cashflows(start, maturity_years, face, coupon_rate, freq=2, convention='30/360', end_of_month=False, business_day='unadjusted')`  _function_
+
+> Coupon-bond cashflows on a real calendar with day-count accruals.
+>
+> Generates the coupon schedule from ``start`` (a ``(y, m, d)`` date) with
+> :func:`quantforge.generate_schedule`, computes each period's accrual factor
+> with :func:`quantforge.year_fraction` under ``convention``, and pays the
+> day-count-weighted coupon ``face * coupon_rate * tau_i`` each period plus the
+> face at maturity. Returns ``[(pay_date, year_fraction, amount), ...]``.
+>
+> Unlike :func:`bond_cashflows` (which assumes uniform ``1/freq`` periods),
+> this reflects the actual day counts, month-end roll, and business-day
+> adjustment -- the difference that matters for act/360 and stub periods.
 
 ### `dirty_price(cashflows: Sequence[Tuple[float, float]], y) -> float`  _function_
 

@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.369.0] - 2026-09-11
+
+### Added
+- `dated_bond_cashflows` (in `bondmath.py`): coupon-bond cashflows on a real
+  calendar. Generates the coupon schedule with `generate_schedule`, weights each
+  coupon by the period's `year_fraction` under a day-count convention, and pays
+  `face * coupon_rate * tau` per period plus the face at maturity -- reflecting
+  actual day counts, month-end roll, and business-day adjustment rather than the
+  uniform `1/freq` of `bond_cashflows`.
+- Verified: a 30/360 semiannual bond gives four periods of tau 0.5 and 2.5
+  coupons with the face on the last flow; act/360 accrual exceeds 0.5 over a
+  half year; a zero coupon pays only the face; the end-of-month roll lands on
+  month ends; a negative coupon raises.
+
 ## [1.368.0] - 2026-09-11
 
 ### Added

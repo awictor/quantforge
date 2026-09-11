@@ -41,6 +41,41 @@ def bond_cashflows(face, coupon_rate, maturity, freq=2) -> List[Tuple[float, flo
     return flows
 
 
+def dated_bond_cashflows(start, maturity_years, face, coupon_rate, freq=2,
+                         convention="30/360", end_of_month=False,
+                         business_day="unadjusted"):
+    """Coupon-bond cashflows on a real calendar with day-count accruals.
+
+    Generates the coupon schedule from ``start`` (a ``(y, m, d)`` date) with
+    :func:`quantforge.generate_schedule`, computes each period's accrual factor
+    with :func:`quantforge.year_fraction` under ``convention``, and pays the
+    day-count-weighted coupon ``face * coupon_rate * tau_i`` each period plus the
+    face at maturity. Returns ``[(pay_date, year_fraction, amount), ...]``.
+
+    Unlike :func:`bond_cashflows` (which assumes uniform ``1/freq`` periods),
+    this reflects the actual day counts, month-end roll, and business-day
+    adjustment -- the difference that matters for act/360 and stub periods.
+    """
+    from .schedule import generate_schedule
+    from .daycount import year_fraction
+    if coupon_rate < 0:
+        raise ValueError("coupon_rate must be non-negative")
+    dates = generate_schedule(start, maturity_years, 12 // freq
+                              if 12 % freq == 0 else max(1, round(12 / freq)),
+                              end_of_month=end_of_month,
+                              convention=business_day)
+    flows = []
+    prev = start
+    n = len(dates)
+    for i, pay in enumerate(dates):
+        tau = year_fraction(prev, pay, convention)
+        cpn = face * coupon_rate * tau
+        amt = cpn + (face if i == n - 1 else 0.0)
+        flows.append((pay, tau, amt))
+        prev = pay
+    return flows
+
+
 def accrued_interest(face, coupon_rate, freq, fraction_elapsed) -> float:
     """Accrued interest since the last coupon, straight-line within the period.
 
