@@ -1359,6 +1359,60 @@ def barrier_greeks(S, K, H, t, r, sigma, option_type=OptionType.CALL,
 _BGK_BETA = 0.5826
 
 
+def partial_time_start_barrier_call(S, K, H, t1, T2, r, sigma,
+                                    barrier=Barrier.DOWN_OUT, b=None) -> float:
+    """Partial-time (start) single-barrier call (Heynen-Kat 1994), closed form.
+
+    The knock-out barrier is monitored only over ``[0, t1]`` -- it is live from
+    inception to ``t1`` and inactive afterwards, with the option paying off at
+    ``T2 > t1``. Because the barrier watches a shorter window than a full-life
+    barrier, a knock-out is worth more than the continuously-monitored one and
+    less than the vanilla; as ``t1 -> 0`` it approaches the vanilla call and as
+    ``t1 -> T2`` it approaches the standard barrier.
+
+    Heynen-Kat's bivariate-normal formula couples the monitoring-end date ``t1``
+    (correlation ``rho = sqrt(t1/T2)``) to expiry. The down-out call is priced
+    directly; the down-in value follows from in-out parity ``KI = vanilla - KO``.
+    (Up-barrier partial-time calls have a distinct form and are not handled.)
+    """
+    barrier = Barrier(barrier)
+    _validate(S, K, T2, sigma)
+    if H <= 0:
+        raise ValueError("barrier H must be positive")
+    if not (0.0 < t1 < T2):
+        raise ValueError("require 0 < t1 < T2")
+    if b is None:
+        b = r
+    if barrier is Barrier.DOWN_IN:
+        vanilla = bsm_price(S, K, T2, r, sigma, OptionType.CALL, b=b)
+        return vanilla - partial_time_start_barrier_call(
+            S, K, H, t1, T2, r, sigma, Barrier.DOWN_OUT, b=b)
+    if barrier is not Barrier.DOWN_OUT:
+        raise ValueError("only down-out / down-in are supported")
+
+    v = sigma
+    v2 = v * v
+    mu = (b - 0.5 * v2) / v2
+    st1, sT2 = math.sqrt(t1), math.sqrt(T2)
+    rho = math.sqrt(t1 / T2)
+    d1 = (math.log(S / K) + (b + 0.5 * v2) * T2) / (v * sT2)
+    d2 = d1 - v * sT2
+    f1 = (math.log(S / K) + 2.0 * math.log(H / S) + (b + 0.5 * v2) * T2) / (v * sT2)
+    f2 = f1 - v * sT2
+    e1 = (math.log(S / H) + (b + 0.5 * v2) * t1) / (v * st1)
+    e2 = e1 - v * st1
+    e3 = e1 + 2.0 * math.log(H / S) / (v * st1)
+    e4 = e3 - v * st1
+    carry = math.exp((b - r) * T2)
+    disc = math.exp(-r * T2)
+    hs_p = (H / S) ** (2.0 * (mu + 1.0))
+    hs_m = (H / S) ** (2.0 * mu)
+    return (S * carry * (_bivariate_normal(d1, e1, rho)
+                         - hs_p * _bivariate_normal(f1, e3, rho))
+            - K * disc * (_bivariate_normal(d2, e2, rho)
+                          - hs_m * _bivariate_normal(f2, e4, rho)))
+
+
 def partial_time_end_barrier_call(S, K, H, t1, T2, r, sigma,
                                   barrier=Barrier.DOWN_OUT, b=None) -> float:
     """Partial-time (end) single-barrier call (Heynen-Kat 1994), closed form.
