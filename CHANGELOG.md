@@ -4,6 +4,26 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.308.0] - 2026-09-11
+
+### Added
+- `baw_critical_spot` (in `baw.py`): the Barone-Adesi-Whaley early-exercise
+  boundary `S*` at inception — a call is exercised for `S >= S*`, a put for
+  `S <= S*`. Returns `None` when early exercise is never optimal (an American
+  call with `b >= r`).
+- `baw_american_greeks` (in `baw.py`): delta, gamma, vega, theta of the BAW
+  American price by finite difference.
+
+### Changed
+- Refactored the BAW critical-spot Newton solves into reusable `_critical_call`
+  and `_critical_put` helpers shared by the pricer and the new boundary
+  function (prices unchanged).
+- Verified: the call boundary lies above the strike and the put boundary below;
+  the American price equals the exercise intrinsic exactly at `S*`; greeks match
+  central finite differences for calls and puts across several spots; the put
+  delta lies in `(-1, 0)` with positive gamma; the BAW value dominates the
+  European price.
+
 ## [1.307.0] - 2026-09-11
 
 ### Added

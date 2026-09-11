@@ -292,7 +292,7 @@ from .american import (
 from .kim import (
     kim_american_put, kim_american_call, kim_exercise_boundary, kim_put_greeks,
 )
-from .baw import baw_american
+from .baw import baw_american, baw_critical_spot, baw_american_greeks
 from .andreasenhuge import (
     andreasen_huge_prices, andreasen_huge_smile, andreasen_huge_calibrate,
     andreasen_huge_strike_greeks,
@@ -327,7 +327,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.307.0"
+__version__ = "1.308.0"
 
 __all__ = [
     "OptionType",
@@ -839,6 +839,8 @@ __all__ = [
     "kim_exercise_boundary",
     "kim_put_greeks",
     "baw_american",
+    "baw_critical_spot",
+    "baw_american_greeks",
     "andreasen_huge_prices",
     "andreasen_huge_smile",
     "andreasen_huge_calibrate",

@@ -32,7 +32,16 @@ def _baw_call(S, K, t, r, sigma, b):
     K_fac = 1.0 - math.exp(-r * t)
     q2 = (-(N - 1.0) + math.sqrt((N - 1.0) ** 2 + 4.0 * M / K_fac)) / 2.0
 
-    # Solve for the critical spot S* by Newton on the value-matching equation.
+    Sx = _critical_call(S, K, t, r, sigma, b, q2)
+    if S >= Sx:
+        return S - K
+    d1 = _d1(Sx, K, t, r, b, sigma)
+    A2 = (Sx / q2) * (1.0 - math.exp((b - r) * t) * norm_cdf(d1))
+    return call_price(S, K, t, r, sigma, b=b) + A2 * (S / Sx) ** q2
+
+
+def _critical_call(S, K, t, r, sigma, b, q2):
+    """Newton solve for the American-call critical spot S* (value matching)."""
     Sx = _seed_critical_call(S, K, t, r, sigma, b)
     for _ in range(100):
         d1 = _d1(Sx, K, t, r, b, sigma)
@@ -40,7 +49,6 @@ def _baw_call(S, K, t, r, sigma, b):
         carry = math.exp((b - r) * t)
         lhs = eur + (1.0 - carry * norm_cdf(d1)) * Sx / q2
         rhs = Sx - K
-        # Derivative of (lhs - rhs) w.r.t. Sx.
         bi = (carry * norm_cdf(d1) * (1.0 - 1.0 / q2)
               + (1.0 - carry * norm_pdf(d1) / (sigma * math.sqrt(t))) / q2)
         f = lhs - rhs
@@ -49,12 +57,7 @@ def _baw_call(S, K, t, r, sigma, b):
         Sx -= f / (bi - 1.0)
         if Sx <= 0:
             Sx = 1e-6 * K
-
-    if S >= Sx:
-        return S - K
-    d1 = _d1(Sx, K, t, r, b, sigma)
-    A2 = (Sx / q2) * (1.0 - math.exp((b - r) * t) * norm_cdf(d1))
-    return call_price(S, K, t, r, sigma, b=b) + A2 * (S / Sx) ** q2
+    return Sx
 
 
 def _seed_critical_call(S, K, t, r, sigma, b):
@@ -74,6 +77,16 @@ def _baw_put(S, K, t, r, sigma, b):
     K_fac = 1.0 - math.exp(-r * t)
     q1 = (-(N - 1.0) - math.sqrt((N - 1.0) ** 2 + 4.0 * M / K_fac)) / 2.0
 
+    Sx = _critical_put(S, K, t, r, sigma, b, q1)
+    if S <= Sx:
+        return K - S
+    d1 = _d1(Sx, K, t, r, b, sigma)
+    A1 = -(Sx / q1) * (1.0 - math.exp((b - r) * t) * norm_cdf(-d1))
+    return put_price(S, K, t, r, sigma, b=b) + A1 * (S / Sx) ** q1
+
+
+def _critical_put(S, K, t, r, sigma, b, q1):
+    """Newton solve for the American-put critical spot S* (value matching)."""
     Sx = _seed_critical_put(S, K, t, r, sigma, b)
     for _ in range(100):
         d1 = _d1(Sx, K, t, r, b, sigma)
@@ -89,12 +102,7 @@ def _baw_put(S, K, t, r, sigma, b):
         Sx -= f / (bi + 1.0)
         if Sx <= 0:
             Sx = 1e-6 * K
-
-    if S <= Sx:
-        return K - S
-    d1 = _d1(Sx, K, t, r, b, sigma)
-    A1 = -(Sx / q1) * (1.0 - math.exp((b - r) * t) * norm_cdf(-d1))
-    return put_price(S, K, t, r, sigma, b=b) + A1 * (S / Sx) ** q1
+    return Sx
 
 
 def _seed_critical_put(S, K, t, r, sigma, b):
@@ -123,3 +131,55 @@ def baw_american(S, K, t, r, sigma, option_type=OptionType.CALL, b=None) -> floa
     if ot is OptionType.CALL:
         return _baw_call(S, K, t, r, sigma, b)
     return _baw_put(S, K, t, r, sigma, b)
+
+
+def baw_critical_spot(K, t, r, sigma, option_type=OptionType.CALL, b=None):
+    """Barone-Adesi-Whaley early-exercise boundary S* at inception.
+
+    The spot at which immediate exercise becomes optimal: a call is exercised
+    for ``S >= S*`` and a put for ``S <= S*``. Returns ``None`` when early
+    exercise is never optimal (an American call with ``b >= r`` equals its
+    European value, so there is no finite boundary).
+    """
+    ot = _coerce_type(option_type)
+    _validate(1.0, K, t, sigma)
+    if b is None:
+        b = r
+    v2 = sigma * sigma
+    M = 2.0 * r / v2
+    N = 2.0 * b / v2
+    K_fac = 1.0 - math.exp(-r * t)
+    if ot is OptionType.CALL:
+        if b >= r:
+            return None  # never exercise a no-dividend American call early
+        q2 = (-(N - 1.0) + math.sqrt((N - 1.0) ** 2 + 4.0 * M / K_fac)) / 2.0
+        return _critical_call(K, K, t, r, sigma, b, q2)
+    q1 = (-(N - 1.0) - math.sqrt((N - 1.0) ** 2 + 4.0 * M / K_fac)) / 2.0
+    return _critical_put(K, K, t, r, sigma, b, q1)
+
+
+def baw_american_greeks(S, K, t, r, sigma, option_type=OptionType.CALL, b=None):
+    """Greeks of a BAW American option by central finite differences of
+    :func:`baw_american`: ``delta`` (dV/dS), ``gamma`` (d2V/dS2), ``vega``
+    (dV/dsigma), ``theta`` (calendar decay). Returns a dict with ``price`` and
+    those fields.
+    """
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if b is None:
+        b = r
+
+    def px(S_=S, t_=t, sigma_=sigma):
+        return baw_american(S_, K, t_, r, sigma_, ot, b=b)
+
+    base = px()
+    hS = 1e-4 * S
+    up, dn = px(S_=S + hS), px(S_=S - hS)
+    delta = (up - dn) / (2.0 * hS)
+    gamma = (up - 2.0 * base + dn) / (hS * hS)
+    hv = 1e-4
+    vega = (px(sigma_=sigma + hv) - px(sigma_=sigma - hv)) / (2.0 * hv)
+    ht = min(1e-4, 0.25 * t)
+    theta = -(px(t_=t + ht) - px(t_=t - ht)) / (2.0 * ht)
+    return {"price": base, "delta": delta, "gamma": gamma, "vega": vega,
+            "theta": theta}

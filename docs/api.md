@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.307.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.308.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -241,6 +241,22 @@ Auto-generated from `quantforge` v1.307.0 by `docs/gen_api.py` — do not edit b
 > ``b`` is the cost of carry (defaults to ``r``); dividend yield ``q`` enters
 > as ``b = r - q``. A no-dividend American call (``b = r``) returns the
 > European value. Falls back to intrinsic below/above the critical spot.
+
+### `baw_american_greeks(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> Greeks of a BAW American option by central finite differences of
+> :func:`baw_american`: ``delta`` (dV/dS), ``gamma`` (d2V/dS2), ``vega``
+> (dV/dsigma), ``theta`` (calendar decay). Returns a dict with ``price`` and
+> those fields.
+
+### `baw_critical_spot(K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> Barone-Adesi-Whaley early-exercise boundary S* at inception.
+>
+> The spot at which immediate exercise becomes optimal: a call is exercised
+> for ``S >= S*`` and a put for ``S <= S*``. Returns ``None`` when early
+> exercise is never optimal (an American call with ``b >= r`` equals its
+> European value, so there is no finite boundary).
 
 ## bermudan_swaption
 
