@@ -243,6 +243,7 @@ from .perfmetrics import (
     omega_ratio, tail_ratio, tracking_error, information_ratio,
     up_capture, down_capture, downside_beta,
     sample_skewness, sample_kurtosis, jarque_bera, cornish_fisher_var,
+    historical_var as historical_var_series, historical_cvar,
 )
 from .cev import cev_price, cev_greeks, cev_smile, noncentral_chisq_cdf
 from .portopt import (
@@ -379,7 +380,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.362.0"
+__version__ = "1.363.0"
 
 __all__ = [
     "OptionType",
@@ -778,6 +779,8 @@ __all__ = [
     "sample_kurtosis",
     "jarque_bera",
     "cornish_fisher_var",
+    "historical_var_series",
+    "historical_cvar",
     "min_variance_weights",
     "max_sharpe_weights",
     "risk_parity_weights",

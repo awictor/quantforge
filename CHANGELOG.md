@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.363.0] - 2026-09-11
+
+### Added
+- `historical_var_series` and `historical_cvar` (in `perfmetrics.py`): empirical
+  Value-at-Risk and conditional VaR (expected shortfall) from a raw return
+  series -- the `1 - confidence` order-statistic quantile (negated to a loss)
+  and the mean of the returns at or below it. Distribution-free, distinct from
+  the option-book `historical_var` in `risk`; exported as `historical_var_series`
+  to avoid the name clash.
+- Verified: both are positive losses; CVaR is at least the VaR; both rise with
+  confidence; the fraction of returns below the 95% VaR is ~5%; too-short series
+  raise.
+
 ## [1.362.0] - 2026-09-11
 
 ### Added

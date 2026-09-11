@@ -316,6 +316,38 @@ def _norm_ppf(p):
            (((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1)
 
 
+def historical_var(returns, confidence=0.95) -> float:
+    """Empirical (historical) Value-at-Risk, as a positive loss.
+
+    The ``(1 - confidence)`` percentile of the return distribution, negated to a
+    loss. Uses linear-interpolated order statistics -- no distributional
+    assumption. A confidence of 0.95 reports the loss the returns exceed 5% of
+    the time.
+    """
+    if len(returns) < 2:
+        raise ValueError("need at least two returns")
+    q = _percentile(sorted(returns), (1.0 - confidence) * 100.0)
+    return -q
+
+
+def historical_cvar(returns, confidence=0.95) -> float:
+    """Empirical conditional VaR (expected shortfall), as a positive loss.
+
+    The average of the returns at or below the historical-VaR threshold, negated
+    -- the mean loss in the worst ``1 - confidence`` of periods. Always at least
+    the historical VaR. Falls back to the single worst return when the tail
+    holds one observation.
+    """
+    if len(returns) < 2:
+        raise ValueError("need at least two returns")
+    s = sorted(returns)
+    threshold = _percentile(s, (1.0 - confidence) * 100.0)
+    tail = [x for x in s if x <= threshold]
+    if not tail:
+        tail = [s[0]]
+    return -sum(tail) / len(tail)
+
+
 def cornish_fisher_var(returns, confidence=0.95, horizon=1.0) -> float:
     """Cornish-Fisher (skew/kurtosis-adjusted) Value-at-Risk, as a positive loss.
 

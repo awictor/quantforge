@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.362.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.363.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -4265,6 +4265,24 @@ Auto-generated from `quantforge` v1.362.0 by `docs/gen_api.py` — do not edit b
 > Compounds the returns into an equity curve and returns, for each period, the
 > non-negative drawdown ``(peak - equity)/peak`` at that point (0 at a new
 > high). The maximum of this curve is :func:`max_drawdown`.
+
+### `historical_cvar(returns, confidence=0.95) -> float`  _function_
+
+> Empirical conditional VaR (expected shortfall), as a positive loss.
+>
+> The average of the returns at or below the historical-VaR threshold, negated
+> -- the mean loss in the worst ``1 - confidence`` of periods. Always at least
+> the historical VaR. Falls back to the single worst return when the tail
+> holds one observation.
+
+### `historical_var_series(returns, confidence=0.95) -> float`  _function_
+
+> Empirical (historical) Value-at-Risk, as a positive loss.
+>
+> The ``(1 - confidence)`` percentile of the return distribution, negated to a
+> loss. Uses linear-interpolated order statistics -- no distributional
+> assumption. A confidence of 0.95 reports the loss the returns exceed 5% of
+> the time.
 
 ### `hit_rate(returns: Sequence[float]) -> float`  _function_
 
