@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.383.0] - 2026-09-11
+
+### Added
+- `commodity.py`: cost-of-carry forward pricing for storable commodities.
+  `commodity_forward` prices `S exp((r + u - y) T)` with storage cost `u` and
+  convenience yield `y`; `implied_convenience_yield` and `implied_storage_cost`
+  invert a market forward for each; `net_cost_of_carry`, `commodity_forward_curve`
+  and `is_backwardation` give the net carry rate, the forward curve, and the
+  contango/backwardation classification. Cross-checked against the carry parity,
+  round-trip inversion, and curve monotonicity.
+
 ## [1.382.0] - 2026-09-11
 
 ### Added

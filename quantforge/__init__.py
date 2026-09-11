@@ -217,6 +217,10 @@ from .inflation import (
     yoy_caplet_price_normal, yoy_caplet_implied_normal_vol,
     real_zero_curve, nominal_zero_curve, real_discount_factor,
 )
+from .commodity import (
+    commodity_forward, implied_convenience_yield, implied_storage_cost,
+    net_cost_of_carry, commodity_forward_curve, is_backwardation,
+)
 from .bondmath import (
     bond_cashflows, dated_bond_cashflows, dated_bond_price, dated_bond_yield,
     dated_accrued_interest, dated_clean_price,
@@ -401,7 +405,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.382.0"
+__version__ = "1.383.0"
 
 __all__ = [
     "OptionType",
@@ -751,6 +755,12 @@ __all__ = [
     "real_zero_curve",
     "nominal_zero_curve",
     "real_discount_factor",
+    "commodity_forward",
+    "implied_convenience_yield",
+    "implied_storage_cost",
+    "net_cost_of_carry",
+    "commodity_forward_curve",
+    "is_backwardation",
     "bond_price_from_yield",
     "macaulay_duration",
     "modified_duration",

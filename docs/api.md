@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.382.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.383.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1064,6 +1064,47 @@ Auto-generated from `quantforge` v1.382.0 by `docs/gen_api.py` — do not edit b
 > with payer swaptions for ``K >= S0`` and receiver swaptions for ``K < S0``,
 > each priced at the smile vol ``vol_fn(K)``. This captures the whole smile,
 > and with a flat ``vol_fn`` it reproduces :func:`cms_adjustment_standard`.
+
+## commodity
+
+### `commodity_forward(spot, r, maturity, storage_cost=0.0, convenience_yield=0.0)`  _function_
+
+> Cost-of-carry forward ``S * exp((r + u - y) * T)``.
+>
+> ``storage_cost`` (u) and ``convenience_yield`` (y) are continuous proportional
+> rates. Storage lifts the forward (a cost of carrying the physical), the
+> convenience yield lowers it (a benefit of holding it).
+
+### `commodity_forward_curve(spot, r, maturities, storage_cost=0.0, convenience_yield=0.0)`  _function_
+
+> Forward prices across a list of maturities under one carry rate.
+>
+> Returns ``[(T, F(T)), ...]`` from :func:`commodity_forward` at each maturity.
+
+### `implied_convenience_yield(spot, forward, r, maturity, storage_cost=0.0)`  _function_
+
+> Convenience yield implied by a market forward (inverts the carry formula).
+>
+> Solves ``F = S exp((r + u - y) T)`` for ``y``:
+> ``y = r + u - ln(F/S)/T``. Inverse of :func:`commodity_forward`.
+
+### `implied_storage_cost(spot, forward, r, maturity, convenience_yield=0.0)`  _function_
+
+> Storage cost implied by a market forward (inverts the carry formula).
+>
+> ``u = ln(F/S)/T - r + y``. Inverse of :func:`commodity_forward` in ``u``.
+
+### `is_backwardation(r, storage_cost=0.0, convenience_yield=0.0)`  _function_
+
+> True when the curve is in backwardation (``y > r + u``, forwards below spot).
+>
+> Backwardation occurs when the convenience yield exceeds the financing-plus-
+> storage carry, so the net carry :func:`net_cost_of_carry` is negative and
+> forwards fall with maturity.
+
+### `net_cost_of_carry(r, storage_cost=0.0, convenience_yield=0.0)`  _function_
+
+> Net proportional carry rate ``r + u - y`` (the forward's growth rate).
 
 ## compound
 
