@@ -31,6 +31,17 @@ def test_total_delta_differs_from_black_delta():
     assert abs(g["delta"] - g["black_delta"]) > 1e-4
 
 
+def test_total_gamma_matches_finite_difference():
+    # Total gamma reprices the SABR surface at each bumped forward.
+    g = sabr_option_greeks(F, K, T, ALPHA, BETA, RHO, NU, OptionType.CALL)
+    h = 0.05
+    fd = (_sabr_price(F + h, OptionType.CALL)
+          - 2 * _sabr_price(F, OptionType.CALL)
+          + _sabr_price(F - h, OptionType.CALL)) / (h * h)
+    assert g["gamma"] == pytest.approx(fd, abs=1e-4)
+    assert g["gamma"] > 0.0
+
+
 def test_vega_positive():
     g = sabr_option_greeks(F, K, T, ALPHA, BETA, RHO, NU, OptionType.CALL)
     assert g["vega"] > 0.0

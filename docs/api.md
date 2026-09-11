@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.250.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.251.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3445,8 +3445,10 @@ Auto-generated from `quantforge` v1.250.0 by `docs/gen_api.py` — do not edit b
 > :func:`sabr_sensitivities`. This differs from the pure Black delta because
 > moving the forward also moves the SABR vol. Returns a dict with ``price``,
 > ``vol``, ``delta`` (total, backbone-adjusted), ``black_delta`` (vol held
-> fixed), and ``vega`` (dPrice/dsigma). Prices/greeks are on the *forward*
-> (carry ``b = 0``); pass ``discount`` = P(0,T) to scale to present value.
+> fixed), ``vega`` (dPrice/dsigma), and ``gamma`` (total d2Price/dF2, including
+> the backbone curvature, by a central difference of the SABR-repriced
+> surface). Prices/greeks are on the *forward* (carry ``b = 0``); pass
+> ``discount`` = P(0,T) to scale to present value.
 
 ### `sabr_repair_butterfly(F, t, params, r=0.0, strikes=None, max_iter=200, factor=0.95)`  _function_
 

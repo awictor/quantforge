@@ -188,8 +188,10 @@ def sabr_option_greeks(F, K, t, alpha, beta, rho, nu,
     :func:`sabr_sensitivities`. This differs from the pure Black delta because
     moving the forward also moves the SABR vol. Returns a dict with ``price``,
     ``vol``, ``delta`` (total, backbone-adjusted), ``black_delta`` (vol held
-    fixed), and ``vega`` (dPrice/dsigma). Prices/greeks are on the *forward*
-    (carry ``b = 0``); pass ``discount`` = P(0,T) to scale to present value.
+    fixed), ``vega`` (dPrice/dsigma), and ``gamma`` (total d2Price/dF2, including
+    the backbone curvature, by a central difference of the SABR-repriced
+    surface). Prices/greeks are on the *forward* (carry ``b = 0``); pass
+    ``discount`` = P(0,T) to scale to present value.
     """
     ot = _coerce_type(option_type)
     sens = sabr_sensitivities(F, K, t, alpha, beta, rho, nu)
@@ -199,8 +201,19 @@ def sabr_option_greeks(F, K, t, alpha, beta, rho, nu,
     black_delta = discount * bsm_delta(F, K, t, 0.0, vol, ot, b=0.0)
     vega = discount * bsm_vega(F, K, t, 0.0, vol, b=0.0)
     delta = black_delta + vega * dvol_dF
+
+    # Total gamma: reprice at F +/- h with the SABR vol recomputed each time, so
+    # the second difference captures the smile backbone's curvature too.
+    hF = 1e-3 * F
+
+    def _sabr_price(f):
+        return discount * bsm_price(f, K, t, 0.0,
+                                    sabr_vol(f, K, t, alpha, beta, rho, nu),
+                                    ot, b=0.0)
+
+    gamma = (_sabr_price(F + hF) - 2.0 * price + _sabr_price(F - hF)) / (hF * hF)
     return {"price": price, "vol": vol, "delta": delta,
-            "black_delta": black_delta, "vega": vega}
+            "black_delta": black_delta, "vega": vega, "gamma": gamma}
 
 
 def sabr_jacobian(F, t, strikes: Sequence[float], alpha, beta, rho, nu):

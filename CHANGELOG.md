@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.251.0] - 2026-09-10
+
+### Added
+- `sabr_option_greeks` now also returns the total `gamma` (`d2Price/dF2`),
+  computed by a central difference of the SABR-repriced surface so it captures
+  the smile backbone's curvature -- not just the vol-fixed Black gamma.
+- Verified: the total gamma matches a finite difference that recomputes the SABR
+  vol at each bumped forward, and is positive.
+
 ## [1.250.0] - 2026-09-10
 
 ### Added
