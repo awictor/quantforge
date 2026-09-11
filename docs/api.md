@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.295.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.296.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1476,6 +1476,24 @@ Auto-generated from `quantforge` v1.295.0 by `docs/gen_api.py` — do not edit b
 >
 >     price = cash e^{-rt} (N(d2(K_low)) - N(d2(K_high))).
 
+### `range_binary_greeks(S, K_low, K_high, t, r, sigma, b=None, cash=1.0)`  _function_
+
+> Greeks of a range binary (double digital).
+>
+> ``delta`` and ``gamma`` are analytic. With ``d2(K)`` the digital exponent
+> and ``e^{-rt}`` the discount, the corridor value is
+> ``cash e^{-rt} (N(d2_lo) - N(d2_hi))``, so differentiating in spot,
+>
+>     delta = cash e^{-rt} (phi(d2_lo) - phi(d2_hi)) / (S sigma sqrt(t))
+>     gamma = -cash e^{-rt} / (S^2 sigma sqrt(t))
+>             * ((phi(d2_lo) d2_lo - phi(d2_hi) d2_hi) / (sigma sqrt(t))
+>                + phi(d2_lo) - phi(d2_hi)).
+>
+> ``vega`` and ``theta`` (calendar decay) are central finite differences of
+> :func:`range_binary`. Returns a dict with ``price`` and those fields. The
+> delta changes sign across the middle of the corridor and gamma is large near
+> either edge as expiry approaches (double-sided pin risk).
+
 ### `seasoned_arithmetic_asian(S, K, t, r, sigma, observed_prices, n_total, remaining_fixing_times=None, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
 
 > Seasoned (in-progress) discrete arithmetic-average Asian (Levy match).
@@ -1547,6 +1565,13 @@ Auto-generated from `quantforge` v1.295.0 by `docs/gen_api.py` — do not edit b
 > carry ``e^{(b-r)t}``,
 >
 >     price = (S/K_low) e^{(b-r)t} (N(d1(K_low)) - N(d1(K_high))).
+
+### `supershare_greeks(S, K_low, K_high, t, r, sigma, b=None)`  _function_
+
+> Greeks of a supershare option by central finite differences of
+> :func:`supershare`: ``delta`` (dV/dS), ``gamma`` (d2V/dS2), ``vega``
+> (dV/dsigma), ``theta`` (calendar decay). Returns a dict with ``price`` and
+> those fields.
 
 ## forward
 

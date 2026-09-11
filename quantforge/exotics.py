@@ -15,7 +15,7 @@ Cross-checks enforced by the test suite:
 import math
 from enum import Enum
 
-from .mathfns import norm_cdf
+from .mathfns import norm_cdf, norm_pdf
 from .bsm import (
     OptionType, _coerce_type, _validate, price as bsm_price,
     delta as bsm_delta, gamma as bsm_gamma, vega as bsm_vega,
@@ -113,6 +113,79 @@ def supershare(S, K_low, K_high, t, r, sigma, b=None):
     d1_lo = (math.log(S / K_low) + (b + 0.5 * sigma * sigma) * t) / vsqrt
     d1_hi = (math.log(S / K_high) + (b + 0.5 * sigma * sigma) * t) / vsqrt
     return (S / K_low) * carry * (norm_cdf(d1_lo) - norm_cdf(d1_hi))
+
+
+def range_binary_greeks(S, K_low, K_high, t, r, sigma, b=None, cash=1.0):
+    """Greeks of a range binary (double digital).
+
+    ``delta`` and ``gamma`` are analytic. With ``d2(K)`` the digital exponent
+    and ``e^{-rt}`` the discount, the corridor value is
+    ``cash e^{-rt} (N(d2_lo) - N(d2_hi))``, so differentiating in spot,
+
+        delta = cash e^{-rt} (phi(d2_lo) - phi(d2_hi)) / (S sigma sqrt(t))
+        gamma = -cash e^{-rt} / (S^2 sigma sqrt(t))
+                * ((phi(d2_lo) d2_lo - phi(d2_hi) d2_hi) / (sigma sqrt(t))
+                   + phi(d2_lo) - phi(d2_hi)).
+
+    ``vega`` and ``theta`` (calendar decay) are central finite differences of
+    :func:`range_binary`. Returns a dict with ``price`` and those fields. The
+    delta changes sign across the middle of the corridor and gamma is large near
+    either edge as expiry approaches (double-sided pin risk).
+    """
+    _validate(S, K_low, t, sigma)
+    if K_high <= K_low:
+        raise ValueError("K_high must exceed K_low")
+    if b is None:
+        b = r
+    disc = math.exp(-r * t)
+    vsqrt = sigma * math.sqrt(t)
+    d2_lo = (math.log(S / K_low) + (b - 0.5 * sigma * sigma) * t) / vsqrt
+    d2_hi = (math.log(S / K_high) + (b - 0.5 * sigma * sigma) * t) / vsqrt
+    plo, phi = norm_pdf(d2_lo), norm_pdf(d2_hi)
+    price = cash * disc * (norm_cdf(d2_lo) - norm_cdf(d2_hi))
+    delta = cash * disc * (plo - phi) / (S * vsqrt)
+    # d(phi(d2)/(S vsqrt))/dS with d(d2)/dS = 1/(S vsqrt):
+    #   d/dS [phi(d2)] = -d2 phi(d2)/(S vsqrt); plus the 1/S from the prefactor.
+    gamma = -cash * disc / (S * S * vsqrt) * (
+        (plo * d2_lo - phi * d2_hi) / vsqrt + plo - phi)
+
+    def px(sigma_=sigma, t_=t):
+        return range_binary(S, K_low, K_high, t_, r, sigma_, b=b, cash=cash)
+
+    hv = 1e-4
+    vega = (px(sigma_=sigma + hv) - px(sigma_=sigma - hv)) / (2.0 * hv)
+    ht = min(1e-4, 0.25 * t)
+    theta = -(px(t_=t + ht) - px(t_=t - ht)) / (2.0 * ht)
+    return {"price": price, "delta": delta, "gamma": gamma, "vega": vega,
+            "theta": theta}
+
+
+def supershare_greeks(S, K_low, K_high, t, r, sigma, b=None):
+    """Greeks of a supershare option by central finite differences of
+    :func:`supershare`: ``delta`` (dV/dS), ``gamma`` (d2V/dS2), ``vega``
+    (dV/dsigma), ``theta`` (calendar decay). Returns a dict with ``price`` and
+    those fields.
+    """
+    _validate(S, K_low, t, sigma)
+    if K_high <= K_low:
+        raise ValueError("K_high must exceed K_low")
+    if b is None:
+        b = r
+
+    def px(S_=S, sigma_=sigma, t_=t):
+        return supershare(S_, K_low, K_high, t_, r, sigma_, b=b)
+
+    base = px()
+    hS = 1e-4 * S
+    up, dn = px(S_=S + hS), px(S_=S - hS)
+    delta = (up - dn) / (2.0 * hS)
+    gamma = (up - 2.0 * base + dn) / (hS * hS)
+    hv = 1e-4
+    vega = (px(sigma_=sigma + hv) - px(sigma_=sigma - hv)) / (2.0 * hv)
+    ht = min(1e-4, 0.25 * t)
+    theta = -(px(t_=t + ht) - px(t_=t - ht)) / (2.0 * ht)
+    return {"price": base, "delta": delta, "gamma": gamma, "vega": vega,
+            "theta": theta}
 
 
 # --------------------------------------------------------------------------

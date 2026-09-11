@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.296.0] - 2026-09-11
+
+### Added
+- `range_binary_greeks` (in `exotics.py`): analytic `delta` and `gamma` for the
+  range binary plus finite-difference `vega`/`theta`. Delta is
+  `cash e^{-rt} (phi(d2_lo) - phi(d2_hi))/(S sigma sqrt t)`; gamma carries the
+  double-sided pin risk near either corridor edge.
+- `supershare_greeks` (in `exotics.py`): finite-difference `delta`, `gamma`,
+  `vega`, `theta` for the supershare option.
+- Verified: analytic range-binary delta and gamma match central finite
+  differences across three strike/vol/maturity cases; both `price` fields match
+  their pricers; a forward-centered corridor has positive calendar theta (the
+  terminal mass concentrates inside as expiry nears).
+
 ## [1.295.0] - 2026-09-11
 
 ### Added
