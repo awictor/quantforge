@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.266.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.267.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2805,6 +2805,14 @@ Auto-generated from `quantforge` v1.266.0 by `docs/gen_api.py` — do not edit b
 > where each ``d`` uses the blended spread vol
 > ``sigma = sqrt(sigma1^2 - 2 b rho sigma1 sigma2 + b^2 sigma2^2)``. Puts follow
 > from parity on the spread ``S1 - S2``.
+
+### `spread_option_bs_greeks(S1, S2, K, t, r, sigma1, sigma2, rho, q1=0.0, q2=0.0, option_type=<OptionType.CALL: 'call'>)`  _function_
+
+> Greeks of a Bjerksund-Stensland (2014) spread option by FD.
+>
+> Same layout as :func:`spread_greeks` (two spot deltas, own-gammas, cross-gamma
+> ``d2V/dS1 dS2``, and ``corr_vega``) but differentiates
+> :func:`spread_option_bs` instead of the Kirk approximation.
 
 ### `two_asset_asset_or_nothing(S1, S2, K1, K2, t, r, sigma1, sigma2, rho, cond1='above', cond2='above', q1=0.0, q2=0.0)`  _function_
 

@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.267.0] - 2026-09-10
+
+### Added
+- `spread_option_bs_greeks` (in `multiasset.py`): finite-difference Greeks of the
+  Bjerksund-Stensland (2014) spread option — two spot deltas, own-gammas,
+  cross-gamma `d2V/dS1 dS2`, and `corr_vega` — matching the `spread_greeks`
+  layout.
+- Verified: delta1 > 0, delta2 < 0, positive gammas, negative cross-gamma and
+  correlation sensitivity; delta1 matches an independent bump; call-minus-put
+  deltas are `(+1, -1)`; the cross-gamma tracks `-sqrt(gamma1 gamma2)`; gammas
+  are identical for call and put.
+
 ## [1.266.0] - 2026-09-10
 
 ### Added
