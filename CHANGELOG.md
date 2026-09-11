@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.274.0] - 2026-09-10
+
+### Added (tests)
+- Cross-model surface density parity: an SSVI surface calibrated to SABR smiles
+  at two expiries reproduces the SABR Breeden-Litzenberger risk-neutral density
+  to ~4% at the money and ~6% in the wings at a fitted expiry; the fitted surface
+  is arbitrage-free and both densities integrate to one. Complements the
+  single-slice SVI/SABR parity check.
+
 ## [1.273.0] - 2026-09-10
 
 ### Added
