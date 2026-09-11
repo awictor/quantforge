@@ -1421,12 +1421,21 @@ def gap_option(S, K_trigger, K_payoff, t, r, sigma, option_type=OptionType.CALL,
 
 def gap_option_greeks(S, K_trigger, K_payoff, t, r, sigma,
                       option_type=OptionType.CALL, b=None):
-    """Greeks of a gap option (Reiner-Rubinstein) by central finite differences.
+    """Greeks of a gap option (Reiner-Rubinstein).
 
-    Differentiates :func:`gap_option` for ``delta`` (dV/dS), ``gamma``
-    (d2V/dS2), ``vega`` (dV/dsigma), and ``theta`` (calendar decay). Setting
-    ``K_trigger = K_payoff`` recovers the vanilla Greeks. Returns a dict with
-    ``price`` and those fields.
+    ``delta`` and ``gamma`` are analytic; ``vega`` and ``theta`` (calendar
+    decay) are central finite differences. A gap option is an asset-or-nothing
+    minus ``K_payoff`` cash-or-nothings, both triggered at ``K_trigger``, so
+    with ``d1, d2`` at the trigger and the identity
+    ``S carry phi(d1) = K_trigger disc phi(d2)`` the spot sensitivities collapse
+    to (call)
+
+        delta = carry N(d1) + disc (K_trigger - K_payoff) phi(d2)/(S sigma sqrt t)
+        gamma = carry phi(d1)/(S sigma sqrt t)
+                - disc (K_trigger - K_payoff) phi(d2) (d2/(sigma sqrt t) + 1)/(S^2 sigma sqrt t).
+
+    Setting ``K_trigger = K_payoff`` recovers the vanilla Black-Scholes delta
+    and gamma. Returns a dict with ``price`` and those fields.
     """
     ot = _coerce_type(option_type)
     _validate(S, K_trigger, t, sigma)
@@ -1439,10 +1448,22 @@ def gap_option_greeks(S, K_trigger, K_payoff, t, r, sigma,
         return gap_option(S_, K_trigger, K_payoff, t_, r, sigma_, ot, b=b)
 
     base = px()
-    hS = 1e-4 * S
-    up, dn = px(S_=S + hS), px(S_=S - hS)
-    delta = (up - dn) / (2.0 * hS)
-    gamma = (up - 2.0 * base + dn) / (hS * hS)
+    carry = math.exp((b - r) * t)
+    disc = math.exp(-r * t)
+    vsqrt = sigma * math.sqrt(t)
+    d1 = (math.log(S / K_trigger) + (b + 0.5 * sigma * sigma) * t) / vsqrt
+    d2 = d1 - vsqrt
+    gap = K_trigger - K_payoff
+    pdf2 = norm_pdf(d2)
+    if ot is OptionType.CALL:
+        delta = carry * norm_cdf(d1) + disc * gap * pdf2 / (S * vsqrt)
+    else:
+        delta = -carry * norm_cdf(-d1) + disc * gap * pdf2 / (S * vsqrt)
+    # gamma is the same for calls and puts (the N(+/-d1) term contributes
+    # carry phi(d1)/(S vsqrt) either way; the cash term's second derivative is
+    # symmetric in the sign convention).
+    gamma = (carry * norm_pdf(d1) / (S * vsqrt)
+             - disc * gap * pdf2 * (d2 / vsqrt + 1.0) / (S * S * vsqrt))
     hv = 1e-4
     vega = (px(sigma_=sigma + hv) - px(sigma_=sigma - hv)) / (2.0 * hv)
     ht = min(1e-4, 0.25 * t)

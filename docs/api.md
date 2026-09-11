@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.296.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.297.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1372,12 +1372,21 @@ Auto-generated from `quantforge` v1.296.0 by `docs/gen_api.py` — do not edit b
 
 ### `gap_option_greeks(S, K_trigger, K_payoff, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
 
-> Greeks of a gap option (Reiner-Rubinstein) by central finite differences.
+> Greeks of a gap option (Reiner-Rubinstein).
 >
-> Differentiates :func:`gap_option` for ``delta`` (dV/dS), ``gamma``
-> (d2V/dS2), ``vega`` (dV/dsigma), and ``theta`` (calendar decay). Setting
-> ``K_trigger = K_payoff`` recovers the vanilla Greeks. Returns a dict with
-> ``price`` and those fields.
+> ``delta`` and ``gamma`` are analytic; ``vega`` and ``theta`` (calendar
+> decay) are central finite differences. A gap option is an asset-or-nothing
+> minus ``K_payoff`` cash-or-nothings, both triggered at ``K_trigger``, so
+> with ``d1, d2`` at the trigger and the identity
+> ``S carry phi(d1) = K_trigger disc phi(d2)`` the spot sensitivities collapse
+> to (call)
+>
+>     delta = carry N(d1) + disc (K_trigger - K_payoff) phi(d2)/(S sigma sqrt t)
+>     gamma = carry phi(d1)/(S sigma sqrt t)
+>             - disc (K_trigger - K_payoff) phi(d2) (d2/(sigma sqrt t) + 1)/(S^2 sigma sqrt t).
+>
+> Setting ``K_trigger = K_payoff`` recovers the vanilla Black-Scholes delta
+> and gamma. Returns a dict with ``price`` and those fields.
 
 ### `geometric_asian(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
 

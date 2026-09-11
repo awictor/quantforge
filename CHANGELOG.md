@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.297.0] - 2026-09-11
+
+### Changed
+- `gap_option_greeks` now computes `delta` and `gamma` analytically instead of
+  by finite difference. Using the identity
+  `S carry phi(d1) = K_trigger disc phi(d2)`, the spot sensitivities collapse to
+  closed forms in `d1, d2` at the trigger, with a cash-driven correction term
+  proportional to the strike gap `K_trigger - K_payoff`. `vega` and `theta`
+  remain finite differences.
+- Verified: analytic delta and gamma match central finite differences across
+  three strike/vol/maturity cases for both calls and puts; gamma is identical
+  for calls and puts; equal trigger/payoff strikes recover the vanilla
+  Black-Scholes delta and gamma.
+
 ## [1.296.0] - 2026-09-11
 
 ### Added
