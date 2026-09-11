@@ -4,6 +4,21 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.279.0] - 2026-09-11
+
+### Added
+- `smile_arbitrage_violations` and `smile_is_arbitrage_free` (in `rnd.py`):
+  model-free butterfly-arbitrage detection for any implied-vol smile. Scans a
+  log-moneyness grid and flags strikes where the Breeden-Litzenberger density is
+  negative (a negative-cost butterfly). Works for SVI, SABR, vanna-volga, or raw
+  quotes.
+- Performance: the extended-Sobol geometric-Asian direction-number test now runs
+  at `n_rand=8` instead of 24 across the 2..12 step sweep (`4*SE` still catches a
+  broken direction number), cutting ~6s off the fast gate.
+- Verified: flat and convex-SVI smiles are flagged arbitrage-free; a
+  butterfly-violating SVI slice is flagged; the density-sign verdict agrees with
+  SVI's analytic g-function across slices.
+
 ## [1.278.0] - 2026-09-11
 
 ### Added

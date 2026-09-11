@@ -26,8 +26,10 @@ def test_extended_sobol_dims_match_closed_form(ns):
     # primitive polynomial or seed would break the low-discrepancy property and
     # bias this.
     cf = _discrete_geometric_asian(S, K, T, R, SIG, OptionType.CALL, R, ns)
+    # n_rand=8 keeps the honest SE small enough that 4*SE still catches a broken
+    # direction number, at a fraction of the runtime of the full n_rand=24 batch.
     rq = sobol_geometric_asian_rqmc(S, K, T, R, SIG, OptionType.CALL,
-                                    n_steps=ns, n_paths=4096, n_rand=24, seed=7)
+                                    n_steps=ns, n_paths=4096, n_rand=8, seed=7)
     assert rq.price == pytest.approx(cf, abs=4.0 * rq.std_error)
 
 

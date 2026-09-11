@@ -36,6 +36,43 @@ def risk_neutral_density_from_smile(S0, t, r, vol_fn, K, q=0.0, dK=None):
     return math.exp(r * t) * d2
 
 
+def smile_arbitrage_violations(S0, t, r, vol_fn, q=0.0, n=400, width=8.0,
+                               tol=1e-9):
+    """Strikes where an implied-vol smile has butterfly (density) arbitrage.
+
+    Scans a log-moneyness grid of ``width`` forward standard deviations and returns
+    the strikes where the Breeden-Litzenberger density
+    (:func:`risk_neutral_density_from_smile`) is negative beyond ``-tol``. A
+    negative density means the call price is locally concave in strike -- a
+    butterfly spread with a negative cost -- so the smile admits static arbitrage
+    there. An empty list means the smile is butterfly-arbitrage-free on the grid.
+    Model-free: works for any ``vol_fn`` (SVI, SABR, vanna-volga, raw quotes).
+    """
+    F = S0 * math.exp((r - q) * t)
+    sd = vol_fn(F) * math.sqrt(t)
+    lo = F * math.exp(-width * sd)
+    hi = F * math.exp(width * sd)
+    dK = (hi - lo) / n
+    bad = []
+    for i in range(n + 1):
+        K = lo + i * dK
+        h = min(max(1e-4 * S0, 0.25 * dK), 0.5 * K)
+        g = risk_neutral_density_from_smile(S0, t, r, vol_fn, K, q=q, dK=h)
+        if g < -tol:
+            bad.append(K)
+    return bad
+
+
+def smile_is_arbitrage_free(S0, t, r, vol_fn, q=0.0, n=400, width=8.0,
+                            tol=1e-9) -> bool:
+    """True if the smile has no butterfly arbitrage on the scanned grid.
+
+    Convenience wrapper: ``not smile_arbitrage_violations(...)``.
+    """
+    return not smile_arbitrage_violations(S0, t, r, vol_fn, q=q, n=n,
+                                          width=width, tol=tol)
+
+
 def risk_neutral_cdf_from_smile(S0, t, r, vol_fn, K, q=0.0, dK=None):
     """Risk-neutral CDF ``F(K) = P(S_T <= K)`` implied by an implied-vol smile.
 
