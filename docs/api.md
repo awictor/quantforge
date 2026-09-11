@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.280.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.281.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3619,6 +3619,33 @@ Auto-generated from `quantforge` v1.280.0 by `docs/gen_api.py` — do not edit b
 > True if the smile has no butterfly arbitrage on the scanned grid.
 >
 > Convenience wrapper: ``not smile_arbitrage_violations(...)``.
+
+### `surface_arbitrage_report(S0, r, expiries, vol_fns, q=0.0, n=200, width=8.0, ks=None, tol=1e-09)`  _function_
+
+> Full static-arbitrage report for a smile *surface* (butterfly + calendar).
+>
+> Combines the two model-free static-arbitrage tests:
+>
+>   * **butterfly** (per slice): the Breeden-Litzenberger density must stay
+>     non-negative at every strike (see :func:`smile_arbitrage_violations`);
+>   * **calendar** (across slices): total implied variance ``sigma^2 t`` must be
+>     non-decreasing in maturity at fixed log-moneyness (see
+>     :func:`calendar_arbitrage_violations`).
+>
+> ``vol_fns`` are smiles in *log-moneyness* ``k = ln(K / F_t)`` (one per expiry,
+> matching ``expiries``), the same convention as
+> :func:`calendar_arbitrage_violations`. Each is wrapped to a strike-based
+> ``vol_fn(K)`` on that expiry's forward for the butterfly scan.
+>
+> Returns a dict ``{"butterfly": {t: [strikes]}, "calendar": [(k, t_lo, t_hi)]}``
+> listing every violation; both empty means the surface is free of static
+> arbitrage on the scanned grid.
+
+### `surface_is_arbitrage_free(S0, r, expiries, vol_fns, q=0.0, n=200, width=8.0, ks=None, tol=1e-09) -> bool`  _function_
+
+> True if a smile surface is free of both butterfly and calendar arbitrage.
+>
+> Convenience wrapper over :func:`surface_arbitrage_report`.
 
 ### `surface_is_calendar_arbitrage_free(expiries, vol_fns, ks=None, tol=1e-09) -> bool`  _function_
 
