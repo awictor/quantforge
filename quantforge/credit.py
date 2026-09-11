@@ -185,6 +185,38 @@ def bootstrap_survival_curve(quote_maturities, quote_spreads, r, recovery=0.4,
     return SurvivalCurve(times, hazards)
 
 
+def cds_greeks(curve: SurvivalCurve, spread, pay_times, r, recovery=0.4,
+               n_steps=400, protection_buyer=True, bump=1e-4):
+    """Risk sensitivities of a CDS mark-to-market by finite difference.
+
+    Returns a dict with:
+
+      * ``value``       -- the mark-to-market :func:`cds_value`;
+      * ``credit01``    -- value change for a 1bp parallel bump of the hazard
+        curve (credit spread risk);
+      * ``ir01``        -- value change for a 1bp parallel bump of the discount
+        rate ``r``;
+      * ``recovery01``  -- value change for a 1-point (0.01) rise in recovery;
+      * ``risky_annuity`` -- the survival-weighted premium annuity.
+
+    A protection buyer gains when spreads widen (``credit01 > 0``) and loses as
+    recovery rises. Bumps are one-sided by ``bump`` (hazard/rate) or 0.01
+    (recovery).
+    """
+    base = cds_value(curve, spread, pay_times, r, recovery, n_steps,
+                     protection_buyer)
+    bumped_curve = SurvivalCurve(curve.times, [h + bump for h in curve.hazards])
+    credit01 = (cds_value(bumped_curve, spread, pay_times, r, recovery, n_steps,
+                          protection_buyer) - base)
+    ir01 = (cds_value(curve, spread, pay_times, r + bump, recovery, n_steps,
+                      protection_buyer) - base)
+    rec01 = (cds_value(curve, spread, pay_times, r, recovery + 0.01, n_steps,
+                       protection_buyer) - base)
+    ann = risky_annuity(curve, pay_times, r)
+    return {"value": base, "credit01": credit01, "ir01": ir01,
+            "recovery01": rec01, "risky_annuity": ann}
+
+
 def cds_value(curve: SurvivalCurve, spread, pay_times, r, recovery=0.4,
               n_steps=400, protection_buyer=True):
     """Mark-to-market value of a CDS at a contractual ``spread``.

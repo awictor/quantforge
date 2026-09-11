@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.332.0] - 2026-09-11
+
+### Added
+- `cds_greeks` (in `credit.py`): finite-difference risk sensitivities of a CDS
+  mark-to-market -- `credit01` (1bp parallel hazard bump), `ir01` (1bp discount
+  rate), `recovery01` (1-point recovery rise), plus the `value` and
+  `risky_annuity`. Respects the protection-buyer/seller sign.
+- Verified: `value` matches `cds_value`; a protection buyer has positive
+  `credit01` (gains on widening) and negative `recovery01`; the seller's
+  sensitivities and value are the negatives of the buyer's; the risky annuity is
+  positive; `credit01` scales roughly linearly with the bump size.
+
 ## [1.331.0] - 2026-09-11
 
 ### Added

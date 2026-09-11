@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.331.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.332.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1008,6 +1008,24 @@ Auto-generated from `quantforge` v1.331.0 by `docs/gen_api.py` — do not edit b
 > pay ``freq`` times a year; the protection-leg grid uses
 > ``n_steps_per_year`` points per year. Returns the calibrated
 > :class:`SurvivalCurve`.
+
+### `cds_greeks(curve: quantforge.credit.SurvivalCurve, spread, pay_times, r, recovery=0.4, n_steps=400, protection_buyer=True, bump=0.0001)`  _function_
+
+> Risk sensitivities of a CDS mark-to-market by finite difference.
+>
+> Returns a dict with:
+>
+>   * ``value``       -- the mark-to-market :func:`cds_value`;
+>   * ``credit01``    -- value change for a 1bp parallel bump of the hazard
+>     curve (credit spread risk);
+>   * ``ir01``        -- value change for a 1bp parallel bump of the discount
+>     rate ``r``;
+>   * ``recovery01``  -- value change for a 1-point (0.01) rise in recovery;
+>   * ``risky_annuity`` -- the survival-weighted premium annuity.
+>
+> A protection buyer gains when spreads widen (``credit01 > 0``) and loses as
+> recovery rises. Bumps are one-sided by ``bump`` (hazard/rate) or 0.01
+> (recovery).
 
 ### `cds_par_spread(curve: quantforge.credit.SurvivalCurve, pay_times, r, recovery=0.4, n_steps=400)`  _function_
 
