@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.241.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.242.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3060,6 +3060,11 @@ Auto-generated from `quantforge` v1.241.0 by `docs/gen_api.py` — do not edit b
 
 > Present-value annuity (level / PV01) of a swap: sum of accrual*discount.
 
+### `cap_greeks(periods: Sequence[quantforge.rates.CapletPeriod], strike: float)`  _function_
+
+> Aggregate Greeks of a cap: the summed caplet ``price``/``rate_delta``/
+> ``rate_gamma``/``vega`` (all per unit notional).
+
 ### `cap_price(periods: Sequence[quantforge.rates.CapletPeriod], strike: float) -> float`  _function_
 
 > Price an interest-rate cap as the sum of its caplets.
@@ -3070,6 +3075,17 @@ Auto-generated from `quantforge` v1.241.0 by `docs/gen_api.py` — do not edit b
 >
 > A put-call-parity identity used to check the pricer:
 > ``caplet - floorlet = discount * accrual * (F - K)``.
+
+### `caplet_greeks(period: quantforge.rates.CapletPeriod, strike: float, is_cap: bool = True)`  _function_
+
+> Analytic Greeks of a single caplet/floorlet (normal model).
+>
+> The value is ``discount * accrual * Bachelier(F, K, expiry, 0, sigma_n)``, so
+> its rate Greeks are the Bachelier Greeks in the forward rate scaled by the
+> same ``discount * accrual`` factor: ``rate_delta`` (dV/dF), ``rate_gamma``
+> (d2V/dF2), and ``vega`` (dV/dsigma_n). A caplet is a call on the forward, so
+> its rate delta is positive; a floorlet's is negative. Returns a dict with
+> ``price``, ``rate_delta``, ``rate_gamma``, ``vega``.
 
 ### `caplet_price(period: quantforge.rates.CapletPeriod, strike: float, is_cap: bool = True) -> float`  _function_
 
@@ -3086,6 +3102,10 @@ Auto-generated from `quantforge` v1.241.0 by `docs/gen_api.py` — do not edit b
 >
 > The net value is ``cap - floor``; a zero-cost collar is the pair of strikes
 > that makes this zero.
+
+### `floor_greeks(periods: Sequence[quantforge.rates.CapletPeriod], strike: float)`  _function_
+
+> Aggregate Greeks of a floor: the summed floorlet Greeks.
 
 ### `floor_price(periods: Sequence[quantforge.rates.CapletPeriod], strike: float) -> float`  _function_
 

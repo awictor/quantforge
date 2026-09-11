@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.242.0] - 2026-09-10
+
+### Added
+- `caplet_greeks`, `cap_greeks`, `floor_greeks` (in `rates.py`): analytic Greeks
+  of normal-model caplets/floorlets and their strips. Each caplet's value is
+  `discount * accrual * Bachelier(F, K, ...)`, so its `rate_delta`, `rate_gamma`,
+  and `vega` are the Bachelier Greeks in the forward rate scaled by the same
+  factor; `cap_greeks`/`floor_greeks` sum them across periods.
+- Verified: the cap `rate_delta` matches a finite difference of `cap_price`; a
+  cap's rate delta is positive and a floor's negative; both vegas positive; the
+  cap Greeks equal the sum of the caplet Greeks.
+
 ## [1.241.0] - 2026-09-10
 
 ### Added

@@ -17,7 +17,9 @@ import math
 from dataclasses import dataclass
 from typing import Sequence, List
 
-from .bachelier import bachelier_price
+from .bachelier import (
+    bachelier_price, bachelier_delta, bachelier_gamma, bachelier_vega,
+)
 from .bsm import OptionType
 
 
@@ -48,9 +50,57 @@ def caplet_price(period: CapletPeriod, strike: float, is_cap: bool = True) -> fl
     return period.discount * period.accrual * undiscounted
 
 
+def caplet_greeks(period: CapletPeriod, strike: float, is_cap: bool = True):
+    """Analytic Greeks of a single caplet/floorlet (normal model).
+
+    The value is ``discount * accrual * Bachelier(F, K, expiry, 0, sigma_n)``, so
+    its rate Greeks are the Bachelier Greeks in the forward rate scaled by the
+    same ``discount * accrual`` factor: ``rate_delta`` (dV/dF), ``rate_gamma``
+    (d2V/dF2), and ``vega`` (dV/dsigma_n). A caplet is a call on the forward, so
+    its rate delta is positive; a floorlet's is negative. Returns a dict with
+    ``price``, ``rate_delta``, ``rate_gamma``, ``vega``.
+    """
+    ot = OptionType.CALL if is_cap else OptionType.PUT
+    f = period.forward
+    scale = period.discount * period.accrual
+    price = caplet_price(period, strike, is_cap)
+    if period.expiry <= 0:
+        itm = (f > strike) if is_cap else (f < strike)
+        rate_delta = scale * ((1.0 if is_cap else -1.0) if itm else 0.0)
+        return {"price": price, "rate_delta": rate_delta, "rate_gamma": 0.0,
+                "vega": 0.0}
+    rate_delta = scale * bachelier_delta(f, strike, period.expiry, 0.0,
+                                         period.sigma_n, ot)
+    rate_gamma = scale * bachelier_gamma(f, strike, period.expiry, 0.0,
+                                         period.sigma_n)
+    vega = scale * bachelier_vega(f, strike, period.expiry, 0.0, period.sigma_n)
+    return {"price": price, "rate_delta": rate_delta, "rate_gamma": rate_gamma,
+            "vega": vega}
+
+
+def _sum_greeks(periods, strike, is_cap):
+    out = {"price": 0.0, "rate_delta": 0.0, "rate_gamma": 0.0, "vega": 0.0}
+    for p in periods:
+        g = caplet_greeks(p, strike, is_cap)
+        for k in out:
+            out[k] += g[k]
+    return out
+
+
 def cap_price(periods: Sequence[CapletPeriod], strike: float) -> float:
     """Price an interest-rate cap as the sum of its caplets."""
     return sum(caplet_price(p, strike, is_cap=True) for p in periods)
+
+
+def cap_greeks(periods: Sequence[CapletPeriod], strike: float):
+    """Aggregate Greeks of a cap: the summed caplet ``price``/``rate_delta``/
+    ``rate_gamma``/``vega`` (all per unit notional)."""
+    return _sum_greeks(periods, strike, True)
+
+
+def floor_greeks(periods: Sequence[CapletPeriod], strike: float):
+    """Aggregate Greeks of a floor: the summed floorlet Greeks."""
+    return _sum_greeks(periods, strike, False)
 
 
 def floor_price(periods: Sequence[CapletPeriod], strike: float) -> float:

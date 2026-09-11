@@ -142,6 +142,7 @@ from .spline import CubicSpline, SmileSpline
 from .rates import (
     CapletPeriod, caplet_price, cap_price, floor_price, collar_price,
     caplet_floorlet_parity, annuity, swaption_price, swaption_parity,
+    caplet_greeks, cap_greeks, floor_greeks,
 )
 from .vasicek import (
     zero_coupon_bond, zero_coupon_yield, bond_option,
@@ -274,7 +275,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.241.0"
+__version__ = "1.242.0"
 
 __all__ = [
     "OptionType",
@@ -481,6 +482,9 @@ __all__ = [
     "caplet_price",
     "cap_price",
     "floor_price",
+    "caplet_greeks",
+    "cap_greeks",
+    "floor_greeks",
     "collar_price",
     "caplet_floorlet_parity",
     "annuity",
