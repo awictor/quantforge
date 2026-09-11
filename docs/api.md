@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.324.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.325.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -5569,6 +5569,14 @@ Auto-generated from `quantforge` v1.324.0 by `docs/gen_api.py` — do not edit b
 > option is the ``c_i``-weighted sum of zero-coupon-bond options struck at each
 > ``K_i``. Exact (no simulation).
 
+### `vasicek_expected_rate(r0, t, kappa, theta, sigma=0.0)`  _function_
+
+> Expected short rate ``E[r_t] = theta + (r0 - theta) e^{-kappa t}``.
+>
+> The mean of the Ornstein-Uhlenbeck process; it decays from ``r0`` toward the
+> long-run level ``theta`` at speed ``kappa`` (``sigma`` does not enter the
+> mean and is accepted only for a uniform signature).
+
 ### `vasicek_floor(r0, dates, strike, kappa, theta, sigma, notional=1.0)`  _function_
 
 > Vasicek floor: strip of floorlets over successive ``dates``.
@@ -5576,6 +5584,20 @@ Auto-generated from `quantforge` v1.324.0 by `docs/gen_api.py` — do not edit b
 ### `vasicek_floorlet(r0, reset, pay, strike, kappa, theta, sigma, notional=1.0)`  _function_
 
 > Floorlet on ``[reset, pay]`` under Vasicek via the bond-call identity.
+
+### `vasicek_rate_variance(t, kappa, sigma)`  _function_
+
+> Variance of the short rate ``Var[r_t] = sigma^2/(2 kappa) (1 - e^{-2 kappa t})``.
+>
+> Grows from 0 to the stationary variance ``sigma^2/(2 kappa)`` as ``t`` rises;
+> at ``kappa -> 0`` it degenerates to the Brownian ``sigma^2 t``.
+
+### `vasicek_stationary_distribution(kappa, theta, sigma)`  _function_
+
+> Long-run (stationary) distribution of the short rate as ``(mean, variance)``.
+>
+> As ``t -> infinity`` the OU rate is Normal with mean ``theta`` and variance
+> ``sigma^2 / (2 kappa)``. Requires ``kappa > 0`` (otherwise no stationary law).
 
 ### `vasicek_swaption(r0, expiry, pay_times, fixed_rate, kappa, theta, sigma, payer=True, notional=1.0)`  _function_
 

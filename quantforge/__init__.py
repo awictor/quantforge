@@ -179,6 +179,9 @@ from .vasicek import (
     swaption as vasicek_swaption,
     caplet as vasicek_caplet, floorlet as vasicek_floorlet,
     cap as vasicek_cap, floor as vasicek_floor,
+    expected_rate as vasicek_expected_rate,
+    rate_variance as vasicek_rate_variance,
+    stationary_distribution as vasicek_stationary_distribution,
 )
 from .cir import (
     cir_zero_coupon_bond, cir_zero_coupon_yield, cir_bond_greeks,
@@ -334,7 +337,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.324.0"
+__version__ = "1.325.0"
 
 __all__ = [
     "OptionType",
@@ -608,6 +611,9 @@ __all__ = [
     "vasicek_floorlet",
     "vasicek_cap",
     "vasicek_floor",
+    "vasicek_expected_rate",
+    "vasicek_rate_variance",
+    "vasicek_stationary_distribution",
     "cir_zero_coupon_bond",
     "cir_zero_coupon_yield",
     "cir_bond_greeks",

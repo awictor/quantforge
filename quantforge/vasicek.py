@@ -49,6 +49,44 @@ def zero_coupon_yield(r0, t, kappa, theta, sigma):
     return -math.log(zero_coupon_bond(r0, t, kappa, theta, sigma)) / t
 
 
+def expected_rate(r0, t, kappa, theta, sigma=0.0):
+    """Expected short rate ``E[r_t] = theta + (r0 - theta) e^{-kappa t}``.
+
+    The mean of the Ornstein-Uhlenbeck process; it decays from ``r0`` toward the
+    long-run level ``theta`` at speed ``kappa`` (``sigma`` does not enter the
+    mean and is accepted only for a uniform signature).
+    """
+    if t < 0:
+        raise ValueError("t must be non-negative")
+    if abs(kappa) < 1e-12:
+        return r0  # no mean reversion: the drift vanishes in the mean
+    return theta + (r0 - theta) * math.exp(-kappa * t)
+
+
+def rate_variance(t, kappa, sigma):
+    """Variance of the short rate ``Var[r_t] = sigma^2/(2 kappa) (1 - e^{-2 kappa t})``.
+
+    Grows from 0 to the stationary variance ``sigma^2/(2 kappa)`` as ``t`` rises;
+    at ``kappa -> 0`` it degenerates to the Brownian ``sigma^2 t``.
+    """
+    if t < 0:
+        raise ValueError("t must be non-negative")
+    if abs(kappa) < 1e-12:
+        return sigma * sigma * t
+    return sigma * sigma / (2.0 * kappa) * (1.0 - math.exp(-2.0 * kappa * t))
+
+
+def stationary_distribution(kappa, theta, sigma):
+    """Long-run (stationary) distribution of the short rate as ``(mean, variance)``.
+
+    As ``t -> infinity`` the OU rate is Normal with mean ``theta`` and variance
+    ``sigma^2 / (2 kappa)``. Requires ``kappa > 0`` (otherwise no stationary law).
+    """
+    if kappa <= 0:
+        raise ValueError("stationary distribution requires kappa > 0")
+    return theta, sigma * sigma / (2.0 * kappa)
+
+
 def bond_option(r0, t_option, t_bond, strike, kappa, theta, sigma,
                 option_type=OptionType.CALL):
     """European option (Jamshidian) on a zero-coupon bond under Vasicek.

@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.325.0] - 2026-09-11
+
+### Added
+- `vasicek_expected_rate`, `vasicek_rate_variance`, and
+  `vasicek_stationary_distribution` (in `vasicek.py`): analytic moments of the
+  Ornstein-Uhlenbeck short rate. Mean `theta + (r0 - theta) e^{-kappa t}`,
+  variance `sigma^2/(2 kappa) (1 - e^{-2 kappa t})`, and the long-run Normal law
+  `(theta, sigma^2/(2 kappa))`.
+- Verified: the mean matches its formula and an Euler Monte Carlo of the OU
+  process; the variance grows from 0 to the stationary value; the `kappa -> 0`
+  limits give `r0` and `sigma^2 t`; the stationary mean is `theta` and requires
+  `kappa > 0`.
+
 ## [1.324.0] - 2026-09-11
 
 ### Added
