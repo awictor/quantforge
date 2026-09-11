@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.348.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.349.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -4252,6 +4252,17 @@ Auto-generated from `quantforge` v1.348.0 by `docs/gen_api.py` — do not edit b
 >          [ (tau C)^{-1} Pi + P^T Omega^{-1} Q ].
 >
 > With no views (empty ``P``) it returns the prior ``Pi``.
+
+### `black_litterman_weights(cov, market_weights, P, Q, tau=0.05, risk_aversion=2.5, omega=None, normalize=True)`  _function_
+
+> Optimal portfolio weights from Black-Litterman posterior returns.
+>
+> Computes the posterior expected returns (:func:`black_litterman_returns`),
+> then the unconstrained mean-variance optimum ``w = (lambda C)^{-1} mu``. With
+> ``normalize=True`` the weights are rescaled to sum to 1 (fully invested);
+> otherwise the raw utility-optimal holdings are returned. With no views the
+> normalized weights reproduce the market weights (the prior is self-
+> consistent).
 
 ### `component_var(weights, cov) -> list`  _function_
 

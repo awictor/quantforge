@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.349.0] - 2026-09-11
+
+### Added
+- `black_litterman_weights` (in `portopt.py`): optimal portfolio weights from
+  the Black-Litterman posterior returns, `w = (lambda C)^{-1} mu`, optionally
+  normalized to sum to 1. With no views the normalized (and raw) weights
+  reproduce the market weights -- the prior is self-consistent.
+- Verified: with no views the weights equal the market weights (raw and
+  normalized); a bullish absolute view tilts weight toward that asset and a
+  bearish one away; normalized weights sum to 1 for both absolute and relative
+  views.
+
 ## [1.348.0] - 2026-09-11
 
 ### Added

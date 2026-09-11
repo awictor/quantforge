@@ -244,6 +244,7 @@ from .portopt import (
     max_diversification_weights, diversification_ratio,
     portfolio_var, portfolio_cvar, component_var, marginal_var, var_budget,
     implied_equilibrium_returns, black_litterman_returns,
+    black_litterman_weights,
 )
 from .sizing import (
     delta_hedge_shares, neutralize, vega_neutral_quantity, gamma_neutral_quantity,
@@ -365,7 +366,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.348.0"
+__version__ = "1.349.0"
 
 __all__ = [
     "OptionType",
@@ -767,6 +768,7 @@ __all__ = [
     "var_budget",
     "implied_equilibrium_returns",
     "black_litterman_returns",
+    "black_litterman_weights",
     "cev_price",
     "cev_greeks",
     "cev_smile",

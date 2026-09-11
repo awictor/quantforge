@@ -229,6 +229,30 @@ def black_litterman_returns(cov, market_weights, P, Q, tau=0.05,
     return _matvec(_invert(A), b)
 
 
+def black_litterman_weights(cov, market_weights, P, Q, tau=0.05,
+                            risk_aversion=2.5, omega=None, normalize=True):
+    """Optimal portfolio weights from Black-Litterman posterior returns.
+
+    Computes the posterior expected returns (:func:`black_litterman_returns`),
+    then the unconstrained mean-variance optimum ``w = (lambda C)^{-1} mu``. With
+    ``normalize=True`` the weights are rescaled to sum to 1 (fully invested);
+    otherwise the raw utility-optimal holdings are returned. With no views the
+    normalized weights reproduce the market weights (the prior is self-
+    consistent).
+    """
+    n = _check_cov(cov)
+    mu = black_litterman_returns(cov, market_weights, P, Q, tau,
+                                 risk_aversion, omega)
+    inv = _invert(cov)
+    raw = [v / risk_aversion for v in _matvec(inv, mu)]
+    if not normalize:
+        return raw
+    total = sum(raw)
+    if abs(total) < 1e-14:
+        raise ValueError("degenerate posterior (zero-sum optimal weights)")
+    return [r / total for r in raw]
+
+
 def marginal_var(weights, cov, confidence=0.95, horizon=1.0) -> list:
     """Marginal VaR: sensitivity of the portfolio VaR to each weight.
 
