@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.303.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.304.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2463,6 +2463,23 @@ Auto-generated from `quantforge` v1.303.0 by `docs/gen_api.py` — do not edit b
 > structure across the single slice).
 
 ## lookback
+
+### `discrete_fixed_strike_lookback(S, K, t, r, sigma, n_fixings, option_type=<OptionType.CALL: 'call'>, b=None) -> float`  _function_
+
+> Discretely-monitored fixed-strike lookback (Broadie-Glasserman-Kou 1999).
+>
+> The realized extreme is sampled at ``n_fixings`` equally-spaced dates rather
+> than continuously, which lowers a call-on-max and raises a put-on-min versus
+> continuous monitoring. Broadie-Glasserman-Kou give an asymptotic continuity
+> correction: shift the *spot* fed to the continuous
+> :func:`fixed_strike_lookback` by ``exp(-/+ beta sigma sqrt(dt))`` (down for a
+> call on the max, up for a put on the min), with ``beta ~ 0.5826`` and
+> ``dt = t / n_fixings``. As ``n_fixings -> infinity`` the shift vanishes and
+> the price converges to the continuous lookback.
+>
+> Accurate to a few tenths of a percent for ``n_fixings`` of ~50 or more; the
+> correction is asymptotic, so coarse monitoring (a handful of dates) carries a
+> larger error.
 
 ### `fixed_strike_lookback(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, s_extreme=None, b=None) -> float`  _function_
 

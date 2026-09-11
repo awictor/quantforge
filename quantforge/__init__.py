@@ -60,6 +60,7 @@ from .displaced import (
 from .hedging import StickyRule, smile_delta, smile_delta_from_smile, skew_slope
 from .lookback import (
     floating_strike_lookback, fixed_strike_lookback, lookback_greeks,
+    discrete_fixed_strike_lookback,
 )
 from .heston import heston_price, heston_smile
 from .heston_mc import (
@@ -324,7 +325,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.303.0"
+__version__ = "1.304.0"
 
 __all__ = [
     "OptionType",
@@ -396,6 +397,7 @@ __all__ = [
     "floating_strike_lookback",
     "fixed_strike_lookback",
     "lookback_greeks",
+    "discrete_fixed_strike_lookback",
     "heston_price",
     "heston_smile",
     "heston_qe_mc",

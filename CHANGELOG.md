@@ -4,6 +4,21 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.304.0] - 2026-09-11
+
+### Added
+- `discrete_fixed_strike_lookback` (in `lookback.py`): discretely-monitored
+  fixed-strike lookback via the Broadie-Glasserman-Kou (1999) continuity
+  correction. The realized extreme is sampled at `n_fixings` equally-spaced
+  dates; the correction shifts the spot fed to the continuous
+  `fixed_strike_lookback` by `exp(-/+ beta sigma sqrt(dt))` (down for a call on
+  the max, up for a put on the min, `beta ~ 0.5826`). As `n_fixings` grows the
+  shift vanishes and the price converges to the continuous lookback.
+- Verified: matches a path Monte Carlo at `n = 50` (call/put) to within ~1.5%;
+  the discrete call sits below the continuous lookback; the price converges
+  (monotonically, and the correction decays like `1/sqrt(n)`) to the continuous
+  value on a fine grid.
+
 ## [1.303.0] - 2026-09-11
 
 ### Added

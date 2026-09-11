@@ -155,6 +155,46 @@ def fixed_strike_lookback(S, K, t, r, sigma, option_type=OptionType.CALL,
                     - math.exp(b * t) * norm_cdf(-f1)))
 
 
+# Broadie-Glasserman-Kou (1999) continuity-correction constant,
+# beta = -zeta(1/2)/sqrt(2 pi).
+_BGK_BETA = 0.5826
+
+
+def discrete_fixed_strike_lookback(S, K, t, r, sigma, n_fixings,
+                                   option_type=OptionType.CALL, b=None) -> float:
+    """Discretely-monitored fixed-strike lookback (Broadie-Glasserman-Kou 1999).
+
+    The realized extreme is sampled at ``n_fixings`` equally-spaced dates rather
+    than continuously, which lowers a call-on-max and raises a put-on-min versus
+    continuous monitoring. Broadie-Glasserman-Kou give an asymptotic continuity
+    correction: shift the *spot* fed to the continuous
+    :func:`fixed_strike_lookback` by ``exp(-/+ beta sigma sqrt(dt))`` (down for a
+    call on the max, up for a put on the min), with ``beta ~ 0.5826`` and
+    ``dt = t / n_fixings``. As ``n_fixings -> infinity`` the shift vanishes and
+    the price converges to the continuous lookback.
+
+    Accurate to a few tenths of a percent for ``n_fixings`` of ~50 or more; the
+    correction is asymptotic, so coarse monitoring (a handful of dates) carries a
+    larger error.
+    """
+    ot = _coerce_type(option_type)
+    _check(S, t, sigma, b)
+    if K <= 0:
+        raise ValueError("strike K must be positive")
+    if n_fixings < 1:
+        raise ValueError("n_fixings must be >= 1")
+    if b is None:
+        b = r
+    if t == 0 or sigma == 0:
+        return fixed_strike_lookback(S, K, t, r, sigma, ot, b=b)
+    dt = t / n_fixings
+    shift = math.exp(_BGK_BETA * sigma * math.sqrt(dt))
+    # Scaling the monitored extreme by `shift` is equivalent to scaling the
+    # initial spot in the extreme's distribution: down for a max, up for a min.
+    s_eff = S / shift if ot is OptionType.CALL else S * shift
+    return fixed_strike_lookback(s_eff, K, t, r, sigma, ot, b=b)
+
+
 def lookback_greeks(S, t, r, sigma, option_type=OptionType.CALL, b=None,
                     kind="floating", K=None, s_extreme=None):
     """Greeks of a lookback option by central finite differences.
