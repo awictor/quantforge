@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.406.0] - 2026-09-11
+
+### Added
+- `tolling_value` (in `commodity.py`): values a tolling agreement as a strip of
+  daily spark-spread call options (the right to run a plant each period), summing
+  `spark_spread_option` across the delivery periods at a common heat rate, strike,
+  and vols, with optional per-period carbon and a discount-factor override.
+  Increasing in the number of run periods; cross-checked against the manual sum,
+  the discount override, and the emissions effect.
+
 ## [1.405.0] - 2026-09-11
 
 ### Added

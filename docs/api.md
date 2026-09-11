@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.405.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.406.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1407,6 +1407,19 @@ Auto-generated from `quantforge` v1.405.0 by `docs/gen_api.py` — do not edit b
 > discounted payoff ``max(F1 - F2 - K, 0)`` (call) or its put. An independent
 > reference for the :func:`kirk_spread_option` approximation. Uses a
 > deterministic linear-congruential stream so results are reproducible.
+
+### `tolling_value(power_forwards, fuel_forwards, heat_rate, strike, sigma_power, sigma_fuel, rho, r, expiries, discount_factors=None, emissions_rate=0.0, carbon_forwards=None)`  _function_
+
+> Value of a tolling agreement as a strip of daily spark-spread call options.
+>
+> A tolling deal grants the right (not obligation) to run a plant each delivery
+> period, so its value is the sum of :func:`spark_spread_option` calls over the
+> periods -- one per ``(power_forward, fuel_forward, expiry)`` triple at a common
+> ``heat_rate``, ``strike`` (variable O&M) and vols. ``strike`` here is the
+> per-MWh variable cost; each spark option already discounts by ``e^{-r T}``, so
+> ``discount_factors`` (if given) rescales that if a separate curve is wanted --
+> by default the internal ``e^{-r expiry}`` is used. Increasing with the number
+> of run periods.
 
 ### `turnbull_wakeman_asian(forward, strike, sigma, r, expiry, n_avg, is_call=True)`  _function_
 

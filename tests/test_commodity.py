@@ -14,7 +14,7 @@ from quantforge import (
     schwartz_smith_log_mean, schwartz_smith_log_variance, schwartz_smith_forward,
     schwartz_smith_futures_volatility,
     margrabe_exchange_option, kirk_spread_option,
-    bachelier_spread_option, spread_option_mc, spark_spread_option,
+    bachelier_spread_option, spread_option_mc, spark_spread_option, tolling_value,
     commodity_swap_rate, commodity_swap_value, asian_commodity_option,
     geometric_asian_option, asian_commodity_option_mc, turnbull_wakeman_asian,
 )
@@ -231,6 +231,47 @@ def test_spread_option_validation():
         kirk_spread_option(SP_F1, SP_F2, -200, SP_S1, SP_S2, SP_RHO, SP_R, SP_T)
     with pytest.raises(ValueError):
         margrabe_exchange_option(-1, SP_F2, SP_S1, SP_S2, SP_RHO, SP_R, SP_T)
+
+
+TOLL_PF = [50, 52, 48]
+TOLL_FF = [3, 3.1, 2.9]
+TOLL_EXP = [0.25, 0.5, 0.75]
+
+
+def test_tolling_is_sum_of_spark_options():
+    manual = sum(spark_spread_option(TOLL_PF[i], TOLL_FF[i], 8.0, 2.0, 10.0, 0.5,
+                                     0.3, 0.05, TOLL_EXP[i], True) for i in range(3))
+    t = tolling_value(TOLL_PF, TOLL_FF, 8.0, 2.0, 10.0, 0.5, 0.3, 0.05, TOLL_EXP)
+    assert t == pytest.approx(manual, abs=1e-12)
+
+
+def test_tolling_monotone_in_periods():
+    full = tolling_value(TOLL_PF, TOLL_FF, 8.0, 2.0, 10.0, 0.5, 0.3, 0.05, TOLL_EXP)
+    part = tolling_value(TOLL_PF[:2], TOLL_FF[:2], 8.0, 2.0, 10.0, 0.5, 0.3, 0.05,
+                         TOLL_EXP[:2])
+    assert full > part
+
+
+def test_tolling_discount_factor_override():
+    dfs = [0.99, 0.97, 0.95]
+    td = tolling_value(TOLL_PF, TOLL_FF, 8.0, 2.0, 10.0, 0.5, 0.3, 0.05, TOLL_EXP,
+                       discount_factors=dfs)
+    manual = sum(spark_spread_option(TOLL_PF[i], TOLL_FF[i], 8.0, 2.0, 10.0, 0.5,
+                                     0.3, 0.05, TOLL_EXP[i], True)
+                 * dfs[i] / math.exp(-0.05 * TOLL_EXP[i]) for i in range(3))
+    assert td == pytest.approx(manual, abs=1e-9)
+
+
+def test_tolling_emissions_lowers_value():
+    base = tolling_value(TOLL_PF, TOLL_FF, 8.0, 2.0, 10.0, 0.5, 0.3, 0.05, TOLL_EXP)
+    te = tolling_value(TOLL_PF, TOLL_FF, 8.0, 2.0, 10.0, 0.5, 0.3, 0.05, TOLL_EXP,
+                       emissions_rate=0.5, carbon_forwards=[20, 20, 20])
+    assert te < base
+
+
+def test_tolling_validation():
+    with pytest.raises(ValueError):
+        tolling_value(TOLL_PF, TOLL_FF[:2], 8.0, 2.0, 10.0, 0.5, 0.3, 0.05, TOLL_EXP)
 
 
 def test_spark_spread_matches_bachelier():

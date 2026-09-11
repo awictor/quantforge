@@ -255,6 +255,43 @@ def kirk_spread_option(f1, f2, strike, sigma1, sigma2, rho, r, expiry,
     return disc * (denom * norm_cdf(-d2) - f1 * norm_cdf(-d1))
 
 
+def tolling_value(power_forwards, fuel_forwards, heat_rate, strike,
+                  sigma_power, sigma_fuel, rho, r, expiries, discount_factors=None,
+                  emissions_rate=0.0, carbon_forwards=None):
+    """Value of a tolling agreement as a strip of daily spark-spread call options.
+
+    A tolling deal grants the right (not obligation) to run a plant each delivery
+    period, so its value is the sum of :func:`spark_spread_option` calls over the
+    periods -- one per ``(power_forward, fuel_forward, expiry)`` triple at a common
+    ``heat_rate``, ``strike`` (variable O&M) and vols. ``strike`` here is the
+    per-MWh variable cost; each spark option already discounts by ``e^{-r T}``, so
+    ``discount_factors`` (if given) rescales that if a separate curve is wanted --
+    by default the internal ``e^{-r expiry}`` is used. Increasing with the number
+    of run periods.
+    """
+    n = len(power_forwards)
+    if not (len(fuel_forwards) == len(expiries) == n):
+        raise ValueError("power_forwards, fuel_forwards, expiries must align")
+    if carbon_forwards is None:
+        carbon_forwards = [0.0] * n
+    elif len(carbon_forwards) != n:
+        raise ValueError("carbon_forwards must align")
+    if discount_factors is not None and len(discount_factors) != n:
+        raise ValueError("discount_factors must align")
+    total = 0.0
+    for i in range(n):
+        opt = spark_spread_option(power_forwards[i], fuel_forwards[i], heat_rate,
+                                  strike, sigma_power, sigma_fuel, rho, r,
+                                  expiries[i], is_call=True,
+                                  emissions_rate=emissions_rate,
+                                  carbon_forward=carbon_forwards[i])
+        if discount_factors is not None:
+            # Replace the internal e^{-r T} with the supplied factor.
+            opt *= discount_factors[i] / math.exp(-r * expiries[i])
+        total += opt
+    return total
+
+
 def spark_spread_option(power_forward, fuel_forward, heat_rate, strike,
                         sigma_power, sigma_fuel, rho, r, expiry, is_call=True,
                         emissions_rate=0.0, carbon_forward=0.0):
