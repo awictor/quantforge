@@ -75,11 +75,14 @@ def test_positive_prices():
     assert average_strike_geometric_asian(S, T, R, SIG, N, option_type="put") > 0.0
 
 
-def test_greeks_price_field_and_gamma_sign():
+def test_greeks_price_field_and_homogeneity():
+    # Payoff homogeneous of degree 1 in S => price linear in S: gamma is
+    # exactly zero and delta = price / S.
     g = average_strike_geometric_asian_greeks(S, T, R, SIG, N, option_type="call")
-    assert g["price"] == pytest.approx(
-        average_strike_geometric_asian(S, T, R, SIG, N, option_type="call"), abs=1e-9)
-    assert g["gamma"] > 0.0   # convex payoff
+    price = average_strike_geometric_asian(S, T, R, SIG, N, option_type="call")
+    assert g["price"] == pytest.approx(price, abs=1e-9)
+    assert g["gamma"] == pytest.approx(0.0, abs=1e-6)
+    assert g["delta"] == pytest.approx(price / S, rel=1e-4)
     assert g["vega"] > 0.0    # more dispersion -> more value
 
 

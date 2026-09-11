@@ -4,6 +4,28 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.292.0] - 2026-09-11
+
+### Added
+- `average_strike_arithmetic_asian` and `average_strike_arithmetic_asian_greeks`
+  (in `exotics.py`): average-strike (floating-strike) discrete arithmetic Asian,
+  payoff `max(S_T - A, 0)`. Priced as an exchange option between `S_T` (exactly
+  lognormal) and the arithmetic average `A` (Levy two-moment lognormal). The
+  cross-moment `E[S_T A] = (S^2/n) sum_i exp(b(t+t_i) + sigma^2 t_i)` is exact,
+  giving the log-space covariance and the Margrabe spread variance. Greeks by
+  finite difference.
+- Verified: put-call parity equals the discounted exchange forward
+  `E[S_T] - E[A]` exactly; the average-strike arithmetic call is cheaper than
+  the geometric one (AM-GM raises the strike); matches an antithetic Monte
+  Carlo (n=12) to ~1% (a small stable Levy approximation bias); explicit times
+  match the `n_fixings` grid.
+
+### Changed
+- `average_strike_geometric_asian_greeks` test now asserts the exact
+  homogeneity property (gamma zero, delta = price/S) instead of a fragile
+  gamma-sign check, since the average-strike payoff is homogeneous of degree 1
+  in spot.
+
 ## [1.291.0] - 2026-09-11
 
 ### Added

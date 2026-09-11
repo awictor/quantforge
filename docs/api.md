@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.291.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.292.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1102,6 +1102,35 @@ Auto-generated from `quantforge` v1.291.0 by `docs/gen_api.py` — do not edit b
 ### `asset_or_nothing(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
 
 > Pays the asset value S_T if in the money, else 0.
+
+### `average_strike_arithmetic_asian(S, t, r, sigma, n_fixings=None, fixing_times=None, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> Average-strike (floating-strike) discrete arithmetic Asian option.
+>
+> The strike is the realized arithmetic average: a call pays
+> ``max(S_T - A, 0)`` and a put ``max(A - S_T, 0)``, where
+> ``A = (1/n) sum_i S_{t_i}``. This is an exchange option between the terminal
+> price ``S_T`` (exactly lognormal) and the average ``A`` (matched to a
+> lognormal by its first two moments, Levy 1992). The cross-moment
+> ``E[S_T A]`` is exact,
+>
+>     E[S_T A] = (S^2/n) sum_i exp(b (t + t_i) + sigma^2 min(t, t_i))
+>              = (S^2/n) sum_i exp(b (t + t_i) + sigma^2 t_i),
+>
+> so the log-space covariance is ``rho_log = log(E[S_T A]/(E[S_T] E[A]))`` and
+> the spread variance is ``Var = sigma^2 t + V_A - 2 rho_log`` with
+> ``V_A = log(M2/M1^2)``. A call is then
+> ``e^{-rt} (E[S_T] N(d1) - E[A] N(d2))`` in the usual Margrabe form.
+>
+> Provide either ``n_fixings`` (equally-spaced dates ``t*i/n``, last at
+> expiry) or an explicit ``fixing_times`` sequence in ``(0, t]``.
+
+### `average_strike_arithmetic_asian_greeks(S, t, r, sigma, n_fixings=None, fixing_times=None, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> Greeks of an average-strike arithmetic Asian by central finite
+> differences of :func:`average_strike_arithmetic_asian`: ``delta`` (dV/dS),
+> ``gamma`` (d2V/dS2), ``vega`` (dV/dsigma), ``theta`` (calendar decay).
+> Returns a dict with ``price`` and those fields.
 
 ### `average_strike_geometric_asian(S, t, r, sigma, n_fixings=None, fixing_times=None, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
 
