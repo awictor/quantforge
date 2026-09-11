@@ -258,6 +258,7 @@ from .cheyette import (
     cheyette_G, cheyette_y, zero_bond as cheyette_zero_bond,
     bond_option as cheyette_bond_option, caplet as cheyette_caplet,
     bond_option_greeks as cheyette_bond_option_greeks,
+    floorlet as cheyette_floorlet, cap as cheyette_cap, floor as cheyette_floor,
 )
 from .g2pp import (
     g2pp_V, zero_bond as g2pp_zero_bond, bond_option as g2pp_bond_option,
@@ -283,7 +284,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.252.0"
+__version__ = "1.253.0"
 
 __all__ = [
     "OptionType",
@@ -717,6 +718,9 @@ __all__ = [
     "cheyette_zero_bond",
     "cheyette_bond_option",
     "cheyette_bond_option_greeks",
+    "cheyette_floorlet",
+    "cheyette_cap",
+    "cheyette_floor",
     "cheyette_caplet",
     "g2pp_V",
     "g2pp_zero_bond",

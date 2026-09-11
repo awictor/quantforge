@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.252.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.253.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -563,6 +563,13 @@ Auto-generated from `quantforge` v1.252.0 by `docs/gen_api.py` — do not edit b
 >
 > Returns a dict with ``price``, ``delta_T``, ``delta_S``, ``vega``.
 
+### `cheyette_cap(discounts, kappa, sigma, strike, notional=1.0)`  _function_
+
+> Cheyette cap: strip of caplets over successive periods.
+>
+> ``discounts`` is an increasing list of ``(t_i, P(0, t_i))``; each consecutive
+> pair is one caplet ``[t_{i-1}, t_i]``. Returns the summed caplet value.
+
 ### `cheyette_caplet(P0_reset, P0_pay, kappa, sigma, reset, pay, strike, notional=1.0)`  _function_
 
 > Price a caplet under Cheyette (constant sigma) on ``[reset, pay]``.
@@ -571,6 +578,14 @@ Auto-generated from `quantforge` v1.252.0 by `docs/gen_api.py` — do not edit b
 > forward rate and ``tau = pay - reset``) equals ``notional (1 + strike tau)``
 > put options on the zero-coupon bond ``P(reset, pay)`` struck at
 > ``1 / (1 + strike tau)`` (the standard caplet<->bond-put identity).
+
+### `cheyette_floor(discounts, kappa, sigma, strike, notional=1.0)`  _function_
+
+> Cheyette floor: strip of floorlets over successive periods (see :func:`cap`).
+
+### `cheyette_floorlet(P0_reset, P0_pay, kappa, sigma, reset, pay, strike, notional=1.0)`  _function_
+
+> Floorlet on ``[reset, pay]`` under Cheyette via the bond-call identity.
 
 ### `cheyette_y(kappa, sigma, t)`  _function_
 

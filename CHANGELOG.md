@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.253.0] - 2026-09-10
+
+### Added
+- `cheyette_floorlet`, `cheyette_cap`, `cheyette_floor` (in `cheyette.py`):
+  Cheyette (Hull-White) floorlet (bond-call identity) and cap/floor as strips of
+  caplets/floorlets.
+- Verified: `cap - floor` equals the underlying swap value (parity) to 1e-8; cap
+  and floor equal the sums of their legs; both positive and monotone in strike.
+
 ## [1.252.0] - 2026-09-10
 
 ### Added

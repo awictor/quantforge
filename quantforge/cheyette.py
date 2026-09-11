@@ -132,3 +132,36 @@ def bond_option_greeks(P0S, P0T, kappa, sigma, expiry, maturity, strike,
         (2.0 * hv) if sigma - hv >= 0 else hv)
     return {"price": price, "delta_T": delta_T, "delta_S": delta_S,
             "vega": vega}
+
+
+def floorlet(P0_reset, P0_pay, kappa, sigma, reset, pay, strike, notional=1.0):
+    """Floorlet on ``[reset, pay]`` under Cheyette via the bond-call identity."""
+    tau = pay - reset
+    K_bond = 1.0 / (1.0 + strike * tau)
+    call = bond_option(P0_reset, P0_pay, kappa, sigma, reset, pay, K_bond,
+                       is_call=True)
+    return notional * (1.0 + strike * tau) * call
+
+
+def cap(discounts, kappa, sigma, strike, notional=1.0):
+    """Cheyette cap: strip of caplets over successive periods.
+
+    ``discounts`` is an increasing list of ``(t_i, P(0, t_i))``; each consecutive
+    pair is one caplet ``[t_{i-1}, t_i]``. Returns the summed caplet value.
+    """
+    ds = sorted(discounts)
+    if len(ds) < 2:
+        raise ValueError("need >= 2 dates (one caplet)")
+    return sum(caplet(ds[i - 1][1], ds[i][1], kappa, sigma, ds[i - 1][0],
+                      ds[i][0], strike, notional)
+               for i in range(1, len(ds)))
+
+
+def floor(discounts, kappa, sigma, strike, notional=1.0):
+    """Cheyette floor: strip of floorlets over successive periods (see :func:`cap`)."""
+    ds = sorted(discounts)
+    if len(ds) < 2:
+        raise ValueError("need >= 2 dates (one floorlet)")
+    return sum(floorlet(ds[i - 1][1], ds[i][1], kappa, sigma, ds[i - 1][0],
+                        ds[i][0], strike, notional)
+               for i in range(1, len(ds)))
