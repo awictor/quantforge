@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.254.0] - 2026-09-10
+
+### Added
+- Vasicek and CIR caps and floors: `vasicek_caplet`/`vasicek_floorlet`/
+  `vasicek_cap`/`vasicek_floor` and `cir_caplet`/`cir_floorlet`/`cir_cap`/
+  `cir_floor`, each a strip of caplets/floorlets via the bond-put/call identity
+  on the model's exact bond option.
+- Verified: for both models `cap - floor` equals the underlying swap value
+  (parity) to 1e-8, and the cap equals the sum of its caplets; positive and
+  monotone in strike.
+
 ## [1.253.0] - 2026-09-10
 
 ### Added

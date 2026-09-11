@@ -187,3 +187,39 @@ def cir_swaption(r0, expiry, pay_times, fixed_rate, kappa, theta, sigma,
     ot = OptionType.PUT if payer else OptionType.CALL
     return cir_coupon_bond_option(r0, expiry, cfs, notional, kappa, theta,
                                   sigma, ot)
+
+
+def cir_caplet(r0, reset, pay, strike, kappa, theta, sigma, notional=1.0):
+    """Caplet on ``[reset, pay]`` under CIR via the bond-put identity."""
+    tau = pay - reset
+    K_bond = 1.0 / (1.0 + strike * tau)
+    put = cir_bond_option(r0, reset, pay, K_bond, kappa, theta, sigma,
+                          OptionType.PUT)
+    return notional * (1.0 + strike * tau) * put
+
+
+def cir_floorlet(r0, reset, pay, strike, kappa, theta, sigma, notional=1.0):
+    """Floorlet on ``[reset, pay]`` under CIR via the bond-call identity."""
+    tau = pay - reset
+    K_bond = 1.0 / (1.0 + strike * tau)
+    call = cir_bond_option(r0, reset, pay, K_bond, kappa, theta, sigma,
+                           OptionType.CALL)
+    return notional * (1.0 + strike * tau) * call
+
+
+def cir_cap(r0, dates, strike, kappa, theta, sigma, notional=1.0):
+    """CIR cap: strip of caplets over successive ``dates`` (increasing times)."""
+    ts = sorted(dates)
+    if len(ts) < 2:
+        raise ValueError("need >= 2 dates (one caplet)")
+    return sum(cir_caplet(r0, ts[i - 1], ts[i], strike, kappa, theta, sigma,
+                          notional) for i in range(1, len(ts)))
+
+
+def cir_floor(r0, dates, strike, kappa, theta, sigma, notional=1.0):
+    """CIR floor: strip of floorlets over successive ``dates``."""
+    ts = sorted(dates)
+    if len(ts) < 2:
+        raise ValueError("need >= 2 dates (one floorlet)")
+    return sum(cir_floorlet(r0, ts[i - 1], ts[i], strike, kappa, theta, sigma,
+                            notional) for i in range(1, len(ts)))

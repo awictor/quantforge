@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.253.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.254.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -644,6 +644,14 @@ Auto-generated from `quantforge` v1.253.0 by `docs/gen_api.py` — do not edit b
 >
 > with critical rate ``r* = ln(A/strike)/B``. Puts follow from put-call parity.
 
+### `cir_cap(r0, dates, strike, kappa, theta, sigma, notional=1.0)`  _function_
+
+> CIR cap: strip of caplets over successive ``dates`` (increasing times).
+
+### `cir_caplet(r0, reset, pay, strike, kappa, theta, sigma, notional=1.0)`  _function_
+
+> Caplet on ``[reset, pay]`` under CIR via the bond-put identity.
+
 ### `cir_coupon_bond_option(r0, t_option, cashflows, strike, kappa, theta, sigma, option_type=<OptionType.CALL: 'call'>)`  _function_
 
 > European option on a coupon bond under CIR (Jamshidian decomposition).
@@ -653,6 +661,14 @@ Auto-generated from `quantforge` v1.253.0 by `docs/gen_api.py` — do not edit b
 > critical rate ``r*`` where the coupon bond's value at expiry equals
 > ``strike``, then sum the ``c_i``-weighted CIR zero-coupon-bond options
 > (:func:`cir_bond_option`) struck at ``K_i = P(t_option, t_i | r*)``. Exact.
+
+### `cir_floor(r0, dates, strike, kappa, theta, sigma, notional=1.0)`  _function_
+
+> CIR floor: strip of floorlets over successive ``dates``.
+
+### `cir_floorlet(r0, reset, pay, strike, kappa, theta, sigma, notional=1.0)`  _function_
+
+> Floorlet on ``[reset, pay]`` under CIR via the bond-call identity.
 
 ### `cir_swaption(r0, expiry, pay_times, fixed_rate, kappa, theta, sigma, payer=True, notional=1.0)`  _function_
 
@@ -4354,6 +4370,17 @@ Auto-generated from `quantforge` v1.253.0 by `docs/gen_api.py` — do not edit b
 > rates discount the bond harder), so ``rho_r < 0`` for a call. Returns a dict
 > with ``price``, ``rho_r``, ``gamma_r``, ``vega``.
 
+### `vasicek_cap(r0, dates, strike, kappa, theta, sigma, notional=1.0)`  _function_
+
+> Vasicek cap: strip of caplets over successive ``dates`` (increasing times).
+
+### `vasicek_caplet(r0, reset, pay, strike, kappa, theta, sigma, notional=1.0)`  _function_
+
+> Caplet on ``[reset, pay]`` under Vasicek via the bond-put identity.
+>
+> Pays ``tau (L - strike)^+`` at ``pay``; equals ``notional (1 + strike tau)``
+> puts on the zero-coupon bond ``P(reset, pay)`` struck at ``1/(1 + strike tau)``.
+
 ### `vasicek_coupon_bond_option(r0, t_option, cashflows, strike, kappa, theta, sigma, option_type=<OptionType.CALL: 'call'>)`  _function_
 
 > European option on a coupon bond under Vasicek (Jamshidian decomposition).
@@ -4369,6 +4396,14 @@ Auto-generated from `quantforge` v1.253.0 by `docs/gen_api.py` — do not edit b
 > into per-cashflow strikes ``K_i = P(t_option, t_i | r*)``, and the coupon-bond
 > option is the ``c_i``-weighted sum of zero-coupon-bond options struck at each
 > ``K_i``. Exact (no simulation).
+
+### `vasicek_floor(r0, dates, strike, kappa, theta, sigma, notional=1.0)`  _function_
+
+> Vasicek floor: strip of floorlets over successive ``dates``.
+
+### `vasicek_floorlet(r0, reset, pay, strike, kappa, theta, sigma, notional=1.0)`  _function_
+
+> Floorlet on ``[reset, pay]`` under Vasicek via the bond-call identity.
 
 ### `vasicek_swaption(r0, expiry, pay_times, fixed_rate, kappa, theta, sigma, payer=True, notional=1.0)`  _function_
 

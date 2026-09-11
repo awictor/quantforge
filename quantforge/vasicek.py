@@ -213,3 +213,43 @@ def bond_greeks(r0, t, kappa, theta, sigma):
     B = _B(kappa, t)
     return {"price": price, "rho_r": -B * price, "gamma_r": B * B * price,
             "duration": B, "convexity": B * B}
+
+
+def caplet(r0, reset, pay, strike, kappa, theta, sigma, notional=1.0):
+    """Caplet on ``[reset, pay]`` under Vasicek via the bond-put identity.
+
+    Pays ``tau (L - strike)^+`` at ``pay``; equals ``notional (1 + strike tau)``
+    puts on the zero-coupon bond ``P(reset, pay)`` struck at ``1/(1 + strike tau)``.
+    """
+    tau = pay - reset
+    K_bond = 1.0 / (1.0 + strike * tau)
+    put = bond_option(r0, reset, pay, K_bond, kappa, theta, sigma,
+                      OptionType.PUT)
+    return notional * (1.0 + strike * tau) * put
+
+
+def floorlet(r0, reset, pay, strike, kappa, theta, sigma, notional=1.0):
+    """Floorlet on ``[reset, pay]`` under Vasicek via the bond-call identity."""
+    tau = pay - reset
+    K_bond = 1.0 / (1.0 + strike * tau)
+    call = bond_option(r0, reset, pay, K_bond, kappa, theta, sigma,
+                       OptionType.CALL)
+    return notional * (1.0 + strike * tau) * call
+
+
+def cap(r0, dates, strike, kappa, theta, sigma, notional=1.0):
+    """Vasicek cap: strip of caplets over successive ``dates`` (increasing times)."""
+    ts = sorted(dates)
+    if len(ts) < 2:
+        raise ValueError("need >= 2 dates (one caplet)")
+    return sum(caplet(r0, ts[i - 1], ts[i], strike, kappa, theta, sigma,
+                      notional) for i in range(1, len(ts)))
+
+
+def floor(r0, dates, strike, kappa, theta, sigma, notional=1.0):
+    """Vasicek floor: strip of floorlets over successive ``dates``."""
+    ts = sorted(dates)
+    if len(ts) < 2:
+        raise ValueError("need >= 2 dates (one floorlet)")
+    return sum(floorlet(r0, ts[i - 1], ts[i], strike, kappa, theta, sigma,
+                        notional) for i in range(1, len(ts)))
