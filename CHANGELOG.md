@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.366.0] - 2026-09-11
+
+### Added
+- `compounded_rate_with_lookback` and `compounded_rate_with_lockout` (in
+  `rates.py`): real-world RFR compounding conventions. Lookback (observation
+  shift) uses the fixing observed `k` business days earlier for each accrual;
+  lockout freezes the last `k` days at the final observed fixing so the coupon
+  is known before period end. Both reduce to `compounded_overnight_rate` at
+  `k = 0`.
+- Verified: `k = 0` reproduces the base compounded rate; on a rising fixing
+  series both lower the coupon; a full lockout uses the first fixing for the
+  whole period; negative `k` and `k >= n` raise.
+
 ## [1.365.0] - 2026-09-11
 
 ### Added

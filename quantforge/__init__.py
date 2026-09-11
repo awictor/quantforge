@@ -172,6 +172,7 @@ from .rates import (
     CapletPeriod, caplet_price, cap_price, floor_price, collar_price,
     caplet_floorlet_parity, annuity, swaption_price, swaption_parity,
     compounded_overnight_rate, simple_average_rate,
+    compounded_rate_with_lookback, compounded_rate_with_lockout,
     caplet_greeks, cap_greeks, floor_greeks, swaption_greeks,
     black_swaption_price, black_swaption_greeks,
     swaption_implied_normal_vol, swaption_implied_black_vol,
@@ -382,7 +383,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.365.0"
+__version__ = "1.366.0"
 
 __all__ = [
     "OptionType",
@@ -644,6 +645,8 @@ __all__ = [
     "swaption_parity",
     "compounded_overnight_rate",
     "simple_average_rate",
+    "compounded_rate_with_lookback",
+    "compounded_rate_with_lockout",
     "swaption_greeks",
     "black_swaption_price",
     "black_swaption_greeks",

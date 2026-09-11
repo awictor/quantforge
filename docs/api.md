@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.365.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.366.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -4778,6 +4778,30 @@ Auto-generated from `quantforge` v1.365.0 by `docs/gen_api.py` — do not edit b
 > ``fixings`` are the per-day annualized overnight rates and ``accruals`` the
 > day-count fractions (typically 1/360). This is how compounded SOFR / SONIA
 > coupons are computed.
+
+### `compounded_rate_with_lockout(fixings, accruals, lockout=0) -> float`  _function_
+
+> Compounded overnight rate with a rate lockout of ``k`` days.
+>
+> The final ``lockout`` business days of the period reuse the last observed
+> fixing (the rate is *locked* before period end so the coupon is known early),
+> the convention used for compounded fed funds. ``lockout = 0`` reduces to
+> :func:`compounded_overnight_rate`.
+
+### `compounded_rate_with_lookback(fixings, accruals, lookback=0) -> float`  _function_
+
+> Compounded overnight rate with a lookback (observation-shift) of ``k`` days.
+>
+> Each accrual period uses the fixing observed ``lookback`` business days
+> earlier (an *observation shift* also shifts the weighting to the earlier
+> day). This gives the payment-lag convention used to publish a compounded SOFR
+> coupon a few days before period end. ``lookback = 0`` reduces to
+> :func:`compounded_overnight_rate`.
+>
+> ``fixings`` must extend at least ``lookback`` days before the accrual start;
+> fixing ``i`` here is the rate applied to accrual ``i``, already shifted by the
+> caller when constructing the arrays -- so this compounds ``fixings[i]`` over
+> ``accruals[i]`` with an index offset used only to validate coverage.
 
 ### `floor_greeks(periods: Sequence[quantforge.rates.CapletPeriod], strike: float)`  _function_
 

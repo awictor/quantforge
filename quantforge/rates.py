@@ -62,6 +62,64 @@ def compounded_overnight_rate(fixings, accruals) -> float:
     return (growth - 1.0) / total
 
 
+def compounded_rate_with_lookback(fixings, accruals, lookback=0) -> float:
+    """Compounded overnight rate with a lookback (observation-shift) of ``k`` days.
+
+    Each accrual period uses the fixing observed ``lookback`` business days
+    earlier (an *observation shift* also shifts the weighting to the earlier
+    day). This gives the payment-lag convention used to publish a compounded SOFR
+    coupon a few days before period end. ``lookback = 0`` reduces to
+    :func:`compounded_overnight_rate`.
+
+    ``fixings`` must extend at least ``lookback`` days before the accrual start;
+    fixing ``i`` here is the rate applied to accrual ``i``, already shifted by the
+    caller when constructing the arrays -- so this compounds ``fixings[i]`` over
+    ``accruals[i]`` with an index offset used only to validate coverage.
+    """
+    if lookback < 0:
+        raise ValueError("lookback must be non-negative")
+    if len(fixings) != len(accruals):
+        raise ValueError("fixings and accruals must have equal length")
+    if len(fixings) <= lookback:
+        raise ValueError("need more fixings than the lookback")
+    growth = 1.0
+    total = 0.0
+    for i in range(len(accruals)):
+        r = fixings[max(0, i - lookback)]
+        growth *= (1.0 + r * accruals[i])
+        total += accruals[i]
+    if total <= 0.0:
+        raise ValueError("total accrual must be positive")
+    return (growth - 1.0) / total
+
+
+def compounded_rate_with_lockout(fixings, accruals, lockout=0) -> float:
+    """Compounded overnight rate with a rate lockout of ``k`` days.
+
+    The final ``lockout`` business days of the period reuse the last observed
+    fixing (the rate is *locked* before period end so the coupon is known early),
+    the convention used for compounded fed funds. ``lockout = 0`` reduces to
+    :func:`compounded_overnight_rate`.
+    """
+    if lockout < 0:
+        raise ValueError("lockout must be non-negative")
+    if len(fixings) != len(accruals):
+        raise ValueError("fixings and accruals must have equal length")
+    n = len(fixings)
+    if n <= lockout:
+        raise ValueError("need more fixings than the lockout")
+    frozen = fixings[n - lockout - 1]
+    growth = 1.0
+    total = 0.0
+    for i in range(n):
+        r = fixings[i] if i < n - lockout else frozen
+        growth *= (1.0 + r * accruals[i])
+        total += accruals[i]
+    if total <= 0.0:
+        raise ValueError("total accrual must be positive")
+    return (growth - 1.0) / total
+
+
 def simple_average_rate(fixings, accruals) -> float:
     """Accrual-weighted arithmetic average of overnight fixings (Fed-funds style).
 
