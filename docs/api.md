@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.360.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.361.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -4264,6 +4264,14 @@ Auto-generated from `quantforge` v1.360.0 by `docs/gen_api.py` — do not edit b
 > ``mean(active) / stdev(active) * sqrt(periods_per_year)`` -- the Sharpe of
 > the active-return series. Raises if the active returns have no variance.
 
+### `jarque_bera(returns) -> float`  _function_
+
+> Jarque-Bera test statistic for normality of a return series.
+>
+> ``JB = n/6 * (skew^2 + excess_kurt^2/4)``, asymptotically chi-squared with 2
+> degrees of freedom under normality. Larger values reject normality (the 5%
+> critical value is ~5.99). Uses the population skew/kurtosis.
+
 ### `longest_drawdown_duration(returns: Sequence[float]) -> int`  _function_
 
 > Longest run of consecutive underwater periods (below a prior peak).
@@ -4304,6 +4312,21 @@ Auto-generated from `quantforge` v1.360.0 by `docs/gen_api.py` — do not edit b
 > values), each computed by :func:`sharpe_ratio` on that slice. A
 > zero-variance window yields ``float('nan')`` rather than raising, so the
 > series stays aligned.
+
+### `sample_kurtosis(returns, excess=True) -> float`  _function_
+
+> Sample kurtosis (fourth standardized moment, population convention).
+>
+> ``(1/n) sum (x - mean)^4 / sigma^4``; with ``excess=True`` subtracts 3 so a
+> normal distribution reads 0 (fat tails positive). Raises on zero variance.
+
+### `sample_skewness(returns) -> float`  _function_
+
+> Sample skewness (third standardized moment, population convention).
+>
+> ``(1/n) sum (x - mean)^3 / sigma^3`` with the population standard deviation
+> (ddof=0). Positive means a longer right tail. Raises on a degenerate
+> (zero-variance) series.
 
 ### `sharpe_ratio(returns: Sequence[float], risk_free=0.0, periods_per_year=252) -> float`  _function_
 

@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.361.0] - 2026-09-11
+
+### Added
+- `sample_skewness`, `sample_kurtosis`, and `jarque_bera` (in `perfmetrics.py`):
+  return-distribution diagnostics. Population-convention third/fourth
+  standardized moments (kurtosis excess by default, so a normal reads 0) and the
+  Jarque-Bera normality statistic `n/6 (skew^2 + exkurt^2/4)`.
+- Verified: a large normal sample gives near-zero skew/kurtosis and a
+  Jarque-Bera below the 5% chi-squared(2) critical value; a symmetric series has
+  zero skew; a right-skewed series is positive; fat tails give positive excess
+  kurtosis; raw minus excess kurtosis is 3; Jarque-Bera rejects a skewed series;
+  zero-variance/too-short series raise.
+
 ## [1.360.0] - 2026-09-11
 
 ### Added

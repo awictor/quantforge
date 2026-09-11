@@ -254,6 +254,56 @@ def information_ratio(returns, benchmark_returns, periods_per_year=252) -> float
     return _mean(active) / sd * math.sqrt(periods_per_year)
 
 
+def sample_skewness(returns) -> float:
+    """Sample skewness (third standardized moment, population convention).
+
+    ``(1/n) sum (x - mean)^3 / sigma^3`` with the population standard deviation
+    (ddof=0). Positive means a longer right tail. Raises on a degenerate
+    (zero-variance) series.
+    """
+    n = len(returns)
+    if n < 2:
+        raise ValueError("need at least two observations")
+    m = _mean(returns)
+    var = sum((x - m) ** 2 for x in returns) / n
+    if var <= 0.0:
+        raise ValueError("zero-variance returns")
+    s3 = var ** 1.5
+    return sum((x - m) ** 3 for x in returns) / n / s3
+
+
+def sample_kurtosis(returns, excess=True) -> float:
+    """Sample kurtosis (fourth standardized moment, population convention).
+
+    ``(1/n) sum (x - mean)^4 / sigma^4``; with ``excess=True`` subtracts 3 so a
+    normal distribution reads 0 (fat tails positive). Raises on zero variance.
+    """
+    n = len(returns)
+    if n < 2:
+        raise ValueError("need at least two observations")
+    m = _mean(returns)
+    var = sum((x - m) ** 2 for x in returns) / n
+    if var <= 0.0:
+        raise ValueError("zero-variance returns")
+    k = sum((x - m) ** 4 for x in returns) / n / (var * var)
+    return k - 3.0 if excess else k
+
+
+def jarque_bera(returns) -> float:
+    """Jarque-Bera test statistic for normality of a return series.
+
+    ``JB = n/6 * (skew^2 + excess_kurt^2/4)``, asymptotically chi-squared with 2
+    degrees of freedom under normality. Larger values reject normality (the 5%
+    critical value is ~5.99). Uses the population skew/kurtosis.
+    """
+    n = len(returns)
+    if n < 2:
+        raise ValueError("need at least two observations")
+    sk = sample_skewness(returns)
+    ek = sample_kurtosis(returns, excess=True)
+    return n / 6.0 * (sk * sk + ek * ek / 4.0)
+
+
 def _percentile(sorted_vals, p):
     """Linear-interpolated percentile ``p`` in [0, 100] of a sorted list."""
     n = len(sorted_vals)
