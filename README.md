@@ -1150,6 +1150,46 @@ The three short-rate models expose analytic rate moments too —
 `vasicek_expected_rate` / `vasicek_rate_variance` / `vasicek_stationary_distribution`
 (Normal), the CIR equivalents (Gamma), and Ho-Lee (drifted Brownian).
 
+## Inflation-linked bonds and derivatives
+
+Index-ratio mechanics, TIPS-style linker pricing/risk, the deflation floor,
+zero-coupon and year-on-year inflation swaps, an inflation curve from a swap
+strip, YoY caplets (lognormal and Bachelier), CPI seasonality and daily
+reference-index interpolation, and the Fisher real/nominal curve bridge:
+
+```python
+from quantforge import (breakeven_inflation, linker_price, linker_real_duration,
+                        zc_inflation_swap_rate, inflation_curve_from_zc_swaps,
+                        yoy_caplet_price, real_zero_curve)
+
+breakeven_inflation(nominal_yield=0.05, real_yield=0.0294)      # ~2%
+zc_inflation_swap_rate(index_start=100, index_end=133.1, years=3)  # 10% p.a.
+real_zero_curve([0.04, 0.045], [0.02, 0.022])                  # strip breakevens
+```
+
+The index ratio multiplies the whole linker price, so it cancels in the
+fractional real duration/convexity (which equal the standard bond measures on
+the real cashflows) while the dollar DV01 scales with it.
+
+## Commodities (cost-of-carry and mean reversion)
+
+Cost-of-carry forwards with storage and convenience yield, implied-yield
+inversion, roll yield, the Schwartz (1997) one-factor mean-reverting model
+(forward, spot option, Samuelson futures vol, calibration), crack/spark spread
+options (Margrabe, Kirk, Bachelier, Monte Carlo), commodity swaps, and average-
+price Asians (1/3-variance, exact geometric, Turnbull-Wakeman, MC):
+
+```python
+from quantforge import (commodity_forward, implied_convenience_yield, roll_yield,
+                        schwartz_forward, kirk_spread_option, turnbull_wakeman_asian)
+
+commodity_forward(spot=100, r=0.05, maturity=1, storage_cost=0.02,
+                  convenience_yield=0.03)
+schwartz_forward(spot=50, kappa=1.5, alpha_star=4.0, sigma=0.3, maturity=2)
+kirk_spread_option(f1=100, f2=90, strike=5, sigma1=0.3, sigma2=0.25, rho=0.4,
+                   r=0.05, expiry=1)      # crack spread
+```
+
 ## Credit (reduced-form)
 
 Piecewise-constant-hazard survival curves, CDS pricing/greeks/bootstrap, and

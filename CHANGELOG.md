@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.393.0] - 2026-09-11
+
+### Documentation
+- README: added "Inflation-linked bonds and derivatives" and "Commodities
+  (cost-of-carry and mean reversion)" sections covering the two modules built
+  since v1.372, with runnable examples (all snippets verified against the
+  installed package).
+
 ## [1.392.0] - 2026-09-11
 
 ### Added
