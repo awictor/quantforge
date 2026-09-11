@@ -240,6 +240,7 @@ from .cms import (
 from .surface import VolSurface, SurfaceSlice, CalendarViolation
 from .exotics import (
     cash_or_nothing, asset_or_nothing, digital_greeks, barrier_option, barrier_greeks,
+    range_binary, supershare,
     geometric_asian, geometric_asian_greeks, arithmetic_asian, asian_greeks,
     discrete_geometric_asian, discrete_geometric_asian_greeks,
     discrete_arithmetic_asian, discrete_arithmetic_asian_greeks,
@@ -314,7 +315,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.294.0"
+__version__ = "1.295.0"
 
 __all__ = [
     "OptionType",
@@ -707,6 +708,8 @@ __all__ = [
     "CalendarViolation",
     "cash_or_nothing",
     "asset_or_nothing",
+    "range_binary",
+    "supershare",
     "digital_greeks",
     "barrier_option",
     "barrier_greeks",

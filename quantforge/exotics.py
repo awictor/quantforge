@@ -65,6 +65,56 @@ def asset_or_nothing(S, K, t, r, sigma, option_type=OptionType.CALL, b=None):
     return S * carry * norm_cdf(-d1)
 
 
+def range_binary(S, K_low, K_high, t, r, sigma, b=None, cash=1.0):
+    """Range binary (double digital): pays ``cash`` iff ``K_low <= S_T <= K_high``.
+
+    A bet that the terminal price lands inside a corridor at expiry (no path
+    monitoring). It is exactly the difference of two cash-or-nothing calls
+    struck at the two levels: paying when ``S_T > K_low`` but not when
+    ``S_T > K_high``. With ``d2(K) = (log(S/K) + (b - sigma^2/2) t)/(sigma sqrt t)``,
+
+        price = cash e^{-rt} (N(d2(K_low)) - N(d2(K_high))).
+    """
+    _validate(S, K_low, t, sigma)
+    if K_high <= K_low:
+        raise ValueError("K_high must exceed K_low")
+    if b is None:
+        b = r
+    disc = math.exp(-r * t)
+    if t == 0 or sigma == 0:
+        fwd = S * math.exp(b * t)
+        return disc * cash if K_low <= fwd <= K_high else 0.0
+    vsqrt = sigma * math.sqrt(t)
+    d2_lo = (math.log(S / K_low) + (b - 0.5 * sigma * sigma) * t) / vsqrt
+    d2_hi = (math.log(S / K_high) + (b - 0.5 * sigma * sigma) * t) / vsqrt
+    return cash * disc * (norm_cdf(d2_lo) - norm_cdf(d2_hi))
+
+
+def supershare(S, K_low, K_high, t, r, sigma, b=None):
+    """Supershare option: pays ``S_T / K_low`` iff ``K_low <= S_T <= K_high``.
+
+    Introduced by Hakansson (1976) as a building block for mutual-fund payoffs.
+    It is a scaled difference of two asset-or-nothing calls struck at the two
+    levels, so with ``d1(K) = (log(S/K) + (b + sigma^2/2) t)/(sigma sqrt t)`` and
+    carry ``e^{(b-r)t}``,
+
+        price = (S/K_low) e^{(b-r)t} (N(d1(K_low)) - N(d1(K_high))).
+    """
+    _validate(S, K_low, t, sigma)
+    if K_high <= K_low:
+        raise ValueError("K_high must exceed K_low")
+    if b is None:
+        b = r
+    carry = math.exp((b - r) * t)
+    if t == 0 or sigma == 0:
+        fwd = S * math.exp(b * t)
+        return (S / K_low) * carry if K_low <= fwd <= K_high else 0.0
+    vsqrt = sigma * math.sqrt(t)
+    d1_lo = (math.log(S / K_low) + (b + 0.5 * sigma * sigma) * t) / vsqrt
+    d1_hi = (math.log(S / K_high) + (b + 0.5 * sigma * sigma) * t) / vsqrt
+    return (S / K_low) * carry * (norm_cdf(d1_lo) - norm_cdf(d1_hi))
+
+
 # --------------------------------------------------------------------------
 # Single-barrier options (Reiner-Rubinstein / Merton)
 # --------------------------------------------------------------------------

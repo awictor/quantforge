@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.294.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.295.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1465,6 +1465,17 @@ Auto-generated from `quantforge` v1.294.0 by `docs/gen_api.py` — do not edit b
 > (dV/dsigma), ``theta`` (calendar decay, ``-dV/dt``). Returns a dict with
 > ``price`` and those fields.
 
+### `range_binary(S, K_low, K_high, t, r, sigma, b=None, cash=1.0)`  _function_
+
+> Range binary (double digital): pays ``cash`` iff ``K_low <= S_T <= K_high``.
+>
+> A bet that the terminal price lands inside a corridor at expiry (no path
+> monitoring). It is exactly the difference of two cash-or-nothing calls
+> struck at the two levels: paying when ``S_T > K_low`` but not when
+> ``S_T > K_high``. With ``d2(K) = (log(S/K) + (b - sigma^2/2) t)/(sigma sqrt t)``,
+>
+>     price = cash e^{-rt} (N(d2(K_low)) - N(d2(K_high))).
+
 ### `seasoned_arithmetic_asian(S, K, t, r, sigma, observed_prices, n_total, remaining_fixing_times=None, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
 
 > Seasoned (in-progress) discrete arithmetic-average Asian (Levy match).
@@ -1525,6 +1536,17 @@ Auto-generated from `quantforge` v1.294.0 by `docs/gen_api.py` — do not edit b
 > ``vega`` (dV/dsigma), ``theta`` (calendar decay). The observed fixings and
 > the remaining schedule are held fixed. Returns a dict with ``price`` and
 > those fields.
+
+### `supershare(S, K_low, K_high, t, r, sigma, b=None)`  _function_
+
+> Supershare option: pays ``S_T / K_low`` iff ``K_low <= S_T <= K_high``.
+>
+> Introduced by Hakansson (1976) as a building block for mutual-fund payoffs.
+> It is a scaled difference of two asset-or-nothing calls struck at the two
+> levels, so with ``d1(K) = (log(S/K) + (b + sigma^2/2) t)/(sigma sqrt t)`` and
+> carry ``e^{(b-r)t}``,
+>
+>     price = (S/K_low) e^{(b-r)t} (N(d1(K_low)) - N(d1(K_high))).
 
 ## forward
 

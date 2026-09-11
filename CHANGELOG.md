@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.295.0] - 2026-09-11
+
+### Added
+- `range_binary` (in `exotics.py`): range binary / double digital paying `cash`
+  iff `K_low <= S_T <= K_high` at expiry. Exactly the difference of two
+  cash-or-nothing calls: `cash e^{-rt} (N(d2(K_low)) - N(d2(K_high)))`.
+- `supershare` (in `exotics.py`): Hakansson (1976) supershare paying
+  `S_T / K_low` iff `K_low <= S_T <= K_high`. A scaled difference of two
+  asset-or-nothing calls.
+- Verified: each equals the corresponding digital difference to machine
+  precision; both match a terminal Monte Carlo to within ~0.4%; a wide corridor
+  range binary approaches the full discounted cash; the zero-vol limit pays iff
+  the forward lands inside the corridor.
+
 ## [1.294.0] - 2026-09-11
 
 ### Added
