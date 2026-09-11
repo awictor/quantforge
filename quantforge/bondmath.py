@@ -76,6 +76,56 @@ def dated_bond_cashflows(start, maturity_years, face, coupon_rate, freq=2,
     return flows
 
 
+def dated_bond_price(settle, dated_cashflows, y, convention="30/360") -> float:
+    """Present value of dated cashflows discounted from a settlement date.
+
+    ``dated_cashflows`` is the ``[(pay_date, tau, amount), ...]`` output of
+    :func:`dated_bond_cashflows`. Each amount is discounted by
+    ``exp(-y * T_i)`` where ``T_i`` is the :func:`quantforge.year_fraction` from
+    ``settle`` to the pay date under ``convention`` (continuously-compounded
+    yield). Cashflows on or before ``settle`` are dropped.
+    """
+    from .daycount import year_fraction, _ordinal
+    s_ord = _ordinal(settle)
+    pv = 0.0
+    for pay, _tau, amt in dated_cashflows:
+        if _ordinal(pay) <= s_ord:
+            continue
+        T = year_fraction(settle, pay, convention)
+        pv += amt * math.exp(-y * T)
+    return pv
+
+
+def dated_bond_yield(settle, dated_cashflows, price, convention="30/360",
+                     tol=1e-10, max_iter=100) -> float:
+    """Continuously-compounded yield reproducing a dated bond ``price``.
+
+    Bisection on the yield (price is monotone decreasing in it), discounting the
+    :func:`dated_bond_price` cashflows from ``settle``. Inverse of
+    :func:`dated_bond_price`.
+    """
+    if price <= 0:
+        raise ValueError("price must be positive")
+
+    def px(yld):
+        return dated_bond_price(settle, dated_cashflows, yld, convention)
+
+    lo, hi = -0.5, 5.0
+    p_lo, p_hi = px(lo), px(hi)
+    if not (min(p_lo, p_hi) - 1e-9 <= price <= max(p_lo, p_hi) + 1e-9):
+        raise ValueError("price outside the achievable yield range")
+    for _ in range(max_iter):
+        mid = 0.5 * (lo + hi)
+        pm = px(mid)
+        if abs(pm - price) < tol:
+            return mid
+        if pm > price:   # price too high -> raise yield
+            lo = mid
+        else:
+            hi = mid
+    return 0.5 * (lo + hi)
+
+
 def accrued_interest(face, coupon_rate, freq, fraction_elapsed) -> float:
     """Accrued interest since the last coupon, straight-line within the period.
 

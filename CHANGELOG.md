@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.370.0] - 2026-09-11
+
+### Added
+- `dated_bond_price` and `dated_bond_yield` (in `bondmath.py`): price and yield
+  of a bond from `dated_bond_cashflows` discounted off an explicit settlement
+  date. Each cashflow is discounted by `exp(-y * T)` with `T` the day-count year
+  fraction from settle to the pay date; cashflows on or before settle drop out.
+  `dated_bond_yield` inverts this by bisection.
+- Verified: the dated price matches the uniform `bond_price_from_yield` on a
+  30/360 semiannual bond; the yield round-trips; settling after a coupon drops
+  it (lower price); higher yields give lower prices; a non-positive price raises.
+
 ## [1.369.0] - 2026-09-11
 
 ### Added

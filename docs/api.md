@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.369.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.370.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -384,6 +384,24 @@ Auto-generated from `quantforge` v1.369.0 by `docs/gen_api.py` — do not edit b
 > Unlike :func:`bond_cashflows` (which assumes uniform ``1/freq`` periods),
 > this reflects the actual day counts, month-end roll, and business-day
 > adjustment -- the difference that matters for act/360 and stub periods.
+
+### `dated_bond_price(settle, dated_cashflows, y, convention='30/360') -> float`  _function_
+
+> Present value of dated cashflows discounted from a settlement date.
+>
+> ``dated_cashflows`` is the ``[(pay_date, tau, amount), ...]`` output of
+> :func:`dated_bond_cashflows`. Each amount is discounted by
+> ``exp(-y * T_i)`` where ``T_i`` is the :func:`quantforge.year_fraction` from
+> ``settle`` to the pay date under ``convention`` (continuously-compounded
+> yield). Cashflows on or before ``settle`` are dropped.
+
+### `dated_bond_yield(settle, dated_cashflows, price, convention='30/360', tol=1e-10, max_iter=100) -> float`  _function_
+
+> Continuously-compounded yield reproducing a dated bond ``price``.
+>
+> Bisection on the yield (price is monotone decreasing in it), discounting the
+> :func:`dated_bond_price` cashflows from ``settle``. Inverse of
+> :func:`dated_bond_price`.
 
 ### `dirty_price(cashflows: Sequence[Tuple[float, float]], y) -> float`  _function_
 
