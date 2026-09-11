@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.345.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.346.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -4239,6 +4239,14 @@ Auto-generated from `quantforge` v1.345.0 by `docs/gen_api.py` — do not edit b
 
 ## portopt
 
+### `component_var(weights, cov) -> list`  _function_
+
+> Component (risk-contribution) VaR: each asset's share of portfolio vol.
+>
+> The marginal contribution ``(C w)_i / sigma_p`` times ``w_i`` gives the
+> component ``w_i (C w)_i / sigma_p``; the components sum to the portfolio
+> standard deviation. Scale by the VaR z-quantile to get VaR contributions.
+
 ### `diversification_ratio(weights, cov) -> float`  _function_
 
 > Diversification ratio ``(sum_i w_i sigma_i) / sqrt(w^T C w)``.
@@ -4278,9 +4286,25 @@ Auto-generated from `quantforge` v1.345.0 by `docs/gen_api.py` — do not edit b
 > Fully invested (weights sum to 1); may be long/short. Requires a
 > non-singular covariance matrix.
 
+### `portfolio_cvar(weights, cov, mean_returns=None, confidence=0.95, horizon=1.0) -> float`  _function_
+
+> Parametric (Gaussian) Conditional VaR / expected shortfall, as a loss.
+>
+> ``CVaR = phi(z)/(1-c) * sigma_p * sqrt(horizon) - mu_p * horizon``, the mean
+> loss beyond the VaR under normality. Exceeds :func:`portfolio_var`.
+
 ### `portfolio_return(weights, mean_returns) -> float`  _function_
 
 > Expected portfolio return ``w^T mu``.
+
+### `portfolio_var(weights, cov, mean_returns=None, confidence=0.95, horizon=1.0) -> float`  _function_
+
+> Parametric (Gaussian) Value-at-Risk of a portfolio, as a positive loss.
+>
+> ``VaR = z * sigma_p * sqrt(horizon) - mu_p * horizon`` where ``sigma_p`` is
+> the portfolio standard deviation, ``mu_p`` the expected return (0 if
+> ``mean_returns`` is omitted), and ``z`` the standard-normal quantile at
+> ``confidence``. Returned as a non-negative loss figure.
 
 ### `portfolio_variance(weights, cov) -> float`  _function_
 

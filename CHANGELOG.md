@@ -4,6 +4,21 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.346.0] - 2026-09-11
+
+### Added
+- `portfolio_var`, `portfolio_cvar`, and `component_var` (in `portopt.py`):
+  parametric (Gaussian) portfolio risk from the covariance matrix.
+  `portfolio_var` is `z sigma_p sqrt(horizon) - mu_p horizon` (a positive loss),
+  `portfolio_cvar` the expected shortfall `phi(z)/(1-c) sigma_p ...`, and
+  `component_var` the per-asset risk contributions `w_i (C w)_i / sigma_p`
+  (summing to the portfolio volatility). Includes an Acklam inverse-normal
+  quantile.
+- Verified: VaR equals `z * sigma_p`; CVaR exceeds VaR; a positive expected
+  return lowers VaR; the component VaRs sum to the portfolio standard
+  deviation; VaR scales with `sqrt(horizon)` and rises with confidence; a
+  zero-variance portfolio raises.
+
 ## [1.345.0] - 2026-09-11
 
 ### Added

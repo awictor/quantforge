@@ -93,6 +93,77 @@ def max_sharpe_weights(mean_returns, cov, risk_free=0.0) -> list:
     return [zi / total for zi in z]
 
 
+def _norm_ppf(p):
+    """Inverse standard-normal CDF (Acklam's rational approximation)."""
+    if not (0.0 < p < 1.0):
+        raise ValueError("p must be in (0, 1)")
+    a = [-3.969683028665376e+01, 2.209460984245205e+02, -2.759285104469687e+02,
+         1.383577518672690e+02, -3.066479806614716e+01, 2.506628277459239e+00]
+    b = [-5.447609879822406e+01, 1.615858368580409e+02, -1.556989798598866e+02,
+         6.680131188771972e+01, -1.328068155288572e+01]
+    c = [-7.784894002430293e-03, -3.223964580411365e-01, -2.400758277161838e+00,
+         -2.549732539343734e+00, 4.374664141464968e+00, 2.938163982698783e+00]
+    d = [7.784695709041462e-03, 3.224671290700398e-01, 2.445134137142996e+00,
+         3.754408661907416e+00]
+    plow, phigh = 0.02425, 1 - 0.02425
+    if p < plow:
+        q = math.sqrt(-2 * math.log(p))
+        return (((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5]) / \
+               ((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1)
+    if p > phigh:
+        q = math.sqrt(-2 * math.log(1 - p))
+        return -(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5]) / \
+               ((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1)
+    q = p - 0.5
+    r = q * q
+    return (((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q / \
+           (((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1)
+
+
+def portfolio_var(weights, cov, mean_returns=None, confidence=0.95,
+                  horizon=1.0) -> float:
+    """Parametric (Gaussian) Value-at-Risk of a portfolio, as a positive loss.
+
+    ``VaR = z * sigma_p * sqrt(horizon) - mu_p * horizon`` where ``sigma_p`` is
+    the portfolio standard deviation, ``mu_p`` the expected return (0 if
+    ``mean_returns`` is omitted), and ``z`` the standard-normal quantile at
+    ``confidence``. Returned as a non-negative loss figure.
+    """
+    sd = math.sqrt(portfolio_variance(weights, cov))
+    mu = 0.0 if mean_returns is None else portfolio_return(weights, mean_returns)
+    z = _norm_ppf(confidence)
+    return z * sd * math.sqrt(horizon) - mu * horizon
+
+
+def portfolio_cvar(weights, cov, mean_returns=None, confidence=0.95,
+                   horizon=1.0) -> float:
+    """Parametric (Gaussian) Conditional VaR / expected shortfall, as a loss.
+
+    ``CVaR = phi(z)/(1-c) * sigma_p * sqrt(horizon) - mu_p * horizon``, the mean
+    loss beyond the VaR under normality. Exceeds :func:`portfolio_var`.
+    """
+    sd = math.sqrt(portfolio_variance(weights, cov))
+    mu = 0.0 if mean_returns is None else portfolio_return(weights, mean_returns)
+    z = _norm_ppf(confidence)
+    phi = math.exp(-0.5 * z * z) / math.sqrt(2.0 * math.pi)
+    return phi / (1.0 - confidence) * sd * math.sqrt(horizon) - mu * horizon
+
+
+def component_var(weights, cov) -> list:
+    """Component (risk-contribution) VaR: each asset's share of portfolio vol.
+
+    The marginal contribution ``(C w)_i / sigma_p`` times ``w_i`` gives the
+    component ``w_i (C w)_i / sigma_p``; the components sum to the portfolio
+    standard deviation. Scale by the VaR z-quantile to get VaR contributions.
+    """
+    n = _check_cov(cov)
+    cw = _matvec(cov, list(weights))
+    sd = math.sqrt(portfolio_variance(weights, cov))
+    if sd <= 0.0:
+        raise ValueError("portfolio variance must be positive")
+    return [weights[i] * cw[i] / sd for i in range(n)]
+
+
 def diversification_ratio(weights, cov) -> float:
     """Diversification ratio ``(sum_i w_i sigma_i) / sqrt(w^T C w)``.
 
