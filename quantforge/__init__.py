@@ -203,6 +203,10 @@ from .holee import (
     holee_caplet, holee_floorlet, holee_cap, holee_floor,
     holee_expected_rate, holee_rate_variance,
 )
+from .inflation import (
+    index_ratio, inflation_adjusted_principal, fisher_real_rate,
+    fisher_nominal_rate, breakeven_inflation, real_from_breakeven,
+)
 from .bondmath import (
     bond_cashflows, dated_bond_cashflows, dated_bond_price, dated_bond_yield,
     dated_accrued_interest, dated_clean_price,
@@ -387,7 +391,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.371.0"
+__version__ = "1.372.0"
 
 __all__ = [
     "OptionType",
@@ -705,6 +709,12 @@ __all__ = [
     "dated_bond_yield",
     "dated_accrued_interest",
     "dated_clean_price",
+    "index_ratio",
+    "inflation_adjusted_principal",
+    "fisher_real_rate",
+    "fisher_nominal_rate",
+    "breakeven_inflation",
+    "real_from_breakeven",
     "bond_price_from_yield",
     "macaulay_duration",
     "modified_duration",

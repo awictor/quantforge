@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.371.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.372.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2878,6 +2878,45 @@ Auto-generated from `quantforge` v1.371.0 by `docs/gen_api.py` — do not edit b
 > Yields are relative to the stock capital ``S``. If assigned (S_T >= K) the
 > return is the capped gain to the strike plus the premium; the breakeven is
 > ``S - premium`` (the stock can fall by the premium before a loss).
+
+## inflation
+
+### `breakeven_inflation(nominal_yield, real_yield) -> float`  _function_
+
+> Breakeven inflation implied by a nominal and a real yield (Fisher).
+>
+> ``(1 + nominal)/(1 + real) - 1`` -- the inflation rate at which a nominal and
+> an inflation-linked bond of the same maturity have equal return. The market's
+> inflation expectation (plus risk premium).
+
+### `fisher_nominal_rate(real, inflation) -> float`  _function_
+
+> Exact Fisher nominal rate ``(1 + real)(1 + inflation) - 1``.
+
+### `fisher_real_rate(nominal, inflation) -> float`  _function_
+
+> Exact Fisher real rate ``(1 + nominal)/(1 + inflation) - 1``.
+>
+> The rate that, compounded with inflation, reproduces the nominal rate. For
+> small rates it is approximately ``nominal - inflation``.
+
+### `index_ratio(index_settle, index_base) -> float`  _function_
+
+> Index ratio ``CPI_settle / CPI_base`` used to inflate the principal.
+>
+> Above 1 when the price index has risen since issue. Both indices must be
+> positive.
+
+### `inflation_adjusted_principal(face, index_settle, index_base) -> float`  _function_
+
+> Inflation-adjusted principal ``face * index_ratio`` (the linker notional).
+
+### `real_from_breakeven(nominal_yield, breakeven) -> float`  _function_
+
+> Real yield implied by a nominal yield and a breakeven inflation rate.
+>
+> ``(1 + nominal)/(1 + breakeven) - 1`` -- inverse of
+> :func:`breakeven_inflation`.
 
 ## kim
 

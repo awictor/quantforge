@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.372.0] - 2026-09-11
+
+### Added
+- `inflation.py`: inflation-linked (TIPS-style) bond and breakeven-inflation
+  analytics. `index_ratio` (CPI_settle / CPI_base) and
+  `inflation_adjusted_principal` scale a linker's notional by realized inflation.
+  `fisher_real_rate` and `fisher_nominal_rate` are the exact Fisher conversions
+  `(1+n)/(1+i)-1` and `(1+r)(1+i)-1` (their round-trip is the identity).
+  `breakeven_inflation` returns the inflation rate equating a nominal and a real
+  yield, `(1+n)/(1+r)-1`, with `real_from_breakeven` its inverse. Cross-checked
+  against the Fisher round-trip and the small-rate approximation n - r.
+
 ## [1.371.0] - 2026-09-11
 
 ### Added
