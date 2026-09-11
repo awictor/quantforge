@@ -234,7 +234,7 @@ from .ssvi import (
     ssvi_bkm_moments,
 )
 from .sabr import (
-    SABRParams, sabr_vol, calibrate_sabr, calibrate_sabr_lm,
+    SABRParams, sabr_vol, sabr_normal_vol, calibrate_sabr, calibrate_sabr_lm,
     sabr_sensitivities, sabr_jacobian, sabr_option_greeks,
     sabr_variance_swap_strike, sabr_vix, sabr_bkm_moments,
     sabr_density, sabr_butterfly_arbitrage, sabr_is_arbitrage_free,
@@ -328,7 +328,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.311.0"
+__version__ = "1.312.0"
 
 __all__ = [
     "OptionType",
@@ -709,6 +709,7 @@ __all__ = [
     "ssvi_bkm_moments",
     "SABRParams",
     "sabr_vol",
+    "sabr_normal_vol",
     "calibrate_sabr",
     "calibrate_sabr_lm",
     "sabr_sensitivities",

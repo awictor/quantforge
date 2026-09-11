@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.312.0] - 2026-09-11
+
+### Added
+- `sabr_normal_vol` (in `sabr.py`): the Hagan (2002) normal (Bachelier) implied
+  volatility for the SABR model — the absolute-vol `sigma_N` quoted in
+  interest-rate markets. Uses the Hagan normal expansion (leading factor
+  `nu (F - K) / x(z)`, third-order time bracket shared with the lognormal
+  `sabr_vol`), with the ATM `F == K` limit handled separately.
+- Verified: matches the reference normal vol (SABR-Black vol -> Black-Scholes
+  price -> Bachelier implied vol) to within 5e-3 across strikes; the ATM branch
+  joins continuously with the just-off-ATM value; `beta = nu = 0` gives exactly
+  `alpha`; the normal-vol smile is positive and rises in both wings.
+
 ## [1.311.0] - 2026-09-11
 
 ### Added

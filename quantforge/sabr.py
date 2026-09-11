@@ -336,6 +336,43 @@ def sabr_vol(F, K, t, alpha, beta, rho, nu) -> float:
     return (alpha / denom) * (z / x_z) * correction
 
 
+def sabr_normal_vol(F, K, t, alpha, beta, rho, nu) -> float:
+    """Hagan (2002) normal (Bachelier) implied volatility for the SABR model.
+
+    Returns the absolute-vol ``sigma_N`` such that a Bachelier option on the
+    forward reproduces the SABR price -- the standard quoting convention in
+    interest-rate markets (where forwards can be near or below zero). Uses the
+    Hagan normal expansion with the ATM limit (``F == K``) handled separately to
+    avoid the removable ``z / x(z)`` singularity. The third-order time bracket
+    matches the lognormal :func:`sabr_vol`; only the leading factor differs
+    (``nu (F - K) / x(z)`` rather than ``alpha z / (denom x(z))``).
+    """
+    if F <= 0 or K <= 0:
+        raise ValueError("F and K must be positive")
+    if alpha <= 0:
+        raise ValueError("alpha must be positive")
+    if t <= 0:
+        raise ValueError("t must be positive")
+
+    one_beta = 1.0 - beta
+    FK = F * K
+    # Common third-order time correction (same bracket as the lognormal form).
+    term1 = -beta * (2.0 - beta) * alpha * alpha / (24.0 * FK ** one_beta)
+    term2 = 0.25 * rho * beta * nu * alpha / (FK ** (one_beta / 2.0))
+    term3 = (2.0 - 3.0 * rho * rho) / 24.0 * nu * nu
+    correction = 1.0 + (term1 + term2 + term3) * t
+
+    logFK = math.log(F / K)
+    if abs(logFK) < 1e-12:
+        # ATM: sigma_N = alpha F^beta * correction.
+        return alpha * F ** beta * correction
+
+    FK_beta = FK ** (one_beta / 2.0)
+    z = (nu / alpha) * FK_beta * logFK
+    x_z = math.log((math.sqrt(1.0 - 2.0 * rho * z + z * z) + z - rho) / (1.0 - rho))
+    return nu * (F - K) / x_z * correction
+
+
 def calibrate_sabr(
     F, t, strikes: Sequence[float], market_vols: Sequence[float],
     beta: float = 0.5, weights: Sequence[float] = None,

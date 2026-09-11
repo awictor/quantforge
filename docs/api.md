@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.311.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.312.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -4356,6 +4356,18 @@ Auto-generated from `quantforge` v1.311.0 by `docs/gen_api.py` — do not edit b
 > the exact dual-number partials. This is the ``J`` a Gauss-Newton or
 > Levenberg-Marquardt step needs, and ``(J^T J)^{-1}`` gives the asymptotic
 > parameter covariance for standard errors on a fit.
+
+### `sabr_normal_vol(F, K, t, alpha, beta, rho, nu) -> float`  _function_
+
+> Hagan (2002) normal (Bachelier) implied volatility for the SABR model.
+>
+> Returns the absolute-vol ``sigma_N`` such that a Bachelier option on the
+> forward reproduces the SABR price -- the standard quoting convention in
+> interest-rate markets (where forwards can be near or below zero). Uses the
+> Hagan normal expansion with the ATM limit (``F == K``) handled separately to
+> avoid the removable ``z / x(z)`` singularity. The third-order time bracket
+> matches the lognormal :func:`sabr_vol`; only the leading factor differs
+> (``nu (F - K) / x(z)`` rather than ``alpha z / (denom x(z))``).
 
 ### `sabr_option_greeks(F, K, t, alpha, beta, rho, nu, option_type=<OptionType.CALL: 'call'>, discount=1.0)`  _function_
 
