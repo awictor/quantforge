@@ -8,8 +8,13 @@ from quantforge import (
     linker_price, linker_real_yield,
     deflation_floored_redemption, deflation_floor_value, yoy_inflation_rate,
     zc_inflation_swap_rate, zc_inflation_swap_value,
+    inflation_curve_from_zc_swaps, forward_inflation_rate, yoy_swap_value,
     bond_cashflows, bond_price_from_yield, yield_to_maturity,
 )
+
+
+TENORS = [1, 2, 3, 5]
+ZC = [0.025, 0.028, 0.03, 0.032]
 
 
 CF = bond_cashflows(100, 0.03, 5, 2)  # real cashflows
@@ -125,6 +130,43 @@ def test_inflation_swap_validation():
         zc_inflation_swap_rate(100, 133, 0)
     with pytest.raises(ValueError):
         yoy_inflation_rate(0, 100)
+
+
+def test_curve_reprices_input_swaps():
+    lv = inflation_curve_from_zc_swaps(100.0, TENORS, ZC)
+    for i, T in enumerate(TENORS):
+        assert zc_inflation_swap_rate(100.0, lv[i], T) == pytest.approx(ZC[i], abs=1e-12)
+
+
+def test_forward_chains_to_spot():
+    lv = inflation_curve_from_zc_swaps(100.0, TENORS, ZC)
+    f12 = forward_inflation_rate(lv[0], lv[1], 1, 2)
+    assert (1 + ZC[0]) ** 1 * (1 + f12) ** 1 == pytest.approx((1 + ZC[1]) ** 2, abs=1e-9)
+
+
+def test_forward_mid_curve_chain():
+    lv = inflation_curve_from_zc_swaps(100.0, TENORS, ZC)
+    f23 = forward_inflation_rate(lv[1], lv[2], 2, 3)
+    assert (1 + ZC[1]) ** 2 * (1 + f23) == pytest.approx((1 + ZC[2]) ** 3, abs=1e-9)
+
+
+def test_yoy_swap_zero_when_fixed_equals_flat_inflation():
+    lv = [100 * 1.03 ** t for t in (1, 2, 3)]
+    assert yoy_swap_value(1e6, 0.03, lv, [1, 1, 1], 100) == pytest.approx(0.0, abs=1e-6)
+
+
+def test_yoy_swap_receiver_gains_below_fixed():
+    lv = [100 * 1.03 ** t for t in (1, 2, 3)]
+    assert yoy_swap_value(1e6, 0.02, lv, [1, 1, 1], 100) > 0
+
+
+def test_curve_forward_validation():
+    with pytest.raises(ValueError):
+        forward_inflation_rate(100, 110, 2, 2)
+    with pytest.raises(ValueError):
+        inflation_curve_from_zc_swaps(100, [1, 2], [0.02])
+    with pytest.raises(ValueError):
+        yoy_swap_value(1e6, 0.02, [110], [1, 1], 100)
 
 
 def test_validation():

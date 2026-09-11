@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.374.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.375.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2918,6 +2918,15 @@ Auto-generated from `quantforge` v1.374.0 by `docs/gen_api.py` — do not edit b
 > The rate that, compounded with inflation, reproduces the nominal rate. For
 > small rates it is approximately ``nominal - inflation``.
 
+### `forward_inflation_rate(index_start, index_end, t_start, t_end)`  _function_
+
+> Annualized forward inflation between two curve horizons.
+>
+> ``(I_end / I_start)^(1/(t_end - t_start)) - 1`` -- the constant annual rate
+> linking two projected index levels. Chains with the near-leg rate so that
+> ``(1 + spot)^t_start (1 + fwd)^(t_end - t_start) = (1 + spot_end)^t_end`` (the
+> no-arbitrage forward/spot relation tested against).
+
 ### `index_ratio(index_settle, index_base) -> float`  _function_
 
 > Index ratio ``CPI_settle / CPI_base`` used to inflate the principal.
@@ -2928,6 +2937,17 @@ Auto-generated from `quantforge` v1.374.0 by `docs/gen_api.py` — do not edit b
 ### `inflation_adjusted_principal(face, index_settle, index_base) -> float`  _function_
 
 > Inflation-adjusted principal ``face * index_ratio`` (the linker notional).
+
+### `inflation_curve_from_zc_swaps(index_base, tenors, zc_rates)`  _function_
+
+> Projected index levels implied by a strip of zero-coupon swap rates.
+>
+> A ZC inflation swap of maturity ``T`` with fair rate ``k_T`` pins the forward
+> index to ``I_0 * (1 + k_T)^T`` (the :func:`zc_inflation_swap_rate` identity).
+> Given quotes ``(tenors, zc_rates)`` this returns the matching forward index
+> levels ``[I_0 (1 + k_T)^T for T in tenors]`` -- the market-implied inflation
+> curve, expressed as projected index fixings. By construction reinverting each
+> level through :func:`zc_inflation_swap_rate` recovers the input ``zc_rates``.
 
 ### `linker_price(real_cashflows, real_yield, index_settle, index_base) -> float`  _function_
 
@@ -2961,6 +2981,20 @@ Auto-generated from `quantforge` v1.374.0 by `docs/gen_api.py` — do not edit b
 ### `yoy_inflation_rate(index_prev, index_curr) -> float`  _function_
 
 > Year-on-year inflation ``index_curr / index_prev - 1`` between two fixings.
+
+### `yoy_swap_value(notional, fixed_rate, index_levels, discount_factors, index_prev)`  _function_
+
+> Value of a year-on-year inflation swap off a projected index curve.
+>
+> Each period ``i`` exchanges the realized year-on-year inflation
+> ``I_i / I_{i-1} - 1`` (float, received) for ``fixed_rate`` (paid), on
+> ``notional``, discounted by ``discount_factors[i]``. ``index_prev`` is the
+> fixing one period before the first ``index_levels`` entry (the base for the
+> first YoY ratio). Returns the inflation-receiver's value
+>
+>     notional * sum_i (I_i/I_{i-1} - 1 - fixed_rate) * DF_i.
+>
+> Unlike the single-payment ZC swap this pays the annual inflation each period.
 
 ### `zc_inflation_swap_rate(index_start, index_end, years) -> float`  _function_
 

@@ -209,6 +209,7 @@ from .inflation import (
     linker_price, linker_real_yield,
     deflation_floored_redemption, deflation_floor_value, yoy_inflation_rate,
     zc_inflation_swap_rate, zc_inflation_swap_value,
+    inflation_curve_from_zc_swaps, forward_inflation_rate, yoy_swap_value,
 )
 from .bondmath import (
     bond_cashflows, dated_bond_cashflows, dated_bond_price, dated_bond_yield,
@@ -394,7 +395,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.374.0"
+__version__ = "1.375.0"
 
 __all__ = [
     "OptionType",
@@ -725,6 +726,9 @@ __all__ = [
     "yoy_inflation_rate",
     "zc_inflation_swap_rate",
     "zc_inflation_swap_value",
+    "inflation_curve_from_zc_swaps",
+    "forward_inflation_rate",
+    "yoy_swap_value",
     "bond_price_from_yield",
     "macaulay_duration",
     "modified_duration",

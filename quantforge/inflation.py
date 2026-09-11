@@ -124,6 +124,73 @@ def zc_inflation_swap_value(notional, fixed_rate, index_start, index_end,
     return notional * (realized - fixed) * discount_factor
 
 
+def inflation_curve_from_zc_swaps(index_base, tenors, zc_rates):
+    """Projected index levels implied by a strip of zero-coupon swap rates.
+
+    A ZC inflation swap of maturity ``T`` with fair rate ``k_T`` pins the forward
+    index to ``I_0 * (1 + k_T)^T`` (the :func:`zc_inflation_swap_rate` identity).
+    Given quotes ``(tenors, zc_rates)`` this returns the matching forward index
+    levels ``[I_0 (1 + k_T)^T for T in tenors]`` -- the market-implied inflation
+    curve, expressed as projected index fixings. By construction reinverting each
+    level through :func:`zc_inflation_swap_rate` recovers the input ``zc_rates``.
+    """
+    if index_base <= 0:
+        raise ValueError("index_base must be positive")
+    if len(tenors) != len(zc_rates):
+        raise ValueError("tenors and zc_rates must have equal length")
+    levels = []
+    for T, k in zip(tenors, zc_rates):
+        if T <= 0:
+            raise ValueError("tenors must be positive")
+        levels.append(index_base * (1.0 + k) ** T)
+    return levels
+
+
+def forward_inflation_rate(index_start, index_end, t_start, t_end):
+    """Annualized forward inflation between two curve horizons.
+
+    ``(I_end / I_start)^(1/(t_end - t_start)) - 1`` -- the constant annual rate
+    linking two projected index levels. Chains with the near-leg rate so that
+    ``(1 + spot)^t_start (1 + fwd)^(t_end - t_start) = (1 + spot_end)^t_end`` (the
+    no-arbitrage forward/spot relation tested against).
+    """
+    if index_start <= 0 or index_end <= 0:
+        raise ValueError("index levels must be positive")
+    dt = t_end - t_start
+    if dt <= 0:
+        raise ValueError("t_end must exceed t_start")
+    return (index_end / index_start) ** (1.0 / dt) - 1.0
+
+
+def yoy_swap_value(notional, fixed_rate, index_levels, discount_factors,
+                   index_prev):
+    """Value of a year-on-year inflation swap off a projected index curve.
+
+    Each period ``i`` exchanges the realized year-on-year inflation
+    ``I_i / I_{i-1} - 1`` (float, received) for ``fixed_rate`` (paid), on
+    ``notional``, discounted by ``discount_factors[i]``. ``index_prev`` is the
+    fixing one period before the first ``index_levels`` entry (the base for the
+    first YoY ratio). Returns the inflation-receiver's value
+
+        notional * sum_i (I_i/I_{i-1} - 1 - fixed_rate) * DF_i.
+
+    Unlike the single-payment ZC swap this pays the annual inflation each period.
+    """
+    if len(index_levels) != len(discount_factors):
+        raise ValueError("index_levels and discount_factors must have equal length")
+    if index_prev <= 0:
+        raise ValueError("index_prev must be positive")
+    prev = index_prev
+    value = 0.0
+    for I, df in zip(index_levels, discount_factors):
+        if I <= 0:
+            raise ValueError("index levels must be positive")
+        yoy = I / prev - 1.0
+        value += (yoy - fixed_rate) * df
+        prev = I
+    return notional * value
+
+
 def linker_price(real_cashflows, real_yield, index_settle, index_base) -> float:
     """Dirty price of an inflation-linked bond off real cashflows.
 

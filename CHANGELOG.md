@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.375.0] - 2026-09-11
+
+### Added
+- `inflation_curve_from_zc_swaps` (in `inflation.py`): projected index levels
+  `I_0 (1+k_T)^T` implied by a strip of zero-coupon inflation swap rates -- the
+  market inflation curve as forward fixings; reinverting reprices the input swaps.
+- `forward_inflation_rate`: annualized forward inflation between two curve
+  horizons, chaining with the near leg via `(1+spot)^t1 (1+fwd)^(t2-t1) =
+  (1+spot_end)^t2`.
+- `yoy_swap_value`: value of a year-on-year inflation swap off a projected index
+  curve, paying realized annual inflation each period against a fixed rate; zero
+  when the fixed rate matches flat realized inflation.
+
 ## [1.374.0] - 2026-09-11
 
 ### Added
