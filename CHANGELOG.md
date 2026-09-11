@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.398.0] - 2026-09-11
+
+### Added
+- `swap_potential_future_exposure` and `wrong_way_cva` (in `xva.py`): the PFE
+  profile of a par swap at a high quantile (`std(t) * Phi^{-1}(q)`, sitting above
+  the EPE and rising with the quantile) and a CVA with a linear wrong-way-risk
+  tilt of the default buckets toward later dates (renormalized to preserve total
+  default probability). `alpha = 0` reduces to `cva`; `alpha > 0` raises the CVA
+  when exposure rises with time (wrong-way), `alpha < 0` lowers it (right-way).
+
 ## [1.397.0] - 2026-09-11
 
 ### Added

@@ -7,7 +7,9 @@ import math
 from quantforge import (
     SurvivalCurve, marginal_default_probs, cva, dva, bcva,
     swap_expected_exposure, fva,
+    swap_potential_future_exposure, wrong_way_cva,
 )
+from quantforge.mathfns import norm_ppf
 
 
 CURVE = SurvivalCurve([1, 3, 5], [0.02, 0.03, 0.04])
@@ -98,6 +100,41 @@ def test_fva_survival_weighting_reduces():
     ee = swap_expected_exposure(1e6, 0.01, 5.0, EE_GRID)
     curve = SurvivalCurve([5], [0.05])
     assert fva(EE_GRID, ee, 0.005, 0.03, curve.survival) < fva(EE_GRID, ee, 0.005, 0.03)
+
+
+def test_pfe_above_epe():
+    p = swap_potential_future_exposure(1e6, 0.01, 5.0, GRID, 0.95)
+    e = swap_expected_exposure(1e6, 0.01, 5.0, GRID)
+    assert all(p[i] >= e[i] - 1e-9 for i in range(len(GRID)))
+
+
+def test_pfe_formula():
+    p = swap_potential_future_exposure(1e6, 0.01, 5.0, GRID, 0.95)
+    std = 1e6 * 0.01 * math.sqrt(2) * (5 - 2) / 5
+    assert p[1] == pytest.approx(std * norm_ppf(0.95), abs=1e-6)
+
+
+def test_pfe_quantile_monotone():
+    p95 = swap_potential_future_exposure(1e6, 0.01, 5.0, GRID, 0.95)
+    p99 = swap_potential_future_exposure(1e6, 0.01, 5.0, GRID, 0.99)
+    assert all(p99[i] >= p95[i] - 1e-9 for i in range(len(GRID)))
+
+
+def test_wrong_way_reduces_to_cva_at_zero_alpha():
+    assert wrong_way_cva(CURVE, GRID, EPE, 0.03, 0.4, 0.0) == pytest.approx(
+        cva(CURVE, GRID, EPE, 0.03, 0.4), abs=1e-12)
+
+
+def test_wrong_way_raises_cva_for_rising_exposure():
+    ee_up = [4, 6, 8, 9, 10]
+    base = cva(CURVE, GRID, ee_up, 0.03)
+    assert wrong_way_cva(CURVE, GRID, ee_up, 0.03, 0.4, 0.5) > base
+    assert wrong_way_cva(CURVE, GRID, ee_up, 0.03, 0.4, -0.5) < base  # right-way
+
+
+def test_pfe_wrong_way_validation():
+    with pytest.raises(ValueError):
+        swap_potential_future_exposure(1e6, 0.01, 5.0, GRID, 0.3)
 
 
 def test_swap_exposure_fva_validation():

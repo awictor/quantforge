@@ -48,6 +48,75 @@ def swap_expected_exposure(notional, sigma, maturity, grid_times):
     return out
 
 
+def swap_potential_future_exposure(notional, sigma, maturity, grid_times,
+                                   quantile=0.95):
+    """Potential future exposure (PFE) profile of a par swap at a high quantile.
+
+    Same diffusing-then-amortizing value model as
+    :func:`swap_expected_exposure`, but reports the ``quantile`` (e.g. 95th
+    percentile) of the positive exposure rather than its mean. For a mean-zero
+    normal value with standard deviation ``std(t)`` the upper-tail exposure
+    quantile is ``std(t) * Phi^{-1}(quantile)``. Since ``Phi^{-1}(q) > 1/sqrt(2 pi)``
+    for ``q`` above ~0.69, the PFE sits above the EPE at usual regulatory
+    quantiles.
+    """
+    from .mathfns import norm_ppf
+    if notional < 0:
+        raise ValueError("notional must be non-negative")
+    if sigma < 0:
+        raise ValueError("sigma must be non-negative")
+    if maturity <= 0:
+        raise ValueError("maturity must be positive")
+    if not (0.5 < quantile < 1.0):
+        raise ValueError("quantile must be in (0.5, 1)")
+    z = norm_ppf(quantile)
+    out = []
+    for t in grid_times:
+        if t < 0.0 or t > maturity:
+            raise ValueError("grid times must lie in [0, maturity]")
+        std = notional * sigma * math.sqrt(t) * (maturity - t) / maturity
+        out.append(std * z)
+    return out
+
+
+def wrong_way_cva(curve, grid_times, expected_exposure, r, recovery=0.4,
+                  alpha=0.0):
+    """CVA with a linear wrong-way-risk scaling of the default buckets.
+
+    Wrong-way risk is the tendency of exposure to rise as the counterparty's
+    credit deteriorates. This applies a simple multiplicative tilt to the marginal
+    default probabilities that grows with time,
+    ``weight_i = 1 + alpha * (t_i / t_last - 0.5)``, renormalized to preserve the
+    total default probability. ``alpha > 0`` shifts default mass toward the later,
+    higher-exposure buckets (wrong-way), raising the CVA above the independent
+    ``alpha = 0`` case; ``alpha < 0`` is right-way risk. Reduces to :func:`cva`
+    at ``alpha = 0``.
+    """
+    if len(expected_exposure) != len(grid_times):
+        raise ValueError("expected_exposure and grid_times must align")
+    if not (0.0 <= recovery <= 1.0):
+        raise ValueError("recovery must be in [0, 1]")
+    df = _disc_fn(r)
+    lgd = 1.0 - recovery
+    dq = marginal_default_probs(curve, grid_times)
+    t_last = grid_times[-1]
+    weights = [1.0 + alpha * (t / t_last - 0.5) for t in grid_times]
+    if any(w < 0.0 for w in weights):
+        raise ValueError("alpha too large: tilt produced a negative weight")
+    tilted = [p * w for p, w in zip(dq, weights)]
+    base_sum = sum(dq)
+    tilt_sum = sum(tilted)
+    if tilt_sum <= 0.0:
+        return 0.0
+    scale = base_sum / tilt_sum  # renormalize to keep total default prob
+    total = 0.0
+    for t, ee, p in zip(grid_times, expected_exposure, tilted):
+        if ee < 0.0:
+            raise ValueError("expected exposure must be non-negative")
+        total += ee * df(t) * p * scale
+    return lgd * total
+
+
 def fva(grid_times, expected_exposure, funding_spread, r, survival=None):
     """Funding valuation adjustment on an uncollateralized exposure.
 

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.397.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.398.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -7435,3 +7435,28 @@ Auto-generated from `quantforge` v1.397.0 by `docs/gen_api.py` — do not edit b
 > remaining risk). The expected positive exposure of a mean-zero normal is
 > ``EPE(t) = std(t) / sqrt(2 pi)``. Returns one EPE per grid time; zero at
 > ``t = 0`` and ``t = maturity``, humped in between.
+
+### `swap_potential_future_exposure(notional, sigma, maturity, grid_times, quantile=0.95)`  _function_
+
+> Potential future exposure (PFE) profile of a par swap at a high quantile.
+>
+> Same diffusing-then-amortizing value model as
+> :func:`swap_expected_exposure`, but reports the ``quantile`` (e.g. 95th
+> percentile) of the positive exposure rather than its mean. For a mean-zero
+> normal value with standard deviation ``std(t)`` the upper-tail exposure
+> quantile is ``std(t) * Phi^{-1}(quantile)``. Since ``Phi^{-1}(q) > 1/sqrt(2 pi)``
+> for ``q`` above ~0.69, the PFE sits above the EPE at usual regulatory
+> quantiles.
+
+### `wrong_way_cva(curve, grid_times, expected_exposure, r, recovery=0.4, alpha=0.0)`  _function_
+
+> CVA with a linear wrong-way-risk scaling of the default buckets.
+>
+> Wrong-way risk is the tendency of exposure to rise as the counterparty's
+> credit deteriorates. This applies a simple multiplicative tilt to the marginal
+> default probabilities that grows with time,
+> ``weight_i = 1 + alpha * (t_i / t_last - 0.5)``, renormalized to preserve the
+> total default probability. ``alpha > 0`` shifts default mass toward the later,
+> higher-exposure buckets (wrong-way), raising the CVA above the independent
+> ``alpha = 0`` case; ``alpha < 0`` is right-way risk. Reduces to :func:`cva`
+> at ``alpha = 0``.
