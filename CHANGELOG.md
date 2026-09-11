@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.276.0] - 2026-09-11
+
+### Added
+- `double_no_touch_greeks` (in `exotics.py`): finite-difference Greeks of a
+  double-no-touch — `delta`, `gamma`, `vega`, `theta`, plus the two barrier
+  sensitivities `dV/dL` and `dV/dU`.
+- Verified: `delta` matches an independent bump; `vega < 0` and `gamma < 0`
+  (short vol, peaked inside the band); `theta > 0` (less time to knock);
+  widening the band raises value (`dV/dL < 0`, `dV/dU > 0`), and both barrier
+  sensitivities match direct bumps.
+
 ## [1.275.0] - 2026-09-11
 
 ### Added
