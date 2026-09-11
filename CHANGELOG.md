@@ -4,6 +4,21 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.290.0] - 2026-09-11
+
+### Added
+- `seasoned_geometric_asian_greeks` and `seasoned_arithmetic_asian_greeks` (in
+  `exotics.py`): finite-difference Greeks (`delta`, `gamma`, `vega`, `theta`)
+  for the seasoned (in-progress) Asian pricers. The calendar bump scales the
+  remaining fixing schedule with `t` so a `theta` difference stays within the
+  option's life and preserves the fixing shape.
+- Verified: with no observations the Greeks match the fresh
+  `discrete_geometric_asian_greeks` / `discrete_arithmetic_asian_greeks`; the
+  `price` field matches the pricer; partial-window delta/gamma/vega are
+  positive and theta negative for a call; a partially-seasoned option has
+  smaller delta and vega than a fresh one (less of the average is still
+  stochastic).
+
 ## [1.289.0] - 2026-09-11
 
 ### Added

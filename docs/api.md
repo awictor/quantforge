@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.289.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.290.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1430,6 +1430,14 @@ Auto-generated from `quantforge` v1.289.0 by `docs/gen_api.py` — do not edit b
 > with all fixings observed the payoff is the deterministic arithmetic
 > intrinsic.
 
+### `seasoned_arithmetic_asian_greeks(S, K, t, r, sigma, observed_prices, n_total, remaining_fixing_times=None, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> Greeks of a seasoned arithmetic Asian by central finite differences of
+> :func:`seasoned_arithmetic_asian`: ``delta`` (dV/dS), ``gamma`` (d2V/dS2),
+> ``vega`` (dV/dsigma), ``theta`` (calendar decay). The observed fixings and
+> the remaining schedule are held fixed. Returns a dict with ``price`` and
+> those fields.
+
 ### `seasoned_geometric_asian(S, K, t, r, sigma, observed_prices, n_total, remaining_fixing_times=None, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
 
 > Seasoned (in-progress) discrete geometric-average Asian option (exact).
@@ -1450,6 +1458,14 @@ Auto-generated from `quantforge` v1.289.0 by `docs/gen_api.py` — do not edit b
 > discounted at ``r``. When no fixings are observed this reduces exactly to
 > :func:`discrete_geometric_asian`. When all ``n_total`` fixings are observed
 > the average is known and the payoff is deterministic.
+
+### `seasoned_geometric_asian_greeks(S, K, t, r, sigma, observed_prices, n_total, remaining_fixing_times=None, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> Greeks of a seasoned geometric Asian by central finite differences of
+> :func:`seasoned_geometric_asian`: ``delta`` (dV/dS), ``gamma`` (d2V/dS2),
+> ``vega`` (dV/dsigma), ``theta`` (calendar decay). The observed fixings and
+> the remaining schedule are held fixed. Returns a dict with ``price`` and
+> those fields.
 
 ## forward
 
