@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.306.0] - 2026-09-11
+
+### Added
+- `partial_time_end_barrier_call` (in `exotics.py`): partial-time (end)
+  single-barrier call (Heynen-Kat 1994), where the down barrier is monitored
+  only over `[t1, T2]` (inactive before `t1`). Exact bivariate-normal closed
+  form coupling the monitoring-start date to expiry (`rho = sqrt(t1/T2)`).
+  Down-out is priced directly; down-in follows from in-out parity. (Up-barrier
+  partial-time calls have a distinct form and raise `ValueError`.)
+- Verified: as `t1 -> 0` it approaches the standard continuously-monitored
+  down-out barrier, and as `t1 -> T2` it approaches the vanilla call; a mid
+  window sits strictly between the two; in-out parity holds exactly; matches a
+  path Monte Carlo across `t1 in {0.25, 0.5, 0.75}` to within ~2%.
+
 ## [1.305.0] - 2026-09-11
 
 ### Added

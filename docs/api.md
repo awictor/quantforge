@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.305.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.306.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1474,6 +1474,23 @@ Auto-generated from `quantforge` v1.305.0 by `docs/gen_api.py` — do not edit b
 > (``H > S``) or a lower barrier (``H < S``); the direction is inferred.
 >
 > Uses the standard Rubinstein-Reiner touch formulas.
+
+### `partial_time_end_barrier_call(S, K, H, t1, T2, r, sigma, barrier=<Barrier.DOWN_OUT: 'down-out'>, b=None) -> float`  _function_
+
+> Partial-time (end) single-barrier call (Heynen-Kat 1994), closed form.
+>
+> The knock-out barrier is monitored only over ``[t1, T2]`` -- it is inactive
+> before ``t1`` and live from ``t1`` to expiry ``T2``. Because the barrier
+> watches a shorter window than a full-life barrier, a knock-out is worth more
+> than the continuously-monitored one and less than the vanilla; as
+> ``t1 -> 0`` it approaches the standard barrier and as ``t1 -> T2`` it
+> approaches the vanilla call.
+>
+> Heynen-Kat's bivariate-normal formula couples the monitoring-start date
+> ``t1`` (correlation ``rho = sqrt(t1/T2)``) to expiry. The down-out call is
+> supported directly; the down-in value follows from in-out parity
+> ``KI = vanilla - KO``. (Up-barrier partial-time calls have a distinct
+> Heynen-Kat form and are not handled here.)
 
 ### `power_option(S, K, t, r, sigma, power, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
 
