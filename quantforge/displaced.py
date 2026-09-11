@@ -94,6 +94,33 @@ def displaced_diffusion_greeks(S, K, t, r, sigma, shift=0.0,
             "theta": theta}
 
 
+def displaced_diffusion_smile(S, strikes, t, r, sigma, shift=0.0, b=None):
+    """The Black-Scholes implied-vol smile a displaced-diffusion model produces.
+
+    Prices a European call at each strike under the displaced diffusion, then
+    inverts each price to its Black-Scholes implied volatility, returning
+    ``(log_moneyness, vol)`` pairs sorted by strike (log-moneyness on the forward
+    ``F = S e^{b t}``). Because ``sigma`` is calibrated to the ATM instantaneous
+    vol, the smile passes near ``sigma`` at the money; a positive ``shift`` makes
+    the process partly normal, producing a downward skew (steeper for larger
+    shift), while ``shift = 0`` returns a flat Black-Scholes smile.
+    """
+    from .implied import implied_volatility
+    if b is None:
+        b = r
+    F = S * math.exp(b * t)
+    out = []
+    for K in sorted(strikes):
+        c = displaced_diffusion_price(S, K, t, r, sigma, shift,
+                                      OptionType.CALL, b=b)
+        try:
+            iv = implied_volatility(c, S, K, t, r, OptionType.CALL, b=b)
+        except ValueError:
+            continue
+        out.append((math.log(K / F), iv))
+    return out
+
+
 def displaced_implied_shift(S, t, r, quotes, b=None,
                             shift_lo=None, shift_hi=None):
     """Calibrate the displacement that reproduces an observed vol skew.

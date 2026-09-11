@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.311.0] - 2026-09-11
+
+### Added
+- `displaced_diffusion_smile` (in `displaced.py`): the Black-Scholes implied-vol
+  smile a displaced-diffusion (shifted-lognormal) model produces. Prices a call
+  at each strike and inverts to BS implied vol, returning `(log_moneyness, vol)`
+  on the forward `F = S e^{b t}`. Mirrors `cev_smile` / `merton_smile`.
+- Verified: `shift = 0` gives a flat smile at `sigma`; the ATM vol sits near
+  `sigma`; a positive shift produces a downward skew, steeper for larger shift;
+  output is sorted by strike; each smile vol reprices to the displaced-diffusion
+  price it came from.
+
 ## [1.310.0] - 2026-09-11
 
 ### Added

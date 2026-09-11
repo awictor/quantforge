@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.310.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.311.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1028,6 +1028,18 @@ Auto-generated from `quantforge` v1.310.0 by `docs/gen_api.py` — do not edit b
 >
 > The payoff is unchanged (``max(S_T - K, 0)`` etc.); only the diffusion is
 > displaced, so the price equals a BSM price on ``S + shift`` / ``K + shift``.
+
+### `displaced_diffusion_smile(S, strikes, t, r, sigma, shift=0.0, b=None)`  _function_
+
+> The Black-Scholes implied-vol smile a displaced-diffusion model produces.
+>
+> Prices a European call at each strike under the displaced diffusion, then
+> inverts each price to its Black-Scholes implied volatility, returning
+> ``(log_moneyness, vol)`` pairs sorted by strike (log-moneyness on the forward
+> ``F = S e^{b t}``). Because ``sigma`` is calibrated to the ATM instantaneous
+> vol, the smile passes near ``sigma`` at the money; a positive ``shift`` makes
+> the process partly normal, producing a downward skew (steeper for larger
+> shift), while ``shift = 0`` returns a flat Black-Scholes smile.
 
 ### `displaced_implied_shift(S, t, r, quotes, b=None, shift_lo=None, shift_hi=None)`  _function_
 
