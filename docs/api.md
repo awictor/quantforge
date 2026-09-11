@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.314.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.315.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -4007,6 +4007,22 @@ Auto-generated from `quantforge` v1.314.0 by `docs/gen_api.py` — do not edit b
 > ``vega`` (dV/dsigma_n). A payer swaption is a call on the swap rate (positive
 > rate delta); a receiver is a put (negative). Returns a dict with ``price``,
 > ``rate_delta``, ``rate_gamma``, ``vega``, ``annuity``.
+
+### `swaption_implied_black_vol(price, swap_rate, strike, expiry, periods, payer=True) -> float`  _function_
+
+> Black (lognormal) implied vol of a swaption from its price.
+>
+> Divides out the annuity to recover the undiscounted Black-76 option value,
+> then inverts it with :func:`quantforge.implied_volatility` at zero carry.
+> Inverse of :func:`black_swaption_price`; requires positive rate and strike.
+
+### `swaption_implied_normal_vol(price, swap_rate, strike, expiry, periods, payer=True) -> float`  _function_
+
+> Normal (Bachelier) implied vol of a swaption from its price.
+>
+> Divides out the annuity to recover the undiscounted Bachelier option value,
+> then inverts it with :func:`bachelier_implied_vol`. Inverse of
+> :func:`swaption_price`.
 
 ### `swaption_parity(swap_rate, strike, periods) -> float`  _function_
 

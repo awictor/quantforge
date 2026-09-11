@@ -19,6 +19,7 @@ from typing import Sequence, List
 
 from .bachelier import (
     bachelier_price, bachelier_delta, bachelier_gamma, bachelier_vega,
+    bachelier_implied_vol,
 )
 from .bsm import (
     OptionType, price as bsm_price, delta as bsm_delta, gamma as bsm_gamma,
@@ -248,3 +249,43 @@ def black_swaption_greeks(swap_rate, strike, expiry, sigma_b, periods,
     vega = ann * bsm_vega(swap_rate, strike, expiry, 0.0, sigma_b, b=0.0)
     return {"price": price, "rate_delta": rate_delta, "rate_gamma": rate_gamma,
             "vega": vega, "annuity": ann}
+
+
+def swaption_implied_normal_vol(price, swap_rate, strike, expiry, periods,
+                                payer=True) -> float:
+    """Normal (Bachelier) implied vol of a swaption from its price.
+
+    Divides out the annuity to recover the undiscounted Bachelier option value,
+    then inverts it with :func:`bachelier_implied_vol`. Inverse of
+    :func:`swaption_price`.
+    """
+    ann = annuity(periods)
+    if ann <= 0:
+        raise ValueError("annuity must be positive")
+    if expiry <= 0:
+        raise ValueError("cannot imply vol at or past expiry")
+    ot = OptionType.CALL if payer else OptionType.PUT
+    undiscounted = price / ann
+    return bachelier_implied_vol(undiscounted, swap_rate, strike, expiry, 0.0, ot)
+
+
+def swaption_implied_black_vol(price, swap_rate, strike, expiry, periods,
+                               payer=True) -> float:
+    """Black (lognormal) implied vol of a swaption from its price.
+
+    Divides out the annuity to recover the undiscounted Black-76 option value,
+    then inverts it with :func:`quantforge.implied_volatility` at zero carry.
+    Inverse of :func:`black_swaption_price`; requires positive rate and strike.
+    """
+    from .implied import implied_volatility
+    if swap_rate <= 0 or strike <= 0:
+        raise ValueError("Black swaption needs positive swap_rate and strike")
+    ann = annuity(periods)
+    if ann <= 0:
+        raise ValueError("annuity must be positive")
+    if expiry <= 0:
+        raise ValueError("cannot imply vol at or past expiry")
+    ot = OptionType.CALL if payer else OptionType.PUT
+    undiscounted = price / ann
+    return implied_volatility(undiscounted, swap_rate, strike, expiry, 0.0, ot,
+                              b=0.0)

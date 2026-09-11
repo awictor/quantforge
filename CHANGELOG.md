@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.315.0] - 2026-09-11
+
+### Added
+- `swaption_implied_normal_vol` and `swaption_implied_black_vol` (in
+  `rates.py`): invert a swaption price back to its normal (Bachelier) or Black
+  (lognormal) volatility. Each divides out the annuity to recover the
+  undiscounted option value, then inverts with `bachelier_implied_vol` /
+  `implied_volatility` at zero carry — the inverses of `swaption_price` and
+  `black_swaption_price`.
+- Verified: both round-trip the input volatility to 1e-6 across payer/receiver
+  and multiple vols; the Black inversion rejects non-positive rates; both reject
+  a zero/expired option.
+
 ## [1.314.0] - 2026-09-11
 
 ### Added

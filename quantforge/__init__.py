@@ -166,6 +166,7 @@ from .rates import (
     caplet_floorlet_parity, annuity, swaption_price, swaption_parity,
     caplet_greeks, cap_greeks, floor_greeks, swaption_greeks,
     black_swaption_price, black_swaption_greeks,
+    swaption_implied_normal_vol, swaption_implied_black_vol,
 )
 from .vasicek import (
     zero_coupon_bond, zero_coupon_yield, bond_option,
@@ -329,7 +330,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.314.0"
+__version__ = "1.315.0"
 
 __all__ = [
     "OptionType",
@@ -579,6 +580,8 @@ __all__ = [
     "swaption_greeks",
     "black_swaption_price",
     "black_swaption_greeks",
+    "swaption_implied_normal_vol",
+    "swaption_implied_black_vol",
     "zero_coupon_bond",
     "zero_coupon_yield",
     "bond_option",
