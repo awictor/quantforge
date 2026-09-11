@@ -308,6 +308,46 @@ def yoy_caplet_price(forward_rate, strike, expiry, sigma, discount_factor,
     return discount_factor * notional * val
 
 
+def real_zero_curve(nominal_zeros, breakevens):
+    """Per-tenor real zero rates from nominal zeros and breakeven inflation.
+
+    Applies the Fisher relation tenor by tenor,
+    ``real = (1 + nominal)/(1 + breakeven) - 1`` (:func:`real_from_breakeven`),
+    turning a nominal zero curve and a breakeven-inflation curve into the implied
+    real zero curve. Inverse of :func:`nominal_zero_curve`.
+    """
+    if len(nominal_zeros) != len(breakevens):
+        raise ValueError("nominal_zeros and breakevens must have equal length")
+    return [real_from_breakeven(n, b) for n, b in zip(nominal_zeros, breakevens)]
+
+
+def nominal_zero_curve(real_zeros, breakevens):
+    """Per-tenor nominal zero rates from real zeros and breakeven inflation.
+
+    Fisher forward direction, ``nominal = (1 + real)(1 + breakeven) - 1``
+    (:func:`fisher_nominal_rate`), reconstructing the nominal curve. Inverse of
+    :func:`real_zero_curve`, so composing the two is the identity per tenor.
+    """
+    if len(real_zeros) != len(breakevens):
+        raise ValueError("real_zeros and breakevens must have equal length")
+    return [fisher_nominal_rate(r, b) for r, b in zip(real_zeros, breakevens)]
+
+
+def real_discount_factor(nominal_df, index_ratio_t):
+    """Real discount factor from a nominal one and the period index growth.
+
+    The real (inflation-adjusted) discount factor grows the nominal by the
+    realized/projected index ratio over the period: ``nominal_df * index_ratio_t``.
+    A real cashflow discounted at the real DF equals its inflated nominal cashflow
+    discounted at the nominal DF -- the identity linking the two measures.
+    """
+    if nominal_df <= 0:
+        raise ValueError("nominal_df must be positive")
+    if index_ratio_t <= 0:
+        raise ValueError("index_ratio_t must be positive")
+    return nominal_df * index_ratio_t
+
+
 def yoy_caplet_price_normal(forward_rate, strike, expiry, sigma, discount_factor,
                             notional=1.0, is_cap=True):
     """Bachelier (normal-model) price of a year-on-year inflation cap/floor let.

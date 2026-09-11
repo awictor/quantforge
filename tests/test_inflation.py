@@ -14,6 +14,7 @@ from quantforge import (
     normalize_seasonal_factors, apply_seasonality, deseasonalize,
     yoy_caplet_price, yoy_cap_price, yoy_cap_implied_vol,
     yoy_caplet_price_normal, yoy_caplet_implied_normal_vol,
+    real_zero_curve, nominal_zero_curve, real_discount_factor,
     bond_cashflows, bond_price_from_yield, yield_to_maturity,
 )
 import math
@@ -402,6 +403,43 @@ def test_normal_caplet_validation():
         yoy_caplet_price_normal(0.03, 0.02, -1.0, 0.01, 0.95)
     with pytest.raises(ValueError):
         yoy_caplet_implied_normal_vol(1e18, 0.03, 0.02, 2.0, 0.95)
+
+
+NOMS = [0.04, 0.042, 0.045]
+BKES = [0.02, 0.021, 0.022]
+
+
+def test_real_nominal_curve_round_trip():
+    reals = real_zero_curve(NOMS, BKES)
+    back = nominal_zero_curve(reals, BKES)
+    assert all(back[i] == pytest.approx(NOMS[i], abs=1e-12) for i in range(3))
+
+
+def test_curve_fisher_per_tenor():
+    reals = real_zero_curve(NOMS, BKES)
+    for i in range(3):
+        assert (1 + reals[i]) * (1 + BKES[i]) == pytest.approx(1 + NOMS[i], abs=1e-12)
+
+
+def test_curve_breakeven_recovers():
+    reals = real_zero_curve(NOMS, BKES)
+    for i in range(3):
+        assert breakeven_inflation(NOMS[i], reals[i]) == pytest.approx(BKES[i], abs=1e-12)
+
+
+def test_real_discount_factor_measure_consistency():
+    ndf, ratio = 0.9, 1.05
+    # 100 real @ real_df == 100*ratio nominal @ nominal_df.
+    assert 100 * real_discount_factor(ndf, ratio) == pytest.approx(100 * ratio * ndf)
+
+
+def test_curve_validation():
+    with pytest.raises(ValueError):
+        real_zero_curve([0.04], [0.02, 0.03])
+    with pytest.raises(ValueError):
+        real_discount_factor(-1, 1.05)
+    with pytest.raises(ValueError):
+        real_discount_factor(0.9, 0)
 
 
 def test_validation():

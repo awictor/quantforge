@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.381.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.382.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3018,6 +3018,14 @@ Auto-generated from `quantforge` v1.381.0 by `docs/gen_api.py` — do not edit b
 > cashflow bond yield by bisection (price is monotone decreasing in the yield).
 > Inverse of :func:`linker_price`.
 
+### `nominal_zero_curve(real_zeros, breakevens)`  _function_
+
+> Per-tenor nominal zero rates from real zeros and breakeven inflation.
+>
+> Fisher forward direction, ``nominal = (1 + real)(1 + breakeven) - 1``
+> (:func:`fisher_nominal_rate`), reconstructing the nominal curve. Inverse of
+> :func:`real_zero_curve`, so composing the two is the identity per tenor.
+
 ### `normalize_seasonal_factors(raw_factors)`  _function_
 
 > Scale 12 monthly seasonal factors to a geometric mean of one.
@@ -3028,12 +3036,30 @@ Auto-generated from `quantforge` v1.381.0 by `docs/gen_api.py` — do not edit b
 > compounding all twelve leaves the annual index unchanged. Raw factors must be
 > positive.
 
+### `real_discount_factor(nominal_df, index_ratio_t)`  _function_
+
+> Real discount factor from a nominal one and the period index growth.
+>
+> The real (inflation-adjusted) discount factor grows the nominal by the
+> realized/projected index ratio over the period: ``nominal_df * index_ratio_t``.
+> A real cashflow discounted at the real DF equals its inflated nominal cashflow
+> discounted at the nominal DF -- the identity linking the two measures.
+
 ### `real_from_breakeven(nominal_yield, breakeven) -> float`  _function_
 
 > Real yield implied by a nominal yield and a breakeven inflation rate.
 >
 > ``(1 + nominal)/(1 + breakeven) - 1`` -- inverse of
 > :func:`breakeven_inflation`.
+
+### `real_zero_curve(nominal_zeros, breakevens)`  _function_
+
+> Per-tenor real zero rates from nominal zeros and breakeven inflation.
+>
+> Applies the Fisher relation tenor by tenor,
+> ``real = (1 + nominal)/(1 + breakeven) - 1`` (:func:`real_from_breakeven`),
+> turning a nominal zero curve and a breakeven-inflation curve into the implied
+> real zero curve. Inverse of :func:`nominal_zero_curve`.
 
 ### `reference_cpi(cpi_month_start, cpi_next_month, day, days_in_month)`  _function_
 

@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.382.0] - 2026-09-11
+
+### Added
+- `real_zero_curve`, `nominal_zero_curve`, `real_discount_factor` (in
+  `inflation.py`): bridge between nominal and real curves via the Fisher relation
+  per tenor. `real_zero_curve` strips breakevens off a nominal zero curve,
+  `nominal_zero_curve` reconstructs it (composing the two is the identity), and
+  `real_discount_factor` grows a nominal DF by the period index ratio so a real
+  cashflow at the real DF equals its inflated nominal cashflow at the nominal DF.
+
 ## [1.381.0] - 2026-09-11
 
 ### Added
