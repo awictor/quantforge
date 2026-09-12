@@ -1764,9 +1764,12 @@ dcd_enhanced_yield(base_deposit_rate=0.05, option_premium_rate=prem, tenor=0.25)
 ## FX forwards (covered interest parity)
 
 ```python
-from quantforge import fx_forward, forward_points, implied_base_rate
+from quantforge import (fx_forward, forward_points, implied_base_rate,
+                        cross_rate, triangular_arbitrage)
 
 fx_forward(spot=1.10, r_price=0.05, r_base=0.03, t=1.0)   # EURUSD-style
+cross_rate(1.10, 1.25)                                     # EURGBP from EURUSD, GBPUSD
+triangular_arbitrage(1.10, 150, 1 / (1.10 * 150))         # == 1 if arbitrage-free
 ```
 
 ## Portfolio optimization
