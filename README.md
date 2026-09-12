@@ -1894,6 +1894,20 @@ Standardized columns have mean 0 and std 1; min-max maps to [0,1]; the robust
 scaler uses the median and IQR, so its center is unmoved by outliers. All three
 round-trip through the inverse.
 
+To let a linear model fit curvature and interactions, expand the features first
+with `polynomial_features`:
+
+```python
+from quantforge import polynomial_features
+
+F, terms = polynomial_features(X, degree=2)   # 1, x1, x2, x1^2, x1*x2, x2^2, ...
+polynomial_features(X, degree=2, interaction_only=True)   # drops pure powers
+```
+
+It returns the expanded matrix and the index-tuple for each column; the feature
+count is `C(p + d, d)`. Feed the result straight into `ols_fit`, `ridge_regression`,
+or `fit_logistic`.
+
 ## Factor models
 
 Multi-factor OLS return regression (alpha, betas, R-squared), factor attribution,
