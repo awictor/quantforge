@@ -16,6 +16,17 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.582.0] - 2026-09-12
+
+### Added
+- `serial_correlation.py`: portmanteau serial-correlation tests -- `ljung_box`
+  (with its small-sample refinement), `box_pierce`, and `durbin_watson`, with a
+  self-contained chi-square survival function (regularized incomplete gamma) for
+  the p-values. Cross-checked: the chi-square SF matches reference points, white
+  noise fails to reject (p > 0.05, DW ~ 2), an AR(1) rejects strongly (Q ~ 790,
+  p < 1e-6, DW < 1), Ljung-Box exceeds Box-Pierce, and a negative-AR series gives
+  DW > 3.
+
 ## [1.581.0] - 2026-09-12
 
 ### Documentation

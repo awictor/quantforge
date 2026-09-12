@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.581.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.582.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -8569,6 +8569,30 @@ Auto-generated from `quantforge` v1.581.0 by `docs/gen_api.py` — do not edit b
 > 12=annual) until ``maturity_years`` is reached, then applies
 > :func:`adjust_business_day` with ``convention``. Returns the list of adjusted
 > period end dates (the start date itself is not included).
+
+## serial_correlation
+
+### `box_pierce(x, lags=10)`  _function_
+
+> Box-Pierce portmanteau statistic and p-value.
+>
+> Returns ``(Q, p_value)`` with ``Q = n * sum_{k=1}^{lags} rho_k^2`` and the
+> chi-square(``lags``) p-value. Small p rejects the white-noise null.
+
+### `durbin_watson(x)`  _function_
+
+> Durbin-Watson statistic ``d = sum (x_t - x_{t-1})^2 / sum x_t^2``.
+>
+> Approximately ``2(1 - rho_1)``: near 2 = no first-order autocorrelation, near
+> 0 = strong positive, near 4 = strong negative. Computed on the demeaned series.
+
+### `ljung_box(x, lags=10)`  _function_
+
+> Ljung-Box portmanteau statistic and p-value (small-sample refinement).
+>
+> Returns ``(Q, p_value)`` with ``Q = n(n+2) sum_{k=1}^{lags} rho_k^2 / (n-k)``
+> and the chi-square(``lags``) p-value. Large Q / small p rejects "the first
+> ``lags`` autocorrelations are jointly zero".
 
 ## shout
 
