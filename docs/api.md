@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.639.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.640.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -4970,6 +4970,20 @@ Auto-generated from `quantforge` v1.639.0 by `docs/gen_api.py` — do not edit b
 ### `hw_B(a, tau)`  _function_
 
 > Hull-White ``B(t, T) = (1 - e^{-a*tau}) / a`` for ``tau = T - t``.
+
+### `hw_bond_option(P0, a, sigma, t_option, t_bond, strike, is_call=True)`  _function_
+
+> European option on a zero-coupon bond under Hull-White (analytic).
+>
+> Prices an option expiring at ``t_option`` on a zero maturing at ``t_bond``,
+> struck at ``strike``, using the initial discount curve ``P0``. The forward
+> bond price is log-normal with volatility
+>
+>     sigma_P = sigma * B(a, t_bond - t_option) * sqrt((1 - e^{-2 a t_option}) / (2 a)),
+>
+> giving a Black-style formula in the discount factors ``P0(t_bond)`` and
+> ``P0(t_option)`` (Jamshidian / Hull-White). Returns the option value today.
+> Requires ``0 < t_option < t_bond``.
 
 ### `hw_zero_from_curve(P0, r0, a, sigma, t, T, f0=None, eps=1e-05)`  _function_
 

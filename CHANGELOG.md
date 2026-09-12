@@ -16,6 +16,16 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.640.0] - 2026-09-12
+
+### Added
+- `hull_white.py`: `hw_bond_option` prices a European option on a zero-coupon bond
+  under Hull-White in closed form (Jamshidian), using the initial discount curve
+  and the analytic forward-bond-price volatility. Cross-checked: put-call parity
+  holds exactly (``c - p = P(Tb) - K P(To)``), ATM call equals put, a higher
+  volatility raises the price, a deep-in-the-money call approaches its intrinsic
+  value, and a zero-vol ATM option is worthless.
+
 ## [1.639.0] - 2026-09-12
 
 ### Documentation
