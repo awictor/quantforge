@@ -1538,6 +1538,20 @@ hw_floor(P0, a=0.1, sigma=0.01, dates=dates, strike=0.03)
 The cap is the sum of its caplets and `cap - floor` equals the underlying
 fixed-vs-float swap value, so the three are mutually consistent by put-call parity.
 
+`hw_swaption` prices a European payer/receiver swaption by the Jamshidian
+decomposition — a portfolio of bond options at the critical short rate:
+
+```python
+from quantforge import hw_swaption
+
+hw_swaption(P0, r0=0.03, a=0.1, sigma=0.01, expiry=1.0,
+            pay_times=[2, 3, 4, 5], fixed_rate=0.03, is_payer=True)
+```
+
+`payer - receiver` equals the forward swap value and an ATM payer equals its
+receiver, so the swaption ties back to the cap/floor and bond-option prices by
+parity.
+
 ## Callable bonds and OAS
 
 Callable/puttable bond pricing on a short-rate binomial tree and the
