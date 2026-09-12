@@ -83,6 +83,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Robust scale and location](#robust-scale-and-location)
 - [Hurst exponent (long memory)](#hurst-exponent-long-memory)
 - [Variance-ratio test](#variance-ratio-test)
+- [Ornstein-Uhlenbeck calibration](#ornstein-uhlenbeck-calibration)
 - [Markov chains](#markov-chains)
 - [Principal component analysis](#principal-component-analysis)
 - [Matrix utilities](#matrix-utilities)
@@ -1972,6 +1973,28 @@ variance_ratio_zstat(returns, q=2)   # standard-normal z; |z| > 1.96 rejects the
 On white noise `VR` sits near 1 with a small `z`; a mean-reverting series drives
 `VR` below 1 with a large negative `z`, a trending one above 1 with a large
 positive `z`.
+
+## Ornstein-Uhlenbeck calibration
+
+Calibrate the mean-reverting OU process `dX = kappa(theta - X)dt + sigma dW` from a
+sampled path — the standard fit for a pairs spread or any mean-reverting series.
+The discrete-time OU is an exact AR(1), so `fit_ornstein_uhlenbeck` fits that by
+least squares and inverts the relations to recover speed, level, and volatility in
+closed form.
+
+```python
+from quantforge import fit_ornstein_uhlenbeck
+
+p = fit_ornstein_uhlenbeck(spread, dt=1/252)
+p["kappa"]        # mean-reversion speed (per year)
+p["theta"]        # long-run level
+p["sigma"]        # instantaneous volatility
+p["half_life"]    # ln(2) / kappa — time for a deviation to halve
+```
+
+A random walk fits a near-zero `kappa` (very long half-life); an oscillating,
+anti-persistent series is rejected. Pair the half-life with `spread_zscore` and
+`ou_half_life` to size a mean-reversion trade.
 
 ## Markov chains
 

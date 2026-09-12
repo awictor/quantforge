@@ -4,6 +4,12 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.567.0] - 2026-09-12
+
+### Documentation
+- README: added an "Ornstein-Uhlenbeck calibration" section documenting
+  `fit_ornstein_uhlenbeck`; TOC regenerated to 96 entries.
+
 ## [1.566.0] - 2026-09-12
 
 ### Added
