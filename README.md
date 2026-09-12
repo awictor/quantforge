@@ -37,6 +37,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Exotic options (closed form)](#exotic-options-closed-form)
 - [Shout and ladder options](#shout-and-ladder-options)
 - [Installment options](#installment-options)
+- [Double-barrier knock-out](#double-barrier-knock-out)
 - [Local volatility (Dupire)](#local-volatility-dupire)
 - [Term-structure surface (calendar-arbitrage aware)](#term-structure-surface-calendar-arbitrage-aware)
 - [Skew/kurtosis-adjusted pricing (Corrado-Su)](#skewkurtosis-adjusted-pricing-corrado-su)
@@ -893,6 +894,26 @@ installment_call(S=100, K=100, t=1.0, r=0.05, sigma=0.25,
 A larger installment lowers the upfront value, more payment dates lower it
 further, and a prohibitively large installment drives it to zero (the holder
 always lapses).
+
+## Double-barrier knock-out
+
+A double knock-out call pays the vanilla call payoff at expiry only if the spot
+stays strictly inside a corridor `(L, U)` for the whole life — touching either
+the lower barrier `L` or the upper barrier `U` extinguishes it.
+`double_knockout_call` prices it in closed form via the Kunitomo-Ikeda (1992)
+image series, which enforces both absorbing boundaries and converges geometrically
+(a handful of terms is machine-accurate).
+
+```python
+from quantforge import double_knockout_call, call_price
+
+double_knockout_call(S=100, K=100, L=80, U=130, t=1.0, r=0.05, sigma=0.25, b=0.05)
+# -> 1.9621   (vs vanilla call 12.336 — most of the value is knocked out)
+```
+
+The value never exceeds the vanilla call, approaches it as the barriers move far
+away, and a tighter corridor lowers it. This is the continuous-monitoring price;
+discrete-monitoring Monte Carlo converges down onto it as the step count rises.
 
 ## Local volatility (Dupire)
 
