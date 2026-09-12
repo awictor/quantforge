@@ -16,6 +16,18 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.706.0] - 2026-09-12
+
+### Added
+- `ruin.py`: risk-of-ruin and first-passage drawdown probabilities.
+  `gamblers_ruin_probability` gives the classic unit-stake ruin probability,
+  `risk_of_ruin_units` wraps it as a bankroll-in-units measure, and
+  `ruin_probability_gbm` gives the chance a drifting log-equity ever falls by a
+  given fraction, `(1 - loss)^{2 mu / sigma^2}`. Cross-checked: the gambler's-ruin
+  formula matches a direct solve of the ruin recursion (and the fair-game linear
+  case), and the geometric-Brownian-motion formula matches its first-passage
+  derivation and a simulated lower bound.
+
 ## [1.705.0] - 2026-09-12
 
 ### Documentation

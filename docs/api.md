@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.704.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.706.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -9580,6 +9580,39 @@ Auto-generated from `quantforge` v1.704.0 by `docs/gen_api.py` — do not edit b
 > Returns ``(log_moneyness, vol)`` pairs sorted by strike on the forward
 > ``F = S e^{(r-q) t}``. Small ``H`` steepens the short-dated skew beyond what
 > classical Heston can reach.
+
+## ruin
+
+### `gamblers_ruin_probability(start, target, win_prob)`  _function_
+
+> Probability of hitting 0 before ``target`` in a unit-stake random walk.
+>
+> Starting from integer wealth ``start`` with per-round win probability
+> ``win_prob`` (win +1, lose -1) and an absorbing target ``target``. The classic
+> gambler's-ruin formula; for a fair game (``win_prob = 0.5``) it is the linear
+> ``1 - start/target``. Ruin is certain against an unfavorable game as the target
+> grows.
+
+### `risk_of_ruin_units(win_prob, target_units)`  _function_
+
+> Risk of ruin starting with ``target_units`` units against a one-unit target run.
+>
+> A trader with a bankroll of ``target_units`` betting one unit at a time with
+> edge ``win_prob``: the probability of losing the whole bankroll before doubling
+> it is :func:`gamblers_ruin_probability` from ``target_units`` toward
+> ``2 * target_units``. A convenient bankroll-in-units risk measure; falls fast in
+> the number of units when the game is favorable.
+
+### `ruin_probability_gbm(loss, mu, sigma)`  _function_
+
+> Probability a drifting log-equity ever falls by at least the fraction ``loss``.
+>
+> For log-equity following a Brownian motion with drift ``mu > 0`` and volatility
+> ``sigma``, the chance the account ever drops to ``(1 - loss)`` of its starting
+> value is the first-passage law ``(1 - loss)^{2 mu / sigma^2}``. ``loss`` is a
+> fraction in ``(0, 1)``. Decreasing in the drift-to-variance ratio: a stronger
+> edge makes a given loss less likely. Returns 1 for a non-positive drift (a
+> driftless or losing account eventually hits any loss level almost surely).
 
 ## sabr
 

@@ -574,6 +574,9 @@ from .sizing import (
     kelly_fraction_binary, kelly_fraction_continuous, kelly_growth_rate,
     kelly_fractions_multivariate, kelly_growth_rate_multivariate,
 )
+from .ruin import (
+    gamblers_ruin_probability, risk_of_ruin_units, ruin_probability_gbm,
+)
 from .gramcharlier import (
     corrado_su_call, corrado_su_price, realized_skewness, realized_excess_kurtosis,
     calibrate_corrado_su, corrado_su_implied_vol, corrado_su_smile,
@@ -717,7 +720,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.705.0"
+__version__ = "1.706.0"
 
 __all__ = [
     "OptionType",
@@ -1673,6 +1676,9 @@ __all__ = [
     "kelly_growth_rate",
     "kelly_fractions_multivariate",
     "kelly_growth_rate_multivariate",
+    "gamblers_ruin_probability",
+    "risk_of_ruin_units",
+    "ruin_probability_gbm",
     "corrado_su_call",
     "corrado_su_price",
     "calibrate_corrado_su",
