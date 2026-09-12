@@ -83,6 +83,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Robust scale and location](#robust-scale-and-location)
 - [Hurst exponent (long memory)](#hurst-exponent-long-memory)
 - [Variance-ratio test](#variance-ratio-test)
+- [Rank dependence (Kendall / Spearman)](#rank-dependence-kendall--spearman)
 - [Spectral analysis](#spectral-analysis)
 - [Structural breaks (CUSUM / Chow)](#structural-breaks-cusum--chow)
 - [Cointegration (ADF / Engle-Granger)](#cointegration-adf--engle-granger)
@@ -1977,6 +1978,25 @@ variance_ratio_zstat(returns, q=2)   # standard-normal z; |z| > 1.96 rejects the
 On white noise `VR` sits near 1 with a small `z`; a mean-reverting series drives
 `VR` below 1 with a large negative `z`, a trending one above 1 with a large
 positive `z`.
+
+## Rank dependence (Kendall / Spearman)
+
+Rank-based dependence captures monotone (not just linear) co-movement and is
+invariant to any monotone transform of the margins — the natural language of
+copulas. `kendall_tau` and `spearman_rho` measure it; `pseudo_observations` maps a
+margin to its scaled ranks for empirical-copula work.
+
+```python
+from quantforge import kendall_tau, spearman_rho, pseudo_observations
+
+kendall_tau(x, y)              # concordant - discordant, in [-1, 1]
+spearman_rho(x, y)             # Pearson correlation of ranks, in [-1, 1]
+pseudo_observations([12, 5, 9, 20])   # -> [0.6, 0.2, 0.4, 0.8]  (ranks / (n+1))
+```
+
+Both equal +1 for a strictly increasing relationship and -1 for decreasing;
+Spearman is unchanged by exponentiating a margin, where Pearson would move. Feed
+the pseudo-observations of each margin into a copula fit.
 
 ## Spectral analysis
 

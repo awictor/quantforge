@@ -16,6 +16,13 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.577.0] - 2026-09-12
+
+### Documentation
+- README: added a "Rank dependence (Kendall / Spearman)" section documenting
+  `kendall_tau`, `spearman_rho`, and `pseudo_observations`; TOC regenerated to 101
+  entries.
+
 ## [1.576.0] - 2026-09-12
 
 ### Added
