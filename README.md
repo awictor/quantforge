@@ -86,6 +86,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Serial correlation (Ljung-Box / Durbin-Watson)](#serial-correlation-ljung-box--durbin-watson)
 - [Goodness of fit (Jarque-Bera / KS)](#goodness-of-fit-jarque-bera--ks)
 - [Autocorrelation (ACF / PACF)](#autocorrelation-acf--pacf)
+- [Exponential smoothing (Holt / Holt-Winters)](#exponential-smoothing-holt--holt-winters)
 - [Rank dependence (Kendall / Spearman)](#rank-dependence-kendall--spearman)
 - [Gaussian-copula sampling](#gaussian-copula-sampling)
 - [Spectral analysis](#spectral-analysis)
@@ -2070,6 +2071,27 @@ order, scores = select_ar_order(series, max_order=8, criterion="bic")
 BIC's heavier `ln(n)` penalty favors more parsimonious models than AIC, so the
 BIC-selected order is never larger — it recovers the true order on simulated
 AR(1)/AR(2) data where AIC tends to over-fit.
+
+## Exponential smoothing (Holt / Holt-Winters)
+
+Forecast a series as a decaying blend of its recent level, trend, and season.
+`holt_linear` is double smoothing (level + trend); `holt_winters_add` adds an
+additive seasonal component of a given period.
+
+```python
+from quantforge import holt_linear, holt_winters_add
+
+level, trend, fc = holt_linear(series, alpha=0.6, beta=0.4, horizon=3)
+# fc = straight-line forecast l + h*b
+
+level, trend, seasonals, fc = holt_winters_add(
+    series, alpha=0.3, beta=0.1, gamma=0.3, period=4, horizon=4)
+# fc repeats the learned seasonal pattern around the trend
+```
+
+Holt recovers a pure linear trend and forecasts a straight line; Holt-Winters
+reproduces a repeating seasonal pattern and tracks any underlying trend. Both are
+causal O(n) recursions with no external dependencies.
 
 ## Rank dependence (Kendall / Spearman)
 
