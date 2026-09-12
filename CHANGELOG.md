@@ -16,6 +16,12 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.663.0] - 2026-09-12
+
+### Documentation
+- README: extended the Bachelier section with `black_to_normal_vol` and
+  `normal_to_black_vol` (lognormal <-> normal vol conversion).
+
 ## [1.662.0] - 2026-09-12
 
 ### Added

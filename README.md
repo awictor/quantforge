@@ -1222,6 +1222,19 @@ bachelier_implied_vol(target_price=6.12, F=100, K=100, t=1.0, r=0.02)
 
 Includes analytic `bachelier_delta`, `bachelier_gamma`, and `bachelier_vega`.
 
+Rates desks quote both a lognormal (Black-76) and a normal (Bachelier) vol for the
+same option; convert between them by price-matching:
+
+```python
+from quantforge import black_to_normal_vol, normal_to_black_vol
+
+black_to_normal_vol(forward=100, strike=100, t=1.0, sigma_black=0.2)   # -> ~19.97
+normal_to_black_vol(forward=100, strike=100, t=1.0, sigma_normal=20.0) # -> ~0.20
+```
+
+Near the money `sigma_N ~ sigma_B * F`; the round-trip is exact and both models
+reproduce the same price at the converted vol.
+
 Displaced diffusion (shifted lognormal) interpolates between Black-Scholes and
 Bachelier and permits negative strikes:
 
