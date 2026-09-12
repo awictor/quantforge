@@ -1392,6 +1392,23 @@ ruin_probability_mc(1e6, annual_withdrawal=50000, mean_return=0.04, vol=0.12,
                     years=30)
 ```
 
+## Liability-driven investing
+
+Funding ratios, liability duration/convexity, duration hedging, Redington
+immunization, and surplus-at-risk:
+
+```python
+from quantforge import (liability_pv, funding_ratio, liability_duration,
+                        required_hedge_duration, surplus_at_risk)
+
+liabilities = [(5, 100), (10, 150), (20, 250), (30, 300)]
+L = liability_pv(liabilities, discount_rate=0.03)
+funding_ratio(assets=1.05 * L, liabilities=L)
+D = liability_duration(liabilities, 0.03)
+required_hedge_duration(asset_value=1.05 * L, liability_duration_=D, liability_value=L)
+surplus_at_risk(1.05 * L, L, surplus_volatility=0.08, confidence=0.95)
+```
+
 ## FX forwards (covered interest parity)
 
 ```python

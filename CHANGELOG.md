@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.446.0] - 2026-09-11
+
+### Documentation
+- README: added a "Liability-driven investing" section covering the `ldi` module
+  (funding ratios, liability duration/convexity, duration hedging, immunization,
+  surplus-at-risk), with runnable examples verified against the installed package.
+
 ## [1.445.0] - 2026-09-11
 
 ### Added
