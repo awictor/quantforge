@@ -7,6 +7,7 @@ from quantforge import (
     clayton_lower_tail_dependence, gumbel_upper_tail_dependence,
     clayton_theta_from_tau, gumbel_theta_from_tau,
     frank_copula, gaussian_copula_joint_default, first_to_default_probability,
+    vasicek_loss_cdf, vasicek_loss_quantile, cdo_tranche_expected_loss,
 )
 
 
@@ -52,6 +53,40 @@ def test_theta_from_tau_round_trips():
     assert th / (th + 2) == pytest.approx(0.5)
     thg = gumbel_theta_from_tau(0.5)
     assert 1 - 1 / thg == pytest.approx(0.5)
+
+
+def test_vasicek_cdf_monotone_and_bounded():
+    xs = [0.01, 0.05, 0.1, 0.2, 0.5, 0.9]
+    cdfs = [vasicek_loss_cdf(x, 0.05, 0.2) for x in xs]
+    assert all(cdfs[i] < cdfs[i + 1] for i in range(len(cdfs) - 1))
+    assert all(0 <= c <= 1 for c in cdfs)
+
+
+def test_vasicek_quantile_inverts_and_monotone():
+    L = vasicek_loss_quantile(0.99, 0.05, 0.2)
+    assert vasicek_loss_cdf(L, 0.05, 0.2) == pytest.approx(0.99, abs=1e-6)
+    assert vasicek_loss_quantile(0.999, 0.05, 0.2) > vasicek_loss_quantile(0.99, 0.05, 0.2)
+    assert vasicek_loss_quantile(0.99, 0.10, 0.2) > vasicek_loss_quantile(0.99, 0.05, 0.2)
+    assert vasicek_loss_quantile(0.99, 0.05, 0.4) > vasicek_loss_quantile(0.99, 0.05, 0.2)
+
+
+def test_cdo_full_capital_structure_mean_is_pd():
+    assert cdo_tranche_expected_loss(0, 1, 0.05, 0.2) == pytest.approx(0.05, abs=1e-3)
+
+
+def test_cdo_tranche_seniority_ordering():
+    eq = cdo_tranche_expected_loss(0, 0.03, 0.05, 0.2)
+    mez = cdo_tranche_expected_loss(0.03, 0.07, 0.05, 0.2)
+    sen = cdo_tranche_expected_loss(0.07, 0.15, 0.05, 0.2)
+    assert eq > mez > sen
+    assert all(0 <= x <= 1 for x in (eq, mez, sen))
+
+
+def test_vasicek_cdo_validation():
+    with pytest.raises(ValueError):
+        vasicek_loss_cdf(0.5, 1.5, 0.2)
+    with pytest.raises(ValueError):
+        cdo_tranche_expected_loss(0.5, 0.3, 0.05, 0.2)
 
 
 def test_frank_boundary_and_independence():

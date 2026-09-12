@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.436.0] - 2026-09-11
+
+### Added
+- `vasicek_loss_cdf`, `vasicek_loss_quantile`, `cdo_tranche_expected_loss` (in
+  `copula.py`): the Vasicek large-homogeneous-portfolio loss distribution (the
+  single-factor Gaussian-copula limit behind the Basel IRB formula), its loss
+  quantile, and the expected loss of a CDO tranche `[attachment, detachment]`.
+  Cross-checked: the loss CDF is monotone and bounded, the quantile inverts it and
+  rises with confidence/PD/correlation, the full-structure expected loss equals
+  the pool PD, and equity tranches lose more than senior tranches.
+
 ## [1.435.0] - 2026-09-11
 
 ### Added

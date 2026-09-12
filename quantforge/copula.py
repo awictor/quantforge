@@ -97,6 +97,75 @@ def gumbel_copula(u, v, theta):
     return math.exp(-(lu + lv) ** (1.0 / theta))
 
 
+def vasicek_loss_cdf(loss, pd, rho):
+    """CDF of the large-homogeneous-portfolio loss fraction (Vasicek limit).
+
+    In the single-factor Gaussian-copula limit of an infinitely granular pool with
+    default probability ``pd`` and asset correlation ``rho``, the fractional loss
+    ``L`` has closed-form CDF
+
+        P(L <= x) = Phi( (sqrt(1 - rho) Phi^{-1}(x) - Phi^{-1}(pd)) / sqrt(rho) ).
+
+    ``loss`` is a fraction in ``[0, 1]`` (LGD assumed 1). Increasing in ``loss``.
+    """
+    if not (0.0 <= loss <= 1.0):
+        raise ValueError("loss must be in [0, 1]")
+    if not (0.0 < pd < 1.0):
+        raise ValueError("pd must be in (0, 1)")
+    if not (0.0 < rho < 1.0):
+        raise ValueError("rho must be in (0, 1)")
+    if loss <= 0.0:
+        return 0.0
+    if loss >= 1.0:
+        return 1.0
+    num = math.sqrt(1.0 - rho) * norm_ppf(loss) - norm_ppf(pd)
+    return norm_cdf(num / math.sqrt(rho))
+
+
+def vasicek_loss_quantile(q, pd, rho):
+    """Portfolio loss at confidence ``q`` (the Vasicek/Basel capital formula).
+
+    Inverse of :func:`vasicek_loss_cdf`:
+
+        L(q) = Phi( (Phi^{-1}(pd) + sqrt(rho) Phi^{-1}(q)) / sqrt(1 - rho) ).
+
+    The worst-case loss not exceeded with probability ``q`` -- the basis of the
+    Basel IRB capital charge. Increasing in ``q``, ``pd`` and ``rho``.
+    """
+    if not (0.0 < q < 1.0):
+        raise ValueError("q must be in (0, 1)")
+    if not (0.0 < pd < 1.0):
+        raise ValueError("pd must be in (0, 1)")
+    if not (0.0 < rho < 1.0):
+        raise ValueError("rho must be in (0, 1)")
+    num = norm_ppf(pd) + math.sqrt(rho) * norm_ppf(q)
+    return norm_cdf(num / math.sqrt(1.0 - rho))
+
+
+def cdo_tranche_expected_loss(attachment, detachment, pd, rho, n_steps=2000):
+    """Expected loss of a CDO tranche in the Vasicek large-pool limit.
+
+    Integrates the portfolio loss distribution over the tranche
+    ``[attachment, detachment]`` and normalizes by the tranche width, giving the
+    expected tranche loss as a fraction of the tranche notional. Equity (low
+    attachment) tranches lose more than senior tranches at the same correlation.
+    Trapezoidal integration of ``E[min(max(L - a, 0), d - a)] / (d - a)`` using
+    the survival ``1 - F(l)``.
+    """
+    if not (0.0 <= attachment < detachment <= 1.0):
+        raise ValueError("require 0 <= attachment < detachment <= 1")
+    width = detachment - attachment
+    # E[tranche loss] = integral_a^d (1 - F(l)) dl  (layer expected loss).
+    dl = (detachment - attachment) / n_steps
+    total = 0.0
+    for k in range(n_steps + 1):
+        l = attachment + k * dl
+        surv = 1.0 - vasicek_loss_cdf(l, pd, rho)
+        w = 0.5 if (k == 0 or k == n_steps) else 1.0
+        total += w * surv * dl
+    return total / width
+
+
 def frank_copula(u, v, theta):
     """Frank copula (``theta != 0``), symmetric with no tail dependence.
 

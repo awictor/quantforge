@@ -222,6 +222,7 @@ from .copula import (
     clayton_lower_tail_dependence, gumbel_upper_tail_dependence,
     clayton_theta_from_tau, gumbel_theta_from_tau,
     frank_copula, gaussian_copula_joint_default, first_to_default_probability,
+    vasicek_loss_cdf, vasicek_loss_quantile, cdo_tranche_expected_loss,
 )
 from .futures_convexity import (
     ho_lee_convexity_adjustment, hull_white_convexity_adjustment,
@@ -478,7 +479,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.435.0"
+__version__ = "1.436.0"
 
 __all__ = [
     "OptionType",
@@ -838,6 +839,9 @@ __all__ = [
     "frank_copula",
     "gaussian_copula_joint_default",
     "first_to_default_probability",
+    "vasicek_loss_cdf",
+    "vasicek_loss_quantile",
+    "cdo_tranche_expected_loss",
     "ho_lee_convexity_adjustment",
     "hull_white_convexity_adjustment",
     "forward_from_futures",

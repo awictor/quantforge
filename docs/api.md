@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.435.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.436.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -1586,6 +1586,17 @@ Auto-generated from `quantforge` v1.435.0 by `docs/gen_api.py` — do not edit b
 
 ## copula
 
+### `cdo_tranche_expected_loss(attachment, detachment, pd, rho, n_steps=2000)`  _function_
+
+> Expected loss of a CDO tranche in the Vasicek large-pool limit.
+>
+> Integrates the portfolio loss distribution over the tranche
+> ``[attachment, detachment]`` and normalizes by the tranche width, giving the
+> expected tranche loss as a fraction of the tranche notional. Equity (low
+> attachment) tranches lose more than senior tranches at the same correlation.
+> Trapezoidal integration of ``E[min(max(L - a, 0), d - a)] / (d - a)`` using
+> the survival ``1 - F(l)``.
+
 ### `clayton_copula(u, v, theta)`  _function_
 
 > Clayton copula ``(u^{-theta} + v^{-theta} - 1)^{-1/theta}`` (``theta > 0``).
@@ -1656,6 +1667,29 @@ Auto-generated from `quantforge` v1.435.0 by `docs/gen_api.py` — do not edit b
 > Upper-tail dependence of the Gumbel copula ``2 - 2^{1/theta}``.
 >
 > Zero at ``theta = 1`` (independence) rising toward 1 as ``theta -> inf``.
+
+### `vasicek_loss_cdf(loss, pd, rho)`  _function_
+
+> CDF of the large-homogeneous-portfolio loss fraction (Vasicek limit).
+>
+> In the single-factor Gaussian-copula limit of an infinitely granular pool with
+> default probability ``pd`` and asset correlation ``rho``, the fractional loss
+> ``L`` has closed-form CDF
+>
+>     P(L <= x) = Phi( (sqrt(1 - rho) Phi^{-1}(x) - Phi^{-1}(pd)) / sqrt(rho) ).
+>
+> ``loss`` is a fraction in ``[0, 1]`` (LGD assumed 1). Increasing in ``loss``.
+
+### `vasicek_loss_quantile(q, pd, rho)`  _function_
+
+> Portfolio loss at confidence ``q`` (the Vasicek/Basel capital formula).
+>
+> Inverse of :func:`vasicek_loss_cdf`:
+>
+>     L(q) = Phi( (Phi^{-1}(pd) + sqrt(rho) Phi^{-1}(q)) / sqrt(1 - rho) ).
+>
+> The worst-case loss not exceeded with probability ``q`` -- the basis of the
+> Basel IRB capital charge. Increasing in ``q``, ``pd`` and ``rho``.
 
 ## correlation
 
