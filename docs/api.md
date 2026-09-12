@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.487.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.488.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -8384,6 +8384,23 @@ Auto-generated from `quantforge` v1.487.0 by `docs/gen_api.py` — do not edit b
 > the note is linear in the coupon.
 
 ## student_t
+
+### `fit_df_from_kurtosis(excess_kurtosis)`  _function_
+
+> Degrees of freedom implied by a sample's excess kurtosis (moment match).
+>
+> For a Student-t the excess kurtosis is ``6 / (df - 4)`` (finite only for
+> ``df > 4``), so ``df = 4 + 6 / excess_kurtosis``. Requires positive excess
+> kurtosis (fatter than normal); larger kurtosis implies fewer degrees of
+> freedom (heavier tails).
+
+### `fit_student_t(returns)`  _function_
+
+> Fit a location-scale Student-t to a return sample by moment matching.
+>
+> Matches the sample mean, variance, and excess kurtosis: ``df`` from
+> :func:`fit_df_from_kurtosis`, and the scale from ``variance = scale^2 df/(df-2)``.
+> Returns ``(mean, scale, df)``. Requires ``df > 4`` (positive excess kurtosis).
 
 ### `student_t_expected_shortfall(mean, scale, df, confidence=0.95)`  _function_
 

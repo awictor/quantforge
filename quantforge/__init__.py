@@ -228,6 +228,7 @@ from .interpolation import natural_cubic_spline, monotone_cubic
 from .rootfind import bisection, brent, newton
 from .student_t import (
     t_pdf, t_cdf, t_ppf, student_t_var, student_t_expected_shortfall,
+    fit_df_from_kurtosis, fit_student_t,
 )
 from .riskmeasures import (
     value_at_risk, expected_shortfall as sample_expected_shortfall,
@@ -545,7 +546,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.487.0"
+__version__ = "1.488.0"
 
 __all__ = [
     "OptionType",
@@ -910,6 +911,8 @@ __all__ = [
     "t_ppf",
     "student_t_var",
     "student_t_expected_shortfall",
+    "fit_df_from_kurtosis",
+    "fit_student_t",
     "value_at_risk",
     "sample_expected_shortfall",
     "spectral_risk_exponential",

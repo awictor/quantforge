@@ -101,6 +101,42 @@ def t_ppf(p, df):
     return 0.5 * (lo + hi)
 
 
+def fit_df_from_kurtosis(excess_kurtosis):
+    """Degrees of freedom implied by a sample's excess kurtosis (moment match).
+
+    For a Student-t the excess kurtosis is ``6 / (df - 4)`` (finite only for
+    ``df > 4``), so ``df = 4 + 6 / excess_kurtosis``. Requires positive excess
+    kurtosis (fatter than normal); larger kurtosis implies fewer degrees of
+    freedom (heavier tails).
+    """
+    if excess_kurtosis <= 0.0:
+        raise ValueError("excess_kurtosis must be positive (fatter than normal)")
+    return 4.0 + 6.0 / excess_kurtosis
+
+
+def fit_student_t(returns):
+    """Fit a location-scale Student-t to a return sample by moment matching.
+
+    Matches the sample mean, variance, and excess kurtosis: ``df`` from
+    :func:`fit_df_from_kurtosis`, and the scale from ``variance = scale^2 df/(df-2)``.
+    Returns ``(mean, scale, df)``. Requires ``df > 4`` (positive excess kurtosis).
+    """
+    n = len(returns)
+    if n < 4:
+        raise ValueError("need at least four observations")
+    mean = sum(returns) / n
+    var = sum((x - mean) ** 2 for x in returns) / n
+    if var <= 0.0:
+        raise ValueError("zero-variance returns")
+    m4 = sum((x - mean) ** 4 for x in returns) / n
+    excess = m4 / (var * var) - 3.0
+    df = fit_df_from_kurtosis(excess)
+    if df <= 2.0:
+        raise ValueError("implied df <= 2; variance is undefined for the t")
+    scale = math.sqrt(var * (df - 2.0) / df)
+    return mean, scale, df
+
+
 def student_t_var(mean, scale, df, confidence=0.95):
     """Parametric VaR of a location-scale Student-t (positive loss magnitude).
 

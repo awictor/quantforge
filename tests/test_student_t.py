@@ -2,8 +2,12 @@
 
 import pytest
 
+import math
+import random
+
 from quantforge import (
     t_pdf, t_cdf, t_ppf, student_t_var, student_t_expected_shortfall,
+    fit_df_from_kurtosis, fit_student_t,
 )
 from quantforge.mathfns import norm_cdf, norm_ppf
 
@@ -45,6 +49,32 @@ def test_es_at_least_var():
 def test_var_converges_to_normal():
     nvar = -(0.0 + 0.02 * norm_ppf(0.01))
     assert student_t_var(0.0, 0.02, 1e6, 0.99) == pytest.approx(nvar, abs=1e-4)
+
+
+def test_df_from_kurtosis_formula():
+    # Excess kurtosis 6/(df-4); df=8 -> ek=1.5.
+    assert fit_df_from_kurtosis(1.5) == pytest.approx(8.0)
+    assert fit_df_from_kurtosis(3.0) < fit_df_from_kurtosis(1.0)   # higher kurt -> lower df
+
+
+def test_fit_recovers_df_order():
+    random.seed(7)
+
+    def t_sample(df):
+        z = random.gauss(0, 1)
+        chi = sum(random.gauss(0, 1) ** 2 for _ in range(df))
+        return z / math.sqrt(chi / df)
+
+    data = [t_sample(8) for _ in range(50000)]
+    _, _, df = fit_student_t(data)
+    assert 4 < df < 20   # noisy moment match, but finite and near 8
+
+
+def test_fit_validation():
+    with pytest.raises(ValueError):
+        fit_df_from_kurtosis(-1)
+    with pytest.raises(ValueError):
+        fit_student_t([1, 2, 3])
 
 
 def test_validation():

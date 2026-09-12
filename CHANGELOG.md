@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.488.0] - 2026-09-11
+
+### Added
+- `fit_df_from_kurtosis` and `fit_student_t` (in `student_t.py`): recover the
+  Student-t degrees of freedom from excess kurtosis (`df = 4 + 6/excess`) and fit
+  a location-scale t to a return sample by matching the mean, variance, and
+  kurtosis. Cross-checked: the df/kurtosis formula, higher kurtosis giving fewer
+  degrees of freedom, and the fit recovering a finite df near the generating value.
+
 ## [1.487.0] - 2026-09-11
 
 ### Added
