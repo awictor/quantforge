@@ -16,6 +16,15 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.654.0] - 2026-09-12
+
+### Added
+- `minimize1d.py`: one-dimensional minimizers -- `golden_section_min` (robust
+  derivative-free bracket shrinking) and `brent_min` (parabolic interpolation with
+  a golden-section safeguard). Cross-checked: both locate the minima of a
+  quadratic, cosine, quartic, and Gaussian to high precision and agree with each
+  other; an invalid bracket raises.
+
 ## [1.653.0] - 2026-09-12
 
 ### Documentation

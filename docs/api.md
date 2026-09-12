@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.653.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.654.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -6591,6 +6591,19 @@ Auto-generated from `quantforge` v1.653.0 by `docs/gen_api.py` — do not edit b
 > ``(log_moneyness, vol)`` pairs sorted by strike (log-moneyness on the forward
 > ``F = S e^{b t}``). Jumps fatten the tails, so the smile curves up in the
 > wings; a negative mean jump ``mu_j`` tilts it into a downward skew.
+
+## minimize1d
+
+### `brent_min(f, lo, hi, tol=1e-10, max_iter=200)`  _function_
+
+> Minimize a scalar ``f`` on ``[lo, hi]`` by Brent's method.
+>
+> Parabolic interpolation with a golden-section fallback. Returns
+> ``(x_min, f_min)``.
+
+### `golden_section_min(f, lo, hi, tol=1e-10, max_iter=200)`  _function_
+
+> Minimize a unimodal ``f`` on ``[lo, hi]`` by golden-section search.
 
 ## mlmc
 
