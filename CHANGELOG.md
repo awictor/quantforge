@@ -16,6 +16,12 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.621.0] - 2026-09-12
+
+### Documentation
+- README: extended the K-means clustering section with `silhouette_score`
+  (label-free cluster-quality scoring for choosing `k`).
+
 ## [1.620.0] - 2026-09-12
 
 ### Added

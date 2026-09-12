@@ -2438,6 +2438,18 @@ Well-separated groups are recovered as pure clusters with centroids at their tru
 centers; runs are reproducible for a fixed seed and inertia falls as `k` rises
 (use the elbow in inertia-vs-`k` to choose `k`).
 
+To score cluster quality without labels, use the silhouette — `(b - a)/max(a, b)`
+comparing each point's own-cluster cohesion to the nearest other cluster:
+
+```python
+from quantforge import silhouette_score
+
+silhouette_score(points, r["labels"])   # ~1 tight/separated, ~0 overlapping, <0 misassigned
+```
+
+Picking the `k` that maximizes the silhouette is a common alternative to the
+inertia elbow; a wrong `k` scores strictly lower on well-separated data.
+
 ## Principal component analysis
 
 Covariance-matrix PCA via Jacobi eigendecomposition -- the yield-curve
