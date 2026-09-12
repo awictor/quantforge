@@ -16,6 +16,13 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.707.0] - 2026-09-12
+
+### Documentation
+- README sizing section now documents the ruin module (`gamblers_ruin_probability`,
+  `risk_of_ruin_units`, `ruin_probability_gbm`) with a worked example, alongside the
+  Kelly sizing it complements.
+
 ## [1.706.0] - 2026-09-12
 
 ### Added

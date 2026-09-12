@@ -439,6 +439,24 @@ kelly_fractions_multivariate(mu, cov)                 # -> [1.5244, 1.5854]
 kelly_fractions_multivariate(mu, cov, fraction=0.5)   # -> [0.7622, 0.7927]  (half-Kelly)
 ```
 
+Sizing has a flip side: the chance of going broke. `gamblers_ruin_probability`
+gives the classic unit-stake ruin probability, and `ruin_probability_gbm` the
+chance a drifting account ever falls by a given fraction — the first-passage law
+`(1 - loss)^{2 mu / sigma^2}`:
+
+```python
+from quantforge import (gamblers_ruin_probability, risk_of_ruin_units,
+                        ruin_probability_gbm)
+
+gamblers_ruin_probability(start=5, target=20, win_prob=0.55)   # ruin before target
+risk_of_ruin_units(win_prob=0.55, target_units=20)             # bankroll-in-units
+ruin_probability_gbm(loss=0.3, mu=0.15, sigma=0.30)            # 0.305, P(ever -30%)
+```
+
+A fair game gives the linear `1 - start/target`; a stronger edge (higher
+drift-to-variance) makes a given loss less likely, and a driftless account hits any
+loss almost surely.
+
 ## Variance / volatility swaps
 
 Model-free fair strike of a variance swap from an option strip (the log-contract
