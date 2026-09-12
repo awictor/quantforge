@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.669.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.670.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -4273,6 +4273,20 @@ Auto-generated from `quantforge` v1.669.0 by `docs/gen_api.py` — do not edit b
 >     b: cost of carry (defaults to r).
 >
 > Returns the present value.
+
+## fra
+
+### `fra_forward_rate(discount, t1, t2)`  _function_
+
+> Simple forward rate over ``[t1, t2]`` implied by the discount curve.
+
+### `fra_value(discount, contract_rate, t1, t2, notional=1.0, payer=True)`  _function_
+
+> Value today of a forward rate agreement.
+>
+> A payer (long the FRA, paying fixed ``contract_rate``) gains when the forward
+> rate exceeds the contract rate: ``notional * tau * (f - K) * P(t2)``. A
+> receiver is the negative. Zero at the fair (forward) rate.
 
 ## futures_convexity
 

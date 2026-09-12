@@ -16,6 +16,16 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.670.0] - 2026-09-12
+
+### Added
+- `fra.py`: `fra_forward_rate` and `fra_value` price a forward rate agreement off a
+  discount curve -- the simple forward rate over the accrual period and the
+  discounted settlement value. Cross-checked: the value is zero at the fair
+  (forward) rate, a payer gains when the forward exceeds the contract rate,
+  receiver equals negative payer, the notional scales it linearly, and an upward
+  curve gives a higher forward rate further out.
+
 ## [1.669.0] - 2026-09-12
 
 ### Documentation
