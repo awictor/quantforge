@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.541.0] - 2026-09-12
+
+### Documentation
+- README: extended the "Double-barrier knock-out" section with the knock-in
+  counterpart (`double_knockin_call`) and the in-out parity, with a snippet
+  verified against the package.
+
 ## [1.540.0] - 2026-09-12
 
 ### Added

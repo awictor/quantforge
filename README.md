@@ -916,6 +916,20 @@ The value never exceeds the vanilla call, approaches it as the barriers move far
 away, and a tighter corridor lowers it. This is the continuous-monitoring price;
 discrete-monitoring Monte Carlo converges down onto it as the step count rises.
 
+The **knock-in** counterpart comes alive only if the spot touches either barrier,
+and is priced by the in-out parity `knock-in + knock-out = vanilla`:
+
+```python
+from quantforge import double_knockin_call, double_knockout_call, call_price
+
+ki = double_knockin_call(S=100, K=100, L=80, U=130, t=1.0, r=0.05, sigma=0.25, b=0.05)
+ko = double_knockout_call(S=100, K=100, L=80, U=130, t=1.0, r=0.05, sigma=0.25, b=0.05)
+ki, ko, ki + ko           # -> (10.3739, 1.9621, 12.336 == vanilla call)
+```
+
+The knock-in rises toward the vanilla as the corridor tightens (a breach becomes
+certain) and falls to zero as the barriers move far away.
+
 ## Range-accrual note
 
 A range-accrual note pays a coupon in proportion to the fraction of observation
