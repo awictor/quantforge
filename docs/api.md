@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.533.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.534.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -4695,6 +4695,33 @@ Auto-generated from `quantforge` v1.533.0 by `docs/gen_api.py` — do not edit b
 >
 > Inflation-leg receiver's value: ``notional * (I_T/I_0 - (1+k)^T)`` at maturity,
 > discounted by ``discount_factor``. Zero at the par :func:`zc_inflation_swap_rate`.
+
+## installment
+
+### `installment_call(S, K, t, r, sigma, installment, pay_times, steps=200, q=0.0)`  _function_
+
+> Fair upfront value of a European installment call on a CRR tree.
+>
+> Parameters
+> ----------
+> S, K, t, r, sigma : float
+>     Spot, strike, time to expiry (years), risk-free rate, volatility.
+> installment : float
+>     Amount paid at each date in ``pay_times`` to keep the option alive.
+>     Must be non-negative.
+> pay_times : sequence of float
+>     Installment payment dates in years, each in ``(0, t)``. Duplicates and
+>     out-of-range values are rejected.
+> steps : int
+>     Number of tree steps.
+> q : float
+>     Continuous dividend yield (carry ``b = r - q``).
+>
+> Returns
+> -------
+> float
+>     Fair upfront premium at inception. At least zero; equals the plain
+>     European call value when ``installment`` is zero or ``pay_times`` empty.
 
 ## interpolation
 

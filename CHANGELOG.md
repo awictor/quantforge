@@ -4,6 +4,25 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.534.0] - 2026-09-12
+
+### Added
+- `installment.py`: `installment_call` prices a European installment call on a CRR
+  tree. The option is paid for in a stream of premiums; at each installment date
+  the holder may lapse (stop paying, forfeit for zero) so the option is kept alive
+  only while its continuation value exceeds the next installment -- a compound
+  option priced by backward induction. Returns the fair upfront value.
+  Cross-checked: zero installment (or empty schedule) reproduces the plain CRR
+  European call to 1e-9, a larger installment lowers the upfront value, more
+  payment dates lower it further, a prohibitive installment drives it to zero, and
+  the value is always non-negative.
+
+## [1.533.0] - 2026-09-12
+
+### Documentation
+- README: added a "Shout and ladder options" section documenting `shout_call` and
+  `ladder_call`, with snippets verified against the package; TOC regenerated.
+
 ## [1.532.0] - 2026-09-12
 
 ### Added
