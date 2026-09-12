@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.483.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.484.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -6393,6 +6393,18 @@ Auto-generated from `quantforge` v1.483.0 by `docs/gen_api.py` — do not edit b
 > fractional drop from a running peak, as a non-negative number (0.2 = a 20%
 > drawdown). Empty or all-rising series give 0.
 
+### `minimum_track_record_length(returns, benchmark_sr=0.0, confidence=0.95)`  _function_
+
+> Minimum track record length for the Sharpe ratio to beat a benchmark.
+>
+> The number of observations at which the :func:`probabilistic_sharpe_ratio`
+> would reach ``confidence`` that the true SR exceeds ``benchmark_sr``:
+>
+>     MinTRL = 1 + (1 - skew*SR + (kurt-1)/4 SR^2) (z_conf / (SR - SR*))^2.
+>
+> Requires the observed per-period Sharpe to exceed the benchmark. Longer for a
+> smaller edge or a more skewed/fat-tailed series.
+
 ### `omega_ratio(returns: Sequence[float], threshold=0.0) -> float`  _function_
 
 > Omega ratio: probability-weighted gains over losses about a threshold.
@@ -6415,6 +6427,20 @@ Auto-generated from `quantforge` v1.483.0 by `docs/gen_api.py` — do not edit b
 >
 > The L1 analogue of the :func:`ulcer_performance_index`. Higher is better;
 > raises when there is no drawdown.
+
+### `probabilistic_sharpe_ratio(returns, benchmark_sr=0.0)`  _function_
+
+> Probabilistic Sharpe ratio (Bailey-López de Prado).
+>
+> The probability that the true per-period Sharpe ratio exceeds a ``benchmark_sr``
+> (also per period), correcting the estimator's standard error for the sample's
+> skewness and (excess) kurtosis and the sample length ``n``:
+>
+>     PSR = Phi( (SR - SR*) sqrt(n - 1)
+>                / sqrt(1 - skew*SR + (kurt-1)/4 * SR^2) ),
+>
+> with ``SR`` the per-period Sharpe. Above 0.5 when the observed SR beats the
+> benchmark; rises with a longer, less-skewed, thinner-tailed track record.
 
 ### `profit_factor(returns: Sequence[float]) -> float`  _function_
 

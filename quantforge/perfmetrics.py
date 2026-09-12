@@ -341,6 +341,67 @@ def information_ratio(returns, benchmark_returns, periods_per_year=252) -> float
     return _mean(active) / sd * math.sqrt(periods_per_year)
 
 
+def probabilistic_sharpe_ratio(returns, benchmark_sr=0.0):
+    """Probabilistic Sharpe ratio (Bailey-López de Prado).
+
+    The probability that the true per-period Sharpe ratio exceeds a ``benchmark_sr``
+    (also per period), correcting the estimator's standard error for the sample's
+    skewness and (excess) kurtosis and the sample length ``n``:
+
+        PSR = Phi( (SR - SR*) sqrt(n - 1)
+                   / sqrt(1 - skew*SR + (kurt-1)/4 * SR^2) ),
+
+    with ``SR`` the per-period Sharpe. Above 0.5 when the observed SR beats the
+    benchmark; rises with a longer, less-skewed, thinner-tailed track record.
+    """
+    from .mathfns import norm_cdf
+    n = len(returns)
+    if n < 2:
+        raise ValueError("need at least two observations")
+    mean = _mean(returns)
+    sd = _std(returns, ddof=1)
+    if sd <= 0.0:
+        raise ValueError("zero-variance returns")
+    sr = mean / sd
+    skew = sample_skewness(returns)
+    kurt = sample_kurtosis(returns, excess=False)
+    denom = 1.0 - skew * sr + (kurt - 1.0) / 4.0 * sr * sr
+    if denom <= 0.0:
+        raise ValueError("degenerate PSR denominator")
+    z = (sr - benchmark_sr) * math.sqrt(n - 1) / math.sqrt(denom)
+    return norm_cdf(z)
+
+
+def minimum_track_record_length(returns, benchmark_sr=0.0, confidence=0.95):
+    """Minimum track record length for the Sharpe ratio to beat a benchmark.
+
+    The number of observations at which the :func:`probabilistic_sharpe_ratio`
+    would reach ``confidence`` that the true SR exceeds ``benchmark_sr``:
+
+        MinTRL = 1 + (1 - skew*SR + (kurt-1)/4 SR^2) (z_conf / (SR - SR*))^2.
+
+    Requires the observed per-period Sharpe to exceed the benchmark. Longer for a
+    smaller edge or a more skewed/fat-tailed series.
+    """
+    n = len(returns)
+    if n < 2:
+        raise ValueError("need at least two observations")
+    mean = _mean(returns)
+    sd = _std(returns, ddof=1)
+    if sd <= 0.0:
+        raise ValueError("zero-variance returns")
+    sr = mean / sd
+    if sr <= benchmark_sr:
+        raise ValueError("observed Sharpe must exceed the benchmark")
+    if not (0.5 < confidence < 1.0):
+        raise ValueError("confidence must be in (0.5, 1)")
+    skew = sample_skewness(returns)
+    kurt = sample_kurtosis(returns, excess=False)
+    z = _norm_ppf(confidence)
+    factor = 1.0 - skew * sr + (kurt - 1.0) / 4.0 * sr * sr
+    return 1.0 + factor * (z / (sr - benchmark_sr)) ** 2
+
+
 def sample_skewness(returns) -> float:
     """Sample skewness (third standardized moment, population convention).
 

@@ -395,6 +395,7 @@ from .perfmetrics import (
     sharpe_ratio, sortino_ratio, max_drawdown, calmar_ratio, hit_rate,
     profit_factor, drawdown_curve, longest_drawdown_duration, rolling_sharpe,
     ulcer_index, pain_index, ulcer_performance_index, pain_ratio,
+    probabilistic_sharpe_ratio, minimum_track_record_length,
     omega_ratio, tail_ratio, tracking_error, information_ratio,
     up_capture, down_capture, downside_beta,
     sample_skewness, sample_kurtosis, jarque_bera, cornish_fisher_var,
@@ -540,7 +541,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.483.0"
+__version__ = "1.484.0"
 
 __all__ = [
     "OptionType",
@@ -1211,6 +1212,8 @@ __all__ = [
     "pain_index",
     "ulcer_performance_index",
     "pain_ratio",
+    "probabilistic_sharpe_ratio",
+    "minimum_track_record_length",
     "rolling_sharpe",
     "omega_ratio",
     "tail_ratio",

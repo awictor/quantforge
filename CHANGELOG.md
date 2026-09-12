@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.484.0] - 2026-09-11
+
+### Added
+- `probabilistic_sharpe_ratio` and `minimum_track_record_length` (in
+  `perfmetrics.py`): the Bailey-López de Prado probability that the true Sharpe
+  ratio beats a benchmark (correcting the estimator's standard error for skewness,
+  kurtosis, and sample length) and the track-record length needed to reach a
+  confidence. Cross-checked: PSR exceeds 0.5 for a positive edge and falls against
+  a higher benchmark, and the minimum track record length is positive and longer
+  for a smaller edge.
+
 ## [1.483.0] - 2026-09-11
 
 ### Added
