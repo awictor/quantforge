@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.464.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.465.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -7980,6 +7980,14 @@ Auto-generated from `quantforge` v1.464.0 by `docs/gen_api.py` — do not edit b
 > ``E = call(V, K=D, T)`` -- shareholders own the residual after repaying debt,
 > a call on the assets. Increases with asset value and volatility.
 
+### `equity_volatility(asset_value, debt_face, r, asset_vol, t)`  _function_
+
+> Equity volatility implied by the asset volatility (Merton).
+>
+> From Ito's lemma on the equity call, ``sigma_E = (V/E) N(d1) sigma_V`` -- the
+> equity is a levered claim, so its volatility exceeds the asset volatility by
+> the delta-elasticity factor ``(V/E) N(d1)``. Rises as leverage rises.
+
 ### `risk_neutral_default_probability(asset_value, debt_face, r, sigma, t)`  _function_
 
 > Risk-neutral probability of default ``P(V_T < D) = Phi(-d2)``.
@@ -7994,6 +8002,20 @@ Auto-generated from `quantforge` v1.464.0 by `docs/gen_api.py` — do not edit b
 > By the accounting identity ``V = E + D_risky`` the debt is the firm value less
 > the equity call. Below the risk-free discounted face; the gap is the credit
 > risk.
+
+### `solve_asset_value_and_vol(equity_value_obs, equity_vol_obs, debt_face, r, t, tol=1e-10, max_iter=500)`  _function_
+
+> Recover the unobservable asset value and volatility (KMV two-equation solve).
+>
+> Given the observed equity value and equity volatility, jointly solves the
+> Merton system
+>
+>     E = call(V, D, T),   sigma_E = (V/E) N(d1) sigma_V
+>
+> for ``(V, sigma_V)`` by fixed-point iteration: invert the equity-call for ``V``
+> at the current ``sigma_V``, then update ``sigma_V`` from the equity-vol
+> relation. Returns ``(asset_value, asset_vol)``. Round-trips with
+> :func:`equity_value` and :func:`equity_volatility`.
 
 ## structured
 

@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.465.0] - 2026-09-11
+
+### Added
+- `equity_volatility` and `solve_asset_value_and_vol` (in `structural_credit.py`):
+  the Merton equity volatility from the asset volatility (`sigma_E = (V/E) N(d1)
+  sigma_V`) and the KMV two-equation solve recovering the unobservable asset value
+  and volatility from the observed equity value and equity volatility.
+  Cross-checked: equity vol exceeds asset vol under leverage, and the solve
+  recovers the true asset value and volatility (round-tripping the equity value).
+
 ## [1.464.0] - 2026-09-11
 
 ### Added

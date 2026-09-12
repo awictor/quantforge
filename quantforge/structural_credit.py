@@ -30,6 +30,63 @@ def equity_value(asset_value, debt_face, r, sigma, t):
     return call_price(asset_value, debt_face, t, r, sigma, b=r)
 
 
+def equity_volatility(asset_value, debt_face, r, asset_vol, t):
+    """Equity volatility implied by the asset volatility (Merton).
+
+    From Ito's lemma on the equity call, ``sigma_E = (V/E) N(d1) sigma_V`` -- the
+    equity is a levered claim, so its volatility exceeds the asset volatility by
+    the delta-elasticity factor ``(V/E) N(d1)``. Rises as leverage rises.
+    """
+    if asset_value <= 0 or debt_face <= 0 or t <= 0 or asset_vol <= 0:
+        raise ValueError("inputs must be positive")
+    d1, _ = _d1_d2(asset_value, debt_face, r, asset_vol, t)
+    E = call_price(asset_value, debt_face, t, r, asset_vol, b=r)
+    if E <= 0:
+        raise ValueError("equity value must be positive")
+    return asset_value * norm_cdf(d1) * asset_vol / E
+
+
+def solve_asset_value_and_vol(equity_value_obs, equity_vol_obs, debt_face, r, t,
+                              tol=1e-10, max_iter=500):
+    """Recover the unobservable asset value and volatility (KMV two-equation solve).
+
+    Given the observed equity value and equity volatility, jointly solves the
+    Merton system
+
+        E = call(V, D, T),   sigma_E = (V/E) N(d1) sigma_V
+
+    for ``(V, sigma_V)`` by fixed-point iteration: invert the equity-call for ``V``
+    at the current ``sigma_V``, then update ``sigma_V`` from the equity-vol
+    relation. Returns ``(asset_value, asset_vol)``. Round-trips with
+    :func:`equity_value` and :func:`equity_volatility`.
+    """
+    if equity_value_obs <= 0 or equity_vol_obs <= 0 or debt_face <= 0 or t <= 0:
+        raise ValueError("inputs must be positive")
+    # Initial guesses: assets ~ equity + debt, asset vol ~ equity vol scaled down.
+    V = equity_value_obs + debt_face * math.exp(-r * t)
+    sigma_V = equity_vol_obs * equity_value_obs / V
+    for _ in range(max_iter):
+        # Invert E = call(V, D, T) for V at the current sigma_V (bisection).
+        lo, hi = debt_face * 1e-6, equity_value_obs + debt_face * 10.0
+        for _b in range(200):
+            mid = 0.5 * (lo + hi)
+            e_mid = call_price(mid, debt_face, t, r, sigma_V, b=r)
+            if abs(e_mid - equity_value_obs) < tol:
+                break
+            if e_mid < equity_value_obs:
+                lo = mid
+            else:
+                hi = mid
+        V_new = mid
+        d1, _ = _d1_d2(V_new, debt_face, r, sigma_V, t)
+        sigma_V_new = equity_vol_obs * equity_value_obs / (V_new * norm_cdf(d1))
+        if abs(V_new - V) < tol and abs(sigma_V_new - sigma_V) < tol:
+            V, sigma_V = V_new, sigma_V_new
+            break
+        V, sigma_V = V_new, sigma_V_new
+    return V, sigma_V
+
+
 def risk_neutral_default_probability(asset_value, debt_face, r, sigma, t):
     """Risk-neutral probability of default ``P(V_T < D) = Phi(-d2)``.
 

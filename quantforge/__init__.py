@@ -220,6 +220,7 @@ from .inflation import (
 from .structural_credit import (
     equity_value, risk_neutral_default_probability, distance_to_default,
     risky_debt_value, credit_spread,
+    equity_volatility, solve_asset_value_and_vol,
 )
 from .markov import (
     n_step_transition, stationary_distribution, expected_hitting_time,
@@ -520,7 +521,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.464.0"
+__version__ = "1.465.0"
 
 __all__ = [
     "OptionType",
@@ -875,6 +876,8 @@ __all__ = [
     "distance_to_default",
     "risky_debt_value",
     "credit_spread",
+    "equity_volatility",
+    "solve_asset_value_and_vol",
     "n_step_transition",
     "stationary_distribution",
     "expected_hitting_time",
