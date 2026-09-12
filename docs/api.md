@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.579.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.580.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -7962,6 +7962,17 @@ Auto-generated from `quantforge` v1.579.0 by `docs/gen_api.py` — do not edit b
 > ``(estimate, standard_error)`` with the bias-aware jackknife SE
 > ``sqrt((n-1)/n * sum (theta_i - theta_bar)^2)``. ``statistic`` defaults to the
 > sample mean.
+
+### `moving_block_bootstrap_ci(data, statistic=None, block=10, n_boot=2000, confidence=0.95, seed=1234567)`  _function_
+
+> Moving-block (Kunsch) bootstrap CI for serially-correlated data.
+>
+> Resamples fixed-length overlapping blocks of length ``block`` from the series
+> (wrapping at the end) and concatenates ceil(n / block) of them, truncated to
+> ``n``, preserving within-block dependence. Like the stationary bootstrap it
+> gives valid intervals for autocorrelated data -- wider than the IID
+> :func:`bootstrap_ci` for a positively autocorrelated mean, and it agrees with
+> the IID interval when ``block = 1``. ``statistic`` defaults to the sample mean.
 
 ### `stationary_bootstrap_ci(data, statistic=None, mean_block=10, n_boot=2000, confidence=0.95, seed=1234567)`  _function_
 

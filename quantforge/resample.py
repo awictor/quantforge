@@ -109,6 +109,43 @@ def stationary_bootstrap_ci(data, statistic=None, mean_block=10, n_boot=2000,
     return lo, statistic(data), hi
 
 
+def moving_block_bootstrap_ci(data, statistic=None, block=10, n_boot=2000,
+                              confidence=0.95, seed=1234567):
+    """Moving-block (Kunsch) bootstrap CI for serially-correlated data.
+
+    Resamples fixed-length overlapping blocks of length ``block`` from the series
+    (wrapping at the end) and concatenates ceil(n / block) of them, truncated to
+    ``n``, preserving within-block dependence. Like the stationary bootstrap it
+    gives valid intervals for autocorrelated data -- wider than the IID
+    :func:`bootstrap_ci` for a positively autocorrelated mean, and it agrees with
+    the IID interval when ``block = 1``. ``statistic`` defaults to the sample mean.
+    """
+    if statistic is None:
+        statistic = _mean
+    n = len(data)
+    if n == 0:
+        raise ValueError("data must be non-empty")
+    if block < 1 or block > n:
+        raise ValueError("block must satisfy 1 <= block <= len(data)")
+    if not (0.0 < confidence < 1.0):
+        raise ValueError("confidence must be in (0, 1)")
+    n_blocks = (n + block - 1) // block
+    rand = _lcg(seed)
+    reps = []
+    for _ in range(n_boot):
+        sample = []
+        for _ in range(n_blocks):
+            start = int(rand() * n)
+            for k in range(block):
+                sample.append(data[(start + k) % n])
+        reps.append(statistic(sample[:n]))
+    reps.sort()
+    alpha = (1.0 - confidence) / 2.0
+    lo = _percentile(reps, 100.0 * alpha)
+    hi = _percentile(reps, 100.0 * (1.0 - alpha))
+    return lo, statistic(data), hi
+
+
 def bca_bootstrap_ci(data, statistic=None, n_boot=2000, confidence=0.95,
                      seed=1234567):
     """Bias-corrected accelerated (BCa) bootstrap confidence interval.

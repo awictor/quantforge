@@ -16,6 +16,17 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.580.0] - 2026-09-12
+
+### Added
+- `resample.py`: `moving_block_bootstrap_ci` adds the Kunsch fixed-length
+  moving-block bootstrap confidence interval for serially-correlated data
+  (overlapping blocks of length ``block``, wrapping at the end). Cross-checked: the
+  interval brackets the sample mean, it is wider than the IID `bootstrap_ci` for a
+  positively autocorrelated mean (which the IID bootstrap under-covers), it agrees
+  with the IID width when ``block = 1``, and it matches the IID interval on
+  genuinely independent data.
+
 ## [1.579.0] - 2026-09-12
 
 ### Documentation

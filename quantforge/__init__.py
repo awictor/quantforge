@@ -318,6 +318,7 @@ from .markov import (
 )
 from .resample import (
     bootstrap_ci, stationary_bootstrap_ci, jackknife_estimate, bca_bootstrap_ci,
+    moving_block_bootstrap_ci,
 )
 from .brinson import (
     allocation_effect, selection_effect, interaction_effect, brinson_attribution,
@@ -632,7 +633,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.579.0"
+__version__ = "1.580.0"
 
 __all__ = [
     "OptionType",
@@ -1129,6 +1130,7 @@ __all__ = [
     "marginal_default_probabilities",
     "bootstrap_ci",
     "stationary_bootstrap_ci",
+    "moving_block_bootstrap_ci",
     "jackknife_estimate",
     "bca_bootstrap_ci",
     "allocation_effect",
