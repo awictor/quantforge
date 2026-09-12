@@ -1297,6 +1297,40 @@ square_root_impact(order_size=1e5, sigma=0.3, daily_volume=1e7)
 vwap_schedule(1e6, volume_profile=[100, 200, 300, 400])
 ```
 
+## Structured notes
+
+Principal-protected notes (capped and uncapped), reverse convertibles with a fair
+coupon solve, and buffered notes, all by component decomposition:
+
+```python
+from quantforge import (principal_protected_note, reverse_convertible,
+                        reverse_convertible_fair_coupon, buffered_note)
+
+principal_protected_note(100, 100, maturity=3, r=0.04, sigma=0.25, principal=1000,
+                         participation=1.0)               # >= discounted principal
+reverse_convertible_fair_coupon(100, 100, 3, 0.04, 0.25, principal=1000)  # prices at par
+buffered_note(100, 100, buffer=0.10, maturity=3, r=0.04, sigma=0.25, principal=1000)
+```
+
+## Actuarial (life contingencies and cat bonds)
+
+Life-table survival, annuities and insurance EPVs, the equivalence-principle net
+premium, the Gompertz-Makeham mortality law, and catastrophe-bond analytics:
+
+```python
+from quantforge import (gompertz_makeham_survival_curve, life_annuity_due,
+                        whole_life_insurance, net_level_premium,
+                        curtate_life_expectancy, cat_bond_price)
+
+px = gompertz_makeham_survival_curve(age=40, n_years=60, a=0.0005, b=7.58e-5, c=1.09)
+life_annuity_due(px, i=0.05)
+net_level_premium(px, i=0.05)          # A_x / a-due_x (equivalence principle)
+curtate_life_expectancy(px)            # e_40 ~ 35 years
+
+cat_bond_price(principal=1000, coupon_rate=0.06, expected_loss_rate=0.02,
+               r=0.03, maturity=1.0)
+```
+
 ## FX forwards (covered interest parity)
 
 ```python
