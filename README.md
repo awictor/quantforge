@@ -1982,6 +1982,21 @@ It scans every feature and midpoint for the split minimizing the size-weighted
 child Gini; a cleanly separable set gives Gini 0, and identical rows fall back to
 the majority class.
 
+Grow it into a full **CART tree** with `fit_decision_tree` — recursive splits up
+to a depth or node-size limit:
+
+```python
+from quantforge import fit_decision_tree, predict_decision_tree, tree_depth
+
+t = fit_decision_tree(X, y, max_depth=5)
+predict_decision_tree(t, X_query)
+tree_depth(t)
+```
+
+A depth-1 tree is exactly the stump; deeper trees solve non-linearly separable
+problems (e.g. XOR) that a single split cannot, at the cost of overfitting — cap
+`max_depth` or `min_samples`, and validate with `cross_val_score`.
+
 ## Factor models
 
 Multi-factor OLS return regression (alpha, betas, R-squared), factor attribution,

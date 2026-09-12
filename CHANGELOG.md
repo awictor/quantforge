@@ -16,6 +16,12 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.633.0] - 2026-09-12
+
+### Documentation
+- README: extended the Decision stump section with the full CART tree
+  (`fit_decision_tree`, `predict_decision_tree`, `tree_depth`).
+
 ## [1.632.0] - 2026-09-12
 
 ### Added
