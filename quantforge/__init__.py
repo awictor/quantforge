@@ -62,7 +62,7 @@ from .quanto import (
 )
 from .displaced import (
     displaced_diffusion_price, displaced_diffusion_greeks, displaced_implied_shift,
-    displaced_diffusion_smile,
+    displaced_diffusion_smile, displaced_diffusion_implied_vol,
 )
 from .hedging import StickyRule, smile_delta, smile_delta_from_smile, skew_slope
 from .lookback import (
@@ -691,7 +691,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.663.0"
+__version__ = "1.664.0"
 
 __all__ = [
     "OptionType",
@@ -760,6 +760,7 @@ __all__ = [
     "quanto_option_greeks",
     "compo_option_greeks",
     "displaced_diffusion_price",
+    "displaced_diffusion_implied_vol",
     "displaced_diffusion_greeks",
     "displaced_implied_shift",
     "displaced_diffusion_smile",

@@ -16,6 +16,15 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.664.0] - 2026-09-12
+
+### Added
+- `displaced.py`: `displaced_diffusion_implied_vol` inverts the displaced-diffusion
+  price for the volatility by bisection (the price is monotone in ``sigma``).
+  Cross-checked: it round-trips with the pricer across a sigma x shift grid,
+  coincides with the Black-Scholes implied vol at zero shift, round-trips on the
+  put side, and rejects out-of-band quotes.
+
 ## [1.663.0] - 2026-09-12
 
 ### Documentation

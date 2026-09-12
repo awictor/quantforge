@@ -217,3 +217,36 @@ def displaced_implied_shift(S, t, r, quotes, b=None,
     total, sigma_atm = sse(shift)
     rmse = math.sqrt(total / len(quotes))
     return shift, sigma_atm, rmse
+
+
+def displaced_diffusion_implied_vol(target_price, S, K, t, r, shift=0.0,
+                                    option_type=OptionType.CALL, b=None,
+                                    tol=1e-10, max_iter=200):
+    """Implied displaced-diffusion volatility from a market price.
+
+    Inverts :func:`displaced_diffusion_price` for the ``sigma`` reproducing
+    ``target_price`` by bisection (the price is monotone increasing in ``sigma``).
+    With ``shift = 0`` this coincides with the Black-Scholes implied vol. Raises if
+    the quote lies outside the attainable ``[intrinsic, forward]`` band.
+    """
+    ot = _coerce_type(option_type)
+    if t <= 0:
+        raise ValueError("cannot imply vol at or past expiry")
+
+    def price(sig):
+        return displaced_diffusion_price(S, K, t, r, sig, shift, ot, b=b)
+
+    lo, hi = 1e-9, 10.0
+    p_lo, p_hi = price(lo), price(hi)
+    if not (p_lo - 1e-12 <= target_price <= p_hi + 1e-12):
+        raise ValueError("target price outside the attainable range")
+    for _ in range(max_iter):
+        mid = 0.5 * (lo + hi)
+        pm = price(mid)
+        if abs(pm - target_price) < tol:
+            return mid
+        if pm < target_price:
+            lo = mid
+        else:
+            hi = mid
+    return 0.5 * (lo + hi)

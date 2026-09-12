@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.663.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.664.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -2667,6 +2667,15 @@ Auto-generated from `quantforge` v1.663.0 by `docs/gen_api.py` — do not edit b
 > At ``shift = 0`` these reduce to the vanilla Black-Scholes Greeks; a positive
 > shift flattens the smile toward normal-model behaviour. Returns a dict with
 > ``price`` and those fields.
+
+### `displaced_diffusion_implied_vol(target_price, S, K, t, r, shift=0.0, option_type=<OptionType.CALL: 'call'>, b=None, tol=1e-10, max_iter=200)`  _function_
+
+> Implied displaced-diffusion volatility from a market price.
+>
+> Inverts :func:`displaced_diffusion_price` for the ``sigma`` reproducing
+> ``target_price`` by bisection (the price is monotone increasing in ``sigma``).
+> With ``shift = 0`` this coincides with the Black-Scholes implied vol. Raises if
+> the quote lies outside the attainable ``[intrinsic, forward]`` band.
 
 ### `displaced_diffusion_price(S, K, t, r, sigma, shift=0.0, option_type=<OptionType.CALL: 'call'>, b=None) -> float`  _function_
 
