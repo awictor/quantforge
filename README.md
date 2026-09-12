@@ -1926,6 +1926,18 @@ proportional_hazard_premium(g, rho=2.0)  # S^{1/rho} distortion
 Both equal the expected loss at zero distortion (`lam = 0`, `rho = 1`) and load the
 tail above it as the parameter grows.
 
+Capital measures come off the same aggregate grid — `aggregate_var` (loss quantile)
+and `aggregate_tvar` (Tail-VaR / CTE):
+
+```python
+from quantforge import aggregate_var, aggregate_tvar
+
+aggregate_var(g, confidence=0.99)     # 99% VaR
+aggregate_tvar(g, confidence=0.99)    # expected loss beyond the 99% VaR
+```
+
+TVaR is always at least the VaR and both rise with the confidence level.
+
 ## Equity swaps and dispersion
 
 Total-return swaps, dividend swaps, variance/volatility swaps, and dispersion-
