@@ -16,6 +16,11 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.679.0] - 2026-09-12
+
+### Documentation
+- README: extended the Actuarial section with `panjer_negative_binomial`.
+
 ## [1.678.0] - 2026-09-12
 
 ### Added

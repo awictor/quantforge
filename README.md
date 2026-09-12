@@ -1903,7 +1903,15 @@ layer_expected_loss(g, attachment=3, limit=2)   # excess-of-loss layer cost
 ```
 
 The mean and variance match `lam E[X]` and `lam E[X^2]`; a full-width layer equals
-the mean.
+the mean. When claims cluster (over-dispersed frequency), use
+`panjer_negative_binomial` instead — same recursion, heavier aggregate tail at the
+same mean:
+
+```python
+from quantforge import panjer_negative_binomial
+
+panjer_negative_binomial(size=5, prob=0.5, severity_pmf=[0.0, 0.4, 0.6])
+```
 
 ## Equity swaps and dispersion
 
