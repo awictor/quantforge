@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.457.0] - 2026-09-11
+
+### Added
+- `resample.py`: bootstrap and jackknife confidence intervals. `bootstrap_ci`
+  (IID percentile bootstrap), `stationary_bootstrap_ci` (Politis-Romano block
+  bootstrap for serially-correlated series), and `jackknife_estimate` (delete-one
+  SE). All deterministic per seed. Cross-checked: the CIs bracket the point
+  estimate, the jackknife SE matches the analytic standard error of the mean, and
+  a custom statistic (max) is supported. Default statistics use a ``None``
+  sentinel so signatures render deterministically in the API docs.
+
 ## [1.456.0] - 2026-09-11
 
 ### Documentation

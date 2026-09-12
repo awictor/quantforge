@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.456.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.457.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -6788,6 +6788,37 @@ Auto-generated from `quantforge` v1.456.0 by `docs/gen_api.py` — do not edit b
 > Like :func:`rbergomi_smile` but prices each strike with the low-variance
 > conditional call on a shared set of W paths, then inverts to a Black-Scholes
 > vol. Returns ``(log_moneyness, vol)`` pairs sorted by strike.
+
+## resample
+
+### `bootstrap_ci(data, statistic=None, n_boot=2000, confidence=0.95, seed=1234567)`  _function_
+
+> IID bootstrap confidence interval for a sample ``statistic``.
+>
+> Resamples ``data`` with replacement ``n_boot`` times, applies ``statistic`` to
+> each resample, and returns ``(lower, point, upper)`` -- the percentile-method
+> interval at ``confidence`` plus the statistic on the original sample. The
+> interval brackets the point estimate and narrows as the sample grows.
+> ``statistic`` defaults to the sample mean.
+
+### `jackknife_estimate(data, statistic=None)`  _function_
+
+> Delete-one jackknife estimate and standard error of a ``statistic``.
+>
+> Recomputes the statistic on each leave-one-out subsample. Returns
+> ``(estimate, standard_error)`` with the bias-aware jackknife SE
+> ``sqrt((n-1)/n * sum (theta_i - theta_bar)^2)``. ``statistic`` defaults to the
+> sample mean.
+
+### `stationary_bootstrap_ci(data, statistic=None, mean_block=10, n_boot=2000, confidence=0.95, seed=1234567)`  _function_
+
+> Stationary (Politis-Romano) bootstrap CI for serially-correlated data.
+>
+> Resamples geometric-length blocks (expected length ``mean_block``) wrapping
+> around the series, preserving short-range dependence, then takes the
+> percentile interval. Wider than the IID :func:`bootstrap_ci` for positively
+> autocorrelated series (it does not spuriously shrink the variance).
+> ``statistic`` defaults to the sample mean.
 
 ## retirement
 

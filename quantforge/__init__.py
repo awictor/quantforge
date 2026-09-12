@@ -217,6 +217,9 @@ from .inflation import (
     yoy_caplet_price_normal, yoy_caplet_implied_normal_vol,
     real_zero_curve, nominal_zero_curve, real_discount_factor,
 )
+from .resample import (
+    bootstrap_ci, stationary_bootstrap_ci, jackknife_estimate,
+)
 from .brinson import (
     allocation_effect, selection_effect, interaction_effect, brinson_attribution,
     carino_factor, linked_active_return, carino_linked_effects,
@@ -508,7 +511,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.456.0"
+__version__ = "1.457.0"
 
 __all__ = [
     "OptionType",
@@ -858,6 +861,9 @@ __all__ = [
     "real_zero_curve",
     "nominal_zero_curve",
     "real_discount_factor",
+    "bootstrap_ci",
+    "stationary_bootstrap_ci",
+    "jackknife_estimate",
     "allocation_effect",
     "selection_effect",
     "interaction_effect",
