@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.434.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.435.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -1606,12 +1606,37 @@ Auto-generated from `quantforge` v1.434.0 by `docs/gen_api.py` — do not edit b
 >
 > Inverse of ``tau = theta / (theta + 2)``. Requires ``0 <= tau < 1``.
 
+### `first_to_default_probability(pd1, pd2, rho)`  _function_
+
+> Probability that at least one of two names defaults (Gaussian copula).
+>
+> ``P(A or B) = pd1 + pd2 - C(pd1, pd2; rho)`` by inclusion-exclusion. Lies
+> between ``max(pd1, pd2)`` and ``min(pd1 + pd2, 1)``, and falls as correlation
+> rises (correlated defaults overlap more, so fewer *distinct* default events).
+
+### `frank_copula(u, v, theta)`  _function_
+
+> Frank copula (``theta != 0``), symmetric with no tail dependence.
+>
+> ``C(u, v) = -1/theta * ln(1 + (e^{-theta u} - 1)(e^{-theta v} - 1) /
+> (e^{-theta} - 1))``. Positive dependence for ``theta > 0``, negative for
+> ``theta < 0``; reduces to independence as ``theta -> 0``.
+
 ### `gaussian_copula(u, v, rho)`  _function_
 
 > Gaussian copula ``C(u, v) = Phi_rho(Phi^{-1}(u), Phi^{-1}(v))``.
 >
 > The dependence structure of a bivariate normal with correlation ``rho``. Zero
 > tail dependence for ``|rho| < 1``; reduces to ``u v`` at ``rho = 0``.
+
+### `gaussian_copula_joint_default(pd1, pd2, rho)`  _function_
+
+> Joint default probability of two names under the Gaussian copula.
+>
+> Both default when their latent normals fall below their default thresholds
+> ``Phi^{-1}(pd_i)``; the joint probability is the Gaussian copula
+> ``C(pd1, pd2; rho)``. Rises above the independent product ``pd1 * pd2`` for
+> ``rho > 0`` and equals it at ``rho = 0``.
 
 ### `gumbel_copula(u, v, theta)`  _function_
 

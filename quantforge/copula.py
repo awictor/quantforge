@@ -97,6 +97,52 @@ def gumbel_copula(u, v, theta):
     return math.exp(-(lu + lv) ** (1.0 / theta))
 
 
+def frank_copula(u, v, theta):
+    """Frank copula (``theta != 0``), symmetric with no tail dependence.
+
+    ``C(u, v) = -1/theta * ln(1 + (e^{-theta u} - 1)(e^{-theta v} - 1) /
+    (e^{-theta} - 1))``. Positive dependence for ``theta > 0``, negative for
+    ``theta < 0``; reduces to independence as ``theta -> 0``.
+    """
+    if not (0.0 <= u <= 1.0 and 0.0 <= v <= 1.0):
+        raise ValueError("u and v must be in [0, 1]")
+    if u == 0.0 or v == 0.0:
+        return 0.0
+    if u == 1.0:
+        return v
+    if v == 1.0:
+        return u
+    if abs(theta) < 1e-8:
+        return u * v
+    num = (math.exp(-theta * u) - 1.0) * (math.exp(-theta * v) - 1.0)
+    den = math.exp(-theta) - 1.0
+    return -1.0 / theta * math.log1p(num / den)
+
+
+def gaussian_copula_joint_default(pd1, pd2, rho):
+    """Joint default probability of two names under the Gaussian copula.
+
+    Both default when their latent normals fall below their default thresholds
+    ``Phi^{-1}(pd_i)``; the joint probability is the Gaussian copula
+    ``C(pd1, pd2; rho)``. Rises above the independent product ``pd1 * pd2`` for
+    ``rho > 0`` and equals it at ``rho = 0``.
+    """
+    if not (0.0 <= pd1 <= 1.0 and 0.0 <= pd2 <= 1.0):
+        raise ValueError("default probabilities must be in [0, 1]")
+    return gaussian_copula(pd1, pd2, rho)
+
+
+def first_to_default_probability(pd1, pd2, rho):
+    """Probability that at least one of two names defaults (Gaussian copula).
+
+    ``P(A or B) = pd1 + pd2 - C(pd1, pd2; rho)`` by inclusion-exclusion. Lies
+    between ``max(pd1, pd2)`` and ``min(pd1 + pd2, 1)``, and falls as correlation
+    rises (correlated defaults overlap more, so fewer *distinct* default events).
+    """
+    joint = gaussian_copula_joint_default(pd1, pd2, rho)
+    return pd1 + pd2 - joint
+
+
 def clayton_lower_tail_dependence(theta):
     """Lower-tail dependence of the Clayton copula ``2^{-1/theta}``.
 

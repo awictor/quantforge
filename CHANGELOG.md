@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.435.0] - 2026-09-11
+
+### Added
+- `frank_copula`, `gaussian_copula_joint_default`, `first_to_default_probability`
+  (in `copula.py`): the Frank copula (symmetric, signed dependence, no tail
+  dependence) and Gaussian-copula credit applications -- the joint default
+  probability of two names and the first-to-default probability. Cross-checked:
+  Frank boundary/independence/symmetry, joint default above the independent
+  product for positive correlation, and the FtD bounded by `[max pd, sum pd]` and
+  falling as correlation rises.
+
 ## [1.434.0] - 2026-09-11
 
 ### Added
