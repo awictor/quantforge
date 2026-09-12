@@ -83,6 +83,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Robust scale and location](#robust-scale-and-location)
 - [Hurst exponent (long memory)](#hurst-exponent-long-memory)
 - [Variance-ratio test](#variance-ratio-test)
+- [Spectral analysis](#spectral-analysis)
 - [Structural breaks (CUSUM / Chow)](#structural-breaks-cusum--chow)
 - [Cointegration (ADF / Engle-Granger)](#cointegration-adf--engle-granger)
 - [Ornstein-Uhlenbeck calibration](#ornstein-uhlenbeck-calibration)
@@ -1975,6 +1976,24 @@ variance_ratio_zstat(returns, q=2)   # standard-normal z; |z| > 1.96 rejects the
 On white noise `VR` sits near 1 with a small `z`; a mean-reverting series drives
 `VR` below 1 with a large negative `z`, a trending one above 1 with a large
 positive `z`.
+
+## Spectral analysis
+
+Find cyclical structure — a seasonal pattern, a dominant trading cycle — with the
+discrete Fourier transform and periodogram. `dominant_frequency` returns the
+strongest non-DC frequency; its reciprocal is the period in samples.
+
+```python
+from quantforge import periodogram, dominant_frequency, spectral_energy
+
+freqs, power = periodogram(series)     # one-sided power spectrum, [0, 0.5]
+f = dominant_frequency(series)         # cycles per sample of the strongest peak
+1 / f                                  # dominant period in samples
+spectral_energy(series)                # equals sum(x^2) by Parseval
+```
+
+A pure sinusoid peaks exactly at its frequency; a constant series has power only
+at zero frequency; white noise spreads its power evenly with no dominant peak.
 
 ## Structural breaks (CUSUM / Chow)
 

@@ -4,6 +4,12 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.573.0] - 2026-09-12
+
+### Documentation
+- README: added a "Spectral analysis" section documenting `periodogram`,
+  `dominant_frequency`, and `spectral_energy`; TOC regenerated to 99 entries.
+
 ## [1.572.0] - 2026-09-12
 
 ### Added
