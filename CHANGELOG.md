@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.418.0] - 2026-09-11
+
+### Added
+- `kyle_lambda`, `kyle_impact`, `square_root_impact`, `implementation_shortfall`
+  (in `execution.py`): Kyle's linear price-impact coefficient and impact, the
+  empirical square-root impact law (concave, scaling like `sqrt(size)`), and a
+  decomposition of expected implementation shortfall into permanent, temporary,
+  and timing-risk components. Cross-checked: Kyle impact is linear in size, the
+  square-root law is concave per share, and the IS components sum to the expected
+  cost.
+
 ## [1.417.0] - 2026-09-11
 
 ### Added

@@ -2,9 +2,12 @@
 
 import pytest
 
+import math
+
 from quantforge import (
     execution_trajectory, execution_trades, expected_cost, cost_variance,
     efficient_frontier_point,
+    kyle_lambda, kyle_impact, square_root_impact, implementation_shortfall,
 )
 
 
@@ -56,6 +59,42 @@ def test_variance_falls_with_front_loading():
     linear = execution_trajectory(X, N, T, 0.0, SIG, ETA)
     urgent = execution_trajectory(X, N, T, 1e-6, SIG, ETA)
     assert cost_variance(urgent, T, SIG) < cost_variance(linear, T, SIG)
+
+
+def test_kyle_impact_linear():
+    assert kyle_impact(2e5, 0.3, 1e7) == pytest.approx(2 * kyle_impact(1e5, 0.3, 1e7))
+
+
+def test_kyle_lambda_formula_and_monotonicity():
+    assert kyle_lambda(0.3, 1e7) == pytest.approx(0.3 / 1e7)
+    assert kyle_lambda(0.6, 1e7) > kyle_lambda(0.3, 1e7)
+    assert kyle_lambda(0.3, 2e7) < kyle_lambda(0.3, 1e7)
+
+
+def test_square_root_law():
+    # Quadrupling size doubles impact.
+    assert square_root_impact(4e5, 0.3, 1e7) == pytest.approx(
+        2 * square_root_impact(1e5, 0.3, 1e7))
+
+
+def test_square_root_is_concave_per_share():
+    assert square_root_impact(2e5, 0.3, 1e7) / 2e5 < \
+        square_root_impact(1e5, 0.3, 1e7) / 1e5
+
+
+def test_implementation_shortfall_decomposition():
+    tr = execution_trajectory(X, N, T, 1e-6, SIG, ETA)
+    perm, temp, tstd, tot = implementation_shortfall(tr, T, GAMMA, ETA, SIG)
+    assert perm + temp == pytest.approx(tot, abs=1e-3)
+    assert perm == pytest.approx(0.5 * GAMMA * X * X, abs=1e-3)
+    assert tstd == pytest.approx(math.sqrt(cost_variance(tr, T, SIG)))
+
+
+def test_impact_validation():
+    with pytest.raises(ValueError):
+        square_root_impact(1e5, 0.3, 0)
+    with pytest.raises(ValueError):
+        kyle_lambda(0.3, 0)
 
 
 def test_validation():

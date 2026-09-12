@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.417.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.418.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2087,6 +2087,40 @@ Auto-generated from `quantforge` v1.417.0 by `docs/gen_api.py` — do not edit b
 > Permanent impact contributes ``0.5 gamma X^2`` (independent of the path); the
 > temporary impact contributes ``eta / tau * sum_k n_k^2`` for trades ``n_k``
 > over intervals of length ``tau``. Returned in cash (price * shares) units.
+
+### `implementation_shortfall(trajectory, horizon, gamma, eta, sigma)`  _function_
+
+> Decompose expected implementation shortfall into its components.
+>
+> Returns ``(permanent, temporary, timing_std, total_expected)``: the permanent
+> impact ``0.5 gamma X^2``, the temporary impact from :func:`expected_cost` net of
+> the permanent part, the timing-risk standard deviation
+> ``sqrt(cost_variance)``, and the total *expected* cost (permanent +
+> temporary). The expected cost excludes timing risk (mean-zero); the timing std
+> is reported separately for the risk budget.
+
+### `kyle_impact(order_size, sigma, daily_volume, liquidity_constant=1.0)`  _function_
+
+> Linear (Kyle) price impact of an order: ``kyle_lambda * order_size``.
+>
+> Proportional to order size -- doubling the order doubles the impact.
+
+### `kyle_lambda(sigma, daily_volume, liquidity_constant=1.0)`  _function_
+
+> Kyle's lambda: linear price impact per unit of signed order flow.
+>
+> ``lambda = liquidity_constant * sigma / daily_volume`` -- the slope of price in
+> net order flow in Kyle's model, so trading ``q`` shares moves the price by
+> ``lambda * q``. Rises with volatility and falls with liquidity (volume).
+
+### `square_root_impact(order_size, sigma, daily_volume, coefficient=1.0)`  _function_
+
+> Square-root market-impact law ``coefficient * sigma * sqrt(Q / ADV)``.
+>
+> The empirically-observed concave impact: cost per share grows with the square
+> root of participation ``order_size / daily_volume``, so total impact scales
+> like ``sqrt(order_size)`` rather than linearly. ``order_size`` is taken as a
+> magnitude (absolute value used).
 
 ## exotics
 
