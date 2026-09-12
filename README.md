@@ -1375,6 +1375,23 @@ vasicek_loss_quantile(q=0.999, pd=0.02, rho=0.15)        # Basel IRB capital
 cdo_tranche_expected_loss(attachment=0.03, detachment=0.07, pd=0.05, rho=0.2)
 ```
 
+## Retirement decumulation
+
+Sustainable withdrawals, portfolio depletion, target-date glide paths, and a
+Monte Carlo ruin probability:
+
+```python
+from quantforge import (sustainable_withdrawal, portfolio_depletion_years,
+                        glide_path_equity_weight, ruin_probability_mc)
+
+sustainable_withdrawal(balance=1e6, real_return=0.03, years=30)   # depletes in 30y
+portfolio_depletion_years(1e6, annual_withdrawal=40000, real_return=0.02)  # ~35y
+glide_path_equity_weight(years_to_target=10, glide_years=30, start_equity=0.9,
+                         end_equity=0.3)
+ruin_probability_mc(1e6, annual_withdrawal=50000, mean_return=0.04, vol=0.12,
+                    years=30)
+```
+
 ## FX forwards (covered interest parity)
 
 ```python
