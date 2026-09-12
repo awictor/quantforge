@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.432.0] - 2026-09-11
+
+### Added
+- `forward_curve_from_futures_strip` and `stub_discount_factors_from_forwards`
+  (in `futures_convexity.py`): convert a strip of futures quotes to convexity-
+  adjusted forward rates and bootstrap discount factors from the forward strip.
+  Cross-checked: every forward sits below its futures rate, the adjustment grows
+  down the curve, and the bootstrapped discount factors are decreasing.
+
 ## [1.431.0] - 2026-09-11
 
 ### Added

@@ -220,6 +220,7 @@ from .inflation import (
 from .futures_convexity import (
     ho_lee_convexity_adjustment, hull_white_convexity_adjustment,
     forward_from_futures, futures_from_forward,
+    forward_curve_from_futures_strip, stub_discount_factors_from_forwards,
 )
 from .equity_swap import (
     total_return_leg, financing_leg, total_return_swap_value, trs_fair_spread,
@@ -471,7 +472,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.431.0"
+__version__ = "1.432.0"
 
 __all__ = [
     "OptionType",
@@ -825,6 +826,8 @@ __all__ = [
     "hull_white_convexity_adjustment",
     "forward_from_futures",
     "futures_from_forward",
+    "forward_curve_from_futures_strip",
+    "stub_discount_factors_from_forwards",
     "total_return_leg",
     "financing_leg",
     "total_return_swap_value",

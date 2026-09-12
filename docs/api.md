@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.431.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.432.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -3124,6 +3124,15 @@ Auto-generated from `quantforge` v1.431.0 by `docs/gen_api.py` — do not edit b
 
 ## futures_convexity
 
+### `forward_curve_from_futures_strip(futures_quotes, sigma, a=0.0)`  _function_
+
+> Convert a strip of futures quotes to forward rates via convexity.
+>
+> ``futures_quotes`` is ``[(t1, t2, futures_rate), ...]`` for consecutive
+> contracts. Applies :func:`forward_from_futures` to each, returning
+> ``[(t1, t2, forward_rate), ...]``. Every forward sits below its futures rate,
+> and the adjustment grows down the curve.
+
 ### `forward_from_futures(futures_rate, sigma, t1, t2, a=0.0)`  _function_
 
 > Forward rate from a futures rate, subtracting the convexity adjustment.
@@ -3160,6 +3169,15 @@ Auto-generated from `quantforge` v1.431.0 by `docs/gen_api.py` — do not edit b
 >           + 2 a B(0, t1)^2 ] / 2,
 > with ``B(u, v) = (1 - e^{-a (v - u)}) / a``. Reduces to
 > :func:`ho_lee_convexity_adjustment` as ``a -> 0``.
+
+### `stub_discount_factors_from_forwards(forward_quotes, df0=1.0)`  _function_
+
+> Bootstrap discount factors from a strip of forward rates.
+>
+> ``forward_quotes`` is ``[(t1, t2, forward_rate), ...]`` of consecutive simple
+> forward rates over ``[t1, t2]``. Chains ``DF(t2) = DF(t1) / (1 + f * (t2 -
+> t1))`` starting from ``df0`` at the first ``t1``. Returns ``[(t2, DF(t2)),
+> ...]``; discount factors are decreasing for positive rates.
 
 ## fxdelta
 

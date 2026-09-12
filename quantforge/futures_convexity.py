@@ -72,6 +72,39 @@ def forward_from_futures(futures_rate, sigma, t1, t2, a=0.0):
     return futures_rate - adj
 
 
+def forward_curve_from_futures_strip(futures_quotes, sigma, a=0.0):
+    """Convert a strip of futures quotes to forward rates via convexity.
+
+    ``futures_quotes`` is ``[(t1, t2, futures_rate), ...]`` for consecutive
+    contracts. Applies :func:`forward_from_futures` to each, returning
+    ``[(t1, t2, forward_rate), ...]``. Every forward sits below its futures rate,
+    and the adjustment grows down the curve.
+    """
+    out = []
+    for t1, t2, fut in futures_quotes:
+        out.append((t1, t2, forward_from_futures(fut, sigma, t1, t2, a)))
+    return out
+
+
+def stub_discount_factors_from_forwards(forward_quotes, df0=1.0):
+    """Bootstrap discount factors from a strip of forward rates.
+
+    ``forward_quotes`` is ``[(t1, t2, forward_rate), ...]`` of consecutive simple
+    forward rates over ``[t1, t2]``. Chains ``DF(t2) = DF(t1) / (1 + f * (t2 -
+    t1))`` starting from ``df0`` at the first ``t1``. Returns ``[(t2, DF(t2)),
+    ...]``; discount factors are decreasing for positive rates.
+    """
+    out = []
+    df = df0
+    for t1, t2, f in forward_quotes:
+        tau = t2 - t1
+        if tau <= 0:
+            raise ValueError("each contract must have t2 > t1")
+        df = df / (1.0 + f * tau)
+        out.append((t2, df))
+    return out
+
+
 def futures_from_forward(forward_rate, sigma, t1, t2, a=0.0):
     """Futures rate from a forward rate, adding the convexity adjustment.
 
