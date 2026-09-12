@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.665.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.666.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -7573,6 +7573,34 @@ Auto-generated from `quantforge` v1.665.0 by `docs/gen_api.py` — do not edit b
 >
 > ``(spread[-1] - mean) / std`` over the last ``window`` points (all if ``None``).
 > The pairs-trade entry signal: large magnitude means the spread is stretched.
+
+## par_yield
+
+### `par_bond_price(discount, coupon_rate, maturity, freq=1, face=100.0)`  _function_
+
+> Price of a coupon bond off the discount curve (for the par-yield check).
+>
+> Sums the discounted coupons plus the discounted principal. Equals ``face``
+> exactly when ``coupon_rate`` is the :func:`par_yield`.
+
+### `par_yield(discount, maturity, freq=1)`  _function_
+
+> Par coupon rate for ``maturity`` from a discount curve ``discount(t)``.
+>
+> Parameters
+> ----------
+> discount : callable
+>     Discount factor ``P(t)`` (``P(0) = 1``, decreasing for positive rates).
+> maturity : float
+>     Bond maturity in years.
+> freq : int
+>     Coupon payments per year.
+>
+> Returns
+> -------
+> float
+>     The annualized par coupon rate. On a flat curve it equals the flat rate;
+>     a bond bearing this coupon prices to exactly par.
 
 ## pca
 

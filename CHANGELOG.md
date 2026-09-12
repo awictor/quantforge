@@ -16,6 +16,21 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.666.0] - 2026-09-12
+
+### Added
+- `par_yield.py`: `par_yield` computes the par coupon rate (= par swap rate) for a
+  maturity from a discount curve, and `par_bond_price` prices a coupon bond off the
+  curve. Cross-checked: on a flat curve the par yield equals the flat rate at every
+  maturity, a bond bearing the par coupon prices to exactly par, the one-year par
+  equals the spot rate, an upward curve gives a par yield between the short and long
+  zeros, and a higher coupon yields a premium bond.
+
+### Reverted
+- Dropped a `cev_implied_sigma` attempt: the CEV pricer's noncentral chi-square
+  series hangs at the large volatilities a bisection bracket sweeps, so it cannot be
+  safely inverted without first bounding the pricer.
+
 ## [1.665.0] - 2026-09-12
 
 ### Documentation
