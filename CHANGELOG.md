@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.486.0] - 2026-09-11
+
+### Documentation
+- README: expanded the "Performance metrics" section with the drawdown-pain
+  (Ulcer / Martin) and statistical-significance (probabilistic and deflated
+  Sharpe) measures, with runnable examples verified against the installed package.
+
 ## [1.485.0] - 2026-09-11
 
 ### Added

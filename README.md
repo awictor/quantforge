@@ -1631,9 +1631,16 @@ Track-record statistics from a return series:
 
 ```python
 from quantforge import (sharpe_ratio, sortino_ratio, max_drawdown,
-                        calmar_ratio, information_ratio, up_capture)
+                        calmar_ratio, information_ratio, up_capture,
+                        ulcer_index, ulcer_performance_index,
+                        probabilistic_sharpe_ratio, deflated_sharpe_ratio)
 
 sharpe_ratio(returns); max_drawdown(returns); calmar_ratio(returns)
+
+# Drawdown pain and statistical significance of the Sharpe.
+ulcer_index(returns); ulcer_performance_index(returns)      # Martin ratio
+probabilistic_sharpe_ratio(returns, benchmark_sr=0.0)       # P(true SR > 0)
+deflated_sharpe_ratio(returns, n_trials=100)                # selection-bias corrected
 ```
 
 ## GARCH volatility
