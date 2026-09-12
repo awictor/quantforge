@@ -1731,6 +1731,19 @@ bollinger_bands(prices, window=20, num_std=2.0)          # (lower, middle, upper
 donchian_channel(highs, lows, window=20)                 # breakout channel
 ```
 
+## Pairs trading
+
+Hedge ratio, spread, Ornstein-Uhlenbeck half-life, and spread z-score:
+
+```python
+from quantforge import pairs_hedge_ratio, spread_series, ou_half_life, spread_zscore
+
+beta = pairs_hedge_ratio(y, x)          # OLS slope of y on x
+spread = spread_series(y, x, beta)
+ou_half_life(spread)                     # mean-reversion half-life (years/periods)
+spread_zscore(spread, window=60)         # entry/exit signal
+```
+
 ## Performance metrics
 
 Track-record statistics from a return series:
