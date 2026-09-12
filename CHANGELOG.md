@@ -16,6 +16,15 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.634.0] - 2026-09-12
+
+### Added
+- `random_forest.py`: `fit_random_forest` trains an ensemble of CART trees on
+  bootstrap resamples and `predict_random_forest` classifies by majority vote.
+  Cross-checked: a separable set is classified at 100%, runs are reproducible per
+  seed, the forest generalizes at least as well as a single tree on held-out noisy
+  data (0.69 vs 0.63), and a one-tree forest degenerates to a single tree.
+
 ## [1.633.0] - 2026-09-12
 
 ### Documentation

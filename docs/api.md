@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.633.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.634.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -8071,6 +8071,30 @@ Auto-generated from `quantforge` v1.633.0 by `docs/gen_api.py` — do not edit b
 > ``corr_vega`` (dV/drho) are central finite differences of the closed form.
 > Returns a dict with ``price``, ``delta``, ``gamma``, ``vega``, ``fx_vega``,
 > ``corr_vega``.
+
+## random_forest
+
+### `fit_random_forest(X, y, n_trees=10, max_depth=5, min_samples=2, seed=1234567)`  _function_
+
+> Fit a random forest of bootstrap-resampled CART trees.
+>
+> Parameters
+> ----------
+> X, y : data and labels.
+> n_trees : int
+>     Number of trees in the ensemble (>= 1).
+> max_depth, min_samples : passed to each tree.
+> seed : int
+>     Seed for the reproducible bootstrap resampling.
+>
+> Returns
+> -------
+> dict
+>     ``{"trees": [...], "classes": sorted labels}``.
+
+### `predict_random_forest(forest, X_query)`  _function_
+
+> Majority-vote prediction across the forest's trees.
 
 ## range_accrual
 
