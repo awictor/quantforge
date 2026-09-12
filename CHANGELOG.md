@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.536.0] - 2026-09-12
+
+### Added
+- `double_barrier.py`: `double_knockout_call` prices a double-barrier knock-out
+  call in closed form via the Kunitomo-Ikeda (1992) image series -- the vanilla
+  call payoff survives only if the spot stays strictly inside a corridor
+  ``(L, U)`` for the whole life. Cross-checked: it never exceeds the vanilla call,
+  approaches the vanilla as the barriers move far away, the series converges in a
+  handful of terms, a tighter corridor lowers the value, and it matches a
+  fine-grid Monte Carlo in the continuous-monitoring limit (discrete MC converges
+  down onto the closed form as the step count rises).
+
 ## [1.535.0] - 2026-09-12
 
 ### Documentation

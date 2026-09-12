@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.535.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.536.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -2374,6 +2374,35 @@ Auto-generated from `quantforge` v1.535.0 by `docs/gen_api.py` — do not edit b
 > across the quotes. Minimises the squared vol error over the shift by
 > golden-section search on ``[shift_lo, shift_hi]`` (defaults scale with spot:
 > ``[-0.9 S, 20 S]``, staying above the ``-shift`` floor).
+
+## double_barrier
+
+### `double_knockout_call(S, K, L, U, t, r, sigma, b=None, q=0.0, terms=8)`  _function_
+
+> Price a double-barrier knock-out call in closed form (Kunitomo-Ikeda).
+>
+> Parameters
+> ----------
+> S, K : float
+>     Spot and strike.
+> L, U : float
+>     Lower and upper knock-out barriers with ``L < S < U``. Both must be
+>     positive and ``L < U``.
+> t, r, sigma : float
+>     Time to expiry (years), risk-free rate, volatility.
+> b : float, optional
+>     Cost of carry. Defaults to ``r - q``.
+> q : float
+>     Continuous dividend yield, used only when ``b`` is not given.
+> terms : int
+>     Number of image terms on each side of the series (total ``2*terms+1``).
+>
+> Returns
+> -------
+> float
+>     Value of the down-and-out-and-up-and-out call. Non-negative and never
+>     exceeds the vanilla call; it approaches the vanilla as the barriers move
+>     far away.
 
 ## double_heston
 
