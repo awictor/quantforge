@@ -1803,7 +1803,15 @@ from quantforge import (heating_degree_days, cooling_degree_days,
 cooling_degree_days(temps=[70, 72, 68, 75], base=65)
 degree_day_option(expected_index=900, strike=880, sigma=45, r=0.03, expiry=0.5,
                   tick_value=20, is_call=True, cap=100)
+
+# Binary payout on a strike breach (discounted breach probability x payout).
+from quantforge import degree_day_digital
+degree_day_digital(expected_index=1200, strike=1000, sigma=150, r=0.04,
+                   expiry=0.5, payout=100000, is_call=True)
 ```
+
+The call and put digitals sum to the discounted payout (one always pays); an ATM
+digital is worth half.
 
 ## Equity compensation and convertibles
 
