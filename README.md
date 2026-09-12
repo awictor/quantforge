@@ -1913,6 +1913,19 @@ from quantforge import panjer_negative_binomial
 panjer_negative_binomial(size=5, prob=0.5, severity_pmf=[0.0, 0.4, 0.6])
 ```
 
+Price the loss with a risk load using a distortion measure — the Wang transform or
+proportional hazard:
+
+```python
+from quantforge import wang_premium, proportional_hazard_premium
+
+wang_premium(g, lam=0.5)                 # Phi(Phi^-1(S) + lam) distortion
+proportional_hazard_premium(g, rho=2.0)  # S^{1/rho} distortion
+```
+
+Both equal the expected loss at zero distortion (`lam = 0`, `rho = 1`) and load the
+tail above it as the parameter grows.
+
 ## Equity swaps and dispersion
 
 Total-return swaps, dividend swaps, variance/volatility swaps, and dispersion-
