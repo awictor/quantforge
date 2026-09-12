@@ -16,6 +16,14 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.705.0] - 2026-09-12
+
+### Documentation
+- README performance-metrics section now documents the Cornish-Fisher pair
+  `cornish_fisher_var` and `cornish_fisher_expected_shortfall` with a worked
+  example, noting both reduce to the Gaussian figures for a normal series and the
+  expected shortfall never falls below the VaR.
+
 ## [1.704.0] - 2026-09-12
 
 ### Added

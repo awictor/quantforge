@@ -3368,6 +3368,21 @@ upside_potential_ratio(returns, tau=0.0)   # upside expectation / downside devia
 A higher `order` weights deep shortfalls more heavily, so Kappa falls as the order
 rises for a left-skewed series.
 
+For tail risk that accounts for non-normal returns, the Cornish-Fisher pair adjusts
+the Gaussian quantile with the sample skewness and excess kurtosis:
+
+```python
+from quantforge import cornish_fisher_var, cornish_fisher_expected_shortfall
+
+r = [0.01, -0.02, 0.015, -0.03, 0.008, 0.02, -0.05, 0.012, -0.01, 0.006, 0.018, -0.04]
+cornish_fisher_var(r, confidence=0.95)                  # 0.05, skew/kurt-adjusted VaR
+cornish_fisher_expected_shortfall(r, confidence=0.95)   # 0.0582, tail mean beyond it
+```
+
+Both reduce to the Gaussian VaR/ES for a normal series; negative skew and fat tails
+push each above its Gaussian value, and the expected shortfall never falls below the
+VaR.
+
 ## GARCH volatility
 
 Fit GARCH(1,1), forecast the term volatility, and price consistently with the
