@@ -16,6 +16,15 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.594.0] - 2026-09-12
+
+### Added
+- `acf.py`: `acf` (autocorrelation function) and `pacf` (partial autocorrelation
+  via the Durbin-Levinson recursion) for ARMA model identification. Cross-checked
+  against theory: the ACF of an AR(1) decays geometrically as ``phi^k`` while its
+  PACF cuts off after lag 1; the ACF of an MA(1) cuts off after lag 1 (matching
+  ``theta/(1+theta^2)``); white noise is flat beyond lag 0.
+
 ## [1.593.0] - 2026-09-12
 
 ### Documentation

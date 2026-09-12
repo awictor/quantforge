@@ -1,6 +1,23 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.593.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.594.0 by `docs/gen_api.py` — do not edit by hand.
+
+## acf
+
+### `acf(x, nlags=20)`  _function_
+
+> Autocorrelation function up to ``nlags`` (lag 0 included, always 1).
+>
+> Uses the biased (divisor ``n``) autocovariance, giving a positive-semidefinite
+> sequence. Returns a list of length ``nlags + 1``.
+
+### `pacf(x, nlags=20)`  _function_
+
+> Partial autocorrelation function via the Durbin-Levinson recursion.
+>
+> Returns a list of length ``nlags + 1`` with ``pacf[0] = 1`` by convention and
+> ``pacf[k]`` the order-``k`` partial autocorrelation. For an AR(p) process the
+> PACF is ~0 beyond lag ``p``.
 
 ## actuarial
 

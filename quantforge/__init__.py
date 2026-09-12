@@ -291,6 +291,7 @@ from .drawdown import drawdown_analytics
 from .downside_ratios import (
     kappa_ratio, upside_potential_ratio, lower_partial_moment,
 )
+from .acf import acf, pacf
 from .hac import (
     autocovariance, autocorrelation, newey_west_variance, newey_west_mean_se,
 )
@@ -641,7 +642,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.593.0"
+__version__ = "1.594.0"
 
 __all__ = [
     "OptionType",
@@ -1096,6 +1097,8 @@ __all__ = [
     "kappa_ratio",
     "upside_potential_ratio",
     "lower_partial_moment",
+    "acf",
+    "pacf",
     "autocovariance",
     "autocorrelation",
     "newey_west_variance",
