@@ -102,3 +102,51 @@ def hw_bond_option(P0, a, sigma, t_option, t_bond, strike, is_call=True):
     if is_call:
         return pT * _N(h) - strike * pS * _N(h - sig_p)
     return strike * pS * _N(-h + sig_p) - pT * _N(-h)
+
+
+def hw_caplet(P0, a, sigma, reset, pay, strike, notional=1.0):
+    """Hull-White caplet: an option on the simple forward rate over ``[reset, pay]``.
+
+    A caplet paying ``notional * tau * max(L - strike, 0)`` at ``pay`` (where ``L``
+    is the simple rate set at ``reset`` for accrual ``tau = pay - reset``) equals
+    ``notional * (1 + strike*tau)`` puts on the ``pay``-zero struck at
+    ``1/(1 + strike*tau)``, expiring at ``reset`` -- the standard bond-option
+    representation. Priced analytically off the initial curve.
+    """
+    tau = pay - reset
+    if tau <= 0:
+        raise ValueError("require pay > reset")
+    k = 1.0 / (1.0 + strike * tau)
+    put = hw_bond_option(P0, a, sigma, reset, pay, k, is_call=False)
+    return notional * (1.0 + strike * tau) * put
+
+
+def hw_floorlet(P0, a, sigma, reset, pay, strike, notional=1.0):
+    """Hull-White floorlet: ``notional * (1 + strike*tau)`` calls on the pay-zero."""
+    tau = pay - reset
+    if tau <= 0:
+        raise ValueError("require pay > reset")
+    k = 1.0 / (1.0 + strike * tau)
+    call = hw_bond_option(P0, a, sigma, reset, pay, k, is_call=True)
+    return notional * (1.0 + strike * tau) * call
+
+
+def hw_cap(P0, a, sigma, dates, strike, notional=1.0):
+    """Hull-White cap: sum of caplets over consecutive ``dates`` (reset, pay pairs).
+
+    ``dates`` is the schedule ``[t_0, t_1, ..., t_n]``; caplet ``i`` covers
+    ``[t_i, t_{i+1}]``. A floor is the analogous sum of floorlets. By put-call
+    parity ``cap - floor`` equals the value of the fixed-vs-float swap.
+    """
+    if len(dates) < 2:
+        raise ValueError("need at least two schedule dates")
+    return sum(hw_caplet(P0, a, sigma, dates[i], dates[i + 1], strike, notional)
+               for i in range(len(dates) - 1))
+
+
+def hw_floor(P0, a, sigma, dates, strike, notional=1.0):
+    """Hull-White floor: sum of floorlets over consecutive ``dates``."""
+    if len(dates) < 2:
+        raise ValueError("need at least two schedule dates")
+    return sum(hw_floorlet(P0, a, sigma, dates[i], dates[i + 1], strike, notional)
+               for i in range(len(dates) - 1))

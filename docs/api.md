@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.641.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.642.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -4984,6 +4984,32 @@ Auto-generated from `quantforge` v1.641.0 by `docs/gen_api.py` — do not edit b
 > giving a Black-style formula in the discount factors ``P0(t_bond)`` and
 > ``P0(t_option)`` (Jamshidian / Hull-White). Returns the option value today.
 > Requires ``0 < t_option < t_bond``.
+
+### `hw_cap(P0, a, sigma, dates, strike, notional=1.0)`  _function_
+
+> Hull-White cap: sum of caplets over consecutive ``dates`` (reset, pay pairs).
+>
+> ``dates`` is the schedule ``[t_0, t_1, ..., t_n]``; caplet ``i`` covers
+> ``[t_i, t_{i+1}]``. A floor is the analogous sum of floorlets. By put-call
+> parity ``cap - floor`` equals the value of the fixed-vs-float swap.
+
+### `hw_caplet(P0, a, sigma, reset, pay, strike, notional=1.0)`  _function_
+
+> Hull-White caplet: an option on the simple forward rate over ``[reset, pay]``.
+>
+> A caplet paying ``notional * tau * max(L - strike, 0)`` at ``pay`` (where ``L``
+> is the simple rate set at ``reset`` for accrual ``tau = pay - reset``) equals
+> ``notional * (1 + strike*tau)`` puts on the ``pay``-zero struck at
+> ``1/(1 + strike*tau)``, expiring at ``reset`` -- the standard bond-option
+> representation. Priced analytically off the initial curve.
+
+### `hw_floor(P0, a, sigma, dates, strike, notional=1.0)`  _function_
+
+> Hull-White floor: sum of floorlets over consecutive ``dates``.
+
+### `hw_floorlet(P0, a, sigma, reset, pay, strike, notional=1.0)`  _function_
+
+> Hull-White floorlet: ``notional * (1 + strike*tau)`` calls on the pay-zero.
 
 ### `hw_zero_from_curve(P0, r0, a, sigma, t, T, f0=None, eps=1e-05)`  _function_
 

@@ -16,6 +16,16 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.642.0] - 2026-09-12
+
+### Added
+- `hull_white.py`: `hw_cap` / `hw_floor` (and the `hw_caplet` / `hw_floorlet`
+  building blocks) price interest-rate caps and floors under Hull-White as
+  portfolios of zero-coupon bond options off the initial curve. Cross-checked: the
+  cap equals the sum of its caplets, ``cap - floor`` equals the fixed-vs-float swap
+  value (put-call parity) to 1e-9, the price rises with volatility and falls with
+  the strike.
+
 ## [1.641.0] - 2026-09-12
 
 ### Documentation
