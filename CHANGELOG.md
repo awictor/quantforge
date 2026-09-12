@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.551.0] - 2026-09-12
+
+### Documentation
+- README: added a "Newey-West HAC variance" section documenting
+  `newey_west_variance`, `newey_west_mean_se`, and `autocorrelation`, with a
+  snippet verified against the package; TOC regenerated to 91 entries.
+
 ## [1.550.0] - 2026-09-12
 
 ### Added

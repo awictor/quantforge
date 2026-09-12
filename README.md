@@ -78,6 +78,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Bootstrap and jackknife](#bootstrap-and-jackknife)
 - [Hodrick-Prescott filter](#hodrick-prescott-filter)
 - [Kalman filter (local level)](#kalman-filter-local-level)
+- [Newey-West HAC variance](#newey-west-hac-variance)
 - [Markov chains](#markov-chains)
 - [Principal component analysis](#principal-component-analysis)
 - [Matrix utilities](#matrix-utilities)
@@ -1814,6 +1815,30 @@ The gain depends only on the signal-to-noise ratio `Q/R`: it rises toward 1 as t
 process noise dominates (trust each observation) and toward 0 as the observation
 noise dominates (heavy smoothing). With `Q = 0` and a diffuse prior the estimate
 is exactly the running mean (recursive least squares).
+
+## Newey-West HAC variance
+
+The sample variance understates the variance of a mean when observations are
+autocorrelated. The Newey-West (1987) estimator corrects for it by adding
+Bartlett-weighted autocovariances up to a truncation lag — the triangular weights
+are exactly what keep the estimate non-negative. This is the long-run variance
+behind HAC standard errors.
+
+```python
+from quantforge import (newey_west_variance, newey_west_mean_se,
+                        autocorrelation)
+
+x = [0.5, 0.7, 0.6, 0.9, 1.1, 0.8, 1.0, 1.3, 1.2, 1.4, 1.1, 1.5]
+
+newey_west_variance(x, 0)      # -> 0.09243  (lag 0 == sample variance)
+newey_west_variance(x, 3)      # -> 0.20573  (autocorrelation-corrected, larger)
+newey_west_mean_se(x, 3)       # -> 0.13094  (HAC standard error of the mean)
+autocorrelation(x, 1)          # -> 0.459
+```
+
+Lag 0 reduces to the sample variance; positive autocorrelation inflates both the
+long-run variance and the mean's standard error. On an AR(1) the estimate climbs
+toward the analytic `sigma^2 / (1 - phi)^2` as the lag grows.
 
 ## Markov chains
 
