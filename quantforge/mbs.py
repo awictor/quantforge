@@ -108,6 +108,76 @@ def mbs_cashflows(balance, annual_rate, term_months, smm=0.0):
     return rows
 
 
+def mbs_cashflows_psa(balance, annual_rate, term_months, psa=100.0):
+    """Projected MBS cashflows on the PSA prepayment ramp (age-varying SMM).
+
+    Like :func:`mbs_cashflows` but the monthly prepayment uses the age-dependent
+    :func:`psa_cpr` converted to SMM at each month, rather than a constant SMM.
+    Returns the same ``[(month, interest, scheduled_principal, prepayment,
+    total_principal, ending_balance), ...]`` rows. At ``psa = 0`` it reduces to the
+    no-prepayment schedule.
+    """
+    if psa < 0:
+        raise ValueError("psa must be non-negative")
+    i = annual_rate / 12.0
+    bal = balance
+    rows = []
+    for m in range(1, term_months + 1):
+        if bal <= 0.0:
+            break
+        smm = cpr_to_smm(psa_cpr(m, psa))
+        pay = monthly_payment(bal, annual_rate, term_months - m + 1)
+        interest = bal * i
+        sched_principal = min(pay - interest, bal)
+        after_sched = bal - sched_principal
+        prepay = smm * after_sched
+        total_principal = sched_principal + prepay
+        bal = after_sched - prepay
+        rows.append((m, interest, sched_principal, prepay, total_principal,
+                     max(bal, 0.0)))
+    return rows
+
+
+def mbs_price(cashflows, annual_yield):
+    """Present value of projected MBS cashflows at a monthly-compounded yield.
+
+    ``cashflows`` are :func:`mbs_cashflows` rows; each month's cash is
+    ``interest + total_principal`` discounted by ``(1 + y/12)^{-month}``. Monotone
+    decreasing in ``annual_yield``.
+    """
+    i = annual_yield / 12.0
+    pv = 0.0
+    for row in cashflows:
+        m, interest, _sched, _prepay, total_principal, _bal = row
+        cash = interest + total_principal
+        pv += cash / (1.0 + i) ** m
+    return pv
+
+
+def mbs_yield(cashflows, price, tol=1e-10, max_iter=100):
+    """Monthly-compounded annual yield reproducing an MBS ``price``.
+
+    Bisection on :func:`mbs_price` (monotone decreasing in yield). Inverse of
+    :func:`mbs_price`.
+    """
+    if price <= 0:
+        raise ValueError("price must be positive")
+    lo, hi = -0.5, 5.0
+    p_lo, p_hi = mbs_price(cashflows, lo), mbs_price(cashflows, hi)
+    if not (min(p_lo, p_hi) - 1e-6 <= price <= max(p_lo, p_hi) + 1e-6):
+        raise ValueError("price outside the achievable yield range")
+    for _ in range(max_iter):
+        mid = 0.5 * (lo + hi)
+        pm = mbs_price(cashflows, mid)
+        if abs(pm - price) < tol:
+            return mid
+        if pm > price:   # price too high -> raise yield
+            lo = mid
+        else:
+            hi = mid
+    return 0.5 * (lo + hi)
+
+
 def weighted_average_life(cashflows, balance):
     """Weighted-average life (years) from projected principal cashflows.
 

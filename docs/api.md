@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.407.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.408.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3970,6 +3970,31 @@ Auto-generated from `quantforge` v1.407.0 by `docs/gen_api.py` — do not edit b
 > principal. Returns ``[(month, interest, scheduled_principal, prepayment,
 > total_principal, ending_balance), ...]``. With ``smm = 0`` the total principal
 > matches :func:`amortization_schedule`.
+
+### `mbs_cashflows_psa(balance, annual_rate, term_months, psa=100.0)`  _function_
+
+> Projected MBS cashflows on the PSA prepayment ramp (age-varying SMM).
+>
+> Like :func:`mbs_cashflows` but the monthly prepayment uses the age-dependent
+> :func:`psa_cpr` converted to SMM at each month, rather than a constant SMM.
+> Returns the same ``[(month, interest, scheduled_principal, prepayment,
+> total_principal, ending_balance), ...]`` rows. At ``psa = 0`` it reduces to the
+> no-prepayment schedule.
+
+### `mbs_price(cashflows, annual_yield)`  _function_
+
+> Present value of projected MBS cashflows at a monthly-compounded yield.
+>
+> ``cashflows`` are :func:`mbs_cashflows` rows; each month's cash is
+> ``interest + total_principal`` discounted by ``(1 + y/12)^{-month}``. Monotone
+> decreasing in ``annual_yield``.
+
+### `mbs_yield(cashflows, price, tol=1e-10, max_iter=100)`  _function_
+
+> Monthly-compounded annual yield reproducing an MBS ``price``.
+>
+> Bisection on :func:`mbs_price` (monotone decreasing in yield). Inverse of
+> :func:`mbs_price`.
 
 ### `monthly_payment(balance, annual_rate, term_months)`  _function_
 

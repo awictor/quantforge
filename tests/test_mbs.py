@@ -5,6 +5,7 @@ import pytest
 from quantforge import (
     monthly_payment, cpr_to_smm, smm_to_cpr, psa_cpr, amortization_schedule,
     mbs_cashflows, weighted_average_life,
+    mbs_cashflows_psa, mbs_price, mbs_yield,
 )
 
 
@@ -48,6 +49,44 @@ def test_wal_shortens_with_prepayment():
     base = mbs_cashflows(300000, 0.05, 360, 0.0)
     fast = mbs_cashflows(300000, 0.05, 360, cpr_to_smm(0.06))
     assert weighted_average_life(fast, 300000) < weighted_average_life(base, 300000)
+
+
+def test_psa_zero_reduces_to_no_prepay():
+    z = mbs_cashflows_psa(300000, 0.05, 360, 0)
+    base = mbs_cashflows(300000, 0.05, 360, 0.0)
+    assert sum(r[4] for r in z) == pytest.approx(sum(r[4] for r in base), abs=1e-6)
+
+
+def test_psa_principal_sums_to_balance():
+    rows = mbs_cashflows_psa(300000, 0.05, 360, 100)
+    assert sum(r[4] for r in rows) == pytest.approx(300000, abs=1e-2)
+
+
+def test_faster_psa_shortens_wal():
+    w100 = weighted_average_life(mbs_cashflows_psa(300000, 0.05, 360, 100), 300000)
+    w300 = weighted_average_life(mbs_cashflows_psa(300000, 0.05, 360, 300), 300000)
+    assert w300 < w100
+
+
+def test_price_monotone_decreasing_in_yield():
+    rows = mbs_cashflows_psa(300000, 0.05, 360, 100)
+    assert mbs_price(rows, 0.07) < mbs_price(rows, 0.05)
+
+
+def test_price_at_coupon_is_par():
+    rows = mbs_cashflows_psa(300000, 0.05, 360, 100)
+    assert mbs_price(rows, 0.05) == pytest.approx(300000, abs=1.0)
+
+
+def test_yield_inverts_price():
+    rows = mbs_cashflows_psa(300000, 0.05, 360, 100)
+    p = mbs_price(rows, 0.05)
+    assert mbs_yield(rows, p) == pytest.approx(0.05, abs=1e-8)
+
+
+def test_price_yield_validation():
+    with pytest.raises(ValueError):
+        mbs_yield(mbs_cashflows_psa(300000, 0.05, 360, 100), -5)
 
 
 def test_validation():

@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.408.0] - 2026-09-11
+
+### Added
+- `mbs_cashflows_psa`, `mbs_price`, `mbs_yield` (in `mbs.py`): MBS cashflows on the
+  PSA prepayment ramp (age-varying SMM), and the price/yield of a projected
+  cashflow strip at a monthly-compounded yield. Faster PSA shortens the WAL, the
+  price is monotone decreasing in yield and equals par at the coupon rate, and the
+  yield inverts the price.
+
 ## [1.407.0] - 2026-09-11
 
 ### Added
