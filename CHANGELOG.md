@@ -16,6 +16,12 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.613.0] - 2026-09-12
+
+### Documentation
+- README: added a "Cross-validation" section documenting `k_fold_indices`,
+  `train_test_split`, and `cross_val_score`; TOC regenerated to 111 entries.
+
 ## [1.612.0] - 2026-09-12
 
 ### Added

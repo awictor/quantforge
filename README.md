@@ -76,6 +76,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [OLS regression](#ols-regression)
 - [Logistic regression](#logistic-regression)
 - [Classification metrics](#classification-metrics)
+- [Cross-validation](#cross-validation)
 - [Factor models](#factor-models)
 - [Performance attribution (Brinson)](#performance-attribution-brinson)
 - [Bootstrap and jackknife](#bootstrap-and-jackknife)
@@ -1852,6 +1853,25 @@ brier_score(y_true, y_score)             # mean squared prob error, 0 = perfect
 AUC uses the Mann-Whitney rank statistic (ties count as half); the Brier score is
 0 for exact probabilities and 0.25 for all-0.5 guesses. Pair these with
 `fit_logistic` / `predict_proba` above.
+
+## Cross-validation
+
+Model-agnostic out-of-sample evaluation. `k_fold_indices` yields disjoint
+train/test index pairs; `train_test_split` does a single split;
+`cross_val_score` runs a caller-supplied fit/score over the folds.
+
+```python
+from quantforge import k_fold_indices, train_test_split, cross_val_score
+
+for train_idx, test_idx in k_fold_indices(len(y), k=5, shuffle=True, seed=42):
+    ...                                    # fit on train_idx, evaluate on test_idx
+
+scores = cross_val_score(X, y, fit_fn, score_fn, k=5)   # one score per fold
+```
+
+The test folds tile the data exactly (disjoint, covering every index once) with
+sizes differing by at most one; a seeded shuffle is reproducible. Pair with
+`fit_logistic`/`ols_fit` and the metrics above for a full evaluation loop.
 
 ## Factor models
 
