@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.476.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.477.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -6015,6 +6015,36 @@ Auto-generated from `quantforge` v1.476.0 by `docs/gen_api.py` — do not edit b
 >
 > with the exact :func:`worst_of_call_closed` and :func:`_disc_expected_min`.
 > Closed-form cross-check for the Monte Carlo :func:`worst_of_call` put.
+
+## nelson_siegel
+
+### `nelson_siegel_discount(t, beta0, beta1, beta2, tau)`  _function_
+
+> Discount factor ``exp(-z(t) t)`` from the Nelson-Siegel zero rate.
+
+### `nelson_siegel_forward(t, beta0, beta1, beta2, tau)`  _function_
+
+> Instantaneous forward rate under Nelson-Siegel.
+>
+> ``f(t) = beta0 + beta1 e^{-t/tau} + beta2 (t/tau) e^{-t/tau}``. Equals the
+> short rate ``beta0 + beta1`` at ``t = 0`` and the long level ``beta0`` as
+> ``t -> inf``.
+
+### `nelson_siegel_zero(t, beta0, beta1, beta2, tau)`  _function_
+
+> Nelson-Siegel zero rate at maturity ``t``.
+>
+> ``z(t) = beta0 + (beta1 + beta2) (1 - e^{-t/tau}) / (t/tau) - beta2 e^{-t/tau}``.
+> ``beta0`` is the long-run level, ``beta0 + beta1`` the short rate (``t -> 0``),
+> and ``beta2`` scales the medium-term curvature hump with decay ``tau``.
+
+### `svensson_zero(t, beta0, beta1, beta2, beta3, tau1, tau2)`  _function_
+
+> Svensson zero rate: Nelson-Siegel plus a second curvature term.
+>
+> Adds ``beta3 ((1 - e^{-t/tau2})/(t/tau2) - e^{-t/tau2})`` with its own decay
+> ``tau2`` for a second hump. Reduces to :func:`nelson_siegel_zero` when
+> ``beta3 = 0``.
 
 ## nig
 

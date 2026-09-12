@@ -220,6 +220,10 @@ from .inflation import (
 from .pca import (
     jacobi_eigen, pca, project, reconstruct_covariance, pca_scenario,
 )
+from .nelson_siegel import (
+    nelson_siegel_zero, svensson_zero, nelson_siegel_discount,
+    nelson_siegel_forward,
+)
 from .interpolation import natural_cubic_spline, monotone_cubic
 from .rootfind import bisection, brent, newton
 from .linalg import (
@@ -530,7 +534,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.476.0"
+__version__ = "1.477.0"
 
 __all__ = [
     "OptionType",
@@ -880,6 +884,10 @@ __all__ = [
     "real_zero_curve",
     "nominal_zero_curve",
     "real_discount_factor",
+    "nelson_siegel_zero",
+    "svensson_zero",
+    "nelson_siegel_discount",
+    "nelson_siegel_forward",
     "natural_cubic_spline",
     "monotone_cubic",
     "bisection",

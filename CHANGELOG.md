@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.477.0] - 2026-09-11
+
+### Added
+- `nelson_siegel.py`: Nelson-Siegel and Svensson parametric yield curves.
+  `nelson_siegel_zero`, `svensson_zero` (adds a second curvature hump),
+  `nelson_siegel_discount`, and `nelson_siegel_forward`. Cross-checked: the short
+  rate (`t -> 0`) is `beta0 + beta1`, the long level (`t -> inf`) is `beta0`, the
+  discount factor is `exp(-z t)` and decreasing, and Svensson reduces to
+  Nelson-Siegel when `beta3 = 0`.
+
 ## [1.476.0] - 2026-09-11
 
 ### Documentation
