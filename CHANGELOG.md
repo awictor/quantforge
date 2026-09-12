@@ -16,6 +16,13 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.615.0] - 2026-09-12
+
+### Documentation
+- README: added a "Feature scaling" section documenting `fit_standardize`,
+  `fit_min_max`, `fit_robust`, `scale_transform`, and `scale_inverse_transform`;
+  TOC regenerated to 112 entries.
+
 ## [1.614.0] - 2026-09-12
 
 ### Added

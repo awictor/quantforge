@@ -77,6 +77,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Logistic regression](#logistic-regression)
 - [Classification metrics](#classification-metrics)
 - [Cross-validation](#cross-validation)
+- [Feature scaling](#feature-scaling)
 - [Factor models](#factor-models)
 - [Performance attribution (Brinson)](#performance-attribution-brinson)
 - [Bootstrap and jackknife](#bootstrap-and-jackknife)
@@ -1872,6 +1873,26 @@ scores = cross_val_score(X, y, fit_fn, score_fn, k=5)   # one score per fold
 The test folds tile the data exactly (disjoint, covering every index once) with
 sizes differing by at most one; a seeded shuffle is reproducible. Pair with
 `fit_logistic`/`ols_fit` and the metrics above for a full evaluation loop.
+
+## Feature scaling
+
+Fit a scaler on training data, apply it to test data — no leakage.
+`fit_standardize` (z-score), `fit_min_max` ([0,1]), and `fit_robust` (median/IQR)
+return params; `scale_transform` applies them and `scale_inverse_transform` undoes
+them.
+
+```python
+from quantforge import fit_standardize, scale_transform, scale_inverse_transform
+
+params = fit_standardize(X_train)        # per-column mean and std
+Z_train = scale_transform(params, X_train)
+Z_test = scale_transform(params, X_test)   # same params — no test-set leakage
+X_back = scale_inverse_transform(params, Z_train)   # round-trips exactly
+```
+
+Standardized columns have mean 0 and std 1; min-max maps to [0,1]; the robust
+scaler uses the median and IQR, so its center is unmoved by outliers. All three
+round-trip through the inverse.
 
 ## Factor models
 
