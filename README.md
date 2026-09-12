@@ -1428,6 +1428,33 @@ fut_dv01 = futures_dv01(ctd_dv01=bond_future_dv01(115, 9.0), ctd_conversion_fact
 futures_hedge_ratio(bond_dv01_=bond_future_dv01(120, 8.5), futures_dv01_=fut_dv01)
 ```
 
+## Factor models
+
+Multi-factor OLS return regression (alpha, betas, R-squared), factor attribution,
+and rolling beta:
+
+```python
+from quantforge import factor_regression, factor_attribution, rolling_factor_beta
+
+fit = factor_regression(asset_returns, [market_returns, size_returns, value_returns])
+fit["alpha"], fit["betas"], fit["r_squared"]
+factor_attribution(total_return=0.05, alpha=fit["alpha"], betas=fit["betas"],
+                   factor_realized_returns=[0.02, 0.01, -0.005])
+```
+
+## Dual-currency deposits
+
+Yield-enhanced FX-linked deposits by component decomposition:
+
+```python
+from quantforge import (dcd_option_premium_rate, dcd_enhanced_yield,
+                        dcd_breakeven_spot)
+
+prem = dcd_option_premium_rate(spot=1.10, strike=1.12, tenor=0.25, r_domestic=0.05,
+                               r_foreign=0.03, sigma=0.10)
+dcd_enhanced_yield(base_deposit_rate=0.05, option_premium_rate=prem, tenor=0.25)
+```
+
 ## FX forwards (covered interest parity)
 
 ```python
