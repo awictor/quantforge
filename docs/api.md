@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.477.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.478.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -6017,6 +6017,16 @@ Auto-generated from `quantforge` v1.477.0 by `docs/gen_api.py` — do not edit b
 > Closed-form cross-check for the Monte Carlo :func:`worst_of_call` put.
 
 ## nelson_siegel
+
+### `fit_nelson_siegel(maturities, zero_rates, tau_grid=None)`  _function_
+
+> Least-squares fit of Nelson-Siegel parameters to observed zero rates.
+>
+> For a fixed decay ``tau`` the three betas enter linearly (the level/slope/
+> curvature loadings), so they are solved by ordinary least squares; ``tau`` is
+> chosen by a grid search minimizing the residual sum of squares. Returns
+> ``(beta0, beta1, beta2, tau)``. Recovers the true parameters exactly on
+> noiseless data whose ``tau`` is in the grid.
 
 ### `nelson_siegel_discount(t, beta0, beta1, beta2, tau)`  _function_
 

@@ -222,7 +222,7 @@ from .pca import (
 )
 from .nelson_siegel import (
     nelson_siegel_zero, svensson_zero, nelson_siegel_discount,
-    nelson_siegel_forward,
+    nelson_siegel_forward, fit_nelson_siegel,
 )
 from .interpolation import natural_cubic_spline, monotone_cubic
 from .rootfind import bisection, brent, newton
@@ -534,7 +534,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.477.0"
+__version__ = "1.478.0"
 
 __all__ = [
     "OptionType",
@@ -888,6 +888,7 @@ __all__ = [
     "svensson_zero",
     "nelson_siegel_discount",
     "nelson_siegel_forward",
+    "fit_nelson_siegel",
     "natural_cubic_spline",
     "monotone_cubic",
     "bisection",

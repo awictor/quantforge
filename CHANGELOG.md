@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.478.0] - 2026-09-11
+
+### Added
+- `fit_nelson_siegel` (in `nelson_siegel.py`): least-squares fit of Nelson-Siegel
+  parameters to observed zero rates. For each ``tau`` on a grid the three betas
+  are solved by OLS (they enter linearly via the factor loadings) and ``tau`` is
+  chosen by minimizing the residual sum of squares. Cross-checked: recovers the
+  true parameters exactly on noiseless data, reprices the curve, and leaves a
+  small residual under noise.
+
 ## [1.477.0] - 2026-09-11
 
 ### Added

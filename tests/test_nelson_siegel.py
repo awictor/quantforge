@@ -6,7 +6,7 @@ import pytest
 
 from quantforge import (
     nelson_siegel_zero, svensson_zero, nelson_siegel_discount,
-    nelson_siegel_forward,
+    nelson_siegel_forward, fit_nelson_siegel,
 )
 
 
@@ -46,6 +46,39 @@ def test_svensson_reduces_to_ns():
 def test_svensson_second_hump_changes_curve():
     assert abs(svensson_zero(3, B0, B1, B2, 0.02, TAU, 5.0)
                - nelson_siegel_zero(3, B0, B1, B2, TAU)) > 1e-4
+
+
+MATS = [0.5, 1, 2, 3, 5, 7, 10, 20, 30]
+
+
+def test_fit_recovers_noiseless_parameters():
+    zs = [nelson_siegel_zero(t, B0, B1, B2, TAU) for t in MATS]
+    b0, b1, b2, tau = fit_nelson_siegel(MATS, zs)
+    assert b0 == pytest.approx(B0, abs=1e-6)
+    assert b1 == pytest.approx(B1, abs=1e-6)
+    assert b2 == pytest.approx(B2, abs=1e-6)
+    assert tau == pytest.approx(TAU, abs=1e-6)
+
+
+def test_fit_reprices_curve():
+    zs = [nelson_siegel_zero(t, B0, B1, B2, TAU) for t in MATS]
+    b0, b1, b2, tau = fit_nelson_siegel(MATS, zs)
+    assert all(nelson_siegel_zero(t, b0, b1, b2, tau) == pytest.approx(zs[i], abs=1e-6)
+               for i, t in enumerate(MATS))
+
+
+def test_fit_noisy_small_residual():
+    zs = [nelson_siegel_zero(t, B0, B1, B2, TAU) for t in MATS]
+    zn = [zs[i] + (0.0002 if i % 2 else -0.0002) for i in range(len(zs))]
+    b0, b1, b2, tau = fit_nelson_siegel(MATS, zn)
+    sse = sum((nelson_siegel_zero(t, b0, b1, b2, tau) - zn[i]) ** 2
+              for i, t in enumerate(MATS))
+    assert sse < 1e-5
+
+
+def test_fit_validation():
+    with pytest.raises(ValueError):
+        fit_nelson_siegel([1, 2], [0.02, 0.03])
 
 
 def test_validation():

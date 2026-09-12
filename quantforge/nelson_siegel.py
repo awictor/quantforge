@@ -47,6 +47,47 @@ def svensson_zero(t, beta0, beta1, beta2, beta3, tau1, tau2):
     return base + beta3 * (loading2 - math.exp(-x2))
 
 
+def _ns_loadings(t, tau):
+    """The three Nelson-Siegel factor loadings at maturity ``t`` for a fixed tau."""
+    if t == 0.0:
+        return 1.0, 1.0, 0.0
+    x = t / tau
+    load = (1.0 - math.exp(-x)) / x
+    return 1.0, load, load - math.exp(-x)
+
+
+def fit_nelson_siegel(maturities, zero_rates, tau_grid=None):
+    """Least-squares fit of Nelson-Siegel parameters to observed zero rates.
+
+    For a fixed decay ``tau`` the three betas enter linearly (the level/slope/
+    curvature loadings), so they are solved by ordinary least squares; ``tau`` is
+    chosen by a grid search minimizing the residual sum of squares. Returns
+    ``(beta0, beta1, beta2, tau)``. Recovers the true parameters exactly on
+    noiseless data whose ``tau`` is in the grid.
+    """
+    from .factor_model import factor_regression
+    if len(maturities) != len(zero_rates):
+        raise ValueError("maturities and zero_rates must have equal length")
+    if len(maturities) < 3:
+        raise ValueError("need at least three points to fit three betas")
+    if tau_grid is None:
+        tau_grid = [0.25 * k for k in range(1, 41)]   # 0.25 .. 10 years
+    best = None
+    for tau in tau_grid:
+        # Loadings 2 and 3 as regressors; loading 1 is the intercept (all ones).
+        f2 = [_ns_loadings(t, tau)[1] for t in maturities]
+        f3 = [_ns_loadings(t, tau)[2] for t in maturities]
+        fit = factor_regression(list(zero_rates), [f2, f3])
+        beta0 = fit["alpha"]
+        beta1, beta2 = fit["betas"]
+        sse = 0.0
+        for t, z in zip(maturities, zero_rates):
+            sse += (nelson_siegel_zero(t, beta0, beta1, beta2, tau) - z) ** 2
+        if best is None or sse < best[0]:
+            best = (sse, beta0, beta1, beta2, tau)
+    return best[1], best[2], best[3], best[4]
+
+
 def nelson_siegel_discount(t, beta0, beta1, beta2, tau):
     """Discount factor ``exp(-z(t) t)`` from the Nelson-Siegel zero rate."""
     if t <= 0:
