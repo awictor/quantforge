@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.575.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.576.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -1999,6 +1999,32 @@ Auto-generated from `quantforge` v1.575.0 by `docs/gen_api.py` — do not edit b
 >
 > The worst-case loss not exceeded with probability ``q`` -- the basis of the
 > Basel IRB capital charge. Increasing in ``q``, ``pd`` and ``rho``.
+
+## copula_stats
+
+### `kendall_tau(x, y)`  _function_
+
+> Kendall's rank correlation tau-a between paired samples.
+>
+> Counts concordant minus discordant pairs over all ``n(n-1)/2`` pairs. Equals
+> +1 for a strictly increasing relationship, -1 for strictly decreasing, and ~0
+> under independence. This is the tau-a variant (no tie correction).
+
+### `pseudo_observations(x)`  _function_
+
+> Empirical-copula pseudo-observations: scaled ranks in (0, 1).
+>
+> Maps each value to ``rank / (n + 1)``, the standard normalization that keeps
+> the transformed sample strictly inside the open unit interval. Applying this
+> to each margin and viewing the joint gives the empirical copula, free of the
+> marginal distributions.
+
+### `spearman_rho(x, y)`  _function_
+
+> Spearman's rank correlation: the Pearson correlation of the ranks.
+>
+> Invariant to any monotone transform of either margin; +1/-1 for a perfectly
+> monotone relationship, ~0 under independence.
 
 ## correlation
 

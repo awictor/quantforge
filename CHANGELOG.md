@@ -16,6 +16,17 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.576.0] - 2026-09-12
+
+### Added
+- `copula_stats.py`: rank-based dependence measures -- `kendall_tau` (concordant
+  minus discordant pairs), `spearman_rho` (Pearson correlation of ranks, with tie
+  averaging), and `pseudo_observations` (scaled-rank empirical-copula transform).
+  Cross-checked: a strictly increasing relationship gives tau = rho = 1, a
+  decreasing one gives -1, Spearman is invariant to a monotone (exp) transform of a
+  margin, independent samples give ~0, and the pseudo-observations stay in the open
+  unit interval with correct rank scaling and tie handling.
+
 ## [1.575.0] - 2026-09-12
 
 ### Documentation
