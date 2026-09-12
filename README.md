@@ -1702,6 +1702,18 @@ cppi_path(initial_wealth=100, floor=90, multiplier=3,
           risky_returns=[-0.30, -0.30, -0.30, -0.30], r=0.02, dt=0.25)  # protected
 ```
 
+## Volatility targeting
+
+Scale exposure inversely with realized volatility to run at a constant risk level:
+
+```python
+from quantforge import target_leverage, vol_targeted_returns, realized_annualized_vol
+
+target_leverage(target_vol=0.10, realized_vol=0.20)          # 0.5x (de-risk)
+overlaid = vol_targeted_returns(returns, target_vol=0.15, lookback=60)
+realized_annualized_vol(overlaid)                            # ~ 0.15
+```
+
 ## Performance metrics
 
 Track-record statistics from a return series:
