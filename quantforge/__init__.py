@@ -265,6 +265,10 @@ from .theil_sen import theil_sen
 from .robust_stats import (
     median_absolute_deviation, interquartile_range, winsorize, trimmed_mean,
 )
+from .realized import (
+    realized_variance_from_returns, bipower_variation, jump_variation,
+    realized_volatility_signature,
+)
 from .hac import (
     autocovariance, autocorrelation, newey_west_variance, newey_west_mean_se,
 )
@@ -614,7 +618,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.557.0"
+__version__ = "1.558.0"
 
 __all__ = [
     "OptionType",
@@ -1028,6 +1032,10 @@ __all__ = [
     "interquartile_range",
     "winsorize",
     "trimmed_mean",
+    "realized_variance_from_returns",
+    "bipower_variation",
+    "jump_variation",
+    "realized_volatility_signature",
     "autocovariance",
     "autocorrelation",
     "newey_west_variance",

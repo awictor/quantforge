@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.557.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.558.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -7717,6 +7717,39 @@ Auto-generated from `quantforge` v1.557.0 by `docs/gen_api.py` — do not edit b
 > Like :func:`rbergomi_smile` but prices each strike with the low-variance
 > conditional call on a shared set of W paths, then inverts to a Black-Scholes
 > vol. Returns ``(log_moneyness, vol)`` pairs sorted by strike.
+
+## realized
+
+### `bipower_variation(returns)`  _function_
+
+> Barndorff-Nielsen-Shephard bipower variation.
+>
+> ``BV = (pi/2) sum_{i=2}^{n} |r_i| |r_{i-1}|``. Estimates the integrated
+> variance of the continuous part only and is robust to jumps. Requires at
+> least two returns.
+
+### `jump_variation(returns)`  _function_
+
+> Jump component of the quadratic variation, ``max(RV - BV, 0)``.
+>
+> Zero (up to sampling noise) for a purely continuous path; strictly positive
+> when the returns contain a jump. Clamped at zero because the estimator can go
+> slightly negative on jump-free data.
+
+### `realized_variance_from_returns(returns)`  _function_
+
+> Realized variance ``sum r_i^2`` of a return series.
+>
+> Consistent for the total quadratic variation (diffusion plus jumps) as the
+> sampling frequency rises.
+
+### `realized_volatility_signature(returns, annualization=1.0)`  _function_
+
+> Realized volatility ``sqrt(RV)``, optionally annualized.
+>
+> ``annualization`` multiplies the variance before the square root (e.g. the
+> number of periods per year for intraday returns aggregated to one day times
+> 252). Defaults to 1 (the raw realized vol of the supplied returns).
 
 ## rebalance
 

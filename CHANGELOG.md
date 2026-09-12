@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.558.0] - 2026-09-12
+
+### Added
+- `realized.py`: jump-robust realized volatility from intraday returns --
+  `realized_variance_from_returns` (total quadratic variation),
+  `bipower_variation` (Barndorff-Nielsen-Shephard integrated variance, robust to
+  jumps), `jump_variation` (``max(RV - BV, 0)``), and
+  `realized_volatility_signature`. Cross-checked: on a continuous path RV and BV
+  both recover the integrated variance and the jump component is negligible; a
+  single injected jump inflates RV by roughly the jump squared while BV stays
+  within 15%, and the jump variation recovers the jump magnitude.
+
 ## [1.557.0] - 2026-09-12
 
 ### Documentation
