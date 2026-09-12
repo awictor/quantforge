@@ -5,7 +5,12 @@ import pytest
 from quantforge import (
     n_step_transition, stationary_distribution, expected_hitting_time,
     fundamental_matrix, expected_steps_to_absorption, absorption_probabilities,
+    cumulative_default_term_structure, marginal_default_probabilities,
 )
+
+
+RATING_P = [[0.90, 0.09, 0.01], [0.05, 0.85, 0.10], [0.0, 0.0, 1.0]]
+HZ = [1, 2, 3, 5, 10]
 
 
 ABS_P = [[0.5, 0.3, 0.2], [0.1, 0.6, 0.3], [0.0, 0.0, 1.0]]
@@ -48,6 +53,36 @@ def test_expected_hitting_time():
     h = expected_hitting_time(P, 0)
     assert h[0] == 0.0
     assert h[1] == pytest.approx(5.0, abs=1e-6)  # 1 + 0.8 h1 => h1 = 5
+
+
+def test_cumulative_default_monotone_and_matches_nstep():
+    cum = cumulative_default_term_structure(RATING_P, 2, HZ)
+    assert all(cum[i] <= cum[i + 1] for i in range(len(cum) - 1))
+    assert all(cum[i] == pytest.approx(n_step_transition(RATING_P, HZ[i])[0][2])
+               for i in range(len(HZ)))
+    assert cum[0] == pytest.approx(0.01)
+
+
+def test_marginal_defaults_nonneg_and_sum():
+    cum = cumulative_default_term_structure(RATING_P, 2, HZ)
+    marg = marginal_default_probabilities(RATING_P, 2, HZ)
+    assert all(m >= 0 for m in marg)
+    assert sum(marg) == pytest.approx(cum[-1])
+
+
+def test_riskier_start_higher_default():
+    cumA = cumulative_default_term_structure(RATING_P, 2, HZ, start_state=0)
+    cumB = cumulative_default_term_structure(RATING_P, 2, HZ, start_state=1)
+    assert all(cumB[i] >= cumA[i] for i in range(len(HZ)))
+
+
+def test_default_converges_to_one():
+    assert cumulative_default_term_structure(RATING_P, 2, [200])[0] > 0.99
+
+
+def test_default_requires_absorbing():
+    with pytest.raises(ValueError):
+        cumulative_default_term_structure([[0.9, 0.1], [0.1, 0.9]], 1, [1])
 
 
 def test_fundamental_matrix_inverts_i_minus_q():

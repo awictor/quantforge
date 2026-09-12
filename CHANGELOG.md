@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.463.0] - 2026-09-11
+
+### Added
+- `cumulative_default_term_structure` and `marginal_default_probabilities` (in
+  `markov.py`): the cumulative and per-period default probabilities by horizon
+  from a rating-migration matrix with an absorbing default state (the default
+  column of `P^n`). Cross-checked: the cumulative curve is monotone and matches
+  the n-step default column, riskier start ratings default more, marginals are
+  non-negative and sum to the cumulative, and default converges to one.
+
 ## [1.462.0] - 2026-09-11
 
 ### Documentation

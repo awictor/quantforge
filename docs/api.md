@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.462.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.463.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -4920,6 +4920,16 @@ Auto-generated from `quantforge` v1.462.0 by `docs/gen_api.py` — do not edit b
 > transient-to-absorbing transition block. Row ``i`` (a transient state) is a
 > distribution over ``absorbing_states`` summing to one.
 
+### `cumulative_default_term_structure(P, default_state, horizons, start_state=0)`  _function_
+
+> Cumulative default probability by horizon from a rating-migration matrix.
+>
+> ``P`` is a one-period rating transition matrix with ``default_state`` an
+> absorbing default row. For each ``n`` in ``horizons`` the cumulative default
+> probability from ``start_state`` is the default-column entry of ``P^n``, i.e.
+> ``(P^n)[start_state][default_state]``. Non-decreasing in the horizon (default
+> is absorbing) and rising toward one if default is reachable.
+
 ### `expected_hitting_time(P, target)`  _function_
 
 > Expected number of steps to first reach ``target`` from each state.
@@ -4945,6 +4955,15 @@ Auto-generated from `quantforge` v1.462.0 by `docs/gen_api.py` — do not edit b
 > their sub-transition block. ``N_ij`` is the expected number of visits to
 > transient state ``j`` starting from ``i`` before absorption. Requires the chain
 > to be absorbing (every transient state eventually reaches an absorbing one).
+
+### `marginal_default_probabilities(P, default_state, horizons, start_state=0)`  _function_
+
+> Marginal (per-period) default probabilities between successive horizons.
+>
+> Differences of the :func:`cumulative_default_term_structure`; each is the
+> probability of defaulting in ``(horizons[k-1], horizons[k]]`` having survived
+> to ``horizons[k-1]``. Non-negative because the cumulative curve is
+> non-decreasing.
 
 ### `n_step_transition(P, n)`  _function_
 
