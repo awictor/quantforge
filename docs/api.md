@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.420.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.421.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -7031,6 +7031,40 @@ Auto-generated from `quantforge` v1.420.0 by `docs/gen_api.py` — do not edit b
 >
 > A call spread with K_long < K_short is a bull spread; a put spread with
 > K_long > K_short is a bear spread.
+
+## structured
+
+### `note_embedded_option_value(note_value, principal, r, maturity)`  _function_
+
+> Option component of a note: ``note_value - discounted principal``.
+>
+> Strips the guaranteed bond leg to isolate the value attributable to the
+> embedded option position (positive for a PPN's long call, negative for a
+> reverse convertible's short put).
+
+### `note_zero_coupon_bond(principal, r, maturity)`  _function_
+
+> Present value of a zero-coupon bond: ``principal * e^{-r T}``.
+
+### `principal_protected_note(S, K, maturity, r, sigma, principal, participation=1.0, n_shares=None, b=None)`  _function_
+
+> Value of a principal-protected note = ZC bond + participation * call.
+>
+> Guarantees the ``principal`` at maturity (the ZC-bond leg) and adds
+> ``participation`` times a call on the underlying for upside. ``n_shares``
+> scales the call to the note's notional (defaults to ``principal / S``, i.e. the
+> note buys as many shares as the principal affords at inception). The value is
+> always at least the discounted principal (the call leg is non-negative).
+
+### `reverse_convertible(S, K, maturity, r, sigma, principal, coupon_rate, n_shares=None, b=None)`  _function_
+
+> Value of a reverse convertible = ZC bond + coupon PV - short put.
+>
+> The investor receives an enhanced coupon and the principal, but is short a put
+> struck at ``K`` (delivering shares if the underlying falls). Value is
+> ``PV(principal + coupon) - n_shares * put``. ``n_shares`` defaults to
+> ``principal / K`` (the put covers the principal at the strike). Below the
+> plain bond-plus-coupon value because of the short put.
 
 ## surface
 

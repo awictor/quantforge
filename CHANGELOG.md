@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.421.0] - 2026-09-11
+
+### Added
+- `structured.py`: structured-note valuation by component decomposition.
+  `note_zero_coupon_bond` (the guaranteed bond leg), `principal_protected_note`
+  (ZC bond + participation * call, floored at the discounted principal),
+  `reverse_convertible` (ZC bond + coupon - short put), and
+  `note_embedded_option_value` (note minus the bond leg). Cross-checked against
+  the component decompositions, the PPN principal floor, and coupon/participation
+  monotonicity. `note_zero_coupon_bond` is named to avoid colliding with the
+  Vasicek `zero_coupon_bond`.
+
 ## [1.420.0] - 2026-09-11
 
 ### Documentation
