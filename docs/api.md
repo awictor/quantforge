@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.675.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.676.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -7613,6 +7613,42 @@ Auto-generated from `quantforge` v1.675.0 by `docs/gen_api.py` — do not edit b
 >
 > ``(spread[-1] - mean) / std`` over the last ``window`` points (all if ``None``).
 > The pairs-trade entry signal: large magnitude means the spread is stretched.
+
+## panjer
+
+### `aggregate_mean(g)`  _function_
+
+> Mean of an aggregate distribution ``g`` (grid units).
+
+### `layer_expected_loss(g, attachment, limit)`  _function_
+
+> Expected loss to a reinsurance layer ``[attachment, attachment + limit]``.
+>
+> ``E[min(max(S - attachment, 0), limit)]`` -- the excess-of-loss layer cost.
+
+### `panjer_poisson(lam, severity_pmf, max_k=None)`  _function_
+
+> Aggregate-loss distribution for compound Poisson via Panjer recursion.
+>
+> Parameters
+> ----------
+> lam : float
+>     Poisson claim frequency (mean number of claims).
+> severity_pmf : sequence of float
+>     Severity probabilities on an integer grid ``0, 1, 2, ...`` (index =
+>     severity in grid units); should sum to 1.
+> max_k : int, optional
+>     Highest aggregate grid point to compute. Defaults to a cutoff capturing
+>     essentially all mass (``ceil(lam * n) * 4 + 20``).
+>
+> Returns
+> -------
+> list[float]
+>     ``g[k] = P(S = k)`` on the aggregate grid; sums to ~1.
+
+### `stop_loss_premium(g, retention)`  _function_
+
+> Stop-loss premium ``E[max(S - retention, 0)]`` from the aggregate grid.
 
 ## par_yield
 

@@ -16,6 +16,17 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.676.0] - 2026-09-12
+
+### Added
+- `panjer.py`: `panjer_poisson` computes the compound-Poisson aggregate-loss
+  distribution exactly by Panjer's recursion, with `aggregate_mean`,
+  `stop_loss_premium`, and `layer_expected_loss` (excess-of-loss reinsurance layer
+  cost). Cross-checked: the distribution sums to 1, the mean and variance match the
+  compound-Poisson identities ``lam E[X]`` and ``lam E[X^2]``, ``g_0`` and ``g_1``
+  match their closed forms, the stop-loss premium at zero retention equals the mean
+  and decreases with retention, and a full-width layer equals the mean.
+
 ## [1.675.0] - 2026-09-12
 
 ### Documentation

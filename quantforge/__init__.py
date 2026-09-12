@@ -343,6 +343,9 @@ from .swap import (
     swap_annuity,
 )
 from .fra import fra_forward_rate, fra_value
+from .panjer import (
+    panjer_poisson, aggregate_mean, stop_loss_premium, layer_expected_loss,
+)
 from .hull_white import (
     hw_zero_from_curve, hw_B, hw_bond_option,
     hw_caplet, hw_floorlet, hw_cap, hw_floor, hw_swaption,
@@ -698,7 +701,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.675.0"
+__version__ = "1.676.0"
 
 __all__ = [
     "OptionType",
@@ -1230,6 +1233,10 @@ __all__ = [
     "swap_annuity",
     "fra_forward_rate",
     "fra_value",
+    "panjer_poisson",
+    "aggregate_mean",
+    "stop_loss_premium",
+    "layer_expected_loss",
     "hw_zero_from_curve",
     "hw_B",
     "hw_bond_option",
