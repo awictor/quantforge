@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.551.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.552.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -4886,6 +4886,32 @@ Auto-generated from `quantforge` v1.551.0 by `docs/gen_api.py` — do not edit b
 > signal-to-noise ratio ``q = process_var / obs_var``. Returns a gain in
 > ``(0, 1)`` that rises toward 1 as the process noise dominates and toward 0 as
 > the observation noise dominates.
+
+## kalman_beta
+
+### `kalman_regression_beta(x, y, process_var, obs_var, beta0=0.0, p0=1000000.0)`  _function_
+
+> Filter a time-varying regression slope ``beta_t`` of ``y`` on ``x``.
+>
+> Parameters
+> ----------
+> x, y : sequence of float
+>     Regressor and response of equal length.
+> process_var : float
+>     Slope random-walk variance ``Q`` (>= 0). ``0`` gives a static slope
+>     (recursive least squares); larger values let it drift faster.
+> obs_var : float
+>     Observation noise variance ``R`` (> 0).
+> beta0 : float
+>     Prior mean of the slope.
+> p0 : float
+>     Prior variance of the slope. A large default gives a near-diffuse start so
+>     early data dominates.
+>
+> Returns
+> -------
+> (betas, variances) : (list[float], list[float])
+>     The filtered slope and its posterior variance at each step.
 
 ## kim
 

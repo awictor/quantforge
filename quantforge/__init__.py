@@ -260,6 +260,7 @@ from .double_barrier import double_knockout_call, double_knockin_call
 from .range_accrual import range_accrual_note
 from .hp_filter import hp_filter
 from .kalman import kalman_local_level, kalman_steady_state_gain
+from .kalman_beta import kalman_regression_beta
 from .hac import (
     autocovariance, autocorrelation, newey_west_variance, newey_west_mean_se,
 )
@@ -609,7 +610,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.551.0"
+__version__ = "1.552.0"
 
 __all__ = [
     "OptionType",
@@ -1017,6 +1018,7 @@ __all__ = [
     "hp_filter",
     "kalman_local_level",
     "kalman_steady_state_gain",
+    "kalman_regression_beta",
     "autocovariance",
     "autocorrelation",
     "newey_west_variance",

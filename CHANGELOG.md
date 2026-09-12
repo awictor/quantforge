@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.552.0] - 2026-09-12
+
+### Added
+- `kalman_beta.py`: `kalman_regression_beta` filters a time-varying regression
+  slope (a dynamic hedge ratio / factor loading) as a random walk observed through
+  ``y_t = beta_t x_t + v_t`` -- a scalar Kalman filter with a time-varying
+  observation loading. Cross-checked: with ``Q = 0`` and a diffuse prior it equals
+  the OLS slope ``sum(x y) / sum(x^2)``, the posterior variance shrinks with data,
+  a positive ``Q`` tracks a regime switch in the true slope (1.0 -> 3.0), and the
+  static filter settles at a blend rather than following the late regime.
+
 ## [1.551.0] - 2026-09-12
 
 ### Documentation
