@@ -1998,6 +1998,24 @@ Both equal +1 for a strictly increasing relationship and -1 for decreasing;
 Spearman is unchanged by exponentiating a margin, where Pearson would move. Feed
 the pseudo-observations of each margin into a copula fit.
 
+Correlation says nothing about whether two assets crash *together* — tail
+dependence does. `upper_tail_dependence` / `lower_tail_dependence` estimate
+`P(U > q | V > q)` on the rank scale, and `exceedance_correlation` is the
+correlation on joint-tail observations only.
+
+```python
+from quantforge import (upper_tail_dependence, lower_tail_dependence,
+                        exceedance_correlation)
+
+upper_tail_dependence(x, y, q=0.9)      # ~1 if extremes cluster, ~(1-q) if independent
+lower_tail_dependence(x, y, q=0.1)      # joint-downside clustering
+exceedance_correlation(x, y, q=0.9, tail="upper")   # correlation in the tail only
+```
+
+A comonotone pair has tail dependence ~1; independent margins sit at the `1 - q`
+null and fall toward 0 at more extreme thresholds; a common-shock pair shows
+clear positive tail dependence (~0.5) even when its bulk correlation is modest.
+
 ## Spectral analysis
 
 Find cyclical structure — a seasonal pattern, a dominant trading cycle — with the

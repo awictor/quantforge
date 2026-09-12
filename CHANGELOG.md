@@ -16,6 +16,12 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.579.0] - 2026-09-12
+
+### Documentation
+- README: extended the rank-dependence section with tail dependence
+  (`upper_tail_dependence`, `lower_tail_dependence`, `exceedance_correlation`).
+
 ## [1.578.0] - 2026-09-12
 
 ### Added
