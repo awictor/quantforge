@@ -16,6 +16,16 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.616.0] - 2026-09-12
+
+### Added
+- `poly_features.py`: `polynomial_features` expands a feature matrix into all
+  monomials up to a given degree (squares, cubes, cross-products), with optional
+  bias and an ``interaction_only`` mode. Cross-checked: degree 1 with a bias is the
+  identity plus a ones column, degree 2 includes the squares and pairwise products,
+  the feature count equals ``C(p+d, d)``, and ``interaction_only`` drops the pure
+  powers.
+
 ## [1.615.0] - 2026-09-12
 
 ### Documentation

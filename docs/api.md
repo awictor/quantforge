@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.615.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.616.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -7611,6 +7611,31 @@ Auto-generated from `quantforge` v1.615.0 by `docs/gen_api.py` — do not edit b
 ### `perpetual_exercise_boundary(K, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
 
 > The optimal-exercise spot ``S*`` for a perpetual American option.
+
+## poly_features
+
+### `polynomial_features(X, degree=2, interaction_only=False, include_bias=True)`  _function_
+
+> Expand rows of ``X`` into polynomial / interaction features.
+>
+> Parameters
+> ----------
+> X : list[list[float]]
+>     Input matrix, ``n`` rows of ``p`` features.
+> degree : int
+>     Maximum total degree of the monomials (>= 1).
+> interaction_only : bool
+>     If True, exclude pure powers (x_i^2, ...), keeping only products of
+>     distinct variables.
+> include_bias : bool
+>     Prepend a constant 1 column.
+>
+> Returns
+> -------
+> (features, powers) : (list[list[float]], list[tuple])
+>     The expanded matrix and, for each column, the tuple of input indices whose
+>     product forms it (``()`` for the bias). With ``degree=1`` and a bias this
+>     is the original matrix with a leading ones column.
 
 ## portfolio
 
