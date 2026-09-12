@@ -72,6 +72,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Equity swaps and dispersion](#equity-swaps-and-dispersion)
 - [Futures/forward convexity](#futuresforward-convexity)
 - [Copulas and portfolio credit](#copulas-and-portfolio-credit)
+- [kth-to-default basket](#kth-to-default-basket)
 - [Retirement decumulation](#retirement-decumulation)
 - [Liability-driven investing](#liability-driven-investing)
 - [Bond futures](#bond-futures)
@@ -1813,6 +1814,23 @@ first_to_default_probability(pd1=0.05, pd2=0.08, rho=0.5)
 vasicek_loss_quantile(q=0.999, pd=0.02, rho=0.15)        # Basel IRB capital
 cdo_tranche_expected_loss(attachment=0.03, detachment=0.07, pd=0.05, rho=0.2)
 ```
+
+## kth-to-default basket
+
+The full number-of-defaults distribution of a homogeneous basket under the
+one-factor Gaussian copula, and the trigger probability of a kth-to-default swap.
+
+```python
+from quantforge import basket_default_distribution, kth_to_default_probability
+
+kth_to_default_probability(n=10, k=1, pd=0.05, rho=0.3)   # first-to-default: 0.307
+kth_to_default_probability(n=10, k=5, pd=0.05, rho=0.3)   # fifth-to-default: 0.008
+basket_default_distribution(10, 0.05, 0.3)                # P(exactly k defaults), sums to 1
+```
+
+The trigger falls as `k` rises; correlation clusters defaults, so senior
+(high-`k`) triggers rise with `rho` while first-to-default falls. The mean number
+of defaults is `n * pd`, and `rho = 0` recovers `1 - (1-pd)^n` for first-to-default.
 
 ## Retirement decumulation
 
