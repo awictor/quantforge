@@ -280,6 +280,9 @@ from .structural_break import cusum_mean, cusum_break_detected, chow_test
 from .spectral import dft, periodogram, dominant_frequency, spectral_energy
 from .entropy_pooling import entropy_pooling_mean, relative_entropy
 from .copula_stats import kendall_tau, spearman_rho, pseudo_observations
+from .tail_dependence import (
+    upper_tail_dependence, lower_tail_dependence, exceedance_correlation,
+)
 from .hac import (
     autocovariance, autocorrelation, newey_west_variance, newey_west_mean_se,
 )
@@ -629,7 +632,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.577.0"
+__version__ = "1.578.0"
 
 __all__ = [
     "OptionType",
@@ -1069,6 +1072,9 @@ __all__ = [
     "kendall_tau",
     "spearman_rho",
     "pseudo_observations",
+    "upper_tail_dependence",
+    "lower_tail_dependence",
+    "exceedance_correlation",
     "autocovariance",
     "autocorrelation",
     "newey_west_variance",

@@ -16,6 +16,18 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.578.0] - 2026-09-12
+
+### Added
+- `tail_dependence.py`: empirical tail dependence and exceedance correlation --
+  `upper_tail_dependence` / `lower_tail_dependence` estimate ``P(U > q | V > q)``
+  (and the lower analogue) on the rank/uniform scale, and `exceedance_correlation`
+  is the Pearson correlation on joint-tail observations only. Cross-checked: a
+  comonotone pair has tail dependence ~1, independent margins match the ``1 - q``
+  null and shrink toward 0 at more extreme thresholds, a common-shock pair shows
+  positive tail dependence, and the exceedance correlation is ~1 for a comonotone
+  pair.
+
 ## [1.577.0] - 2026-09-12
 
 ### Documentation

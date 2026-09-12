@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.577.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.578.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -9695,6 +9695,34 @@ Auto-generated from `quantforge` v1.577.0 by `docs/gen_api.py` — do not edit b
 >
 > Maps each strike to ``p.implied_vol(ln(K/F), t)`` and feeds the smile to
 > :func:`quantforge.vix_from_smile`. A flat slice returns ``100 * sigma``.
+
+## tail_dependence
+
+### `exceedance_correlation(x, y, q=0.9, tail='upper')`  _function_
+
+> Pearson correlation computed only on joint-tail observations.
+>
+> Selects the points where both margins breach the ``q`` quantile (upper tail)
+> or fall below the ``1 - q`` quantile (lower tail), then returns the ordinary
+> correlation of ``x`` and ``y`` on that subset -- the "correlations rise in the
+> tails" diagnostic. Raises if fewer than two joint-tail points exist.
+
+### `lower_tail_dependence(x, y, q=0.05)`  _function_
+
+> Empirical lower tail-dependence coefficient at threshold ``q``.
+>
+> Estimates ``P(U <= q | V <= q)`` on the rank/uniform scale. Near 1 means joint
+> downside extremes cluster. Returns 0 when no point falls below the threshold
+> in ``y``.
+
+### `upper_tail_dependence(x, y, q=0.95)`  _function_
+
+> Empirical upper tail-dependence coefficient at threshold ``q``.
+>
+> Estimates ``P(U > q | V > q)`` on the rank/uniform scale: of the points whose
+> ``y`` rank exceeds ``q``, the fraction whose ``x`` rank also exceeds ``q``.
+> Near 1 means the two crash/spike together; near ``1 - q``-scaled independence
+> means they do not. Returns 0 when no point exceeds the threshold in ``y``.
 
 ## theil_sen
 
