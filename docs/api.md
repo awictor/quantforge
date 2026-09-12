@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.472.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.473.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -4424,6 +4424,25 @@ Auto-generated from `quantforge` v1.472.0 by `docs/gen_api.py` — do not edit b
 >
 > Inflation-leg receiver's value: ``notional * (I_T/I_0 - (1+k)^T)`` at maturity,
 > discounted by ``discount_factor``. Zero at the par :func:`zc_inflation_swap_rate`.
+
+## interpolation
+
+### `monotone_cubic(xs, ys)`  _function_
+
+> Fritsch-Carlson monotone cubic Hermite interpolant, returning ``f(x)``.
+>
+> Chooses the Hermite tangents so the interpolant preserves the monotonicity of
+> the data: no overshoot between knots. Exact at the knots. The standard choice
+> for discount-factor / survival curves that must not wiggle below/above the data.
+
+### `natural_cubic_spline(xs, ys)`  _function_
+
+> Build a natural cubic spline interpolant, returning a callable ``f(x)``.
+>
+> Solves the tridiagonal system for the second derivatives with zero-curvature
+> (natural) end conditions. The returned function evaluates the piecewise cubic
+> and is exact at the knots, C2 in between. Clamps to the end segments outside
+> ``[xs[0], xs[-1]]``.
 
 ## kim
 

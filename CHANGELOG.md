@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.473.0] - 2026-09-11
+
+### Added
+- `interpolation.py`: cubic curve interpolation. `natural_cubic_spline` (C2
+  natural spline via the tridiagonal solve) and `monotone_cubic` (Fritsch-Carlson
+  monotone cubic Hermite, no overshoot -- for discount-factor/survival curves).
+  Cross-checked: both pass through the knots and are exact on linear data, the
+  monotone interpolant preserves monotonicity without overshooting where the
+  natural spline does.
+
 ## [1.472.0] - 2026-09-11
 
 ### Documentation

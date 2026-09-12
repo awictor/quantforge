@@ -220,6 +220,7 @@ from .inflation import (
 from .pca import (
     jacobi_eigen, pca, project, reconstruct_covariance, pca_scenario,
 )
+from .interpolation import natural_cubic_spline, monotone_cubic
 from .linalg import (
     cholesky, is_positive_definite, correlated_normals, nearest_correlation,
     basket_option_mc,
@@ -528,7 +529,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.472.0"
+__version__ = "1.473.0"
 
 __all__ = [
     "OptionType",
@@ -878,6 +879,8 @@ __all__ = [
     "real_zero_curve",
     "nominal_zero_curve",
     "real_discount_factor",
+    "natural_cubic_spline",
+    "monotone_cubic",
     "jacobi_eigen",
     "pca",
     "project",
