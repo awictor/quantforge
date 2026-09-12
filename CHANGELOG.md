@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.454.0] - 2026-09-11
+
+### Added
+- `brinson.py`: Brinson-Hood-Beebower performance attribution. `allocation_effect`,
+  `selection_effect`, `interaction_effect`, and `brinson_attribution` decompose a
+  portfolio's active return versus a benchmark into per-segment allocation,
+  selection, and interaction effects. Cross-checked: the three effects sum to the
+  active return, an identical portfolio has zero effects, and same-return
+  different-weight cases isolate the allocation effect.
+
 ## [1.453.0] - 2026-09-11
 
 ### Documentation

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.453.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.454.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -717,6 +717,38 @@ Auto-generated from `quantforge` v1.453.0 by `docs/gen_api.py` — do not edit b
 > Sums the position-scaled net theta and the gamma-rent term across the book;
 > the residual is the difference. When every leg shares one spot/vol (a
 > single-name book) the gamma-rent uses that common S and sigma.
+
+## brinson
+
+### `allocation_effect(portfolio_weights, benchmark_weights, benchmark_returns)`  _function_
+
+> Per-segment allocation effect ``(w_p - w_b) * r_b``.
+>
+> Positive when the portfolio overweights segments that outperformed the overall
+> benchmark (using the segment benchmark return). Returns one value per segment.
+
+### `brinson_attribution(portfolio_weights, benchmark_weights, portfolio_returns, benchmark_returns)`  _function_
+
+> Full Brinson attribution: allocation, selection, interaction, and totals.
+>
+> Returns a dict with per-segment ``allocation``, ``selection``, ``interaction``
+> lists, their totals, the ``active_return`` (portfolio minus benchmark total
+> return), and ``total_effect`` (allocation + selection + interaction totals).
+> The total effect equals the active return by construction.
+
+### `interaction_effect(portfolio_weights, benchmark_weights, portfolio_returns, benchmark_returns)`  _function_
+
+> Per-segment interaction effect ``(w_p - w_b) * (r_p - r_b)``.
+>
+> The cross term -- the combined effect of active weighting and active selection
+> in the same segment.
+
+### `selection_effect(benchmark_weights, portfolio_returns, benchmark_returns)`  _function_
+
+> Per-segment selection effect ``w_b * (r_p - r_b)``.
+>
+> Positive when the portfolio's holdings within a segment beat that segment's
+> benchmark, weighted at the benchmark weight.
 
 ## bsm
 
