@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.566.0] - 2026-09-12
+
+### Added
+- `ou_fit.py`: `fit_ornstein_uhlenbeck` calibrates the mean-reverting OU process
+  ``dX = kappa(theta - X)dt + sigma dW`` from a sampled path in closed form -- it
+  fits the exact discrete AR(1) by least squares and inverts the OU relations to
+  recover ``(kappa, theta, sigma)`` plus the half-life ``ln(2)/kappa``.
+  Cross-checked: it recovers the parameters of a simulated OU path to within ~10%,
+  the half-life relation holds exactly, faster true reversion yields a shorter
+  fitted half-life, a random walk fits a near-zero kappa (very long half-life), and
+  an anti-persistent (oscillating) series is rejected.
+
 ## [1.565.0] - 2026-09-12
 
 ### Documentation

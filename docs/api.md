@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.565.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.566.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -6659,6 +6659,27 @@ Auto-generated from `quantforge` v1.565.0 by `docs/gen_api.py` — do not edit b
 > Prices a call at each strike and inverts to a Black-Scholes implied vol,
 > returning ``(log_moneyness, vol)`` pairs sorted by strike on the forward
 > ``F = S e^{(r-q) t}``. ``beta < 0`` tilts the smile into a downward skew.
+
+## ou_fit
+
+### `fit_ornstein_uhlenbeck(x, dt=1.0)`  _function_
+
+> Estimate OU parameters ``(kappa, theta, sigma)`` from a sampled path.
+>
+> Parameters
+> ----------
+> x : sequence of float
+>     Observations sampled at uniform spacing ``dt``.
+> dt : float
+>     Time between observations (in the same units as ``kappa`` is desired).
+>
+> Returns
+> -------
+> dict
+>     ``{"kappa", "theta", "sigma", "half_life"}``. ``kappa`` is the
+>     mean-reversion speed, ``theta`` the long-run mean, ``sigma`` the
+>     instantaneous volatility, and ``half_life = ln(2)/kappa``. Raises if the
+>     series is not mean-reverting (fitted ``b`` outside ``(0, 1)``).
 
 ## overhedge
 
