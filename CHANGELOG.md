@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.479.0] - 2026-09-11
+
+### Documentation
+- README: added a "Nelson-Siegel / Svensson curves" section covering the
+  `nelson_siegel` module (parametric curves and least-squares calibration), with
+  runnable examples verified against the installed package.
+
 ## [1.478.0] - 2026-09-11
 
 ### Added

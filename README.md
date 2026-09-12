@@ -1542,6 +1542,19 @@ curve = SplineZeroCurve([0.5, 1, 2, 5, 10], [0.02, 0.025, 0.03, 0.035, 0.04])
 brent(lambda x: x * x - 2, 0, 2)                  # sqrt(2)
 ```
 
+## Nelson-Siegel / Svensson curves
+
+Parametric yield curves and least-squares calibration to observed zeros:
+
+```python
+from quantforge import (nelson_siegel_zero, svensson_zero, fit_nelson_siegel)
+
+nelson_siegel_zero(t=5, beta0=0.04, beta1=-0.02, beta2=0.01, tau=2.0)
+mats = [0.5, 1, 2, 3, 5, 7, 10, 20, 30]
+zeros = [0.02, 0.025, 0.028, 0.03, 0.033, 0.035, 0.037, 0.039, 0.04]
+beta0, beta1, beta2, tau = fit_nelson_siegel(mats, zeros)   # calibrate
+```
+
 ## Structural credit (Merton)
 
 Firm equity as a call on assets, distance-to-default, default probability, credit
