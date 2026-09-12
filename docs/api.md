@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.416.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.417.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2046,6 +2046,47 @@ Auto-generated from `quantforge` v1.416.0 by `docs/gen_api.py` — do not edit b
 > A single-period dilution adjustment -- the standard textbook approximation
 > ``value = M/(M+N) * call(S, K, ...)`` -- which reduces to the plain call when
 > no new shares are issued. ``S`` is the current (pre-dilution) share price.
+
+## execution
+
+### `cost_variance(trajectory, horizon, sigma)`  _function_
+
+> Timing-risk variance ``sigma^2 tau * sum_k x_k^2`` of the holdings path.
+>
+> The variance of execution cost from price moves while shares are still held;
+> ``x_k`` are the holdings during each interval (using the end-of-interval
+> holdings ``x_1..x_N``). Falls as liquidation is front-loaded.
+
+### `efficient_frontier_point(total_shares, n_intervals, horizon, lam, sigma, eta, gamma)`  _function_
+
+> One ``(expected_cost, variance)`` point for a given risk aversion ``lam``.
+>
+> Builds the :func:`execution_trajectory` at ``lam`` and returns its
+> :func:`expected_cost` and :func:`cost_variance` -- sweeping ``lam`` traces the
+> Almgren-Chriss efficient frontier (cost rises as variance falls).
+
+### `execution_trades(trajectory)`  _function_
+
+> Per-interval trade sizes ``n_k = x_{k-1} - x_k`` from a holdings trajectory.
+>
+> Positive sells that sum to the initial holdings.
+
+### `execution_trajectory(total_shares, n_intervals, horizon, lam, sigma, eta)`  _function_
+
+> Optimal holdings trajectory ``[x_0, x_1, ..., x_N]`` (Almgren-Chriss).
+>
+> ``x_k`` is the shares still held after interval ``k``. Starts at
+> ``total_shares`` and ends at zero. For ``lam = 0`` the schedule is linear
+> (TWAP); for ``lam > 0`` it is the ``sinh`` profile that liquidates faster
+> early. ``eta`` is the temporary-impact coefficient.
+
+### `expected_cost(trajectory, horizon, gamma, eta)`  _function_
+
+> Expected implementation-shortfall cost of a trajectory.
+>
+> Permanent impact contributes ``0.5 gamma X^2`` (independent of the path); the
+> temporary impact contributes ``eta / tau * sum_k n_k^2`` for trades ``n_k``
+> over intervals of length ``tau``. Returned in cash (price * shares) units.
 
 ## exotics
 

@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.417.0] - 2026-09-11
+
+### Added
+- `execution.py`: the Almgren-Chriss optimal trade-execution model.
+  `execution_trajectory` gives the cost/risk-optimal holdings path (linear TWAP at
+  zero risk aversion, `sinh` front-loading when risk-averse), `execution_trades`
+  the per-interval sizes, `expected_cost` the permanent + temporary impact cost,
+  `cost_variance` the timing risk, and `efficient_frontier_point` one cost/variance
+  point per risk aversion. Cross-checked: the trajectory runs from the full
+  position to zero, reduces to TWAP at `lambda = 0`, front-loads and lowers
+  variance as risk aversion rises, and traces the cost/variance frontier.
+
 ## [1.416.0] - 2026-09-11
 
 ### Added

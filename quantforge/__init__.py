@@ -217,6 +217,10 @@ from .inflation import (
     yoy_caplet_price_normal, yoy_caplet_implied_normal_vol,
     real_zero_curve, nominal_zero_curve, real_discount_factor,
 )
+from .execution import (
+    execution_trajectory, execution_trades, expected_cost, cost_variance,
+    efficient_frontier_point,
+)
 from .equity_comp import (
     dilution_factor, warrant_price, eso_expected_life, eso_value,
     pv_dividends, discrete_dividend_price, forward_with_dividends,
@@ -442,7 +446,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.416.0"
+__version__ = "1.417.0"
 
 __all__ = [
     "OptionType",
@@ -792,6 +796,11 @@ __all__ = [
     "real_zero_curve",
     "nominal_zero_curve",
     "real_discount_factor",
+    "execution_trajectory",
+    "execution_trades",
+    "expected_cost",
+    "cost_variance",
+    "efficient_frontier_point",
     "dilution_factor",
     "warrant_price",
     "eso_expected_life",
