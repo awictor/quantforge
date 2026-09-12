@@ -16,6 +16,17 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.698.0] - 2026-09-12
+
+### Added
+- `mack.py`: `mack_standard_error` computes Mack's (1993) distribution-free
+  standard error of chain-ladder reserves -- the per-accident-year and total
+  mean-squared error of prediction, combining process and estimation error with
+  the between-year correlation term, plus coefficients of variation. Validated
+  against the Taylor-Ashe triangle from Mack's paper: total reserve 18,680,856
+  and standard error 2,447,095 to the dollar, with the per-year standard errors
+  matching his table.
+
 ## [1.697.0] - 2026-09-12
 
 ### Documentation

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.697.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.698.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -6446,6 +6446,25 @@ Auto-generated from `quantforge` v1.697.0 by `docs/gen_api.py` — do not edit b
 >
 > Returns ``leverage`` -- a dict ``{t: {k_center: L}}`` -- and the callable
 > ``lev_fn(spot, t)`` that interpolates it, suitable for an LSV Monte Carlo.
+
+## mack
+
+### `mack_standard_error(triangle)`  _function_
+
+> Chain-ladder reserves with Mack's prediction standard errors.
+>
+> ``triangle`` is a cumulative run-off triangle: ``triangle[i]`` holds the observed
+> cumulative claims for accident year ``i`` at development ages ``0 ..``, with the
+> most recent accident year the shortest row. Returns a dict with
+>
+> - ``factors``, ``sigma2``: estimated age-to-age factors and variance parameters,
+> - ``ultimate``, ``reserve``: per accident year,
+> - ``std_error``: Mack standard error of each accident-year reserve,
+> - ``cv``: coefficient of variation ``std_error / reserve`` (0 for a zero reserve),
+> - ``total_reserve``, ``total_std_error``, ``total_cv``: for the reserve sum,
+>   including the between-year correlation term.
+>
+> Raises ``ValueError`` for fewer than two accident years or non-positive entries.
 
 ## markov
 
