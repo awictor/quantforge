@@ -80,6 +80,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Kalman filter (local level)](#kalman-filter-local-level)
 - [Newey-West HAC variance](#newey-west-hac-variance)
 - [Theil-Sen robust regression](#theil-sen-robust-regression)
+- [Robust scale and location](#robust-scale-and-location)
 - [Markov chains](#markov-chains)
 - [Principal component analysis](#principal-component-analysis)
 - [Matrix utilities](#matrix-utilities)
@@ -1878,6 +1879,28 @@ theil_sen(x, y)         # -> (2.0, 5.0)   slope and intercept, unmoved by the ou
 
 The median pairwise slope shrugs off the two corrupted points that would tilt an
 OLS line. Pairs sharing an `x` value are skipped.
+
+## Robust scale and location
+
+The standard deviation and the mean both break down under a single extreme point.
+These estimators degrade gracefully: `median_absolute_deviation` (50% breakdown,
+scaled to match the standard deviation under normality), `interquartile_range`,
+`winsorize` (clip the tails), and `trimmed_mean`.
+
+```python
+from quantforge import (median_absolute_deviation, interquartile_range,
+                        winsorize, trimmed_mean)
+
+x = [10, 11, 9, 12, 10, 11, 9, 10, 13, 8, 1000]   # one gross outlier
+
+median_absolute_deviation(x)          # -> 1.4826  (std would be ~299)
+interquartile_range(x, scale=True)    # -> 1.4826  (normal-consistent scale)
+trimmed_mean(x, 0.1)                  # -> 10.556  (mean would be ~99)
+max(winsorize(x, 0.1))                # -> 13      (the 1000 is clipped in)
+```
+
+The scaled MAD and IQR both estimate the same underlying sigma the standard
+deviation would give on clean data, but ignore the outlier that inflates it.
 
 ## Markov chains
 
