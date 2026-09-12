@@ -1486,6 +1486,19 @@ The three short-rate models expose analytic rate moments too —
 `vasicek_expected_rate` / `vasicek_rate_variance` / `vasicek_stationary_distribution`
 (Normal), the CIR equivalents (Gamma), and Ho-Lee (drifted Brownian).
 
+From a discount curve, `par_yield` gives the par coupon rate (the par swap rate)
+and `par_bond_price` prices any coupon bond off the curve:
+
+```python
+from quantforge import par_yield, par_bond_price
+
+par_yield(discount, maturity=10, freq=2)        # par coupon rate for a 10y bond
+par_bond_price(discount, coupon_rate=par, maturity=10, freq=2)   # -> 100 at par
+```
+
+On a flat curve the par yield equals the flat rate; a bond bearing the par coupon
+prices to exactly par, and a richer coupon trades at a premium.
+
 ## Equity valuation
 
 Cost of capital and discounted-cashflow valuation:
