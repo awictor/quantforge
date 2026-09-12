@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.545.0] - 2026-09-12
+
+### Documentation
+- README: extended the Kelly-sizing block with `kelly_fractions_multivariate`
+  (growth-optimal leverage across correlated assets), with a snippet verified
+  against the package.
+
 ## [1.544.0] - 2026-09-12
 
 ### Added

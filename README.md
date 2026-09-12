@@ -394,6 +394,19 @@ kelly_fraction_binary(win_prob=0.6, win_payoff=1.0)     # 0.2 of bankroll
 kelly_fraction_continuous(0.08, 0.04, fraction=0.5)     # half-Kelly leverage
 ```
 
+Across correlated assets the growth-optimal leverage vector is
+`f* = Sigma^{-1} mu`. Positive correlation pulls the total leverage below the
+naive per-asset sum; feed it the shrunk covariance from `ledoit_wolf_shrinkage`.
+
+```python
+from quantforge import kelly_fractions_multivariate
+
+mu = [0.08, 0.05]                       # excess returns
+cov = [[0.04, 0.012], [0.012, 0.02]]    # covariance
+kelly_fractions_multivariate(mu, cov)                 # -> [1.5244, 1.5854]
+kelly_fractions_multivariate(mu, cov, fraction=0.5)   # -> [0.7622, 0.7927]  (half-Kelly)
+```
+
 ## Variance / volatility swaps
 
 Model-free fair strike of a variance swap from an option strip (the log-contract
