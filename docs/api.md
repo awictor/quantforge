@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.438.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.439.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -6442,6 +6442,46 @@ Auto-generated from `quantforge` v1.438.0 by `docs/gen_api.py` — do not edit b
 > Like :func:`rbergomi_smile` but prices each strike with the low-variance
 > conditional call on a shared set of W paths, then inverts to a Black-Scholes
 > vol. Returns ``(log_moneyness, vol)`` pairs sorted by strike.
+
+## retirement
+
+### `glide_path_equity_weight(years_to_target, glide_years, start_equity, end_equity)`  _function_
+
+> Linear equity weight along a target-date glide path.
+>
+> Interpolates the equity allocation from ``start_equity`` (``glide_years`` out)
+> down to ``end_equity`` at the target, clamped outside the glide window:
+>
+>     w = end + (start - end) * clamp(years_to_target / glide_years, 0, 1).
+>
+> Declines monotonically as the target approaches.
+
+### `portfolio_depletion_years(balance, annual_withdrawal, real_return)`  _function_
+
+> Years a portfolio lasts under a constant real withdrawal.
+>
+> Solves the annuity exhaustion ``balance = W * (1 - (1+g)^{-n}) / g`` for ``n``
+> with real growth ``g = real_return``:
+>
+>     n = -ln(1 - g * balance / W) / ln(1 + g).
+>
+> Returns ``inf`` when the withdrawal is at or below the interest earned
+> (``W <= g * balance``); at ``g = 0`` it is simply ``balance / W``.
+
+### `sustainable_withdrawal(balance, real_return, years)`  _function_
+
+> Largest constant real withdrawal that exactly depletes over ``years``.
+>
+> The annuity payment ``W = balance * g / (1 - (1+g)^{-n})`` (``= balance / n`` at
+> zero real return). The inverse of :func:`portfolio_depletion_years`.
+
+### `withdrawal_balance_path(balance, annual_withdrawal, nominal_return, inflation, years)`  _function_
+
+> Year-end balances under an inflation-indexed withdrawal.
+>
+> The withdrawal grows with ``inflation`` each year while the portfolio grows at
+> the ``nominal_return``; withdrawals happen at year start. Returns the list of
+> year-end balances (clipped at zero once depleted).
 
 ## risk
 

@@ -217,6 +217,10 @@ from .inflation import (
     yoy_caplet_price_normal, yoy_caplet_implied_normal_vol,
     real_zero_curve, nominal_zero_curve, real_discount_factor,
 )
+from .retirement import (
+    portfolio_depletion_years, sustainable_withdrawal, withdrawal_balance_path,
+    glide_path_equity_weight,
+)
 from .copula import (
     gaussian_copula, clayton_copula, gumbel_copula,
     clayton_lower_tail_dependence, gumbel_upper_tail_dependence,
@@ -480,7 +484,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.438.0"
+__version__ = "1.439.0"
 
 __all__ = [
     "OptionType",
@@ -830,6 +834,10 @@ __all__ = [
     "real_zero_curve",
     "nominal_zero_curve",
     "real_discount_factor",
+    "portfolio_depletion_years",
+    "sustainable_withdrawal",
+    "withdrawal_balance_path",
+    "glide_path_equity_weight",
     "gaussian_copula",
     "clayton_copula",
     "gumbel_copula",

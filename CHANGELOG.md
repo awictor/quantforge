@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.439.0] - 2026-09-11
+
+### Added
+- `retirement.py`: deterministic decumulation tools. `portfolio_depletion_years`
+  (annuity exhaustion, infinite when the withdrawal is below the interest),
+  `sustainable_withdrawal` (its inverse), `withdrawal_balance_path` (inflation-
+  indexed balance path), and `glide_path_equity_weight` (linear target-date glide).
+  Cross-checked: depletion inverts the sustainable withdrawal, higher return
+  extends the horizon, the 4%-rule limit, and a monotone clamped glide path.
+
 ## [1.438.0] - 2026-09-11
 
 ### Documentation
