@@ -7,7 +7,7 @@ from quantforge import (
     mbs_cashflows, weighted_average_life,
     mbs_cashflows_psa, mbs_price, mbs_yield,
     mbs_price_with_spread, mbs_zspread, mbs_effective_duration,
-    mbs_effective_convexity,
+    mbs_effective_convexity, sequential_cmo, tranche_wal,
 )
 
 
@@ -51,6 +51,44 @@ def test_wal_shortens_with_prepayment():
     base = mbs_cashflows(300000, 0.05, 360, 0.0)
     fast = mbs_cashflows(300000, 0.05, 360, cpr_to_smm(0.06))
     assert weighted_average_life(fast, 300000) < weighted_average_life(base, 300000)
+
+
+CMO_SIZES = [150000, 100000, 50000]
+
+
+def test_cmo_tranche_principal_sums():
+    cf = mbs_cashflows_psa(300000, 0.05, 360, 100)
+    tr = sequential_cmo(cf, CMO_SIZES)
+    for k in range(3):
+        assert sum(r[1] for r in tr[k]) == pytest.approx(CMO_SIZES[k], abs=1e-2)
+
+
+def test_cmo_sequential_retirement():
+    cf = mbs_cashflows_psa(300000, 0.05, 360, 100)
+    tr = sequential_cmo(cf, CMO_SIZES)
+    # Last tranche does not receive principal before the first is retired.
+    assert tr[2][0][0] >= tr[0][-1][0]
+
+
+def test_cmo_wal_ordering():
+    cf = mbs_cashflows_psa(300000, 0.05, 360, 100)
+    tr = sequential_cmo(cf, CMO_SIZES)
+    w = [tranche_wal(tr[k], CMO_SIZES[k]) for k in range(3)]
+    assert w[0] < w[1] < w[2]
+
+
+def test_cmo_blend_equals_pool_wal():
+    cf = mbs_cashflows_psa(300000, 0.05, 360, 100)
+    tr = sequential_cmo(cf, CMO_SIZES)
+    w = [tranche_wal(tr[k], CMO_SIZES[k]) for k in range(3)]
+    blend = sum(CMO_SIZES[k] * w[k] for k in range(3)) / 300000
+    assert blend == pytest.approx(weighted_average_life(cf, 300000), abs=1e-6)
+
+
+def test_cmo_validation():
+    cf = mbs_cashflows_psa(300000, 0.05, 360, 100)
+    with pytest.raises(ValueError):
+        sequential_cmo(cf, [150000, 100000])  # doesn't sum to pool
 
 
 def test_zspread_flat_curve_matches_price():

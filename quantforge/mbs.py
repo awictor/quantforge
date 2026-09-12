@@ -251,6 +251,51 @@ def mbs_effective_convexity(cashflows, annual_yield, bump=1e-4):
     return (up - 2.0 * base + dn) / (bump * bump * base)
 
 
+def sequential_cmo(cashflows, tranche_sizes):
+    """Split MBS principal across sequential (plain-vanilla) CMO tranches.
+
+    Principal from ``cashflows`` (:func:`mbs_cashflows` rows) is paid to tranches
+    strictly in order: tranche 0 receives all principal until retired, then
+    tranche 1, and so on. ``tranche_sizes`` are the initial tranche balances (must
+    sum to the pool's total principal). Returns a list, one per tranche, of
+    ``[(month, principal, ending_balance), ...]`` rows. Each tranche's principal
+    sums to its size; earlier tranches retire first (shorter WAL).
+    """
+    total_principal = sum(row[4] for row in cashflows)
+    if abs(sum(tranche_sizes) - total_principal) > 1e-2:
+        raise ValueError("tranche_sizes must sum to the pool's total principal")
+    if any(sz < 0 for sz in tranche_sizes):
+        raise ValueError("tranche sizes must be non-negative")
+    balances = list(tranche_sizes)
+    out = [[] for _ in tranche_sizes]
+    active = 0
+    for row in cashflows:
+        principal = row[4]
+        m = row[0]
+        # Waterfall the month's principal down the tranche stack.
+        for k in range(len(balances)):
+            if principal <= 0.0:
+                break
+            if balances[k] <= 0.0:
+                continue
+            pay = min(principal, balances[k])
+            balances[k] -= pay
+            principal -= pay
+            out[k].append((m, pay, max(balances[k], 0.0)))
+    return out
+
+
+def tranche_wal(tranche_rows, tranche_size):
+    """Weighted-average life (years) of a single CMO tranche.
+
+    ``sum_m (month/12) * principal_m / tranche_size`` over the tranche's principal
+    rows from :func:`sequential_cmo`.
+    """
+    if tranche_size <= 0:
+        raise ValueError("tranche_size must be positive")
+    return sum((row[0] / 12.0) * row[1] for row in tranche_rows) / tranche_size
+
+
 def weighted_average_life(cashflows, balance):
     """Weighted-average life (years) from projected principal cashflows.
 

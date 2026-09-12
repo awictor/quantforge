@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.409.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.410.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -4041,11 +4041,29 @@ Auto-generated from `quantforge` v1.409.0 by `docs/gen_api.py` — do not edit b
 > Standard 100 PSA: ``CPR = 0.06 * min(month, 30) / 30`` (0.2%/month ramp to 6%
 > at month 30, flat after). Scaled by ``psa / 100`` for other speeds.
 
+### `sequential_cmo(cashflows, tranche_sizes)`  _function_
+
+> Split MBS principal across sequential (plain-vanilla) CMO tranches.
+>
+> Principal from ``cashflows`` (:func:`mbs_cashflows` rows) is paid to tranches
+> strictly in order: tranche 0 receives all principal until retired, then
+> tranche 1, and so on. ``tranche_sizes`` are the initial tranche balances (must
+> sum to the pool's total principal). Returns a list, one per tranche, of
+> ``[(month, principal, ending_balance), ...]`` rows. Each tranche's principal
+> sums to its size; earlier tranches retire first (shorter WAL).
+
 ### `smm_to_cpr(smm)`  _function_
 
 > Annual CPR from a single monthly mortality: ``1 - (1 - SMM)^{12}``.
 >
 > Inverse of :func:`cpr_to_smm`.
+
+### `tranche_wal(tranche_rows, tranche_size)`  _function_
+
+> Weighted-average life (years) of a single CMO tranche.
+>
+> ``sum_m (month/12) * principal_m / tranche_size`` over the tranche's principal
+> rows from :func:`sequential_cmo`.
 
 ### `weighted_average_life(cashflows, balance)`  _function_
 

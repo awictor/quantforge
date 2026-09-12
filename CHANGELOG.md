@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.410.0] - 2026-09-11
+
+### Added
+- `sequential_cmo` and `tranche_wal` (in `mbs.py`): split MBS principal across
+  sequential-pay CMO tranches (principal waterfalls strictly in priority order)
+  and compute each tranche's weighted-average life. Cross-checked: tranche
+  principals sum to their sizes, earlier tranches retire first (shorter WAL), and
+  the size-weighted blend of tranche WALs equals the pool WAL.
+
 ## [1.409.0] - 2026-09-11
 
 ### Added
