@@ -1225,6 +1225,43 @@ col = collateralized_exposure_profile(epe, threshold=5000, min_transfer_amount=1
 The CVA default buckets are the marginal survival drops `Q(t_{i-1}) - Q(t_i)`;
 `wrong_way_cva` tilts them toward later, higher-exposure dates.
 
+## Mortgage-backed securities and CMOs
+
+Level-payment amortization, PSA / CPR / SMM prepayment, projected pool cashflows,
+WAL, price / yield / Z-spread and effective duration, plus sequential and
+PAC/support CMO tranching:
+
+```python
+from quantforge import (monthly_payment, mbs_cashflows_psa, weighted_average_life,
+                        mbs_zspread, sequential_cmo, pac_schedule, pac_support_split)
+
+monthly_payment(balance=300000, annual_rate=0.05, term_months=360)   # 1610.46
+flows = mbs_cashflows_psa(300000, 0.05, 360, psa=100)                 # PSA ramp
+weighted_average_life(flows, 300000)
+
+# Sequential CMO: earlier tranches retire first (shorter WAL).
+tranches = sequential_cmo(flows, [150000, 100000, 50000])
+
+# PAC bond: stable WAL across prepayment speeds inside the 100-300 PSA collar.
+sched = pac_schedule(300000, 0.05, 360, psa_low=100, psa_high=300)
+pac, support = pac_support_split(flows, sched)
+```
+
+## Weather derivatives
+
+Heating/cooling degree days, temperature-index swaps and options (Bachelier), a
+degree-day collar, a mean-reverting temperature model, and a Monte Carlo cross-
+check:
+
+```python
+from quantforge import (heating_degree_days, cooling_degree_days,
+                        degree_day_option, expected_temperature)
+
+cooling_degree_days(temps=[70, 72, 68, 75], base=65)
+degree_day_option(expected_index=900, strike=880, sigma=45, r=0.03, expiry=0.5,
+                  tick_value=20, is_call=True, cap=100)
+```
+
 ## FX forwards (covered interest parity)
 
 ```python

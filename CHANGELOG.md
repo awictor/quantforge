@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.412.0] - 2026-09-11
+
+### Documentation
+- README: added "Mortgage-backed securities and CMOs" and "Weather derivatives"
+  sections covering the `mbs` and `weather` modules, with runnable examples
+  verified against the installed package.
+
 ## [1.411.0] - 2026-09-11
 
 ### Added
