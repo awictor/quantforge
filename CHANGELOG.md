@@ -16,6 +16,12 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.619.0] - 2026-09-12
+
+### Documentation
+- README: added a "K-means clustering" section documenting `kmeans`; TOC
+  regenerated to 113 entries.
+
 ## [1.618.0] - 2026-09-12
 
 ### Added

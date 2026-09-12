@@ -100,6 +100,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Cointegration (ADF / Engle-Granger)](#cointegration-adf--engle-granger)
 - [Ornstein-Uhlenbeck calibration](#ornstein-uhlenbeck-calibration)
 - [Markov chains](#markov-chains)
+- [K-means clustering](#k-means-clustering)
 - [Principal component analysis](#principal-component-analysis)
 - [Matrix utilities](#matrix-utilities)
 - [Numerical utilities](#numerical-utilities)
@@ -2418,6 +2419,24 @@ A = [[0.5, 0.3, 0.2], [0.1, 0.6, 0.3], [0.0, 0.0, 1.0]]
 expected_steps_to_absorption(A, transient_states=[0, 1])
 absorption_probabilities(A, transient_states=[0, 1], absorbing_states=[2])
 ```
+
+## K-means clustering
+
+Partition points into `k` clusters by Lloyd's algorithm with k-means++ seeding —
+regime grouping, basket construction, or any unsupervised segmentation.
+
+```python
+from quantforge import kmeans
+
+r = kmeans(points, k=3, seed=42)
+r["labels"]        # cluster index per point
+r["centroids"]     # k cluster centers
+r["inertia"]       # total within-cluster squared distance
+```
+
+Well-separated groups are recovered as pure clusters with centroids at their true
+centers; runs are reproducible for a fixed seed and inertia falls as `k` rises
+(use the elbow in inertia-vs-`k` to choose `k`).
 
 ## Principal component analysis
 
