@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.631.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.632.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -2448,6 +2448,37 @@ Auto-generated from `quantforge` v1.631.0 by `docs/gen_api.py` — do not edit b
 ### `predict_decision_stump(stump, X_query)`  _function_
 
 > Predict labels for query rows under a fitted stump.
+
+## decision_tree
+
+### `fit_decision_tree(X, y, max_depth=5, min_samples=2)`  _function_
+
+> Fit a CART classification tree.
+>
+> Parameters
+> ----------
+> X : list[list[float]]
+>     ``n`` rows of ``d`` features.
+> y : list
+>     Class labels.
+> max_depth : int
+>     Maximum tree depth (>= 1). Depth 1 is a decision stump.
+> min_samples : int
+>     Minimum samples required to attempt a split.
+>
+> Returns
+> -------
+> dict
+>     Nested tree; internal nodes have ``feature``/``threshold``/``left``/
+>     ``right``, leaves have only ``prediction``.
+
+### `predict_decision_tree(tree, X_query)`  _function_
+
+> Predict labels for query rows by walking the tree to a leaf.
+
+### `tree_depth(tree)`  _function_
+
+> Depth of a fitted tree (a single leaf has depth 0).
 
 ## density
 

@@ -16,6 +16,17 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.632.0] - 2026-09-12
+
+### Added
+- `decision_tree.py`: `fit_decision_tree` grows a CART classification tree by
+  recursively splitting on the best Gini-reducing feature/threshold up to a max
+  depth or min node size, `predict_decision_tree` walks it to a leaf, and
+  `tree_depth` reports its depth. Cross-checked: a depth-1 tree matches the
+  decision stump, a depth-2+ tree solves XOR (which a stump cannot), a separable
+  three-class set is fit perfectly, a deeper tree fits at least as well, and a pure
+  node becomes a leaf.
+
 ## [1.631.0] - 2026-09-12
 
 ### Documentation

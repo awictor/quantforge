@@ -321,6 +321,9 @@ from .encoding import (
 from .decision_stump import (
     gini_impurity, fit_decision_stump, predict_decision_stump,
 )
+from .decision_tree import (
+    fit_decision_tree, predict_decision_tree, tree_depth,
+)
 from .hac import (
     autocovariance, autocorrelation, newey_west_variance, newey_west_mean_se,
 )
@@ -671,7 +674,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.631.0"
+__version__ = "1.632.0"
 
 __all__ = [
     "OptionType",
@@ -1174,6 +1177,9 @@ __all__ = [
     "gini_impurity",
     "fit_decision_stump",
     "predict_decision_stump",
+    "fit_decision_tree",
+    "predict_decision_tree",
+    "tree_depth",
     "autocovariance",
     "autocorrelation",
     "newey_west_variance",
