@@ -16,6 +16,13 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.709.0] - 2026-09-12
+
+### Documentation
+- README numerics section now shows `tanh_sinh` next to the other quadrature
+  rules, with a note that it is the one to use for integrable endpoint
+  singularities where Simpson and Gauss-Legendre lose accuracy.
+
 ## [1.708.0] - 2026-09-12
 
 ### Added
