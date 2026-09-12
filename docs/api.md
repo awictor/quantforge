@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.537.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.538.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -7265,6 +7265,39 @@ Auto-generated from `quantforge` v1.537.0 by `docs/gen_api.py` — do not edit b
 > ``corr_vega`` (dV/drho) are central finite differences of the closed form.
 > Returns a dict with ``price``, ``delta``, ``gamma``, ``vega``, ``fx_vega``,
 > ``corr_vega``.
+
+## range_accrual
+
+### `range_accrual_note(S, L, U, t, r, sigma, coupon, observations, b=None, q=0.0, notional=1.0)`  _function_
+
+> Present value of a range-accrual note's coupon leg.
+>
+> Parameters
+> ----------
+> S, L, U : float
+>     Spot and the lower/upper edges of the accrual band, ``0 < L < U``.
+> t : float
+>     Maturity in years; the coupon is paid at ``t``.
+> r, sigma : float
+>     Risk-free rate and volatility.
+> coupon : float
+>     Full coupon rate earned if the index is in range on every observation.
+> observations : int
+>     Number of equally spaced observation dates in ``(0, t]``. Date ``i`` of
+>     ``m`` falls at ``t_i = t * i / m``.
+> b : float, optional
+>     Cost of carry / index drift. Defaults to ``r - q``.
+> q : float
+>     Dividend yield, used only when ``b`` is not given.
+> notional : float
+>     Note notional.
+>
+> Returns
+> -------
+> float
+>     Discounted expected coupon. Non-negative, rises with a wider band, and
+>     approaches ``notional * coupon * e^{-r t}`` as the band widens to cover
+>     the whole positive axis.
 
 ## rates
 

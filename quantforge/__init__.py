@@ -257,6 +257,7 @@ from .convertible_lattice import convertible_bond_lattice
 from .shout import shout_call, ladder_call
 from .installment import installment_call
 from .double_barrier import double_knockout_call
+from .range_accrual import range_accrual_note
 from .evt import (
     hill_estimator, gpd_fit_pot, gpd_var, gpd_expected_shortfall,
     gev_cdf, gev_return_level, gev_fit_block_maxima,
@@ -599,7 +600,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.537.0"
+__version__ = "1.538.0"
 
 __all__ = [
     "OptionType",
@@ -1002,6 +1003,7 @@ __all__ = [
     "ladder_call",
     "installment_call",
     "double_knockout_call",
+    "range_accrual_note",
     "hill_estimator",
     "gpd_fit_pot",
     "gpd_var",

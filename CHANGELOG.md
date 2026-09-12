@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.538.0] - 2026-09-12
+
+### Added
+- `range_accrual.py`: `range_accrual_note` prices a range-accrual note's coupon
+  leg in closed form -- the coupon accrues proportionally to the fraction of
+  observation dates on which the index sits inside a band ``[L, U]``, valued as a
+  discounted sum of GBM range probabilities. Cross-checked: it collapses to the
+  discounted full coupon as the band widens to the whole axis, a wider band raises
+  the value, higher volatility lowers it, the notional scales it linearly, and it
+  matches a Monte Carlo count to 1e-5.
+
 ## [1.537.0] - 2026-09-12
 
 ### Documentation
