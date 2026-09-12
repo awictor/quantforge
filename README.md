@@ -1719,8 +1719,19 @@ commodity_forward(spot=100, r=0.05, maturity=1, storage_cost=0.02,
                   convenience_yield=0.03)
 schwartz_forward(spot=50, kappa=1.5, alpha_star=4.0, sigma=0.3, maturity=2)
 kirk_spread_option(f1=100, f2=90, strike=5, sigma1=0.3, sigma2=0.25, rho=0.4,
-                   r=0.05, expiry=1)      # crack spread
+                   r=0.05, expiry=1)      # single spread
+
+# Refinery crack spread: weighted product basket minus crude (e.g. 3:2:1),
+# via the normal-model Bachelier spread (handles a negative margin).
+from quantforge import crack_spread_option
+crack_spread_option(crude_forward=80, product_forwards=[95, 90],
+                    product_weights=[2/3, 1/3], strike=5,
+                    sigma_crude=5.0, sigma_products=[7.0, 6.5],
+                    corr_products_crude=[0.7, 0.65], r=0.03, expiry=1.0)
 ```
+
+A single unit-weight product reduces to the plain Bachelier spread; put-call
+parity ties the call and put to the forward margin.
 
 ## Credit (reduced-form)
 
