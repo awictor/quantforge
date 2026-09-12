@@ -1689,6 +1689,19 @@ inverse_volatility_weights(cov)
 hierarchical_risk_parity(cov)     # Lopez de Prado HRP
 ```
 
+## Portfolio insurance (CPPI)
+
+Constant Proportion Portfolio Insurance: dynamic risky/safe allocation with a
+guaranteed floor.
+
+```python
+from quantforge import risky_exposure, cppi_path
+
+risky_exposure(wealth=100, floor_pv=90, multiplier=3)   # = 3 * cushion, capped
+cppi_path(initial_wealth=100, floor=90, multiplier=3,
+          risky_returns=[-0.30, -0.30, -0.30, -0.30], r=0.02, dt=0.25)  # protected
+```
+
 ## Performance metrics
 
 Track-record statistics from a return series:
