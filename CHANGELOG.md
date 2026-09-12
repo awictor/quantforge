@@ -4,6 +4,12 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.565.0] - 2026-09-12
+
+### Documentation
+- README: added a "Variance-ratio test" section documenting `variance_ratio` and
+  `variance_ratio_zstat`; TOC regenerated to 95 entries.
+
 ## [1.564.0] - 2026-09-12
 
 ### Added

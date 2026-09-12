@@ -82,6 +82,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Theil-Sen robust regression](#theil-sen-robust-regression)
 - [Robust scale and location](#robust-scale-and-location)
 - [Hurst exponent (long memory)](#hurst-exponent-long-memory)
+- [Variance-ratio test](#variance-ratio-test)
 - [Markov chains](#markov-chains)
 - [Principal component analysis](#principal-component-analysis)
 - [Matrix utilities](#matrix-utilities)
@@ -1952,6 +1953,25 @@ hurst_exponent(mean_reverting)   # <0.5  (moves tend to reverse)
 `H` is the slope of `log(R/S)` against `log(window)` over dyadic window sizes.
 A reading well above 0.5 flags a trend-following regime; well below flags a
 mean-reversion regime.
+
+## Variance-ratio test
+
+The Lo-MacKinlay variance ratio tests the random-walk null: under it the variance
+of a `q`-period return is `q` times the one-period variance, so `VR(q) = 1`.
+`VR > 1` signals momentum (positive serial correlation); `VR < 1` signals mean
+reversion. `variance_ratio_zstat` returns a heteroskedasticity-robust `z` (valid
+under GARCH-type noise) — `|z| > 1.96` rejects at 5%.
+
+```python
+from quantforge import variance_ratio, variance_ratio_zstat
+
+variance_ratio(returns, q=2)         # ~1 random walk, >1 trending, <1 mean-reverting
+variance_ratio_zstat(returns, q=2)   # standard-normal z; |z| > 1.96 rejects the walk
+```
+
+On white noise `VR` sits near 1 with a small `z`; a mean-reverting series drives
+`VR` below 1 with a large negative `z`, a trending one above 1 with a large
+positive `z`.
 
 ## Markov chains
 
