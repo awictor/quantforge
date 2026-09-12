@@ -1,9 +1,12 @@
-"""Numerical integration: trapezoid, Simpson, Gauss-Legendre, adaptive Simpson.
+"""Numerical integration: trapezoid, Simpson, Gauss-Legendre, adaptive Simpson,
+Romberg, and tanh-sinh.
 
 General-purpose definite-integral routines for the many expected-value and
 density integrals across the library. Trapezoid and composite Simpson on a fixed
-grid, fixed-order Gauss-Legendre (exact for polynomials up to degree 2n-1), and
-an error-controlled adaptive Simpson. Pure standard library.
+grid, fixed-order Gauss-Legendre (exact for polynomials up to degree 2n-1), an
+error-controlled adaptive Simpson, Romberg (Richardson extrapolation on the
+trapezoid rule) for smooth integrands, and tanh-sinh (double-exponential) for
+integrable endpoint singularities. Pure standard library.
 """
 
 import math
@@ -90,6 +93,44 @@ def adaptive_simpson(f, a, b, tol=1e-10, max_depth=50):
     fa, fb, fm = f(a), f(b), f(m)
     whole = (b - a) / 6.0 * (fa + 4.0 * fm + fb)
     return _adaptive(f, a, b, fa, fb, fm, whole, tol, max_depth)
+
+
+def romberg(f, a, b, max_order=10, tol=1e-12):
+    """Romberg integration: Richardson extrapolation on the trapezoid rule.
+
+    Builds the Romberg tableau, refining the composite trapezoid estimate by
+    successive interval halvings and extrapolating away the Euler-Maclaurin error
+    terms. Row ``T[k][0]`` is the ``2^k``-panel trapezoid; each further column
+    cancels the next even power of the step,
+
+        T[k][j] = (4^j T[k][j-1] - T[k-1][j-1]) / (4^j - 1),
+
+    so ``T[k][k]`` converges as ``O(h^{2k+2})`` for a smooth integrand. Stops early
+    when two successive diagonal estimates agree to ``tol``. Ideal for smooth
+    integrands where it reaches machine precision in a handful of halvings; for
+    endpoint singularities use :func:`tanh_sinh` instead.
+    """
+    if max_order < 1:
+        raise ValueError("max_order must be at least 1")
+    table = [[0.0] * (max_order + 1) for _ in range(max_order + 1)]
+    h = b - a
+    table[0][0] = 0.5 * h * (f(a) + f(b))
+    prev_diag = table[0][0]
+    for k in range(1, max_order + 1):
+        h *= 0.5
+        # New midpoints added at this refinement level.
+        total = 0.0
+        for i in range(1, 2 ** k, 2):
+            total += f(a + i * h)
+        table[k][0] = 0.5 * table[k - 1][0] + h * total
+        pow4 = 1.0
+        for j in range(1, k + 1):
+            pow4 *= 4.0
+            table[k][j] = (pow4 * table[k][j - 1] - table[k - 1][j - 1]) / (pow4 - 1.0)
+        if abs(table[k][k] - prev_diag) <= tol:
+            return table[k][k]
+        prev_diag = table[k][k]
+    return table[max_order][max_order]
 
 
 def tanh_sinh(f, a, b, levels=6, h0=1.0):

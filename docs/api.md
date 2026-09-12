@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.708.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.710.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -8612,6 +8612,22 @@ Auto-generated from `quantforge` v1.708.0 by `docs/gen_api.py` — do not edit b
 >
 > Maps the reference nodes to ``[a, b]``. Exact for polynomials up to degree
 > ``2n - 1`` -- very accurate for smooth integrands with few evaluations.
+
+### `romberg(f, a, b, max_order=10, tol=1e-12)`  _function_
+
+> Romberg integration: Richardson extrapolation on the trapezoid rule.
+>
+> Builds the Romberg tableau, refining the composite trapezoid estimate by
+> successive interval halvings and extrapolating away the Euler-Maclaurin error
+> terms. Row ``T[k][0]`` is the ``2^k``-panel trapezoid; each further column
+> cancels the next even power of the step,
+>
+>     T[k][j] = (4^j T[k][j-1] - T[k-1][j-1]) / (4^j - 1),
+>
+> so ``T[k][k]`` converges as ``O(h^{2k+2})`` for a smooth integrand. Stops early
+> when two successive diagonal estimates agree to ``tol``. Ideal for smooth
+> integrands where it reaches machine precision in a handful of halvings; for
+> endpoint singularities use :func:`tanh_sinh` instead.
 
 ### `simpson(f, a, b, n=1000)`  _function_
 

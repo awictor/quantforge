@@ -16,6 +16,17 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.710.0] - 2026-09-12
+
+### Added
+- `quadrature.py`: `romberg` integration -- Richardson extrapolation on the
+  trapezoid rule via the Romberg tableau, cancelling successive even powers of the
+  step so a smooth integrand reaches machine precision in a few halvings, with
+  early stopping when the diagonal converges. Cross-checked to 1e-12 against closed
+  forms (`sin` over a half period, `exp`, a degree-7 polynomial, `arctan'` giving
+  `pi/4`, a Gaussian against `erf`) and against composite Simpson on a smooth
+  damped-cosine integrand.
+
 ## [1.709.0] - 2026-09-12
 
 ### Documentation
