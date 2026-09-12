@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.651.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.652.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -2461,6 +2461,16 @@ Auto-generated from `quantforge` v1.651.0 by `docs/gen_api.py` — do not edit b
 >
 > Returns ``(train_indices, test_indices)``. The test set gets
 > ``round(n * test_fraction)`` indices (at least 1, at most ``n-1``).
+
+## curran_asian
+
+### `curran_asian(forward, strike, sigma, r, expiry, n_avg, is_call=True)`  _function_
+
+> Curran arithmetic-average Asian option price.
+>
+> Parameters mirror :func:`~quantforge.turnbull_wakeman_asian`. Returns the
+> discounted option value; call and put satisfy
+> ``C - P = e^{-rT}(forward - strike)``.
 
 ## daycount
 

@@ -16,6 +16,17 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.652.0] - 2026-09-12
+
+### Added
+- `curran_asian.py`: `curran_asian` prices an arithmetic-average Asian option by
+  Curran's (1994) geometric-conditioning approximation -- conditioning the average
+  on the exactly-lognormal geometric mean and integrating analytically, sharper
+  than the two-moment Turnbull-Wakeman match. Cross-checked: it reduces to Black
+  for a single fixing, matches a Monte Carlo arithmetic Asian to ~0.001 at 12
+  fixings (closer than Turnbull-Wakeman), satisfies put-call parity, and orders
+  ITM above OTM.
+
 ## [1.651.0] - 2026-09-12
 
 ### Documentation
