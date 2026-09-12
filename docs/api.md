@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.436.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.437.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -1596,6 +1596,17 @@ Auto-generated from `quantforge` v1.436.0 by `docs/gen_api.py` — do not edit b
 > attachment) tranches lose more than senior tranches at the same correlation.
 > Trapezoidal integration of ``E[min(max(L - a, 0), d - a)] / (d - a)`` using
 > the survival ``1 - F(l)``.
+
+### `cdo_tranche_expected_loss_mc(attachment, detachment, pd, rho, n_names=100, n_paths=20000, seed=8675309)`  _function_
+
+> Monte Carlo CDO tranche expected loss under the single-factor model.
+>
+> Simulates a finite pool of ``n_names``: a common factor ``M`` and idiosyncratic
+> shocks give each name's asset value ``sqrt(rho) M + sqrt(1 - rho) Z_i``; a name
+> defaults when it falls below ``Phi^{-1}(pd)``. Averages the tranche loss over
+> the portfolio-loss fraction across paths. An independent finite-pool reference
+> for the large-pool :func:`cdo_tranche_expected_loss` (they agree as
+> ``n_names -> inf``). Deterministic per seed.
 
 ### `clayton_copula(u, v, theta)`  _function_
 

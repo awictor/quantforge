@@ -166,6 +166,55 @@ def cdo_tranche_expected_loss(attachment, detachment, pd, rho, n_steps=2000):
     return total / width
 
 
+def cdo_tranche_expected_loss_mc(attachment, detachment, pd, rho, n_names=100,
+                                 n_paths=20000, seed=8675309):
+    """Monte Carlo CDO tranche expected loss under the single-factor model.
+
+    Simulates a finite pool of ``n_names``: a common factor ``M`` and idiosyncratic
+    shocks give each name's asset value ``sqrt(rho) M + sqrt(1 - rho) Z_i``; a name
+    defaults when it falls below ``Phi^{-1}(pd)``. Averages the tranche loss over
+    the portfolio-loss fraction across paths. An independent finite-pool reference
+    for the large-pool :func:`cdo_tranche_expected_loss` (they agree as
+    ``n_names -> inf``). Deterministic per seed.
+    """
+    if not (0.0 <= attachment < detachment <= 1.0):
+        raise ValueError("require 0 <= attachment < detachment <= 1")
+    if not (0.0 < pd < 1.0):
+        raise ValueError("pd must be in (0, 1)")
+    if not (0.0 < rho < 1.0):
+        raise ValueError("rho must be in (0, 1)")
+    if n_names < 1 or n_paths < 1:
+        raise ValueError("n_names and n_paths must be positive")
+    threshold = norm_ppf(pd)
+    sq_rho = math.sqrt(rho)
+    sq_1mrho = math.sqrt(1.0 - rho)
+    width = detachment - attachment
+    state = seed & 0xFFFFFFFF
+
+    def _unif():
+        nonlocal state
+        state = (1103515245 * state + 12345) & 0x7FFFFFFF
+        return (state + 0.5) / 0x80000000
+
+    def _normal():
+        u1 = _unif()
+        u2 = _unif()
+        return math.sqrt(-2.0 * math.log(u1)) * math.cos(2.0 * math.pi * u2)
+
+    total = 0.0
+    for _ in range(n_paths):
+        m = _normal()
+        defaults = 0
+        for _i in range(n_names):
+            asset = sq_rho * m + sq_1mrho * _normal()
+            if asset < threshold:
+                defaults += 1
+        loss = defaults / n_names
+        tranche_loss = min(max(loss - attachment, 0.0), width)
+        total += tranche_loss
+    return total / n_paths / width
+
+
 def frank_copula(u, v, theta):
     """Frank copula (``theta != 0``), symmetric with no tail dependence.
 

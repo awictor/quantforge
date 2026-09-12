@@ -8,6 +8,7 @@ from quantforge import (
     clayton_theta_from_tau, gumbel_theta_from_tau,
     frank_copula, gaussian_copula_joint_default, first_to_default_probability,
     vasicek_loss_cdf, vasicek_loss_quantile, cdo_tranche_expected_loss,
+    cdo_tranche_expected_loss_mc,
 )
 
 
@@ -80,6 +81,21 @@ def test_cdo_tranche_seniority_ordering():
     sen = cdo_tranche_expected_loss(0.07, 0.15, 0.05, 0.2)
     assert eq > mez > sen
     assert all(0 <= x <= 1 for x in (eq, mez, sen))
+
+
+def test_cdo_mc_deterministic():
+    a = cdo_tranche_expected_loss_mc(0.03, 0.10, 0.05, 0.2, 100, 5000, 7)
+    b = cdo_tranche_expected_loss_mc(0.03, 0.10, 0.05, 0.2, 100, 5000, 7)
+    assert a == b
+
+
+@pytest.mark.slow
+def test_cdo_mc_validates_closed_form():
+    pd, rho = 0.05, 0.2
+    for a, d in [(0.0, 0.03), (0.03, 0.10), (0.10, 0.20)]:
+        cf = cdo_tranche_expected_loss(a, d, pd, rho)
+        mc = cdo_tranche_expected_loss_mc(a, d, pd, rho, 500, 60000, 42)
+        assert abs(cf - mc) / cf < 0.10
 
 
 def test_vasicek_cdo_validation():

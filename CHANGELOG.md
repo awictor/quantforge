@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.437.0] - 2026-09-11
+
+### Added
+- `cdo_tranche_expected_loss_mc` (in `copula.py`): a finite-pool Monte Carlo of
+  the single-factor default model that independently validates the large-pool
+  `cdo_tranche_expected_loss`. Agrees within 10% across equity, mezzanine, and
+  senior tranches at 500 names / 60k paths; deterministic per seed.
+
 ## [1.436.0] - 2026-09-11
 
 ### Added
