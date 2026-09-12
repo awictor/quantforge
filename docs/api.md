@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.587.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.588.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -9779,6 +9779,30 @@ Auto-generated from `quantforge` v1.587.0 by `docs/gen_api.py` — do not edit b
 >
 > Maps each strike to ``p.implied_vol(ln(K/F), t)`` and feeds the smile to
 > :func:`quantforge.vix_from_smile`. A flat slice returns ``100 * sigma``.
+
+## t_copula_sample
+
+### `student_t_copula_sample(correlation, df, n, seed=1234567)`  _function_
+
+> Draw ``n`` samples from a Student-t copula.
+>
+> Parameters
+> ----------
+> correlation : list[list[float]]
+>     Symmetric positive-definite correlation matrix (unit diagonal).
+> df : int
+>     Degrees of freedom (>= 1). Smaller ``df`` gives heavier joint tails; large
+>     ``df`` approaches the Gaussian copula.
+> n : int
+>     Number of sample vectors.
+> seed : int
+>     Seed for the deterministic normal stream.
+>
+> Returns
+> -------
+> list[list[float]]
+>     ``n`` vectors of uniforms in (0, 1) with the target rank correlation and
+>     symmetric tail dependence set by ``df``.
 
 ## tail_dependence
 

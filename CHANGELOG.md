@@ -16,6 +16,17 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.588.0] - 2026-09-12
+
+### Added
+- `t_copula_sample.py`: `student_t_copula_sample` draws dependent uniforms from a
+  Student-t copula -- same rank correlation as the Gaussian copula but with
+  symmetric tail dependence that grows as the degrees of freedom fall, the standard
+  fix for underestimated joint-crash risk. Cross-checked: the rank correlation
+  tracks the target, each margin is uniform, a lower ``df`` gives stronger lower
+  tail dependence, a large ``df`` reproduces the Gaussian copula's tail behavior,
+  and an identity target gives ~0 rank correlation.
+
 ## [1.587.0] - 2026-09-12
 
 ### Documentation
