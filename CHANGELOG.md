@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.411.0] - 2026-09-11
+
+### Added
+- `pac_schedule` and `pac_support_split` (in `mbs.py`): the planned-amortization-
+  class principal schedule as the lower envelope of the pool principal at the two
+  ends of a PSA collar, and the allocation of pool principal between the PAC (with
+  arrears carried forward) and its support/companion tranche. Cross-checked: the
+  schedule is a lower envelope, PAC + support sums to the pool principal, the PAC
+  WAL is stable across speeds inside the band, and the support absorbs more WAL
+  variability than the PAC.
+
 ## [1.410.0] - 2026-09-11
 
 ### Added

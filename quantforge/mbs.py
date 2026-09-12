@@ -251,6 +251,55 @@ def mbs_effective_convexity(cashflows, annual_yield, bump=1e-4):
     return (up - 2.0 * base + dn) / (bump * bump * base)
 
 
+def pac_schedule(balance, annual_rate, term_months, psa_low, psa_high):
+    """Planned-amortization-class principal schedule from a PSA collar.
+
+    A PAC bond promises the principal that is available under *both* ends of a PSA
+    speed band: at each month the scheduled PAC principal is the minimum of the
+    total principal produced at ``psa_low`` and at ``psa_high``
+    (:func:`mbs_cashflows_psa`). Returns ``[(month, pac_principal), ...]``. Because
+    it is a lower envelope, the PAC schedule is stable for any prepayment speed
+    inside the collar -- the support (companion) tranche absorbs the difference.
+    """
+    if psa_low > psa_high:
+        raise ValueError("psa_low must not exceed psa_high")
+    low = mbs_cashflows_psa(balance, annual_rate, term_months, psa_low)
+    high = mbs_cashflows_psa(balance, annual_rate, term_months, psa_high)
+    n = max(len(low), len(high))
+    sched = []
+    for m in range(n):
+        p_low = low[m][4] if m < len(low) else 0.0
+        p_high = high[m][4] if m < len(high) else 0.0
+        sched.append((m + 1, min(p_low, p_high)))
+    return sched
+
+
+def pac_support_split(cashflows, pac_sched):
+    """Allocate pool principal between a PAC band and its support tranche.
+
+    At each month the PAC receives its scheduled principal (from
+    :func:`pac_schedule`), capped by what the pool actually produces and by the
+    PAC's remaining balance; the support tranche receives the remainder. Any PAC
+    shortfall in a slow month is made up from later principal before the support is
+    paid. Returns ``(pac_rows, support_rows)`` as ``[(month, principal), ...]``.
+    The two principal streams sum to the pool principal each month.
+    """
+    pac_by_month = {m: p for m, p in pac_sched}
+    pac_arrears = 0.0
+    pac_rows = []
+    support_rows = []
+    for row in cashflows:
+        m = row[0]
+        avail = row[4]
+        target = pac_by_month.get(m, 0.0) + pac_arrears
+        pac_pay = min(target, avail)
+        pac_arrears = target - pac_pay  # unmet PAC principal carried forward
+        support_pay = avail - pac_pay
+        pac_rows.append((m, pac_pay))
+        support_rows.append((m, support_pay))
+    return pac_rows, support_rows
+
+
 def sequential_cmo(cashflows, tranche_sizes):
     """Split MBS principal across sequential (plain-vanilla) CMO tranches.
 

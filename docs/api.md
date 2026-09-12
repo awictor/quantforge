@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.410.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.411.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -4033,6 +4033,28 @@ Auto-generated from `quantforge` v1.410.0 by `docs/gen_api.py` — do not edit b
 >
 > ``P = B * i / (1 - (1 + i)^{-n})`` with monthly rate ``i = annual_rate / 12``.
 > At zero rate this is the straight-line ``balance / term_months``.
+
+### `pac_schedule(balance, annual_rate, term_months, psa_low, psa_high)`  _function_
+
+> Planned-amortization-class principal schedule from a PSA collar.
+>
+> A PAC bond promises the principal that is available under *both* ends of a PSA
+> speed band: at each month the scheduled PAC principal is the minimum of the
+> total principal produced at ``psa_low`` and at ``psa_high``
+> (:func:`mbs_cashflows_psa`). Returns ``[(month, pac_principal), ...]``. Because
+> it is a lower envelope, the PAC schedule is stable for any prepayment speed
+> inside the collar -- the support (companion) tranche absorbs the difference.
+
+### `pac_support_split(cashflows, pac_sched)`  _function_
+
+> Allocate pool principal between a PAC band and its support tranche.
+>
+> At each month the PAC receives its scheduled principal (from
+> :func:`pac_schedule`), capped by what the pool actually produces and by the
+> PAC's remaining balance; the support tranche receives the remainder. Any PAC
+> shortfall in a slow month is made up from later principal before the support is
+> paid. Returns ``(pac_rows, support_rows)`` as ``[(month, principal), ...]``.
+> The two principal streams sum to the pool principal each month.
 
 ### `psa_cpr(month, psa=100.0)`  _function_
 

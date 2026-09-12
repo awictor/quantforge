@@ -8,7 +8,12 @@ from quantforge import (
     mbs_cashflows_psa, mbs_price, mbs_yield,
     mbs_price_with_spread, mbs_zspread, mbs_effective_duration,
     mbs_effective_convexity, sequential_cmo, tranche_wal,
+    pac_schedule, pac_support_split,
 )
+
+
+def _wal(rows):
+    return sum((m / 12.0) * p for m, p in rows) / sum(p for _, p in rows)
 
 
 def test_monthly_payment_value():
@@ -51,6 +56,45 @@ def test_wal_shortens_with_prepayment():
     base = mbs_cashflows(300000, 0.05, 360, 0.0)
     fast = mbs_cashflows(300000, 0.05, 360, cpr_to_smm(0.06))
     assert weighted_average_life(fast, 300000) < weighted_average_life(base, 300000)
+
+
+def test_pac_schedule_is_lower_envelope():
+    sched = pac_schedule(300000, 0.05, 360, 100, 300)
+    low = mbs_cashflows_psa(300000, 0.05, 360, 100)
+    high = mbs_cashflows_psa(300000, 0.05, 360, 300)
+    for m in range(len(sched)):
+        p_low = low[m][4] if m < len(low) else 0.0
+        p_high = high[m][4] if m < len(high) else 0.0
+        assert sched[m][1] <= min(p_low, p_high) + 1e-9
+
+
+def test_pac_support_sums_to_pool():
+    sched = pac_schedule(300000, 0.05, 360, 100, 300)
+    mid = mbs_cashflows_psa(300000, 0.05, 360, 200)
+    pac, sup = pac_support_split(mid, sched)
+    for i in range(len(mid)):
+        assert pac[i][1] + sup[i][1] == pytest.approx(mid[i][4], abs=1e-9)
+
+
+def test_pac_wal_stable_within_band():
+    sched = pac_schedule(300000, 0.05, 360, 100, 300)
+    pac150, _ = pac_support_split(mbs_cashflows_psa(300000, 0.05, 360, 150), sched)
+    pac250, _ = pac_support_split(mbs_cashflows_psa(300000, 0.05, 360, 250), sched)
+    assert abs(_wal(pac150) - _wal(pac250)) < 0.5
+
+
+def test_support_absorbs_more_variability_than_pac():
+    sched = pac_schedule(300000, 0.05, 360, 100, 300)
+    pac150, sup150 = pac_support_split(mbs_cashflows_psa(300000, 0.05, 360, 150), sched)
+    pac250, sup250 = pac_support_split(mbs_cashflows_psa(300000, 0.05, 360, 250), sched)
+    pac_swing = abs(_wal(pac150) - _wal(pac250))
+    sup_swing = abs(_wal(sup150) - _wal(sup250))
+    assert sup_swing > pac_swing
+
+
+def test_pac_validation():
+    with pytest.raises(ValueError):
+        pac_schedule(300000, 0.05, 360, 300, 100)
 
 
 CMO_SIZES = [150000, 100000, 50000]
