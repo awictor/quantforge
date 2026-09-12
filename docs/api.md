@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.446.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.447.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -451,6 +451,61 @@ Auto-generated from `quantforge` v1.446.0 by `docs/gen_api.py` — do not edit b
 ### `skew_swap_from_smile(S0, t, r, vol_fn, q=0.0, n_strikes=401, width=8.0)`  _function_
 
 > Fair skew-swap value: the risk-neutral skewness from the BKM moments.
+
+## bond_future
+
+### `cheapest_to_deliver(bonds, futures_price)`  _function_
+
+> Index of the cheapest-to-deliver bond (minimum net basis).
+>
+> ``bonds`` is a list of dicts with keys ``price``, ``cf`` (conversion factor),
+> and ``carry``. Returns the index minimizing :func:`net_basis`. Ties break to
+> the first.
+
+### `conversion_factor(coupon_rate, years_to_maturity, notional_coupon=0.06, freq=2)`  _function_
+
+> Conversion factor: price per unit face of a bond yielding the notional coupon.
+>
+> The bond's price discounted at the exchange's notional coupon
+> (``notional_coupon``, e.g. 6% for CBOT Treasury futures), per unit face:
+>
+>     CF = sum_i (c/freq) / (1 + y/freq)^i + 1 / (1 + y/freq)^n,
+>
+> with ``c = coupon_rate``, ``y = notional_coupon``, ``n = years * freq``. Above
+> one for bonds with coupons over the notional, below one otherwise; exactly one
+> when the coupon equals the notional.
+
+### `gross_basis(bond_price, futures_price, conversion_factor_)`  _function_
+
+> Gross basis ``bond_price - futures_price * CF``.
+>
+> The raw richness of the cash bond over its futures-implied forward price
+> (before carry). Positive means the bond trades above its converted futures
+> price.
+
+### `implied_repo_rate(bond_price, accrued_now, futures_price, conversion_factor_, accrued_delivery, days, day_count=360)`  _function_
+
+> Implied repo rate of a deliverable bond.
+>
+> The financing rate that makes buying the bond and delivering into the future
+> break even:
+>
+>     repo = (invoice - dirty_now) / dirty_now * (day_count / days),
+>
+> with ``invoice = futures * CF + accrued_delivery`` and ``dirty_now =
+> bond_price + accrued_now``. The cheapest-to-deliver bond has the highest
+> implied repo.
+
+### `invoice_price(futures_price, conversion_factor_, accrued_interest=0.0)`  _function_
+
+> Invoice price the short receives: ``futures * CF + accrued``.
+
+### `net_basis(bond_price, futures_price, conversion_factor_, carry)`  _function_
+
+> Net basis: gross basis less the carry to delivery.
+>
+> ``gross_basis - carry`` where ``carry`` is coupon income minus financing over
+> the holding period. The cheapest-to-deliver bond minimizes the net basis.
 
 ## bondmath
 

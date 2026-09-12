@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.447.0] - 2026-09-11
+
+### Added
+- `bond_future.py`: bond-futures delivery analytics. `conversion_factor` (price at
+  the notional coupon), `invoice_price`, `gross_basis`, `net_basis`,
+  `implied_repo_rate`, and `cheapest_to_deliver`. Cross-checked: the conversion
+  factor is one at the notional coupon and above/below for higher/lower coupons,
+  the CTD bond minimizes the net basis, and the implied repo rises with the
+  futures price.
+
 ## [1.446.0] - 2026-09-11
 
 ### Documentation

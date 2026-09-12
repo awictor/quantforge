@@ -217,6 +217,10 @@ from .inflation import (
     yoy_caplet_price_normal, yoy_caplet_implied_normal_vol,
     real_zero_curve, nominal_zero_curve, real_discount_factor,
 )
+from .bond_future import (
+    conversion_factor, invoice_price, gross_basis, net_basis,
+    implied_repo_rate, cheapest_to_deliver,
+)
 from .ldi import (
     liability_pv, funding_ratio, surplus, liability_duration, hedge_ratio,
     required_hedge_duration, surplus_at_risk,
@@ -491,7 +495,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.446.0"
+__version__ = "1.447.0"
 
 __all__ = [
     "OptionType",
@@ -841,6 +845,12 @@ __all__ = [
     "real_zero_curve",
     "nominal_zero_curve",
     "real_discount_factor",
+    "conversion_factor",
+    "invoice_price",
+    "gross_basis",
+    "net_basis",
+    "implied_repo_rate",
+    "cheapest_to_deliver",
     "liability_pv",
     "funding_ratio",
     "surplus",
