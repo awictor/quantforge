@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.605.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.606.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -8299,6 +8299,30 @@ Auto-generated from `quantforge` v1.605.0 by `docs/gen_api.py` — do not edit b
 >
 > The capital needed to fund the stream. Rises with the withdrawal, the horizon,
 > and the growth rate; falls with the discount rate.
+
+## ridge
+
+### `ridge_regression(X, y, alpha=1.0, add_intercept=True)`  _function_
+
+> Fit an L2-penalized (ridge) regression.
+>
+> Parameters
+> ----------
+> X : list[list[float]]
+>     Design matrix, ``n`` rows of regressors.
+> y : list[float]
+>     Response vector.
+> alpha : float
+>     Ridge penalty ``lambda`` (>= 0). 0 reproduces OLS; larger shrinks the
+>     slope coefficients toward zero.
+> add_intercept : bool
+>     Prepend an (unpenalized) intercept column.
+>
+> Returns
+> -------
+> dict
+>     ``coefficients`` (intercept first if added), ``fitted``, ``residuals``,
+>     ``r_squared``.
 
 ## risk
 

@@ -16,6 +16,16 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.606.0] - 2026-09-12
+
+### Added
+- `ridge.py`: `ridge_regression` fits L2-penalized (Tikhonov) least squares,
+  ``beta = (X'X + lambda I)^{-1} X'y``, shrinking the slope coefficients toward
+  zero (the intercept is left unpenalized). Cross-checked: ``lambda = 0`` reproduces
+  OLS exactly, a larger ``lambda`` monotonically shrinks the slopes (with the
+  intercept converging to the mean of ``y``), and ridge stays solvable under
+  perfect collinearity where OLS is singular.
+
 ## [1.605.0] - 2026-09-12
 
 ### Documentation
