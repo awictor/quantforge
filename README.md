@@ -1243,7 +1243,15 @@ from quantforge import displaced_diffusion_price
 
 displaced_diffusion_price(S=100, K=100, t=1.0, r=0.05, sigma=0.2, shift=50,
                           option_type="call")
+
+# Back out the displaced-diffusion vol from a price (bisection).
+from quantforge import displaced_diffusion_implied_vol
+displaced_diffusion_implied_vol(target_price=8.5, S=100, K=100, t=1.0, r=0.05,
+                                shift=50)
 ```
+
+The implied-vol solver round-trips with the pricer and, at `shift = 0`, coincides
+with the Black-Scholes implied vol.
 
 `shift=0` is Black-Scholes; a larger shift moves toward normal-model behavior.
 
