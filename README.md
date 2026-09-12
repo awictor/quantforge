@@ -36,6 +36,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Quasi-Monte Carlo](#quasi-monte-carlo)
 - [Exotic options (closed form)](#exotic-options-closed-form)
 - [Shout and ladder options](#shout-and-ladder-options)
+- [Installment options](#installment-options)
 - [Local volatility (Dupire)](#local-volatility-dupire)
 - [Term-structure surface (calendar-arbitrage aware)](#term-structure-surface-calendar-arbitrage-aware)
 - [Skew/kurtosis-adjusted pricing (Corrado-Su)](#skewkurtosis-adjusted-pricing-corrado-su)
@@ -867,6 +868,31 @@ ladder_call(S=100, K=100, rungs=[110, 120, 130], t=1.0, r=0.05, sigma=0.25)  # -
 Both are worth at least the vanilla call. With no rungs the ladder reduces to the
 plain tree-priced European call; rungs at or below the strike are ignored. More or
 higher rungs raise the ladder value up toward the shout-like limit.
+
+## Installment options
+
+An installment call is paid for in a stream of premiums rather than a single
+upfront cost. At each installment date the holder may **lapse** — stop paying and
+forfeit the option for zero — so it is kept alive only while its continuation value
+exceeds the next installment. That abandon-option makes it a compound option,
+priced by backward induction on a Cox-Ross-Rubinstein tree. `installment_call`
+returns the fair *upfront* value given the agreed schedule.
+
+```python
+from quantforge import installment_call
+
+# Pay 2.0 at each of three dates to keep a 1y ATM call alive.
+installment_call(S=100, K=100, t=1.0, r=0.05, sigma=0.25,
+                 installment=2.0, pay_times=[0.25, 0.5, 0.75])   # -> 7.3523
+
+# Zero installment (or an empty schedule) reduces to the plain tree call.
+installment_call(S=100, K=100, t=1.0, r=0.05, sigma=0.25,
+                 installment=0.0, pay_times=[0.5])                # -> 12.3236
+```
+
+A larger installment lowers the upfront value, more payment dates lower it
+further, and a prohibitively large installment drives it to zero (the holder
+always lapses).
 
 ## Local volatility (Dupire)
 

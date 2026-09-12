@@ -4,6 +4,12 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.535.0] - 2026-09-12
+
+### Documentation
+- README: added an "Installment options" section documenting `installment_call`,
+  with snippets verified against the package; TOC regenerated to 85 entries.
+
 ## [1.534.0] - 2026-09-12
 
 ### Added
