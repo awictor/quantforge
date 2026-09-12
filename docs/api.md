@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.515.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.516.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -9397,6 +9397,14 @@ Auto-generated from `quantforge` v1.515.0 by `docs/gen_api.py` — do not edit b
 
 ## volatility
 
+### `GJRGarchParams(omega: float, alpha: float, beta: float, gamma: float) -> None`  _class_
+
+> GJR-GARCH(1,1,1) parameters with a leverage (asymmetry) term.
+>
+> ``h_t = omega + (alpha + gamma * I[r_{t-1} < 0]) r_{t-1}^2 + beta h_{t-1}``.
+> ``gamma > 0`` makes negative shocks raise volatility more than positive ones
+> (the leverage effect). Stationary when ``alpha + beta + 0.5 gamma < 1``.
+
 ### `GarchParams(omega: float, alpha: float, beta: float) -> None`  _class_
 
 > GarchParams(omega: float, alpha: float, beta: float)
@@ -9477,6 +9485,22 @@ Auto-generated from `quantforge` v1.515.0 by `docs/gen_api.py` — do not edit b
 >
 > var = mean( 0.5*ln(H/L)^2 - (2ln2 - 1)*ln(C/O)^2 ). Uses the full bar; more
 > efficient than Parkinson, still assumes no overnight jump or drift.
+
+### `gjr_garch_forecast(params: quantforge.volatility.GJRGarchParams, last_return, last_variance, horizon=1, periods_per_year: int = 252)`  _function_
+
+> Forecast annualized volatility ``horizon`` steps ahead under GJR-GARCH.
+>
+> One step uses :func:`gjr_garch_variance`; beyond that the expected variance
+> mean-reverts to the long-run level at the leverage-adjusted persistence
+> ``alpha + beta + 0.5 gamma`` per step. Returns the annualized volatility.
+
+### `gjr_garch_variance(params: quantforge.volatility.GJRGarchParams, last_return, last_variance)`  _function_
+
+> One-step-ahead GJR-GARCH conditional variance.
+>
+> Adds the leverage term ``gamma`` to the ARCH coefficient when the last return
+> was negative, so a down move feeds more into next-period variance than an up
+> move of the same size.
 
 ### `parkinson(highs: Sequence[float], lows: Sequence[float], periods_per_year: int = 252) -> float`  _function_
 

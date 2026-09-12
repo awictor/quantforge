@@ -390,3 +390,59 @@ def garch_option_price(params: GarchParams, last_return, last_variance,
                                 periods_per_year)
     tt = (horizon / periods_per_year) if t is None else t
     return bsm_price(S, K, tt, r, sigma, option_type, b=b)
+
+
+@dataclass(frozen=True)
+class GJRGarchParams:
+    """GJR-GARCH(1,1,1) parameters with a leverage (asymmetry) term.
+
+    ``h_t = omega + (alpha + gamma * I[r_{t-1} < 0]) r_{t-1}^2 + beta h_{t-1}``.
+    ``gamma > 0`` makes negative shocks raise volatility more than positive ones
+    (the leverage effect). Stationary when ``alpha + beta + 0.5 gamma < 1``.
+    """
+    omega: float
+    alpha: float
+    beta: float
+    gamma: float
+
+    @property
+    def persistence(self):
+        # Expected leverage contribution is 0.5 gamma (P(r<0)=0.5 for zero-mean).
+        return self.alpha + self.beta + 0.5 * self.gamma
+
+    @property
+    def long_run_variance(self):
+        p = self.persistence
+        return self.omega / (1.0 - p) if p < 1.0 else float("inf")
+
+
+def gjr_garch_variance(params: GJRGarchParams, last_return, last_variance):
+    """One-step-ahead GJR-GARCH conditional variance.
+
+    Adds the leverage term ``gamma`` to the ARCH coefficient when the last return
+    was negative, so a down move feeds more into next-period variance than an up
+    move of the same size.
+    """
+    lev = params.gamma if last_return < 0 else 0.0
+    return (params.omega + (params.alpha + lev) * last_return * last_return
+            + params.beta * last_variance)
+
+
+def gjr_garch_forecast(params: GJRGarchParams, last_return, last_variance,
+                       horizon=1, periods_per_year: int = 252):
+    """Forecast annualized volatility ``horizon`` steps ahead under GJR-GARCH.
+
+    One step uses :func:`gjr_garch_variance`; beyond that the expected variance
+    mean-reverts to the long-run level at the leverage-adjusted persistence
+    ``alpha + beta + 0.5 gamma`` per step. Returns the annualized volatility.
+    """
+    if horizon < 1:
+        raise ValueError("horizon must be >= 1")
+    h1 = gjr_garch_variance(params, last_return, last_variance)
+    lr = params.long_run_variance
+    p = params.persistence
+    if horizon == 1 or p >= 1.0:
+        h = h1
+    else:
+        h = lr + (p ** (horizon - 1)) * (h1 - lr)
+    return math.sqrt(h * periods_per_year)

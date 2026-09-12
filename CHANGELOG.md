@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.516.0] - 2026-09-12
+
+### Added
+- `GJRGarchParams`, `gjr_garch_variance`, `gjr_garch_forecast` (in
+  `volatility.py`): the GJR-GARCH(1,1,1) leverage model, where negative shocks
+  raise conditional variance more than positive ones (the leverage effect), with
+  persistence `alpha + beta + 0.5 gamma`. Cross-checked: down shocks raise
+  variance more than up shocks, the model reduces to symmetric GARCH at
+  `gamma = 0`, and the forecast reverts to the long-run vol.
+
 ## [1.515.0] - 2026-09-12
 
 ### Documentation

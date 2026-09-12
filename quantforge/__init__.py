@@ -530,6 +530,7 @@ from .volatility import (
     yang_zhang, vol_report, VolReport, vol_cone, VolConePoint,
     fit_garch, garch_forecast, garch_term_variance, garch_option_price,
     GarchParams,
+    GJRGarchParams, gjr_garch_variance, gjr_garch_forecast,
 )
 from .greeks2 import (
     vanna, vomma, volga, charm, veta, speed, zomma, color, ultima,
@@ -578,7 +579,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.515.0"
+__version__ = "1.516.0"
 
 __all__ = [
     "OptionType",
@@ -1521,6 +1522,9 @@ __all__ = [
     "garch_term_variance",
     "garch_option_price",
     "GarchParams",
+    "GJRGarchParams",
+    "gjr_garch_variance",
+    "gjr_garch_forecast",
     "vanna",
     "vomma",
     "volga",
