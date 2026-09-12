@@ -16,6 +16,18 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.586.0] - 2026-09-12
+
+### Added
+- `copula_sample.py`: `gaussian_copula_sample` draws dependent uniforms from a
+  Gaussian copula with a target correlation matrix (correlate standard normals via
+  the Cholesky factor, then map back through the normal CDF), and
+  `inverse_transform` pushes those uniforms through any inverse-CDF to build
+  correlated draws from arbitrary marginals. Cross-checked: the sample rank
+  correlation matches the target (0.69 vs 0.7), each margin is uniform (mean ~0.5,
+  in (0,1)), independence gives ~0 rank correlation, a negative target gives a
+  negative rank correlation, and a non-positive-definite matrix is rejected.
+
 ## [1.585.0] - 2026-09-12
 
 ### Documentation

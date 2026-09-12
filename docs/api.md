@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.585.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.586.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -1999,6 +1999,35 @@ Auto-generated from `quantforge` v1.585.0 by `docs/gen_api.py` — do not edit b
 >
 > The worst-case loss not exceeded with probability ``q`` -- the basis of the
 > Basel IRB capital charge. Increasing in ``q``, ``pd`` and ``rho``.
+
+## copula_sample
+
+### `gaussian_copula_sample(correlation, n, seed=1234567)`  _function_
+
+> Draw ``n`` samples from a Gaussian copula with the given correlation matrix.
+>
+> Parameters
+> ----------
+> correlation : list[list[float]]
+>     A symmetric positive-definite correlation matrix (unit diagonal).
+> n : int
+>     Number of sample vectors to draw.
+> seed : int
+>     Seed for the deterministic normal stream.
+>
+> Returns
+> -------
+> list[list[float]]
+>     ``n`` vectors of uniforms in (0, 1); each margin is uniform and the
+>     cross-margin rank correlation approximates ``correlation``.
+
+### `inverse_transform(u, ppf)`  _function_
+
+> Map copula uniforms to a target margin via its inverse CDF ``ppf``.
+>
+> ``u`` is a sequence of uniforms in (0, 1); ``ppf`` maps a probability to a
+> quantile (e.g. :func:`quantforge.norm_ppf` for a normal margin). Returns the
+> transformed sample.
 
 ## copula_stats
 
