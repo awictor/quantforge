@@ -2766,7 +2766,18 @@ brent_min(math.cos, 0, 2 * math.pi)                        # -> (pi, -1.0)
 from quantforge import gradient, hessian, jacobian
 gradient(lambda v: v[0] ** 2 + 3 * v[1] ** 2, [1.0, 2.0])   # -> [2.0, 12.0]
 hessian(lambda v: v[0] ** 2 + v[0] * v[1], [1.0, 1.0])       # -> [[2, 1], [1, 0]]
+
+# Nonlinear least-squares calibration (Levenberg-Marquardt, finite-diff Jacobian).
+from quantforge import levenberg_marquardt
+xs = [i * 0.2 for i in range(30)]
+ys = [2.0 * math.exp(0.5 * x) for x in xs]
+fit = levenberg_marquardt(lambda b, x: b[0] * math.exp(b[1] * x), xs, ys, [1.0, 0.1])
+fit["parameters"]        # -> [2.0, 0.5]  (recovered exactly)
 ```
+
+`levenberg_marquardt` needs only the model function -- the residual Jacobian is
+taken numerically -- and converges from a poor starting guess, making it the
+general calibration engine (vol surface, curve, or any parametric fit).
 
 ## Nelson-Siegel / Svensson curves
 

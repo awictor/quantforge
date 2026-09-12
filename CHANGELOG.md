@@ -16,6 +16,12 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.659.0] - 2026-09-12
+
+### Documentation
+- README: extended the Numerical utilities section with `levenberg_marquardt`
+  nonlinear least-squares calibration.
+
 ## [1.658.0] - 2026-09-12
 
 ### Added
