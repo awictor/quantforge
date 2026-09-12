@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.443.0] - 2026-09-11
+
+### Added
+- `log_contract` and `log_contract_fair_variance` (in `exotics.py`): the log
+  contract paying `ln(S_T / F)` (present value `e^{-rt} * (-0.5 sigma^2 t)`) and
+  the variance-swap replication identity `sigma^2 = -2/t * E[ln(S_T/F)]`. The log
+  contract is the theoretical basis of variance-swap replication; the fair
+  variance recovers the input `sigma^2` exactly in the Black-Scholes world.
+  Cross-checked against the closed form, the variance recovery, and horizon/vol
+  monotonicity.
+
 ## [1.442.0] - 2026-09-11
 
 ### Added

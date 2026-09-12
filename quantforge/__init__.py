@@ -405,6 +405,7 @@ from .cms import (
 from .surface import VolSurface, SurfaceSlice, CalendarViolation
 from .exotics import (
     contingent_premium_option, pay_later_option_value,
+    log_contract, log_contract_fair_variance,
     cash_or_nothing, asset_or_nothing, digital_greeks, barrier_option, barrier_greeks,
     discrete_barrier_option, partial_time_end_barrier_call,
     partial_time_start_barrier_call,
@@ -485,7 +486,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.442.0"
+__version__ = "1.443.0"
 
 __all__ = [
     "OptionType",
@@ -1204,6 +1205,8 @@ __all__ = [
     "CalendarViolation",
     "contingent_premium_option",
     "pay_later_option_value",
+    "log_contract",
+    "log_contract_fair_variance",
     "cash_or_nothing",
     "asset_or_nothing",
     "range_binary",

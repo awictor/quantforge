@@ -1682,6 +1682,40 @@ def gap_option_greeks(S, K_trigger, K_payoff, t, r, sigma,
 # --------------------------------------------------------------------------
 # Power options: payoff on S^power
 # --------------------------------------------------------------------------
+def log_contract(S, t, r, sigma, b=None):
+    """Log contract paying ``ln(S_T / F)`` at expiry, discounted to today.
+
+    With ``F = S e^{b t}`` the forward, ``ln(S_T / F)`` is normal with mean
+    ``-0.5 sigma^2 t`` under the risk-neutral measure, so the present value is
+
+        value = e^{-r t} * (-0.5 sigma^2 t).
+
+    The log contract is the theoretical building block of the variance swap: a
+    static log-contract position replicates the payoff of realized variance. The
+    value is negative (the holder pays for the guaranteed negative drift of the
+    log return).
+    """
+    _validate(S, S, t, sigma)
+    if b is None:
+        b = r
+    disc = math.exp(-r * t)
+    return disc * (-0.5 * sigma * sigma * t)
+
+
+def log_contract_fair_variance(S, t, r, sigma, b=None):
+    """Fair variance implied by the log contract: ``-2/t * e^{r t} * value``.
+
+    Inverts :func:`log_contract` via the variance-swap replication identity
+    ``sigma^2 = -2/t * E[ln(S_T / F)]``. Recovers the input ``sigma^2`` exactly in
+    the Black-Scholes world -- the sanity check behind model-free variance-swap
+    pricing.
+    """
+    if t <= 0:
+        raise ValueError("t must be positive")
+    value = log_contract(S, t, r, sigma, b)
+    return -2.0 / t * math.exp(r * t) * value
+
+
 def power_option(S, K, t, r, sigma, power, option_type=OptionType.CALL, b=None):
     """Power option with payoff ``max(S_T^power - K, 0)`` (call) / ``max(K - S_T^power, 0)``.
 

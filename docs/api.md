@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.442.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.443.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -2867,6 +2867,29 @@ Auto-generated from `quantforge` v1.442.0 by `docs/gen_api.py` — do not edit b
 > ``r`` through the adjusted parameters, so they are taken as central finite
 > differences of the exact closed form. Returns a dict with ``price``,
 > ``delta``, ``gamma``, ``vega``, ``theta``, ``rho``.
+
+### `log_contract(S, t, r, sigma, b=None)`  _function_
+
+> Log contract paying ``ln(S_T / F)`` at expiry, discounted to today.
+>
+> With ``F = S e^{b t}`` the forward, ``ln(S_T / F)`` is normal with mean
+> ``-0.5 sigma^2 t`` under the risk-neutral measure, so the present value is
+>
+>     value = e^{-r t} * (-0.5 sigma^2 t).
+>
+> The log contract is the theoretical building block of the variance swap: a
+> static log-contract position replicates the payoff of realized variance. The
+> value is negative (the holder pays for the guaranteed negative drift of the
+> log return).
+
+### `log_contract_fair_variance(S, t, r, sigma, b=None)`  _function_
+
+> Fair variance implied by the log contract: ``-2/t * e^{r t} * value``.
+>
+> Inverts :func:`log_contract` via the variance-swap replication identity
+> ``sigma^2 = -2/t * E[ln(S_T / F)]``. Recovers the input ``sigma^2`` exactly in
+> the Black-Scholes world -- the sanity check behind model-free variance-swap
+> pricing.
 
 ### `no_touch(S, H, t, r, sigma, b=None, cash=1.0)`  _function_
 
