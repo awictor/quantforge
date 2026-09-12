@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.470.0] - 2026-09-11
+
+### Added
+- `linalg.py`: matrix utilities for risk work. `cholesky` (`L L^T` factor),
+  `is_positive_definite`, `correlated_normals` (turn IID normals into correlated
+  draws via Cholesky), and `nearest_correlation` (Higham alternating-projection
+  repair of an indefinite correlation matrix to the nearest PSD unit-diagonal
+  one). Cross-checked: Cholesky reconstructs the matrix, the correlated transform
+  matches `L z`, and Higham repair yields a symmetric unit-diagonal PSD matrix
+  while leaving a valid correlation unchanged.
+
 ## [1.469.0] - 2026-09-11
 
 ### Documentation
