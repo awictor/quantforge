@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.489.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.490.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -2585,6 +2585,41 @@ Auto-generated from `quantforge` v1.489.0 by `docs/gen_api.py` — do not edit b
 > Linear in realized vol (in vol points). Unlike the variance swap it has no
 > convexity, so it prices below a variance swap struck at the same vol (the
 > convexity value / vol-of-vol adjustment).
+
+## evt
+
+### `gpd_expected_shortfall(losses, threshold, confidence=0.99)`  _function_
+
+> Peaks-over-threshold expected shortfall from the GPD tail.
+>
+> ``ES = VaR/(1 - xi) + (beta - xi threshold)/(1 - xi)`` for ``xi < 1``. Always
+> at least the :func:`gpd_var`; finite only for a tail with ``xi < 1``.
+
+### `gpd_fit_pot(losses, threshold)`  _function_
+
+> Fit a Generalized Pareto to peaks over ``threshold`` (method of moments).
+>
+> Returns ``(xi, beta, n_exceed, n_total)``: the GPD shape ``xi`` and scale
+> ``beta`` matching the mean and variance of the exceedances ``X - threshold``,
+> the number of exceedances, and the sample size. ``xi > 0`` is a heavy
+> (Pareto-type) tail.
+
+### `gpd_var(losses, threshold, confidence=0.99)`  _function_
+
+> Peaks-over-threshold VaR from a fitted Generalized Pareto tail.
+>
+> ``VaR = threshold + (beta/xi) [ (n/N_u (1 - confidence))^{-xi} - 1 ]`` with
+> ``N_u`` exceedances of ``n`` observations. Reduces to the exponential-tail
+> limit as ``xi -> 0``. A positive loss quantile deep in the tail.
+
+### `hill_estimator(losses, k)`  _function_
+
+> Hill estimator of the tail index from the top ``k`` order statistics.
+>
+> ``xi = (1/k) sum_{i=1}^{k} ln(X_(n-i+1) / X_(n-k))`` -- the mean log-excess of
+> the ``k`` largest losses over the ``(k+1)``-th. Estimates the shape ``xi`` of a
+> heavy power-law tail (tail exponent ``alpha = 1/xi``); larger ``xi`` means a
+> heavier tail.
 
 ## execution
 

@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.490.0] - 2026-09-11
+
+### Added
+- `evt.py`: extreme value theory tail risk. `hill_estimator` (tail index from the
+  top order statistics), `gpd_fit_pot` (method-of-moments Generalized Pareto fit
+  to peaks over a threshold), `gpd_var`, and `gpd_expected_shortfall`.
+  Cross-checked: the Hill estimator recovers a Pareto tail index (1/3 for
+  alpha = 3), the GPD shape is positive for a heavy tail, ES exceeds VaR, and VaR
+  rises with confidence.
+
 ## [1.489.0] - 2026-09-11
 
 ### Documentation

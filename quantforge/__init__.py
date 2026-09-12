@@ -226,6 +226,9 @@ from .nelson_siegel import (
 )
 from .interpolation import natural_cubic_spline, monotone_cubic
 from .rootfind import bisection, brent, newton
+from .evt import (
+    hill_estimator, gpd_fit_pot, gpd_var, gpd_expected_shortfall,
+)
 from .student_t import (
     t_pdf, t_cdf, t_ppf, student_t_var, student_t_expected_shortfall,
     fit_df_from_kurtosis, fit_student_t,
@@ -546,7 +549,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.489.0"
+__version__ = "1.490.0"
 
 __all__ = [
     "OptionType",
@@ -906,6 +909,10 @@ __all__ = [
     "bisection",
     "brent",
     "newton",
+    "hill_estimator",
+    "gpd_fit_pot",
+    "gpd_var",
+    "gpd_expected_shortfall",
     "t_pdf",
     "t_cdf",
     "t_ppf",
