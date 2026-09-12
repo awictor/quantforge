@@ -16,6 +16,12 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.661.0] - 2026-09-12
+
+### Documentation
+- README: extended the Covariance shrinkage section with the EWMA (RiskMetrics)
+  covariance and correlation matrices.
+
 ## [1.660.0] - 2026-09-12
 
 ### Added

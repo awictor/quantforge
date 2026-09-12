@@ -2927,6 +2927,19 @@ estimate becomes reliable); the result keeps each asset's own variance, pulls th
 correlations toward their average, and is symmetric positive definite. Feed
 `sigma` straight into the mean-variance optimizer below.
 
+For a *time-varying* estimate that weights recent data more heavily, use the
+exponentially-weighted (RiskMetrics) covariance:
+
+```python
+from quantforge import ewma_covariance_matrix, ewma_correlation_matrix
+
+ewma_covariance_matrix(returns, lam=0.94)     # RiskMetrics decay
+ewma_correlation_matrix(returns, lam=0.94)    # unit diagonal, entries in [-1, 1]
+```
+
+Both are symmetric positive definite; the EWMA tracks regime shifts a shrinkage
+of the full-sample covariance would smooth over.
+
 ## Portfolio optimization
 
 Mean-variance optimizers and risk decomposition from a covariance matrix, plus
