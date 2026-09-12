@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.625.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.626.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -7047,6 +7047,36 @@ Auto-generated from `quantforge` v1.625.0 by `docs/gen_api.py` — do not edit b
 >
 > with the exact :func:`worst_of_call_closed` and :func:`_disc_expected_min`.
 > Closed-form cross-check for the Monte Carlo :func:`worst_of_call` put.
+
+## naive_bayes
+
+### `fit_gaussian_nb(X, y, var_smoothing=1e-09)`  _function_
+
+> Fit a Gaussian naive Bayes model.
+>
+> Parameters
+> ----------
+> X : list[list[float]]
+>     ``n`` rows of ``d`` features.
+> y : list
+>     Class labels (any hashable).
+> var_smoothing : float
+>     Added to every variance for numerical stability (avoids zero variance on
+>     constant features).
+>
+> Returns
+> -------
+> dict
+>     ``classes`` (sorted), ``priors``, ``means`` and ``variances`` (per class,
+>     per feature), keyed by class label.
+
+### `predict_gaussian_nb(model, X_query)`  _function_
+
+> Predict the most probable class for each query row.
+
+### `predict_proba_gaussian_nb(model, X_query)`  _function_
+
+> Posterior class probabilities per query (softmax of the log posteriors).
 
 ## nelson_siegel
 

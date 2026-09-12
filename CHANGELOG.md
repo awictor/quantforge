@@ -16,6 +16,16 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.626.0] - 2026-09-12
+
+### Added
+- `naive_bayes.py`: Gaussian naive Bayes -- `fit_gaussian_nb` estimates each
+  class's prior and per-feature mean/variance, `predict_gaussian_nb` picks the
+  max-log-posterior class, and `predict_proba_gaussian_nb` returns softmaxed class
+  probabilities. Cross-checked: the fitted class means and priors match the
+  generating distribution, separable classes are classified at ~100% accuracy,
+  the posterior sums to 1, and it favors the nearby class.
+
 ## [1.625.0] - 2026-09-12
 
 ### Documentation
