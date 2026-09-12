@@ -1714,6 +1714,19 @@ overlaid = vol_targeted_returns(returns, target_vol=0.15, lookback=60)
 realized_annualized_vol(overlaid)                            # ~ 0.15
 ```
 
+## Trend and momentum signals
+
+Moving averages, MACD, RSI, rolling z-score, and time-series momentum:
+
+```python
+from quantforge import sma, ema, macd, rsi, rolling_zscore, time_series_momentum
+
+ema(prices, span=12)
+macd(prices, fast=12, slow=26, signal=9)      # (macd_line, signal_line, histogram)
+rsi(prices, window=14)                         # 0-100 oscillator
+time_series_momentum(prices, lookback=60)      # +1 / -1 / 0 trend sign
+```
+
 ## Performance metrics
 
 Track-record statistics from a return series:
