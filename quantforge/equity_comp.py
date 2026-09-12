@@ -14,6 +14,52 @@ import math
 from .bsm import call_price
 
 
+def pv_dividends(dividends, r):
+    """Present value of a discrete dividend schedule ``[(t, amount), ...]``.
+
+    Each cash dividend is discounted at the continuously-compounded rate ``r``:
+    ``sum_i D_i e^{-r t_i}``. Dividends at or before time zero (``t <= 0``) are
+    excluded (already paid).
+    """
+    total = 0.0
+    for t, d in dividends:
+        if d < 0:
+            raise ValueError("dividend amounts must be non-negative")
+        if t > 0:
+            total += d * math.exp(-r * t)
+    return total
+
+
+def discrete_dividend_price(S, K, t, r, sigma, dividends, is_call=True):
+    """European option on a stock paying known discrete cash dividends.
+
+    Uses the escrowed-dividend (spot-minus-PV-of-dividends) approximation: the
+    option is priced with Black-Scholes on the dividend-adjusted spot
+    ``S - PV(dividends up to expiry)`` and carry ``b = r`` (the adjusted spot grows
+    at the risk-free rate). Reduces to the plain BSM call/put when there are no
+    dividends before expiry. Put and call satisfy
+    ``C - P = (S - PV_div) - K e^{-r t}``.
+    """
+    from .bsm import put_price
+    pv = pv_dividends([(dt, d) for dt, d in dividends if dt <= t], r)
+    s_adj = S - pv
+    if s_adj <= 0:
+        raise ValueError("dividend PV exceeds spot; adjusted spot non-positive")
+    if is_call:
+        return call_price(s_adj, K, t, r, sigma, b=r)
+    return put_price(s_adj, K, t, r, sigma, b=r)
+
+
+def forward_with_dividends(S, t, r, dividends):
+    """Forward price of a stock paying discrete dividends: ``(S - PV_div) e^{r t}``.
+
+    The escrowed-dividend forward: the dividend-stripped spot compounded at the
+    risk-free rate. Equals ``S e^{r t}`` when no dividends fall before ``t``.
+    """
+    pv = pv_dividends([(dt, d) for dt, d in dividends if dt <= t], r)
+    return (S - pv) * math.exp(r * t)
+
+
 def dilution_factor(existing_shares, new_shares):
     """Dilution multiplier ``M / (M + N)`` for issuing ``N`` new shares on ``M``.
 

@@ -219,6 +219,7 @@ from .inflation import (
 )
 from .equity_comp import (
     dilution_factor, warrant_price, eso_expected_life, eso_value,
+    pv_dividends, discrete_dividend_price, forward_with_dividends,
 )
 from .mbs import (
     monthly_payment, cpr_to_smm, smm_to_cpr, psa_cpr, amortization_schedule,
@@ -439,7 +440,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.413.0"
+__version__ = "1.414.0"
 
 __all__ = [
     "OptionType",
@@ -793,6 +794,9 @@ __all__ = [
     "warrant_price",
     "eso_expected_life",
     "eso_value",
+    "pv_dividends",
+    "discrete_dividend_price",
+    "forward_with_dividends",
     "monthly_payment",
     "cpr_to_smm",
     "smm_to_cpr",

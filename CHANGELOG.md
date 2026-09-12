@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.414.0] - 2026-09-11
+
+### Added
+- `pv_dividends`, `discrete_dividend_price`, `forward_with_dividends` (in
+  `equity_comp.py`): discrete cash-dividend handling via the escrowed-dividend
+  (spot-minus-PV) method. Prices a European option on the dividend-adjusted spot
+  and the corresponding forward. Cross-checked against the no-dividend vanilla
+  limit, the adjusted-spot BSM price, put-call parity with dividends, and the
+  exclusion of dividends after expiry.
+
 ## [1.413.0] - 2026-09-11
 
 ### Added

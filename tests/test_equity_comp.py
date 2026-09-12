@@ -6,8 +6,12 @@ import pytest
 
 from quantforge import (
     dilution_factor, warrant_price, eso_expected_life, eso_value,
+    pv_dividends, discrete_dividend_price, forward_with_dividends,
 )
 from quantforge.bsm import call_price
+
+
+DIVS = [(0.25, 2.0), (0.75, 2.0)]
 
 
 S, K, T, R, SIG = 50.0, 50.0, 5.0, 0.05, 0.3
@@ -52,6 +56,48 @@ def test_higher_exit_rate_lowers_value():
 def test_forfeiture_lowers_value():
     assert eso_value(S, K, 10.0, R, SIG, 2.0, 0.15, 0.1) < \
         eso_value(S, K, 10.0, R, SIG, 2.0, 0.15, 0.0)
+
+
+def test_pv_dividends():
+    assert pv_dividends(DIVS, 0.05) == pytest.approx(
+        2 * math.exp(-0.05 * 0.25) + 2 * math.exp(-0.05 * 0.75))
+
+
+def test_no_dividends_is_vanilla():
+    assert discrete_dividend_price(100, 100, 1.0, 0.05, 0.25, []) == pytest.approx(
+        call_price(100, 100, 1.0, 0.05, 0.25), abs=1e-9)
+
+
+def test_dividends_lower_call_and_match_adjusted_spot():
+    c = discrete_dividend_price(100, 100, 1.0, 0.05, 0.25, DIVS)
+    assert c < call_price(100, 100, 1.0, 0.05, 0.25)
+    pv = pv_dividends(DIVS, 0.05)
+    assert c == pytest.approx(call_price(100 - pv, 100, 1.0, 0.05, 0.25, b=0.05),
+                              abs=1e-12)
+
+
+def test_discrete_dividend_parity():
+    c = discrete_dividend_price(100, 100, 1.0, 0.05, 0.25, DIVS, True)
+    p = discrete_dividend_price(100, 100, 1.0, 0.05, 0.25, DIVS, False)
+    pv = pv_dividends(DIVS, 0.05)
+    assert c - p == pytest.approx((100 - pv) - 100 * math.exp(-0.05), abs=1e-9)
+
+
+def test_forward_with_dividends():
+    pv = pv_dividends(DIVS, 0.05)
+    assert forward_with_dividends(100, 1.0, 0.05, DIVS) == pytest.approx(
+        (100 - pv) * math.exp(0.05))
+    assert forward_with_dividends(100, 1.0, 0.05, DIVS) < 100 * math.exp(0.05)
+
+
+def test_dividends_after_expiry_excluded():
+    assert discrete_dividend_price(100, 100, 1.0, 0.05, 0.25, [(2.0, 5.0)]) == \
+        pytest.approx(call_price(100, 100, 1.0, 0.05, 0.25), abs=1e-9)
+
+
+def test_dividend_validation():
+    with pytest.raises(ValueError):
+        discrete_dividend_price(1, 100, 1.0, 0.05, 0.25, [(0.5, 100)])
 
 
 def test_validation():

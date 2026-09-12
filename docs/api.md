@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.413.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.414.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1937,6 +1937,17 @@ Auto-generated from `quantforge` v1.413.0 by `docs/gen_api.py` — do not edit b
 > Below one whenever new shares are created; one when ``N = 0``. Applied to a
 > warrant's per-option payoff because exercise expands the share count.
 
+### `discrete_dividend_price(S, K, t, r, sigma, dividends, is_call=True)`  _function_
+
+> European option on a stock paying known discrete cash dividends.
+>
+> Uses the escrowed-dividend (spot-minus-PV-of-dividends) approximation: the
+> option is priced with Black-Scholes on the dividend-adjusted spot
+> ``S - PV(dividends up to expiry)`` and carry ``b = r`` (the adjusted spot grows
+> at the risk-free rate). Reduces to the plain BSM call/put when there are no
+> dividends before expiry. Put and call satisfy
+> ``C - P = (S - PV_div) - K e^{-r t}``.
+
 ### `eso_expected_life(vesting, contractual_term, exit_rate)`  _function_
 
 > Expected life of an ESO given post-vest exit and the contractual term.
@@ -1959,6 +1970,21 @@ Auto-generated from `quantforge` v1.413.0 by `docs/gen_api.py` — do not edit b
 > contractual term because early exercise shortens the option and forfeiture
 > can extinguish it. With ``exit_rate = 0`` and ``forfeiture_rate = 0`` it
 > reduces to the vanilla call.
+
+### `forward_with_dividends(S, t, r, dividends)`  _function_
+
+> Forward price of a stock paying discrete dividends: ``(S - PV_div) e^{r t}``.
+>
+> The escrowed-dividend forward: the dividend-stripped spot compounded at the
+> risk-free rate. Equals ``S e^{r t}`` when no dividends fall before ``t``.
+
+### `pv_dividends(dividends, r)`  _function_
+
+> Present value of a discrete dividend schedule ``[(t, amount), ...]``.
+>
+> Each cash dividend is discounted at the continuously-compounded rate ``r``:
+> ``sum_i D_i e^{-r t_i}``. Dividends at or before time zero (``t <= 0``) are
+> excluded (already paid).
 
 ### `warrant_price(S, K, t, r, sigma, existing_shares, new_shares, b=None)`  _function_
 
