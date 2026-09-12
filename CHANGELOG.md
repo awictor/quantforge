@@ -4,6 +4,12 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.555.0] - 2026-09-12
+
+### Documentation
+- README: added a "Theil-Sen robust regression" section documenting `theil_sen`,
+  with a snippet verified against the package; TOC regenerated to 92 entries.
+
 ## [1.554.0] - 2026-09-12
 
 ### Added

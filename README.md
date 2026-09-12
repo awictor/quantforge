@@ -79,6 +79,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Hodrick-Prescott filter](#hodrick-prescott-filter)
 - [Kalman filter (local level)](#kalman-filter-local-level)
 - [Newey-West HAC variance](#newey-west-hac-variance)
+- [Theil-Sen robust regression](#theil-sen-robust-regression)
 - [Markov chains](#markov-chains)
 - [Principal component analysis](#principal-component-analysis)
 - [Matrix utilities](#matrix-utilities)
@@ -1856,6 +1857,27 @@ autocorrelation(x, 1)          # -> 0.459
 Lag 0 reduces to the sample variance; positive autocorrelation inflates both the
 long-run variance and the mean's standard error. On an AR(1) the estimate climbs
 toward the analytic `sigma^2 / (1 - phi)^2` as the lag grows.
+
+## Theil-Sen robust regression
+
+Ordinary least squares is dragged by outliers. The Theil-Sen estimator takes the
+median of the slopes of all point pairs, giving a ~29% breakdown point — up to
+that fraction of the data can be arbitrarily corrupted before the fit blows up —
+while staying exact on clean linear data.
+
+```python
+from quantforge import theil_sen
+
+x = list(range(12))
+y = [2.0 * xi + 5.0 for xi in x]
+y[3] += 40      # two gross outliers
+y[8] -= 35
+
+theil_sen(x, y)         # -> (2.0, 5.0)   slope and intercept, unmoved by the outliers
+```
+
+The median pairwise slope shrugs off the two corrupted points that would tilt an
+OLS line. Pairs sharing an `x` value are skipped.
 
 ## Markov chains
 
