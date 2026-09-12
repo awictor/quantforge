@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.456.0] - 2026-09-11
+
+### Documentation
+- README: added a "Performance attribution (Brinson)" section covering the
+  `brinson` module (allocation/selection/interaction, Cariño linking), with a
+  runnable example verified against the installed package.
+
 ## [1.455.0] - 2026-09-11
 
 ### Added

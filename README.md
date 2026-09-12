@@ -1442,6 +1442,21 @@ factor_attribution(total_return=0.05, alpha=fit["alpha"], betas=fit["betas"],
                    factor_realized_returns=[0.02, 0.01, -0.005])
 ```
 
+## Performance attribution (Brinson)
+
+Brinson-Hood-Beebower allocation/selection/interaction effects with Cariño
+multi-period geometric linking:
+
+```python
+from quantforge import brinson_attribution, carino_linked_effects
+
+res = brinson_attribution(portfolio_weights=[0.5, 0.3, 0.2],
+                          benchmark_weights=[0.4, 0.4, 0.2],
+                          portfolio_returns=[0.10, 0.05, 0.08],
+                          benchmark_returns=[0.08, 0.06, 0.07])
+res["allocation_total"], res["selection_total"], res["active_return"]
+```
+
 ## Dual-currency deposits
 
 Yield-enhanced FX-linked deposits by component decomposition:
