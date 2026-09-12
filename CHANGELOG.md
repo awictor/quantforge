@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.527.0] - 2026-09-12
+
+### Added
+- `valuation.py`: equity valuation. `capm_cost_of_equity`, `wacc`,
+  `gordon_growth_value` (constant-growth DDM), `terminal_value`, and
+  `two_stage_dcf`. Cross-checked: WACC lies between the after-tax debt and equity
+  costs (and equals `ke` at all-equity), the Gordon and terminal formulas require
+  `r > g`, and the two-stage DCF rises with growth and falls with the discount
+  rate.
+
 ## [1.526.0] - 2026-09-12
 
 ### Documentation

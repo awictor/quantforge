@@ -491,6 +491,9 @@ from .fxforward import (
 from .capital_budgeting import (
     npv, irr, profitability_index, payback_period, mirr,
 )
+from .valuation import (
+    capm_cost_of_equity, wacc, gordon_growth_value, terminal_value, two_stage_dcf,
+)
 from .money_market import (
     price_from_discount, bank_discount_yield, money_market_yield,
     bond_equivalent_yield, discount_to_bond_equivalent, holding_period_return,
@@ -589,7 +592,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.526.0"
+__version__ = "1.527.0"
 
 __all__ = [
     "OptionType",
@@ -1441,6 +1444,11 @@ __all__ = [
     "profitability_index",
     "payback_period",
     "mirr",
+    "capm_cost_of_equity",
+    "wacc",
+    "gordon_growth_value",
+    "terminal_value",
+    "two_stage_dcf",
     "price_from_discount",
     "bank_discount_yield",
     "money_market_yield",

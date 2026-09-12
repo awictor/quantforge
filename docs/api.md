@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.526.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.527.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -9104,6 +9104,45 @@ Auto-generated from `quantforge` v1.526.0 by `docs/gen_api.py` — do not edit b
 >     american: if True, allow early exercise at every node; if False, price
 >         the European payoff (useful as a convergence cross-check).
 >     b: cost of carry (defaults to r). Dividend yield q enters as b = r - q.
+
+## valuation
+
+### `capm_cost_of_equity(risk_free, beta, market_premium)`  _function_
+
+> CAPM cost of equity ``risk_free + beta * market_premium``.
+>
+> The required return on equity given its market beta and the equity risk
+> premium. Rises with beta.
+
+### `gordon_growth_value(dividend_next, discount_rate, growth)`  _function_
+
+> Gordon constant-growth value ``D_1 / (r - g)``.
+>
+> The present value of a perpetually-growing dividend. Requires ``r > g``
+> (otherwise the sum diverges).
+
+### `terminal_value(final_cashflow, discount_rate, growth)`  _function_
+
+> Gordon terminal (continuing) value at the end of an explicit forecast.
+>
+> ``final_cashflow * (1 + growth) / (discount_rate - growth)`` -- the perpetuity
+> value of cashflows beyond the forecast horizon. Requires ``r > g``.
+
+### `two_stage_dcf(cashflows, discount_rate, terminal_growth)`  _function_
+
+> Two-stage DCF: explicit cashflows plus a discounted terminal value.
+>
+> Discounts the explicit ``cashflows`` (periods 1..n) at ``discount_rate`` and
+> adds the :func:`terminal_value` of the last cashflow discounted from period
+> ``n``. Returns the enterprise/equity value. Requires ``discount_rate >
+> terminal_growth``.
+
+### `wacc(equity_value, debt_value, cost_of_equity, cost_of_debt, tax_rate)`  _function_
+
+> Weighted-average cost of capital.
+>
+> ``E/V * ke + D/V * kd * (1 - tax)`` with ``V = E + D``. The after-tax blended
+> discount rate; lies between the after-tax debt cost and the equity cost.
 
 ## vannavolga
 
