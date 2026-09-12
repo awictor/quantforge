@@ -572,6 +572,19 @@ jump_variation(r)                   # -> 0.002258  (max(RV - BV, 0), the jump)
 On a jump-free path RV and BV coincide and the jump variation is ~0; a jump lifts
 RV by roughly its square while BV barely moves.
 
+At the finest sampling frequencies, microstructure noise biases the naive realized
+variance *upward* by `2 * n * Var(noise)` — and faster sampling makes it worse.
+`two_scale_realized_variance` (Zhang-Mykland-Aït-Sahalia) removes that bias by
+combining a subsampled slow scale with the fast scale:
+
+```python
+from quantforge import two_scale_realized_variance, realized_variance_naive
+
+# noisy tick log-prices; true integrated variance is 0.002
+realized_variance_naive(prices)        # -> 0.00309  (inflated by noise)
+two_scale_realized_variance(prices)    # -> 0.00224  (bias-corrected)
+```
+
 ## Delta-hedge P&L simulator
 
 Monte Carlo a discretely delta-hedged short option and see the hedging-error
