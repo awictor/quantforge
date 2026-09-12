@@ -48,6 +48,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Command line](#command-line)
 - [Quanto options](#quanto-options)
 - [Fixed income](#fixed-income)
+- [Money-market yields](#money-market-yields)
 - [Callable bonds and OAS](#callable-bonds-and-oas)
 - [Carry and roll-down](#carry-and-roll-down)
 - [Inflation-linked bonds and derivatives](#inflation-linked-bonds-and-derivatives)
@@ -1238,6 +1239,20 @@ key_rate_durations(cf, [0.5, 1, 2, 3, 5], [0.03, 0.032, 0.035, 0.037, 0.04])
 The three short-rate models expose analytic rate moments too —
 `vasicek_expected_rate` / `vasicek_rate_variance` / `vasicek_stationary_distribution`
 (Normal), the CIR equivalents (Gamma), and Ho-Lee (drifted Brownian).
+
+## Money-market yields
+
+Discount instruments and the bank-discount / CD / bond-equivalent conventions:
+
+```python
+from quantforge import (price_from_discount, bank_discount_yield,
+                        money_market_yield, bond_equivalent_yield)
+
+price = price_from_discount(face=100, discount_rate=0.05, days=90)   # T-bill price
+bank_discount_yield(100, price, 90)      # actual/360, on face
+money_market_yield(100, price, 90)       # actual/360, on price (higher)
+bond_equivalent_yield(100, price, 90)    # actual/365, coupon-comparable
+```
 
 ## Callable bonds and OAS
 
