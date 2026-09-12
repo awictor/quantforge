@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.504.0] - 2026-09-12
+
+### Added
+- `signals.py`: trend and momentum signals. `sma`, `ema`, `macd`, `rsi` (Wilder's
+  smoothing), `rolling_zscore`, and `time_series_momentum`. Cross-checked: the SMA
+  values, the EMA reacting faster than the SMA after a step, MACD positive on an
+  uptrend and equal to the fast-minus-slow EMA, RSI in `[0, 100]` (high in an
+  uptrend, low in a downtrend), the z-score flagging a spike, and the TSM sign.
+
 ## [1.503.0] - 2026-09-12
 
 ### Documentation

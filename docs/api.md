@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.503.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.504.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -7866,6 +7866,54 @@ Auto-generated from `quantforge` v1.503.0 by `docs/gen_api.py` — do not edit b
 > 12=annual) until ``maturity_years`` is reached, then applies
 > :func:`adjust_business_day` with ``convention``. Returns the list of adjusted
 > period end dates (the start date itself is not included).
+
+## signals
+
+### `ema(series, span)`  _function_
+
+> Exponential moving average with smoothing ``alpha = 2/(span+1)``.
+>
+> Recursive ``e_t = alpha x_t + (1 - alpha) e_{t-1}`` seeded at the first point.
+> Reacts faster than the :func:`sma` of the same length (less lag).
+
+### `macd(series, fast=12, slow=26, signal=9)`  _function_
+
+> MACD line, signal line, and histogram.
+>
+> MACD line = ``EMA(fast) - EMA(slow)``; signal line = ``EMA(signal)`` of the
+> MACD line; histogram = MACD - signal. Returns ``(macd_line, signal_line,
+> histogram)`` aligned to the series. Positive MACD indicates the fast average
+> above the slow (up-momentum).
+
+### `rolling_zscore(series, window)`  _function_
+
+> Rolling z-score ``(x_t - mean) / std`` over each trailing ``window``.
+>
+> Standardizes the latest point against its window; a mean-reversion / breakout
+> signal. Windows with zero variance yield 0. One value per position from index
+> ``window - 1`` on.
+
+### `rsi(series, window=14)`  _function_
+
+> Relative strength index over a trailing ``window`` (Wilder's smoothing).
+>
+> ``RSI = 100 - 100/(1 + avg_gain/avg_loss)`` in ``[0, 100]``. Above 70 is
+> conventionally overbought, below 30 oversold; near 100 in a strong uptrend.
+> Returns one value per position from index ``window`` on.
+
+### `sma(series, window)`  _function_
+
+> Simple moving average over each trailing ``window`` (list, one per position).
+>
+> Returns ``len(series) - window + 1`` values, each the mean of that window.
+
+### `time_series_momentum(prices, lookback)`  _function_
+
+> Sign of the trailing ``lookback``-period return: +1 up, -1 down, 0 flat.
+>
+> The time-series-momentum signal (Moskowitz-Ooi-Pedersen): go long after a
+> positive past return, short after a negative one. Returns one signal per
+> position from index ``lookback`` on.
 
 ## sizing
 

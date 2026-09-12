@@ -233,6 +233,9 @@ from .cppi import (
 from .vol_target import (
     target_leverage, vol_targeted_returns, realized_annualized_vol,
 )
+from .signals import (
+    sma, ema, macd, rsi, rolling_zscore, time_series_momentum,
+)
 from .carry_rolldown import (
     carry_return, rolldown_return, total_carry_rolldown,
 )
@@ -564,7 +567,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.503.0"
+__version__ = "1.504.0"
 
 __all__ = [
     "OptionType",
@@ -933,6 +936,12 @@ __all__ = [
     "target_leverage",
     "vol_targeted_returns",
     "realized_annualized_vol",
+    "sma",
+    "ema",
+    "macd",
+    "rsi",
+    "rolling_zscore",
+    "time_series_momentum",
     "carry_return",
     "rolldown_return",
     "total_carry_rolldown",
