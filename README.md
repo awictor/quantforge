@@ -1499,6 +1499,22 @@ par_bond_price(discount, coupon_rate=par, maturity=10, freq=2)   # -> 100 at par
 On a flat curve the par yield equals the flat rate; a bond bearing the par coupon
 prices to exactly par, and a richer coupon trades at a premium.
 
+For a fixed-for-floating swap off a single discount curve, `vanilla_swap_value`
+values it, `single_curve_par_swap_rate` gives the fair fixed rate, and
+`swap_annuity` the PV01:
+
+```python
+from quantforge import (vanilla_swap_value, single_curve_par_swap_rate,
+                        swap_annuity)
+
+par = single_curve_par_swap_rate(discount, start=0, maturity=5, freq=2)
+vanilla_swap_value(discount, par, start=0, maturity=5, freq=2)   # -> 0 at par
+swap_annuity(discount, 0, 5, freq=2)                              # PV01 per unit rate
+```
+
+The swap is worth zero at the par rate; a receiver is the negative of the payer,
+and the value scales linearly in notional.
+
 ## Equity valuation
 
 Cost of capital and discounted-cashflow valuation:

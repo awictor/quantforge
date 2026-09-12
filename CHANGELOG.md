@@ -16,6 +16,12 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.669.0] - 2026-09-12
+
+### Documentation
+- README: extended the Fixed income section with `vanilla_swap_value`,
+  `single_curve_par_swap_rate`, and `swap_annuity`.
+
 ## [1.668.0] - 2026-09-12
 
 ### Added
