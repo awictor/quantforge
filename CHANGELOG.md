@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.451.0] - 2026-09-11
+
+### Added
+- `factor_model.py`: multi-factor OLS return regression. `factor_regression`
+  returns the alpha, factor betas, R-squared, and residual volatility (solved via
+  the normal equations with pure-Python Gaussian elimination); `factor_expected_
+  return` builds the expected return from betas and factor premia. Cross-checked:
+  exact coefficient recovery and unit R-squared on a noiseless synthetic fit, the
+  single-factor beta matching `realized_beta`, and R-squared below one under noise.
+
 ## [1.450.0] - 2026-09-11
 
 ### Added

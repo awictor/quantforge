@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.450.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.451.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -3324,6 +3324,22 @@ Auto-generated from `quantforge` v1.450.0 by `docs/gen_api.py` — do not edit b
 > :func:`writer_extendible_put`: ``delta``, ``gamma``, ``vega``, ``theta``
 > (calendar decay, both expiries shrinking together). Returns a dict with
 > ``price`` and those fields.
+
+## factor_model
+
+### `factor_expected_return(alpha, betas, factor_premia)`  _function_
+
+> Expected return from a fitted factor model: ``alpha + sum beta_k premium_k``.
+
+### `factor_regression(asset_returns, factor_returns)`  _function_
+
+> OLS regression of ``asset_returns`` on ``factor_returns`` (list of series).
+>
+> ``factor_returns`` is a list of equal-length factor return series. Returns a
+> dict with ``alpha`` (intercept), ``betas`` (one loading per factor),
+> ``r_squared``, and ``residual_vol`` (standard deviation of the residuals).
+> Fits ``r_t = alpha + sum_k beta_k f_{k,t} + eps_t`` by minimizing the squared
+> residuals.
 
 ## forward
 
