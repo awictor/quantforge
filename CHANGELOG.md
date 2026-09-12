@@ -16,6 +16,12 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.631.0] - 2026-09-12
+
+### Documentation
+- README: added a "Decision stump" section documenting `fit_decision_stump`,
+  `predict_decision_stump`, and `gini_impurity`; TOC regenerated to 117 entries.
+
 ## [1.630.0] - 2026-09-12
 
 ### Added

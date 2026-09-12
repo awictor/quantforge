@@ -80,6 +80,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Feature scaling](#feature-scaling)
 - [k-nearest neighbors](#k-nearest-neighbors)
 - [Gaussian naive Bayes](#gaussian-naive-bayes)
+- [Decision stump](#decision-stump)
 - [Factor models](#factor-models)
 - [Performance attribution (Brinson)](#performance-attribution-brinson)
 - [Bootstrap and jackknife](#bootstrap-and-jackknife)
@@ -1961,6 +1962,25 @@ predict_proba_gaussian_nb(m, [[1, 1]])          # -> [{'lo': 1.0, 'hi': 0.0}]
 Posteriors are computed in log space and softmaxed, so they sum to 1 and stay
 stable in high dimension. Despite the independence assumption it is a strong,
 cheap baseline.
+
+## Decision stump
+
+A depth-1 decision tree: the single feature and threshold that best split the
+classes by Gini impurity. Interpretable on its own and the base learner of
+boosting.
+
+```python
+from quantforge import fit_decision_stump, predict_decision_stump, gini_impurity
+
+s = fit_decision_stump(X, y)
+s["feature"], s["threshold"], s["gini"]     # the chosen split and its weighted Gini
+predict_decision_stump(s, [[1.2], [8.8]])   # -> [0, 1]
+gini_impurity([0, 0, 1, 1])                  # -> 0.5
+```
+
+It scans every feature and midpoint for the split minimizing the size-weighted
+child Gini; a cleanly separable set gives Gini 0, and identical rows fall back to
+the majority class.
 
 ## Factor models
 
