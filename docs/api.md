@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.561.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.562.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -4467,6 +4467,36 @@ Auto-generated from `quantforge` v1.561.0 by `docs/gen_api.py` — do not edit b
 >
 > Each asset weighted by the reciprocal of its standard deviation, normalized to
 > sum to one. Higher-volatility assets get less capital; ignores correlations.
+
+## hurst
+
+### `hurst_exponent(x, min_window=8, max_window=None)`  _function_
+
+> Estimate the Hurst exponent of ``x`` by rescaled-range analysis.
+>
+> Parameters
+> ----------
+> x : sequence of float
+>     The series (levels for a walk, or increments -- interpret ``H`` relative
+>     to what you feed in).
+> min_window : int
+>     Smallest window length used in the log-log regression (>= 2).
+> max_window : int, optional
+>     Largest window length. Defaults to ``len(x) // 2``.
+>
+> Returns
+> -------
+> float
+>     The Hurst exponent, the slope of ``log(R/S)`` versus ``log(n)`` over
+>     dyadic window sizes. ~0.5 for a memoryless series, >0.5 persistent,
+>     <0.5 mean-reverting.
+
+### `rescaled_range(window)`  _function_
+
+> Rescaled range ``R/S`` of a single window.
+>
+> ``R`` is the range of the cumulative demeaned series; ``S`` is the window's
+> population standard deviation. Returns 0 when the window is constant.
 
 ## implied
 

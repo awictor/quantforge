@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.562.0] - 2026-09-12
+
+### Added
+- `hurst.py`: `hurst_exponent` estimates the Hurst exponent by rescaled-range
+  (R/S) analysis -- the slope of ``log(R/S)`` against ``log(window)`` -- plus the
+  `rescaled_range` of a single window. Cross-checked against the canonical regimes:
+  white noise gives ``H ~ 0.5``, a cumulated random walk gives ``H ~ 1``, a
+  mean-reverting AR(1) with negative coefficient gives ``H < 0.5``, and a
+  persistent AR(1) gives ``H > 0.5``.
+
 ## [1.561.0] - 2026-09-12
 
 ### Documentation
