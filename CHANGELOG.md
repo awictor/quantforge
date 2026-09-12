@@ -16,6 +16,12 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.639.0] - 2026-09-12
+
+### Documentation
+- README: added a "Hull-White (fitted to a curve)" section documenting
+  `hw_zero_from_curve` and `hw_B`; TOC regenerated to 119 entries.
+
 ## [1.638.0] - 2026-09-12
 
 ### Added

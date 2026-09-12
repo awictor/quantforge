@@ -56,6 +56,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Capital budgeting](#capital-budgeting)
 - [Money-market yields](#money-market-yields)
 - [Black-Karasinski short rate](#black-karasinski-short-rate)
+- [Hull-White (fitted to a curve)](#hull-white-fitted-to-a-curve)
 - [Callable bonds and OAS](#callable-bonds-and-oas)
 - [Carry and roll-down](#carry-and-roll-down)
 - [Inflation-linked bonds and derivatives](#inflation-linked-bonds-and-derivatives)
@@ -1489,6 +1490,25 @@ bk_zero_coupon_bond(r0=0.03, kappa=0.1, theta=math.log(0.03), sigma=0.2, t=5.0)
 The price sits near the flat discount factor, falls as the rate or maturity rises,
 approaches 1 at short maturity, and falls as volatility rises (Jensen lifts the
 expected rate). Rates cannot go negative.
+
+## Hull-White (fitted to a curve)
+
+The Hull-White (extended Vasicek) model adds a time-dependent drift so it reprices
+*any* initial discount curve exactly while keeping analytic bond prices.
+`hw_zero_from_curve` takes the observed discount curve as a callable and returns
+the fitted `P(t, T)`.
+
+```python
+import math
+from quantforge import hw_zero_from_curve
+
+P0 = lambda T: math.exp(-0.03 * T)          # observed discount curve
+hw_zero_from_curve(P0, r0=0.03, a=0.1, sigma=0.01, t=0.0, T=5.0)   # -> 0.860708 (refits P0)
+hw_zero_from_curve(P0, r0=0.03, a=0.1, sigma=0.01, t=2.0, T=10.0)  # forward P(2,10)
+```
+
+At `t=0` it reproduces the input curve to machine precision (flat, sloped, or the
+`a→0` Ho-Lee limit); the `hw_B` helper gives the `B(t,T)` mean-reversion factor.
 
 ## Callable bonds and OAS
 
