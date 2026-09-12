@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.541.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.542.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -8250,6 +8250,39 @@ Auto-generated from `quantforge` v1.541.0 by `docs/gen_api.py` — do not edit b
 > Its value at the shout node is ``(S* - K) e^{-r tau} + call(S*, S*, tau)`` for
 > remaining time ``tau``, taken only when positive. Backward induction compares
 > shouting versus continuing. At least the vanilla call value.
+
+## shrinkage
+
+### `constant_correlation_target(cov)`  _function_
+
+> Constant-correlation shrinkage target from a covariance matrix.
+>
+> Keeps each asset's own variance but replaces every pairwise correlation with
+> the average sample correlation ``r_bar``: ``F_ij = r_bar * sqrt(S_ii S_jj)``
+> for ``i != j`` and ``F_ii = S_ii``.
+
+### `ledoit_wolf_shrinkage(returns)`  _function_
+
+> Ledoit-Wolf (2004) constant-correlation shrinkage covariance estimate.
+>
+> Parameters
+> ----------
+> returns : sequence of sequence of float
+>     ``n`` observations of ``p`` asset returns.
+>
+> Returns
+> -------
+> (sigma_hat, delta) : (list[list[float]], float)
+>     The shrunk ``p x p`` covariance matrix and the shrinkage intensity
+>     ``delta`` in ``[0, 1]``. ``delta`` rises toward 1 as the sample estimate
+>     gets noisier (small ``n``) and falls toward 0 as it gets reliable.
+
+### `sample_covariance(returns)`  _function_
+
+> Maximum-likelihood sample covariance (divisor ``n``) of a return matrix.
+>
+> ``returns`` is a sequence of ``n`` observations, each a length-``p`` sequence.
+> Returns a ``p x p`` list-of-lists.
 
 ## signals
 

@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.542.0] - 2026-09-12
+
+### Added
+- `shrinkage.py`: `ledoit_wolf_shrinkage` estimates a covariance matrix by the
+  Ledoit-Wolf (2004) constant-correlation shrinkage -- a data-driven convex blend
+  ``delta * F + (1 - delta) * S`` of the sample covariance and a
+  constant-correlation target, with the closed-form optimal intensity. Also exports
+  `sample_covariance` and `constant_correlation_target`. Cross-checked: ``delta``
+  stays in ``[0, 1]`` and decreases as the sample grows (1.0 at n=50 down to 0.002
+  at n=5000 on heterogeneous data), the result is the exact convex combination,
+  the diagonal is preserved, off-diagonals are pulled toward the target, and the
+  estimate is symmetric and positive definite.
+
 ## [1.541.0] - 2026-09-12
 
 ### Documentation
