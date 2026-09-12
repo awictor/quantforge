@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.543.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.544.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -8392,12 +8392,33 @@ Auto-generated from `quantforge` v1.543.0 by `docs/gen_api.py` — do not edit b
 > by ``fraction`` for fractional Kelly (e.g. 0.5 for half-Kelly, which trades
 > a little growth for much lower drawdown).
 
+### `kelly_fractions_multivariate(mean_excess_returns, cov, fraction=1.0)`  _function_
+
+> Growth-optimal Kelly allocation across correlated assets.
+>
+> For a vector of excess returns with mean ``mu`` and covariance ``Sigma``, the
+> continuous multivariate Kelly criterion maximizes the expected log-growth
+> ``f . mu - 0.5 f . Sigma f``; the optimum is ``f* = Sigma^{-1} mu``. Returns
+> the leverage vector, scaled by ``fraction`` for fractional Kelly.
+>
+> Reduces to the scalar ``mu / sigma^2`` for a single asset, and to the
+> per-asset Kelly fractions when the covariance is diagonal (uncorrelated
+> assets). Requires a positive-definite ``Sigma``.
+
 ### `kelly_growth_rate(expected_excess_return, variance, leverage)`  _function_
 
 > Expected log-growth rate at a given leverage (continuous Kelly).
 >
 > ``g(f) = f*mu - 0.5 * f^2 * sigma^2``. Maximized at the full-Kelly leverage
 > ``f* = mu / sigma^2``; used to compare fractional-Kelly choices.
+
+### `kelly_growth_rate_multivariate(mean_excess_returns, cov, leverages)`  _function_
+
+> Expected log-growth rate of a multivariate allocation.
+>
+> ``g(f) = f . mu - 0.5 f . Sigma f``. Maximized at
+> ``f* = Sigma^{-1} mu`` (:func:`kelly_fractions_multivariate` with
+> ``fraction=1``); used to compare fractional-Kelly leverage vectors.
 
 ### `neutralize(book: quantforge.portfolio.Book, greek: str, S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, multiplier=1.0, target: float = 0.0) -> float`  _function_
 

@@ -110,3 +110,44 @@ def kelly_growth_rate(expected_excess_return, variance, leverage):
     ``f* = mu / sigma^2``; used to compare fractional-Kelly choices.
     """
     return leverage * expected_excess_return - 0.5 * leverage * leverage * variance
+
+
+def kelly_fractions_multivariate(mean_excess_returns, cov, fraction=1.0):
+    """Growth-optimal Kelly allocation across correlated assets.
+
+    For a vector of excess returns with mean ``mu`` and covariance ``Sigma``, the
+    continuous multivariate Kelly criterion maximizes the expected log-growth
+    ``f . mu - 0.5 f . Sigma f``; the optimum is ``f* = Sigma^{-1} mu``. Returns
+    the leverage vector, scaled by ``fraction`` for fractional Kelly.
+
+    Reduces to the scalar ``mu / sigma^2`` for a single asset, and to the
+    per-asset Kelly fractions when the covariance is diagonal (uncorrelated
+    assets). Requires a positive-definite ``Sigma``.
+    """
+    from .portopt import _invert, _matvec
+
+    n = len(mean_excess_returns)
+    if len(cov) != n or any(len(row) != n for row in cov):
+        raise ValueError("cov must be square and match mean_excess_returns")
+    inv = _invert(cov)
+    f = _matvec(inv, list(map(float, mean_excess_returns)))
+    return [fraction * fi for fi in f]
+
+
+def kelly_growth_rate_multivariate(mean_excess_returns, cov, leverages):
+    """Expected log-growth rate of a multivariate allocation.
+
+    ``g(f) = f . mu - 0.5 f . Sigma f``. Maximized at
+    ``f* = Sigma^{-1} mu`` (:func:`kelly_fractions_multivariate` with
+    ``fraction=1``); used to compare fractional-Kelly leverage vectors.
+    """
+    from .portopt import _matvec
+
+    mu = list(map(float, mean_excess_returns))
+    f = list(map(float, leverages))
+    if len(f) != len(mu):
+        raise ValueError("leverages must match mean_excess_returns")
+    linear = sum(f[i] * mu[i] for i in range(len(f)))
+    Sf = _matvec(cov, f)
+    quad = sum(f[i] * Sf[i] for i in range(len(f)))
+    return linear - 0.5 * quad

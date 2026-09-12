@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.544.0] - 2026-09-12
+
+### Added
+- `sizing.py`: `kelly_fractions_multivariate` computes the growth-optimal Kelly
+  leverage vector across correlated assets, ``f* = Sigma^{-1} mu``, and
+  `kelly_growth_rate_multivariate` evaluates the expected log-growth
+  ``f . mu - 0.5 f . Sigma f`` at any leverage vector. Cross-checked: reduces to
+  the scalar ``mu / sigma^2`` for one asset, to the per-asset fractions when the
+  covariance is diagonal, the growth rate is maximized at ``f*`` (perturbations
+  lower it), fractional Kelly scales the vector linearly, and positive correlation
+  cuts the total leverage below the uncorrelated case. Pairs naturally with the
+  shrunk covariance from `ledoit_wolf_shrinkage`.
+
 ## [1.543.0] - 2026-09-12
 
 ### Documentation
