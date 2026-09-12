@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.589.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.590.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -2560,6 +2560,19 @@ Auto-generated from `quantforge` v1.589.0 by `docs/gen_api.py` — do not edit b
 >
 > Returns ``(params, rmse)`` -- the fitted 10-tuple and the root-mean-square
 > implied-vol error over the quotes.
+
+## drawdown
+
+### `drawdown_analytics(returns)`  _function_
+
+> Depth-and-duration summary of a return series' drawdowns.
+>
+> Returns a dict with ``max_drawdown_depth`` (fractional, non-negative),
+> ``peak_index`` / ``trough_index`` / ``recovery_index`` of the deepest episode
+> (indices into the equity curve, which has ``len(returns)+1`` points),
+> ``time_to_recovery`` (periods from trough to recovery, or ``None`` if never),
+> and ``longest_underwater`` (the most periods spent below a prior peak).
+> ``recovery_index`` is ``None`` if the deepest drawdown never recovers.
 
 ## dual_currency
 

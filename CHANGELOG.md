@@ -16,6 +16,17 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.590.0] - 2026-09-12
+
+### Added
+- `drawdown.py`: `drawdown_analytics` reports the depth-and-duration summary of a
+  return series' drawdowns -- the deepest peak-to-trough drop with its peak /
+  trough / recovery indices, the time to recovery (``None`` if never), and the
+  longest underwater stretch. Cross-checked: the depth matches
+  :func:`max_drawdown`, peak precedes trough precedes recovery, a monotone-up
+  series has no drawdown, a terminal crash never recovers, and the longest
+  underwater count is exact.
+
 ## [1.589.0] - 2026-09-12
 
 ### Documentation
