@@ -81,6 +81,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Newey-West HAC variance](#newey-west-hac-variance)
 - [Theil-Sen robust regression](#theil-sen-robust-regression)
 - [Robust scale and location](#robust-scale-and-location)
+- [Hurst exponent (long memory)](#hurst-exponent-long-memory)
 - [Markov chains](#markov-chains)
 - [Principal component analysis](#principal-component-analysis)
 - [Matrix utilities](#matrix-utilities)
@@ -1933,6 +1934,24 @@ max(winsorize(x, 0.1))                # -> 13      (the 1000 is clipped in)
 
 The scaled MAD and IQR both estimate the same underlying sigma the standard
 deviation would give on clean data, but ignore the outlier that inflates it.
+
+## Hurst exponent (long memory)
+
+Measure the persistence of a series with the Hurst exponent via rescaled-range
+(R/S) analysis: `H ~ 0.5` is memoryless (a random walk's increments), `H > 0.5`
+is persistent/trending, and `H < 0.5` is anti-persistent/mean-reverting.
+
+```python
+from quantforge import hurst_exponent, rescaled_range
+
+hurst_exponent(white_noise)      # ~0.5  (no memory)
+hurst_exponent(price_levels)     # ~1.0  (a random walk in levels)
+hurst_exponent(mean_reverting)   # <0.5  (moves tend to reverse)
+```
+
+`H` is the slope of `log(R/S)` against `log(window)` over dyadic window sizes.
+A reading well above 0.5 flags a trend-following regime; well below flags a
+mean-reversion regime.
 
 ## Markov chains
 

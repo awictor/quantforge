@@ -4,6 +4,12 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.563.0] - 2026-09-12
+
+### Documentation
+- README: added a "Hurst exponent (long memory)" section documenting
+  `hurst_exponent` and `rescaled_range`; TOC regenerated to 94 entries.
+
 ## [1.562.0] - 2026-09-12
 
 ### Added
