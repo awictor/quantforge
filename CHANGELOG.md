@@ -16,6 +16,17 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.702.0] - 2026-09-12
+
+### Added
+- `structural_credit.py`: `physical_distance_to_default` and
+  `physical_default_probability` give the Merton default measures under the firm's
+  real-world asset drift `mu` rather than the risk-free rate -- the Moody's-KMV
+  distance to default. Cross-checked: setting `mu = r` reproduces the risk-neutral
+  figures exactly, the physical probability matches a geometric-Brownian-motion
+  Monte Carlo, and a higher drift (`mu > r`) puts the physical default probability
+  below the risk-neutral one.
+
 ## [1.701.0] - 2026-09-12
 
 ### Documentation

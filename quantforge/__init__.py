@@ -390,6 +390,7 @@ from .structural_credit import (
     equity_value, risk_neutral_default_probability, distance_to_default,
     risky_debt_value, credit_spread,
     equity_volatility, solve_asset_value_and_vol,
+    physical_distance_to_default, physical_default_probability,
 )
 from .markov import (
     n_step_transition, stationary_distribution, expected_hitting_time,
@@ -715,7 +716,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.701.0"
+__version__ = "1.702.0"
 
 __all__ = [
     "OptionType",
@@ -1320,6 +1321,8 @@ __all__ = [
     "equity_value",
     "risk_neutral_default_probability",
     "distance_to_default",
+    "physical_distance_to_default",
+    "physical_default_probability",
     "risky_debt_value",
     "credit_spread",
     "equity_volatility",

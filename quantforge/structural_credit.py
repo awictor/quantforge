@@ -138,3 +138,37 @@ def credit_spread(asset_value, debt_face, r, sigma, t):
     yield_risky = -math.log(debt / debt_face) / t
     yield_free = -math.log(riskfree_debt / debt_face) / t
     return yield_risky - yield_free
+
+
+def physical_distance_to_default(asset_value, debt_face, mu, sigma, t):
+    """Real-world distance to default under the physical asset drift ``mu``.
+
+    The risk-neutral :func:`distance_to_default` discounts at the risk-free rate;
+    the physical measure uses the firm's actual expected asset return ``mu``:
+
+        DD = (ln(V/D) + (mu - sigma^2/2) T) / (sigma sqrt(T)).
+
+    This is the Moody's-KMV distance to default -- the number of asset-return
+    standard deviations between the current value and the default point. Setting
+    ``mu = r`` recovers the risk-neutral figure; a higher expected return moves the
+    firm further from default. Higher is safer.
+    """
+    if asset_value <= 0 or debt_face <= 0 or t <= 0 or sigma <= 0:
+        raise ValueError("asset_value, debt_face, t, sigma must be positive")
+    return (math.log(asset_value / debt_face) + (mu - 0.5 * sigma * sigma) * t) / (
+        sigma * math.sqrt(t)
+    )
+
+
+def physical_default_probability(asset_value, debt_face, mu, sigma, t):
+    """Real-world probability of default ``P(V_T < D) = Phi(-DD)`` under drift ``mu``.
+
+    The physical-measure analogue of :func:`risk_neutral_default_probability`,
+    using the firm's actual expected asset return rather than the risk-free rate.
+    In the KMV framework this maps (through an empirical calibration) to the
+    expected default frequency. Setting ``mu = r`` recovers the risk-neutral
+    probability; because ``mu > r`` for a risky firm, the physical default
+    probability is below the risk-neutral one.
+    """
+    dd = physical_distance_to_default(asset_value, debt_face, mu, sigma, t)
+    return norm_cdf(-dd)

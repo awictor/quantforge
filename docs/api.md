@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.700.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.702.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -10628,6 +10628,31 @@ Auto-generated from `quantforge` v1.700.0 by `docs/gen_api.py` — do not edit b
 > From Ito's lemma on the equity call, ``sigma_E = (V/E) N(d1) sigma_V`` -- the
 > equity is a levered claim, so its volatility exceeds the asset volatility by
 > the delta-elasticity factor ``(V/E) N(d1)``. Rises as leverage rises.
+
+### `physical_default_probability(asset_value, debt_face, mu, sigma, t)`  _function_
+
+> Real-world probability of default ``P(V_T < D) = Phi(-DD)`` under drift ``mu``.
+>
+> The physical-measure analogue of :func:`risk_neutral_default_probability`,
+> using the firm's actual expected asset return rather than the risk-free rate.
+> In the KMV framework this maps (through an empirical calibration) to the
+> expected default frequency. Setting ``mu = r`` recovers the risk-neutral
+> probability; because ``mu > r`` for a risky firm, the physical default
+> probability is below the risk-neutral one.
+
+### `physical_distance_to_default(asset_value, debt_face, mu, sigma, t)`  _function_
+
+> Real-world distance to default under the physical asset drift ``mu``.
+>
+> The risk-neutral :func:`distance_to_default` discounts at the risk-free rate;
+> the physical measure uses the firm's actual expected asset return ``mu``:
+>
+>     DD = (ln(V/D) + (mu - sigma^2/2) T) / (sigma sqrt(T)).
+>
+> This is the Moody's-KMV distance to default -- the number of asset-return
+> standard deviations between the current value and the default point. Setting
+> ``mu = r`` recovers the risk-neutral figure; a higher expected return moves the
+> firm further from default. Higher is safer.
 
 ### `risk_neutral_default_probability(asset_value, debt_face, r, sigma, t)`  _function_
 
