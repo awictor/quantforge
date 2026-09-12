@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.497.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.498.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -4228,6 +4228,25 @@ Auto-generated from `quantforge` v1.497.0 by `docs/gen_api.py` — do not edit b
 >
 > ``y(t) = r0 + 0.5 theta t - sigma^2 t^2 / 6`` (linear-in-t drift, quadratic
 > convexity pull-down).
+
+## hrp
+
+### `hierarchical_risk_parity(cov)`  _function_
+
+> Hierarchical Risk Parity weights (López de Prado).
+>
+> Clusters assets by correlation distance, quasi-diagonalizes, and allocates by
+> recursive bisection: each split gives the two sub-clusters weights inversely
+> proportional to their inverse-variance-weighted variances. Returns positive
+> weights summing to one, aligned with the original asset order. Needs no matrix
+> inversion, so it is stable for near-singular covariances.
+
+### `inverse_volatility_weights(cov)`  _function_
+
+> Inverse-volatility weights ``(1/sigma_i) / sum_j (1/sigma_j)``.
+>
+> Each asset weighted by the reciprocal of its standard deviation, normalized to
+> sum to one. Higher-volatility assets get less capital; ignores correlations.
 
 ## implied
 

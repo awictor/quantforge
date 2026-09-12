@@ -226,6 +226,7 @@ from .nelson_siegel import (
 )
 from .interpolation import natural_cubic_spline, monotone_cubic
 from .rootfind import bisection, brent, newton
+from .hrp import inverse_volatility_weights, hierarchical_risk_parity
 from .carry_rolldown import (
     carry_return, rolldown_return, total_carry_rolldown,
 )
@@ -557,7 +558,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.497.0"
+__version__ = "1.498.0"
 
 __all__ = [
     "OptionType",
@@ -917,6 +918,8 @@ __all__ = [
     "bisection",
     "brent",
     "newton",
+    "inverse_volatility_weights",
+    "hierarchical_risk_parity",
     "carry_return",
     "rolldown_return",
     "total_carry_rolldown",
