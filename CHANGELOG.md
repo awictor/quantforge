@@ -16,6 +16,17 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.700.0] - 2026-09-12
+
+### Added
+- `copula.py`: `vasicek_loss_pdf` and `vasicek_loss_expected_shortfall` complete the
+  large-homogeneous-pool loss distribution alongside the existing CDF and quantile.
+  The density is the closed-form derivative of the CDF; the expected shortfall is
+  Tasche's (2002) closed form `Phi_2(Phi^{-1}(pd), -Phi^{-1}(q); sqrt(rho))/(1-q)`.
+  Cross-checked: the density integrates to one with mean `pd` and matches a
+  finite-difference of the CDF, and the expected shortfall matches a tail average of
+  the quantile function and a single-factor Monte Carlo, staying at or above the VaR.
+
 ## [1.699.0] - 2026-09-12
 
 ### Documentation

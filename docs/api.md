@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.698.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.700.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -2290,6 +2290,31 @@ Auto-generated from `quantforge` v1.698.0 by `docs/gen_api.py` — do not edit b
 >     P(L <= x) = Phi( (sqrt(1 - rho) Phi^{-1}(x) - Phi^{-1}(pd)) / sqrt(rho) ).
 >
 > ``loss`` is a fraction in ``[0, 1]`` (LGD assumed 1). Increasing in ``loss``.
+
+### `vasicek_loss_expected_shortfall(q, pd, rho)`  _function_
+
+> Expected shortfall (average loss beyond the ``q`` quantile) of the pool loss.
+>
+> The mean fractional loss conditional on exceeding the ``q``-quantile. In the
+> Vasicek limit this has the closed form (Tasche 2002)
+>
+>     ES_q = Phi_2( Phi^{-1}(pd), -Phi^{-1}(q); sqrt(rho) ) / (1 - q),
+>
+> where ``Phi_2(., .; r)`` is the standard bivariate normal CDF with correlation
+> ``r``. Always at least the quantile :func:`vasicek_loss_quantile`, and bounded by
+> the mean loss ``pd`` from below and 1 from above. Increasing in ``q`` and ``rho``.
+
+### `vasicek_loss_pdf(loss, pd, rho)`  _function_
+
+> Density of the large-pool loss fraction (Vasicek limit).
+>
+> Differentiating :func:`vasicek_loss_cdf` gives
+>
+>     f(x) = sqrt((1 - rho) / rho)
+>            * exp( 0.5 y^2 - 0.5 ((sqrt(1 - rho) y - Phi^{-1}(pd)) / sqrt(rho))^2 ),
+>
+> where ``y = Phi^{-1}(x)``. The distribution is bimodal for ``rho > 0.5`` and
+> concentrates at ``x = pd`` as ``rho -> 0``. ``loss`` is a fraction in ``(0, 1)``.
 
 ### `vasicek_loss_quantile(q, pd, rho)`  _function_
 

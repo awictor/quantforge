@@ -142,6 +142,50 @@ def vasicek_loss_quantile(q, pd, rho):
     return norm_cdf(num / math.sqrt(1.0 - rho))
 
 
+def vasicek_loss_pdf(loss, pd, rho):
+    """Density of the large-pool loss fraction (Vasicek limit).
+
+    Differentiating :func:`vasicek_loss_cdf` gives
+
+        f(x) = sqrt((1 - rho) / rho)
+               * exp( 0.5 y^2 - 0.5 ((sqrt(1 - rho) y - Phi^{-1}(pd)) / sqrt(rho))^2 ),
+
+    where ``y = Phi^{-1}(x)``. The distribution is bimodal for ``rho > 0.5`` and
+    concentrates at ``x = pd`` as ``rho -> 0``. ``loss`` is a fraction in ``(0, 1)``.
+    """
+    if not (0.0 < loss < 1.0):
+        raise ValueError("loss must be in (0, 1)")
+    if not (0.0 < pd < 1.0):
+        raise ValueError("pd must be in (0, 1)")
+    if not (0.0 < rho < 1.0):
+        raise ValueError("rho must be in (0, 1)")
+    y = norm_ppf(loss)
+    g = (math.sqrt(1.0 - rho) * y - norm_ppf(pd)) / math.sqrt(rho)
+    return math.sqrt((1.0 - rho) / rho) * math.exp(0.5 * y * y - 0.5 * g * g)
+
+
+def vasicek_loss_expected_shortfall(q, pd, rho):
+    """Expected shortfall (average loss beyond the ``q`` quantile) of the pool loss.
+
+    The mean fractional loss conditional on exceeding the ``q``-quantile. In the
+    Vasicek limit this has the closed form (Tasche 2002)
+
+        ES_q = Phi_2( Phi^{-1}(pd), -Phi^{-1}(q); sqrt(rho) ) / (1 - q),
+
+    where ``Phi_2(., .; r)`` is the standard bivariate normal CDF with correlation
+    ``r``. Always at least the quantile :func:`vasicek_loss_quantile`, and bounded by
+    the mean loss ``pd`` from below and 1 from above. Increasing in ``q`` and ``rho``.
+    """
+    if not (0.0 < q < 1.0):
+        raise ValueError("q must be in (0, 1)")
+    if not (0.0 < pd < 1.0):
+        raise ValueError("pd must be in (0, 1)")
+    if not (0.0 < rho < 1.0):
+        raise ValueError("rho must be in (0, 1)")
+    joint = _bivariate_normal_cdf(norm_ppf(pd), -norm_ppf(q), math.sqrt(rho))
+    return joint / (1.0 - q)
+
+
 def cdo_tranche_expected_loss(attachment, detachment, pd, rho, n_steps=2000):
     """Expected loss of a CDO tranche in the Vasicek large-pool limit.
 
