@@ -16,6 +16,14 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.713.0] - 2026-09-12
+
+### Documentation
+- README numerics section now documents Gauss-Hermite quadrature
+  (`gauss_hermite_expectation`, `gauss_hermite_nodes_weights`) with a worked
+  example, noting it is exact for polynomials up to degree `2n-1` and best for
+  smooth integrands.
+
 ## [1.712.0] - 2026-09-12
 
 ### Added

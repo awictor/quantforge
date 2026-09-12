@@ -3046,6 +3046,21 @@ endpoint — `1/sqrt(x)`, `ln x`, `sqrt(1-x^2)` at `x = ±1` — where Simpson a
 Gauss-Legendre lose accuracy; it evaluates strictly inside the interval and
 converges on the singular cases to machine precision.
 
+For expectations under a normal density, Gauss-Hermite quadrature is exact for
+polynomials up to degree `2n-1` and needs only a handful of nodes:
+
+```python
+from quantforge import gauss_hermite_expectation
+
+gauss_hermite_expectation(lambda x: x * x, mu=1.5, sigma=0.7)   # E[X^2] = mu^2+sigma^2
+gauss_hermite_expectation(math.exp, mu=0.05, sigma=0.3)         # lognormal mean
+```
+
+The nodes and weights (probabilists' convention, weights summing to one) come from
+the Golub-Welsch eigen-decomposition of the Hermite recurrence; `gauss_hermite_nodes_weights(n)`
+exposes them directly. Best for smooth integrands — a kinked payoff converges
+slowly, so integrate option payoffs with the density routines instead.
+
 # One-dimensional minimizers (line search / 1-D calibration).
 from quantforge import golden_section_min, brent_min
 golden_section_min(lambda x: (x - 3) ** 2 + 1, -10, 10)   # -> (3.0, 1.0)
