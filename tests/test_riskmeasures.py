@@ -2,9 +2,11 @@
 
 import pytest
 
+import random
+
 from quantforge import (
     value_at_risk, sample_expected_shortfall, spectral_risk_exponential,
-    entropic_risk,
+    entropic_risk, is_subadditive, component_expected_shortfall,
 )
 
 
@@ -31,6 +33,41 @@ def test_entropic_approaches_mean_loss():
 
 def test_entropic_increasing_in_risk_aversion():
     assert entropic_risk(PNL, 5.0) > entropic_risk(PNL, 1.0)
+
+
+def test_expected_shortfall_subadditive():
+    random.seed(2)
+    a = [random.gauss(0, 0.02) for _ in range(200)]
+    b = [random.gauss(0, 0.03) for _ in range(200)]
+    assert is_subadditive(a, b, 0.95)
+    assert is_subadditive(a, a, 0.95)   # perfectly correlated: still <=
+
+
+def test_component_es_sums_to_total():
+    random.seed(2)
+    a = [random.gauss(0, 0.02) for _ in range(200)]
+    b = [random.gauss(0, 0.03) for _ in range(200)]
+    total = [a[i] + b[i] for i in range(200)]
+    contribs = component_expected_shortfall([a, b], 0.95)
+    assert sum(contribs) == pytest.approx(sample_expected_shortfall(total, 0.95),
+                                          abs=1e-9)
+
+
+def test_component_es_three_components():
+    random.seed(3)
+    a = [random.gauss(0, 0.02) for _ in range(200)]
+    b = [random.gauss(0, 0.03) for _ in range(200)]
+    c = [random.gauss(0, 0.01) for _ in range(200)]
+    total = [a[i] + b[i] + c[i] for i in range(200)]
+    assert sum(component_expected_shortfall([a, b, c], 0.95)) == pytest.approx(
+        sample_expected_shortfall(total, 0.95), abs=1e-9)
+
+
+def test_coherence_validation():
+    with pytest.raises(ValueError):
+        is_subadditive([0.1, 0.2], [0.1])
+    with pytest.raises(ValueError):
+        component_expected_shortfall([])
 
 
 def test_validation():

@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.481.0] - 2026-09-11
+
+### Added
+- `is_subadditive` and `component_expected_shortfall` (in `riskmeasures.py`): a
+  subadditivity diagnostic for expected shortfall (`rho(A+B) <= rho(A) + rho(B)`,
+  which the coherent ES always satisfies) and the Euler component-ES allocation
+  (each sub-portfolio's mean loss over the total portfolio's tail scenarios).
+  Cross-checked: subadditivity holds including for perfectly correlated series,
+  and the component contributions sum exactly to the portfolio ES for two and
+  three components.
+
 ## [1.480.0] - 2026-09-11
 
 ### Added

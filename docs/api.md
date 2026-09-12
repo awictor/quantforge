@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.480.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.481.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -7160,6 +7160,16 @@ Auto-generated from `quantforge` v1.480.0 by `docs/gen_api.py` — do not edit b
 
 ## riskmeasures
 
+### `component_expected_shortfall(component_pnls, confidence=0.95)`  _function_
+
+> Euler (component) expected-shortfall allocation across sub-portfolios.
+>
+> ``component_pnls`` is a list of aligned P&L series whose sum is the portfolio.
+> Each component's ES contribution is the average of its own losses over the
+> scenarios where the *total* portfolio is in its worst ``1 - confidence`` tail;
+> the contributions sum to the portfolio :func:`expected_shortfall` (Euler's
+> theorem for the positively-homogeneous ES). Returns the list of contributions.
+
 ### `entropic_risk(pnl, risk_aversion=1.0)`  _function_
 
 > Entropic (exponential) risk measure ``(1/theta) ln E[e^{-theta X}]``.
@@ -7167,6 +7177,15 @@ Auto-generated from `quantforge` v1.480.0 by `docs/gen_api.py` — do not edit b
 > The exponential-utility certainty equivalent of the loss; ``theta =
 > risk_aversion``. Convex and increasing in ``theta``; approaches the mean loss
 > ``-E[X]`` as ``theta -> 0`` and the worst loss as ``theta -> inf``.
+
+### `is_subadditive(pnl_a, pnl_b, confidence=0.95)`  _function_
+
+> Check the subadditivity ``rho(A+B) <= rho(A) + rho(B)`` for expected shortfall.
+>
+> Adds the two P&L series scenario-by-scenario and compares the combined
+> expected shortfall to the sum of the standalone ones. Expected shortfall is
+> coherent, so this holds (up to a tiny numerical tolerance) for any two aligned
+> series -- a diagnostic that diversification never increases ES.
 
 ### `sample_expected_shortfall(pnl, confidence=0.95)`  _function_
 

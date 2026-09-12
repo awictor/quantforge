@@ -67,6 +67,48 @@ def spectral_risk_exponential(pnl, risk_aversion=5.0):
     return sum(losses[i] * weights[i] for i in range(n)) / total
 
 
+def is_subadditive(pnl_a, pnl_b, confidence=0.95):
+    """Check the subadditivity ``rho(A+B) <= rho(A) + rho(B)`` for expected shortfall.
+
+    Adds the two P&L series scenario-by-scenario and compares the combined
+    expected shortfall to the sum of the standalone ones. Expected shortfall is
+    coherent, so this holds (up to a tiny numerical tolerance) for any two aligned
+    series -- a diagnostic that diversification never increases ES.
+    """
+    if len(pnl_a) != len(pnl_b):
+        raise ValueError("series must have equal length")
+    combined = [a + b for a, b in zip(pnl_a, pnl_b)]
+    rho_ab = expected_shortfall(combined, confidence)
+    rho_a = expected_shortfall(pnl_a, confidence)
+    rho_b = expected_shortfall(pnl_b, confidence)
+    return rho_ab <= rho_a + rho_b + 1e-12
+
+
+def component_expected_shortfall(component_pnls, confidence=0.95):
+    """Euler (component) expected-shortfall allocation across sub-portfolios.
+
+    ``component_pnls`` is a list of aligned P&L series whose sum is the portfolio.
+    Each component's ES contribution is the average of its own losses over the
+    scenarios where the *total* portfolio is in its worst ``1 - confidence`` tail;
+    the contributions sum to the portfolio :func:`expected_shortfall` (Euler's
+    theorem for the positively-homogeneous ES). Returns the list of contributions.
+    """
+    if not component_pnls:
+        raise ValueError("need at least one component")
+    m = len(component_pnls[0])
+    if any(len(c) != m for c in component_pnls):
+        raise ValueError("all component series must have equal length")
+    total = [sum(component_pnls[j][i] for j in range(len(component_pnls)))
+             for i in range(m)]
+    # Identify the tail scenarios of the total loss.
+    losses = [-x for x in total]
+    order = sorted(range(m), key=lambda i: losses[i], reverse=True)
+    k = max(int(math.ceil((1.0 - confidence) * m)), 1)
+    tail = order[:k]
+    # Each component's mean loss over those tail scenarios.
+    return [sum(-comp[i] for i in tail) / k for comp in component_pnls]
+
+
 def entropic_risk(pnl, risk_aversion=1.0):
     """Entropic (exponential) risk measure ``(1/theta) ln E[e^{-theta X}]``.
 
