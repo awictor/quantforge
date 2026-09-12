@@ -62,6 +62,31 @@ def implied_correlation(weights: Sequence[float], vols: Sequence[float],
     return (index_vol * index_vol - diag) / cross
 
 
+def dispersion_trade_pnl(weights, realized_member_vols, realized_index_vol,
+                         strike_member_vols, strike_index_vol,
+                         variance_notional=1.0):
+    """P&L of a variance dispersion trade (short index var, long member var).
+
+    A dispersion trade sells index variance and buys the weighted member
+    variances. Its variance P&L per unit notional is
+
+        (sum_i w_i (rv_i^2 - k_i^2))  -  (rv_index^2 - k_index^2),
+
+    the long member-variance legs minus the short index-variance leg (strikes
+    ``k``). Because index variance carries the correlation, the trade profits when
+    realized correlation comes in *below* what was implied (index realizes calmer
+    than the members would imply), and is zero when realized matches strikes.
+    """
+    _validate(weights, realized_member_vols)
+    if len(strike_member_vols) != len(weights):
+        raise ValueError("strike_member_vols must align with weights")
+    member_leg = sum(w * (rv * rv - k * k)
+                     for w, rv, k in zip(weights, realized_member_vols,
+                                         strike_member_vols))
+    index_leg = realized_index_vol ** 2 - strike_index_vol ** 2
+    return variance_notional * (member_leg - index_leg)
+
+
 def dispersion_basket_vol(weights: Sequence[float], vols: Sequence[float]) -> float:
     """The zero-correlation ("fully diversified") index vol, sqrt(sum w^2 sig^2).
 

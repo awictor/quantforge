@@ -318,7 +318,7 @@ from .sobol import (
 )
 from .correlation import (
     implied_correlation, index_vol_from_correlation, dispersion_basket_vol,
-    correlation_term_structure,
+    correlation_term_structure, dispersion_trade_pnl,
     ewma_covariance, ewma_correlation, realized_beta,
 )
 from .perfmetrics import (
@@ -467,7 +467,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.429.0"
+__version__ = "1.430.0"
 
 __all__ = [
     "OptionType",
@@ -1016,6 +1016,7 @@ __all__ = [
     "implied_correlation",
     "index_vol_from_correlation",
     "dispersion_basket_vol",
+    "dispersion_trade_pnl",
     "correlation_term_structure",
     "ewma_covariance",
     "ewma_correlation",

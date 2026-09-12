@@ -6,6 +6,7 @@ import pytest
 
 from quantforge import (
     implied_correlation, index_vol_from_correlation, dispersion_basket_vol,
+    dispersion_trade_pnl,
 )
 
 W = [0.4, 0.35, 0.25]
@@ -60,3 +61,30 @@ def test_rejects_bad_inputs():
         index_vol_from_correlation(W, V, 1.5)           # rho out of range
     with pytest.raises(ValueError):
         implied_correlation(W, V, -0.1)                 # negative index vol
+
+
+DW = [0.4, 0.35, 0.25]
+DMV = [0.3, 0.25, 0.35]
+
+
+def test_dispersion_profits_when_realized_correlation_low():
+    k_idx = index_vol_from_correlation(DW, DMV, 0.5)
+    realized_idx = index_vol_from_correlation(DW, DMV, 0.3)  # calmer index
+    assert dispersion_trade_pnl(DW, DMV, realized_idx, DMV, k_idx) > 0
+
+
+def test_dispersion_loses_when_realized_correlation_high():
+    k_idx = index_vol_from_correlation(DW, DMV, 0.5)
+    realized_idx = index_vol_from_correlation(DW, DMV, 0.8)
+    assert dispersion_trade_pnl(DW, DMV, realized_idx, DMV, k_idx) < 0
+
+
+def test_dispersion_zero_at_strikes():
+    k_idx = index_vol_from_correlation(DW, DMV, 0.5)
+    assert dispersion_trade_pnl(DW, DMV, k_idx, DMV, k_idx) == pytest.approx(0.0, abs=1e-12)
+
+
+def test_dispersion_validation():
+    k_idx = index_vol_from_correlation(DW, DMV, 0.5)
+    with pytest.raises(ValueError):
+        dispersion_trade_pnl(DW, DMV, 0.2, [0.3, 0.25], k_idx)

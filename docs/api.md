@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.429.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.430.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -1605,6 +1605,20 @@ Auto-generated from `quantforge` v1.429.0 by `docs/gen_api.py` — do not edit b
 > The zero-correlation ("fully diversified") index vol, sqrt(sum w^2 sig^2).
 >
 > A useful lower reference: the index vol if the members were uncorrelated.
+
+### `dispersion_trade_pnl(weights, realized_member_vols, realized_index_vol, strike_member_vols, strike_index_vol, variance_notional=1.0)`  _function_
+
+> P&L of a variance dispersion trade (short index var, long member var).
+>
+> A dispersion trade sells index variance and buys the weighted member
+> variances. Its variance P&L per unit notional is
+>
+>     (sum_i w_i (rv_i^2 - k_i^2))  -  (rv_index^2 - k_index^2),
+>
+> the long member-variance legs minus the short index-variance leg (strikes
+> ``k``). Because index variance carries the correlation, the trade profits when
+> realized correlation comes in *below* what was implied (index realizes calmer
+> than the members would imply), and is zero when realized matches strikes.
 
 ### `ewma_correlation(returns_x, returns_y, lam=0.94)`  _function_
 

@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.430.0] - 2026-09-11
+
+### Added
+- `dispersion_trade_pnl` (in `correlation.py`): the variance P&L of a dispersion
+  trade (long the weighted member variances, short index variance). Profits when
+  realized correlation comes in below the implied strike, loses when it comes in
+  higher, and is zero when realized vols match the strikes. Cross-checked across
+  all three correlation regimes.
+
 ## [1.429.0] - 2026-09-11
 
 ### Added
