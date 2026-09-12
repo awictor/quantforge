@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.545.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.546.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -4389,6 +4389,26 @@ Auto-generated from `quantforge` v1.545.0 by `docs/gen_api.py` — do not edit b
 >
 > ``y(t) = r0 + 0.5 theta t - sigma^2 t^2 / 6`` (linear-in-t drift, quadratic
 > convexity pull-down).
+
+## hp_filter
+
+### `hp_filter(y, lam=1600.0)`  _function_
+
+> Hodrick-Prescott trend/cycle decomposition.
+>
+> Parameters
+> ----------
+> y : sequence of float
+>     The time series.
+> lam : float
+>     Smoothing parameter (>= 0). Larger values yield a smoother trend; 1600 is
+>     the standard quarterly value.
+>
+> Returns
+> -------
+> (trend, cycle) : (list[float], list[float])
+>     The smooth trend and the cyclical residual ``cycle = y - trend``. Their
+>     sum reconstructs ``y`` exactly.
 
 ## hrp
 

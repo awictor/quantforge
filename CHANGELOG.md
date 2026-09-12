@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.546.0] - 2026-09-12
+
+### Added
+- `hp_filter.py`: `hp_filter` performs a Hodrick-Prescott trend/cycle
+  decomposition, solving ``(I + lambda D'D) tau = y`` for the smooth trend by an
+  O(n) banded LDL^T factorization of the pentadiagonal system (no dense inverse).
+  Cross-checked: the banded solve matches a dense inverse to ~1e-13, the trend and
+  cycle reconstruct the series exactly, ``lambda -> 0`` returns the data itself,
+  ``lambda -> inf`` returns the least-squares linear trend, and a larger
+  ``lambda`` yields a strictly smoother (lower-curvature) trend.
+
 ## [1.545.0] - 2026-09-12
 
 ### Documentation
