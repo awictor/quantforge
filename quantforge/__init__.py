@@ -455,7 +455,7 @@ from .actuarial import (
 from .structured import (
     note_zero_coupon_bond, principal_protected_note, reverse_convertible,
     note_embedded_option_value, capped_principal_protected_note,
-    reverse_convertible_fair_coupon, buffered_note,
+    reverse_convertible_fair_coupon, buffered_note, phoenix_autocall_mc,
 )
 from .execution import (
     execution_trajectory, execution_trades, expected_cost, cost_variance,
@@ -713,7 +713,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.695.0"
+__version__ = "1.696.0"
 
 __all__ = [
     "OptionType",
@@ -1426,6 +1426,7 @@ __all__ = [
     "note_embedded_option_value",
     "capped_principal_protected_note",
     "reverse_convertible_fair_coupon",
+    "phoenix_autocall_mc",
     "buffered_note",
     "execution_trajectory",
     "execution_trades",

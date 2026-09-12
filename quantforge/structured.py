@@ -148,3 +148,81 @@ def note_embedded_option_value(note_value, principal, r, maturity):
     reverse convertible's short put).
     """
     return note_value - note_zero_coupon_bond(principal, r, maturity)
+
+
+def phoenix_autocall_mc(S, t, r, sigma, observation_times, autocall_barrier,
+                        coupon_barrier, coupon, protection_barrier=None,
+                        principal=1.0, memory=True, q=0.0, n_paths=40000,
+                        seed=1234567):
+    """Monte Carlo a Phoenix autocallable note.
+
+    A Phoenix pays a coupon at each observation where the spot is at or above the
+    ``coupon_barrier`` (typically below the autocall level). With ``memory=True``
+    any coupons missed while below the barrier are paid retroactively the next time
+    the barrier is met (snowball/memory feature). If the spot reaches
+    ``autocall_barrier`` the note redeems early at par plus the coupon due. At
+    maturity, unredeemed, the holder gets par unless the spot is below
+    ``protection_barrier`` (down-and-in), taking the downside ``principal * S_T/S``.
+
+    Returns the discounted Monte Carlo price. Memory raises the value versus no
+    memory; a lower coupon barrier pays more often. Pure standard library.
+    """
+    import math
+
+    if S <= 0 or t <= 0 or sigma <= 0 or principal <= 0:
+        raise ValueError("S, t, sigma, principal must be positive")
+    if not observation_times or observation_times[-1] <= 0:
+        raise ValueError("observation_times must be positive and non-empty")
+    b = r - q
+    obs = list(observation_times)
+    m = len(obs)
+
+    def _lcg(seed):
+        state = seed & 0x7FFFFFFF
+        cache = []
+
+        def nxt():
+            nonlocal state
+            if cache:
+                return cache.pop()
+            state = (1103515245 * state + 12345) & 0x7FFFFFFF
+            u1 = (state + 0.5) / 0x80000000
+            state = (1103515245 * state + 12345) & 0x7FFFFFFF
+            u2 = (state + 0.5) / 0x80000000
+            rr = math.sqrt(-2.0 * math.log(u1))
+            cache.append(rr * math.sin(2.0 * math.pi * u2))
+            return rr * math.cos(2.0 * math.pi * u2)
+        return nxt
+
+    gen = _lcg(seed)
+    total = 0.0
+    for _ in range(n_paths):
+        spot = S
+        prev_t = 0.0
+        pv = 0.0
+        unpaid = 0                       # missed coupons held in memory
+        redeemed = False
+        for k in range(m):
+            dt = obs[k] - prev_t
+            prev_t = obs[k]
+            z = gen()
+            spot *= math.exp((b - 0.5 * sigma * sigma) * dt + sigma * math.sqrt(dt) * z)
+            disc = math.exp(-r * obs[k])
+            if spot >= coupon_barrier:
+                due = coupon * (unpaid + 1 if memory else 1)
+                pv += principal * due * disc
+                unpaid = 0
+            elif memory:
+                unpaid += 1
+            if spot >= autocall_barrier:
+                pv += principal * disc     # par redemption
+                redeemed = True
+                break
+        if not redeemed:
+            disc = math.exp(-r * obs[-1])
+            if protection_barrier is not None and spot < protection_barrier:
+                pv += principal * (spot / S) * disc
+            else:
+                pv += principal * disc
+        total += pv
+    return total / n_paths

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.695.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.696.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -10646,6 +10646,21 @@ Auto-generated from `quantforge` v1.695.0 by `docs/gen_api.py` — do not edit b
 ### `note_zero_coupon_bond(principal, r, maturity)`  _function_
 
 > Present value of a zero-coupon bond: ``principal * e^{-r T}``.
+
+### `phoenix_autocall_mc(S, t, r, sigma, observation_times, autocall_barrier, coupon_barrier, coupon, protection_barrier=None, principal=1.0, memory=True, q=0.0, n_paths=40000, seed=1234567)`  _function_
+
+> Monte Carlo a Phoenix autocallable note.
+>
+> A Phoenix pays a coupon at each observation where the spot is at or above the
+> ``coupon_barrier`` (typically below the autocall level). With ``memory=True``
+> any coupons missed while below the barrier are paid retroactively the next time
+> the barrier is met (snowball/memory feature). If the spot reaches
+> ``autocall_barrier`` the note redeems early at par plus the coupon due. At
+> maturity, unredeemed, the holder gets par unless the spot is below
+> ``protection_barrier`` (down-and-in), taking the downside ``principal * S_T/S``.
+>
+> Returns the discounted Monte Carlo price. Memory raises the value versus no
+> memory; a lower coupon barrier pays more often. Pure standard library.
 
 ### `principal_protected_note(S, K, maturity, r, sigma, principal, participation=1.0, n_shares=None, b=None)`  _function_
 

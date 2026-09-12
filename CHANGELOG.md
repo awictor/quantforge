@@ -16,6 +16,17 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.696.0] - 2026-09-12
+
+### Added
+- `structured.py`: `phoenix_autocall_mc` Monte Carlo prices a Phoenix autocallable
+  note -- conditional coupons paid when the spot is above a coupon barrier (with an
+  optional memory/snowball feature), early par redemption at an autocall barrier,
+  and down-and-in downside at maturity below a protection barrier. Cross-checked:
+  the price is positive, the memory feature raises it, a lower coupon barrier pays
+  more often, a higher coupon raises the value, and dropping the protection barrier
+  never lowers it.
+
 ## [1.695.0] - 2026-09-12
 
 ### Documentation
