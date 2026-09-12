@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.570.0] - 2026-09-12
+
+### Added
+- `structural_break.py`: structural-break diagnostics -- `cusum_mean` /
+  `cusum_break_detected` (the standardized CUSUM of deviations from the mean,
+  compared to Kolmogorov Brownian-bridge critical values) and `chow_test` (an F
+  test for a mean break at a known point). Cross-checked: a stable series stays in
+  the band on the large majority of runs (~5% false-positive rate), an injected
+  level shift breaches the band (max |CUSUM| ~ 6.6 vs a 1.36 band), the Chow F is
+  huge at the true break (>1000) and small on a stable series.
+
 ## [1.569.0] - 2026-09-12
 
 ### Documentation

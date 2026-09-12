@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.569.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.570.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -9223,6 +9223,32 @@ Auto-generated from `quantforge` v1.569.0 by `docs/gen_api.py` — do not edit b
 >
 > A call spread with K_long < K_short is a bull spread; a put spread with
 > K_long > K_short is a bear spread.
+
+## structural_break
+
+### `chow_test(x, break_index)`  _function_
+
+> Chow F test for a break in the mean at ``break_index``.
+>
+> Compares the pooled residual sum of squares (one mean for the whole sample)
+> against the sum from fitting separate means before and after the break. Under
+> the no-break null the statistic is F(1, n - 2) distributed; a large value
+> rejects. Returns ``(F_statistic, dof1, dof2)``.
+
+### `cusum_break_detected(x, confidence=0.95)`  _function_
+
+> True if the standardized CUSUM path breaches its confidence band.
+
+### `cusum_mean(x, confidence=0.95)`  _function_
+
+> Standardized CUSUM of deviations from the sample mean.
+>
+> Returns ``(cusum, boundary)`` where ``cusum[k]`` is the cumulative sum of
+> demeaned observations through index ``k`` divided by ``sigma * sqrt(n)``, and
+> ``boundary`` is the confidence threshold. Under a stable mean the standardized
+> path is a Brownian bridge (it starts and ends at 0), so the supremum of its
+> absolute value is compared to the Kolmogorov critical values -- a ``cusum``
+> magnitude exceeding ``boundary`` flags a structural break in the mean.
 
 ## structural_credit
 
