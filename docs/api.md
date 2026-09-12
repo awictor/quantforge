@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.563.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.564.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -9647,6 +9647,24 @@ Auto-generated from `quantforge` v1.563.0 by `docs/gen_api.py` — do not edit b
 ### `pillar_vols(atm, rr, bf)`  _function_
 
 > Return (sigma_25put, sigma_atm, sigma_25call) from ATM / RR / BF quotes.
+
+## variance_ratio
+
+### `variance_ratio(returns, q)`  _function_
+
+> Lo-MacKinlay variance ratio ``VR(q)`` of a return series.
+>
+> Uses overlapping ``q``-period returns and the unbiased scaling factors from
+> Lo-MacKinlay (1988). Returns 1 under a random walk, >1 for trending series,
+> <1 for mean-reverting series.
+
+### `variance_ratio_zstat(returns, q)`  _function_
+
+> Heteroskedasticity-robust Lo-MacKinlay ``z`` statistic for ``VR(q) = 1``.
+>
+> Divides ``VR(q) - 1`` by the robust standard error assembled from the
+> autocorrelations of squared demeaned returns. Asymptotically standard normal
+> under the random-walk null; ``|z| > 1.96`` rejects at 5%.
 
 ## variancegamma
 

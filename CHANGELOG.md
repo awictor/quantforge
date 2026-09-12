@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.564.0] - 2026-09-12
+
+### Added
+- `variance_ratio.py`: `variance_ratio` computes the Lo-MacKinlay (1988) variance
+  ratio ``VR(q)`` from overlapping ``q``-period returns (with the unbiased scaling
+  factors), and `variance_ratio_zstat` gives the heteroskedasticity-robust ``z``
+  statistic for the random-walk null. Cross-checked: white noise gives ``VR ~ 1``
+  with ``|z|`` small, a mean-reverting AR(1) gives ``VR < 1`` with ``z`` rejecting
+  below -1.96, and a trending AR(1) gives ``VR > 1`` with ``z`` rejecting above
+  1.96.
+
 ## [1.563.0] - 2026-09-12
 
 ### Documentation
