@@ -2082,6 +2082,21 @@ Each margin is uniform; the cross-margin rank correlation tracks `R` (≈0.69 fo
 0.7 target). A non-positive-definite correlation matrix is rejected by the
 Cholesky step.
 
+The Gaussian copula has **zero tail dependence** — extremes decouple, which
+famously understates joint-crash risk. `student_t_copula_sample` keeps the same
+rank correlation but adds symmetric tail dependence that grows as the degrees of
+freedom fall:
+
+```python
+from quantforge import student_t_copula_sample
+
+student_t_copula_sample(R, df=4, n=5000)     # heavy joint tails
+student_t_copula_sample(R, df=100, n=5000)   # ~ Gaussian copula
+```
+
+A lower `df` makes joint extremes markedly more likely at the same correlation; as
+`df` grows the sampler converges to the Gaussian copula.
+
 ## Spectral analysis
 
 Find cyclical structure — a seasonal pattern, a dominant trading cycle — with the
