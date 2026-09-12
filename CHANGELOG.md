@@ -16,6 +16,16 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.704.0] - 2026-09-12
+
+### Added
+- `perfmetrics.py`: `cornish_fisher_expected_shortfall` gives the skew- and
+  kurtosis-adjusted expected shortfall as the tail mean of the Cornish-Fisher
+  expanded quantile, completing the pair with the existing `cornish_fisher_var`.
+  Cross-checked: for a normal series it reduces to the Gaussian expected shortfall,
+  it never falls below the Cornish-Fisher VaR, it matches an empirical tail average
+  under mild non-normality to within 2%, and a fat left tail raises it.
+
 ## [1.703.0] - 2026-09-12
 
 ### Documentation

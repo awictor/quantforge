@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.702.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.704.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -8103,6 +8103,22 @@ Auto-generated from `quantforge` v1.702.0 by `docs/gen_api.py` — do not edit b
 >
 > Annualized return is the geometric ``(prod(1+r))^{periods_per_year/n} - 1``.
 > Raises if there is no drawdown (undefined ratio).
+
+### `cornish_fisher_expected_shortfall(returns, confidence=0.95, horizon=1.0, n_steps=2000) -> float`  _function_
+
+> Cornish-Fisher (skew/kurtosis-adjusted) expected shortfall, a positive loss.
+>
+> The average loss in the worst ``1 - confidence`` of the distribution when the
+> quantile is the Cornish-Fisher expansion :func:`cornish_fisher_var` uses. The
+> standardized shortfall is the tail mean of the expanded quantile,
+>
+>     ES_z = (1/(1-c)) integral_0^{1-c} z_cf(Phi^{-1}(p)) dp,
+>
+> computed by midpoint quadrature, then scaled to the loss
+> ``ES = -(mean*horizon + ES_z*sigma*sqrt(horizon))``. For a normal series it
+> reduces to the Gaussian expected shortfall; negative skew and fat tails push it
+> above both the Gaussian ES and the Cornish-Fisher VaR. Always at least the
+> Cornish-Fisher VaR.
 
 ### `cornish_fisher_var(returns, confidence=0.95, horizon=1.0) -> float`  _function_
 

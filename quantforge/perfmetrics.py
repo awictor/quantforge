@@ -562,6 +562,51 @@ def cornish_fisher_var(returns, confidence=0.95, horizon=1.0) -> float:
     return -(mu * horizon + z_cf * sd * math.sqrt(horizon))
 
 
+def _cornish_fisher_z(z, sk, ek):
+    """Cornish-Fisher expanded standard-normal quantile at base quantile ``z``."""
+    return (z + (z * z - 1.0) * sk / 6.0
+            + (z ** 3 - 3.0 * z) * ek / 24.0
+            - (2.0 * z ** 3 - 5.0 * z) * sk * sk / 36.0)
+
+
+def cornish_fisher_expected_shortfall(returns, confidence=0.95, horizon=1.0,
+                                      n_steps=2000) -> float:
+    """Cornish-Fisher (skew/kurtosis-adjusted) expected shortfall, a positive loss.
+
+    The average loss in the worst ``1 - confidence`` of the distribution when the
+    quantile is the Cornish-Fisher expansion :func:`cornish_fisher_var` uses. The
+    standardized shortfall is the tail mean of the expanded quantile,
+
+        ES_z = (1/(1-c)) integral_0^{1-c} z_cf(Phi^{-1}(p)) dp,
+
+    computed by midpoint quadrature, then scaled to the loss
+    ``ES = -(mean*horizon + ES_z*sigma*sqrt(horizon))``. For a normal series it
+    reduces to the Gaussian expected shortfall; negative skew and fat tails push it
+    above both the Gaussian ES and the Cornish-Fisher VaR. Always at least the
+    Cornish-Fisher VaR.
+    """
+    n = len(returns)
+    if n < 2:
+        raise ValueError("need at least two returns")
+    if not (0.0 < confidence < 1.0):
+        raise ValueError("confidence must be in (0, 1)")
+    mu = _mean(returns)
+    sd = _std(returns)
+    if sd <= 0.0:
+        raise ValueError("zero-variance returns")
+    sk = sample_skewness(returns)
+    ek = sample_kurtosis(returns, excess=True)
+    alpha = 1.0 - confidence
+    # Tail mean of the expanded quantile over p in (0, alpha) by midpoint rule.
+    acc = 0.0
+    dp = alpha / n_steps
+    for k in range(n_steps):
+        p = (k + 0.5) * dp
+        acc += _cornish_fisher_z(_norm_ppf(p), sk, ek)
+    es_z = acc / n_steps      # (1/alpha) * integral_0^alpha ... dp
+    return -(mu * horizon + es_z * sd * math.sqrt(horizon))
+
+
 def jarque_bera(returns) -> float:
     """Jarque-Bera test statistic for normality of a return series.
 

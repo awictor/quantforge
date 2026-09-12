@@ -555,6 +555,7 @@ from .perfmetrics import (
     omega_ratio, tail_ratio, tracking_error, information_ratio,
     up_capture, down_capture, downside_beta,
     sample_skewness, sample_kurtosis, jarque_bera, cornish_fisher_var,
+    cornish_fisher_expected_shortfall,
     historical_var as historical_var_series, historical_cvar,
     cumulative_return, annualized_return, annualized_volatility,
 )
@@ -716,7 +717,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.703.0"
+__version__ = "1.704.0"
 
 __all__ = [
     "OptionType",
@@ -1636,6 +1637,7 @@ __all__ = [
     "sample_kurtosis",
     "jarque_bera",
     "cornish_fisher_var",
+    "cornish_fisher_expected_shortfall",
     "historical_var_series",
     "historical_cvar",
     "cumulative_return",
