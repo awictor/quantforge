@@ -240,6 +240,9 @@ from .signals import (
 from .pairs import (
     pairs_hedge_ratio, spread_series, ou_half_life, spread_zscore,
 )
+from .rebalance import (
+    drift_weights, turnover, transaction_cost, no_trade_band_rebalance,
+)
 from .carry_rolldown import (
     carry_return, rolldown_return, total_carry_rolldown,
 )
@@ -572,7 +575,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.511.0"
+__version__ = "1.512.0"
 
 __all__ = [
     "OptionType",
@@ -954,6 +957,10 @@ __all__ = [
     "spread_series",
     "ou_half_life",
     "spread_zscore",
+    "drift_weights",
+    "turnover",
+    "transaction_cost",
+    "no_trade_band_rebalance",
     "carry_return",
     "rolldown_return",
     "total_carry_rolldown",

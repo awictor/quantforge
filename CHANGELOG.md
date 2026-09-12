@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.512.0] - 2026-09-12
+
+### Added
+- `rebalance.py`: portfolio rebalancing analytics. `drift_weights` (buy-and-hold
+  weight drift), `turnover` (one-way `0.5 sum |delta w|`), `transaction_cost`
+  (round-trip cost drag in bps), and `no_trade_band_rebalance` (only trade
+  positions outside a tolerance). Cross-checked: drift renormalizes with the
+  winner gaining weight, turnover is zero on target and one for a full swap, the
+  cost formula, and the band suppressing small drifts while trading large ones.
+
 ## [1.511.0] - 2026-09-12
 
 ### Documentation

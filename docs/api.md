@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.511.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.512.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -7314,6 +7314,38 @@ Auto-generated from `quantforge` v1.511.0 by `docs/gen_api.py` — do not edit b
 > Like :func:`rbergomi_smile` but prices each strike with the low-variance
 > conditional call on a shared set of W paths, then inverts to a Black-Scholes
 > vol. Returns ``(log_moneyness, vol)`` pairs sorted by strike.
+
+## rebalance
+
+### `drift_weights(weights, asset_returns)`  _function_
+
+> Buy-and-hold weights after one period of ``asset_returns``.
+>
+> Each position grows by ``(1 + r_i)``; the new weights are the grown values
+> renormalized to sum to one. The starting point for the next rebalance decision.
+
+### `no_trade_band_rebalance(current_weights, target_weights, band)`  _function_
+
+> Rebalance only positions whose drift exceeds a ``band`` tolerance.
+>
+> Positions within ``band`` of their target are left untouched (no trade);
+> those outside are moved to target. The remaining weight from the traded legs
+> is left as-is (the untouched legs keep their drifted weight), so the result is
+> renormalized to sum to one. Reduces turnover versus a full rebalance.
+
+### `transaction_cost(current_weights, target_weights, cost_bps)`  _function_
+
+> Transaction-cost drag of a rebalance: ``2 * turnover * cost_bps / 1e4``.
+>
+> Costs the round-trip (both sides) at ``cost_bps`` basis points of the traded
+> notional. Zero when no trade is needed.
+
+### `turnover(current_weights, target_weights)`  _function_
+
+> One-way turnover ``0.5 * sum |target - current|`` (fraction of the book).
+>
+> The fraction of the portfolio traded to move from current to target weights;
+> zero when already on target, up to one for a full turnover.
 
 ## resample
 
