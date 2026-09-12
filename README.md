@@ -1912,6 +1912,20 @@ It returns the expanded matrix and the index-tuple for each column; the feature
 count is `C(p + d, d)`. Feed the result straight into `ols_fit`, `ridge_regression`,
 or `fit_logistic`.
 
+Categorical columns need encoding first. `fit_label_encoder` maps categories to
+integer codes; `one_hot_encode` expands them to 0/1 indicator columns.
+
+```python
+from quantforge import fit_label_encoder, label_encode, one_hot_encode
+
+enc = fit_label_encoder(["b", "a", "c", "a"])   # categories sorted -> codes
+label_encode(enc, ["a", "c"])                    # -> [0, 2]
+one_hot_encode(enc, ["a", "c"])                  # -> [[1,0,0], [0,0,1]]
+```
+
+Fit the encoder on the training categories and reuse it on test data; unseen
+categories map to `-1` (label) or an all-zero row (one-hot).
+
 ## k-nearest neighbors
 
 A lazy, non-parametric baseline for classification and regression: predict a query
