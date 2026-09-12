@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.528.0] - 2026-09-12
+
+### Documentation
+- README: added an "Equity valuation" section covering the `valuation` module
+  (TOC auto-updated to 82 entries), with runnable examples verified against the
+  installed package.
+
 ## [1.527.0] - 2026-09-12
 
 ### Added

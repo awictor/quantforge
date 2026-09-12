@@ -48,6 +48,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Command line](#command-line)
 - [Quanto options](#quanto-options)
 - [Fixed income](#fixed-income)
+- [Equity valuation](#equity-valuation)
 - [Capital budgeting](#capital-budgeting)
 - [Money-market yields](#money-market-yields)
 - [Callable bonds and OAS](#callable-bonds-and-oas)
@@ -1240,6 +1241,21 @@ key_rate_durations(cf, [0.5, 1, 2, 3, 5], [0.03, 0.032, 0.035, 0.037, 0.04])
 The three short-rate models expose analytic rate moments too —
 `vasicek_expected_rate` / `vasicek_rate_variance` / `vasicek_stationary_distribution`
 (Normal), the CIR equivalents (Gamma), and Ho-Lee (drifted Brownian).
+
+## Equity valuation
+
+Cost of capital and discounted-cashflow valuation:
+
+```python
+from quantforge import (capm_cost_of_equity, wacc, gordon_growth_value,
+                        two_stage_dcf)
+
+ke = capm_cost_of_equity(risk_free=0.03, beta=1.2, market_premium=0.05)
+wacc(equity_value=600, debt_value=400, cost_of_equity=ke, cost_of_debt=0.05,
+     tax_rate=0.21)
+gordon_growth_value(dividend_next=2, discount_rate=0.08, growth=0.03)
+two_stage_dcf([100, 110, 121, 133, 146], discount_rate=0.09, terminal_growth=0.03)
+```
 
 ## Capital budgeting
 
