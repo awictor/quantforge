@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.486.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.487.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -8382,6 +8382,45 @@ Auto-generated from `quantforge` v1.486.0 by `docs/gen_api.py` — do not edit b
 > that compensates the investor for the downside they sell. Closed form:
 > ``coupon = (put_value / disc / principal ... )``; here solved directly since
 > the note is linear in the coupon.
+
+## student_t
+
+### `student_t_expected_shortfall(mean, scale, df, confidence=0.95)`  _function_
+
+> Parametric expected shortfall of a location-scale Student-t.
+>
+> Closed form ``ES = -mean + scale * (df + q^2)/(df - 1) * f(q)/(1 - confidence)``
+> where ``q = t_ppf(1 - confidence, df)`` and ``f`` is the t density. Requires
+> ``df > 1`` (finite mean); always at least the :func:`student_t_var`.
+
+### `student_t_var(mean, scale, df, confidence=0.95)`  _function_
+
+> Parametric VaR of a location-scale Student-t (positive loss magnitude).
+>
+> ``-(mean + scale * t_ppf(1 - confidence, df))`` -- heavier-tailed than the
+> normal VaR for finite ``df``, converging to it as ``df -> inf``.
+
+### `t_cdf(x, df)`  _function_
+
+> Student-t cumulative distribution via the regularized incomplete beta.
+>
+> Uses the identity ``P(T <= x) = 1 - 0.5 I_{df/(df+x^2)}(df/2, 1/2)`` for
+> ``x > 0`` and symmetry for ``x < 0``. Converges to :func:`norm_cdf` as
+> ``df -> inf``.
+
+### `t_pdf(x, df)`  _function_
+
+> Student-t probability density with ``df`` degrees of freedom.
+>
+> ``f(x) = Gamma((df+1)/2) / (sqrt(df pi) Gamma(df/2)) (1 + x^2/df)^{-(df+1)/2}``.
+> Symmetric about zero, heavier-tailed than the normal for finite ``df``.
+
+### `t_ppf(p, df)`  _function_
+
+> Student-t quantile (inverse CDF) by bisection on :func:`t_cdf`.
+>
+> Returns the ``x`` with ``t_cdf(x, df) = p``. Symmetric: ``t_ppf(1-p) =
+> -t_ppf(p)``.
 
 ## surface
 

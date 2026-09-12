@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.487.0] - 2026-09-11
+
+### Added
+- `student_t.py`: Student's t distribution and fat-tailed parametric risk.
+  `t_pdf`, `t_cdf` (regularized incomplete beta), `t_ppf`, `student_t_var`, and
+  `student_t_expected_shortfall` (closed form). Cross-checked: the CDF is
+  symmetric and converges to the normal as df grows, the df=5 critical value is
+  2.015, the density integrates to one, and the t VaR is fatter than the normal
+  VaR (converging to it), with ES at least the VaR.
+
 ## [1.486.0] - 2026-09-11
 
 ### Documentation
