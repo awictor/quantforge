@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.443.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.444.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -4272,6 +4272,54 @@ Auto-generated from `quantforge` v1.443.0 by `docs/gen_api.py` — do not edit b
 > returning ``(log_moneyness, vol)`` pairs sorted by strike on the forward
 > ``F = S e^{(r-q) t}``. An asymmetric jump distribution (``eta1 != eta2`` or
 > ``p != 1/2``) tilts the smile into a skew.
+
+## ldi
+
+### `funding_ratio(assets, liabilities)`  _function_
+
+> Funding ratio ``assets / liabilities`` (above 1 = surplus).
+
+### `hedge_ratio(asset_duration, asset_value, liability_duration_, liability_value)`  _function_
+
+> Fraction of the liability dollar-duration hedged by the assets.
+>
+> ``(asset_duration * asset_value) / (liability_duration * liability_value)`` --
+> the ratio of asset to liability dollar duration (DV01). One means the surplus
+> is immune to a parallel rate move; below one leaves residual liability
+> interest-rate risk.
+
+### `liability_duration(cashflows, discount_rate)`  _function_
+
+> Macaulay duration of the liability stream (years).
+>
+> PV-weighted average cashflow time ``sum t_i PV_i / sum PV_i``. The interest-
+> rate sensitivity the asset portfolio must match to immunize the surplus.
+
+### `liability_pv(cashflows, discount_rate)`  _function_
+
+> Present value of a liability stream ``[(t, amount), ...]``.
+>
+> Continuously-compounded discounting ``sum_i CF_i e^{-r t_i}``.
+
+### `required_hedge_duration(asset_value, liability_duration_, liability_value)`  _function_
+
+> Asset duration that fully immunizes the surplus (hedge ratio = 1).
+>
+> ``liability_duration * liability_value / asset_value`` -- the duration the
+> asset portfolio must carry so its dollar duration matches the liability's.
+
+### `surplus(assets, liabilities)`  _function_
+
+> Plan surplus (deficit if negative): ``assets - liabilities``.
+
+### `surplus_at_risk(assets, liabilities, surplus_volatility, confidence=0.95, horizon=1.0)`  _function_
+
+> Surplus-at-risk: the worst surplus loss at a confidence over a horizon.
+>
+> ``z * surplus_volatility * sqrt(horizon) * liabilities`` where ``z =
+> Phi^{-1}(confidence)`` and ``surplus_volatility`` is the funded-status (surplus/
+> liabilities) return volatility. A one-sided downside measure (positive number =
+> potential shortfall), analogous to VaR for the plan surplus.
 
 ## leisen_reimer
 

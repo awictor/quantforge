@@ -217,6 +217,10 @@ from .inflation import (
     yoy_caplet_price_normal, yoy_caplet_implied_normal_vol,
     real_zero_curve, nominal_zero_curve, real_discount_factor,
 )
+from .ldi import (
+    liability_pv, funding_ratio, surplus, liability_duration, hedge_ratio,
+    required_hedge_duration, surplus_at_risk,
+)
 from .retirement import (
     portfolio_depletion_years, sustainable_withdrawal, withdrawal_balance_path,
     glide_path_equity_weight, withdrawal_stream_pv, ruin_probability_mc,
@@ -486,7 +490,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.443.0"
+__version__ = "1.444.0"
 
 __all__ = [
     "OptionType",
@@ -836,6 +840,13 @@ __all__ = [
     "real_zero_curve",
     "nominal_zero_curve",
     "real_discount_factor",
+    "liability_pv",
+    "funding_ratio",
+    "surplus",
+    "liability_duration",
+    "hedge_ratio",
+    "required_hedge_duration",
+    "surplus_at_risk",
     "portfolio_depletion_years",
     "sustainable_withdrawal",
     "withdrawal_balance_path",

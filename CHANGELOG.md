@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.444.0] - 2026-09-11
+
+### Added
+- `ldi.py`: liability-driven investing. `liability_pv`, `funding_ratio`,
+  `surplus`, `liability_duration`, `hedge_ratio`, `required_hedge_duration`, and
+  `surplus_at_risk`. Cross-checked: the funding ratio and surplus, the required
+  hedge duration giving a unit hedge ratio, the hedge ratio scaling with asset
+  duration, and surplus-at-risk positive and rising with confidence.
+
 ## [1.443.0] - 2026-09-11
 
 ### Added
