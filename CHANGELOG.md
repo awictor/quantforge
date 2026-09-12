@@ -16,6 +16,15 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.662.0] - 2026-09-12
+
+### Added
+- `vol_convert.py`: `black_to_normal_vol` and `normal_to_black_vol` convert between
+  Black-76 (lognormal) and Bachelier (normal) implied volatilities by matching the
+  option price under both models. Cross-checked: the ATM conversion recovers the
+  leading-order ``sigma_N ~ sigma_B * F``, the round-trip is exact, both models
+  reproduce the same price at the converted vol, and OTM/put conversions round-trip.
+
 ## [1.661.0] - 2026-09-12
 
 ### Documentation

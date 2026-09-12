@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.661.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.662.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -11154,6 +11154,22 @@ Auto-generated from `quantforge` v1.661.0 by `docs/gen_api.py` — do not edit b
 > Samples an OTM chain around the forward, prices each option at its smile vol
 > with Black-Scholes, and applies :func:`vix_from_chain`. A flat smile returns
 > ``VIX ~= 100 * sigma``.
+
+## vol_convert
+
+### `black_to_normal_vol(forward, strike, t, sigma_black, is_call=True)`  _function_
+
+> Convert a Black-76 (lognormal) vol to the equivalent Bachelier (normal) vol.
+>
+> Prices the option with Black-76 at ``sigma_black`` (zero rates, forward
+> measure) and inverts the Bachelier model for the normal vol that reproduces it.
+
+### `normal_to_black_vol(forward, strike, t, sigma_normal, is_call=True)`  _function_
+
+> Convert a Bachelier (normal) vol to the equivalent Black-76 (lognormal) vol.
+>
+> Prices with Bachelier at ``sigma_normal`` and inverts Black-76. Requires
+> positive forward and strike (a lognormal vol is undefined otherwise).
 
 ## vol_target
 

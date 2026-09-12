@@ -336,6 +336,7 @@ from .minimize1d import golden_section_min, brent_min
 from .numdiff import gradient, hessian, jacobian
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
+from .vol_convert import black_to_normal_vol, normal_to_black_vol
 from .hull_white import (
     hw_zero_from_curve, hw_B, hw_bond_option,
     hw_caplet, hw_floorlet, hw_cap, hw_floor, hw_swaption,
@@ -690,7 +691,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.661.0"
+__version__ = "1.662.0"
 
 __all__ = [
     "OptionType",
@@ -1212,6 +1213,8 @@ __all__ = [
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",
+    "black_to_normal_vol",
+    "normal_to_black_vol",
     "hw_zero_from_curve",
     "hw_B",
     "hw_bond_option",
