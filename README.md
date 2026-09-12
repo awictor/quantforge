@@ -1492,6 +1492,24 @@ expected_steps_to_absorption(A, transient_states=[0, 1])
 absorption_probabilities(A, transient_states=[0, 1], absorbing_states=[2])
 ```
 
+## Principal component analysis
+
+Covariance-matrix PCA via Jacobi eigendecomposition -- the yield-curve
+level/slope/curvature factors -- plus low-rank reconstruction and component
+scenarios:
+
+```python
+from quantforge import pca, pca_scenario, reconstruct_covariance
+
+cov = [[0.04, 0.02, 0.01], [0.02, 0.03, 0.015], [0.01, 0.015, 0.025]]
+res = pca(cov)
+res["variances"], res["loadings"], res["cumulative_explained"]
+
+# A 2-sigma move along the first component (a level shift for a rate curve).
+pca_scenario(component_index=0, n_sigma=2.0, variances=res["variances"],
+             loadings=res["loadings"])
+```
+
 ## Structural credit (Merton)
 
 Firm equity as a call on assets, distance-to-default, default probability, credit

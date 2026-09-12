@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.469.0] - 2026-09-11
+
+### Documentation
+- README: added a "Principal component analysis" section covering the `pca`
+  module (Jacobi eigendecomposition, variance explained, reconstruction, component
+  scenarios), with runnable examples verified against the installed package.
+
 ## [1.468.0] - 2026-09-11
 
 ### Added
