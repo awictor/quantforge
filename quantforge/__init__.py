@@ -326,6 +326,7 @@ from .decision_tree import (
 )
 from .random_forest import fit_random_forest, predict_random_forest
 from .black_karasinski import bk_zero_coupon_bond
+from .hull_white import hw_zero_from_curve, hw_B
 from .hac import (
     autocovariance, autocorrelation, newey_west_variance, newey_west_mean_se,
 )
@@ -676,7 +677,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.637.0"
+__version__ = "1.638.0"
 
 __all__ = [
     "OptionType",
@@ -1185,6 +1186,8 @@ __all__ = [
     "fit_random_forest",
     "predict_random_forest",
     "bk_zero_coupon_bond",
+    "hw_zero_from_curve",
+    "hw_B",
     "autocovariance",
     "autocorrelation",
     "newey_west_variance",

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.637.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.638.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -4964,6 +4964,38 @@ Auto-generated from `quantforge` v1.637.0 by `docs/gen_api.py` — do not edit b
 >
 > Each asset weighted by the reciprocal of its standard deviation, normalized to
 > sum to one. Higher-volatility assets get less capital; ignores correlations.
+
+## hull_white
+
+### `hw_B(a, tau)`  _function_
+
+> Hull-White ``B(t, T) = (1 - e^{-a*tau}) / a`` for ``tau = T - t``.
+
+### `hw_zero_from_curve(P0, r0, a, sigma, t, T, f0=None, eps=1e-05)`  _function_
+
+> Hull-White bond price ``P(t, T)`` fitted to an initial curve ``P0``.
+>
+> Parameters
+> ----------
+> P0 : callable
+>     Initial discount factor ``P0(T)`` observed today (``P0(0) = 1``).
+> r0 : float
+>     Current short rate; for consistency it should equal the initial instant
+>     forward ``f(0,0)``.
+> a, sigma : float
+>     Mean reversion and volatility (``a`` may be 0 for the Ho-Lee limit).
+> t, T : float
+>     Valuation and maturity times, ``0 <= t <= T``.
+> f0 : callable, optional
+>     Initial instantaneous forward ``f(0, t)``; defaults to a finite-difference
+>     of ``-ln P0``.
+> eps : float
+>     Step for the forward finite difference.
+>
+> Returns
+> -------
+> float
+>     The fitted ``P(t, T)``. At ``t = 0`` it reproduces ``P0(T)`` exactly.
 
 ## hurst
 

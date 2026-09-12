@@ -16,6 +16,16 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.638.0] - 2026-09-12
+
+### Added
+- `hull_white.py`: `hw_zero_from_curve` prices a zero-coupon bond under the
+  Hull-White (extended Vasicek) model fitted to an arbitrary initial discount
+  curve, so the model reprices the input term structure exactly; `hw_B` gives the
+  ``B(t, T)`` factor. Cross-checked: at ``t = 0`` it refits flat, upward, and
+  Ho-Lee-limit curves to 1e-4, the ``B`` factor tends to ``T - t`` as mean
+  reversion vanishes, and fitted discount factors stay in ``(0, 1)``.
+
 ## [1.637.0] - 2026-09-12
 
 ### Documentation
