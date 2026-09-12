@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.645.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.646.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -425,6 +425,24 @@ Auto-generated from `quantforge` v1.645.0 by `docs/gen_api.py` — do not edit b
 ### `bachelier_vega(F, K, t, r, sigma) -> float`  _function_
 
 > dPrice/dsigma_N (per unit of normal vol). Same for calls and puts.
+
+## basket_default
+
+### `basket_default_distribution(n, pd, rho, n_quad=200)`  _function_
+
+> Distribution of the number of defaults in a homogeneous basket.
+>
+> Returns a list ``p`` of length ``n + 1`` with ``p[k] = P(exactly k defaults)``,
+> integrating the conditional binomial over the common factor by midpoint
+> quadrature on ``[-8, 8]``. The list sums to 1.
+
+### `kth_to_default_probability(n, k, pd, rho, n_quad=200)`  _function_
+
+> Probability of at least ``k`` defaults in a homogeneous basket.
+>
+> The trigger probability of a kth-to-default swap. Monotone: decreasing in
+> ``k`` (harder to reach more defaults) and, for a fixed ``k > 1``, increasing
+> in correlation (defaults cluster). ``k = 1`` is first-to-default.
 
 ## bates
 

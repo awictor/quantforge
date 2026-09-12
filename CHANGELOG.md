@@ -16,6 +16,18 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.646.0] - 2026-09-12
+
+### Added
+- `basket_default.py`: `basket_default_distribution` gives the full distribution of
+  the number of defaults in a homogeneous basket under the one-factor Gaussian
+  copula (conditional binomial integrated over the common factor), and
+  `kth_to_default_probability` gives the ``P(>= k defaults)`` trigger of a
+  kth-to-default swap. Cross-checked: the distribution sums to 1, the trigger is
+  monotone decreasing in ``k``, the ``rho = 0`` first-to-default matches
+  ``1 - (1-pd)^n``, correlation clusters defaults (senior triggers rise, first-to-
+  default falls with ``rho``), and the mean equals ``n * pd``.
+
 ## [1.645.0] - 2026-09-12
 
 ### Documentation
