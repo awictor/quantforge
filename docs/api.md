@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.627.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.628.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -2853,6 +2853,29 @@ Auto-generated from `quantforge` v1.627.0 by `docs/gen_api.py` — do not edit b
 >
 > Returns a :class:`KeyRateDV01`. By convention DV01 is negative for a long
 > bond-like position (rates up -> PV down).
+
+## encoding
+
+### `fit_label_encoder(values)`  _function_
+
+> Fit a label encoder: sorted distinct categories -> integer indices.
+>
+> Returns ``{"categories": [...]}`` where the list position is the code.
+
+### `label_decode(encoder, codes)`  _function_
+
+> Invert label codes back to categories; -1 (unseen) maps to ``None``.
+
+### `label_encode(encoder, values)`  _function_
+
+> Encode ``values`` to integer codes; unseen categories map to -1.
+
+### `one_hot_encode(encoder, values)`  _function_
+
+> One-hot encode ``values`` against a fitted label encoder.
+>
+> Each row is a length-``len(categories)`` list of 0/1; a known category sets one
+> entry to 1 (rows sum to 1), an unseen category yields an all-zero row.
 
 ## entropy_pooling
 

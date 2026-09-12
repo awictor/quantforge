@@ -315,6 +315,9 @@ from .knn import knn_classify, knn_regress
 from .naive_bayes import (
     fit_gaussian_nb, predict_gaussian_nb, predict_proba_gaussian_nb,
 )
+from .encoding import (
+    fit_label_encoder, label_encode, label_decode, one_hot_encode,
+)
 from .hac import (
     autocovariance, autocorrelation, newey_west_variance, newey_west_mean_se,
 )
@@ -665,7 +668,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.627.0"
+__version__ = "1.628.0"
 
 __all__ = [
     "OptionType",
@@ -1161,6 +1164,10 @@ __all__ = [
     "fit_gaussian_nb",
     "predict_gaussian_nb",
     "predict_proba_gaussian_nb",
+    "fit_label_encoder",
+    "label_encode",
+    "label_decode",
+    "one_hot_encode",
     "autocovariance",
     "autocorrelation",
     "newey_west_variance",

@@ -16,6 +16,16 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.628.0] - 2026-09-12
+
+### Added
+- `encoding.py`: categorical feature encoding -- `fit_label_encoder`,
+  `label_encode` / `label_decode` (integer codes), and `one_hot_encode` (0/1
+  indicator columns). Cross-checked: categories are sorted and encode to
+  contiguous indices, codes round-trip back to labels, unseen categories map to
+  ``-1`` / ``None`` (label) or an all-zero row (one-hot), and one-hot rows sum to
+  1 for known categories.
+
 ## [1.627.0] - 2026-09-12
 
 ### Documentation
