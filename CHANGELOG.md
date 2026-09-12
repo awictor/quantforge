@@ -16,6 +16,16 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.644.0] - 2026-09-12
+
+### Added
+- `hull_white.py`: `hw_swaption` prices a European payer/receiver swaption under
+  Hull-White via the Jamshidian decomposition -- solve for the critical short rate
+  at which the underlying coupon bond is at par, then sum options on each
+  zero-coupon cashflow struck at that rate. Cross-checked: payer and receiver are
+  positive, ``payer - receiver`` equals the forward swap value (put-call parity),
+  the ATM payer equals the ATM receiver, and a higher volatility raises the price.
+
 ## [1.643.0] - 2026-09-12
 
 ### Documentation

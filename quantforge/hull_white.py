@@ -150,3 +150,62 @@ def hw_floor(P0, a, sigma, dates, strike, notional=1.0):
         raise ValueError("need at least two schedule dates")
     return sum(hw_floorlet(P0, a, sigma, dates[i], dates[i + 1], strike, notional)
                for i in range(len(dates) - 1))
+
+
+def hw_swaption(P0, r0, a, sigma, expiry, pay_times, fixed_rate,
+                is_payer=True, notional=1.0):
+    """European swaption under Hull-White via Jamshidian decomposition.
+
+    At ``expiry`` the holder enters a swap paying (payer) or receiving (receiver)
+    ``fixed_rate`` on ``pay_times``. Jamshidian's trick: the underlying coupon bond
+    is monotone in the short rate, so find the critical rate ``r*`` at which its
+    value equals par, then the swaption is a portfolio of options on each
+    zero-coupon cashflow struck at that cashflow's value at ``r*``. Priced off the
+    initial curve; ``r0`` is only used to seed the ``r*`` search.
+
+    A payer swaption is a put on the coupon bond (a portfolio of zero puts); a
+    receiver is the corresponding call portfolio.
+    """
+    import math as _m
+    if not pay_times or any(pay_times[i] <= expiry for i in range(len(pay_times))):
+        raise ValueError("all pay_times must be after expiry")
+    if sigma < 0:
+        raise ValueError("sigma must be non-negative")
+
+    # Cashflows of the fixed leg (coupon = fixed_rate * accrual), plus notional.
+    prev = expiry
+    cfs = []
+    for pt in pay_times:
+        tau = pt - prev
+        cfs.append((pt, fixed_rate * tau))
+        prev = pt
+    cfs[-1] = (cfs[-1][0], cfs[-1][1] + 1.0)     # principal at the end
+
+    # Bond value at expiry as a function of the short rate r (HW: P(expiry,T)
+    # given r), using the analytic reconstitution around the fitted curve.
+    def bond_at(r):
+        total = 0.0
+        for (T, c) in cfs:
+            # P(expiry, T | r) = A(expiry,T) exp(-B r), matched to the curve.
+            p = hw_zero_from_curve(P0, r, a, sigma, expiry, T)
+            total += c * p
+        return total
+
+    # Critical r* where the coupon bond equals par (1.0). Bond is decreasing in r.
+    lo, hi = -0.5, 1.0
+    for _ in range(200):
+        mid = 0.5 * (lo + hi)
+        if bond_at(mid) > 1.0:
+            lo = mid
+        else:
+            hi = mid
+    r_star = 0.5 * (lo + hi)
+
+    # Strike for each zero option = its value at r*; sum the bond options.
+    total = 0.0
+    for (T, c) in cfs:
+        k = hw_zero_from_curve(P0, r_star, a, sigma, expiry, T)
+        # Payer = put on the bond = puts on each zero; receiver = calls.
+        opt = hw_bond_option(P0, a, sigma, expiry, T, k, is_call=not is_payer)
+        total += c * opt
+    return notional * total

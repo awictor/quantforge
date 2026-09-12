@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.643.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.644.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -5010,6 +5010,20 @@ Auto-generated from `quantforge` v1.643.0 by `docs/gen_api.py` — do not edit b
 ### `hw_floorlet(P0, a, sigma, reset, pay, strike, notional=1.0)`  _function_
 
 > Hull-White floorlet: ``notional * (1 + strike*tau)`` calls on the pay-zero.
+
+### `hw_swaption(P0, r0, a, sigma, expiry, pay_times, fixed_rate, is_payer=True, notional=1.0)`  _function_
+
+> European swaption under Hull-White via Jamshidian decomposition.
+>
+> At ``expiry`` the holder enters a swap paying (payer) or receiving (receiver)
+> ``fixed_rate`` on ``pay_times``. Jamshidian's trick: the underlying coupon bond
+> is monotone in the short rate, so find the critical rate ``r*`` at which its
+> value equals par, then the swaption is a portfolio of options on each
+> zero-coupon cashflow struck at that cashflow's value at ``r*``. Priced off the
+> initial curve; ``r0`` is only used to seed the ``r*`` search.
+>
+> A payer swaption is a put on the coupon bond (a portfolio of zero puts); a
+> receiver is the corresponding call portfolio.
 
 ### `hw_zero_from_curve(P0, r0, a, sigma, t, T, f0=None, eps=1e-05)`  _function_
 
