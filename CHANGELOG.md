@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.459.0] - 2026-09-11
+
+### Documentation
+- README: added a "Bootstrap and jackknife" section covering the `resample`
+  module (IID / stationary / BCa bootstrap and jackknife CIs), with runnable
+  examples verified against the installed package.
+
 ## [1.458.0] - 2026-09-11
 
 ### Added

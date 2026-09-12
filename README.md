@@ -1457,6 +1457,22 @@ res = brinson_attribution(portfolio_weights=[0.5, 0.3, 0.2],
 res["allocation_total"], res["selection_total"], res["active_return"]
 ```
 
+## Bootstrap and jackknife
+
+Nonparametric confidence intervals: IID, stationary (block) bootstrap for
+serially-correlated data, BCa, and the jackknife:
+
+```python
+from quantforge import (bootstrap_ci, stationary_bootstrap_ci, bca_bootstrap_ci,
+                        jackknife_estimate)
+
+returns = [0.01, -0.02, 0.03, 0.00, 0.015, -0.01, 0.025]
+bootstrap_ci(returns, confidence=0.95)          # (lower, point, upper) for the mean
+bca_bootstrap_ci(returns)                        # bias-corrected accelerated
+stationary_bootstrap_ci(returns, mean_block=3)   # block bootstrap for autocorrelation
+jackknife_estimate(returns)                      # (estimate, standard_error)
+```
+
 ## Dual-currency deposits
 
 Yield-enhanced FX-linked deposits by component decomposition:
