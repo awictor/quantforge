@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.492.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.493.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -925,6 +925,29 @@ Auto-generated from `quantforge` v1.492.0 by `docs/gen_api.py` — do not edit b
 ### `vega(S, K, t, r, sigma, b=None) -> float`  _function_
 
 > dPrice/dSigma, per 1.0 change in vol (divide by 100 for per-vol-point).
+
+## callable_bond
+
+### `call_option_value(face, coupon_rate, maturity, r0, sigma, call_price, freq=1, p=0.5)`  _function_
+
+> Value of the embedded call to the issuer: straight minus callable price.
+>
+> ``straight_bond - callable_bond`` -- the value the call option strips from the
+> bondholder (non-negative). The callable bond trades cheaper by this amount.
+
+### `callable_bond_price(face, coupon_rate, maturity, r0, sigma, freq=1, call_price=None, put_price=None, p=0.5)`  _function_
+
+> Price a (possibly callable/puttable) bond on a binomial short-rate tree.
+>
+> ``freq`` coupons per year over ``maturity`` years; the lattice has one step per
+> coupon. ``call_price`` caps the value at each pre-maturity node (issuer's call);
+> ``put_price`` floors it (holder's put); either may be ``None``. With both
+> ``None`` this is the straight bond on the tree. Risk-neutral up-probability
+> ``p``. Returns the time-zero price.
+
+### `straight_bond_tree_price(face, coupon_rate, maturity, r0, sigma, freq=1, p=0.5)`  _function_
+
+> Straight (option-free) bond on the same tree -- the no-optionality baseline.
 
 ## carrmadan
 

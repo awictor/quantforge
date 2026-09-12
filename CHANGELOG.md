@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.493.0] - 2026-09-11
+
+### Added
+- `callable_bond.py`: callable/puttable bond pricing on a Black-Derman-Toy-style
+  binomial short-rate tree by backward induction. `callable_bond_price` (call caps
+  / put floors the node value), `straight_bond_tree_price`, and `call_option_value`
+  (straight minus callable). Cross-checked: callable below and puttable above the
+  straight bond, no-optionality equals the straight bond, the call value is
+  non-negative, and higher volatility lowers the callable price.
+
 ## [1.492.0] - 2026-09-11
 
 ### Added

@@ -226,6 +226,9 @@ from .nelson_siegel import (
 )
 from .interpolation import natural_cubic_spline, monotone_cubic
 from .rootfind import bisection, brent, newton
+from .callable_bond import (
+    callable_bond_price, straight_bond_tree_price, call_option_value,
+)
 from .evt import (
     hill_estimator, gpd_fit_pot, gpd_var, gpd_expected_shortfall,
     gev_cdf, gev_return_level, gev_fit_block_maxima,
@@ -550,7 +553,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.492.0"
+__version__ = "1.493.0"
 
 __all__ = [
     "OptionType",
@@ -910,6 +913,9 @@ __all__ = [
     "bisection",
     "brent",
     "newton",
+    "callable_bond_price",
+    "straight_bond_tree_price",
+    "call_option_value",
     "hill_estimator",
     "gpd_fit_pot",
     "gpd_var",
