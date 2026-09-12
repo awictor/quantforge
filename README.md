@@ -77,6 +77,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Performance attribution (Brinson)](#performance-attribution-brinson)
 - [Bootstrap and jackknife](#bootstrap-and-jackknife)
 - [Hodrick-Prescott filter](#hodrick-prescott-filter)
+- [Kalman filter (local level)](#kalman-filter-local-level)
 - [Markov chains](#markov-chains)
 - [Principal component analysis](#principal-component-analysis)
 - [Matrix utilities](#matrix-utilities)
@@ -1790,6 +1791,29 @@ cycle[:2]                                  # -> [0.425, 0.109]   (y - trend)
 trend (`lambda -> inf` collapses to the least-squares straight line); `lambda = 0`
 returns the data untouched. Common choices: 1600 (quarterly), 129600 (monthly),
 6.25 (annual).
+
+## Kalman filter (local level)
+
+Track a slowly drifting level — a time-varying mean, a dynamic hedge ratio, a
+smoothed signal — with the exact scalar Kalman recursion for the
+random-walk-plus-noise model. `kalman_local_level` returns the filtered level, its
+posterior variance, and the Kalman gain at each step;
+`kalman_steady_state_gain` gives the closed-form limiting gain.
+
+```python
+from quantforge import kalman_local_level, kalman_steady_state_gain
+
+y = [10.1, 10.3, 9.8, 10.5, 10.9, 11.2, 10.7, 11.5, 11.8, 12.0]
+levels, variances, gains = kalman_local_level(y, process_var=0.05, obs_var=1.0)
+levels[:3]                                  # -> [10.1, 10.172, 10.064]  (smoothed)
+
+kalman_steady_state_gain(0.05, 1.0)         # -> 0.2  (limiting gain)
+```
+
+The gain depends only on the signal-to-noise ratio `Q/R`: it rises toward 1 as the
+process noise dominates (trust each observation) and toward 0 as the observation
+noise dominates (heavy smoothing). With `Q = 0` and a diffuse prior the estimate
+is exactly the running mean (recursive least squares).
 
 ## Markov chains
 

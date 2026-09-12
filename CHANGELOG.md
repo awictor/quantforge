@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.549.0] - 2026-09-12
+
+### Documentation
+- README: added a "Kalman filter (local level)" section documenting
+  `kalman_local_level` and `kalman_steady_state_gain`, with a snippet verified
+  against the package; TOC regenerated to 90 entries.
+
 ## [1.548.0] - 2026-09-12
 
 ### Added
