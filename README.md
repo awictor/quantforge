@@ -1515,6 +1515,19 @@ swap_annuity(discount, 0, 5, freq=2)                              # PV01 per uni
 The swap is worth zero at the par rate; a receiver is the negative of the payer,
 and the value scales linearly in notional.
 
+A single-period forward rate agreement is `fra_value`, with `fra_forward_rate` the
+fair rate:
+
+```python
+from quantforge import fra_forward_rate, fra_value
+
+fra_forward_rate(discount, t1=1.0, t2=1.5)          # simple forward rate
+fra_value(discount, contract_rate=0.03, t1=1.0, t2=1.5, payer=True)
+```
+
+The FRA is worth zero at the forward rate; a payer gains when the realized forward
+exceeds the contract rate.
+
 ## Equity valuation
 
 Cost of capital and discounted-cashflow valuation:

@@ -16,6 +16,12 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.671.0] - 2026-09-12
+
+### Documentation
+- README: extended the Fixed income section with `fra_forward_rate` and
+  `fra_value`.
+
 ## [1.670.0] - 2026-09-12
 
 ### Added
