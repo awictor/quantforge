@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.530.0] - 2026-09-12
+
+### Documentation
+- README: added a "Leveraged ETFs" section covering the `leveraged_etf` module
+  (TOC auto-updated to 83 entries), with runnable examples verified against the
+  installed package.
+
 ## [1.529.0] - 2026-09-12
 
 ### Added

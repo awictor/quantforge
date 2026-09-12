@@ -86,6 +86,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Portfolio optimization](#portfolio-optimization)
 - [Rebalancing](#rebalancing)
 - [Portfolio insurance (CPPI)](#portfolio-insurance-cppi)
+- [Leveraged ETFs](#leveraged-etfs)
 - [Volatility targeting](#volatility-targeting)
 - [Trend and momentum signals](#trend-and-momentum-signals)
 - [Pairs trading](#pairs-trading)
@@ -1864,6 +1865,18 @@ from quantforge import risky_exposure, cppi_path
 risky_exposure(wealth=100, floor_pv=90, multiplier=3)   # = 3 * cushion, capped
 cppi_path(initial_wealth=100, floor=90, multiplier=3,
           risky_returns=[-0.30, -0.30, -0.30, -0.30], r=0.02, dt=0.25)  # protected
+```
+
+## Leveraged ETFs
+
+Daily-rebalanced leveraged/inverse ETF path and the volatility (compounding) drag:
+
+```python
+from quantforge import volatility_drag, flat_market_decay, leveraged_etf_path
+
+volatility_drag(leverage=3, sigma=0.20)          # per-period drag vs naive 3x
+leveraged_etf_path(daily_returns, leverage=3, expense_ratio=0.0095)
+flat_market_decay(3, [0.10, 1/1.1 - 1])          # loses value over a net-flat path
 ```
 
 ## Volatility targeting
