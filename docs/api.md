@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.509.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.510.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -1793,6 +1793,19 @@ Auto-generated from `quantforge` v1.509.0 by `docs/gen_api.py` — do not edit b
 > shifting both expiries together). Returns a dict with ``price`` and those
 > fields. ``kind`` is one of ``call-on-call``/``call-on-put``/``put-on-call``/
 > ``put-on-put``.
+
+## convertible_lattice
+
+### `convertible_bond_lattice(S, sigma, face, conversion_ratio, coupon_rate, maturity, r, steps=200, call_price=None, put_price=None, credit_spread=0.0, q=0.0)`  _function_
+
+> Convertible bond value on a CRR equity tree by backward induction.
+>
+> ``S`` current stock, ``conversion_ratio`` shares per bond, coupons at rate
+> ``coupon_rate`` on ``face`` spread evenly across the steps. At each node the
+> holder value is ``max(continuation, conversion_ratio * S_node, put_price)`` and
+> the issuer caps it at ``call_price`` (both optional). Continuation discounts at
+> ``r + credit_spread`` (risky). ``q`` is the dividend yield. Returns the
+> time-zero convertible price.
 
 ## copula
 

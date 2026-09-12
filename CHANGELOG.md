@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.510.0] - 2026-09-12
+
+### Added
+- `convertible_lattice.py`: `convertible_bond_lattice` prices a convertible bond
+  on a Cox-Ross-Rubinstein equity tree by backward induction, with American-style
+  conversion, an issuer call, and a holder put, discounting at a credit spread.
+  Cross-checked: the value stays at or above both the conversion parity and the
+  bond floor, approaches the conversion value deep in the money, is lower when
+  callable, and rises with volatility.
+
 ## [1.509.0] - 2026-09-12
 
 ### Documentation

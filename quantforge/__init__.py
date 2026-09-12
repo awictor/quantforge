@@ -247,6 +247,7 @@ from .callable_bond import (
     callable_bond_price, straight_bond_tree_price, call_option_value,
     callable_bond_price_with_spread, option_adjusted_spread,
 )
+from .convertible_lattice import convertible_bond_lattice
 from .evt import (
     hill_estimator, gpd_fit_pot, gpd_var, gpd_expected_shortfall,
     gev_cdf, gev_return_level, gev_fit_block_maxima,
@@ -571,7 +572,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.509.0"
+__version__ = "1.510.0"
 
 __all__ = [
     "OptionType",
@@ -961,6 +962,7 @@ __all__ = [
     "call_option_value",
     "callable_bond_price_with_spread",
     "option_adjusted_spread",
+    "convertible_bond_lattice",
     "hill_estimator",
     "gpd_fit_pot",
     "gpd_var",
