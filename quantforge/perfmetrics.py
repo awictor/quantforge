@@ -150,6 +150,62 @@ def longest_drawdown_duration(returns: Sequence[float]) -> int:
     return longest
 
 
+def ulcer_index(returns: Sequence[float]) -> float:
+    """Ulcer index: RMS of the underwater drawdown curve.
+
+    ``sqrt(mean(drawdown_t^2))`` over the :func:`drawdown_curve` -- a downside risk
+    measure that penalizes deep and prolonged drawdowns more than shallow ones,
+    unlike volatility which treats up and down moves alike. Zero for a series that
+    never draws down.
+    """
+    dd = drawdown_curve(returns)
+    if not dd:
+        return 0.0
+    return math.sqrt(sum(d * d for d in dd) / len(dd))
+
+
+def pain_index(returns: Sequence[float]) -> float:
+    """Pain index: the average depth of the underwater drawdown curve.
+
+    ``mean(drawdown_t)`` -- the mean fractional distance below the running peak.
+    A gentler (L1) cousin of the :func:`ulcer_index` (L2).
+    """
+    dd = drawdown_curve(returns)
+    if not dd:
+        return 0.0
+    return sum(dd) / len(dd)
+
+
+def ulcer_performance_index(returns: Sequence[float], risk_free=0.0,
+                            periods_per_year=252) -> float:
+    """Ulcer performance index (Martin ratio): excess return over the Ulcer index.
+
+    ``(annualized_excess_return) / ulcer_index`` -- a return-per-unit-of-drawdown-
+    pain ratio, the drawdown analogue of the Sharpe ratio. Higher is better;
+    raises if there is no drawdown (infinite ratio).
+    """
+    ui = ulcer_index(returns)
+    if ui <= 0.0:
+        raise ValueError("no drawdown; Ulcer performance index is undefined")
+    mean_excess = _mean(returns) - risk_free / periods_per_year
+    ann_excess = mean_excess * periods_per_year
+    return ann_excess / ui
+
+
+def pain_ratio(returns: Sequence[float], risk_free=0.0,
+               periods_per_year=252) -> float:
+    """Pain ratio: annualized excess return over the :func:`pain_index`.
+
+    The L1 analogue of the :func:`ulcer_performance_index`. Higher is better;
+    raises when there is no drawdown.
+    """
+    pi = pain_index(returns)
+    if pi <= 0.0:
+        raise ValueError("no drawdown; pain ratio is undefined")
+    ann_excess = (_mean(returns) - risk_free / periods_per_year) * periods_per_year
+    return ann_excess / pi
+
+
 def rolling_sharpe(returns: Sequence[float], window: int, risk_free=0.0,
                    periods_per_year=252) -> list:
     """Annualized Sharpe ratio over each trailing window of ``window`` periods.

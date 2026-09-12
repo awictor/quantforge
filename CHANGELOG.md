@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.483.0] - 2026-09-11
+
+### Added
+- `ulcer_index`, `pain_index`, `ulcer_performance_index`, `pain_ratio` (in
+  `perfmetrics.py`): drawdown-based risk and return-per-pain ratios -- the RMS
+  (Ulcer) and mean (pain) depth of the underwater curve, and the Martin/pain
+  ratios of annualized excess return over each. Cross-checked: zero without
+  drawdown, Ulcer at least the pain index, both bounded by the max drawdown, and
+  the ratios raising when there is no drawdown.
+
 ## [1.482.0] - 2026-09-11
 
 ### Documentation

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.482.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.483.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -6402,6 +6402,20 @@ Auto-generated from `quantforge` v1.482.0 by `docs/gen_api.py` — do not edit b
 > gain mass than loss mass. Returns ``inf`` when there is no downside; raises
 > if there is neither upside nor downside.
 
+### `pain_index(returns: Sequence[float]) -> float`  _function_
+
+> Pain index: the average depth of the underwater drawdown curve.
+>
+> ``mean(drawdown_t)`` -- the mean fractional distance below the running peak.
+> A gentler (L1) cousin of the :func:`ulcer_index` (L2).
+
+### `pain_ratio(returns: Sequence[float], risk_free=0.0, periods_per_year=252) -> float`  _function_
+
+> Pain ratio: annualized excess return over the :func:`pain_index`.
+>
+> The L1 analogue of the :func:`ulcer_performance_index`. Higher is better;
+> raises when there is no drawdown.
+
 ### `profit_factor(returns: Sequence[float]) -> float`  _function_
 
 > Gross profits divided by gross losses (absolute).
@@ -6462,6 +6476,23 @@ Auto-generated from `quantforge` v1.482.0 by `docs/gen_api.py` — do not edit b
 >
 > ``active_t = r_t - b_t``; the sample standard deviation (ddof=1) scaled by
 > ``sqrt(periods_per_year)``. Series must be equal length.
+
+### `ulcer_index(returns: Sequence[float]) -> float`  _function_
+
+> Ulcer index: RMS of the underwater drawdown curve.
+>
+> ``sqrt(mean(drawdown_t^2))`` over the :func:`drawdown_curve` -- a downside risk
+> measure that penalizes deep and prolonged drawdowns more than shallow ones,
+> unlike volatility which treats up and down moves alike. Zero for a series that
+> never draws down.
+
+### `ulcer_performance_index(returns: Sequence[float], risk_free=0.0, periods_per_year=252) -> float`  _function_
+
+> Ulcer performance index (Martin ratio): excess return over the Ulcer index.
+>
+> ``(annualized_excess_return) / ulcer_index`` -- a return-per-unit-of-drawdown-
+> pain ratio, the drawdown analogue of the Sharpe ratio. Higher is better;
+> raises if there is no drawdown (infinite ratio).
 
 ### `up_capture(returns, benchmark_returns) -> float`  _function_
 
