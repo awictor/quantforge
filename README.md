@@ -1570,6 +1570,20 @@ sample_expected_shortfall(pnl, confidence=0.95)     # coherent CVaR
 component_expected_shortfall([book_a_pnl, book_b_pnl])   # contributions sum to total ES
 ```
 
+## Student-t fat tails
+
+The Student-t distribution (pdf/cdf/quantile), fat-tailed parametric VaR / ES,
+and degrees-of-freedom fitting from a return sample:
+
+```python
+from quantforge import (t_ppf, student_t_var, student_t_expected_shortfall,
+                        fit_student_t)
+
+student_t_var(mean=0, scale=0.02, df=4, confidence=0.99)   # fatter than normal
+student_t_expected_shortfall(0, 0.02, df=4, confidence=0.99)
+mean, scale, df = fit_student_t(returns)                    # moment-match the tails
+```
+
 ## Structural credit (Merton)
 
 Firm equity as a call on assets, distance-to-default, default probability, credit

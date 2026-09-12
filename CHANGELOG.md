@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.489.0] - 2026-09-11
+
+### Documentation
+- README: added a "Student-t fat tails" section covering the `student_t` module
+  (distribution, fat-tailed VaR/ES, degrees-of-freedom fitting), with runnable
+  examples verified against the installed package.
+
 ## [1.488.0] - 2026-09-11
 
 ### Added
