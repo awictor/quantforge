@@ -356,6 +356,7 @@ from .credibility import (
 from .chain_ladder import (
     development_factors, chain_ladder, development_pattern, bornhuetter_ferguson,
     cape_cod, incremental_to_cumulative, cumulative_to_incremental, paid_to_date,
+    exponential_tail_factor, chain_ladder_with_tail,
 )
 from .hull_white import (
     hw_zero_from_curve, hw_B, hw_bond_option,
@@ -712,7 +713,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.693.0"
+__version__ = "1.694.0"
 
 __all__ = [
     "OptionType",
@@ -1266,6 +1267,8 @@ __all__ = [
     "incremental_to_cumulative",
     "cumulative_to_incremental",
     "paid_to_date",
+    "exponential_tail_factor",
+    "chain_ladder_with_tail",
     "hw_zero_from_curve",
     "hw_B",
     "hw_bond_option",

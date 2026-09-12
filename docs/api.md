@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.693.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.694.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -1380,6 +1380,14 @@ Auto-generated from `quantforge` v1.693.0 by `docs/gen_api.py` — do not edit b
 > ``reserve`` (IBNR per year = ultimate - latest observed), and
 > ``total_reserve``. A fully-developed row has zero reserve.
 
+### `chain_ladder_with_tail(triangle, tail_factor)`  _function_
+
+> Chain-ladder projection with an extra tail development factor.
+>
+> Multiplies each accident year's ultimate by ``tail_factor`` after the usual
+> chain-ladder projection, capturing development beyond the triangle. A
+> ``tail_factor`` of 1.0 reproduces :func:`chain_ladder`.
+
 ### `cumulative_to_incremental(triangle)`  _function_
 
 > Convert a cumulative-claims triangle to incremental (successive differences).
@@ -1399,6 +1407,16 @@ Auto-generated from `quantforge` v1.693.0 by `docs/gen_api.py` — do not edit b
 > Returns ``pct[j]`` = fraction of ultimate developed by age ``j``, computed as
 > the reciprocal of the cumulative product of the remaining factors. The final
 > age is fully developed (``1.0``).
+
+### `exponential_tail_factor(factors, n_extrapolate=100)`  _function_
+
+> Extrapolate a tail development factor by exponential decay of ``f - 1``.
+>
+> Fits ``ln(f_j - 1) = a + b j`` to the observed age-to-age factors with
+> ``f_j > 1`` (the excess-over-one decays geometrically), projects the excess
+> forward ``n_extrapolate`` ages, and returns the product ``prod (1 + excess_k)``
+> as a single tail factor applied beyond the last observed age. Returns 1.0 when
+> no factor exceeds 1 (fully developed). Requires ``b < 0`` (a decaying tail).
 
 ### `incremental_to_cumulative(triangle)`  _function_
 

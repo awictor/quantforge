@@ -212,3 +212,56 @@ def cumulative_to_incremental(triangle):
 def paid_to_date(cumulative_triangle):
     """Latest (diagonal) paid amount per accident year of a cumulative triangle."""
     return [row[-1] for row in cumulative_triangle]
+
+
+def exponential_tail_factor(factors, n_extrapolate=100):
+    """Extrapolate a tail development factor by exponential decay of ``f - 1``.
+
+    Fits ``ln(f_j - 1) = a + b j`` to the observed age-to-age factors with
+    ``f_j > 1`` (the excess-over-one decays geometrically), projects the excess
+    forward ``n_extrapolate`` ages, and returns the product ``prod (1 + excess_k)``
+    as a single tail factor applied beyond the last observed age. Returns 1.0 when
+    no factor exceeds 1 (fully developed). Requires ``b < 0`` (a decaying tail).
+    """
+    import math
+    excess = [(j, factors[j] - 1.0) for j in range(len(factors)) if factors[j] > 1.0]
+    if len(excess) < 2:
+        return 1.0
+    n = len(excess)
+    xs = [e[0] for e in excess]
+    ys = [math.log(e[1]) for e in excess]
+    mx = sum(xs) / n
+    my = sum(ys) / n
+    sxx = sum((x - mx) ** 2 for x in xs)
+    if sxx <= 0.0:
+        return 1.0
+    b = sum((xs[i] - mx) * (ys[i] - my) for i in range(n)) / sxx
+    a = my - b * mx
+    if b >= 0.0:
+        raise ValueError("factor excess is not decaying (b >= 0); no finite tail")
+    start = len(factors)
+    tail = 1.0
+    for k in range(start, start + n_extrapolate):
+        tail *= 1.0 + math.exp(a + b * k)
+    return tail
+
+
+def chain_ladder_with_tail(triangle, tail_factor):
+    """Chain-ladder projection with an extra tail development factor.
+
+    Multiplies each accident year's ultimate by ``tail_factor`` after the usual
+    chain-ladder projection, capturing development beyond the triangle. A
+    ``tail_factor`` of 1.0 reproduces :func:`chain_ladder`.
+    """
+    if tail_factor < 1.0:
+        raise ValueError("tail_factor must be >= 1")
+    base = chain_ladder(triangle)
+    ultimate = [u * tail_factor for u in base["ultimate"]]
+    reserve = [ultimate[i] - triangle[i][-1] for i in range(len(triangle))]
+    return {
+        "factors": base["factors"],
+        "tail_factor": tail_factor,
+        "ultimate": ultimate,
+        "reserve": reserve,
+        "total_reserve": sum(reserve),
+    }

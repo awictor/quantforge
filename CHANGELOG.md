@@ -16,6 +16,16 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.694.0] - 2026-09-12
+
+### Added
+- `chain_ladder.py`: `exponential_tail_factor` extrapolates a tail development
+  factor by fitting exponential decay to the age-to-age factors' excess over one,
+  and `chain_ladder_with_tail` applies it to capture development beyond the
+  triangle. Cross-checked: decaying factors give a finite tail above 1, flat
+  factors give 1, the tail scales the ultimates proportionally, a unit tail
+  reproduces plain chain-ladder, and a non-decaying factor pattern is rejected.
+
 ## [1.693.0] - 2026-09-12
 
 ### Documentation
