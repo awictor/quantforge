@@ -1997,6 +1997,19 @@ A depth-1 tree is exactly the stump; deeper trees solve non-linearly separable
 problems (e.g. XOR) that a single split cannot, at the cost of overfitting — cap
 `max_depth` or `min_samples`, and validate with `cross_val_score`.
 
+To cut a single tree's variance, bag many on bootstrap resamples and vote — a
+**random forest**:
+
+```python
+from quantforge import fit_random_forest, predict_random_forest
+
+f = fit_random_forest(X, y, n_trees=25, max_depth=6)
+predict_random_forest(f, X_query)
+```
+
+The forest generalizes at least as well as any one tree on held-out data and is
+reproducible for a fixed seed.
+
 ## Factor models
 
 Multi-factor OLS return regression (alpha, betas, R-squared), factor attribution,
