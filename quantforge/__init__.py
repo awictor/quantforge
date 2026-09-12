@@ -353,6 +353,7 @@ from .distortion import (
 from .credibility import (
     buhlmann_k, credibility_factor, buhlmann_premium, buhlmann_straub_premium,
 )
+from .chain_ladder import development_factors, chain_ladder
 from .hull_white import (
     hw_zero_from_curve, hw_B, hw_bond_option,
     hw_caplet, hw_floorlet, hw_cap, hw_floor, hw_swaption,
@@ -708,7 +709,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.685.0"
+__version__ = "1.686.0"
 
 __all__ = [
     "OptionType",
@@ -1254,6 +1255,8 @@ __all__ = [
     "credibility_factor",
     "buhlmann_premium",
     "buhlmann_straub_premium",
+    "development_factors",
+    "chain_ladder",
     "hw_zero_from_curve",
     "hw_B",
     "hw_bond_option",

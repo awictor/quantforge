@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.685.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.686.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -1319,6 +1319,24 @@ Auto-generated from `quantforge` v1.685.0 by `docs/gen_api.py` — do not edit b
 > returning ``(log_moneyness, vol)`` pairs sorted by strike on the forward
 > ``F = S e^{(r-q) t}``. Tail asymmetry (``G != M``) tilts the smile into a
 > skew; smaller ``Y`` fattens the wings.
+
+## chain_ladder
+
+### `chain_ladder(triangle)`  _function_
+
+> Project a claims triangle to ultimate losses and reserves.
+>
+> Returns a dict with ``factors`` (age-to-age), ``ultimate`` (per accident year),
+> ``reserve`` (IBNR per year = ultimate - latest observed), and
+> ``total_reserve``. A fully-developed row has zero reserve.
+
+### `development_factors(triangle)`  _function_
+
+> Volume-weighted age-to-age development factors from a cumulative triangle.
+>
+> ``triangle[i]`` is the observed cumulative claims for accident year ``i`` at
+> development ages ``0 .. len(triangle[i]) - 1``. Returns ``n - 1`` factors
+> ``f_0 .. f_{n-2}`` linking successive development ages.
 
 ## cheyette
 

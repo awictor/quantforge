@@ -16,6 +16,16 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.686.0] - 2026-09-12
+
+### Added
+- `chain_ladder.py`: `development_factors` and `chain_ladder` implement
+  chain-ladder loss reserving -- volume-weighted age-to-age factors from a
+  cumulative-claims triangle, projected to ultimate losses and IBNR reserves.
+  Cross-checked on a hand-computed triangle: the factors, ultimates, and reserves
+  match exactly, a fully-developed accident year has zero reserve, and every
+  ultimate is at least the latest paid.
+
 ## [1.685.0] - 2026-09-12
 
 ### Documentation
