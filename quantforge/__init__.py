@@ -226,6 +226,10 @@ from .nelson_siegel import (
 )
 from .interpolation import natural_cubic_spline, monotone_cubic
 from .rootfind import bisection, brent, newton
+from .riskmeasures import (
+    value_at_risk, expected_shortfall as sample_expected_shortfall,
+    spectral_risk_exponential, entropic_risk,
+)
 from .linalg import (
     cholesky, is_positive_definite, correlated_normals, nearest_correlation,
     basket_option_mc,
@@ -534,7 +538,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.479.0"
+__version__ = "1.480.0"
 
 __all__ = [
     "OptionType",
@@ -894,6 +898,10 @@ __all__ = [
     "bisection",
     "brent",
     "newton",
+    "value_at_risk",
+    "sample_expected_shortfall",
+    "spectral_risk_exponential",
+    "entropic_risk",
     "jacobi_eigen",
     "pca",
     "project",

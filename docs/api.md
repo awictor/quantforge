@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.479.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.480.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -7157,6 +7157,39 @@ Auto-generated from `quantforge` v1.479.0 by `docs/gen_api.py` — do not edit b
 > P&L ~= delta * dS + 0.5 * gamma * dS^2, with dS = spot * r_h and r_h normal
 > with std ``sigma_h``. The gamma term makes P&L non-normal; Cornish-Fisher
 > corrects the quantile using the P&L skewness.
+
+## riskmeasures
+
+### `entropic_risk(pnl, risk_aversion=1.0)`  _function_
+
+> Entropic (exponential) risk measure ``(1/theta) ln E[e^{-theta X}]``.
+>
+> The exponential-utility certainty equivalent of the loss; ``theta =
+> risk_aversion``. Convex and increasing in ``theta``; approaches the mean loss
+> ``-E[X]`` as ``theta -> 0`` and the worst loss as ``theta -> inf``.
+
+### `sample_expected_shortfall(pnl, confidence=0.95)`  _function_
+
+> Expected shortfall (CVaR): mean loss in the worst ``1 - confidence`` tail.
+>
+> Averages the losses at or beyond the VaR quantile. A coherent risk measure,
+> always at least the :func:`value_at_risk`.
+
+### `spectral_risk_exponential(pnl, risk_aversion=5.0)`  _function_
+
+> Spectral risk measure with an exponential risk-aversion spectrum.
+>
+> Weights the sorted losses by the normalized decreasing spectrum
+> ``phi(p) ~ e^{-k(1-p)}`` (heavier weight on worse losses). Coherent for any
+> decreasing non-negative spectrum; larger ``risk_aversion`` concentrates weight
+> on the tail, raising the measure toward the worst loss.
+
+### `value_at_risk(pnl, confidence=0.95)`  _function_
+
+> Historical value-at-risk at ``confidence`` (a positive loss magnitude).
+>
+> The ``confidence`` quantile of the loss distribution (``-pnl``). Uses the
+> lower-index empirical quantile so the VaR is a realized sample loss.
 
 ## rnd
 

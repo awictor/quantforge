@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.480.0] - 2026-09-11
+
+### Added
+- `riskmeasures.py`: sample risk measures from a P&L series. `value_at_risk`
+  (loss quantile), `sample_expected_shortfall` (coherent CVaR tail mean),
+  `spectral_risk_exponential` (exponential risk-aversion spectrum), and
+  `entropic_risk` (exponential certainty equivalent). Cross-checked: ES is at
+  least VaR, VaR rises with confidence, spectral and entropic rise with risk
+  aversion, and entropic approaches the mean loss as risk aversion vanishes.
+  Exported as `sample_expected_shortfall` to avoid colliding with the smile-based
+  `expected_shortfall`.
+
 ## [1.479.0] - 2026-09-11
 
 ### Documentation
