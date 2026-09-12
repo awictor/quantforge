@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.428.0] - 2026-09-11
+
+### Added
+- `equity_swap.py`: total-return and dividend swaps. `total_return_leg`,
+  `financing_leg`, `total_return_swap_value`, and `trs_fair_spread` for TRS;
+  `dividend_swap_fair_strike` (PV of expected dividends) and `dividend_swap_value`
+  for dividend swaps. Cross-checked: the TRS value is the equity leg minus
+  financing, the fair spread zeroes it, and the dividend swap is zero at the fair
+  strike and positive when realized dividends exceed it.
+
 ## [1.427.0] - 2026-09-11
 
 ### Documentation

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.427.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.428.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -2168,6 +2168,56 @@ Auto-generated from `quantforge` v1.427.0 by `docs/gen_api.py` — do not edit b
 > A single-period dilution adjustment -- the standard textbook approximation
 > ``value = M/(M+N) * call(S, K, ...)`` -- which reduces to the plain call when
 > no new shares are issued. ``S`` is the current (pre-dilution) share price.
+
+## equity_swap
+
+### `dividend_swap_fair_strike(expected_dividends, discount_factors)`  _function_
+
+> Fair strike of a dividend swap: PV of the expected dividend stream.
+>
+> ``sum_i DF_i * D_i`` -- the present value of the expected dividends the
+> floating leg will pay, which the fixed strike must match for the swap to have
+> zero value at inception.
+
+### `dividend_swap_value(realized_dividends, strike, discount_factors, notional=1.0)`  _function_
+
+> Value of a dividend swap to the fixed-strike payer (dividend receiver).
+>
+> ``notional * (sum_i DF_i * D_i - strike)`` -- the PV of realized dividends less
+> the fixed strike. Zero when the strike equals the
+> :func:`dividend_swap_fair_strike` for the realized stream.
+
+### `financing_leg(notional, funding_rate, spread, year_fraction)`  _function_
+
+> Financing leg of a TRS: ``notional * (funding_rate + spread) * tau``.
+>
+> The interest the total-return receiver pays on the notional over the accrual
+> period ``year_fraction``.
+
+### `total_return_leg(notional, start_price, end_price, dividends)`  _function_
+
+> Equity total-return leg: price return plus dividends on the notional.
+>
+> ``notional * ((end_price - start_price + dividends) / start_price)`` -- the
+> cash the total-return receiver collects (negative if the equity fell more than
+> its dividends).
+
+### `total_return_swap_value(notional, start_price, end_price, dividends, funding_rate, spread, year_fraction)`  _function_
+
+> Net value to the total-return receiver: equity leg minus financing leg.
+>
+> Positive when the equity total return beats the financing cost.
+
+### `trs_fair_spread(start_price, expected_end_price, expected_dividends, funding_rate, year_fraction)`  _function_
+
+> Financing spread that zeroes the expected TRS value.
+>
+> Solves ``E[equity return] = (funding_rate + spread) * tau`` for the spread:
+>
+>     spread = E[total return] / tau - funding_rate,
+>
+> with ``E[total return] = (E[end] - start + E[div]) / start``. The spread the
+> financing leg must carry so the swap is fair at inception.
 
 ## execution
 
