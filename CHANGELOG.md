@@ -16,6 +16,14 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.703.0] - 2026-09-12
+
+### Documentation
+- README structural-credit section now documents `physical_distance_to_default`
+  and `physical_default_probability` with a worked example, noting `mu = r`
+  recovers the risk-neutral figures and a risky firm's physical default
+  probability sits below the risk-neutral one.
+
 ## [1.702.0] - 2026-09-12
 
 ### Added

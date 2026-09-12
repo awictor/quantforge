@@ -3114,6 +3114,20 @@ solve_asset_value_and_vol(equity_value_obs=27.4, equity_vol_obs=0.94,
                           debt_face=100, r=0.05, t=1)
 ```
 
+The measures above discount at the risk-free rate. The Moody's-KMV distance to
+default and expected default frequency use the firm's real-world asset drift `mu`
+instead:
+
+```python
+from quantforge import physical_distance_to_default, physical_default_probability
+
+physical_distance_to_default(asset_value=120, debt_face=100, mu=0.10, sigma=0.25, t=1)
+physical_default_probability(120, 100, mu=0.10, sigma=0.25, t=1)   # 0.158
+```
+
+Setting `mu = r` recovers the risk-neutral figures; because a risky firm earns
+`mu > r`, its physical default probability sits below the risk-neutral one.
+
 ## Dual-currency deposits
 
 Yield-enhanced FX-linked deposits by component decomposition:
