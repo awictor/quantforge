@@ -83,6 +83,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Robust scale and location](#robust-scale-and-location)
 - [Hurst exponent (long memory)](#hurst-exponent-long-memory)
 - [Variance-ratio test](#variance-ratio-test)
+- [Cointegration (ADF / Engle-Granger)](#cointegration-adf--engle-granger)
 - [Ornstein-Uhlenbeck calibration](#ornstein-uhlenbeck-calibration)
 - [Markov chains](#markov-chains)
 - [Principal component analysis](#principal-component-analysis)
@@ -1973,6 +1974,27 @@ variance_ratio_zstat(returns, q=2)   # standard-normal z; |z| > 1.96 rejects the
 On white noise `VR` sits near 1 with a small `z`; a mean-reverting series drives
 `VR` below 1 with a large negative `z`, a trending one above 1 with a large
 positive `z`.
+
+## Cointegration (ADF / Engle-Granger)
+
+Before trading a spread, test that it is actually mean-reverting. `adf_test` runs
+the augmented Dickey-Fuller unit-root test; `engle_granger` regresses one series
+on the other and ADF-tests the residual, returning the hedge ratio and a
+cointegration verdict.
+
+```python
+from quantforge import adf_test, engle_granger
+
+adf_test(series)["reject_5pct"]        # True if the series is stationary
+
+c = engle_granger(y, x)
+c["hedge_ratio"]                        # beta from regressing y on x
+c["cointegrated_5pct"]                  # True if the residual spread is stationary
+```
+
+A stationary series gives a strongly negative ADF statistic and rejects the unit
+root; two independent random walks do not. When a pair is cointegrated, feed the
+residual spread straight into `fit_ornstein_uhlenbeck` to size the trade.
 
 ## Ornstein-Uhlenbeck calibration
 
