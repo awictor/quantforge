@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.518.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.519.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -9469,6 +9469,15 @@ Auto-generated from `quantforge` v1.518.0 by `docs/gen_api.py` — do not edit b
 >
 > Returns ``GarchParams`` (per-period variance parameters).
 
+### `fit_har_rv(realized_variance, weekly=5, monthly=22)`  _function_
+
+> Fit the HAR-RV (Corsi 2009) model to a realized-variance series.
+>
+> Regresses ``RV_{t+1}`` on the previous day's RV, the trailing ``weekly``-day
+> average, and the trailing ``monthly``-day average -- a parsimonious long-memory
+> model. Returns ``(beta0, beta_day, beta_week, beta_month)``. Recovers the true
+> coefficients on data generated from the model.
+
 ### `garch_forecast(params: quantforge.volatility.GarchParams, last_return, last_variance, horizon=1, periods_per_year: int = 252)`  _function_
 
 > Forecast annualized volatility ``horizon`` periods ahead under GARCH(1,1).
@@ -9528,6 +9537,14 @@ Auto-generated from `quantforge` v1.518.0 by `docs/gen_api.py` — do not edit b
 > Adds the leverage term ``gamma`` to the ARCH coefficient when the last return
 > was negative, so a down move feeds more into next-period variance than an up
 > move of the same size.
+
+### `har_rv_forecast(coeffs, recent_rv, weekly=5, monthly=22)`  _function_
+
+> One-step HAR-RV forecast from the fitted coefficients and recent RV.
+>
+> ``coeffs`` is ``(beta0, beta_day, beta_week, beta_month)``; ``recent_rv`` is the
+> trailing realized-variance history (at least ``monthly`` points). Forms the
+> day / week / month averages and applies the linear model.
 
 ### `parkinson(highs: Sequence[float], lows: Sequence[float], periods_per_year: int = 252) -> float`  _function_
 

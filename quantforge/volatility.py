@@ -392,6 +392,47 @@ def garch_option_price(params: GarchParams, last_return, last_variance,
     return bsm_price(S, K, tt, r, sigma, option_type, b=b)
 
 
+def fit_har_rv(realized_variance, weekly=5, monthly=22):
+    """Fit the HAR-RV (Corsi 2009) model to a realized-variance series.
+
+    Regresses ``RV_{t+1}`` on the previous day's RV, the trailing ``weekly``-day
+    average, and the trailing ``monthly``-day average -- a parsimonious long-memory
+    model. Returns ``(beta0, beta_day, beta_week, beta_month)``. Recovers the true
+    coefficients on data generated from the model.
+    """
+    from .factor_model import factor_regression
+    n = len(realized_variance)
+    if n <= monthly + 1:
+        raise ValueError("need more than monthly+1 observations")
+    rv = list(realized_variance)
+    y, f_day, f_week, f_month = [], [], [], []
+    for t in range(monthly, n - 1):
+        y.append(rv[t + 1])
+        f_day.append(rv[t])
+        f_week.append(sum(rv[t - weekly + 1:t + 1]) / weekly)
+        f_month.append(sum(rv[t - monthly + 1:t + 1]) / monthly)
+    fit = factor_regression(y, [f_day, f_week, f_month])
+    b0 = fit["alpha"]
+    bd, bw, bm = fit["betas"]
+    return b0, bd, bw, bm
+
+
+def har_rv_forecast(coeffs, recent_rv, weekly=5, monthly=22):
+    """One-step HAR-RV forecast from the fitted coefficients and recent RV.
+
+    ``coeffs`` is ``(beta0, beta_day, beta_week, beta_month)``; ``recent_rv`` is the
+    trailing realized-variance history (at least ``monthly`` points). Forms the
+    day / week / month averages and applies the linear model.
+    """
+    b0, bd, bw, bm = coeffs
+    if len(recent_rv) < monthly:
+        raise ValueError("recent_rv must have at least `monthly` observations")
+    day = recent_rv[-1]
+    week = sum(recent_rv[-weekly:]) / weekly
+    month = sum(recent_rv[-monthly:]) / monthly
+    return b0 + bd * day + bw * week + bm * month
+
+
 @dataclass(frozen=True)
 class EGarchParams:
     """EGARCH(1,1) parameters (Nelson) on the log conditional variance.

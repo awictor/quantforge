@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.519.0] - 2026-09-12
+
+### Added
+- `fit_har_rv` and `har_rv_forecast` (in `volatility.py`): the HAR-RV (Corsi 2009)
+  long-memory realized-variance model -- regress next-day RV on the daily, weekly,
+  and monthly average RV, and forecast one step ahead. Cross-checked: the fitted
+  persistence (sum of the collinear lag slopes) recovers the true 0.9, the
+  in-sample fit correlation exceeds 0.99, and the forecast matches the manual
+  linear combination.
+
 ## [1.518.0] - 2026-09-12
 
 ### Documentation
