@@ -228,6 +228,7 @@ from .interpolation import natural_cubic_spline, monotone_cubic
 from .rootfind import bisection, brent, newton
 from .evt import (
     hill_estimator, gpd_fit_pot, gpd_var, gpd_expected_shortfall,
+    gev_cdf, gev_return_level, gev_fit_block_maxima,
 )
 from .student_t import (
     t_pdf, t_cdf, t_ppf, student_t_var, student_t_expected_shortfall,
@@ -549,7 +550,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.491.0"
+__version__ = "1.492.0"
 
 __all__ = [
     "OptionType",
@@ -913,6 +914,9 @@ __all__ = [
     "gpd_fit_pot",
     "gpd_var",
     "gpd_expected_shortfall",
+    "gev_cdf",
+    "gev_return_level",
+    "gev_fit_block_maxima",
     "t_pdf",
     "t_cdf",
     "t_ppf",

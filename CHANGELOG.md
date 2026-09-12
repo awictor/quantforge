@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.492.0] - 2026-09-11
+
+### Added
+- `gev_cdf`, `gev_return_level`, `gev_fit_block_maxima` (in `evt.py`): the
+  Generalized Extreme Value (block-maxima) distribution, the T-block return level,
+  and a Gumbel-limit method-of-moments fit. Cross-checked: the CDF is monotone and
+  bounded with the correct Gumbel limit, the return level equals the GEV quantile
+  and rises with the return period, and the Gumbel fit recovers the location and
+  scale.
+
 ## [1.491.0] - 2026-09-11
 
 ### Documentation

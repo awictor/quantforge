@@ -55,6 +55,66 @@ def gpd_fit_pot(losses, threshold):
     return xi, beta, ne, n
 
 
+def gev_cdf(x, loc, scale, shape):
+    """Generalized extreme value CDF (block-maxima limit distribution).
+
+    ``F(x) = exp(-(1 + shape (x-loc)/scale)^{-1/shape})`` for ``shape != 0`` (Frechet
+    ``shape > 0`` / Weibull ``shape < 0``), and the Gumbel limit
+    ``exp(-e^{-(x-loc)/scale})`` as ``shape -> 0``. Defined where
+    ``1 + shape (x-loc)/scale > 0``.
+    """
+    if scale <= 0:
+        raise ValueError("scale must be positive")
+    z = (x - loc) / scale
+    if abs(shape) < 1e-8:
+        return math.exp(-math.exp(-z))
+    arg = 1.0 + shape * z
+    if arg <= 0.0:
+        return 0.0 if shape > 0 else 1.0
+    return math.exp(-arg ** (-1.0 / shape))
+
+
+def gev_return_level(period, loc, scale, shape):
+    """Return level: the block maximum exceeded once per ``period`` blocks.
+
+    Inverts :func:`gev_cdf` at ``p = 1 - 1/period``:
+
+        level = loc + (scale/shape) [ (-ln(1 - 1/period))^{-shape} - 1 ],
+
+    with the Gumbel limit ``loc - scale ln(-ln(1 - 1/period))`` as ``shape -> 0``.
+    The T-block return level rises with the return period.
+    """
+    if period <= 1:
+        raise ValueError("period must exceed 1")
+    if scale <= 0:
+        raise ValueError("scale must be positive")
+    y = -math.log(1.0 - 1.0 / period)
+    if abs(shape) < 1e-8:
+        return loc - scale * math.log(y)
+    return loc + (scale / shape) * (y ** (-shape) - 1.0)
+
+
+def gev_fit_block_maxima(block_maxima):
+    """Method-of-moments GEV fit assuming the Gumbel (shape = 0) limit.
+
+    Fits location and scale of a Gumbel to the block maxima by moment matching:
+    ``scale = std * sqrt(6)/pi``, ``loc = mean - gamma * scale`` (``gamma`` the
+    Euler-Mascheroni constant). Returns ``(loc, scale, shape=0.0)`` -- a simple,
+    robust baseline when the shape is not separately estimated.
+    """
+    n = len(block_maxima)
+    if n < 2:
+        raise ValueError("need at least two block maxima")
+    mean = sum(block_maxima) / n
+    var = sum((x - mean) ** 2 for x in block_maxima) / n
+    if var <= 0.0:
+        raise ValueError("zero-variance block maxima")
+    scale = math.sqrt(var) * math.sqrt(6.0) / math.pi
+    gamma = 0.5772156649015329
+    loc = mean - gamma * scale
+    return loc, scale, 0.0
+
+
 def gpd_var(losses, threshold, confidence=0.99):
     """Peaks-over-threshold VaR from a fitted Generalized Pareto tail.
 

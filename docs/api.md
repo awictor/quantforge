@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.491.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.492.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -2587,6 +2587,35 @@ Auto-generated from `quantforge` v1.491.0 by `docs/gen_api.py` — do not edit b
 > convexity value / vol-of-vol adjustment).
 
 ## evt
+
+### `gev_cdf(x, loc, scale, shape)`  _function_
+
+> Generalized extreme value CDF (block-maxima limit distribution).
+>
+> ``F(x) = exp(-(1 + shape (x-loc)/scale)^{-1/shape})`` for ``shape != 0`` (Frechet
+> ``shape > 0`` / Weibull ``shape < 0``), and the Gumbel limit
+> ``exp(-e^{-(x-loc)/scale})`` as ``shape -> 0``. Defined where
+> ``1 + shape (x-loc)/scale > 0``.
+
+### `gev_fit_block_maxima(block_maxima)`  _function_
+
+> Method-of-moments GEV fit assuming the Gumbel (shape = 0) limit.
+>
+> Fits location and scale of a Gumbel to the block maxima by moment matching:
+> ``scale = std * sqrt(6)/pi``, ``loc = mean - gamma * scale`` (``gamma`` the
+> Euler-Mascheroni constant). Returns ``(loc, scale, shape=0.0)`` -- a simple,
+> robust baseline when the shape is not separately estimated.
+
+### `gev_return_level(period, loc, scale, shape)`  _function_
+
+> Return level: the block maximum exceeded once per ``period`` blocks.
+>
+> Inverts :func:`gev_cdf` at ``p = 1 - 1/period``:
+>
+>     level = loc + (scale/shape) [ (-ln(1 - 1/period))^{-shape} - 1 ],
+>
+> with the Gumbel limit ``loc - scale ln(-ln(1 - 1/period))`` as ``shape -> 0``.
+> The T-block return level rises with the return period.
 
 ### `gpd_expected_shortfall(losses, threshold, confidence=0.99)`  _function_
 
