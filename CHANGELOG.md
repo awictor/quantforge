@@ -16,6 +16,12 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.609.0] - 2026-09-12
+
+### Documentation
+- README: added a "Logistic regression" section documenting `fit_logistic` and
+  `predict_proba`; TOC regenerated to 109 entries.
+
 ## [1.608.0] - 2026-09-12
 
 ### Added

@@ -74,6 +74,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Liability-driven investing](#liability-driven-investing)
 - [Bond futures](#bond-futures)
 - [OLS regression](#ols-regression)
+- [Logistic regression](#logistic-regression)
 - [Factor models](#factor-models)
 - [Performance attribution (Brinson)](#performance-attribution-brinson)
 - [Bootstrap and jackknife](#bootstrap-and-jackknife)
@@ -1811,6 +1812,24 @@ ridge_regression(X, y, alpha=10.0)    # slopes shrunk toward zero (intercept kep
 A larger `alpha` shrinks the slope coefficients more (the intercept is not
 penalized); ridge stays solvable even under perfect collinearity, where OLS is
 singular.
+
+## Logistic regression
+
+Binary classification / default-probability modeling by iteratively reweighted
+least squares. `fit_logistic` maximizes the logistic likelihood via Newton-Raphson
+(ridge-stabilized against separation); `predict_proba` returns class probabilities.
+
+```python
+from quantforge import fit_logistic, predict_proba
+
+m = fit_logistic(X, y)          # y is binary 0/1
+m["coefficients"]                # [intercept, b1, b2, ...]
+predict_proba(m, [[1, 0], [-1, 0]])   # -> [0.899, 0.275] class-1 probabilities
+```
+
+It recovers the generating logit coefficients on simulated data, returns
+probabilities strictly in (0, 1), and classifies separable data near-perfectly. A
+positive coefficient makes the probability rise monotonically in that feature.
 
 ## Factor models
 
