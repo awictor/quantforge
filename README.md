@@ -1661,6 +1661,13 @@ from quantforge import (natural_cubic_spline, monotone_cubic, SplineZeroCurve,
 f = monotone_cubic([0, 1, 2, 3], [0, 0, 0, 1])   # no overshoot
 curve = SplineZeroCurve([0.5, 1, 2, 5, 10], [0.02, 0.025, 0.03, 0.035, 0.04])
 brent(lambda x: x * x - 2, 0, 2)                  # sqrt(2)
+
+# Definite-integral quadrature.
+from quantforge import simpson, gauss_legendre, adaptive_simpson
+import math
+simpson(lambda x: x * x, 0, 1)                    # composite Simpson
+gauss_legendre(lambda x: x ** 5, 0, 1, n=3)       # exact to degree 2n-1
+adaptive_simpson(math.sin, 0, math.pi)            # error-controlled -> 2.0
 ```
 
 ## Nelson-Siegel / Svensson curves
