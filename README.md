@@ -2096,6 +2096,21 @@ vasicek_loss_quantile(q=0.999, pd=0.02, rho=0.15)        # Basel IRB capital
 cdo_tranche_expected_loss(attachment=0.03, detachment=0.07, pd=0.05, rho=0.2)
 ```
 
+The large-pool loss distribution is complete: `vasicek_loss_cdf` and
+`vasicek_loss_quantile` are joined by the density and the expected shortfall (the
+average loss beyond the quantile, Tasche's closed form):
+
+```python
+from quantforge import vasicek_loss_pdf, vasicek_loss_expected_shortfall
+
+vasicek_loss_pdf(0.03, pd=0.02, rho=0.15)                        # loss density
+vasicek_loss_expected_shortfall(q=0.99, pd=0.02, rho=0.15)       # 0.136, >= the VaR
+```
+
+The density integrates to one with mean `pd`; the expected shortfall sits at or
+above `vasicek_loss_quantile` and rises with both the confidence level and the
+asset correlation.
+
 ## kth-to-default basket
 
 The full number-of-defaults distribution of a homogeneous basket under the

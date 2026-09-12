@@ -16,6 +16,14 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.701.0] - 2026-09-12
+
+### Documentation
+- README portfolio-credit section now documents `vasicek_loss_pdf` and
+  `vasicek_loss_expected_shortfall` with a worked example, noting the density
+  integrates to one with mean `pd` and the expected shortfall sits at or above the
+  VaR and rises with confidence and asset correlation.
+
 ## [1.700.0] - 2026-09-12
 
 ### Added
