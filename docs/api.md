@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.553.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.554.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -9428,6 +9428,25 @@ Auto-generated from `quantforge` v1.553.0 by `docs/gen_api.py` — do not edit b
 >
 > Maps each strike to ``p.implied_vol(ln(K/F), t)`` and feeds the smile to
 > :func:`quantforge.vix_from_smile`. A flat slice returns ``100 * sigma``.
+
+## theil_sen
+
+### `theil_sen(x, y)`  _function_
+
+> Theil-Sen robust regression slope and intercept.
+>
+> Parameters
+> ----------
+> x, y : sequence of float
+>     Paired observations of equal length (at least 2). Pairs sharing an ``x``
+>     value are skipped (their slope is undefined).
+>
+> Returns
+> -------
+> (slope, intercept) : (float, float)
+>     The median pairwise slope and the median residual intercept. On exactly
+>     collinear data this reproduces the generating line; under heavy-tailed
+>     contamination it stays close to the clean fit where OLS is dragged away.
 
 ## trinomial
 

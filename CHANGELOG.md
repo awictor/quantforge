@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.554.0] - 2026-09-12
+
+### Added
+- `theil_sen.py`: `theil_sen` computes the Theil-Sen robust regression slope (the
+  median of all pairwise slopes) and intercept, with a ~29% breakdown point.
+  Cross-checked: it is exact on noiseless linear data, tracks OLS and the true
+  slope on clean Gaussian data, and holds the true slope under 20% gross-outlier
+  contamination where OLS is dragged away; pairs sharing an ``x`` value are
+  skipped.
+
 ## [1.553.0] - 2026-09-12
 
 ### Documentation
