@@ -837,6 +837,11 @@ geometric_asian(S=100, K=100, t=1, r=0.05, sigma=0.3, option_type="call")
 from quantforge import arithmetic_asian
 arithmetic_asian(S=100, K=100, t=1, r=0.05, sigma=0.3, option_type="call")
 
+# Sharper discrete arithmetic Asian by Curran's geometric conditioning
+# (forward measure; n_avg monitoring dates). Matches Monte Carlo to ~0.001.
+from quantforge import curran_asian
+curran_asian(forward=100, strike=100, sigma=0.25, r=0.05, expiry=1.0, n_avg=12)
+
 # Asian Greeks (delta/gamma/vega/theta) for either average, by finite diff.
 from quantforge import asian_greeks
 asian_greeks(S=100, K=100, t=1, r=0.05, sigma=0.3, average="geometric")
