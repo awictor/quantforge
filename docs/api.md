@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.421.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.422.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -7034,6 +7034,25 @@ Auto-generated from `quantforge` v1.421.0 by `docs/gen_api.py` — do not edit b
 
 ## structured
 
+### `buffered_note(S, K, buffer, maturity, r, sigma, principal, n_shares=None, b=None)`  _function_
+
+> Buffered note: absorbs the first ``buffer`` fraction of downside losses.
+>
+> The investor is short a put struck at the buffered level ``K * (1 - buffer)``
+> rather than at ``K``, so losses only bite once the underlying falls more than
+> ``buffer``. Value is ``PV(principal) - n_shares * put(K*(1-buffer))``. A larger
+> buffer moves the put further out of the money, raising the note's value.
+
+### `capped_principal_protected_note(S, K, cap_level, maturity, r, sigma, principal, participation=1.0, n_shares=None, b=None)`  _function_
+
+> Principal-protected note with a capped upside (a call spread).
+>
+> Like :func:`principal_protected_note` but the upside is a call spread -- long
+> a call at ``K``, short a call at ``cap_level`` -- so the payoff is capped once
+> the underlying passes ``cap_level``. Value is the ZC bond plus
+> ``participation * n_shares * (call(K) - call(cap_level))``. At or below the
+> uncapped PPN (selling the higher-strike call raises no value).
+
 ### `note_embedded_option_value(note_value, principal, r, maturity)`  _function_
 
 > Option component of a note: ``note_value - discounted principal``.
@@ -7065,6 +7084,16 @@ Auto-generated from `quantforge` v1.421.0 by `docs/gen_api.py` — do not edit b
 > ``PV(principal + coupon) - n_shares * put``. ``n_shares`` defaults to
 > ``principal / K`` (the put covers the principal at the strike). Below the
 > plain bond-plus-coupon value because of the short put.
+
+### `reverse_convertible_fair_coupon(S, K, maturity, r, sigma, principal, n_shares=None, b=None, tol=1e-12, max_iter=100)`  _function_
+
+> Coupon rate that prices a reverse convertible at par (its principal).
+>
+> Solves :func:`reverse_convertible` ``= principal`` for the ``coupon_rate``.
+> The short put costs value, so the fair coupon is positive -- the enhanced yield
+> that compensates the investor for the downside they sell. Closed form:
+> ``coupon = (put_value / disc / principal ... )``; here solved directly since
+> the note is linear in the coupon.
 
 ## surface
 

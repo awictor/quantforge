@@ -70,6 +70,76 @@ def reverse_convertible(S, K, maturity, r, sigma, principal, coupon_rate,
     return bond_plus_coupon - put
 
 
+def capped_principal_protected_note(S, K, cap_level, maturity, r, sigma,
+                                    principal, participation=1.0, n_shares=None,
+                                    b=None):
+    """Principal-protected note with a capped upside (a call spread).
+
+    Like :func:`principal_protected_note` but the upside is a call spread -- long
+    a call at ``K``, short a call at ``cap_level`` -- so the payoff is capped once
+    the underlying passes ``cap_level``. Value is the ZC bond plus
+    ``participation * n_shares * (call(K) - call(cap_level))``. At or below the
+    uncapped PPN (selling the higher-strike call raises no value).
+    """
+    if cap_level <= K:
+        raise ValueError("cap_level must exceed the strike K")
+    if participation < 0:
+        raise ValueError("participation must be non-negative")
+    if n_shares is None:
+        if S <= 0:
+            raise ValueError("S must be positive to default n_shares")
+        n_shares = principal / S
+    bond = note_zero_coupon_bond(principal, r, maturity)
+    spread = call_price(S, K, maturity, r, sigma, b) \
+        - call_price(S, cap_level, maturity, r, sigma, b)
+    return bond + participation * n_shares * spread
+
+
+def reverse_convertible_fair_coupon(S, K, maturity, r, sigma, principal,
+                                    n_shares=None, b=None, tol=1e-12,
+                                    max_iter=100):
+    """Coupon rate that prices a reverse convertible at par (its principal).
+
+    Solves :func:`reverse_convertible` ``= principal`` for the ``coupon_rate``.
+    The short put costs value, so the fair coupon is positive -- the enhanced yield
+    that compensates the investor for the downside they sell. Closed form:
+    ``coupon = (put_value / disc / principal ... )``; here solved directly since
+    the note is linear in the coupon.
+    """
+    if n_shares is None:
+        if K <= 0:
+            raise ValueError("K must be positive to default n_shares")
+        n_shares = principal / K
+    disc = math.exp(-r * maturity)
+    put = n_shares * put_price(S, K, maturity, r, sigma, b)
+    # reverse_convertible = principal*(1 + c*T)*disc - put = principal
+    #  => c = (principal + put - principal*disc) / (principal * disc * T)
+    if maturity <= 0:
+        raise ValueError("maturity must be positive")
+    return (principal + put - principal * disc) / (principal * disc * maturity)
+
+
+def buffered_note(S, K, buffer, maturity, r, sigma, principal, n_shares=None,
+                  b=None):
+    """Buffered note: absorbs the first ``buffer`` fraction of downside losses.
+
+    The investor is short a put struck at the buffered level ``K * (1 - buffer)``
+    rather than at ``K``, so losses only bite once the underlying falls more than
+    ``buffer``. Value is ``PV(principal) - n_shares * put(K*(1-buffer))``. A larger
+    buffer moves the put further out of the money, raising the note's value.
+    """
+    if not (0.0 <= buffer < 1.0):
+        raise ValueError("buffer must be in [0, 1)")
+    if n_shares is None:
+        if K <= 0:
+            raise ValueError("K must be positive to default n_shares")
+        n_shares = principal / K
+    buffered_strike = K * (1.0 - buffer)
+    bond = note_zero_coupon_bond(principal, r, maturity)
+    put = n_shares * put_price(S, buffered_strike, maturity, r, sigma, b)
+    return bond - put
+
+
 def note_embedded_option_value(note_value, principal, r, maturity):
     """Option component of a note: ``note_value - discounted principal``.
 

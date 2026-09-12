@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.422.0] - 2026-09-11
+
+### Added
+- `capped_principal_protected_note`, `reverse_convertible_fair_coupon`,
+  `buffered_note` (in `structured.py`): a PPN with a capped upside (call spread,
+  at or below the uncapped PPN), the coupon that prices a reverse convertible at
+  par, and a buffered note whose short put strikes below spot so it absorbs the
+  first losses. Cross-checked: capped below uncapped and above the floor, fair
+  coupon prices the note at par, and a larger buffer raises value monotonically.
+
 ## [1.421.0] - 2026-09-11
 
 ### Added
