@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.429.0] - 2026-09-11
+
+### Added
+- `variance_swap_payoff`, `vega_notional_to_variance_notional`,
+  `volatility_swap_payoff`, `variance_swap_mtm` (in `equity_swap.py`): payoffs and
+  mark-to-market for variance and volatility swaps, plus the vega-to-variance
+  notional conversion. Cross-checked: the variance swap is zero at the strike, the
+  vol swap is linear, the variance swap's convexity makes it pay more than the vol
+  swap on both sides of the strike, and the MTM reduces to the discounted
+  expected payoff at inception and the realized payoff at expiry.
+
 ## [1.428.0] - 2026-09-11
 
 ### Added

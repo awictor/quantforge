@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.428.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.429.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -2218,6 +2218,44 @@ Auto-generated from `quantforge` v1.428.0 by `docs/gen_api.py` — do not edit b
 >
 > with ``E[total return] = (E[end] - start + E[div]) / start``. The spread the
 > financing leg must carry so the swap is fair at inception.
+
+### `variance_swap_mtm(accrued_variance, expected_future_variance, elapsed, total_time, strike_vol, variance_notional, discount_factor)`  _function_
+
+> Mark-to-market of a seasoned variance swap.
+>
+> Blends the realized (accrued) variance over the elapsed fraction with the
+> expected future variance over the remainder to get the expected terminal
+> realized variance, then discounts the variance-swap payoff:
+>
+>     E[realized_var] = (elapsed * accrued + (total - elapsed) * future) / total
+>     MTM = DF * variance_notional * (E[realized_var] - strike_vol^2).
+>
+> At inception (``elapsed = 0``) it is the discounted expected-minus-strike
+> variance; at expiry it is the fully-realized payoff.
+
+### `variance_swap_payoff(realized_vol, strike_vol, variance_notional)`  _function_
+
+> Variance-swap payoff ``variance_notional * (realized_vol^2 - strike_vol^2)``.
+>
+> Settles on the difference between realized and strike *variance* (vols entered
+> as decimals, e.g. 0.20 for 20%). Convex in realized vol -- the variance
+> convention penalizes large moves more than a volatility swap.
+
+### `vega_notional_to_variance_notional(vega_notional, strike_vol)`  _function_
+
+> Convert a vega notional to the equivalent variance notional.
+>
+> ``variance_notional = vega_notional / (2 * strike_vol)`` -- the market quotes
+> variance swaps in vega terms (P&L per vol point at the strike); this is the
+> variance notional that reproduces that sensitivity.
+
+### `volatility_swap_payoff(realized_vol, strike_vol, vega_notional)`  _function_
+
+> Volatility-swap payoff ``vega_notional * (realized_vol - strike_vol)``.
+>
+> Linear in realized vol (in vol points). Unlike the variance swap it has no
+> convexity, so it prices below a variance swap struck at the same vol (the
+> convexity value / vol-of-vol adjustment).
 
 ## execution
 

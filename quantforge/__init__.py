@@ -220,6 +220,8 @@ from .inflation import (
 from .equity_swap import (
     total_return_leg, financing_leg, total_return_swap_value, trs_fair_spread,
     dividend_swap_fair_strike, dividend_swap_value,
+    variance_swap_payoff, vega_notional_to_variance_notional,
+    volatility_swap_payoff, variance_swap_mtm,
 )
 from .actuarial import (
     survival_probabilities, life_annuity_due, term_insurance,
@@ -465,7 +467,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.428.0"
+__version__ = "1.429.0"
 
 __all__ = [
     "OptionType",
@@ -821,6 +823,10 @@ __all__ = [
     "trs_fair_spread",
     "dividend_swap_fair_strike",
     "dividend_swap_value",
+    "variance_swap_payoff",
+    "vega_notional_to_variance_notional",
+    "volatility_swap_payoff",
+    "variance_swap_mtm",
     "survival_probabilities",
     "life_annuity_due",
     "term_insurance",
