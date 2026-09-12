@@ -16,6 +16,16 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.668.0] - 2026-09-12
+
+### Added
+- `swap.py`: single-curve vanilla interest-rate swap valuation --
+  `vanilla_swap_value`, `single_curve_par_swap_rate`, and `swap_annuity` (PV01),
+  using the telescoping float-leg PV off one discount curve. Cross-checked: the swap
+  is worth zero at the par rate, receiver equals negative payer, the value rises as
+  the fixed rate falls, the notional scales it linearly, a forward-starting swap is
+  zero at its par rate, and the annuity is positive.
+
 ## [1.667.0] - 2026-09-12
 
 ### Documentation

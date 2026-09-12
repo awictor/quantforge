@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.667.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.668.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -10631,6 +10631,26 @@ Auto-generated from `quantforge` v1.667.0 by `docs/gen_api.py` — do not edit b
 >
 > Maps each strike to ``p.implied_vol(ln(K/F), t)`` and feeds the smile to
 > :func:`quantforge.vix_from_smile`. A flat slice returns ``100 * sigma``.
+
+## swap
+
+### `single_curve_par_swap_rate(discount, start, maturity, freq=2)`  _function_
+
+> Par (fair) fixed rate that gives the swap zero value at inception.
+
+### `swap_annuity(discount, start, maturity, freq=2)`  _function_
+
+> Fixed-leg annuity ``sum_k tau_k P(t_k)`` (PV01 per unit rate).
+>
+> The present value of receiving 1 unit of rate on the fixed schedule.
+
+### `vanilla_swap_value(discount, fixed_rate, start, maturity, freq=2, notional=1.0, payer=True)`  _function_
+
+> Value of a fixed-for-floating swap off a single discount curve.
+>
+> A payer pays ``fixed_rate`` and receives float; its value is the float-leg PV
+> (``P(start) - P(end)``) minus the fixed-leg PV (``fixed_rate * annuity``),
+> times ``notional``. A receiver is the negative. Zero at the par swap rate.
 
 ## t_copula_sample
 
