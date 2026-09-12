@@ -1525,6 +1525,19 @@ Put-call parity holds exactly (`c - p = P(t_bond) - K·P(t_option)`); the price
 rises with volatility and collapses to intrinsic when vol is zero. Bond options are
 the building block for caps, floors, and swaptions.
 
+Caps and floors follow directly — each caplet is a scaled bond put:
+
+```python
+from quantforge import hw_cap, hw_floor
+
+dates = [1.0, 2.0, 3.0, 4.0, 5.0]     # reset/pay schedule
+hw_cap(P0, a=0.1, sigma=0.01, dates=dates, strike=0.03)
+hw_floor(P0, a=0.1, sigma=0.01, dates=dates, strike=0.03)
+```
+
+The cap is the sum of its caplets and `cap - floor` equals the underlying
+fixed-vs-float swap value, so the three are mutually consistent by put-call parity.
+
 ## Callable bonds and OAS
 
 Callable/puttable bond pricing on a short-rate binomial tree and the

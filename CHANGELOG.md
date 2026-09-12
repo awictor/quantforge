@@ -16,6 +16,11 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.643.0] - 2026-09-12
+
+### Documentation
+- README: extended the Hull-White section with `hw_cap` and `hw_floor`.
+
 ## [1.642.0] - 2026-09-12
 
 ### Added
