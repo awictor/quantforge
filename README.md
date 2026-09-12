@@ -1798,6 +1798,20 @@ An exact linear relationship gives R-squared 1 and zero residuals; adjusted
 R-squared never exceeds R-squared. For the finance-specific alpha/beta return
 regression, see the next section.
 
+When regressors are collinear or numerous, `ridge_regression` adds an L2 penalty
+that shrinks the slopes and keeps the system solvable:
+
+```python
+from quantforge import ridge_regression
+
+ridge_regression(X, y, alpha=0.0)     # reproduces OLS
+ridge_regression(X, y, alpha=10.0)    # slopes shrunk toward zero (intercept kept)
+```
+
+A larger `alpha` shrinks the slope coefficients more (the intercept is not
+penalized); ridge stays solvable even under perfect collinearity, where OLS is
+singular.
+
 ## Factor models
 
 Multi-factor OLS return regression (alpha, betas, R-squared), factor attribution,
