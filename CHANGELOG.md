@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.462.0] - 2026-09-11
+
+### Documentation
+- README: added a "Markov chains" section covering the `markov` module (n-step
+  transitions, stationary distribution, hitting times, absorbing-chain
+  analytics), with runnable examples verified against the installed package.
+
 ## [1.461.0] - 2026-09-11
 
 ### Added

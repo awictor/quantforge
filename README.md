@@ -1473,6 +1473,25 @@ stationary_bootstrap_ci(returns, mean_block=3)   # block bootstrap for autocorre
 jackknife_estimate(returns)                      # (estimate, standard_error)
 ```
 
+## Markov chains
+
+Finite-state chains: n-step transitions, stationary distribution, hitting times,
+and absorbing-chain analytics (credit-rating migration):
+
+```python
+from quantforge import (stationary_distribution, n_step_transition,
+                        absorption_probabilities, expected_steps_to_absorption)
+
+P = [[0.9, 0.1], [0.2, 0.8]]
+stationary_distribution(P)          # long-run state distribution
+n_step_transition(P, 5)             # P^5
+
+# Absorbing chain (states 0,1 transient, 2 absorbing).
+A = [[0.5, 0.3, 0.2], [0.1, 0.6, 0.3], [0.0, 0.0, 1.0]]
+expected_steps_to_absorption(A, transient_states=[0, 1])
+absorption_probabilities(A, transient_states=[0, 1], absorbing_states=[2])
+```
+
 ## Dual-currency deposits
 
 Yield-enhanced FX-linked deposits by component decomposition:
