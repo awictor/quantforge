@@ -218,3 +218,29 @@ def degree_day_option(expected_index, strike, sigma, r, expiry, tick_value,
         # Capped put = long put(K) - short put(K - cap).
         undiscounted = _bachelier(strike) - _bachelier(strike - cap)
     return disc * tick_value * undiscounted
+
+
+def degree_day_digital(expected_index, strike, sigma, r, expiry, payout,
+                       is_call=True):
+    """Digital (binary) degree-day option: fixed ``payout`` on a strike breach.
+
+    Under the normal (Bachelier) index model with mean ``expected_index`` and
+    standard deviation ``sigma``, a call digital pays ``payout`` if the index
+    finishes above ``strike``, a put digital if below. The value is the discounted
+    breach probability times the payout:
+
+        call = e^{-rT} payout * Phi((mu - K) / sigma),
+        put  = e^{-rT} payout * Phi((K - mu) / sigma).
+
+    Call and put digitals sum to ``e^{-rT} payout`` (one of them always pays).
+    """
+    from .mathfns import norm_cdf
+    if sigma < 0 or expiry < 0 or payout < 0:
+        raise ValueError("sigma, expiry, payout must be non-negative")
+    disc = math.exp(-r * expiry)
+    if sigma == 0.0:
+        breach = (expected_index > strike) if is_call else (expected_index < strike)
+        return disc * payout * (1.0 if breach else 0.0)
+    z = (expected_index - strike) / sigma
+    prob = norm_cdf(z) if is_call else norm_cdf(-z)
+    return disc * payout * prob

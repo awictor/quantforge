@@ -16,6 +16,16 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.674.0] - 2026-09-12
+
+### Added
+- `weather.py`: `degree_day_digital` prices a binary degree-day option paying a
+  fixed amount on a strike breach -- the discounted breach probability times the
+  payout under the normal index model. Cross-checked: the call and put digitals sum
+  to the discounted payout, an ATM digital is worth half, a deep-ITM call pays the
+  full discounted amount, the value is monotone in the strike, and zero vol gives a
+  step function.
+
 ## [1.673.0] - 2026-09-12
 
 ### Documentation

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.673.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.674.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -11533,6 +11533,20 @@ Auto-generated from `quantforge` v1.673.0 by `docs/gen_api.py` — do not edit b
 > ``degree_day_option(call, K=cap) - degree_day_option(put, K=floor)``. When both
 > strikes coincide the collar reduces to the discounted forward payoff
 > ``e^{-r T} tick (expected_index - strike)`` by put-call parity.
+
+### `degree_day_digital(expected_index, strike, sigma, r, expiry, payout, is_call=True)`  _function_
+
+> Digital (binary) degree-day option: fixed ``payout`` on a strike breach.
+>
+> Under the normal (Bachelier) index model with mean ``expected_index`` and
+> standard deviation ``sigma``, a call digital pays ``payout`` if the index
+> finishes above ``strike``, a put digital if below. The value is the discounted
+> breach probability times the payout:
+>
+>     call = e^{-rT} payout * Phi((mu - K) / sigma),
+>     put  = e^{-rT} payout * Phi((K - mu) / sigma).
+>
+> Call and put digitals sum to ``e^{-rT} payout`` (one of them always pays).
 
 ### `degree_day_index(temps, base=65.0, kind='HDD')`  _function_
 
