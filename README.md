@@ -35,6 +35,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Forward-start and cliquet options](#forward-start-and-cliquet-options)
 - [Quasi-Monte Carlo](#quasi-monte-carlo)
 - [Exotic options (closed form)](#exotic-options-closed-form)
+- [Shout and ladder options](#shout-and-ladder-options)
 - [Local volatility (Dupire)](#local-volatility-dupire)
 - [Term-structure surface (calendar-arbitrage aware)](#term-structure-surface-calendar-arbitrage-aware)
 - [Skew/kurtosis-adjusted pricing (Corrado-Su)](#skewkurtosis-adjusted-pricing-corrado-su)
@@ -844,6 +845,28 @@ gap_option(S=100, K_trigger=90, K_payoff=110, t=1.0, r=0.05, sigma=0.25,
 power_option(S=100, K=10000, t=1.0, r=0.05, sigma=0.2, power=2.0,
              option_type="call")
 ```
+
+## Shout and ladder options
+
+Two path-dependent lock-in calls priced on a Cox-Ross-Rubinstein tree. A **shout**
+call lets the holder shout once before expiry to lock in the then-current intrinsic
+`S* - K` as a floor while keeping the upside, so the terminal payoff is
+`max(S_T - K, S* - K)`. A **ladder** call floors its payoff at the highest preset
+rung the underlying touches: `max(S_T - K, max_touched L_i - K, 0)`.
+
+```python
+from quantforge import shout_call, ladder_call
+
+# Shout: lock in intrinsic once, keep upside.
+shout_call(S=100, K=100, t=1.0, r=0.05, sigma=0.25)          # -> 15.4261
+
+# Ladder: floor payoff at highest rung touched (rungs must exceed the strike).
+ladder_call(S=100, K=100, rungs=[110, 120, 130], t=1.0, r=0.05, sigma=0.25)  # -> 17.3279
+```
+
+Both are worth at least the vanilla call. With no rungs the ladder reduces to the
+plain tree-priced European call; rungs at or below the strike are ignored. More or
+higher rungs raise the ladder value up toward the shout-like limit.
 
 ## Local volatility (Dupire)
 
