@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.464.0] - 2026-09-11
+
+### Added
+- `structural_credit.py`: the Merton (1974) structural credit model.
+  `equity_value` (a call on the firm's assets struck at the debt face),
+  `risk_neutral_default_probability` (`Phi(-d2)`), `distance_to_default` (`d2`),
+  `risky_debt_value` (`V - E`), and `credit_spread`. Cross-checked: equity equals
+  the BSM call, PD equals `Phi(-distance)`, the firm-value identity `V = E + debt`
+  holds, and PD/spread rise with leverage and volatility (near zero for a safe
+  firm).
+
 ## [1.463.0] - 2026-09-11
 
 ### Added

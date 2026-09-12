@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.463.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.464.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -7954,6 +7954,46 @@ Auto-generated from `quantforge` v1.463.0 by `docs/gen_api.py` — do not edit b
 >
 > A call spread with K_long < K_short is a bull spread; a put spread with
 > K_long > K_short is a bear spread.
+
+## structural_credit
+
+### `credit_spread(asset_value, debt_face, r, sigma, t)`  _function_
+
+> Continuously-compounded credit spread of the risky debt over the risk-free.
+>
+> ``spread = -ln(D_risky / D e^{-r T}) / T`` -- the yield pickup of the risky
+> debt over discounting the face at the risk-free rate. Non-negative, zero in the
+> no-default limit, and rising with leverage and volatility.
+
+### `distance_to_default(asset_value, debt_face, r, sigma, t)`  _function_
+
+> Distance to default: ``d2`` (standard deviations of asset drift above debt).
+>
+> ``d2 = (ln(V/D) + (r - sigma^2/2) T) / (sigma sqrt(T))``. The number of
+> standard deviations the log assets must fall to hit the default barrier;
+> higher is safer, and ``Phi(-DD)`` is the default probability.
+
+### `equity_value(asset_value, debt_face, r, sigma, t)`  _function_
+
+> Equity as a call on the firm's assets struck at the debt face value.
+>
+> ``E = call(V, K=D, T)`` -- shareholders own the residual after repaying debt,
+> a call on the assets. Increases with asset value and volatility.
+
+### `risk_neutral_default_probability(asset_value, debt_face, r, sigma, t)`  _function_
+
+> Risk-neutral probability of default ``P(V_T < D) = Phi(-d2)``.
+>
+> The chance the assets end below the debt face at maturity under the pricing
+> measure. Rises with leverage (``D/V``), volatility, and horizon.
+
+### `risky_debt_value(asset_value, debt_face, r, sigma, t)`  _function_
+
+> Value of the risky debt: assets minus equity (``V - E``).
+>
+> By the accounting identity ``V = E + D_risky`` the debt is the firm value less
+> the equity call. Below the risk-free discounted face; the gap is the credit
+> risk.
 
 ## structured
 
