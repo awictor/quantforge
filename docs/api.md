@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.499.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.500.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -1982,6 +1982,37 @@ Auto-generated from `quantforge` v1.499.0 by `docs/gen_api.py` — do not edit b
 >
 > Ordinary (equal-weight) sample covariance over variance, the slope of a
 > regression of asset returns on market returns. Series must be equal length.
+
+## cppi
+
+### `cppi_path(initial_wealth, floor, multiplier, risky_returns, r, dt)`  _function_
+
+> Simulate a CPPI wealth path over a sequence of risky-asset returns.
+>
+> Each step: allocate :func:`risky_exposure` to the risky asset (rest at the safe
+> rate ``r`` over ``dt``), apply that period's ``risky_return``, and roll forward.
+> The floor is discounted to each step's remaining horizon. Returns the list of
+> period-end wealths. Wealth stays at or above the floor for a multiplier within
+> the gap-risk limit.
+
+### `cushion(wealth, floor_pv)`  _function_
+
+> Cushion: wealth above the (discounted) floor, ``max(wealth - floor_pv, 0)``.
+
+### `discounted_floor(floor, r, horizon)`  _function_
+
+> Present value of the guaranteed floor: ``floor * e^{-r * horizon}``.
+>
+> The bond floor CPPI must stay above today so the terminal wealth is at least
+> ``floor``.
+
+### `risky_exposure(wealth, floor_pv, multiplier)`  _function_
+
+> CPPI risky-asset exposure ``clamp(multiplier * cushion, 0, wealth)``.
+>
+> The dollar amount in the risky asset: the multiplier times the
+> :func:`cushion`, capped at total wealth (no leverage) and floored at zero.
+> Zero once wealth hits the floor, protecting the guarantee.
 
 ## credit
 

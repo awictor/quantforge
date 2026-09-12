@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.500.0] - 2026-09-11
+
+### Added
+- `cppi.py`: Constant Proportion Portfolio Insurance. `discounted_floor`,
+  `cushion`, `risky_exposure` (multiplier times the cushion, capped at wealth and
+  floored at zero), and `cppi_path` (wealth-path simulation). Cross-checked: the
+  exposure is the multiplier times the cushion and respects the no-leverage cap,
+  higher multipliers take more risk, a positive-return path grows, and a crash
+  path stays at the guaranteed floor.
+
 ## [1.499.0] - 2026-09-11
 
 ### Documentation
