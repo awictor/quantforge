@@ -333,6 +333,7 @@ from .levy_basket import levy_basket_option
 from .rainbow_n import rainbow_option_mc
 from .curran_asian import curran_asian
 from .minimize1d import golden_section_min, brent_min
+from .numdiff import gradient, hessian, jacobian
 from .hull_white import (
     hw_zero_from_curve, hw_B, hw_bond_option,
     hw_caplet, hw_floorlet, hw_cap, hw_floor, hw_swaption,
@@ -687,7 +688,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.655.0"
+__version__ = "1.656.0"
 
 __all__ = [
     "OptionType",
@@ -1203,6 +1204,9 @@ __all__ = [
     "curran_asian",
     "golden_section_min",
     "brent_min",
+    "gradient",
+    "hessian",
+    "jacobian",
     "hw_zero_from_curve",
     "hw_B",
     "hw_bond_option",

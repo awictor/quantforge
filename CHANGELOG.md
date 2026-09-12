@@ -16,6 +16,16 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.656.0] - 2026-09-12
+
+### Added
+- `numdiff.py`: central-difference numerical differentiation -- `gradient` and
+  `hessian` of a scalar function and the `jacobian` of a vector function, with
+  per-coordinate steps scaled by the argument magnitude. Cross-checked against
+  exact derivatives: the gradient and Hessian of a quadratic are recovered
+  exactly, the Hessian is symmetric, the gradient vanishes at a minimum, and the
+  Jacobian of a known vector map matches.
+
 ## [1.655.0] - 2026-09-12
 
 ### Documentation

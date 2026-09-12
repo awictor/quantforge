@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.655.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.656.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -7397,6 +7397,29 @@ Auto-generated from `quantforge` v1.655.0 by `docs/gen_api.py` — do not edit b
 > Prices a call at each strike and inverts to a Black-Scholes implied vol,
 > returning ``(log_moneyness, vol)`` pairs sorted by strike on the forward
 > ``F = S e^{(r-q) t}``. ``beta < 0`` tilts the smile into a downward skew.
+
+## numdiff
+
+### `gradient(f, x, rel_step=1e-06)`  _function_
+
+> Central-difference gradient of a scalar ``f`` at the vector ``x``.
+>
+> Returns a list of ``df/dx_i``. Each partial uses ``(f(x+h e_i) - f(x-h e_i))
+> / (2 h)`` with a per-coordinate step scaled by the argument magnitude.
+
+### `hessian(f, x, rel_step=0.0001)`  _function_
+
+> Central-difference Hessian of a scalar ``f`` at ``x`` (symmetric).
+>
+> Diagonal terms use the second-difference stencil; off-diagonal terms the
+> four-point cross stencil. A larger default step than the gradient keeps the
+> second differences well-conditioned. Returns an ``n x n`` list of lists.
+
+### `jacobian(f, x, rel_step=1e-06)`  _function_
+
+> Central-difference Jacobian of a vector function ``f: R^n -> R^m``.
+>
+> Returns an ``m x n`` list of lists ``df_k/dx_i``.
 
 ## ols
 
