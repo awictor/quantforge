@@ -98,6 +98,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Structural credit (Merton)](#structural-credit-merton)
 - [Dual-currency deposits](#dual-currency-deposits)
 - [FX forwards (covered interest parity)](#fx-forwards-covered-interest-parity)
+- [Entropy pooling (views on scenarios)](#entropy-pooling-views-on-scenarios)
 - [Covariance shrinkage (Ledoit-Wolf)](#covariance-shrinkage-ledoit-wolf)
 - [Portfolio optimization](#portfolio-optimization)
 - [Rebalancing](#rebalancing)
@@ -2230,6 +2231,28 @@ fx_forward(spot=1.10, r_price=0.05, r_base=0.03, t=1.0)   # EURUSD-style
 cross_rate(1.10, 1.25)                                     # EURGBP from EURUSD, GBPUSD
 triangular_arbitrage(1.10, 150, 1 / (1.10 * 150))         # == 1 if arbitrage-free
 ```
+
+## Entropy pooling (views on scenarios)
+
+Impose a view on a set of scenarios — "the mean of this quantity should be 3" —
+while changing the scenario probabilities as little as possible.
+`entropy_pooling_mean` returns the minimal-relative-entropy posterior (an
+exponential tilt of the prior, Meucci 2008); `relative_entropy` measures the KL
+cost of the view.
+
+```python
+from quantforge import entropy_pooling_mean, relative_entropy
+
+x = [-3, -1, 0, 1, 2, 4, 5, 7]          # scenario values, uniform prior
+p = entropy_pooling_mean(x, target=3.0)  # posterior probabilities
+sum(x[i] * p[i] for i in range(len(x)))  # -> 3.0  (view satisfied exactly)
+
+relative_entropy(p, [1/8] * 8)           # -> 0.0657  (KL cost of the view)
+```
+
+A view equal to the prior mean leaves the probabilities unchanged; a stronger view
+costs more relative entropy. The reweighted scenarios flow straight into any
+downstream risk or allocation calculation.
 
 ## Covariance shrinkage (Ledoit-Wolf)
 

@@ -16,6 +16,13 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.575.0] - 2026-09-12
+
+### Documentation
+- README: added an "Entropy pooling (views on scenarios)" section documenting
+  `entropy_pooling_mean` and `relative_entropy`, the 100th documented section; TOC
+  regenerated to 100 entries.
+
 ## [1.573.0] - 2026-09-12
 
 ### Documentation
