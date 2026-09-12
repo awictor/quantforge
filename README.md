@@ -79,6 +79,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Cross-validation](#cross-validation)
 - [Feature scaling](#feature-scaling)
 - [k-nearest neighbors](#k-nearest-neighbors)
+- [Gaussian naive Bayes](#gaussian-naive-bayes)
 - [Factor models](#factor-models)
 - [Performance attribution (Brinson)](#performance-attribution-brinson)
 - [Bootstrap and jackknife](#bootstrap-and-jackknife)
@@ -1926,6 +1927,26 @@ knn_regress(X_train, y_train, X_query, k=3)    # mean target of the k nearest
 
 With `k=1` it reproduces the training labels (or the nearest target) exactly; a
 larger `k` smooths the decision boundary. No training step — the model is the data.
+
+## Gaussian naive Bayes
+
+A fast probabilistic classifier that assumes features are conditionally
+independent and normally distributed within each class. `fit_gaussian_nb`
+estimates the priors and per-feature moments; `predict_gaussian_nb` and
+`predict_proba_gaussian_nb` classify and score queries.
+
+```python
+from quantforge import (fit_gaussian_nb, predict_gaussian_nb,
+                        predict_proba_gaussian_nb)
+
+m = fit_gaussian_nb(X, y)                       # y = class labels (any hashable)
+predict_gaussian_nb(m, [[1.1, 1.0]])            # -> ['lo']
+predict_proba_gaussian_nb(m, [[1, 1]])          # -> [{'lo': 1.0, 'hi': 0.0}]
+```
+
+Posteriors are computed in log space and softmaxed, so they sum to 1 and stay
+stable in high dimension. Despite the independence assumption it is a strong,
+cheap baseline.
 
 ## Factor models
 

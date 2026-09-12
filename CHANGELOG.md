@@ -16,6 +16,13 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.627.0] - 2026-09-12
+
+### Documentation
+- README: added a "Gaussian naive Bayes" section documenting `fit_gaussian_nb`,
+  `predict_gaussian_nb`, and `predict_proba_gaussian_nb`; TOC regenerated to 116
+  entries.
+
 ## [1.626.0] - 2026-09-12
 
 ### Added
