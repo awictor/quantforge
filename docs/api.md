@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.601.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.602.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -3930,6 +3930,38 @@ Auto-generated from `quantforge` v1.601.0 by `docs/gen_api.py` — do not edit b
 > Runs :func:`factor_regression` on each trailing window of length ``window``,
 > returning the list of first-factor betas (one per window end, from index
 > ``window - 1`` onward). Tracks how the factor loading drifts through time.
+
+## forecast_metrics
+
+### `mae(actual, forecast)`  _function_
+
+> Mean absolute error.
+
+### `mape(actual, forecast)`  _function_
+
+> Mean absolute percentage error (as a fraction; 0.1 = 10%).
+>
+> Raises if any actual value is zero (the percentage is undefined there).
+
+### `mase(actual, forecast, train=None, season=1)`  _function_
+
+> Mean absolute scaled error.
+>
+> Scales the forecast MAE by the in-sample MAE of a seasonal-naive forecast
+> (differences at lag ``season``) computed on ``train`` (defaults to ``actual``).
+> ``< 1`` means the forecast beats naive; ``= 1`` matches it. Raises if the naive
+> benchmark has zero error (a perfectly predictable training series).
+
+### `rmse(actual, forecast)`  _function_
+
+> Root mean squared error.
+
+### `smape(actual, forecast)`  _function_
+
+> Symmetric mean absolute percentage error, in [0, 2].
+>
+> ``mean( |a - f| / ((|a| + |f|) / 2) )``. Terms with both ``a`` and ``f`` zero
+> contribute 0. Robust to small actuals and bounded, unlike plain MAPE.
 
 ## forward
 

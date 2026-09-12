@@ -295,6 +295,7 @@ from .acf import acf, pacf
 from .ar_model import fit_ar_yule_walker, ar_forecast
 from .ar_select import select_ar_order, ar_information_criteria
 from .holt_winters import holt_linear, holt_winters_add
+from .forecast_metrics import mae, rmse, mape, smape, mase
 from .hac import (
     autocovariance, autocorrelation, newey_west_variance, newey_west_mean_se,
 )
@@ -645,7 +646,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.601.0"
+__version__ = "1.602.0"
 
 __all__ = [
     "OptionType",
@@ -1108,6 +1109,11 @@ __all__ = [
     "ar_information_criteria",
     "holt_linear",
     "holt_winters_add",
+    "mae",
+    "rmse",
+    "mape",
+    "smape",
+    "mase",
     "autocovariance",
     "autocorrelation",
     "newey_west_variance",

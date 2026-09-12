@@ -16,6 +16,16 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.602.0] - 2026-09-12
+
+### Added
+- `forecast_metrics.py`: forecast-accuracy metrics -- `mae`, `rmse`, `mape`,
+  `smape` (symmetric, bounded), and `mase` (mean absolute scaled error vs a
+  seasonal-naive benchmark). Cross-checked: a perfect forecast scores zero on all,
+  known inputs give the exact hand values, RMSE >= MAE, MAPE is scale-invariant,
+  sMAPE is bounded in [0, 2], and MASE equals 1 for a naive-equivalent forecast and
+  drops below 1 for a perfect one.
+
 ## [1.601.0] - 2026-09-12
 
 ### Documentation
