@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.571.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.572.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -8945,6 +8945,36 @@ Auto-generated from `quantforge` v1.571.0 by `docs/gen_api.py` — do not edit b
 > :func:`quantforge.parisian_barrier_mc`, which it cross-checks. ``n_steps`` is
 > capped by the Sobol generator's dimension (now 12), so the window is resolved
 > to ``round(window / dt)`` consecutive steps.
+
+## spectral
+
+### `dft(x)`  _function_
+
+> Discrete Fourier transform of a real (or complex) sequence.
+>
+> Returns the ``n`` complex coefficients ``X_k = sum_t x_t exp(-2 pi i k t / n)``.
+
+### `dominant_frequency(x)`  _function_
+
+> Frequency (cycles per sample) of the largest non-DC periodogram peak.
+>
+> Ignores the zero-frequency (mean) component. Returns the frequency; its
+> reciprocal is the dominant period in samples.
+
+### `periodogram(x)`  _function_
+
+> One-sided periodogram of a real series.
+>
+> Returns ``(freqs, power)`` where ``freqs`` are normalized frequencies in
+> cycles per sample over ``[0, 0.5]`` and ``power[k] = |X_k|^2 / n``. The DC
+> term is included at frequency 0. Peaks mark dominant cycles.
+
+### `spectral_energy(x)`  _function_
+
+> Total periodogram energy, ``sum_k |X_k|^2 / n`` over all n frequencies.
+>
+> By Parseval's theorem this equals ``sum_t x_t^2`` (the time-domain energy),
+> which the tests use as a consistency check.
 
 ## spline
 

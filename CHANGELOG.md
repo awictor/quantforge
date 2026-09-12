@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.572.0] - 2026-09-12
+
+### Added
+- `spectral.py`: spectral analysis of a real signal -- `dft` (direct discrete
+  Fourier transform), `periodogram` (one-sided power spectrum), `dominant_frequency`
+  (largest non-DC peak), and `spectral_energy`. Cross-checked: a pure sine peaks
+  exactly at its frequency (period recovered to machine precision), Parseval's
+  theorem holds (spectral energy equals the time-domain sum of squares), a constant
+  signal has power only at DC, white noise spreads across frequencies with no
+  dominant peak, and a two-tone signal picks the stronger tone.
+
 ## [1.571.0] - 2026-09-12
 
 ### Documentation
