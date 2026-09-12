@@ -1409,6 +1409,25 @@ required_hedge_duration(asset_value=1.05 * L, liability_duration_=D, liability_v
 surplus_at_risk(1.05 * L, L, surplus_volatility=0.08, confidence=0.95)
 ```
 
+## Bond futures
+
+Conversion factors, delivery invoice/basis, cheapest-to-deliver selection,
+implied repo, and futures DV01 hedging:
+
+```python
+from quantforge import (conversion_factor, net_basis, cheapest_to_deliver,
+                        futures_dv01, futures_hedge_ratio, bond_future_dv01)
+
+conversion_factor(coupon_rate=0.04, years_to_maturity=10, notional_coupon=0.06)
+basket = [{"price": 115, "cf": 0.95, "carry": 0.5},
+          {"price": 118, "cf": 0.98, "carry": 0.4}]
+cheapest_to_deliver(basket, futures_price=120)
+
+# Hedge a cash bond with futures via DV01 matching.
+fut_dv01 = futures_dv01(ctd_dv01=bond_future_dv01(115, 9.0), ctd_conversion_factor=0.95)
+futures_hedge_ratio(bond_dv01_=bond_future_dv01(120, 8.5), futures_dv01_=fut_dv01)
+```
+
 ## FX forwards (covered interest parity)
 
 ```python

@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.449.0] - 2026-09-11
+
+### Documentation
+- README: added a "Bond futures" section covering the `bond_future` module
+  (conversion factors, delivery basis, cheapest-to-deliver, implied repo, DV01
+  hedging), with runnable examples verified against the installed package.
+
 ## [1.448.0] - 2026-09-11
 
 ### Added
