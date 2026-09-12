@@ -16,6 +16,17 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.614.0] - 2026-09-12
+
+### Added
+- `scaling.py`: feature scalers with fit / transform / inverse discipline --
+  `fit_standardize` (z-score), `fit_min_max` ([0, 1]), `fit_robust` (median / IQR),
+  applied by `scale_transform` and undone by `scale_inverse_transform` (exported
+  under those names to avoid clashing with the copula ``inverse_transform``).
+  Cross-checked: standardized columns have mean 0 and std 1, min-max maps to exactly
+  [0, 1], both round-trip through the inverse, and the robust scaler's median center
+  is resistant to an injected outlier.
+
 ## [1.613.0] - 2026-09-12
 
 ### Documentation

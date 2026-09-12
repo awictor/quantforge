@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.613.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.614.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -8885,6 +8885,28 @@ Auto-generated from `quantforge` v1.613.0 by `docs/gen_api.py` — do not edit b
 >
 > Uses the standard expansion with the ATM limit handled separately to avoid
 > the removable 0/0 singularity at ``F == K``.
+
+## scaling
+
+### `fit_min_max(X)`  _function_
+
+> Fit a min-max scaler: per-column ``(min, range)`` (zero range -> 1).
+
+### `fit_robust(X)`  _function_
+
+> Fit a robust scaler: per-column ``(median, IQR)`` (zero IQR -> 1).
+
+### `fit_standardize(X)`  _function_
+
+> Fit a z-score scaler: per-column ``(mean, std)`` (zero std -> 1).
+
+### `scale_inverse_transform(params, X)`  _function_
+
+> Undo a fitted scaler: ``x * scale + center`` column-wise.
+
+### `scale_transform(params, X)`  _function_
+
+> Apply a fitted scaler: ``(x - center) / scale`` column-wise.
 
 ## scenario
 
