@@ -86,6 +86,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Serial correlation (Ljung-Box / Durbin-Watson)](#serial-correlation-ljung-box--durbin-watson)
 - [Goodness of fit (Jarque-Bera / KS)](#goodness-of-fit-jarque-bera--ks)
 - [Rank dependence (Kendall / Spearman)](#rank-dependence-kendall--spearman)
+- [Gaussian-copula sampling](#gaussian-copula-sampling)
 - [Spectral analysis](#spectral-analysis)
 - [Structural breaks (CUSUM / Chow)](#structural-breaks-cusum--chow)
 - [Cointegration (ADF / Engle-Granger)](#cointegration-adf--engle-granger)
@@ -2058,6 +2059,28 @@ exceedance_correlation(x, y, q=0.9, tail="upper")   # correlation in the tail on
 A comonotone pair has tail dependence ~1; independent margins sit at the `1 - q`
 null and fall toward 0 at more extreme thresholds; a common-shock pair shows
 clear positive tail dependence (~0.5) even when its bulk correlation is modest.
+
+## Gaussian-copula sampling
+
+Simulate a dependent portfolio: draw uniforms with a target correlation from a
+Gaussian copula, then push each margin through its inverse-CDF to get correlated
+draws from any distributions. `gaussian_copula_sample` correlates standard normals
+via the Cholesky factor and maps them back through the normal CDF.
+
+```python
+from quantforge import gaussian_copula_sample, inverse_transform
+from quantforge.mathfns import norm_ppf
+
+R = [[1.0, 0.7], [0.7, 1.0]]
+u = gaussian_copula_sample(R, n=5000, seed=42)   # list of [u1, u2] uniforms
+
+# Turn margin 0 into standard-normal draws (or any inverse-CDF).
+x = inverse_transform([row[0] for row in u], norm_ppf)
+```
+
+Each margin is uniform; the cross-margin rank correlation tracks `R` (≈0.69 for a
+0.7 target). A non-positive-definite correlation matrix is rejected by the
+Cholesky step.
 
 ## Spectral analysis
 

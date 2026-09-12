@@ -16,6 +16,12 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.587.0] - 2026-09-12
+
+### Documentation
+- README: added a "Gaussian-copula sampling" section documenting
+  `gaussian_copula_sample` and `inverse_transform`; TOC regenerated to 104 entries.
+
 ## [1.586.0] - 2026-09-12
 
 ### Added
