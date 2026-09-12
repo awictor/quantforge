@@ -1393,6 +1393,11 @@ eso_value(50, 50, contractual_term=10, r=0.05, sigma=0.3, vesting=2,
 discrete_dividend_price(100, 100, 1.0, 0.05, 0.25, dividends=[(0.25, 2), (0.75, 2)])
 convertible_bond_value(50, conversion_ratio=20, face=1000, coupon_rate=0.04,
                        maturity=5, r=0.05, sigma=0.3, credit_spread=0.01)
+
+# Full American optionality (early conversion + issuer call) on an equity lattice.
+from quantforge import convertible_bond_lattice
+convertible_bond_lattice(50, sigma=0.3, face=1000, conversion_ratio=20,
+                         coupon_rate=0.04, maturity=5, r=0.05, call_price=1100)
 ```
 
 ## Optimal execution
