@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.619.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.620.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -9152,6 +9152,22 @@ Auto-generated from `quantforge` v1.619.0 by `docs/gen_api.py` — do not edit b
 > The time-series-momentum signal (Moskowitz-Ooi-Pedersen): go long after a
 > positive past return, short after a negative one. Returns one signal per
 > position from index ``lookback`` on.
+
+## silhouette
+
+### `silhouette_samples(X, labels)`  _function_
+
+> Per-point silhouette values ``s(i)`` in ``[-1, 1]``.
+>
+> A point alone in its cluster gets ``s = 0`` by convention. Requires at least
+> two distinct cluster labels.
+
+### `silhouette_score(X, labels)`  _function_
+
+> Mean silhouette over all points -- an overall clustering-quality score.
+>
+> Near 1 = dense, well-separated clusters; near 0 = overlapping; negative =
+> mostly misassigned. Use it to compare label sets or pick ``k``.
 
 ## sizing
 

@@ -16,6 +16,16 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.620.0] - 2026-09-12
+
+### Added
+- `silhouette.py`: `silhouette_score` and `silhouette_samples` measure clustering
+  quality -- for each point, ``(b - a) / max(a, b)`` comparing its own-cluster
+  cohesion to the nearest other cluster. Cross-checked: the correct ``k`` scores
+  high (~0.93) and beats a wrong ``k``, values stay in ``[-1, 1]``, a singleton
+  cluster scores 0, tight well-separated clusters approach 1, and random labels
+  score near 0.
+
 ## [1.619.0] - 2026-09-12
 
 ### Documentation

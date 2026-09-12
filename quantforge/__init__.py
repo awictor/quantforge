@@ -309,6 +309,7 @@ from .scaling import (
 )
 from .poly_features import polynomial_features
 from .kmeans import kmeans
+from .silhouette import silhouette_score, silhouette_samples
 from .hac import (
     autocovariance, autocorrelation, newey_west_variance, newey_west_mean_se,
 )
@@ -659,7 +660,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.619.0"
+__version__ = "1.620.0"
 
 __all__ = [
     "OptionType",
@@ -1146,6 +1147,8 @@ __all__ = [
     "scale_inverse_transform",
     "polynomial_features",
     "kmeans",
+    "silhouette_score",
+    "silhouette_samples",
     "autocovariance",
     "autocorrelation",
     "newey_west_variance",
