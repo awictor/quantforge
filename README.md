@@ -84,6 +84,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Hurst exponent (long memory)](#hurst-exponent-long-memory)
 - [Variance-ratio test](#variance-ratio-test)
 - [Serial correlation (Ljung-Box / Durbin-Watson)](#serial-correlation-ljung-box--durbin-watson)
+- [Goodness of fit (Jarque-Bera / KS)](#goodness-of-fit-jarque-bera--ks)
 - [Rank dependence (Kendall / Spearman)](#rank-dependence-kendall--spearman)
 - [Spectral analysis](#spectral-analysis)
 - [Structural breaks (CUSUM / Chow)](#structural-breaks-cusum--chow)
@@ -2002,6 +2003,24 @@ durbin_watson(residuals)                # ~2 = clean, <2 positive, >2 negative
 White noise gives a large Ljung-Box p-value and a Durbin-Watson near 2; an AR(1)
 gives a huge Q with a vanishing p-value and a Durbin-Watson far from 2. The
 p-values use a self-contained chi-square survival function (no SciPy).
+
+## Goodness of fit (Jarque-Bera / KS)
+
+Test distributional assumptions. `jarque_bera_test` checks normality from skew and
+kurtosis; `ks_two_sample` checks whether two samples share a distribution via the
+largest gap between their empirical CDFs.
+
+```python
+from quantforge import jarque_bera_test, ks_two_sample
+
+stat, p = jarque_bera_test(returns)      # small p rejects normality
+d, p = ks_two_sample(sample_a, sample_b) # small p rejects "same distribution"
+```
+
+A normal sample is not rejected; a heavy-tailed or skewed one is. The KS test
+catches any distributional difference — location, scale, or shape — not just a
+difference in means, and its p-value uses the asymptotic Kolmogorov distribution
+(no SciPy).
 
 ## Rank dependence (Kendall / Spearman)
 
