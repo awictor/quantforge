@@ -16,6 +16,16 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.598.0] - 2026-09-12
+
+### Added
+- `ar_select.py`: `select_ar_order` picks the AR order that minimizes AIC or BIC
+  over a range of candidates, and `ar_information_criteria` returns the criteria of
+  a single fit (from the concentrated Gaussian log-likelihood). Cross-checked: BIC
+  recovers the true order of simulated AR(1) and AR(2) series, the BIC-selected
+  order is never larger than the AIC one (heavier penalty), and AIC drops at the
+  true order.
+
 ## [1.597.0] - 2026-09-12
 
 ### Documentation

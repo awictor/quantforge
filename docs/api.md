@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.597.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.598.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -274,6 +274,34 @@ Auto-generated from `quantforge` v1.597.0 by `docs/gen_api.py` — do not edit b
 >     "noise_variance": sigma2, "mean": mu}``. The coefficients solve the
 >     Yule-Walker equations; ``noise_variance`` is the innovation variance from
 >     the final Levinson step.
+
+## ar_select
+
+### `ar_information_criteria(x, order)`  _function_
+
+> AIC and BIC of an AR(``order``) fit to ``x``.
+>
+> Returns ``(aic, bic, loglik, noise_variance)`` using the concentrated Gaussian
+> log-likelihood and ``k = order + 1`` parameters.
+
+### `select_ar_order(x, max_order=10, criterion='aic')`  _function_
+
+> Select the AR order minimizing AIC or BIC over ``1..max_order``.
+>
+> Parameters
+> ----------
+> x : sequence of float
+>     The series.
+> max_order : int
+>     Largest candidate order to try.
+> criterion : str
+>     ``"aic"`` or ``"bic"``.
+>
+> Returns
+> -------
+> (best_order, scores) : (int, list[tuple])
+>     The selected order and a list of ``(order, aic, bic)`` for every candidate.
+>     BIC tends to pick an order no larger than AIC.
 
 ## attribution
 
