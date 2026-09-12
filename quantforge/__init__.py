@@ -288,6 +288,9 @@ from .gof_tests import jarque_bera_test, ks_two_sample
 from .copula_sample import gaussian_copula_sample, inverse_transform
 from .t_copula_sample import student_t_copula_sample
 from .drawdown import drawdown_analytics
+from .downside_ratios import (
+    kappa_ratio, upside_potential_ratio, lower_partial_moment,
+)
 from .hac import (
     autocovariance, autocorrelation, newey_west_variance, newey_west_mean_se,
 )
@@ -638,7 +641,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.591.0"
+__version__ = "1.592.0"
 
 __all__ = [
     "OptionType",
@@ -1090,6 +1093,9 @@ __all__ = [
     "inverse_transform",
     "student_t_copula_sample",
     "drawdown_analytics",
+    "kappa_ratio",
+    "upside_potential_ratio",
+    "lower_partial_moment",
     "autocovariance",
     "autocorrelation",
     "newey_west_variance",

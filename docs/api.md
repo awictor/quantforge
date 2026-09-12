@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.591.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.592.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -2560,6 +2560,27 @@ Auto-generated from `quantforge` v1.591.0 by `docs/gen_api.py` — do not edit b
 >
 > Returns ``(params, rmse)`` -- the fitted 10-tuple and the root-mean-square
 > implied-vol error over the quotes.
+
+## downside_ratios
+
+### `kappa_ratio(returns, tau=0.0, order=2)`  _function_
+
+> Kaplan-Knowles Kappa of the given ``order`` about target ``tau``.
+>
+> ``kappa_n = (mean - tau) / LPM_n^(1/n)``. ``order=1`` is the Omega-Sharpe
+> ratio, ``order=2`` the per-period Sortino ratio. Raises if there is no
+> downside (zero lower partial moment).
+
+### `lower_partial_moment(returns, tau=0.0, order=2)`  _function_
+
+> ``n``-th lower partial moment about ``tau``: mean(max(tau - r, 0)^n).
+
+### `upside_potential_ratio(returns, tau=0.0)`  _function_
+
+> Upside-potential ratio: mean upside over downside deviation about ``tau``.
+>
+> ``UPR = mean(max(r - tau, 0)) / sqrt(LPM_2(tau))`` -- expected outperformance
+> of the target per unit of downside risk. Raises if there is no downside.
 
 ## drawdown
 

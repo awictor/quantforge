@@ -16,6 +16,18 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.592.0] - 2026-09-12
+
+### Added
+- `downside_ratios.py`: generalized downside-risk performance measures --
+  `kappa_ratio` (Kaplan-Knowles Kappa of any order about a target; order 1 is the
+  Omega-Sharpe ratio, order 2 the per-period Sortino), `upside_potential_ratio`,
+  and the underlying `lower_partial_moment`. Cross-checked: Kappa-2 times the
+  annualization factor reproduces the existing Sortino ratio exactly, Kappa
+  decreases with order (deeper shortfalls penalized more), a higher target lowers
+  it, a symmetric mean-zero series gives ~0, and the upside-potential ratio is
+  positive for a positive-drift series.
+
 ## [1.591.0] - 2026-09-12
 
 ### Documentation
