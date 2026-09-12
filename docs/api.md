@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.679.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.680.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -2751,6 +2751,27 @@ Auto-generated from `quantforge` v1.679.0 by `docs/gen_api.py` — do not edit b
 > across the quotes. Minimises the squared vol error over the shift by
 > golden-section search on ``[shift_lo, shift_hi]`` (defaults scale with spot:
 > ``[-0.9 S, 20 S]``, staying above the ``-shift`` floor).
+
+## distortion
+
+### `expected_loss(pmf)`  _function_
+
+> Expected loss ``sum_k k * pmf[k]`` (= sum of the survival function).
+
+### `proportional_hazard_premium(pmf, rho)`  _function_
+
+> Proportional-hazard distortion premium ``sum_k S_k^{1/rho}``.
+>
+> ``rho = 1`` gives the expected loss; ``rho > 1`` loads the tail. Requires
+> ``rho >= 1``.
+
+### `wang_premium(pmf, lam)`  _function_
+
+> Wang-transform premium of a discrete loss distribution.
+>
+> Distorts the survival function by ``g(u) = Phi(Phi^{-1}(u) + lam)`` and sums
+> it over the grid (unit spacing). ``lam = 0`` gives the expected loss; positive
+> ``lam`` adds a risk load. Monotone increasing in ``lam``.
 
 ## double_barrier
 

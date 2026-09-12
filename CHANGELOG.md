@@ -16,6 +16,17 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.680.0] - 2026-09-12
+
+### Added
+- `distortion.py`: distortion (spectral) risk pricing on a discrete loss
+  distribution -- `wang_premium` (Wang transform, ``g(u) = Phi(Phi^{-1}(u) +
+  lambda)``) and `proportional_hazard_premium` (``g(u) = u^{1/rho}``), plus
+  `expected_loss`. Cross-checked: both reduce to the expected loss at zero
+  distortion (``lambda = 0`` / ``rho = 1``), a positive load raises the premium
+  monotonically and loads the tail, and a negative Wang ``lambda`` discounts below
+  the mean.
+
 ## [1.679.0] - 2026-09-12
 
 ### Documentation

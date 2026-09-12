@@ -347,6 +347,9 @@ from .panjer import (
     panjer_poisson, panjer_negative_binomial, aggregate_mean, stop_loss_premium,
     layer_expected_loss,
 )
+from .distortion import (
+    wang_premium, proportional_hazard_premium, expected_loss,
+)
 from .hull_white import (
     hw_zero_from_curve, hw_B, hw_bond_option,
     hw_caplet, hw_floorlet, hw_cap, hw_floor, hw_swaption,
@@ -702,7 +705,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.679.0"
+__version__ = "1.680.0"
 
 __all__ = [
     "OptionType",
@@ -1239,6 +1242,9 @@ __all__ = [
     "aggregate_mean",
     "stop_loss_premium",
     "layer_expected_loss",
+    "wang_premium",
+    "proportional_hazard_premium",
+    "expected_loss",
     "hw_zero_from_curve",
     "hw_B",
     "hw_bond_option",
