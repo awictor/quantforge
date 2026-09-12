@@ -83,6 +83,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Robust scale and location](#robust-scale-and-location)
 - [Hurst exponent (long memory)](#hurst-exponent-long-memory)
 - [Variance-ratio test](#variance-ratio-test)
+- [Structural breaks (CUSUM / Chow)](#structural-breaks-cusum--chow)
 - [Cointegration (ADF / Engle-Granger)](#cointegration-adf--engle-granger)
 - [Ornstein-Uhlenbeck calibration](#ornstein-uhlenbeck-calibration)
 - [Markov chains](#markov-chains)
@@ -1974,6 +1975,26 @@ variance_ratio_zstat(returns, q=2)   # standard-normal z; |z| > 1.96 rejects the
 On white noise `VR` sits near 1 with a small `z`; a mean-reverting series drives
 `VR` below 1 with a large negative `z`, a trending one above 1 with a large
 positive `z`.
+
+## Structural breaks (CUSUM / Chow)
+
+Detect when a mean or regime shifts. `cusum_mean` returns the standardized
+cumulative sum of deviations from the mean — a stable series stays inside a
+Kolmogorov band, a level shift drives it out. `chow_test` is an F test for a break
+at a known point.
+
+```python
+from quantforge import cusum_break_detected, cusum_mean, chow_test
+
+cusum_break_detected(series)          # True if the CUSUM path leaves its 95% band
+cusum, band = cusum_mean(series)      # inspect the path and threshold directly
+
+f, dof1, dof2 = chow_test(series, break_index=len(series)//2)
+# large f rejects "no break at that point"
+```
+
+On a stable series the CUSUM stays well inside the band and the Chow F is small; a
+persistent level shift breaches the band and drives the F statistic large.
 
 ## Cointegration (ADF / Engle-Granger)
 
