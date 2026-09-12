@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.617.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.618.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -5357,6 +5357,29 @@ Auto-generated from `quantforge` v1.617.0 by `docs/gen_api.py` — do not edit b
 > premium evaluation. Delta and gamma come from central differences in ``S``
 > on that fixed boundary; theta from a maturity bump (which does re-solve the
 > boundary). Returns ``{price, delta, gamma, theta}``.
+
+## kmeans
+
+### `kmeans(X, k, max_iter=100, seed=1234567)`  _function_
+
+> Cluster ``X`` into ``k`` groups with Lloyd's algorithm (k-means++ seed).
+>
+> Parameters
+> ----------
+> X : list[list[float]]
+>     ``n`` points in ``d`` dimensions.
+> k : int
+>     Number of clusters (>= 1, <= n).
+> max_iter : int
+>     Maximum Lloyd iterations.
+> seed : int
+>     Seed for the deterministic k-means++ sampler.
+>
+> Returns
+> -------
+> dict
+>     ``labels`` (cluster index per point), ``centroids``, ``inertia`` (total
+>     within-cluster squared distance), and ``iterations``.
 
 ## kou
 

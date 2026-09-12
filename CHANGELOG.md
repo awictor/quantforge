@@ -16,6 +16,15 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.618.0] - 2026-09-12
+
+### Added
+- `kmeans.py`: `kmeans` clusters points by Lloyd's algorithm with k-means++
+  seeding, returning labels, centroids, inertia, and the iteration count.
+  Cross-checked: three well-separated blobs are recovered as pure clusters with
+  centroids at the true centers, ``k=1`` gives the global mean, runs are
+  reproducible per seed, and inertia decreases as ``k`` grows.
+
 ## [1.617.0] - 2026-09-12
 
 ### Documentation
