@@ -90,3 +90,47 @@ def adaptive_simpson(f, a, b, tol=1e-10, max_depth=50):
     fa, fb, fm = f(a), f(b), f(m)
     whole = (b - a) / 6.0 * (fa + 4.0 * fm + fb)
     return _adaptive(f, a, b, fa, fb, fm, whole, tol, max_depth)
+
+
+def tanh_sinh(f, a, b, levels=6, h0=1.0):
+    """Tanh-sinh (double-exponential) quadrature over ``[a, b]``.
+
+    Substitutes ``x = (a+b)/2 + (b-a)/2 * tanh((pi/2) sinh(t))`` and integrates the
+    transformed integrand in ``t`` on a uniform grid. The change of variables makes
+    the abscissae cluster double-exponentially toward the endpoints and the weights
+    decay super-fast, so the rule converges even when ``f`` has integrable
+    endpoint singularities (``1/sqrt(x)``, ``ln x``, ...) where Gauss-Legendre and
+    Simpson struggle. ``levels`` successive grid halvings refine the step from
+    ``h0``; the number of function evaluations is ``O(2^levels / h0)``.
+
+    Nodes are computed off the endpoints, so ``f`` is never evaluated exactly at
+    ``a`` or ``b`` -- an integrable singularity at either end is fine.
+    """
+    if levels < 0:
+        raise ValueError("levels must be non-negative")
+    half = 0.5 * (b - a)
+    mid = 0.5 * (a + b)
+    half_pi = 0.5 * math.pi
+
+    def contrib(t):
+        # Weight and abscissa of the double-exponential transform at parameter t.
+        s = math.sinh(t)
+        u = half_pi * s
+        x = math.tanh(u)                      # in (-1, 1)
+        # dx/dt = (pi/2) cosh(t) / cosh(u)^2, guarded against overflow.
+        cosh_u = math.cosh(u)
+        w = half_pi * math.cosh(t) / (cosh_u * cosh_u)
+        return x, w
+
+    # Finest step and total half-width in t: beyond t_max the weight underflows.
+    h = h0 / (2 ** levels)
+    t_max = 3.5
+    n = int(t_max / h)
+    total = 0.0
+    for k in range(-n, n + 1):
+        t = k * h
+        x, w = contrib(t)
+        if abs(x) >= 1.0:
+            continue
+        total += w * f(mid + half * x)
+    return total * h * half

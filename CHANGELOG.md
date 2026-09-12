@@ -16,6 +16,17 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.708.0] - 2026-09-12
+
+### Added
+- `quadrature.py`: `tanh_sinh` double-exponential quadrature. The
+  `x = tanh((pi/2) sinh(t))` change of variables clusters abscissae toward the
+  endpoints and decays the weights super-fast, so it integrates functions with
+  integrable endpoint singularities (`1/sqrt(x)`, `ln x`) that Simpson and
+  Gauss-Legendre handle poorly. Cross-checked against closed forms: `integral_0^1
+  x^{-1/2} = 2`, `integral_0^1 -ln x = 1`, `integral_0^1 ln(x)/sqrt(x) = -4`, the
+  semicircle `integral_-1^1 sqrt(1-x^2) = pi/2`, and a Gaussian against `erf`.
+
 ## [1.707.0] - 2026-09-12
 
 ### Documentation

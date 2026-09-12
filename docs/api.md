@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.706.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.708.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -8618,6 +8618,21 @@ Auto-generated from `quantforge` v1.706.0 by `docs/gen_api.py` — do not edit b
 > Composite Simpson's rule (``n`` even) -- exact for cubics.
 >
 > Rounds ``n`` up to the next even number. Fourth-order accurate.
+
+### `tanh_sinh(f, a, b, levels=6, h0=1.0)`  _function_
+
+> Tanh-sinh (double-exponential) quadrature over ``[a, b]``.
+>
+> Substitutes ``x = (a+b)/2 + (b-a)/2 * tanh((pi/2) sinh(t))`` and integrates the
+> transformed integrand in ``t`` on a uniform grid. The change of variables makes
+> the abscissae cluster double-exponentially toward the endpoints and the weights
+> decay super-fast, so the rule converges even when ``f`` has integrable
+> endpoint singularities (``1/sqrt(x)``, ``ln x``, ...) where Gauss-Legendre and
+> Simpson struggle. ``levels`` successive grid halvings refine the step from
+> ``h0``; the number of function evaluations is ``O(2^levels / h0)``.
+>
+> Nodes are computed off the endpoints, so ``f`` is never evaluated exactly at
+> ``a`` or ``b`` -- an integrable singularity at either end is fine.
 
 ### `trapezoid(f, a, b, n=1000)`  _function_
 
