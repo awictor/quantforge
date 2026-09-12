@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.647.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.648.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -5800,6 +5800,25 @@ Auto-generated from `quantforge` v1.647.0 by `docs/gen_api.py` — do not edit b
 > shortfall versus naive ``leverage`` times the underlying's log return, from the
 > daily-rebalancing compounding. Zero at ``leverage`` 0 or 1; positive (a drag)
 > for ``leverage > 1`` or ``leverage < 0``.
+
+## levy_basket
+
+### `levy_basket_option(spots, weights, strike, t, r, sigmas, corr, q=None, is_call=True)`  _function_
+
+> Levy moment-matched basket call/put on ``sum_i w_i S_i``.
+>
+> Parameters
+> ----------
+> spots, weights, sigmas : sequences of length ``n``.
+> strike, t, r : option strike, maturity, risk-free rate.
+> corr : ``n x n`` correlation matrix.
+> q : optional per-asset dividend yields (defaults to zeros).
+> is_call : call if True, else put.
+>
+> Returns
+> -------
+> float
+>     Basket option value. Reduces to Black-Scholes for a single asset.
 
 ## levycalib
 

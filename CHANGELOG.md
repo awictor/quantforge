@@ -16,6 +16,16 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.648.0] - 2026-09-12
+
+### Added
+- `levy_basket.py`: `levy_basket_option` prices an ``n``-asset basket option by
+  Levy's lognormal moment matching (matching the basket forward's first two
+  moments to a single lognormal), generalizing the existing two-asset
+  ``basket_option``. Cross-checked: it reduces to Black-Scholes for a single asset,
+  matches a Monte Carlo basket price to within ~0.05, satisfies put-call parity
+  exactly, and rises with volatility.
+
 ## [1.647.0] - 2026-09-12
 
 ### Documentation

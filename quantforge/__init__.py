@@ -329,6 +329,7 @@ from .black_karasinski import bk_zero_coupon_bond
 from .basket_default import (
     basket_default_distribution, kth_to_default_probability,
 )
+from .levy_basket import levy_basket_option
 from .hull_white import (
     hw_zero_from_curve, hw_B, hw_bond_option,
     hw_caplet, hw_floorlet, hw_cap, hw_floor, hw_swaption,
@@ -683,7 +684,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.647.0"
+__version__ = "1.648.0"
 
 __all__ = [
     "OptionType",
@@ -1194,6 +1195,7 @@ __all__ = [
     "bk_zero_coupon_bond",
     "basket_default_distribution",
     "kth_to_default_probability",
+    "levy_basket_option",
     "hw_zero_from_curve",
     "hw_B",
     "hw_bond_option",
