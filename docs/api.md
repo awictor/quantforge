@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.524.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.525.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -965,6 +965,46 @@ Auto-generated from `quantforge` v1.524.0 by `docs/gen_api.py` — do not edit b
 ### `straight_bond_tree_price(face, coupon_rate, maturity, r0, sigma, freq=1, p=0.5)`  _function_
 
 > Straight (option-free) bond on the same tree -- the no-optionality baseline.
+
+## capital_budgeting
+
+### `irr(cashflows, tol=1e-10, max_iter=200)`  _function_
+
+> Internal rate of return: the rate at which :func:`npv` is zero.
+>
+> Bisection on ``[-0.999, 10]`` (NPV is monotone decreasing in the rate for a
+> conventional outlay-then-inflows project). Requires a sign change in the
+> cashflows. Recovers the discount rate that generated a set of flows.
+
+### `mirr(cashflows, finance_rate, reinvest_rate)`  _function_
+
+> Modified internal rate of return.
+>
+> Compounds positive cashflows forward at ``reinvest_rate`` to the terminal date,
+> discounts negative cashflows back at ``finance_rate`` to time zero, then
+> ``MIRR = (FV_pos / -PV_neg)^{1/n} - 1``. Avoids the multiple-IRR problem and
+> uses realistic reinvestment.
+
+### `npv(rate, cashflows)`  _function_
+
+> Net present value at a per-period discount ``rate``.
+>
+> ``sum_t CF_t / (1 + rate)^t`` with ``t = 0`` the first entry. Falls as the
+> discount rate rises for a conventional project.
+
+### `payback_period(cashflows)`  _function_
+
+> Payback period: fractional periods to recover the initial outlay.
+>
+> Accumulates undiscounted cashflows until the running total turns non-negative,
+> interpolating within the crossing period. Returns ``inf`` if never recovered.
+
+### `profitability_index(rate, cashflows)`  _function_
+
+> Profitability index: PV of inflows over the initial outlay.
+>
+> ``PV(CF_1..) / -CF_0`` -- above one for a value-adding project, exactly one at
+> the :func:`irr`. Requires a negative time-0 outlay.
 
 ## carrmadan
 

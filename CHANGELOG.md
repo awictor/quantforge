@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.525.0] - 2026-09-12
+
+### Added
+- `capital_budgeting.py`: `npv`, `irr` (bisection), `profitability_index`,
+  `payback_period` (interpolated), and `mirr`. Cross-checked: NPV is zero at the
+  IRR, the IRR recovers a known discount rate, the profitability index is one at
+  the IRR and above one below it, and NPV is monotone decreasing in the rate.
+
 ## [1.524.0] - 2026-09-12
 
 ### Documentation
