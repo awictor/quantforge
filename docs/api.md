@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.493.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.494.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -944,6 +944,23 @@ Auto-generated from `quantforge` v1.493.0 by `docs/gen_api.py` — do not edit b
 > ``put_price`` floors it (holder's put); either may be ``None``. With both
 > ``None`` this is the straight bond on the tree. Risk-neutral up-probability
 > ``p``. Returns the time-zero price.
+
+### `callable_bond_price_with_spread(face, coupon_rate, maturity, r0, sigma, spread, freq=1, call_price=None, put_price=None, p=0.5)`  _function_
+
+> Callable-bond price with a constant spread added to every tree rate.
+>
+> Shifts the whole short-rate lattice up by ``spread`` before backward
+> induction, so a positive spread discounts harder and lowers the price. The
+> building block for the option-adjusted spread solve.
+
+### `option_adjusted_spread(market_price, face, coupon_rate, maturity, r0, sigma, freq=1, call_price=None, put_price=None, p=0.5, tol=1e-08, max_iter=100)`  _function_
+
+> Option-adjusted spread: constant rate spread repricing the bond to market.
+>
+> Bisection on the :func:`callable_bond_price_with_spread` (monotone decreasing
+> in the spread) to hit ``market_price``. Positive when the market price is below
+> the zero-spread model price. Strips out the embedded option so the spread
+> reflects credit/liquidity risk on a like-for-like basis.
 
 ### `straight_bond_tree_price(face, coupon_rate, maturity, r0, sigma, freq=1, p=0.5)`  _function_
 

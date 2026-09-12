@@ -228,6 +228,7 @@ from .interpolation import natural_cubic_spline, monotone_cubic
 from .rootfind import bisection, brent, newton
 from .callable_bond import (
     callable_bond_price, straight_bond_tree_price, call_option_value,
+    callable_bond_price_with_spread, option_adjusted_spread,
 )
 from .evt import (
     hill_estimator, gpd_fit_pot, gpd_var, gpd_expected_shortfall,
@@ -553,7 +554,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.493.0"
+__version__ = "1.494.0"
 
 __all__ = [
     "OptionType",
@@ -916,6 +917,8 @@ __all__ = [
     "callable_bond_price",
     "straight_bond_tree_price",
     "call_option_value",
+    "callable_bond_price_with_spread",
+    "option_adjusted_spread",
     "hill_estimator",
     "gpd_fit_pot",
     "gpd_var",

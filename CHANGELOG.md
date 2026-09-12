@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.494.0] - 2026-09-11
+
+### Added
+- `callable_bond_price_with_spread` and `option_adjusted_spread` (in
+  `callable_bond.py`): reprice a callable/puttable bond with a constant spread
+  added to every short-rate node, and solve the option-adjusted spread (the
+  constant spread repricing the bond to a market price) by bisection.
+  Cross-checked: zero spread matches the base price, a positive spread lowers the
+  price, and the OAS recovers a known spread and is zero at the model price
+  (using a non-binding call so the price-spread curve is strictly monotone).
+
 ## [1.493.0] - 2026-09-11
 
 ### Added

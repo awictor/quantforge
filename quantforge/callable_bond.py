@@ -58,6 +58,71 @@ def callable_bond_price(face, coupon_rate, maturity, r0, sigma, freq=1,
     return values[0]
 
 
+def callable_bond_price_with_spread(face, coupon_rate, maturity, r0, sigma,
+                                    spread, freq=1, call_price=None,
+                                    put_price=None, p=0.5):
+    """Callable-bond price with a constant spread added to every tree rate.
+
+    Shifts the whole short-rate lattice up by ``spread`` before backward
+    induction, so a positive spread discounts harder and lowers the price. The
+    building block for the option-adjusted spread solve.
+    """
+    if face <= 0 or maturity <= 0 or freq < 1:
+        raise ValueError("face, maturity must be positive and freq >= 1")
+    n = int(round(maturity * freq))
+    dt = 1.0 / freq
+    coupon = face * coupon_rate / freq
+    rates = _rate_tree(r0, sigma, n, dt)
+    values = [face + coupon for _ in range(n + 1)]
+    for i in range(n - 1, -1, -1):
+        new = []
+        for j in range(i + 1):
+            disc = math.exp(-(rates[i][j] + spread) * dt)
+            cont = disc * (p * values[j + 1] + (1.0 - p) * values[j]) + coupon
+            v = cont
+            if call_price is not None:
+                v = min(v, call_price + coupon)
+            if put_price is not None:
+                v = max(v, put_price + coupon)
+            new.append(v)
+        values = new
+    return values[0]
+
+
+def option_adjusted_spread(market_price, face, coupon_rate, maturity, r0, sigma,
+                           freq=1, call_price=None, put_price=None, p=0.5,
+                           tol=1e-8, max_iter=100):
+    """Option-adjusted spread: constant rate spread repricing the bond to market.
+
+    Bisection on the :func:`callable_bond_price_with_spread` (monotone decreasing
+    in the spread) to hit ``market_price``. Positive when the market price is below
+    the zero-spread model price. Strips out the embedded option so the spread
+    reflects credit/liquidity risk on a like-for-like basis.
+    """
+    if market_price <= 0:
+        raise ValueError("market_price must be positive")
+
+    def px(sp):
+        return callable_bond_price_with_spread(face, coupon_rate, maturity, r0,
+                                               sigma, sp, freq, call_price,
+                                               put_price, p)
+
+    lo, hi = -0.5, 1.0
+    p_lo, p_hi = px(lo), px(hi)
+    if not (min(p_lo, p_hi) - 1e-6 <= market_price <= max(p_lo, p_hi) + 1e-6):
+        raise ValueError("market_price outside the achievable spread range")
+    for _ in range(max_iter):
+        mid = 0.5 * (lo + hi)
+        pm = px(mid)
+        if abs(pm - market_price) < tol:
+            return mid
+        if pm > market_price:   # price too high -> raise spread
+            lo = mid
+        else:
+            hi = mid
+    return 0.5 * (lo + hi)
+
+
 def straight_bond_tree_price(face, coupon_rate, maturity, r0, sigma, freq=1,
                              p=0.5):
     """Straight (option-free) bond on the same tree -- the no-optionality baseline."""

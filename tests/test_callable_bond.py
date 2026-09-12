@@ -4,6 +4,7 @@ import pytest
 
 from quantforge import (
     callable_bond_price, straight_bond_tree_price, call_option_value,
+    callable_bond_price_with_spread, option_adjusted_spread,
 )
 
 
@@ -41,6 +42,41 @@ def test_higher_call_price_raises_callable():
     base = callable_bond_price(FACE, CPN, MAT, R0, SIG, call_price=100)
     higher = callable_bond_price(FACE, CPN, MAT, R0, SIG, call_price=110)
     assert higher > base
+
+
+def test_spread_zero_matches_base():
+    base = callable_bond_price(FACE, CPN, MAT, R0, SIG, call_price=110)
+    assert callable_bond_price_with_spread(FACE, CPN, MAT, R0, SIG, 0.0,
+                                           call_price=110) == pytest.approx(base, abs=1e-12)
+
+
+def test_positive_spread_lowers_price():
+    base = callable_bond_price_with_spread(FACE, CPN, MAT, R0, SIG, 0.0, call_price=110)
+    assert callable_bond_price_with_spread(FACE, CPN, MAT, R0, SIG, 0.01,
+                                           call_price=110) < base
+
+
+def test_oas_recovers_spread():
+    target = callable_bond_price_with_spread(FACE, CPN, MAT, R0, SIG, 0.02, call_price=110)
+    assert option_adjusted_spread(target, FACE, CPN, MAT, R0, SIG,
+                                  call_price=110) == pytest.approx(0.02, abs=1e-6)
+
+
+def test_oas_zero_at_model_price():
+    base = callable_bond_price(FACE, CPN, MAT, R0, SIG, call_price=110)
+    assert option_adjusted_spread(base, FACE, CPN, MAT, R0, SIG,
+                                  call_price=110) == pytest.approx(0.0, abs=1e-6)
+
+
+def test_oas_positive_below_model():
+    base = callable_bond_price(FACE, CPN, MAT, R0, SIG, call_price=110)
+    assert option_adjusted_spread(base * 0.95, FACE, CPN, MAT, R0, SIG,
+                                  call_price=110) > 0
+
+
+def test_oas_validation():
+    with pytest.raises(ValueError):
+        option_adjusted_spread(-5, FACE, CPN, MAT, R0, SIG)
 
 
 def test_validation():
