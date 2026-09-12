@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.528.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.529.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -4900,6 +4900,41 @@ Auto-generated from `quantforge` v1.528.0 by `docs/gen_api.py` — do not edit b
 >         otherwise price the European payoff.
 >     b: cost of carry (defaults to ``r``); dividend yield ``q`` enters as
 >         ``b = r - q``.
+
+## leveraged_etf
+
+### `expected_leveraged_return(underlying_return, leverage, sigma, periods)`  _function_
+
+> Approximate multi-period leveraged-ETF log return with drag.
+>
+> ``periods * (leverage * mu - drag)`` where ``mu`` is the per-period underlying
+> log return and ``drag`` is :func:`volatility_drag`. Below naive
+> ``periods * leverage * mu`` whenever there is drag.
+
+### `flat_market_decay(leverage, returns)`  _function_
+
+> Cumulative leveraged return over a *round-trip* (net-flat) return path.
+>
+> A market that ends where it started but moved in between: the leveraged ETF
+> still loses value to the drag. Returns the final growth factor minus one; below
+> zero for ``|leverage| > 1`` over a volatile flat path.
+
+### `leveraged_etf_path(underlying_returns, leverage, expense_ratio=0.0, periods_per_year=252)`  _function_
+
+> Daily-rebalanced leveraged ETF cumulative return path.
+>
+> Each period the ETF returns ``leverage * r - expense_ratio/periods_per_year``;
+> the path compounds those. ``leverage`` may be negative (inverse ETFs). Returns
+> the list of cumulative growth factors (starting after the first period).
+
+### `volatility_drag(leverage, sigma)`  _function_
+
+> Approximate per-period volatility drag of a leveraged ETF.
+>
+> ``0.5 * leverage * (leverage - 1) * sigma^2`` -- the expected log-return
+> shortfall versus naive ``leverage`` times the underlying's log return, from the
+> daily-rebalancing compounding. Zero at ``leverage`` 0 or 1; positive (a drag)
+> for ``leverage > 1`` or ``leverage < 0``.
 
 ## levycalib
 

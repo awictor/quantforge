@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.529.0] - 2026-09-12
+
+### Added
+- `leveraged_etf.py`: daily-rebalanced leveraged/inverse ETF path,
+  `volatility_drag` (`0.5 L (L-1) sigma^2`), `expected_leveraged_return`, and
+  `flat_market_decay`. Cross-checked: 1x matches the underlying, the drag is zero
+  at leverage 0 or 1 and larger for higher/inverse leverage, the expected return
+  is below naive leverage, and a 3x ETF loses value over a net-flat volatile path.
+
 ## [1.528.0] - 2026-09-12
 
 ### Documentation

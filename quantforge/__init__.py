@@ -494,6 +494,10 @@ from .capital_budgeting import (
 from .valuation import (
     capm_cost_of_equity, wacc, gordon_growth_value, terminal_value, two_stage_dcf,
 )
+from .leveraged_etf import (
+    leveraged_etf_path, volatility_drag, expected_leveraged_return,
+    flat_market_decay,
+)
 from .money_market import (
     price_from_discount, bank_discount_yield, money_market_yield,
     bond_equivalent_yield, discount_to_bond_equivalent, holding_period_return,
@@ -592,7 +596,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.528.0"
+__version__ = "1.529.0"
 
 __all__ = [
     "OptionType",
@@ -1449,6 +1453,10 @@ __all__ = [
     "gordon_growth_value",
     "terminal_value",
     "two_stage_dcf",
+    "leveraged_etf_path",
+    "volatility_drag",
+    "expected_leveraged_return",
+    "flat_market_decay",
     "price_from_discount",
     "bank_discount_yield",
     "money_market_yield",
