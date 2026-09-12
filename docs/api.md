@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.573.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.574.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -2617,6 +2617,38 @@ Auto-generated from `quantforge` v1.573.0 by `docs/gen_api.py` — do not edit b
 >
 > Returns a :class:`KeyRateDV01`. By convention DV01 is negative for a long
 > bond-like position (rates up -> PV down).
+
+## entropy_pooling
+
+### `entropy_pooling_mean(x, target, prior=None, tol=1e-12, max_iter=200)`  _function_
+
+> Posterior scenario probabilities matching a target mean, min relative entropy.
+>
+> Parameters
+> ----------
+> x : sequence of float
+>     Scenario values of the quantity being viewed.
+> target : float
+>     Desired posterior mean ``E_p[x]``. Must lie strictly inside
+>     ``(min(x), max(x))`` -- a mean outside the scenario range is infeasible.
+> prior : sequence of float, optional
+>     Prior probabilities (non-negative, summing to 1). Defaults to uniform.
+> tol, max_iter : float, int
+>     Bisection tolerance on the achieved mean and its iteration cap.
+>
+> Returns
+> -------
+> list[float]
+>     Posterior probabilities ``p`` (an exponential tilt of the prior). They sum
+>     to 1, reproduce ``target`` as their mean, and reduce to the prior when
+>     ``target`` equals the prior mean.
+
+### `relative_entropy(p, q)`  _function_
+
+> Kullback-Leibler divergence ``sum_i p_i log(p_i / q_i)`` (nats).
+>
+> Non-negative, and zero exactly when ``p == q``. Terms with ``p_i == 0`` are
+> dropped (limit ``0 log 0 = 0``).
 
 ## equity_comp
 

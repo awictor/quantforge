@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.574.0] - 2026-09-12
+
+### Added
+- `entropy_pooling.py`: `entropy_pooling_mean` reweights a scenario set to satisfy
+  a target-mean view with minimal Kullback-Leibler divergence from the prior
+  (Meucci 2008) -- an exponential tilt ``p_i ∝ q_i exp(lambda x_i)`` with
+  ``lambda`` solved by bisection -- plus `relative_entropy` (the KL divergence).
+  Cross-checked: the posterior sums to 1 and hits the target mean exactly, a view
+  equal to the prior mean returns the prior, the relative entropy is positive under
+  a view and zero without, a stronger view costs more entropy, and an infeasible
+  target (outside the scenario range) is rejected.
+
 ## [1.573.0] - 2026-09-12
 
 ### Documentation
