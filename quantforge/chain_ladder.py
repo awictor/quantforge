@@ -177,3 +177,38 @@ def cape_cod(triangle, premiums):
         "ultimate": ultimate,
         "total_reserve": sum(reserve),
     }
+
+
+def incremental_to_cumulative(triangle):
+    """Convert an incremental-claims triangle to cumulative.
+
+    Each row's cumulative entry is the running sum of its incremental entries.
+    Ragged rows (shorter for recent accident years) are preserved.
+    """
+    out = []
+    for row in triangle:
+        cum = []
+        running = 0.0
+        for v in row:
+            running += v
+            cum.append(running)
+        out.append(cum)
+    return out
+
+
+def cumulative_to_incremental(triangle):
+    """Convert a cumulative-claims triangle to incremental (successive differences)."""
+    out = []
+    for row in triangle:
+        inc = []
+        prev = 0.0
+        for v in row:
+            inc.append(v - prev)
+            prev = v
+        out.append(inc)
+    return out
+
+
+def paid_to_date(cumulative_triangle):
+    """Latest (diagonal) paid amount per accident year of a cumulative triangle."""
+    return [row[-1] for row in cumulative_triangle]

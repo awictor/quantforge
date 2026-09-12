@@ -16,6 +16,15 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.692.0] - 2026-09-12
+
+### Added
+- `chain_ladder.py`: claims-triangle utilities -- `incremental_to_cumulative`,
+  `cumulative_to_incremental`, and `paid_to_date`. Cross-checked: the two
+  conversions round-trip, a cumulative triangle from positive increments is
+  monotone, paid-to-date is the latest diagonal, and each row's increments sum to
+  its cumulative total.
+
 ## [1.691.0] - 2026-09-12
 
 ### Documentation

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.691.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.692.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -1380,6 +1380,10 @@ Auto-generated from `quantforge` v1.691.0 by `docs/gen_api.py` — do not edit b
 > ``reserve`` (IBNR per year = ultimate - latest observed), and
 > ``total_reserve``. A fully-developed row has zero reserve.
 
+### `cumulative_to_incremental(triangle)`  _function_
+
+> Convert a cumulative-claims triangle to incremental (successive differences).
+
 ### `development_factors(triangle)`  _function_
 
 > Volume-weighted age-to-age development factors from a cumulative triangle.
@@ -1395,6 +1399,17 @@ Auto-generated from `quantforge` v1.691.0 by `docs/gen_api.py` — do not edit b
 > Returns ``pct[j]`` = fraction of ultimate developed by age ``j``, computed as
 > the reciprocal of the cumulative product of the remaining factors. The final
 > age is fully developed (``1.0``).
+
+### `incremental_to_cumulative(triangle)`  _function_
+
+> Convert an incremental-claims triangle to cumulative.
+>
+> Each row's cumulative entry is the running sum of its incremental entries.
+> Ragged rows (shorter for recent accident years) are preserved.
+
+### `paid_to_date(cumulative_triangle)`  _function_
+
+> Latest (diagonal) paid amount per accident year of a cumulative triangle.
 
 ## cheyette
 
