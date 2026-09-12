@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.523.0] - 2026-09-12
+
+### Added
+- `money_market.py`: money-market yield conventions. `price_from_discount`,
+  `bank_discount_yield`, `money_market_yield` (CD-equivalent, actual/360),
+  `bond_equivalent_yield` (actual/365), `discount_to_bond_equivalent`, and
+  `holding_period_return`. Cross-checked: the discount/price round-trip and the
+  yield ordering (bond-equivalent > money-market > bank discount).
+
 ## [1.522.0] - 2026-09-12
 
 ### Documentation

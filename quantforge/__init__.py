@@ -488,6 +488,10 @@ from .fxforward import (
     implied_price_rate, fx_forward_from_curves,
     cross_rate, triangular_arbitrage, is_arbitrage_free,
 )
+from .money_market import (
+    price_from_discount, bank_discount_yield, money_market_yield,
+    bond_equivalent_yield, discount_to_bond_equivalent, holding_period_return,
+)
 from .daycount import year_fraction, day_count
 from .schedule import generate_schedule, adjust_business_day
 from .volcube import VolCube
@@ -582,7 +586,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.522.0"
+__version__ = "1.523.0"
 
 __all__ = [
     "OptionType",
@@ -1429,6 +1433,12 @@ __all__ = [
     "cross_rate",
     "triangular_arbitrage",
     "is_arbitrage_free",
+    "price_from_discount",
+    "bank_discount_yield",
+    "money_market_yield",
+    "bond_equivalent_yield",
+    "discount_to_bond_equivalent",
+    "holding_period_return",
     "year_fraction",
     "day_count",
     "generate_schedule",

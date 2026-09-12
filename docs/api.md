@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.522.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.523.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -5624,6 +5624,51 @@ Auto-generated from `quantforge` v1.522.0 by `docs/gen_api.py` — do not edit b
 >
 > Returns a dict with ``realized_skew``, ``implied_skew``, ``skew_premium``
 > (implied - realized), and the analogous ``*_kurt`` excess-kurtosis fields.
+
+## money_market
+
+### `bank_discount_yield(face, price, days, year_days=360)`  _function_
+
+> Bank discount yield from the price: ``(face - price)/face * year_days/days``.
+>
+> Inverse of :func:`price_from_discount`. Understates the true return because it
+> divides the discount by face rather than price.
+
+### `bond_equivalent_yield(face, price, days, year_days=365)`  _function_
+
+> Bond-equivalent yield: return on price on an actual/365 basis.
+>
+> ``(face - price)/price * 365/days`` -- puts a discount instrument on the same
+> footing as a coupon bond (actual/365), so it exceeds both the discount and the
+> actual/360 money-market yield.
+
+### `discount_to_bond_equivalent(discount_rate, days)`  _function_
+
+> Convert a bank discount rate directly to a bond-equivalent yield.
+>
+> Prices at par 100 off the discount, then takes the actual/365 return on price.
+> Always above the input discount rate.
+
+### `holding_period_return(buy_price, sell_price, income=0.0)`  _function_
+
+> Holding-period return ``(sell - buy + income) / buy``.
+>
+> The total return over the holding period including any interim income; not
+> annualized.
+
+### `money_market_yield(face, price, days, year_days=360)`  _function_
+
+> Money-market (CD-equivalent) yield: return on *price*, actual/360.
+>
+> ``(face - price)/price * year_days/days`` -- the actual return per invested
+> dollar, higher than the :func:`bank_discount_yield` (which divides by face).
+
+### `price_from_discount(face, discount_rate, days, year_days=360)`  _function_
+
+> Price of a discount instrument from its bank discount rate.
+>
+> ``price = face * (1 - discount_rate * days / year_days)`` -- the bank discount
+> convention prices off the *face*, not the price, on an actual/360 basis.
 
 ## montecarlo
 
