@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.710.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.712.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -4718,6 +4718,25 @@ Auto-generated from `quantforge` v1.710.0 by `docs/gen_api.py` — do not edit b
 ### `g2pp_zero_bond(P0T, P0t, x, y, a, b, sigma, eta, rho, t, T)`  _function_
 
 > G2++ zero-coupon bond ``P(t,T)`` given the factor state ``(x, y)``.
+
+## gauss_hermite
+
+### `gauss_hermite_expectation(g, mu=0.0, sigma=1.0, n=16)`  _function_
+
+> Approximate ``E[g(X)]`` for ``X ~ N(mu, sigma^2)`` by Gauss-Hermite quadrature.
+>
+> Shifts and scales the standard-normal nodes to ``x_i = mu + sigma * z_i`` and
+> forms ``sum_i w_i g(x_i)``. Exact when ``g`` is a polynomial of degree at most
+> ``2n - 1``. With ``sigma = 0`` it collapses to ``g(mu)``.
+
+### `gauss_hermite_nodes_weights(n)`  _function_
+
+> Probabilists' Gauss-Hermite nodes and weights for ``n`` points.
+>
+> Returns ``(nodes, weights)`` for the weight function ``phi(z)`` (standard
+> normal density), so ``sum_i w_i = 1`` and ``sum_i w_i x_i^{2m}`` reproduces the
+> standard-normal moments. Exact for polynomials up to degree ``2n - 1``. Nodes
+> are symmetric about zero and returned in increasing order.
 
 ## gof_tests
 

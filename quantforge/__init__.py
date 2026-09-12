@@ -229,6 +229,9 @@ from .rootfind import bisection, brent, newton
 from .quadrature import (
     trapezoid, simpson, gauss_legendre, adaptive_simpson, tanh_sinh, romberg,
 )
+from .gauss_hermite import (
+    gauss_hermite_nodes_weights, gauss_hermite_expectation,
+)
 from .hrp import inverse_volatility_weights, hierarchical_risk_parity
 from .cppi import (
     discounted_floor, cushion, risky_exposure, cppi_path,
@@ -720,7 +723,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.711.0"
+__version__ = "1.712.0"
 
 __all__ = [
     "OptionType",
@@ -1087,6 +1090,8 @@ __all__ = [
     "adaptive_simpson",
     "tanh_sinh",
     "romberg",
+    "gauss_hermite_nodes_weights",
+    "gauss_hermite_expectation",
     "inverse_volatility_weights",
     "hierarchical_risk_parity",
     "discounted_floor",
