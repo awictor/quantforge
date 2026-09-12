@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.603.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.604.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -6983,6 +6983,29 @@ Auto-generated from `quantforge` v1.603.0 by `docs/gen_api.py` — do not edit b
 > Prices a call at each strike and inverts to a Black-Scholes implied vol,
 > returning ``(log_moneyness, vol)`` pairs sorted by strike on the forward
 > ``F = S e^{(r-q) t}``. ``beta < 0`` tilts the smile into a downward skew.
+
+## ols
+
+### `ols_fit(X, y, add_intercept=True)`  _function_
+
+> Fit an OLS regression and return coefficients with diagnostics.
+>
+> Parameters
+> ----------
+> X : list[list[float]]
+>     Design matrix, ``n`` rows of ``k`` regressors (no intercept column unless
+>     ``add_intercept=False`` and you supply your own).
+> y : list[float]
+>     Response vector of length ``n``.
+> add_intercept : bool
+>     Prepend a column of ones (the default).
+>
+> Returns
+> -------
+> dict
+>     ``coefficients`` (intercept first if added), ``std_errors``, ``t_stats``,
+>     ``r_squared``, ``adj_r_squared``, ``f_stat``, ``residuals``, ``n_obs``,
+>     ``df_resid``.
 
 ## ou_fit
 

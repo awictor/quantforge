@@ -16,6 +16,17 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.604.0] - 2026-09-12
+
+### Added
+- `ols.py`: `ols_fit` fits a multivariate OLS regression by the normal equations
+  and returns the standard diagnostics -- coefficients, standard errors,
+  t-statistics, R-squared, adjusted R-squared, the F-statistic, and residuals (with
+  an optional intercept column). Cross-checked: an exact line gives R-squared 1 and
+  zero residuals, a noisy multivariate model recovers its coefficients with
+  significant t-stats and a large F, adjusted R-squared never exceeds R-squared,
+  and the single-regressor slope matches the closed form.
+
 ## [1.603.0] - 2026-09-12
 
 ### Documentation
