@@ -1528,6 +1528,20 @@ basket_option_mc([100, 100, 100], [1/3, 1/3, 1/3], strike=100, t=1, r=0.05,
                  sigmas=[0.2, 0.25, 0.3], correlation=corr)
 ```
 
+## Numerical utilities
+
+Cubic interpolation (natural spline and monotone Hermite), a spline-interpolated
+zero curve, and general-purpose root finders (bisection, Brent, Newton):
+
+```python
+from quantforge import (natural_cubic_spline, monotone_cubic, SplineZeroCurve,
+                        brent, newton)
+
+f = monotone_cubic([0, 1, 2, 3], [0, 0, 0, 1])   # no overshoot
+curve = SplineZeroCurve([0.5, 1, 2, 5, 10], [0.02, 0.025, 0.03, 0.035, 0.04])
+brent(lambda x: x * x - 2, 0, 2)                  # sqrt(2)
+```
+
 ## Structural credit (Merton)
 
 Firm equity as a call on assets, distance-to-default, default probability, credit
