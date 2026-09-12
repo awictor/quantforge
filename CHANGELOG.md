@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.502.0] - 2026-09-12
+
+### Added
+- `vol_target.py`: volatility-targeting overlay. `target_leverage`
+  (`target_vol/realized_vol`, capped), `vol_targeted_returns` (rolling overlay on a
+  return series), and `realized_annualized_vol`. Cross-checked: the leverage
+  formula and cap, higher realized vol giving lower leverage, and the overlaid
+  series realizing near the target vol where the raw series is much higher.
+
 ## [1.501.0] - 2026-09-11
 
 ### Documentation

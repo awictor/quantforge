@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.501.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.502.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -9195,6 +9195,29 @@ Auto-generated from `quantforge` v1.501.0 by `docs/gen_api.py` — do not edit b
 > Samples an OTM chain around the forward, prices each option at its smile vol
 > with Black-Scholes, and applies :func:`vix_from_chain`. A flat smile returns
 > ``VIX ~= 100 * sigma``.
+
+## vol_target
+
+### `realized_annualized_vol(returns, periods_per_year=252)`  _function_
+
+> Annualized realized volatility of a return series (sample std).
+
+### `target_leverage(target_vol, realized_vol, max_leverage=None)`  _function_
+
+> Volatility-target leverage ``target_vol / realized_vol`` (capped).
+>
+> Above one when realized vol is below target (lever up), below one when it is
+> above (de-risk). Capped at ``max_leverage`` if given, and floored at zero.
+
+### `vol_targeted_returns(returns, target_vol, lookback, periods_per_year=252, max_leverage=None)`  _function_
+
+> Apply a rolling volatility-targeting overlay to a return series.
+>
+> For each period past the first ``lookback``, sizes the position at
+> :func:`target_leverage` using the trailing ``lookback``-window annualized
+> realized vol, and scales that period's return. Returns the overlaid return
+> series (length ``len(returns) - lookback``). The overlay's realized vol sits
+> near ``target_vol`` when the estimate tracks the true vol.
 
 ## volatility
 
