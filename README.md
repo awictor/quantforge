@@ -1510,6 +1510,24 @@ pca_scenario(component_index=0, n_sigma=2.0, variances=res["variances"],
              loadings=res["loadings"])
 ```
 
+## Matrix utilities
+
+Cholesky factorization, positive-definiteness check, correlated-normal draws,
+Higham nearest-correlation repair, and an n-asset basket Monte Carlo:
+
+```python
+from quantforge import (cholesky, nearest_correlation, correlated_normals,
+                        basket_option_mc)
+
+corr = [[1, 0.3, 0.2], [0.3, 1, 0.4], [0.2, 0.4, 1]]
+cholesky(corr)
+correlated_normals([0.5, -1.0, 2.0], corr)     # IID normals -> correlated
+nearest_correlation([[1, 0.9, -0.9], [0.9, 1, 0.9], [-0.9, 0.9, 1]])  # repair indefinite
+
+basket_option_mc([100, 100, 100], [1/3, 1/3, 1/3], strike=100, t=1, r=0.05,
+                 sigmas=[0.2, 0.25, 0.3], correlation=corr)
+```
+
 ## Structural credit (Merton)
 
 Firm equity as a call on assets, distance-to-default, default probability, credit
