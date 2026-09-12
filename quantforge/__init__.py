@@ -262,6 +262,9 @@ from .hp_filter import hp_filter
 from .kalman import kalman_local_level, kalman_steady_state_gain
 from .kalman_beta import kalman_regression_beta
 from .theil_sen import theil_sen
+from .robust_stats import (
+    median_absolute_deviation, interquartile_range, winsorize, trimmed_mean,
+)
 from .hac import (
     autocovariance, autocorrelation, newey_west_variance, newey_west_mean_se,
 )
@@ -611,7 +614,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.555.0"
+__version__ = "1.556.0"
 
 __all__ = [
     "OptionType",
@@ -1021,6 +1024,10 @@ __all__ = [
     "kalman_steady_state_gain",
     "kalman_regression_beta",
     "theil_sen",
+    "median_absolute_deviation",
+    "interquartile_range",
+    "winsorize",
+    "trimmed_mean",
     "autocovariance",
     "autocorrelation",
     "newey_west_variance",

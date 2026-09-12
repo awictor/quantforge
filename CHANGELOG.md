@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.556.0] - 2026-09-12
+
+### Added
+- `robust_stats.py`: robust scale and location estimators --
+  `median_absolute_deviation` (50%-breakdown scale, 1.4826-scaled to match the
+  standard deviation under normality), `interquartile_range` (with a
+  normal-consistent scaling), `winsorize` (clip tails to percentiles), and
+  `trimmed_mean`. Cross-checked: MAD and the scaled IQR both recover the true
+  Gaussian sigma, they are exactly zero on constant data, MAD stays bounded under
+  outliers where the standard deviation explodes, winsorize clips extremes while
+  preserving length, and the trimmed mean shrugs off a gross outlier that moves
+  the ordinary mean by 100x.
+
 ## [1.555.0] - 2026-09-12
 
 ### Documentation

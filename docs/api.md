@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.555.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.556.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -8094,6 +8094,40 @@ Auto-generated from `quantforge` v1.555.0 by `docs/gen_api.py` — do not edit b
 > True if the smile term structure has no calendar arbitrage on the grid.
 >
 > Convenience wrapper: ``not calendar_arbitrage_violations(...)``.
+
+## robust_stats
+
+### `interquartile_range(x, scale=False)`  _function_
+
+> Interquartile range ``Q3 - Q1`` of ``x``.
+>
+> With ``scale=True`` it is divided by 1.349 to give a normal-consistent scale
+> estimate (the IQR of a standard normal). Robust to outliers in the outer
+> quartiles.
+
+### `median_absolute_deviation(x, scale=True)`  _function_
+
+> Median absolute deviation of ``x``.
+>
+> ``MAD = median(|x_i - median(x)|)``. With ``scale=True`` (default) it is
+> multiplied by 1.4826 so it consistently estimates the standard deviation for
+> Gaussian data. Breakdown point 50%: up to half the data can be corrupted
+> before it blows up. Zero for constant data.
+
+### `trimmed_mean(x, proportion=0.1)`  _function_
+
+> Mean of ``x`` after discarding a ``proportion`` fraction from each tail.
+>
+> ``proportion`` must be in ``[0, 0.5)``. With ``proportion = 0`` this is the
+> ordinary mean; larger values give a more robust central estimate.
+
+### `winsorize(x, limit=0.05)`  _function_
+
+> Clip the tails of ``x`` to the ``limit`` / ``1 - limit`` quantiles.
+>
+> Returns a new list with values below the lower quantile raised to it and
+> values above the upper quantile lowered to it -- bounding the influence of
+> extremes without discarding observations. ``limit`` must be in ``[0, 0.5)``.
 
 ## rootfind
 
