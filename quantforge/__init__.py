@@ -222,6 +222,7 @@ from .pca import (
 )
 from .linalg import (
     cholesky, is_positive_definite, correlated_normals, nearest_correlation,
+    basket_option_mc,
 )
 from .structural_credit import (
     equity_value, risk_neutral_default_probability, distance_to_default,
@@ -527,7 +528,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.470.0"
+__version__ = "1.471.0"
 
 __all__ = [
     "OptionType",
@@ -886,6 +887,7 @@ __all__ = [
     "is_positive_definite",
     "correlated_normals",
     "nearest_correlation",
+    "basket_option_mc",
     "equity_value",
     "risk_neutral_default_probability",
     "distance_to_default",

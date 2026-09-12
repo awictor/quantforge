@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.471.0] - 2026-09-11
+
+### Added
+- `basket_option_mc` (in `linalg.py`): a general n-asset basket option Monte Carlo
+  under correlated geometric Brownian motion (correlated draws via Cholesky).
+  Independently validates the two-asset analytic `basket_option` (agrees within 3%
+  at 200k paths), handles any number of assets, is deterministic per seed, and
+  prices richer for higher correlation.
+
 ## [1.470.0] - 2026-09-11
 
 ### Added

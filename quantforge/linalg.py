@@ -53,6 +53,48 @@ def correlated_normals(independent, correlation):
     return [sum(L[i][k] * independent[k] for k in range(i + 1)) for i in range(n)]
 
 
+def basket_option_mc(spots, weights, strike, t, r, sigmas, correlation,
+                     option_type="call", n_paths=50000, seed=987654321):
+    """Monte Carlo basket option on ``sum_i w_i S_i`` for any number of assets.
+
+    Simulates correlated terminal asset prices under geometric Brownian motion
+    (correlated normals via :func:`correlated_normals` / Cholesky) and averages the
+    discounted basket payoff. A general n-asset reference for the two-asset
+    analytic :func:`quantforge.basket_option`. Deterministic per seed.
+    """
+    n = len(spots)
+    if not (len(weights) == len(sigmas) == n):
+        raise ValueError("spots, weights, sigmas must have equal length")
+    if len(correlation) != n:
+        raise ValueError("correlation must be n x n")
+    if n_paths < 1:
+        raise ValueError("n_paths must be positive")
+    is_call = str(option_type).lower() in ("call", "c")
+    L = cholesky(correlation)
+    disc = math.exp(-r * t)
+    sq = math.sqrt(t)
+    drift = [(r - 0.5 * s * s) * t for s in sigmas]
+    state = seed & 0xFFFFFFFF
+
+    def _normal():
+        nonlocal state
+        state = (1103515245 * state + 12345) & 0x7FFFFFFF
+        u1 = (state + 0.5) / 0x80000000
+        state = (1103515245 * state + 12345) & 0x7FFFFFFF
+        u2 = (state + 0.5) / 0x80000000
+        return math.sqrt(-2.0 * math.log(u1)) * math.cos(2.0 * math.pi * u2)
+
+    total = 0.0
+    for _ in range(n_paths):
+        z = [_normal() for _ in range(n)]
+        corr_z = [sum(L[i][k] * z[k] for k in range(i + 1)) for i in range(n)]
+        basket = sum(weights[i] * spots[i] * math.exp(drift[i] + sigmas[i] * sq * corr_z[i])
+                     for i in range(n))
+        payoff = max(basket - strike, 0.0) if is_call else max(strike - basket, 0.0)
+        total += payoff
+    return disc * total / n_paths
+
+
 def _sym_eigen(matrix, tol=1e-12, max_sweeps=100):
     from .pca import jacobi_eigen
     return jacobi_eigen(matrix, tol, max_sweeps)
