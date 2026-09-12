@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.609.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.610.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -1463,6 +1463,35 @@ Auto-generated from `quantforge` v1.609.0 by `docs/gen_api.py` — do not edit b
 ### `cir_zero_coupon_yield(r0, t, kappa, theta, sigma)`  _function_
 
 > Continuously-compounded yield of the CIR zero-coupon bond to ``t``.
+
+## classification_metrics
+
+### `brier_score(y_true, y_score)`  _function_
+
+> Mean squared error of the predicted probabilities. 0 = perfect.
+
+### `confusion_matrix(y_true, y_score, threshold=0.5)`  _function_
+
+> Confusion counts ``(tp, fp, fn, tn)`` at a probability ``threshold``.
+
+### `log_loss(y_true, y_score, eps=1e-15)`  _function_
+
+> Mean binary cross-entropy. 0 for a perfect confident classifier.
+
+### `precision_recall_f1(y_true, y_score, threshold=0.5)`  _function_
+
+> Precision, recall, and F1 at a threshold, as a ``(p, r, f1)`` tuple.
+>
+> Precision and recall are 0 when their denominators vanish (no predicted or no
+> actual positives).
+
+### `roc_auc(y_true, y_score)`  _function_
+
+> Area under the ROC curve via the Mann-Whitney rank statistic.
+>
+> Equals the probability that a randomly chosen positive scores higher than a
+> randomly chosen negative (ties = 0.5). Raises if the labels are all one class
+> (AUC undefined). 1 = perfect ranking, 0.5 = random.
 
 ## cms
 

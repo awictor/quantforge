@@ -16,6 +16,17 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.610.0] - 2026-09-12
+
+### Added
+- `classification_metrics.py`: binary-classification evaluation -- `roc_auc` (the
+  Mann-Whitney rank AUC), `confusion_matrix`, `precision_recall_f1`, `log_loss`
+  (cross-entropy), and `brier_score`. Cross-checked: a perfect ranking gives AUC 1
+  and a reversed one 0, random scores give ~0.5, ties count as half, the confusion
+  matrix and precision/recall/F1 are exact on separable data, log-loss is ~0 for
+  confident-correct predictions, and the Brier score is 0 for exact probabilities
+  and 0.25 for all-0.5 guesses.
+
 ## [1.609.0] - 2026-09-12
 
 ### Documentation
