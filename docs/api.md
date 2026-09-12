@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.473.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.474.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -2137,6 +2137,15 @@ Auto-generated from `quantforge` v1.473.0 by `docs/gen_api.py` — do not edit b
 ### `DiscountCurve(times, dfs)`  _class_
 
 > Log-linear discount curve from pillar ``(T, DF)`` points.
+
+### `SplineZeroCurve(times, zero_rates)`  _class_
+
+> Discount curve with cubic-spline-interpolated continuously-compounded zeros.
+>
+> Interpolates the pillar zero rates with a natural cubic spline (smooth C2 zero
+> curve) rather than log-linear discount factors, so the instantaneous forward
+> rates are smooth. Exposes the same ``df``/``zero_rate``/``forward_rate``
+> interface as :class:`DiscountCurve` and reprices the pillars exactly.
 
 ### `bootstrap_from_swaps(swap_maturities, par_rates, freq=1.0)`  _function_
 

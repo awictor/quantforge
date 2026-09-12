@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.474.0] - 2026-09-11
+
+### Added
+- `SplineZeroCurve` (in `discount_curve.py`): a discount curve that interpolates
+  the pillar zero rates with a natural cubic spline (smooth instantaneous
+  forwards) rather than log-linear discount factors, with the same
+  `df`/`zero_rate`/`forward_rate` interface as `DiscountCurve`. Cross-checked: it
+  reprices the pillars exactly, `df = exp(-z T)`, discount factors stay monotone
+  for an upward curve, and it flat-extrapolates outside the pillar range.
+
 ## [1.473.0] - 2026-09-11
 
 ### Added

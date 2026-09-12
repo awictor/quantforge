@@ -155,6 +155,51 @@ class DiscountCurve:
         return (self.df(start) - self.df(pay_times[-1])) / annuity
 
 
+class SplineZeroCurve:
+    """Discount curve with cubic-spline-interpolated continuously-compounded zeros.
+
+    Interpolates the pillar zero rates with a natural cubic spline (smooth C2 zero
+    curve) rather than log-linear discount factors, so the instantaneous forward
+    rates are smooth. Exposes the same ``df``/``zero_rate``/``forward_rate``
+    interface as :class:`DiscountCurve` and reprices the pillars exactly.
+    """
+
+    def __init__(self, times, zero_rates):
+        from .interpolation import natural_cubic_spline
+        pts = sorted(zip((float(t) for t in times), (float(z) for z in zero_rates)))
+        self.times = [t for t, _ in pts]
+        self.zeros = [z for _, z in pts]
+        if len(self.times) < 2 or self.times[0] < 0:
+            raise ValueError("need at least two non-negative pillars")
+        self._spline = natural_cubic_spline(self.times, self.zeros)
+
+    def zero_rate(self, T):
+        """Continuously-compounded zero rate, spline-interpolated (flat outside)."""
+        if T <= 0.0:
+            return self.zeros[0]
+        if T <= self.times[0]:
+            return self.zeros[0]
+        if T >= self.times[-1]:
+            return self.zeros[-1]
+        return self._spline(T)
+
+    def df(self, T):
+        """Discount factor ``exp(-z(T) T)`` from the spline zero rate."""
+        T = float(T)
+        if T <= 0.0:
+            return 1.0
+        return math.exp(-self.zero_rate(T) * T)
+
+    def __call__(self, T):
+        return self.df(T)
+
+    def forward_rate(self, T1, T2):
+        """Continuously-compounded forward rate over ``[T1, T2]``."""
+        if T2 <= T1:
+            raise ValueError("need T2 > T1")
+        return (math.log(self.df(T1)) - math.log(self.df(T2))) / (T2 - T1)
+
+
 def bootstrap_from_swaps(swap_maturities, par_rates, freq=1.0):
     """Bootstrap a :class:`DiscountCurve` from par swap rates.
 
