@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.530.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.531.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -8116,6 +8116,18 @@ Auto-generated from `quantforge` v1.530.0 by `docs/gen_api.py` — do not edit b
 > 12=annual) until ``maturity_years`` is reached, then applies
 > :func:`adjust_business_day` with ``convention``. Returns the list of adjusted
 > period end dates (the start date itself is not included).
+
+## shout
+
+### `shout_call(S, K, t, r, sigma, steps=200, q=0.0)`  _function_
+
+> Shout call price on a CRR tree.
+>
+> Once shouted at spot ``S*``, the remaining claim pays
+> ``max(S_T - K, S* - K)`` -- a guaranteed ``S* - K`` plus a call struck at ``S*``.
+> Its value at the shout node is ``(S* - K) e^{-r tau} + call(S*, S*, tau)`` for
+> remaining time ``tau``, taken only when positive. Backward induction compares
+> shouting versus continuing. At least the vanilla call value.
 
 ## signals
 

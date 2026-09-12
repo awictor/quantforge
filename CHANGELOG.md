@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.531.0] - 2026-09-12
+
+### Added
+- `shout.py`: `shout_call` prices a shout option on a CRR tree -- the holder may
+  shout once to lock in the current intrinsic as a floor while keeping the upside.
+  Cross-checked: the shout is at least the vanilla call, the in-the-money lock-in
+  premium is positive, value rises with volatility, and the tree converges across
+  step counts.
+
 ## [1.530.0] - 2026-09-12
 
 ### Documentation
