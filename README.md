@@ -38,6 +38,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Shout and ladder options](#shout-and-ladder-options)
 - [Installment options](#installment-options)
 - [Double-barrier knock-out](#double-barrier-knock-out)
+- [Range-accrual note](#range-accrual-note)
 - [Local volatility (Dupire)](#local-volatility-dupire)
 - [Term-structure surface (calendar-arbitrage aware)](#term-structure-surface-calendar-arbitrage-aware)
 - [Skew/kurtosis-adjusted pricing (Corrado-Su)](#skewkurtosis-adjusted-pricing-corrado-su)
@@ -914,6 +915,31 @@ double_knockout_call(S=100, K=100, L=80, U=130, t=1.0, r=0.05, sigma=0.25, b=0.0
 The value never exceeds the vanilla call, approaches it as the barriers move far
 away, and a tighter corridor lowers it. This is the continuous-monitoring price;
 discrete-monitoring Monte Carlo converges down onto it as the step count rises.
+
+## Range-accrual note
+
+A range-accrual note pays a coupon in proportion to the fraction of observation
+dates on which a reference index sits inside a band `[L, U]`. By linearity of
+expectation the present value of the coupon leg is a discounted sum of GBM range
+probabilities `N(d_L) - N(d_U)` across the observation dates — no simulation
+needed. `range_accrual_note` returns that present value.
+
+```python
+from quantforge import range_accrual_note
+
+# 6% coupon, index in [90, 110], 12 monthly observations over 1y.
+range_accrual_note(S=100, L=90, U=110, t=1.0, r=0.05, sigma=0.25,
+                   coupon=0.06, observations=12, b=0.05)          # -> 0.026593
+
+# Scale by notional.
+range_accrual_note(S=100, L=90, U=110, t=1.0, r=0.05, sigma=0.25,
+                   coupon=0.06, observations=12, b=0.05,
+                   notional=1_000_000)                            # -> 26592.90
+```
+
+The value widens toward the discounted full coupon as the band grows, falls as
+volatility rises (the index escapes the band more often), and scales linearly in
+the notional.
 
 ## Local volatility (Dupire)
 

@@ -4,6 +4,12 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.539.0] - 2026-09-12
+
+### Documentation
+- README: added a "Range-accrual note" section documenting `range_accrual_note`,
+  with snippets verified against the package; TOC regenerated to 87 entries.
+
 ## [1.538.0] - 2026-09-12
 
 ### Added
