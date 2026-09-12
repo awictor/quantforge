@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.438.0] - 2026-09-11
+
+### Documentation
+- README: added a "Copulas and portfolio credit" section covering the `copula`
+  module (Gaussian/Clayton/Gumbel/Frank, tail dependence, credit-default
+  applications, Vasicek/CDO loss), with runnable examples verified against the
+  installed package.
+
 ## [1.437.0] - 2026-09-11
 
 ### Added

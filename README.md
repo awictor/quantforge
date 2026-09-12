@@ -1357,6 +1357,24 @@ forward_from_futures(futures_rate=0.05, sigma=0.01, t1=2.0, t2=2.25)   # < futur
 forward_curve_from_futures_strip([(0.25, 0.5, 0.05), (0.5, 0.75, 0.052)], sigma=0.012)
 ```
 
+## Copulas and portfolio credit
+
+Gaussian, Clayton, Gumbel, and Frank copulas with tail dependence and Kendall's-
+tau calibration, plus Gaussian-copula credit applications (joint/first-to-default)
+and the Vasicek large-pool CDO tranche loss:
+
+```python
+from quantforge import (gaussian_copula, clayton_lower_tail_dependence,
+                        first_to_default_probability, vasicek_loss_quantile,
+                        cdo_tranche_expected_loss)
+
+gaussian_copula(0.4, 0.7, rho=0.5)                       # joint CDF
+clayton_lower_tail_dependence(theta=2)                   # joint-crash dependence
+first_to_default_probability(pd1=0.05, pd2=0.08, rho=0.5)
+vasicek_loss_quantile(q=0.999, pd=0.02, rho=0.15)        # Basel IRB capital
+cdo_tranche_expected_loss(attachment=0.03, detachment=0.07, pd=0.05, rho=0.2)
+```
+
 ## FX forwards (covered interest parity)
 
 ```python
