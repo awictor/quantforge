@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.440.0] - 2026-09-11
+
+### Added
+- `withdrawal_stream_pv` and `ruin_probability_mc` (in `retirement.py`): the
+  present value of a growing real withdrawal stream and the Monte Carlo
+  probability of portfolio ruin under lognormal returns. Cross-checked: the PV
+  matches the annuity sum and is monotone in withdrawal/horizon/growth/discount,
+  and the ruin probability rises with the withdrawal rate and volatility, is near
+  zero for low withdrawals, and is deterministic per seed.
+
 ## [1.439.0] - 2026-09-11
 
 ### Added

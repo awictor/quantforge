@@ -71,6 +71,70 @@ def withdrawal_balance_path(balance, annual_withdrawal, nominal_return,
     return out
 
 
+def withdrawal_stream_pv(annual_withdrawal, real_discount_rate, years,
+                         growth=0.0):
+    """Present value of a (possibly growing) real withdrawal stream.
+
+    Discounts ``years`` annual withdrawals -- ``annual_withdrawal`` growing at
+    ``growth`` per year -- at ``real_discount_rate``, withdrawals at year start:
+
+        PV = sum_{k=0}^{n-1} W (1+growth)^k / (1+r)^k.
+
+    The capital needed to fund the stream. Rises with the withdrawal, the horizon,
+    and the growth rate; falls with the discount rate.
+    """
+    if annual_withdrawal < 0:
+        raise ValueError("annual_withdrawal must be non-negative")
+    if real_discount_rate <= -1.0 or growth <= -1.0:
+        raise ValueError("rates must exceed -100%")
+    ratio = (1.0 + growth) / (1.0 + real_discount_rate)
+    n = int(years)
+    if abs(ratio - 1.0) < 1e-12:
+        return annual_withdrawal * n
+    return annual_withdrawal * (1.0 - ratio ** n) / (1.0 - ratio)
+
+
+def ruin_probability_mc(balance, annual_withdrawal, mean_return, vol, years,
+                        inflation=0.0, n_paths=10000, seed=20260911):
+    """Probability of portfolio ruin under lognormal returns (Monte Carlo).
+
+    Simulates annual real returns as ``N(mean_return, vol^2)``, taking an
+    inflation-indexed withdrawal at the start of each year, and reports the
+    fraction of paths that hit zero before ``years``. Rises with the withdrawal
+    rate and volatility; near zero for withdrawals well below the mean return.
+    Deterministic per seed.
+    """
+    if balance <= 0 or annual_withdrawal < 0:
+        raise ValueError("balance must be positive, withdrawal non-negative")
+    if vol < 0:
+        raise ValueError("vol must be non-negative")
+    if n_paths < 1 or years < 1:
+        raise ValueError("n_paths and years must be positive")
+    state = seed & 0xFFFFFFFF
+
+    def _normal():
+        nonlocal state
+        state = (1103515245 * state + 12345) & 0x7FFFFFFF
+        u1 = (state + 0.5) / 0x80000000
+        state = (1103515245 * state + 12345) & 0x7FFFFFFF
+        u2 = (state + 0.5) / 0x80000000
+        return math.sqrt(-2.0 * math.log(u1)) * math.cos(2.0 * math.pi * u2)
+
+    ruined = 0
+    n = int(years)
+    for _ in range(n_paths):
+        bal = balance
+        w = annual_withdrawal
+        for _y in range(n):
+            bal -= w
+            if bal <= 0.0:
+                ruined += 1
+                break
+            bal *= 1.0 + mean_return + vol * _normal()
+            w *= 1.0 + inflation
+    return ruined / n_paths
+
+
 def glide_path_equity_weight(years_to_target, glide_years, start_equity,
                              end_equity):
     """Linear equity weight along a target-date glide path.

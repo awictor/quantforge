@@ -4,7 +4,7 @@ import pytest
 
 from quantforge import (
     portfolio_depletion_years, sustainable_withdrawal, withdrawal_balance_path,
-    glide_path_equity_weight,
+    glide_path_equity_weight, withdrawal_stream_pv, ruin_probability_mc,
 )
 
 
@@ -42,6 +42,51 @@ def test_glide_path_monotone_and_clamped():
     assert all(ws[i] >= ws[i + 1] for i in range(len(ws) - 1))
     assert glide_path_equity_weight(40, 30, 0.9, 0.3) == pytest.approx(0.9)
     assert glide_path_equity_weight(-5, 30, 0.9, 0.3) == pytest.approx(0.3)
+
+
+def test_withdrawal_pv_matches_annuity():
+    p = withdrawal_stream_pv(40000, 0.03, 30)
+    manual = sum(40000 / (1.03) ** k for k in range(30))
+    assert p == pytest.approx(manual, abs=1e-6)
+
+
+def test_withdrawal_pv_growth_equals_discount():
+    assert withdrawal_stream_pv(40000, 0.03, 30, 0.03) == pytest.approx(40000 * 30)
+
+
+def test_withdrawal_pv_monotonicity():
+    base = withdrawal_stream_pv(40000, 0.03, 30)
+    assert withdrawal_stream_pv(50000, 0.03, 30) > base
+    assert withdrawal_stream_pv(40000, 0.03, 40) > base
+    assert withdrawal_stream_pv(40000, 0.05, 30) < base
+
+
+def test_ruin_rises_with_withdrawal():
+    hi = ruin_probability_mc(1e6, 70000, 0.04, 0.12, 30, n_paths=4000)
+    lo = ruin_probability_mc(1e6, 30000, 0.04, 0.12, 30, n_paths=4000)
+    assert hi > lo
+
+
+def test_low_withdrawal_near_zero_ruin():
+    assert ruin_probability_mc(1e6, 10000, 0.05, 0.10, 30, n_paths=4000) < 0.05
+
+
+def test_ruin_rises_with_volatility():
+    assert ruin_probability_mc(1e6, 50000, 0.04, 0.20, 30, n_paths=4000) > \
+        ruin_probability_mc(1e6, 50000, 0.04, 0.05, 30, n_paths=4000)
+
+
+def test_ruin_deterministic():
+    a = ruin_probability_mc(1e6, 50000, 0.04, 0.12, 30, n_paths=2000)
+    b = ruin_probability_mc(1e6, 50000, 0.04, 0.12, 30, n_paths=2000)
+    assert a == b
+
+
+def test_pv_ruin_validation():
+    with pytest.raises(ValueError):
+        withdrawal_stream_pv(-1, 0.03, 30)
+    with pytest.raises(ValueError):
+        ruin_probability_mc(-1, 40000, 0.04, 0.12, 30)
 
 
 def test_validation():

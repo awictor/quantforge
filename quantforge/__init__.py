@@ -219,7 +219,7 @@ from .inflation import (
 )
 from .retirement import (
     portfolio_depletion_years, sustainable_withdrawal, withdrawal_balance_path,
-    glide_path_equity_weight,
+    glide_path_equity_weight, withdrawal_stream_pv, ruin_probability_mc,
 )
 from .copula import (
     gaussian_copula, clayton_copula, gumbel_copula,
@@ -484,7 +484,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.439.0"
+__version__ = "1.440.0"
 
 __all__ = [
     "OptionType",
@@ -838,6 +838,8 @@ __all__ = [
     "sustainable_withdrawal",
     "withdrawal_balance_path",
     "glide_path_equity_weight",
+    "withdrawal_stream_pv",
+    "ruin_probability_mc",
     "gaussian_copula",
     "clayton_copula",
     "gumbel_copula",

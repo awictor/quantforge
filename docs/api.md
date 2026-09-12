@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.439.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.440.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -6468,6 +6468,16 @@ Auto-generated from `quantforge` v1.439.0 by `docs/gen_api.py` — do not edit b
 > Returns ``inf`` when the withdrawal is at or below the interest earned
 > (``W <= g * balance``); at ``g = 0`` it is simply ``balance / W``.
 
+### `ruin_probability_mc(balance, annual_withdrawal, mean_return, vol, years, inflation=0.0, n_paths=10000, seed=20260911)`  _function_
+
+> Probability of portfolio ruin under lognormal returns (Monte Carlo).
+>
+> Simulates annual real returns as ``N(mean_return, vol^2)``, taking an
+> inflation-indexed withdrawal at the start of each year, and reports the
+> fraction of paths that hit zero before ``years``. Rises with the withdrawal
+> rate and volatility; near zero for withdrawals well below the mean return.
+> Deterministic per seed.
+
 ### `sustainable_withdrawal(balance, real_return, years)`  _function_
 
 > Largest constant real withdrawal that exactly depletes over ``years``.
@@ -6482,6 +6492,18 @@ Auto-generated from `quantforge` v1.439.0 by `docs/gen_api.py` — do not edit b
 > The withdrawal grows with ``inflation`` each year while the portfolio grows at
 > the ``nominal_return``; withdrawals happen at year start. Returns the list of
 > year-end balances (clipped at zero once depleted).
+
+### `withdrawal_stream_pv(annual_withdrawal, real_discount_rate, years, growth=0.0)`  _function_
+
+> Present value of a (possibly growing) real withdrawal stream.
+>
+> Discounts ``years`` annual withdrawals -- ``annual_withdrawal`` growing at
+> ``growth`` per year -- at ``real_discount_rate``, withdrawals at year start:
+>
+>     PV = sum_{k=0}^{n-1} W (1+growth)^k / (1+r)^k.
+>
+> The capital needed to fund the stream. Rises with the withdrawal, the horizon,
+> and the growth rate; falls with the discount rate.
 
 ## risk
 
