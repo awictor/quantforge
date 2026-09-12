@@ -217,6 +217,10 @@ from .inflation import (
     yoy_caplet_price_normal, yoy_caplet_implied_normal_vol,
     real_zero_curve, nominal_zero_curve, real_discount_factor,
 )
+from .dual_currency import (
+    dcd_enhanced_yield, dcd_option_premium_rate, dcd_maturity_payoff,
+    dcd_breakeven_spot,
+)
 from .bond_future import (
     conversion_factor, invoice_price, gross_basis, net_basis,
     implied_repo_rate, cheapest_to_deliver,
@@ -496,7 +500,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.449.0"
+__version__ = "1.450.0"
 
 __all__ = [
     "OptionType",
@@ -846,6 +850,10 @@ __all__ = [
     "real_zero_curve",
     "nominal_zero_curve",
     "real_discount_factor",
+    "dcd_enhanced_yield",
+    "dcd_option_premium_rate",
+    "dcd_maturity_payoff",
+    "dcd_breakeven_spot",
     "conversion_factor",
     "invoice_price",
     "gross_basis",

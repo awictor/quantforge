@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.449.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.450.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -2193,6 +2193,53 @@ Auto-generated from `quantforge` v1.449.0 by `docs/gen_api.py` — do not edit b
 >
 > Returns ``(params, rmse)`` -- the fitted 10-tuple and the root-mean-square
 > implied-vol error over the quotes.
+
+## dual_currency
+
+### `dcd_breakeven_spot(coupon_rate, base_deposit_rate, tenor, strike, deposit_ccy_is_base=True)`  _function_
+
+> Spot at which the DCD matches a plain deposit (breakeven).
+>
+> The converted DCD value equals the plain-deposit value when the extra coupon
+> exactly offsets the conversion loss. For a base deposit (converted above
+> ``strike``):
+>
+>     strike * (1 + coupon*tenor) / breakeven = 1 + base*tenor
+>     => breakeven = strike * (1 + coupon*tenor) / (1 + base*tenor).
+>
+> Above the strike (in the converted region) for a positive yield pickup.
+
+### `dcd_enhanced_yield(base_deposit_rate, option_premium_rate, tenor)`  _function_
+
+> Enhanced annual yield of a DCD: base rate plus annualized premium.
+>
+> ``base_deposit_rate + option_premium_rate / tenor`` -- the option premium
+> (as a fraction of notional, earned once) spread over the ``tenor`` in years and
+> added to the plain deposit rate. Above the base deposit rate whenever the sold
+> option has value.
+
+### `dcd_maturity_payoff(notional, coupon_rate, tenor, spot_at_maturity, strike, deposit_ccy_is_base=True)`  _function_
+
+> Base-currency value of a DCD at maturity, including conversion.
+>
+> The depositor always earns ``notional * (1 + coupon_rate * tenor)`` of
+> principal-plus-coupon; if the option the depositor sold finishes in the money
+> the repayment is converted at ``strike`` rather than ``spot_at_maturity``,
+> costing the depositor the shortfall. Returns the base-currency value received.
+>
+> For a base-currency deposit (sold call), conversion bites when
+> ``spot_at_maturity > strike``: repayment happens at the worse ``strike``, so
+> value = principal_plus_coupon * strike / spot when converted.
+
+### `dcd_option_premium_rate(spot, strike, tenor, r_domestic, r_foreign, sigma, deposit_ccy_is_base=True)`  _function_
+
+> Premium rate (fraction of notional) of the option embedded in a DCD.
+>
+> The depositor sells a call on the base currency (if depositing the base
+> currency) or a put (if depositing the alternate), struck at the conversion
+> ``strike``, priced with Garman-Kohlhagen (carry ``b = r_domestic -
+> r_foreign``). Returned per unit notional. Higher vol and a nearer strike raise
+> the premium, and thus the DCD's yield pickup.
 
 ## dualcurve
 

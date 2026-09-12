@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.450.0] - 2026-09-11
+
+### Added
+- `dual_currency.py`: dual-currency deposit (DCD) analytics. `dcd_enhanced_yield`,
+  `dcd_option_premium_rate` (Garman-Kohlhagen premium of the embedded sold
+  option), `dcd_maturity_payoff` (with conversion), and `dcd_breakeven_spot`.
+  Cross-checked: the enhanced yield exceeds the base deposit rate, higher vol
+  raises the premium, conversion bites only past the strike, and at the breakeven
+  spot the converted DCD equals a plain deposit.
+
 ## [1.449.0] - 2026-09-11
 
 ### Documentation
