@@ -16,6 +16,12 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.693.0] - 2026-09-12
+
+### Documentation
+- README: extended the Actuarial section with the triangle utilities
+  `incremental_to_cumulative`, `cumulative_to_incremental`, and `paid_to_date`.
+
 ## [1.692.0] - 2026-09-12
 
 ### Added

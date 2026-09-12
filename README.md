@@ -1994,6 +1994,16 @@ r["total_reserve"]
 Cape Cod equals Bornhuetter-Ferguson with a `premium x ELR` a-priori, so the three
 reserving methods share one development pattern and are mutually consistent.
 
+Triangles supplied in either form convert with `incremental_to_cumulative` /
+`cumulative_to_incremental`, and `paid_to_date` reads the latest diagonal:
+
+```python
+from quantforge import incremental_to_cumulative, paid_to_date
+
+cum = incremental_to_cumulative([[100, 50, 30], [110, 55], [120]])
+paid_to_date(cum)      # [180, 165, 120]
+```
+
 ## Equity swaps and dispersion
 
 Total-return swaps, dividend swaps, variance/volatility swaps, and dispersion-
