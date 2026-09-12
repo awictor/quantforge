@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.559.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.560.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -9533,6 +9533,41 @@ Auto-generated from `quantforge` v1.559.0 by `docs/gen_api.py` — do not edit b
 >     american: if True, allow early exercise at every node; if False, price
 >         the European payoff (useful as a convergence cross-check).
 >     b: cost of carry (defaults to r). Dividend yield q enters as b = r - q.
+
+## two_scale_rv
+
+### `noise_variance_estimate(prices)`  _function_
+
+> Estimate the microstructure-noise variance ``Var(eps)``.
+>
+> Under the noise model the fast-scale RV is dominated by noise, so
+> ``Var(eps) ~= RV_fast / (2 * (n - 1))`` where ``n - 1`` is the number of
+> returns. Consistent as the noise dwarfs the signal at the finest scale.
+
+### `realized_variance_naive(prices)`  _function_
+
+> Naive all-observations realized variance of a (log) price series.
+>
+> Upward-biased by ``2 n Var(eps)`` under i.i.d. microstructure noise.
+
+### `two_scale_realized_variance(prices, K=None)`  _function_
+
+> Two-scale realized variance (TSRV), robust to microstructure noise.
+>
+> Parameters
+> ----------
+> prices : sequence of float
+>     Observed log-prices on a fine grid.
+> K : int, optional
+>     Number of subsampling grids for the slow scale. Defaults to
+>     ``max(2, round(n ** (1/3)))``, the rate-optimal choice.
+>
+> Returns
+> -------
+> float
+>     Bias-corrected estimate of the integrated variance. On noise-free data it
+>     essentially reproduces the realized variance; under noise it is far less
+>     biased than :func:`realized_variance_naive`.
 
 ## valuation
 

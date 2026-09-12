@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.560.0] - 2026-09-12
+
+### Added
+- `two_scale_rv.py`: `two_scale_realized_variance` implements the Zhang-Mykland-
+  Ait-Sahalia (2005) two-scale estimator that removes the microstructure-noise
+  bias of realized variance by combining a subsampled slow scale with the
+  bias-estimable fast scale; also `realized_variance_naive` and
+  `noise_variance_estimate`. Cross-checked: on a noise-free path it reproduces the
+  integrated variance, under i.i.d. noise it is far less biased than the naive RV
+  (which is inflated by ``2 n Var(eps)``, confirmed to 20%), and the noise-variance
+  estimate recovers ``Var(eps)`` to ~6% in the noise-dominated regime.
+
 ## [1.559.0] - 2026-09-12
 
 ### Documentation
