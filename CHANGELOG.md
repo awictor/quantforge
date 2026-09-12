@@ -16,6 +16,12 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.605.0] - 2026-09-12
+
+### Documentation
+- README: added an "OLS regression" section documenting `ols_fit`, placed before
+  the finance-specific factor-model regression; TOC regenerated to 108 entries.
+
 ## [1.604.0] - 2026-09-12
 
 ### Added

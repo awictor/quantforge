@@ -73,6 +73,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Retirement decumulation](#retirement-decumulation)
 - [Liability-driven investing](#liability-driven-investing)
 - [Bond futures](#bond-futures)
+- [OLS regression](#ols-regression)
 - [Factor models](#factor-models)
 - [Performance attribution (Brinson)](#performance-attribution-brinson)
 - [Bootstrap and jackknife](#bootstrap-and-jackknife)
@@ -1775,6 +1776,27 @@ cheapest_to_deliver(basket, futures_price=120)
 fut_dv01 = futures_dv01(ctd_dv01=bond_future_dv01(115, 9.0), ctd_conversion_factor=0.95)
 futures_hedge_ratio(bond_dv01_=bond_future_dv01(120, 8.5), futures_dv01_=fut_dv01)
 ```
+
+## OLS regression
+
+General multivariate ordinary least squares with the standard diagnostics —
+coefficient standard errors, t-statistics, R-squared, adjusted R-squared, and the
+F-statistic. An intercept column is added by default.
+
+```python
+from quantforge import ols_fit
+
+X = [[1, 2], [2, 1], [3, 4], [4, 3], [5, 5]]
+y = [5, 4, 10, 9, 13]
+m = ols_fit(X, y)
+m["coefficients"]     # [intercept, b1, b2]
+m["t_stats"]          # significance of each coefficient
+m["r_squared"], m["adj_r_squared"], m["f_stat"]
+```
+
+An exact linear relationship gives R-squared 1 and zero residuals; adjusted
+R-squared never exceeds R-squared. For the finance-specific alpha/beta return
+regression, see the next section.
 
 ## Factor models
 
