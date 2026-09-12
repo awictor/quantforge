@@ -16,6 +16,14 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.699.0] - 2026-09-12
+
+### Documentation
+- README reserving section now documents `mack_standard_error` alongside the
+  chain-ladder, Bornhuetter-Ferguson and Cape-Cod methods: a worked example and
+  the note that on Mack's Taylor-Ashe triangle it reproduces the reserve of
+  18,680,856 and standard error of 2,447,095 to the dollar.
+
 ## [1.698.0] - 2026-09-12
 
 ### Added

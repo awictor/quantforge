@@ -2008,6 +2008,27 @@ r["total_reserve"]
 Cape Cod equals Bornhuetter-Ferguson with a `premium x ELR` a-priori, so the three
 reserving methods share one development pattern and are mutually consistent.
 
+`mack_standard_error` attaches an uncertainty to the chain-ladder point estimate:
+Mack's (1993) distribution-free standard error of the reserve. It returns the
+per-accident-year and total mean-squared error of prediction — process error plus
+estimation error, with the between-year correlation in the total — and the
+coefficients of variation:
+
+```python
+from quantforge import mack_standard_error
+
+wtri = [[100, 180, 230, 245], [120, 200, 260], [90, 175], [130]]
+r = mack_standard_error(wtri)
+r["total_reserve"]      # 272.02, matches chain_ladder
+r["total_std_error"]    # 27.24, standard error of that reserve
+r["total_cv"]           # 0.10, std_error / reserve
+```
+
+On the Taylor-Ashe triangle from Mack's paper it reproduces his figures to the
+dollar: a reserve of 18,680,856 with a standard error of 2,447,095. The total
+standard error exceeds the root of the summed per-year variances (positive
+correlation) but stays below their plain sum.
+
 Triangles supplied in either form convert with `incremental_to_cumulative` /
 `cumulative_to_incremental`, and `paid_to_date` reads the latest diagonal:
 
