@@ -16,6 +16,12 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.603.0] - 2026-09-12
+
+### Documentation
+- README: added a "Forecast accuracy" section documenting `mae`, `rmse`, `mape`,
+  `smape`, and `mase`; TOC regenerated to 107 entries.
+
 ## [1.602.0] - 2026-09-12
 
 ### Added

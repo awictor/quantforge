@@ -87,6 +87,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Goodness of fit (Jarque-Bera / KS)](#goodness-of-fit-jarque-bera--ks)
 - [Autocorrelation (ACF / PACF)](#autocorrelation-acf--pacf)
 - [Exponential smoothing (Holt / Holt-Winters)](#exponential-smoothing-holt--holt-winters)
+- [Forecast accuracy](#forecast-accuracy)
 - [Rank dependence (Kendall / Spearman)](#rank-dependence-kendall--spearman)
 - [Gaussian-copula sampling](#gaussian-copula-sampling)
 - [Spectral analysis](#spectral-analysis)
@@ -2092,6 +2093,25 @@ level, trend, seasonals, fc = holt_winters_add(
 Holt recovers a pure linear trend and forecasts a straight line; Holt-Winters
 reproduces a repeating seasonal pattern and tracks any underlying trend. Both are
 causal O(n) recursions with no external dependencies.
+
+## Forecast accuracy
+
+Score forecasts against realized values with scale-dependent and scale-free
+errors. `mase` divides the MAE by a seasonal-naive benchmark, so `< 1` beats naive.
+
+```python
+from quantforge import mae, rmse, mape, smape, mase
+
+actual, fc = [100, 102, 101, 105, 108], [101, 100, 103, 104, 107]
+mae(actual, fc)      # 1.4    absolute error
+rmse(actual, fc)     # 1.483  penalizes big misses
+mape(actual, fc)     # 0.0136 scale-free (fraction)
+smape(actual, fc)    # 0.0136 symmetric, bounded [0, 2]
+mase(actual, fc, train=[95, 96, 98, 99, 100], season=1)   # vs naive: <1 beats it
+```
+
+MAPE is scale-invariant but undefined at zero actuals; sMAPE is bounded and robust
+to small values; MASE is the scale-free choice for cross-series comparison.
 
 ## Rank dependence (Kendall / Spearman)
 
