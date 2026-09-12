@@ -16,6 +16,16 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.658.0] - 2026-09-12
+
+### Added
+- `levenberg.py`: `levenberg_marquardt` fits parameters by nonlinear least squares,
+  interpolating between Gauss-Newton and gradient descent via an adaptive damping
+  factor, with the residual Jacobian taken by finite differences (only the model
+  is needed). Cross-checked: it recovers the parameters of an exponential model
+  exactly and from a poor starting point, fits noisy data close to the truth,
+  solves a linear model exactly, and drives the residual to zero.
+
 ## [1.657.0] - 2026-09-12
 
 ### Documentation

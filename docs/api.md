@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.657.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.658.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -5775,6 +5775,31 @@ Auto-generated from `quantforge` v1.657.0 by `docs/gen_api.py` — do not edit b
 >         otherwise price the European payoff.
 >     b: cost of carry (defaults to ``r``); dividend yield ``q`` enters as
 >         ``b = r - q``.
+
+## levenberg
+
+### `levenberg_marquardt(model, xs, ys, beta0, max_iter=100, tol=1e-10, lam0=0.001)`  _function_
+
+> Fit ``beta`` minimizing ``sum_i (model(beta, xs[i]) - ys[i])^2``.
+>
+> Parameters
+> ----------
+> model : callable
+>     ``model(beta, x)`` returning a scalar prediction.
+> xs, ys : sequences
+>     Inputs and targets of equal length.
+> beta0 : sequence of float
+>     Initial parameter guess.
+> max_iter, tol : int, float
+>     Iteration cap and convergence tolerance on the parameter step.
+> lam0 : float
+>     Initial damping.
+>
+> Returns
+> -------
+> dict
+>     ``parameters``, ``residual`` (sum of squared errors), ``iterations``,
+>     ``converged``.
 
 ## leveraged_etf
 
