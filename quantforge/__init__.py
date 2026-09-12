@@ -292,6 +292,7 @@ from .downside_ratios import (
     kappa_ratio, upside_potential_ratio, lower_partial_moment,
 )
 from .acf import acf, pacf
+from .ar_model import fit_ar_yule_walker, ar_forecast
 from .hac import (
     autocovariance, autocorrelation, newey_west_variance, newey_west_mean_se,
 )
@@ -642,7 +643,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.595.0"
+__version__ = "1.596.0"
 
 __all__ = [
     "OptionType",
@@ -1099,6 +1100,8 @@ __all__ = [
     "lower_partial_moment",
     "acf",
     "pacf",
+    "fit_ar_yule_walker",
+    "ar_forecast",
     "autocovariance",
     "autocorrelation",
     "newey_west_variance",

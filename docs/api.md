@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.595.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.596.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -245,6 +245,35 @@ Auto-generated from `quantforge` v1.595.0 by `docs/gen_api.py` — do not edit b
 > Returns ``(interior_strikes, dual_delta, rnd)`` as three equal-length lists
 > (the two Dirichlet edge strikes are dropped). The density is non-negative for
 > any positive ``local_vols`` and integrates to approximately 1 over the grid.
+
+## ar_model
+
+### `ar_forecast(model, history, steps=1)`  _function_
+
+> Forecast ``steps`` ahead from a fitted AR model and recent ``history``.
+>
+> ``history`` must hold at least ``len(coefficients)`` most-recent observations
+> (oldest first). Iterates the deterministic AR recursion (innovations set to
+> their zero mean), appending each forecast to drive the next.
+
+### `fit_ar_yule_walker(x, order)`  _function_
+
+> Fit an AR(``order``) model by the Yule-Walker / Durbin-Levinson method.
+>
+> Parameters
+> ----------
+> x : sequence of float
+>     The series.
+> order : int
+>     AR order ``p`` (>= 1).
+>
+> Returns
+> -------
+> dict
+>     ``{"coefficients": [phi_1, ..., phi_p], "intercept": c,
+>     "noise_variance": sigma2, "mean": mu}``. The coefficients solve the
+>     Yule-Walker equations; ``noise_variance`` is the innovation variance from
+>     the final Levinson step.
 
 ## attribution
 

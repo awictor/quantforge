@@ -16,6 +16,16 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.596.0] - 2026-09-12
+
+### Added
+- `ar_model.py`: `fit_ar_yule_walker` fits an AR(p) model by the Yule-Walker /
+  Durbin-Levinson method (returning coefficients, intercept, and innovation
+  variance), and `ar_forecast` iterates the deterministic AR recursion forward.
+  Cross-checked: it recovers the coefficients of simulated AR(1) and AR(2) series
+  (and the AR(1) intercept and unit noise variance), the forecast mean-reverts
+  toward the process mean, and the one-step forecast matches the recursion exactly.
+
 ## [1.595.0] - 2026-09-12
 
 ### Documentation
