@@ -16,6 +16,13 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.697.0] - 2026-09-12
+
+### Documentation
+- README Structured-notes section now shows a `phoenix_autocall_mc` example
+  (memory coupons, autocall and protection barriers) alongside the note-price note
+  on the memory feature and coupon barrier.
+
 ## [1.696.0] - 2026-09-12
 
 ### Added

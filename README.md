@@ -1868,6 +1868,20 @@ reverse_convertible_fair_coupon(100, 100, 3, 0.04, 0.25, principal=1000)  # pric
 buffered_note(100, 100, buffer=0.10, maturity=3, r=0.04, sigma=0.25, principal=1000)
 ```
 
+A Phoenix autocallable — conditional memory coupons, early autocall, and
+down-and-in downside — is priced by Monte Carlo:
+
+```python
+from quantforge import phoenix_autocall_mc
+
+phoenix_autocall_mc(S=100, t=3, r=0.03, sigma=0.25, observation_times=[1, 2, 3],
+                    autocall_barrier=110, coupon_barrier=80, coupon=0.08,
+                    protection_barrier=70, memory=True)
+```
+
+The memory feature (paying missed coupons on the next barrier touch) raises the
+value; a lower coupon barrier pays more often.
+
 ## Actuarial (life contingencies and cat bonds)
 
 Life-table survival, annuities and insurance EPVs, the equivalence-principle net
