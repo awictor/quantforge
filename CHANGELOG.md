@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.514.0] - 2026-09-12
+
+### Added
+- `quadrature.py`: numerical integration -- `trapezoid`, `simpson` (composite,
+  exact for cubics), `gauss_legendre` (orders 2-5, exact to degree 2n-1), and
+  `adaptive_simpson` (error-controlled). Cross-checked: Simpson exact on a cubic,
+  Gauss-Legendre exact to degree 2n-1, and the adaptive rule matching sin,
+  Lorentzian, and Gaussian integrals to 1e-8.
+
 ## [1.513.0] - 2026-09-12
 
 ### Documentation

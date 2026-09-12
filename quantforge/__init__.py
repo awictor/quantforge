@@ -226,6 +226,9 @@ from .nelson_siegel import (
 )
 from .interpolation import natural_cubic_spline, monotone_cubic
 from .rootfind import bisection, brent, newton
+from .quadrature import (
+    trapezoid, simpson, gauss_legendre, adaptive_simpson,
+)
 from .hrp import inverse_volatility_weights, hierarchical_risk_parity
 from .cppi import (
     discounted_floor, cushion, risky_exposure, cppi_path,
@@ -575,7 +578,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.513.0"
+__version__ = "1.514.0"
 
 __all__ = [
     "OptionType",
@@ -935,6 +938,10 @@ __all__ = [
     "bisection",
     "brent",
     "newton",
+    "trapezoid",
+    "simpson",
+    "gauss_legendre",
+    "adaptive_simpson",
     "inverse_volatility_weights",
     "hierarchical_risk_parity",
     "discounted_floor",

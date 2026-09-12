@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.513.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.514.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -6976,6 +6976,32 @@ Auto-generated from `quantforge` v1.513.0 by `docs/gen_api.py` — do not edit b
 >
 > Skips index 0 (the origin) by convention via a 1-based offset internally,
 > so callers can pass 0, 1, 2, ... and get well-spread points.
+
+## quadrature
+
+### `adaptive_simpson(f, a, b, tol=1e-10, max_depth=50)`  _function_
+
+> Adaptive Simpson quadrature with error control to ``tol``.
+>
+> Recursively bisects where the Simpson estimate has not converged, so it
+> concentrates work on the hard parts of the integrand. Returns the integral.
+
+### `gauss_legendre(f, a, b, n=5)`  _function_
+
+> Fixed-order Gauss-Legendre quadrature (``n`` in {2,3,4,5}).
+>
+> Maps the reference nodes to ``[a, b]``. Exact for polynomials up to degree
+> ``2n - 1`` -- very accurate for smooth integrands with few evaluations.
+
+### `simpson(f, a, b, n=1000)`  _function_
+
+> Composite Simpson's rule (``n`` even) -- exact for cubics.
+>
+> Rounds ``n`` up to the next even number. Fourth-order accurate.
+
+### `trapezoid(f, a, b, n=1000)`  _function_
+
+> Composite trapezoid rule with ``n`` sub-intervals over ``[a, b]``.
 
 ## quanto
 
