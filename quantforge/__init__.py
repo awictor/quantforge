@@ -221,6 +221,7 @@ from .execution import (
     execution_trajectory, execution_trades, expected_cost, cost_variance,
     efficient_frontier_point,
     kyle_lambda, kyle_impact, square_root_impact, implementation_shortfall,
+    twap_schedule, vwap_schedule, pov_schedule,
 )
 from .equity_comp import (
     dilution_factor, warrant_price, eso_expected_life, eso_value,
@@ -447,7 +448,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.418.0"
+__version__ = "1.419.0"
 
 __all__ = [
     "OptionType",
@@ -806,6 +807,9 @@ __all__ = [
     "kyle_impact",
     "square_root_impact",
     "implementation_shortfall",
+    "twap_schedule",
+    "vwap_schedule",
+    "pov_schedule",
     "dilution_factor",
     "warrant_price",
     "eso_expected_life",

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.418.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.419.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -2113,6 +2113,14 @@ Auto-generated from `quantforge` v1.418.0 by `docs/gen_api.py` — do not edit b
 > net order flow in Kyle's model, so trading ``q`` shares moves the price by
 > ``lambda * q``. Rises with volatility and falls with liquidity (volume).
 
+### `pov_schedule(volume_profile, participation_rate, total_shares=None)`  _function_
+
+> Percentage-of-volume schedule: trade a fixed fraction of each interval.
+>
+> Each interval's child order is ``participation_rate * volume_profile[i]``. If
+> ``total_shares`` is given, trading stops once cumulative fills reach it (the
+> last slice is truncated). Returns the per-interval sizes.
+
 ### `square_root_impact(order_size, sigma, daily_volume, coefficient=1.0)`  _function_
 
 > Square-root market-impact law ``coefficient * sigma * sqrt(Q / ADV)``.
@@ -2121,6 +2129,21 @@ Auto-generated from `quantforge` v1.418.0 by `docs/gen_api.py` — do not edit b
 > root of participation ``order_size / daily_volume``, so total impact scales
 > like ``sqrt(order_size)`` rather than linearly. ``order_size`` is taken as a
 > magnitude (absolute value used).
+
+### `twap_schedule(total_shares, n_intervals)`  _function_
+
+> Time-weighted average price schedule: equal-size slices.
+>
+> Splits ``total_shares`` into ``n_intervals`` equal child orders. The
+> benchmark-neutral schedule when volume is uniform.
+
+### `vwap_schedule(total_shares, volume_profile)`  _function_
+
+> Volume-weighted average price schedule: slices proportional to volume.
+>
+> Allocates ``total_shares`` across intervals in proportion to the expected
+> ``volume_profile`` (per-interval volumes), so the fill tracks the day's volume
+> curve. With a flat profile it reduces to :func:`twap_schedule`.
 
 ## exotics
 

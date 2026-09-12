@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.419.0] - 2026-09-11
+
+### Added
+- `twap_schedule`, `vwap_schedule`, `pov_schedule` (in `execution.py`): standard
+  execution benchmarks -- equal-size TWAP slices, VWAP slices proportional to a
+  volume profile (reducing to TWAP when flat), and a percentage-of-volume schedule
+  that trades a fixed fraction of each interval's volume with an optional total-
+  shares cap. Cross-checked against equal TWAP slices, VWAP proportionality, the
+  flat-profile equivalence, and POV proportionality with truncation.
+
 ## [1.418.0] - 2026-09-11
 
 ### Added

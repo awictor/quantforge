@@ -8,6 +8,7 @@ from quantforge import (
     execution_trajectory, execution_trades, expected_cost, cost_variance,
     efficient_frontier_point,
     kyle_lambda, kyle_impact, square_root_impact, implementation_shortfall,
+    twap_schedule, vwap_schedule, pov_schedule,
 )
 
 
@@ -59,6 +60,43 @@ def test_variance_falls_with_front_loading():
     linear = execution_trajectory(X, N, T, 0.0, SIG, ETA)
     urgent = execution_trajectory(X, N, T, 1e-6, SIG, ETA)
     assert cost_variance(urgent, T, SIG) < cost_variance(linear, T, SIG)
+
+
+def test_twap_equal_slices():
+    t = twap_schedule(1e6, 10)
+    assert all(x == pytest.approx(1e5) for x in t)
+    assert sum(t) == pytest.approx(1e6)
+
+
+def test_vwap_proportional_to_volume():
+    v = vwap_schedule(1e6, [100, 200, 300, 400])
+    assert v[1] / v[0] == pytest.approx(2.0)
+    assert sum(v) == pytest.approx(1e6)
+
+
+def test_vwap_flat_profile_is_twap():
+    v = vwap_schedule(1e6, [1, 1, 1, 1])
+    assert all(x == pytest.approx(2.5e5) for x in v)
+
+
+def test_pov_proportional_to_interval_volume():
+    prof = [100, 200, 300, 400]
+    p = pov_schedule(prof, 0.1)
+    assert all(p[i] == pytest.approx(0.1 * prof[i]) for i in range(4))
+
+
+def test_pov_caps_at_total():
+    p = pov_schedule([100, 200, 300, 400], 0.5, total_shares=120)
+    assert sum(p) == pytest.approx(120)
+
+
+def test_schedule_validation():
+    with pytest.raises(ValueError):
+        pov_schedule([100, 200], 1.5)
+    with pytest.raises(ValueError):
+        vwap_schedule(1e6, [0, 0, 0])
+    with pytest.raises(ValueError):
+        twap_schedule(1e6, 0)
 
 
 def test_kyle_impact_linear():

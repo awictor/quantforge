@@ -17,6 +17,60 @@ cost/variance efficient frontier. Pure standard library.
 import math
 
 
+def twap_schedule(total_shares, n_intervals):
+    """Time-weighted average price schedule: equal-size slices.
+
+    Splits ``total_shares`` into ``n_intervals`` equal child orders. The
+    benchmark-neutral schedule when volume is uniform.
+    """
+    if total_shares <= 0:
+        raise ValueError("total_shares must be positive")
+    if n_intervals < 1:
+        raise ValueError("n_intervals must be a positive integer")
+    return [total_shares / n_intervals] * n_intervals
+
+
+def vwap_schedule(total_shares, volume_profile):
+    """Volume-weighted average price schedule: slices proportional to volume.
+
+    Allocates ``total_shares`` across intervals in proportion to the expected
+    ``volume_profile`` (per-interval volumes), so the fill tracks the day's volume
+    curve. With a flat profile it reduces to :func:`twap_schedule`.
+    """
+    if total_shares <= 0:
+        raise ValueError("total_shares must be positive")
+    total_vol = sum(volume_profile)
+    if total_vol <= 0 or any(v < 0 for v in volume_profile):
+        raise ValueError("volume_profile must be non-negative with a positive sum")
+    return [total_shares * v / total_vol for v in volume_profile]
+
+
+def pov_schedule(volume_profile, participation_rate, total_shares=None):
+    """Percentage-of-volume schedule: trade a fixed fraction of each interval.
+
+    Each interval's child order is ``participation_rate * volume_profile[i]``. If
+    ``total_shares`` is given, trading stops once cumulative fills reach it (the
+    last slice is truncated). Returns the per-interval sizes.
+    """
+    if not (0.0 < participation_rate <= 1.0):
+        raise ValueError("participation_rate must be in (0, 1]")
+    if any(v < 0 for v in volume_profile):
+        raise ValueError("volume_profile must be non-negative")
+    out = []
+    filled = 0.0
+    for v in volume_profile:
+        slice_size = participation_rate * v
+        if total_shares is not None:
+            remaining = total_shares - filled
+            if remaining <= 0.0:
+                out.append(0.0)
+                continue
+            slice_size = min(slice_size, remaining)
+        out.append(slice_size)
+        filled += slice_size
+    return out
+
+
 def kyle_lambda(sigma, daily_volume, liquidity_constant=1.0):
     """Kyle's lambda: linear price impact per unit of signed order flow.
 
