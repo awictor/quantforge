@@ -16,6 +16,13 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.583.0] - 2026-09-12
+
+### Documentation
+- README: added a "Serial correlation (Ljung-Box / Durbin-Watson)" section
+  documenting `ljung_box`, `box_pierce`, and `durbin_watson`; TOC regenerated to
+  102 entries.
+
 ## [1.582.0] - 2026-09-12
 
 ### Added

@@ -83,6 +83,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Robust scale and location](#robust-scale-and-location)
 - [Hurst exponent (long memory)](#hurst-exponent-long-memory)
 - [Variance-ratio test](#variance-ratio-test)
+- [Serial correlation (Ljung-Box / Durbin-Watson)](#serial-correlation-ljung-box--durbin-watson)
 - [Rank dependence (Kendall / Spearman)](#rank-dependence-kendall--spearman)
 - [Spectral analysis](#spectral-analysis)
 - [Structural breaks (CUSUM / Chow)](#structural-breaks-cusum--chow)
@@ -1984,6 +1985,23 @@ variance_ratio_zstat(returns, q=2)   # standard-normal z; |z| > 1.96 rejects the
 On white noise `VR` sits near 1 with a small `z`; a mean-reverting series drives
 `VR` below 1 with a large negative `z`, a trending one above 1 with a large
 positive `z`.
+
+## Serial correlation (Ljung-Box / Durbin-Watson)
+
+Test whether a series — usually model residuals — is white noise. `ljung_box`
+(and `box_pierce`) check that the first `h` autocorrelations are jointly zero;
+`durbin_watson` checks first-order autocorrelation.
+
+```python
+from quantforge import ljung_box, box_pierce, durbin_watson
+
+q, p = ljung_box(residuals, lags=10)    # small p rejects "no autocorrelation"
+durbin_watson(residuals)                # ~2 = clean, <2 positive, >2 negative
+```
+
+White noise gives a large Ljung-Box p-value and a Durbin-Watson near 2; an AR(1)
+gives a huge Q with a vanishing p-value and a Durbin-Watson far from 2. The
+p-values use a self-contained chi-square survival function (no SciPy).
 
 ## Rank dependence (Kendall / Spearman)
 
