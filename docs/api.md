@@ -1,6 +1,41 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.422.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.423.0 by `docs/gen_api.py` — do not edit by hand.
+
+## actuarial
+
+### `endowment_insurance(one_year_survival, i, term)`  _function_
+
+> EPV of an endowment: term insurance plus a pure endowment at ``term``.
+
+### `life_annuity_due(one_year_survival, i)`  _function_
+
+> Expected present value of a unit life annuity-due.
+>
+> ``a-due = sum_k v^k * kp_x`` paying 1 at the start of each year while alive,
+> ``v = 1/(1+i)``. Falls as interest or mortality rises.
+
+### `pure_endowment(one_year_survival, i, term)`  _function_
+
+> EPV of a unit pure endowment: ``v^n * np_x`` (pays 1 iff alive at ``n``).
+
+### `survival_probabilities(one_year_survival)`  _function_
+
+> Cumulative survival ``[0p_x, 1p_x, 2p_x, ...]`` from one-year ``p_x`` values.
+>
+> ``kp_x = prod_{j<k} p_{x+j}``, starting at ``0p_x = 1``. The returned list has
+> one more entry than the input (the leading 1). Survival is non-increasing.
+
+### `term_insurance(one_year_survival, i, term=None)`  _function_
+
+> EPV of a unit term insurance paying 1 at the end of the year of death.
+>
+> ``A = sum_k v^{k+1} * kp_x * q_{x+k}`` over the first ``term`` years (default:
+> the whole table). ``q = 1 - p`` is the one-year death probability.
+
+### `whole_life_insurance(one_year_survival, i)`  _function_
+
+> EPV of whole-life insurance: :func:`term_insurance` over the whole table.
 
 ## american
 

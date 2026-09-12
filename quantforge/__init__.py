@@ -217,6 +217,10 @@ from .inflation import (
     yoy_caplet_price_normal, yoy_caplet_implied_normal_vol,
     real_zero_curve, nominal_zero_curve, real_discount_factor,
 )
+from .actuarial import (
+    survival_probabilities, life_annuity_due, term_insurance,
+    whole_life_insurance, pure_endowment, endowment_insurance,
+)
 from .structured import (
     note_zero_coupon_bond, principal_protected_note, reverse_convertible,
     note_embedded_option_value, capped_principal_protected_note,
@@ -453,7 +457,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.422.0"
+__version__ = "1.423.0"
 
 __all__ = [
     "OptionType",
@@ -803,6 +807,12 @@ __all__ = [
     "real_zero_curve",
     "nominal_zero_curve",
     "real_discount_factor",
+    "survival_probabilities",
+    "life_annuity_due",
+    "term_insurance",
+    "whole_life_insurance",
+    "pure_endowment",
+    "endowment_insurance",
     "note_zero_coupon_bond",
     "principal_protected_note",
     "reverse_convertible",

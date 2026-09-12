@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.423.0] - 2026-09-11
+
+### Added
+- `actuarial.py`: life-contingent expected present values. `survival_probabilities`
+  (cumulative `kp_x` from one-year `p_x`), `life_annuity_due`, `term_insurance`,
+  `whole_life_insurance`, `pure_endowment`, and `endowment_insurance`.
+  Cross-checked against the annuity/insurance identity `A_x = 1 - d * a-due` on a
+  terminating table, term below whole life, and endowment = term + pure endowment.
+
 ## [1.422.0] - 2026-09-11
 
 ### Added
