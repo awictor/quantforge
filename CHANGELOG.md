@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.467.0] - 2026-09-11
+
+### Added
+- `pca.py`: principal component analysis via the Jacobi eigenvalue algorithm.
+  `jacobi_eigen` (symmetric eigendecomposition), `pca` (sorted variances,
+  orthonormal loadings, variance explained -- the yield-curve level/slope/curvature
+  decomposition), and `project` (component scores). Cross-checked: correct
+  eigenvalues, orthonormal eigenvectors, the eigen equation `Av = lambda v`,
+  variances summing to the trace, and norm-preserving full projection.
+
 ## [1.466.0] - 2026-09-11
 
 ### Documentation

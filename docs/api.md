@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.466.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.467.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -6007,6 +6007,34 @@ Auto-generated from `quantforge` v1.466.0 by `docs/gen_api.py` — do not edit b
 ### `overhedge_payoff(oh: quantforge.overhedge.Overhedge, spot_at_expiry: float, is_call=True) -> float`  _function_
 
 > Terminal payoff of the replicating spread at ``spot_at_expiry``.
+
+## pca
+
+### `jacobi_eigen(matrix, tol=1e-12, max_sweeps=100)`  _function_
+
+> Eigenvalues and eigenvectors of a symmetric matrix (Jacobi rotations).
+>
+> Returns ``(eigenvalues, eigenvectors)`` where ``eigenvectors[i]`` is the
+> orthonormal eigenvector for ``eigenvalues[i]``, sorted by descending
+> eigenvalue. Requires a symmetric input; iteratively zeroes off-diagonal
+> entries with plane rotations.
+
+### `pca(covariance)`  _function_
+
+> PCA of a covariance matrix: sorted variances, loadings, variance explained.
+>
+> Returns a dict with ``variances`` (eigenvalues, descending), ``loadings``
+> (orthonormal eigenvectors), ``explained`` (each variance over the total), and
+> ``cumulative_explained``. For a yield-curve covariance the first three
+> components are the level, slope, and curvature factors.
+
+### `project(data_row, loadings, k=None)`  _function_
+
+> Project a data vector onto the first ``k`` principal components (scores).
+>
+> ``sum_j data_row_j loadings_i_j`` for each retained component ``i``. ``k``
+> defaults to all components. The scores are the coordinates of the observation
+> in the principal-component basis.
 
 ## pde
 
