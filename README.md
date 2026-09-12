@@ -101,6 +101,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Ornstein-Uhlenbeck calibration](#ornstein-uhlenbeck-calibration)
 - [Markov chains](#markov-chains)
 - [K-means clustering](#k-means-clustering)
+- [Hierarchical clustering](#hierarchical-clustering)
 - [Principal component analysis](#principal-component-analysis)
 - [Matrix utilities](#matrix-utilities)
 - [Numerical utilities](#numerical-utilities)
@@ -2449,6 +2450,23 @@ silhouette_score(points, r["labels"])   # ~1 tight/separated, ~0 overlapping, <0
 
 Picking the `k` that maximizes the silhouette is a common alternative to the
 inertia elbow; a wrong `k` scores strictly lower on well-separated data.
+
+## Hierarchical clustering
+
+Build a bottom-up cluster tree with single, complete, or average linkage, then cut
+it into flat clusters — no need to fix `k` in advance.
+
+```python
+from quantforge import linkage, fcluster
+
+merges = linkage(points, method="average")      # (a, b, distance, size) per merge
+fcluster(points, merges, n_clusters=3)           # cut into 3 clusters
+fcluster(points, merges, distance_threshold=5)   # or cut below a distance
+```
+
+Merge distances are monotone; cutting into the right number of clusters recovers
+separated groups purely. Complete linkage yields compact clusters, single linkage
+chains, and average sits between.
 
 ## Principal component analysis
 

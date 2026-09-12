@@ -16,6 +16,12 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.623.0] - 2026-09-12
+
+### Documentation
+- README: added a "Hierarchical clustering" section documenting `linkage` and
+  `fcluster`; TOC regenerated to 114 entries.
+
 ## [1.622.0] - 2026-09-12
 
 ### Added
