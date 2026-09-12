@@ -81,6 +81,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Dual-currency deposits](#dual-currency-deposits)
 - [FX forwards (covered interest parity)](#fx-forwards-covered-interest-parity)
 - [Portfolio optimization](#portfolio-optimization)
+- [Rebalancing](#rebalancing)
 - [Portfolio insurance (CPPI)](#portfolio-insurance-cppi)
 - [Volatility targeting](#volatility-targeting)
 - [Trend and momentum signals](#trend-and-momentum-signals)
@@ -1775,6 +1776,20 @@ var_budget([0.4, 0.4, 0.2], cov)  # % risk per position
 from quantforge import inverse_volatility_weights, hierarchical_risk_parity
 inverse_volatility_weights(cov)
 hierarchical_risk_parity(cov)     # Lopez de Prado HRP
+```
+
+## Rebalancing
+
+Weight drift, turnover, transaction-cost drag, and no-trade-band rebalancing:
+
+```python
+from quantforge import (drift_weights, turnover, transaction_cost,
+                        no_trade_band_rebalance)
+
+drifted = drift_weights([0.5, 0.5], asset_returns=[0.20, -0.10])
+turnover(drifted, target_weights=[0.5, 0.5])              # fraction traded
+transaction_cost(drifted, [0.5, 0.5], cost_bps=10)        # round-trip drag
+no_trade_band_rebalance(drifted, [0.5, 0.5], band=0.05)   # only trade if outside band
 ```
 
 ## Portfolio insurance (CPPI)
