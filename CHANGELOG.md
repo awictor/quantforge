@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.475.0] - 2026-09-11
+
+### Added
+- `rootfind.py`: general-purpose scalar root finders. `bisection` (guaranteed
+  convergence on a sign-changing bracket), `brent` (bisection + secant + inverse
+  quadratic interpolation), and `newton` (derivative-based with an optional
+  bisection safeguard). Cross-checked against known roots (sqrt(2), the cos
+  fixed point, a cubic), bracket safeguards, and the no-bracket / zero-derivative
+  error cases.
+
 ## [1.474.0] - 2026-09-11
 
 ### Added

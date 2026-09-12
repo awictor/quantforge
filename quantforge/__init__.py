@@ -221,6 +221,7 @@ from .pca import (
     jacobi_eigen, pca, project, reconstruct_covariance, pca_scenario,
 )
 from .interpolation import natural_cubic_spline, monotone_cubic
+from .rootfind import bisection, brent, newton
 from .linalg import (
     cholesky, is_positive_definite, correlated_normals, nearest_correlation,
     basket_option_mc,
@@ -529,7 +530,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.474.0"
+__version__ = "1.475.0"
 
 __all__ = [
     "OptionType",
@@ -881,6 +882,9 @@ __all__ = [
     "real_discount_factor",
     "natural_cubic_spline",
     "monotone_cubic",
+    "bisection",
+    "brent",
+    "newton",
     "jacobi_eigen",
     "pca",
     "project",

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.474.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.475.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -7265,6 +7265,30 @@ Auto-generated from `quantforge` v1.474.0 by `docs/gen_api.py` — do not edit b
 > True if the smile term structure has no calendar arbitrage on the grid.
 >
 > Convenience wrapper: ``not calendar_arbitrage_violations(...)``.
+
+## rootfind
+
+### `bisection(f, lo, hi, tol=1e-12, max_iter=200)`  _function_
+
+> Bisection root of ``f`` on ``[lo, hi]`` (requires a sign change).
+>
+> Halves the bracket until it is narrower than ``tol``. Guaranteed to converge
+> for a continuous ``f`` with ``f(lo) f(hi) < 0``.
+
+### `brent(f, lo, hi, tol=1e-12, max_iter=200)`  _function_
+
+> Brent's method root of ``f`` on ``[lo, hi]`` (requires a sign change).
+>
+> Combines bisection with secant and inverse-quadratic interpolation for
+> superlinear convergence while retaining bisection's guaranteed bracketing.
+
+### `newton(f, fprime, x0, tol=1e-12, max_iter=100, lo=None, hi=None)`  _function_
+
+> Newton's method with an optional bisection safeguard.
+>
+> Steps ``x -= f(x)/f'(x)``; if ``lo``/``hi`` bounds are given, a step leaving
+> the bracket (or a zero derivative) falls back to a bisection step. Converges
+> quadratically near a simple root when the derivative is well-behaved.
 
 ## rough_heston
 
