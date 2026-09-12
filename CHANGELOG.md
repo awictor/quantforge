@@ -16,6 +16,13 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.711.0] - 2026-09-12
+
+### Documentation
+- README numerics section now shows `romberg` next to the other quadrature rules,
+  with a note that it reaches machine precision in a few halvings on smooth
+  integrands (and tanh-sinh for singular endpoints).
+
 ## [1.710.0] - 2026-09-12
 
 ### Added
