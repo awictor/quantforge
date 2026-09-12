@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.466.0] - 2026-09-11
+
+### Documentation
+- README: added a "Structural credit (Merton)" section covering the
+  `structural_credit` module (distance-to-default, default probability, credit
+  spread, KMV asset-value solve), with runnable examples verified against the
+  installed package.
+
 ## [1.465.0] - 2026-09-11
 
 ### Added

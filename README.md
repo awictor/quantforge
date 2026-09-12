@@ -1492,6 +1492,24 @@ expected_steps_to_absorption(A, transient_states=[0, 1])
 absorption_probabilities(A, transient_states=[0, 1], absorbing_states=[2])
 ```
 
+## Structural credit (Merton)
+
+Firm equity as a call on assets, distance-to-default, default probability, credit
+spread, and the KMV solve for unobservable asset value and volatility:
+
+```python
+from quantforge import (distance_to_default, risk_neutral_default_probability,
+                        credit_spread, solve_asset_value_and_vol)
+
+distance_to_default(asset_value=120, debt_face=100, r=0.05, sigma=0.25, t=1)
+risk_neutral_default_probability(120, 100, 0.05, 0.25, 1)
+credit_spread(120, 100, 0.05, 0.25, 1)
+
+# Back out the unobservable assets from observed equity value and equity vol.
+solve_asset_value_and_vol(equity_value_obs=27.4, equity_vol_obs=0.94,
+                          debt_face=100, r=0.05, t=1)
+```
+
 ## Dual-currency deposits
 
 Yield-enhanced FX-linked deposits by component decomposition:
