@@ -4,6 +4,12 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.497.0] - 2026-09-11
+
+### Documentation
+- README: added a "Carry and roll-down" section covering the `carry_rolldown`
+  module, with runnable examples verified against the installed package.
+
 ## [1.496.0] - 2026-09-11
 
 ### Added

@@ -1166,6 +1166,22 @@ option_adjusted_spread(market_price=99, face=100, coupon_rate=0.05, maturity=5,
                        r0=0.04, sigma=0.15, call_price=110)
 ```
 
+## Carry and roll-down
+
+Decompose a bond's expected holding return (unchanged curve) into carry and
+roll-down:
+
+```python
+from quantforge import (carry_return, rolldown_return, total_carry_rolldown,
+                        SplineZeroCurve, bond_cashflows)
+
+curve = SplineZeroCurve([0.5, 1, 2, 3, 5, 10], [0.02, 0.025, 0.03, 0.033, 0.037, 0.04])
+cf = bond_cashflows(face=100, coupon_rate=0.04, maturity=5, freq=2)
+carry_return(coupon_rate=0.04, yield_now=0.037, horizon=1.0, financing_rate=0.02)
+rolldown_return(cf, curve, horizon=1.0)     # zero on a flat curve, positive when upward
+total_carry_rolldown(cf, curve, 0.04, 1.0, financing_rate=0.02)
+```
+
 ## Inflation-linked bonds and derivatives
 
 Index-ratio mechanics, TIPS-style linker pricing/risk, the deflation floor,
