@@ -1968,6 +1968,18 @@ r["total_reserve"]   # 129  (IBNR = ultimate - paid)
 A fully-developed accident year carries zero reserve, and each ultimate is at
 least the latest paid amount.
 
+`bornhuetter_ferguson` blends the development pattern with an a-priori ultimate
+(reserve = a-priori × undeveloped fraction) — more stable for green years:
+
+```python
+from quantforge import bornhuetter_ferguson
+
+bornhuetter_ferguson(tri, apriori_ultimates=[200, 200, 200])["reserve"]
+```
+
+Feeding the chain-ladder ultimate as the a-priori reproduces the chain-ladder
+reserves exactly, so the two methods are consistent endpoints of the same blend.
+
 ## Equity swaps and dispersion
 
 Total-return swaps, dividend swaps, variance/volatility swaps, and dispersion-
