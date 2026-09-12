@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.505.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.506.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -7868,6 +7868,30 @@ Auto-generated from `quantforge` v1.505.0 by `docs/gen_api.py` — do not edit b
 > period end dates (the start date itself is not included).
 
 ## signals
+
+### `average_true_range(highs, lows, closes, window=14)`  _function_
+
+> Average true range (Wilder): mean of the true range over a trailing window.
+>
+> True range at ``t`` is ``max(high-low, |high-prev_close|, |low-prev_close|)``;
+> ATR smooths it with Wilder's moving average. A non-negative volatility measure
+> in price units. Returns one value per position from index ``window`` on.
+
+### `bollinger_bands(series, window=20, num_std=2.0)`  _function_
+
+> Bollinger bands: ``(lower, middle, upper)`` lists over a trailing window.
+>
+> Middle is the :func:`sma`; the bands are ``middle +/- num_std * rolling std``.
+> Price closing above the upper / below the lower band flags stretched moves.
+> Returns three aligned lists, one value per window position.
+
+### `donchian_channel(highs, lows, window=20)`  _function_
+
+> Donchian channel: rolling ``(lowest_low, highest_high)`` over a window.
+>
+> The channel a breakout system trades: a close above the prior highest high is
+> a long breakout, below the lowest low a short. Returns ``(lower, upper)`` lists
+> with ``upper >= lower`` at every position.
 
 ### `ema(series, span)`  _function_
 

@@ -98,6 +98,71 @@ def rolling_zscore(series, window):
     return out
 
 
+def bollinger_bands(series, window=20, num_std=2.0):
+    """Bollinger bands: ``(lower, middle, upper)`` lists over a trailing window.
+
+    Middle is the :func:`sma`; the bands are ``middle +/- num_std * rolling std``.
+    Price closing above the upper / below the lower band flags stretched moves.
+    Returns three aligned lists, one value per window position.
+    """
+    n = len(series)
+    if window < 2 or window > n:
+        raise ValueError("window must be in [2, len(series)]")
+    lower, middle, upper = [], [], []
+    for end in range(window, n + 1):
+        w = series[end - window:end]
+        m = sum(w) / window
+        var = sum((x - m) ** 2 for x in w) / window
+        sd = var ** 0.5
+        middle.append(m)
+        lower.append(m - num_std * sd)
+        upper.append(m + num_std * sd)
+    return lower, middle, upper
+
+
+def average_true_range(highs, lows, closes, window=14):
+    """Average true range (Wilder): mean of the true range over a trailing window.
+
+    True range at ``t`` is ``max(high-low, |high-prev_close|, |low-prev_close|)``;
+    ATR smooths it with Wilder's moving average. A non-negative volatility measure
+    in price units. Returns one value per position from index ``window`` on.
+    """
+    n = len(closes)
+    if not (len(highs) == len(lows) == n):
+        raise ValueError("highs, lows, closes must have equal length")
+    if window < 1 or window >= n:
+        raise ValueError("window must be in [1, len(closes) - 1]")
+    tr = []
+    for t in range(1, n):
+        tr.append(max(highs[t] - lows[t], abs(highs[t] - closes[t - 1]),
+                      abs(lows[t] - closes[t - 1])))
+    atr = sum(tr[:window]) / window
+    out = [atr]
+    for t in range(window, len(tr)):
+        atr = (atr * (window - 1) + tr[t]) / window
+        out.append(atr)
+    return out
+
+
+def donchian_channel(highs, lows, window=20):
+    """Donchian channel: rolling ``(lowest_low, highest_high)`` over a window.
+
+    The channel a breakout system trades: a close above the prior highest high is
+    a long breakout, below the lowest low a short. Returns ``(lower, upper)`` lists
+    with ``upper >= lower`` at every position.
+    """
+    n = len(highs)
+    if len(lows) != n:
+        raise ValueError("highs and lows must have equal length")
+    if window < 1 or window > n:
+        raise ValueError("window must be in [1, len(highs)]")
+    lower, upper = [], []
+    for end in range(window, n + 1):
+        lower.append(min(lows[end - window:end]))
+        upper.append(max(highs[end - window:end]))
+    return lower, upper
+
+
 def time_series_momentum(prices, lookback):
     """Sign of the trailing ``lookback``-period return: +1 up, -1 down, 0 flat.
 

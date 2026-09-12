@@ -235,6 +235,7 @@ from .vol_target import (
 )
 from .signals import (
     sma, ema, macd, rsi, rolling_zscore, time_series_momentum,
+    bollinger_bands, average_true_range, donchian_channel,
 )
 from .carry_rolldown import (
     carry_return, rolldown_return, total_carry_rolldown,
@@ -567,7 +568,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.505.0"
+__version__ = "1.506.0"
 
 __all__ = [
     "OptionType",
@@ -942,6 +943,9 @@ __all__ = [
     "rsi",
     "rolling_zscore",
     "time_series_momentum",
+    "bollinger_bands",
+    "average_true_range",
+    "donchian_channel",
     "carry_return",
     "rolldown_return",
     "total_carry_rolldown",

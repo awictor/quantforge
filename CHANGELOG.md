@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.506.0] - 2026-09-12
+
+### Added
+- `bollinger_bands`, `average_true_range`, `donchian_channel` (in `signals.py`):
+  Bollinger bands (SMA +/- k std), Wilder's average true range, and the Donchian
+  breakout channel. Cross-checked: the bands are ordered with the SMA middle and
+  bracket ~99% of prices, the ATR is positive, and the Donchian upper is the
+  rolling high and never below the lower.
+
 ## [1.505.0] - 2026-09-12
 
 ### Documentation
