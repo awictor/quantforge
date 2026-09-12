@@ -12,12 +12,18 @@ import inspect
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "docs"))
 
 import gen_api  # noqa: E402
+import gen_toc  # noqa: E402
 import quantforge  # noqa: E402
 
 
 def test_api_reference_is_up_to_date():
     # Exit code 0 means docs/api.md matches the current package.
     assert gen_api.main(["--check"]) == 0
+
+
+def test_readme_toc_is_up_to_date():
+    # Exit code 0 means the README TOC matches its headings.
+    assert gen_toc.main(["--check"]) == 0
 
 
 def test_every_public_callable_is_documented():

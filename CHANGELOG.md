@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.509.0] - 2026-09-12
+
+### Documentation
+- README: added an auto-generated table of contents (`docs/gen_toc.py`) between
+  `<!-- TOC -->` markers, covering all 78 sections with GitHub-style anchors, and
+  a `test_readme_toc_is_up_to_date` check so the TOC cannot drift from the
+  headings.
+
 ## [1.508.0] - 2026-09-12
 
 ### Documentation
