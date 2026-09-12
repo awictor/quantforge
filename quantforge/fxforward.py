@@ -15,6 +15,42 @@ standard library.
 import math
 
 
+def cross_rate(ab, cb, via_is_quote=True):
+    """Cross rate from two rates sharing a common currency.
+
+    Given ``A/B`` and ``C/B`` (both quoted against the common currency ``B``), the
+    cross ``A/C = (A/B) / (C/B)`` when ``via_is_quote`` (the common currency is the
+    quote of both), else ``A/C = (A/B) * (B/C)`` for ``A/B`` and ``B/C``. Positive
+    rates required.
+    """
+    if ab <= 0 or cb <= 0:
+        raise ValueError("rates must be positive")
+    return ab / cb if via_is_quote else ab * cb
+
+
+def triangular_arbitrage(ab, bc, ca):
+    """Triangular-arbitrage profit factor around a currency loop ``A->B->C->A``.
+
+    Converting one unit of A through ``A/B``... actually multiplying the three
+    quoted legs ``(A per B) (B per C) (C per A)`` returns the units of A after a
+    round trip; it equals one in an arbitrage-free market. Returns the product;
+    values above one (net of costs) signal a profitable loop, below one the reverse
+    direction.
+    """
+    if ab <= 0 or bc <= 0 or ca <= 0:
+        raise ValueError("rates must be positive")
+    return ab * bc * ca
+
+
+def is_arbitrage_free(ab, bc, ca, tol=1e-9):
+    """True if the triangular loop is arbitrage-free within ``tol``.
+
+    Checks ``|triangular_arbitrage - 1| <= tol``; the cross rates are mutually
+    consistent when the round-trip product is one.
+    """
+    return abs(triangular_arbitrage(ab, bc, ca) - 1.0) <= tol
+
+
 def fx_forward(spot, r_price, r_base, t) -> float:
     """Covered-interest-parity forward FX rate ``S exp((r_price - r_base) t)``.
 

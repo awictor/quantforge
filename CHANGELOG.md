@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.521.0] - 2026-09-12
+
+### Added
+- `cross_rate`, `triangular_arbitrage`, `is_arbitrage_free` (in `fxforward.py`):
+  FX cross rates from a common currency, the triangular round-trip product around
+  a currency loop, and an arbitrage-free check. Cross-checked: the cross rate,
+  the round-trip product equal to one in an arbitrage-free market, a mispriced
+  loop signalling profit (>1) or the reverse (<1).
+
 ## [1.520.0] - 2026-09-12
 
 ### Documentation

@@ -486,6 +486,7 @@ from .fxdelta import (
 from .fxforward import (
     fx_forward, forward_points, fx_swap_points, implied_base_rate,
     implied_price_rate, fx_forward_from_curves,
+    cross_rate, triangular_arbitrage, is_arbitrage_free,
 )
 from .daycount import year_fraction, day_count
 from .schedule import generate_schedule, adjust_business_day
@@ -581,7 +582,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.520.0"
+__version__ = "1.521.0"
 
 __all__ = [
     "OptionType",
@@ -1425,6 +1426,9 @@ __all__ = [
     "implied_base_rate",
     "implied_price_rate",
     "fx_forward_from_curves",
+    "cross_rate",
+    "triangular_arbitrage",
+    "is_arbitrage_free",
     "year_fraction",
     "day_count",
     "generate_schedule",
