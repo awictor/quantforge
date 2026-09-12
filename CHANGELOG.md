@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.420.0] - 2026-09-11
+
+### Documentation
+- README: added "Equity compensation and convertibles" and "Optimal execution"
+  sections covering the `equity_comp` and `execution` modules, with runnable
+  examples verified against the installed package.
+
 ## [1.419.0] - 2026-09-11
 
 ### Added

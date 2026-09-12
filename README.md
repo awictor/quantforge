@@ -1262,6 +1262,41 @@ degree_day_option(expected_index=900, strike=880, sigma=45, r=0.03, expiry=0.5,
                   tick_value=20, is_call=True, cap=100)
 ```
 
+## Equity compensation and convertibles
+
+Warrants with dilution, employee stock options (FASB 123R expected-life model),
+discrete cash dividends (escrowed method), and convertible bonds with their
+relative-value metrics:
+
+```python
+from quantforge import (warrant_price, eso_value, discrete_dividend_price,
+                        convertible_bond_value, conversion_premium)
+
+warrant_price(50, 50, 5, 0.05, 0.3, existing_shares=1_000_000, new_shares=100_000)
+eso_value(50, 50, contractual_term=10, r=0.05, sigma=0.3, vesting=2,
+          exit_rate=0.15, forfeiture_rate=0.03)
+discrete_dividend_price(100, 100, 1.0, 0.05, 0.25, dividends=[(0.25, 2), (0.75, 2)])
+convertible_bond_value(50, conversion_ratio=20, face=1000, coupon_rate=0.04,
+                       maturity=5, r=0.05, sigma=0.3, credit_spread=0.01)
+```
+
+## Optimal execution
+
+Almgren-Chriss optimal liquidation (cost/risk trade-off), market-impact models
+(Kyle, square-root law), implementation-shortfall decomposition, and TWAP / VWAP /
+POV schedules:
+
+```python
+from quantforge import (execution_trajectory, implementation_shortfall,
+                        square_root_impact, vwap_schedule)
+
+# Risk-averse liquidation front-loads selling; lambda = 0 gives TWAP.
+traj = execution_trajectory(total_shares=1e6, n_intervals=10, horizon=1.0,
+                            lam=1e-6, sigma=0.3, eta=1e-6)
+square_root_impact(order_size=1e5, sigma=0.3, daily_volume=1e7)
+vwap_schedule(1e6, volume_profile=[100, 200, 300, 400])
+```
+
 ## FX forwards (covered interest parity)
 
 ```python
