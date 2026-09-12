@@ -16,6 +16,12 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.637.0] - 2026-09-12
+
+### Documentation
+- README: added a "Black-Karasinski short rate" section documenting
+  `bk_zero_coupon_bond`; TOC regenerated to 118 entries.
+
 ## [1.636.0] - 2026-09-12
 
 ### Added

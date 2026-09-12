@@ -55,6 +55,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Equity valuation](#equity-valuation)
 - [Capital budgeting](#capital-budgeting)
 - [Money-market yields](#money-market-yields)
+- [Black-Karasinski short rate](#black-karasinski-short-rate)
 - [Callable bonds and OAS](#callable-bonds-and-oas)
 - [Carry and roll-down](#carry-and-roll-down)
 - [Inflation-linked bonds and derivatives](#inflation-linked-bonds-and-derivatives)
@@ -1470,6 +1471,24 @@ bank_discount_yield(100, price, 90)      # actual/360, on face
 money_market_yield(100, price, 90)       # actual/360, on price (higher)
 bond_equivalent_yield(100, price, 90)    # actual/365, coupon-comparable
 ```
+
+## Black-Karasinski short rate
+
+A log-normal short-rate model — the log rate mean-reverts, so the rate itself
+stays strictly positive (unlike Vasicek/Hull-White). `bk_zero_coupon_bond` prices
+a zero on a Hull-White-style trinomial tree in the log rate.
+
+```python
+import math
+from quantforge import bk_zero_coupon_bond
+
+bk_zero_coupon_bond(r0=0.03, kappa=0.1, theta=math.log(0.03), sigma=0.2, t=5.0)
+# -> 0.8564   (5y zero; theta is the log of the target rate level)
+```
+
+The price sits near the flat discount factor, falls as the rate or maturity rises,
+approaches 1 at short maturity, and falls as volatility rises (Jensen lifts the
+expected rate). Rates cannot go negative.
 
 ## Callable bonds and OAS
 
