@@ -16,6 +16,12 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.677.0] - 2026-09-12
+
+### Documentation
+- README: extended the Actuarial section with `panjer_poisson`,
+  `stop_loss_premium`, and `layer_expected_loss`.
+
 ## [1.676.0] - 2026-09-12
 
 ### Added

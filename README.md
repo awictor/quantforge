@@ -1887,6 +1887,24 @@ cat_bond_price(principal=1000, coupon_rate=0.06, expected_loss_rate=0.02,
                r=0.03, maturity=1.0)
 ```
 
+For aggregate losses, `panjer_poisson` gives the exact compound-Poisson
+aggregate-loss distribution (Poisson claim count, discrete severity), from which
+`stop_loss_premium` and `layer_expected_loss` price stop-loss and excess-of-loss
+reinsurance:
+
+```python
+from quantforge import (panjer_poisson, aggregate_mean, stop_loss_premium,
+                        layer_expected_loss)
+
+g = panjer_poisson(lam=3.0, severity_pmf=[0.0, 0.4, 0.6])   # P(S = k), sums to 1
+aggregate_mean(g)                       # = lam * E[X]
+stop_loss_premium(g, retention=5)       # E[max(S - 5, 0)]
+layer_expected_loss(g, attachment=3, limit=2)   # excess-of-loss layer cost
+```
+
+The mean and variance match `lam E[X]` and `lam E[X^2]`; a full-width layer equals
+the mean.
+
 ## Equity swaps and dispersion
 
 Total-return swaps, dividend swaps, variance/volatility swaps, and dispersion-
