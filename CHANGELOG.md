@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.460.0] - 2026-09-11
+
+### Added
+- `markov.py`: finite-state Markov chains. `n_step_transition` (`P^n` by repeated
+  squaring), `stationary_distribution` (left eigenvector via power iteration), and
+  `expected_hitting_time` (first-passage times by Gaussian elimination).
+  Cross-checked: the stationary law matches the two-state closed form and is a
+  fixed point of `P`, the n-step matrix stays row-stochastic and converges to the
+  stationary rows, and the hitting time matches its recurrence solution.
+
 ## [1.459.0] - 2026-09-11
 
 ### Documentation

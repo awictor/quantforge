@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.459.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.460.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -4909,6 +4909,32 @@ Auto-generated from `quantforge` v1.459.0 by `docs/gen_api.py` — do not edit b
 >
 > Returns ``leverage`` -- a dict ``{t: {k_center: L}}`` -- and the callable
 > ``lev_fn(spot, t)`` that interpolates it, suitable for an LSV Monte Carlo.
+
+## markov
+
+### `expected_hitting_time(P, target)`  _function_
+
+> Expected number of steps to first reach ``target`` from each state.
+>
+> Solves the linear system ``h_i = 0`` for ``i = target`` and
+> ``h_i = 1 + sum_j P_ij h_j`` otherwise, by Gaussian elimination. Returns the
+> vector of expected hitting times (``0`` at the target, ``inf`` conceptually if
+> unreachable -- the solver raises on a singular system in that case).
+
+### `n_step_transition(P, n)`  _function_
+
+> ``n``-step transition matrix ``P^n`` by repeated squaring.
+>
+> Row ``i`` gives the distribution over states after ``n`` steps starting from
+> ``i``. ``P^0`` is the identity; every power is again row-stochastic.
+
+### `stationary_distribution(P, tol=1e-14, max_iter=100000)`  _function_
+
+> Stationary distribution ``pi`` with ``pi P = pi`` (power iteration).
+>
+> Iterates a uniform start under ``P`` until convergence. For an irreducible
+> aperiodic chain this is the unique long-run state distribution; the returned
+> vector is non-negative and sums to one.
 
 ## mbs
 

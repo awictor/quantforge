@@ -217,6 +217,9 @@ from .inflation import (
     yoy_caplet_price_normal, yoy_caplet_implied_normal_vol,
     real_zero_curve, nominal_zero_curve, real_discount_factor,
 )
+from .markov import (
+    n_step_transition, stationary_distribution, expected_hitting_time,
+)
 from .resample import (
     bootstrap_ci, stationary_bootstrap_ci, jackknife_estimate, bca_bootstrap_ci,
 )
@@ -511,7 +514,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.459.0"
+__version__ = "1.460.0"
 
 __all__ = [
     "OptionType",
@@ -861,6 +864,9 @@ __all__ = [
     "real_zero_curve",
     "nominal_zero_curve",
     "real_discount_factor",
+    "n_step_transition",
+    "stationary_distribution",
+    "expected_hitting_time",
     "bootstrap_ci",
     "stationary_bootstrap_ci",
     "jackknife_estimate",
