@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.434.0] - 2026-09-11
+
+### Added
+- `copula.py`: bivariate copulas. The Gaussian copula (via a Drezner-Wesolowsky
+  bivariate-normal CDF), the Clayton and Gumbel Archimedean copulas, their lower/
+  upper tail-dependence coefficients, and the Kendall's-tau calibration inverses.
+  Cross-checked against the copula boundary conditions, the Frechet-Hoeffding
+  bounds, the independence limits, closed-form tail dependence, and tau
+  round-trips.
+
 ## [1.433.0] - 2026-09-11
 
 ### Documentation

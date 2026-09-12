@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.433.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.434.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -1583,6 +1583,54 @@ Auto-generated from `quantforge` v1.433.0 by `docs/gen_api.py` — do not edit b
 > shifting both expiries together). Returns a dict with ``price`` and those
 > fields. ``kind`` is one of ``call-on-call``/``call-on-put``/``put-on-call``/
 > ``put-on-put``.
+
+## copula
+
+### `clayton_copula(u, v, theta)`  _function_
+
+> Clayton copula ``(u^{-theta} + v^{-theta} - 1)^{-1/theta}`` (``theta > 0``).
+>
+> Lower-tail dependent (assets crash together); reduces to independence as
+> ``theta -> 0``.
+
+### `clayton_lower_tail_dependence(theta)`  _function_
+
+> Lower-tail dependence of the Clayton copula ``2^{-1/theta}``.
+>
+> In ``(0, 1)`` for ``theta > 0`` -- rising toward 1 as ``theta`` grows (stronger
+> joint-crash dependence).
+
+### `clayton_theta_from_tau(tau)`  _function_
+
+> Clayton ``theta`` from Kendall's tau: ``2 tau / (1 - tau)``.
+>
+> Inverse of ``tau = theta / (theta + 2)``. Requires ``0 <= tau < 1``.
+
+### `gaussian_copula(u, v, rho)`  _function_
+
+> Gaussian copula ``C(u, v) = Phi_rho(Phi^{-1}(u), Phi^{-1}(v))``.
+>
+> The dependence structure of a bivariate normal with correlation ``rho``. Zero
+> tail dependence for ``|rho| < 1``; reduces to ``u v`` at ``rho = 0``.
+
+### `gumbel_copula(u, v, theta)`  _function_
+
+> Gumbel copula ``exp(-((-ln u)^theta + (-ln v)^theta)^{1/theta})`` (``theta >= 1``).
+>
+> Upper-tail dependent (assets rally together); reduces to independence at
+> ``theta = 1``.
+
+### `gumbel_theta_from_tau(tau)`  _function_
+
+> Gumbel ``theta`` from Kendall's tau: ``1 / (1 - tau)``.
+>
+> Inverse of ``tau = 1 - 1/theta``. Requires ``0 <= tau < 1``.
+
+### `gumbel_upper_tail_dependence(theta)`  _function_
+
+> Upper-tail dependence of the Gumbel copula ``2 - 2^{1/theta}``.
+>
+> Zero at ``theta = 1`` (independence) rising toward 1 as ``theta -> inf``.
 
 ## correlation
 
