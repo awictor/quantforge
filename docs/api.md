@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.599.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.600.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -4678,6 +4678,48 @@ Auto-generated from `quantforge` v1.599.0 by `docs/gen_api.py` — do not edit b
 >
 > ``y(t) = r0 + 0.5 theta t - sigma^2 t^2 / 6`` (linear-in-t drift, quadratic
 > convexity pull-down).
+
+## holt_winters
+
+### `holt_linear(y, alpha, beta, horizon=1)`  _function_
+
+> Holt's linear-trend (double) exponential smoothing.
+>
+> Parameters
+> ----------
+> y : sequence of float
+>     The series (length >= 2).
+> alpha, beta : float
+>     Level and trend smoothing parameters in [0, 1].
+> horizon : int
+>     Forecast horizon (number of steps beyond the last observation).
+>
+> Returns
+> -------
+> (level, trend, forecast) : (float, float, list[float])
+>     Final level and trend, and the ``horizon``-step-ahead forecasts
+>     ``l + h*b`` (a straight line in ``h``).
+
+### `holt_winters_add(y, alpha, beta, gamma, period, horizon=1)`  _function_
+
+> Additive Holt-Winters (triple) exponential smoothing.
+>
+> Parameters
+> ----------
+> y : sequence of float
+>     The series; length must exceed ``2 * period``.
+> alpha, beta, gamma : float
+>     Level, trend, and seasonal smoothing parameters in [0, 1].
+> period : int
+>     Season length ``m`` (>= 2).
+> horizon : int
+>     Forecast horizon.
+>
+> Returns
+> -------
+> (level, trend, seasonals, forecast) : (float, float, list[float], list[float])
+>     Final level, trend, the last ``period`` seasonal factors, and the
+>     ``horizon``-step forecasts ``l + h*b + s[(h-1) mod m]``.
 
 ## hp_filter
 

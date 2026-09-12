@@ -16,6 +16,16 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.600.0] - 2026-09-12
+
+### Added
+- `holt_winters.py`: exponential smoothing -- `holt_linear` (double smoothing with
+  a level and trend; straight-line forecast) and `holt_winters_add` (triple
+  smoothing with an additive seasonal component of a given period). Cross-checked:
+  Holt recovers a pure linear trend and forecasts a straight line; Holt-Winters
+  reproduces a repeating seasonal pattern exactly and recovers an added linear
+  trend under seasonality.
+
 ## [1.599.0] - 2026-09-12
 
 ### Documentation
