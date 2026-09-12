@@ -1952,6 +1952,22 @@ buhlmann_straub_premium(claims=[50, 50, 50], exposures=[10, 10, 10],
 More data or a larger between-risk spread pulls `Z` toward 1 (trust the
 individual); more within-risk noise pulls it toward 0 (trust the collective).
 
+`chain_ladder` reserves outstanding claims from a cumulative run-off triangle via
+volume-weighted development factors:
+
+```python
+from quantforge import chain_ladder
+
+tri = [[100, 150, 180], [110, 165], [120]]      # cumulative claims by accident year
+r = chain_ladder(tri)
+r["factors"]         # age-to-age: [1.5, 1.2]
+r["ultimate"]        # [180, 198, 216]
+r["total_reserve"]   # 129  (IBNR = ultimate - paid)
+```
+
+A fully-developed accident year carries zero reserve, and each ultimate is at
+least the latest paid amount.
+
 ## Equity swaps and dispersion
 
 Total-return swaps, dividend swaps, variance/volatility swaps, and dispersion-
