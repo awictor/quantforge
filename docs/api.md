@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.611.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.612.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -2372,6 +2372,31 @@ Auto-generated from `quantforge` v1.611.0 by `docs/gen_api.py` — do not edit b
 > such that discounting the *promised* cashflows at ``r + s`` (no explicit
 > default/recovery) gives the same value -- the bond's z-spread-like quote.
 > Solved by bisection (price is monotone decreasing in the spread).
+
+## cross_validation
+
+### `cross_val_score(X, y, fit_fn, score_fn, k=5, shuffle=False, seed=1234567)`  _function_
+
+> K-fold cross-validated scores for a caller-supplied model.
+>
+> ``fit_fn(X_train, y_train)`` returns a fitted model or predictor; ``score_fn``
+> is called as ``score_fn(model, X_test, y_test)`` and returns a scalar. Returns
+> the list of ``k`` per-fold scores.
+
+### `k_fold_indices(n, k=5, shuffle=False, seed=1234567)`  _function_
+
+> Yield ``(train_indices, test_indices)`` for ``k``-fold cross-validation.
+>
+> The ``n`` observations are split into ``k`` contiguous folds (of sizes
+> differing by at most one); with ``shuffle=True`` the order is permuted first.
+> The test folds are disjoint and cover every index exactly once.
+
+### `train_test_split(n, test_fraction=0.2, shuffle=False, seed=1234567)`  _function_
+
+> Single train/test split of ``n`` indices by ``test_fraction``.
+>
+> Returns ``(train_indices, test_indices)``. The test set gets
+> ``round(n * test_fraction)`` indices (at least 1, at most ``n-1``).
 
 ## daycount
 

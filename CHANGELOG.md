@@ -16,6 +16,17 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.612.0] - 2026-09-12
+
+### Added
+- `cross_validation.py`: model-agnostic resampling -- `k_fold_indices` (disjoint
+  folds, optionally shuffled), `train_test_split` (single fractional split), and
+  `cross_val_score` (run a caller-supplied fit/score over the folds). Cross-checked:
+  the test folds tile the data exactly and are disjoint, train/test are
+  complementary within each fold, fold sizes differ by at most one, a seeded
+  shuffle is reproducible and seed-sensitive, and cross_val_score returns one score
+  per fold.
+
 ## [1.611.0] - 2026-09-12
 
 ### Documentation
