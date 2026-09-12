@@ -726,6 +726,20 @@ levy_basket_option(spots, w, strike=100, t=1.0, r=0.04, sigmas=sig, corr=corr)
 It reduces to Black-Scholes for a single asset and satisfies put-call parity
 exactly.
 
+Best-of / worst-of options extend to any number of assets by Monte Carlo:
+
+```python
+from quantforge import rainbow_option_mc
+
+spots, sig = [100, 95, 105], [0.2, 0.25, 0.3]
+corr = [[1, 0.5, 0.3], [0.5, 1, 0.4], [0.3, 0.4, 1]]
+rainbow_option_mc(spots, strike=100, t=1.0, r=0.05, sigmas=sig, corr=corr, best=True)   # best-of call
+rainbow_option_mc(spots, strike=100, t=1.0, r=0.05, sigmas=sig, corr=corr, best=False)  # worst-of call
+```
+
+The two-asset case matches the closed-form rainbow prices, and always
+`worst-of <= single-asset <= best-of`.
+
 Best-of + worst-of equals `call(S1) + call(S2)` (Stulz identity).
 
 ## Forward-start and cliquet options

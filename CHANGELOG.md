@@ -16,6 +16,12 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.651.0] - 2026-09-12
+
+### Documentation
+- README: extended the Two-asset options section with `rainbow_option_mc` for
+  n-asset best-of / worst-of options.
+
 ## [1.650.0] - 2026-09-12
 
 ### Added
