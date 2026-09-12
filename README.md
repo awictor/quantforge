@@ -85,6 +85,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Variance-ratio test](#variance-ratio-test)
 - [Serial correlation (Ljung-Box / Durbin-Watson)](#serial-correlation-ljung-box--durbin-watson)
 - [Goodness of fit (Jarque-Bera / KS)](#goodness-of-fit-jarque-bera--ks)
+- [Autocorrelation (ACF / PACF)](#autocorrelation-acf--pacf)
 - [Rank dependence (Kendall / Spearman)](#rank-dependence-kendall--spearman)
 - [Gaussian-copula sampling](#gaussian-copula-sampling)
 - [Spectral analysis](#spectral-analysis)
@@ -2022,6 +2023,23 @@ A normal sample is not rejected; a heavy-tailed or skewed one is. The KS test
 catches any distributional difference — location, scale, or shape — not just a
 difference in means, and its p-value uses the asymptotic Kolmogorov distribution
 (no SciPy).
+
+## Autocorrelation (ACF / PACF)
+
+Identify ARMA structure from the correlograms. `acf` is the autocorrelation at each
+lag; `pacf` is the partial autocorrelation (via the Durbin-Levinson recursion),
+which removes the intervening lags.
+
+```python
+from quantforge import acf, pacf
+
+acf(series, nlags=20)     # [1.0, r1, r2, ...] — decays geometrically for an AR
+pacf(series, nlags=20)    # [1.0, p1, p2, ...] — cuts off after lag p for an AR(p)
+```
+
+An AR(p) shows a PACF that drops to ~0 beyond lag `p` with a geometrically
+decaying ACF; an MA(q) shows the mirror image — an ACF that cuts off after lag `q`.
+White noise is flat in both.
 
 ## Rank dependence (Kendall / Spearman)
 
