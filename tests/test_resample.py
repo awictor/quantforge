@@ -4,7 +4,9 @@ import statistics
 
 import pytest
 
-from quantforge import bootstrap_ci, stationary_bootstrap_ci, jackknife_estimate
+from quantforge import (
+    bootstrap_ci, stationary_bootstrap_ci, jackknife_estimate, bca_bootstrap_ci,
+)
 
 
 DATA = [3, 5, 7, 4, 6, 5, 8, 2, 5, 6, 4, 7, 5, 3, 6, 5, 4, 7, 6, 5]
@@ -39,6 +41,35 @@ def test_stationary_bootstrap_deterministic():
 def test_stationary_ci_brackets_point():
     lo, pt, hi = stationary_bootstrap_ci(DATA, mean_block=5, n_boot=600)
     assert lo <= pt <= hi
+
+
+def test_bca_brackets_point():
+    lo, pt, hi = bca_bootstrap_ci(DATA, n_boot=1500)
+    assert lo <= pt <= hi
+
+
+def test_bca_deterministic():
+    assert bca_bootstrap_ci(DATA, n_boot=800) == bca_bootstrap_ci(DATA, n_boot=800)
+
+
+def test_bca_close_to_percentile_for_symmetric():
+    sym = [-3, -2, -1, 0, 1, 2, 3, -3, -2, -1, 0, 1, 2, 3, 0, 0]
+    pl, _, ph = bootstrap_ci(sym, n_boot=1500)
+    bl, _, bh = bca_bootstrap_ci(sym, n_boot=1500)
+    assert abs(bl - pl) < 0.5
+    assert abs(bh - ph) < 0.5
+
+
+def test_bca_differs_for_skewed():
+    skew = [1, 1, 1, 1, 2, 2, 3, 5, 8, 13, 21]
+    pl, _, ph = bootstrap_ci(skew, n_boot=1500)
+    bl, _, bh = bca_bootstrap_ci(skew, n_boot=1500)
+    assert abs(bl - pl) > 1e-3 or abs(bh - ph) > 1e-3
+
+
+def test_bca_validation():
+    with pytest.raises(ValueError):
+        bca_bootstrap_ci([5], n_boot=100)
 
 
 def test_validation():

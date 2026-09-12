@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.458.0] - 2026-09-11
+
+### Added
+- `bca_bootstrap_ci` (in `resample.py`): the bias-corrected accelerated (BCa)
+  bootstrap confidence interval, correcting the percentile method for median bias
+  (`z0`) and skewness (`a`, from the jackknife). Cross-checked: it brackets the
+  point estimate, is close to the plain percentile interval for symmetric data,
+  differs for skewed data, and is deterministic per seed.
+
 ## [1.457.0] - 2026-09-11
 
 ### Added

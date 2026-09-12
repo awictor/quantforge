@@ -9,6 +9,8 @@ results are reproducible per seed. Pure standard library.
 
 import math
 
+from .mathfns import norm_cdf, norm_ppf
+
 
 def _lcg(seed):
     state = seed & 0xFFFFFFFF
@@ -105,6 +107,62 @@ def stationary_bootstrap_ci(data, statistic=None, mean_block=10, n_boot=2000,
     lo = _percentile(reps, 100.0 * alpha)
     hi = _percentile(reps, 100.0 * (1.0 - alpha))
     return lo, statistic(data), hi
+
+
+def bca_bootstrap_ci(data, statistic=None, n_boot=2000, confidence=0.95,
+                     seed=1234567):
+    """Bias-corrected accelerated (BCa) bootstrap confidence interval.
+
+    Efron's BCa improves on the percentile method by correcting for median bias
+    (``z0``, from the fraction of bootstrap replicates below the point estimate)
+    and skewness (``a``, the acceleration from the jackknife). The percentiles are
+    shifted:
+
+        alpha1 = Phi(z0 + (z0 + z_lo)/(1 - a(z0 + z_lo)))
+        alpha2 = Phi(z0 + (z0 + z_hi)/(1 - a(z0 + z_hi))).
+
+    Reduces to the plain :func:`bootstrap_ci` when ``z0`` and ``a`` are zero
+    (symmetric, unbiased statistic). Returns ``(lower, point, upper)``.
+    """
+    if statistic is None:
+        statistic = _mean
+    n = len(data)
+    if n < 2:
+        raise ValueError("need at least two observations")
+    if not (0.0 < confidence < 1.0):
+        raise ValueError("confidence must be in (0, 1)")
+    rand = _lcg(seed)
+    theta_hat = statistic(data)
+    reps = []
+    for _ in range(n_boot):
+        sample = [data[int(rand() * n)] for _ in range(n)]
+        reps.append(statistic(sample))
+    reps_sorted = sorted(reps)
+    # Bias correction z0 from the fraction of replicates below the estimate.
+    n_below = sum(1 for r in reps if r < theta_hat)
+    prop = n_below / n_boot
+    prop = min(max(prop, 1.0 / (2 * n_boot)), 1.0 - 1.0 / (2 * n_boot))
+    z0 = norm_ppf(prop)
+    # Acceleration a from the jackknife influence values.
+    thetas = []
+    for i in range(n):
+        loo = data[:i] + data[i + 1:]
+        thetas.append(statistic(loo))
+    theta_bar = sum(thetas) / n
+    num = sum((theta_bar - t) ** 3 for t in thetas)
+    den = 6.0 * (sum((theta_bar - t) ** 2 for t in thetas)) ** 1.5
+    a = num / den if den != 0.0 else 0.0
+    alpha = (1.0 - confidence) / 2.0
+    z_lo = norm_ppf(alpha)
+    z_hi = norm_ppf(1.0 - alpha)
+
+    def _adjust(z):
+        denom = 1.0 - a * (z0 + z)
+        return norm_cdf(z0 + (z0 + z) / denom) if denom != 0.0 else norm_cdf(z0 + z)
+
+    lo = _percentile(reps_sorted, 100.0 * _adjust(z_lo))
+    hi = _percentile(reps_sorted, 100.0 * _adjust(z_hi))
+    return lo, theta_hat, hi
 
 
 def jackknife_estimate(data, statistic=None):

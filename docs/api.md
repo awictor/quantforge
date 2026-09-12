@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.457.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.458.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -6790,6 +6790,21 @@ Auto-generated from `quantforge` v1.457.0 by `docs/gen_api.py` — do not edit b
 > vol. Returns ``(log_moneyness, vol)`` pairs sorted by strike.
 
 ## resample
+
+### `bca_bootstrap_ci(data, statistic=None, n_boot=2000, confidence=0.95, seed=1234567)`  _function_
+
+> Bias-corrected accelerated (BCa) bootstrap confidence interval.
+>
+> Efron's BCa improves on the percentile method by correcting for median bias
+> (``z0``, from the fraction of bootstrap replicates below the point estimate)
+> and skewness (``a``, the acceleration from the jackknife). The percentiles are
+> shifted:
+>
+>     alpha1 = Phi(z0 + (z0 + z_lo)/(1 - a(z0 + z_lo)))
+>     alpha2 = Phi(z0 + (z0 + z_hi)/(1 - a(z0 + z_hi))).
+>
+> Reduces to the plain :func:`bootstrap_ci` when ``z0`` and ``a`` are zero
+> (symmetric, unbiased statistic). Returns ``(lower, point, upper)``.
 
 ### `bootstrap_ci(data, statistic=None, n_boot=2000, confidence=0.95, seed=1234567)`  _function_
 

@@ -218,7 +218,7 @@ from .inflation import (
     real_zero_curve, nominal_zero_curve, real_discount_factor,
 )
 from .resample import (
-    bootstrap_ci, stationary_bootstrap_ci, jackknife_estimate,
+    bootstrap_ci, stationary_bootstrap_ci, jackknife_estimate, bca_bootstrap_ci,
 )
 from .brinson import (
     allocation_effect, selection_effect, interaction_effect, brinson_attribution,
@@ -511,7 +511,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.457.0"
+__version__ = "1.458.0"
 
 __all__ = [
     "OptionType",
@@ -864,6 +864,7 @@ __all__ = [
     "bootstrap_ci",
     "stationary_bootstrap_ci",
     "jackknife_estimate",
+    "bca_bootstrap_ci",
     "allocation_effect",
     "selection_effect",
     "interaction_effect",
