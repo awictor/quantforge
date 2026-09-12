@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.491.0] - 2026-09-11
+
+### Documentation
+- README: added an "Extreme value theory" section covering the `evt` module (Hill
+  tail index, peaks-over-threshold GPD VaR/ES), with runnable examples verified
+  against the installed package.
+
 ## [1.490.0] - 2026-09-11
 
 ### Added

@@ -1584,6 +1584,19 @@ student_t_expected_shortfall(0, 0.02, df=4, confidence=0.99)
 mean, scale, df = fit_student_t(returns)                    # moment-match the tails
 ```
 
+## Extreme value theory
+
+Tail-index estimation and peaks-over-threshold Generalized Pareto VaR / ES:
+
+```python
+from quantforge import hill_estimator, gpd_var, gpd_expected_shortfall
+
+hill_estimator(losses, k=1000)                        # tail index of the top k
+threshold = sorted(losses)[int(0.95 * len(losses))]
+gpd_var(losses, threshold, confidence=0.99)           # peaks-over-threshold VaR
+gpd_expected_shortfall(losses, threshold, 0.99)
+```
+
 ## Structural credit (Merton)
 
 Firm equity as a call on assets, distance-to-default, default probability, credit
