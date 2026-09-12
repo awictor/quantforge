@@ -4,6 +4,12 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.518.0] - 2026-09-12
+
+### Documentation
+- README: expanded the "GARCH volatility" section with the GJR-GARCH and EGARCH
+  leverage variants, verified against the installed package.
+
 ## [1.517.0] - 2026-09-12
 
 ### Added

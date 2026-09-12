@@ -1883,6 +1883,14 @@ from quantforge import fit_garch, garch_term_variance, garch_option_price
 params = fit_garch(returns)
 garch_option_price(params, last_return, last_variance,
                    S=100, K=100, r=0.05, option_type="call", horizon=21)
+
+# Asymmetric (leverage) variants: GJR-GARCH and log-variance EGARCH.
+from quantforge import (GJRGarchParams, gjr_garch_forecast,
+                        EGarchParams, egarch_forecast)
+gjr = GJRGarchParams(omega=1e-6, alpha=0.05, beta=0.90, gamma=0.06)
+gjr_garch_forecast(gjr, last_return=-0.02, last_variance=4e-4, horizon=5)
+eg = EGarchParams(omega=-0.1, alpha=0.15, beta=0.95, gamma=-0.08)
+egarch_forecast(eg, last_return=-0.02, last_variance=4e-4, horizon=5)
 ```
 
 ## Model coverage
