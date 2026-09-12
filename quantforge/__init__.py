@@ -350,6 +350,9 @@ from .panjer import (
 from .distortion import (
     wang_premium, proportional_hazard_premium, expected_loss,
 )
+from .credibility import (
+    buhlmann_k, credibility_factor, buhlmann_premium, buhlmann_straub_premium,
+)
 from .hull_white import (
     hw_zero_from_curve, hw_B, hw_bond_option,
     hw_caplet, hw_floorlet, hw_cap, hw_floor, hw_swaption,
@@ -705,7 +708,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.683.0"
+__version__ = "1.684.0"
 
 __all__ = [
     "OptionType",
@@ -1247,6 +1250,10 @@ __all__ = [
     "expected_loss",
     "aggregate_var",
     "aggregate_tvar",
+    "buhlmann_k",
+    "credibility_factor",
+    "buhlmann_premium",
+    "buhlmann_straub_premium",
     "hw_zero_from_curve",
     "hw_B",
     "hw_bond_option",

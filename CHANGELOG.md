@@ -16,6 +16,17 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.684.0] - 2026-09-12
+
+### Added
+- `credibility.py`: Buhlmann and Buhlmann-Straub credibility (experience rating) --
+  `buhlmann_k` (stiffness EPV/VHM), `credibility_factor` (Z = n/(n+k)),
+  `buhlmann_premium`, and `buhlmann_straub_premium` (unequal exposures).
+  Cross-checked: Z stays in [0,1], the premium lies between the individual and
+  collective means, Z -> 1 as data grows and -> 0 with none, more within-risk noise
+  lowers Z while more between-risk spread raises it, and Buhlmann-Straub matches
+  Buhlmann on equal exposures.
+
 ## [1.683.0] - 2026-09-12
 
 ### Documentation

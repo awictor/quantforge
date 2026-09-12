@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.683.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.684.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -2349,6 +2349,35 @@ Auto-generated from `quantforge` v1.683.0 by `docs/gen_api.py` — do not edit b
 > The dollar amount in the risky asset: the multiplier times the
 > :func:`cushion`, capped at total wealth (no leverage) and floored at zero.
 > Zero once wealth hits the floor, protecting the guarantee.
+
+## credibility
+
+### `buhlmann_k(expected_process_variance, variance_of_hypothetical_means)`  _function_
+
+> Buhlmann stiffness ``k = EPV / VHM``.
+>
+> ``EPV`` is the mean within-risk variance; ``VHM`` the between-risk variance of
+> the true means. Smaller ``k`` -> more credibility to the individual.
+
+### `buhlmann_premium(own_mean, collective_mean, n, epv, vhm)`  _function_
+
+> Buhlmann credibility premium.
+>
+> Blends the risk's own mean with the collective mean using ``Z = n/(n+k)``,
+> ``k = EPV/VHM``. Lies between the two means; approaches the own mean as ``n``
+> grows or the between-risk spread dominates the noise.
+
+### `buhlmann_straub_premium(claims, exposures, collective_mean, epv, vhm)`  _function_
+
+> Buhlmann-Straub premium for a risk with per-period exposures.
+>
+> Generalizes Buhlmann to unequal exposures ``m_i``: the credibility uses total
+> exposure ``m = sum m_i`` with ``Z = m / (m + k)`` and the own estimate is the
+> exposure-weighted claim rate ``sum claims_i / m``.
+
+### `credibility_factor(n, k)`  _function_
+
+> Buhlmann credibility ``Z = n / (n + k)`` for ``n`` observations.
 
 ## credit
 
