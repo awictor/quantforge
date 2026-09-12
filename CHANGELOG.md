@@ -16,6 +16,18 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.608.0] - 2026-09-12
+
+### Added
+- `logistic.py`: `fit_logistic` fits a binary logistic regression by iteratively
+  reweighted least squares (Newton-Raphson), with a small ridge term for stability
+  under separation, and `predict_proba` returns fitted class probabilities -- the
+  standard default-probability / classification model. Cross-checked: it recovers
+  the generating coefficients ([0.55, 2.07, -1.00] for a [0.5, 2, -1] logit), the
+  probabilities lie in (0, 1), classification accuracy beats the baseline, perfectly
+  separable data is classified ~perfectly, and a positive coefficient makes the
+  probability monotone in that feature.
+
 ## [1.607.0] - 2026-09-12
 
 ### Documentation

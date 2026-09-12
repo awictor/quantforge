@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.607.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.608.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -5593,6 +5593,35 @@ Auto-generated from `quantforge` v1.607.0 by `docs/gen_api.py` — do not edit b
 > derivatives are needed at a fixed expiry, so this reads the SABR smile in
 > strike and holds ``T`` fixed for the maturity bump (a flat local term
 > structure across the single slice).
+
+## logistic
+
+### `fit_logistic(X, y, add_intercept=True, max_iter=100, tol=1e-08, ridge=1e-08)`  _function_
+
+> Fit a logistic regression by IRLS / Newton-Raphson.
+>
+> Parameters
+> ----------
+> X : list[list[float]]
+>     Design matrix, ``n`` rows of features.
+> y : list[float]
+>     Binary outcomes (0 or 1).
+> add_intercept : bool
+>     Prepend an intercept column.
+> max_iter, tol : int, float
+>     Newton iteration cap and convergence tolerance on the coefficient step.
+> ridge : float
+>     Small L2 penalty on the Hessian for numerical stability under separation.
+>
+> Returns
+> -------
+> dict
+>     ``coefficients`` (intercept first if added), ``iterations``,
+>     ``log_likelihood``, ``converged``.
+
+### `predict_proba(model, X, add_intercept=True)`  _function_
+
+> Predicted P(y=1) for each row of ``X`` under a fitted logistic model.
 
 ## lookback
 
