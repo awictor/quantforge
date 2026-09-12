@@ -495,6 +495,11 @@ print(ewma_vol(closes, lam=0.94))   # RiskMetrics
 # Range-based estimators need OHLC bars and are much lower-variance.
 rep = vol_report(opens, highs, lows, closes)
 print(rep.parkinson, rep.garman_klass, rep.rogers_satchell, rep.yang_zhang)
+
+# HAR-RV (Corsi) long-memory realized-variance forecast.
+from quantforge import fit_har_rv, har_rv_forecast
+coeffs = fit_har_rv(realized_variance_series)          # day/week/month regression
+har_rv_forecast(coeffs, realized_variance_series)      # one-step-ahead RV
 ```
 
 Yang-Zhang is drift-independent and handles overnight gaps; it is the default

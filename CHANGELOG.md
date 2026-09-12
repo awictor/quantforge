@@ -4,6 +4,12 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.520.0] - 2026-09-12
+
+### Documentation
+- README: added the HAR-RV forecast to the "Realized volatility" section, verified
+  against the installed package.
+
 ## [1.519.0] - 2026-09-12
 
 ### Added
