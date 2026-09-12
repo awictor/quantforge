@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.467.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.468.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -6028,6 +6028,15 @@ Auto-generated from `quantforge` v1.467.0 by `docs/gen_api.py` — do not edit b
 > ``cumulative_explained``. For a yield-curve covariance the first three
 > components are the level, slope, and curvature factors.
 
+### `pca_scenario(component_index, n_sigma, variances, loadings)`  _function_
+
+> A stress scenario shocking one principal component by ``n_sigma`` std devs.
+>
+> Returns the vector move ``n_sigma * sqrt(variance_i) * loading_i`` -- a
+> ``n_sigma``-standard-deviation move along principal component
+> ``component_index``. For a yield curve, component 0 is a parallel (level)
+> shift, 1 a slope twist, 2 a curvature bend.
+
 ### `project(data_row, loadings, k=None)`  _function_
 
 > Project a data vector onto the first ``k`` principal components (scores).
@@ -6035,6 +6044,15 @@ Auto-generated from `quantforge` v1.467.0 by `docs/gen_api.py` — do not edit b
 > ``sum_j data_row_j loadings_i_j`` for each retained component ``i``. ``k``
 > defaults to all components. The scores are the coordinates of the observation
 > in the principal-component basis.
+
+### `reconstruct_covariance(variances, loadings, k=None)`  _function_
+
+> Rebuild a covariance matrix from the top ``k`` principal components.
+>
+> ``sum_i variance_i * (loading_i outer loading_i)`` over the first ``k``
+> components. With all components it reproduces the original covariance exactly
+> (spectral decomposition); with ``k`` below the rank it is the best rank-``k``
+> approximation.
 
 ## pde
 

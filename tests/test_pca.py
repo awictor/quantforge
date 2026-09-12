@@ -2,7 +2,11 @@
 
 import pytest
 
-from quantforge import jacobi_eigen, pca, project
+import math
+
+from quantforge import (
+    jacobi_eigen, pca, project, reconstruct_covariance, pca_scenario,
+)
 
 
 def _dot(a, b):
@@ -54,6 +58,37 @@ def test_projection_preserves_norm():
     x = [0.01, -0.02, 0.015]
     scores = project(x, res["loadings"])
     assert _dot(scores, scores) == pytest.approx(_dot(x, x), abs=1e-9)
+
+
+def test_full_reconstruction_recovers_covariance():
+    res = pca(COV)
+    full = reconstruct_covariance(res["variances"], res["loadings"])
+    assert all(full[i][j] == pytest.approx(COV[i][j], abs=1e-9)
+               for i in range(3) for j in range(3))
+
+
+def test_rank_one_trace_is_top_variance():
+    res = pca(COV)
+    r1 = reconstruct_covariance(res["variances"], res["loadings"], k=1)
+    assert sum(r1[i][i] for i in range(3)) == pytest.approx(res["variances"][0])
+    assert all(r1[i][j] == pytest.approx(r1[j][i]) for i in range(3) for j in range(3))
+
+
+def test_scenario_magnitude_and_scaling():
+    res = pca(COV)
+    sh = pca_scenario(0, 1.0, res["variances"], res["loadings"])
+    mag = math.sqrt(sum(x * x for x in sh))
+    assert mag == pytest.approx(math.sqrt(res["variances"][0]))
+    sh2 = pca_scenario(0, 2.0, res["variances"], res["loadings"])
+    assert all(sh2[i] == pytest.approx(2 * sh[i]) for i in range(3))
+    shn = pca_scenario(0, -1.0, res["variances"], res["loadings"])
+    assert all(shn[i] == pytest.approx(-sh[i]) for i in range(3))
+
+
+def test_scenario_validation():
+    res = pca(COV)
+    with pytest.raises(ValueError):
+        pca_scenario(5, 1.0, res["variances"], res["loadings"])
 
 
 def test_validation():

@@ -217,7 +217,9 @@ from .inflation import (
     yoy_caplet_price_normal, yoy_caplet_implied_normal_vol,
     real_zero_curve, nominal_zero_curve, real_discount_factor,
 )
-from .pca import jacobi_eigen, pca, project
+from .pca import (
+    jacobi_eigen, pca, project, reconstruct_covariance, pca_scenario,
+)
 from .structural_credit import (
     equity_value, risk_neutral_default_probability, distance_to_default,
     risky_debt_value, credit_spread,
@@ -522,7 +524,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.467.0"
+__version__ = "1.468.0"
 
 __all__ = [
     "OptionType",
@@ -875,6 +877,8 @@ __all__ = [
     "jacobi_eigen",
     "pca",
     "project",
+    "reconstruct_covariance",
+    "pca_scenario",
     "equity_value",
     "risk_neutral_default_probability",
     "distance_to_default",

@@ -82,6 +82,44 @@ def pca(covariance):
             "explained": explained, "cumulative_explained": cum}
 
 
+def reconstruct_covariance(variances, loadings, k=None):
+    """Rebuild a covariance matrix from the top ``k`` principal components.
+
+    ``sum_i variance_i * (loading_i outer loading_i)`` over the first ``k``
+    components. With all components it reproduces the original covariance exactly
+    (spectral decomposition); with ``k`` below the rank it is the best rank-``k``
+    approximation.
+    """
+    n = len(loadings)
+    m = len(loadings[0]) if n else 0
+    k = n if k is None else min(k, n)
+    out = [[0.0] * m for _ in range(m)]
+    for i in range(k):
+        lam = variances[i]
+        vec = loadings[i]
+        for r in range(m):
+            for c in range(m):
+                out[r][c] += lam * vec[r] * vec[c]
+    return out
+
+
+def pca_scenario(component_index, n_sigma, variances, loadings):
+    """A stress scenario shocking one principal component by ``n_sigma`` std devs.
+
+    Returns the vector move ``n_sigma * sqrt(variance_i) * loading_i`` -- a
+    ``n_sigma``-standard-deviation move along principal component
+    ``component_index``. For a yield curve, component 0 is a parallel (level)
+    shift, 1 a slope twist, 2 a curvature bend.
+    """
+    n = len(loadings)
+    if not (0 <= component_index < n):
+        raise ValueError("component_index out of range")
+    if variances[component_index] < 0:
+        raise ValueError("variance must be non-negative")
+    scale = n_sigma * math.sqrt(variances[component_index])
+    return [scale * x for x in loadings[component_index]]
+
+
 def project(data_row, loadings, k=None):
     """Project a data vector onto the first ``k`` principal components (scores).
 

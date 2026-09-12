@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.468.0] - 2026-09-11
+
+### Added
+- `reconstruct_covariance` and `pca_scenario` (in `pca.py`): rebuild a covariance
+  matrix from its top ``k`` principal components (the best rank-``k`` approximation;
+  exact with all components) and generate an ``n``-sigma stress scenario along a
+  chosen component (level/slope/curvature shifts for a yield curve). Cross-checked:
+  full reconstruction recovers the covariance, the rank-1 trace equals the top
+  variance, and the scenario magnitude equals the component standard deviation and
+  scales linearly with sigma.
+
 ## [1.467.0] - 2026-09-11
 
 ### Added
