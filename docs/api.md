@@ -1,8 +1,42 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.425.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.426.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
+
+### `cat_bond_price(principal, coupon_rate, expected_loss_rate, r, maturity, risk_free_spread=0.0)`  _function_
+
+> Present value of a single-period cat bond.
+>
+> Pays ``coupon_rate`` on the principal and returns the principal at maturity
+> unless a triggering event erodes it by the expected loss. Discounts the
+> expected principal repayment ``principal * (1 - expected_loss_rate)`` and the
+> coupon at ``r + risk_free_spread``. Falls as the expected loss rises.
+
+### `cat_bond_spread(expected_loss_rate, risk_load=1.0)`  _function_
+
+> Fair coupon spread of a cat bond: expected loss rate times a risk load.
+>
+> Investors demand a spread above the expected loss to bear the (undiversifiable,
+> fat-tailed) catastrophe risk: ``spread = (1 + risk_load) * expected_loss_rate``
+> (``risk_load = 0`` is the actuarially fair spread). At or above the expected
+> loss rate.
+
+### `cat_expected_loss(loss_scenarios, attachment, exhaustion)`  _function_
+
+> Expected layer loss over equally-likely loss scenarios (as a fraction).
+>
+> Averages :func:`cat_layer_loss` across ``loss_scenarios`` and divides by the
+> layer width, giving the expected loss as a fraction of the layer notional in
+> ``[0, 1]`` -- the cat bond's expected loss rate.
+
+### `cat_layer_loss(gross_loss, attachment, exhaustion)`  _function_
+
+> Loss ceded to a reinsurance / cat-bond layer ``[attachment, exhaustion]``.
+>
+> ``min(max(gross_loss - attachment, 0), exhaustion - attachment)`` -- zero below
+> the attachment point, rising one-for-one through the layer, capped at the layer
+> width above exhaustion.
 
 ### `curtate_life_expectancy(one_year_survival)`  _function_
 

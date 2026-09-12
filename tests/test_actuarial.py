@@ -10,7 +10,11 @@ from quantforge import (
     temporary_life_annuity_due, net_level_premium,
     gompertz_makeham_hazard, gompertz_makeham_survival,
     gompertz_makeham_survival_curve, curtate_life_expectancy,
+    cat_layer_loss, cat_expected_loss, cat_bond_spread, cat_bond_price,
 )
+
+
+CAT_SCEN = [0, 50, 120, 180, 250, 300]
 
 
 GM_A, GM_B, GM_C = 0.0005, 0.0000758, 1.09
@@ -55,6 +59,45 @@ def test_higher_interest_lowers_annuity():
 
 def test_pure_endowment_below_one():
     assert pure_endowment(PX, I, 5) < 1
+
+
+def test_cat_layer_loss_bounds():
+    assert cat_layer_loss(50, 100, 200) == 0     # below attachment
+    assert cat_layer_loss(150, 100, 200) == 50   # inside layer
+    assert cat_layer_loss(300, 100, 200) == 100  # capped at width
+
+
+def test_cat_expected_loss_fraction():
+    el = cat_expected_loss(CAT_SCEN, 100, 200)
+    assert 0 <= el <= 1
+    avg = sum(cat_layer_loss(x, 100, 200) for x in CAT_SCEN) / len(CAT_SCEN)
+    assert el == pytest.approx(avg / 100)
+
+
+def test_higher_attachment_lowers_expected_loss():
+    assert cat_expected_loss(CAT_SCEN, 150, 200) < cat_expected_loss(CAT_SCEN, 50, 200)
+
+
+def test_cat_spread_at_least_expected_loss():
+    el = cat_expected_loss(CAT_SCEN, 100, 200)
+    assert cat_bond_spread(el) >= el
+    assert cat_bond_spread(el, 0.0) == pytest.approx(el)
+
+
+def test_cat_bond_price_falls_with_expected_loss():
+    assert cat_bond_price(1000, 0.06, 0.10, 0.03, 1.0) < \
+        cat_bond_price(1000, 0.06, 0.02, 0.03, 1.0)
+
+
+def test_cat_bond_no_loss_returns_principal_plus_coupon():
+    assert cat_bond_price(1000, 0.06, 0.0, 0.0, 1.0) == pytest.approx(1060)
+
+
+def test_cat_validation():
+    with pytest.raises(ValueError):
+        cat_layer_loss(50, 200, 100)
+    with pytest.raises(ValueError):
+        cat_bond_spread(1.5)
 
 
 def test_gm_hazard_increases_with_age():

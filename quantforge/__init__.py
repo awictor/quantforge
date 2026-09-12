@@ -223,6 +223,7 @@ from .actuarial import (
     temporary_life_annuity_due, net_level_premium,
     gompertz_makeham_hazard, gompertz_makeham_survival,
     gompertz_makeham_survival_curve, curtate_life_expectancy,
+    cat_layer_loss, cat_expected_loss, cat_bond_spread, cat_bond_price,
 )
 from .structured import (
     note_zero_coupon_bond, principal_protected_note, reverse_convertible,
@@ -460,7 +461,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.425.0"
+__version__ = "1.426.0"
 
 __all__ = [
     "OptionType",
@@ -822,6 +823,10 @@ __all__ = [
     "gompertz_makeham_survival",
     "gompertz_makeham_survival_curve",
     "curtate_life_expectancy",
+    "cat_layer_loss",
+    "cat_expected_loss",
+    "cat_bond_spread",
+    "cat_bond_price",
     "note_zero_coupon_bond",
     "principal_protected_note",
     "reverse_convertible",

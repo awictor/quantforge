@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.426.0] - 2026-09-11
+
+### Added
+- `cat_layer_loss`, `cat_expected_loss`, `cat_bond_spread`, `cat_bond_price` (in
+  `actuarial.py`): catastrophe-bond analytics -- the loss ceded to an
+  `[attachment, exhaustion]` layer, the expected loss rate over loss scenarios,
+  the fair coupon spread (expected loss times a risk load), and the single-period
+  cat-bond price. Cross-checked: the layer loss is bounded by the layer width, the
+  expected loss falls as the attachment rises, the spread is at least the expected
+  loss rate, and the price falls as expected loss rises.
+
 ## [1.425.0] - 2026-09-11
 
 ### Added

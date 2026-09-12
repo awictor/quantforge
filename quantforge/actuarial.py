@@ -16,6 +16,67 @@ life contract over the full table. Pure standard library.
 import math
 
 
+def cat_layer_loss(gross_loss, attachment, exhaustion):
+    """Loss ceded to a reinsurance / cat-bond layer ``[attachment, exhaustion]``.
+
+    ``min(max(gross_loss - attachment, 0), exhaustion - attachment)`` -- zero below
+    the attachment point, rising one-for-one through the layer, capped at the layer
+    width above exhaustion.
+    """
+    if attachment < 0 or exhaustion <= attachment:
+        raise ValueError("require 0 <= attachment < exhaustion")
+    return min(max(gross_loss - attachment, 0.0), exhaustion - attachment)
+
+
+def cat_expected_loss(loss_scenarios, attachment, exhaustion):
+    """Expected layer loss over equally-likely loss scenarios (as a fraction).
+
+    Averages :func:`cat_layer_loss` across ``loss_scenarios`` and divides by the
+    layer width, giving the expected loss as a fraction of the layer notional in
+    ``[0, 1]`` -- the cat bond's expected loss rate.
+    """
+    if not loss_scenarios:
+        raise ValueError("need at least one loss scenario")
+    width = exhaustion - attachment
+    avg = sum(cat_layer_loss(x, attachment, exhaustion)
+              for x in loss_scenarios) / len(loss_scenarios)
+    return avg / width
+
+
+def cat_bond_spread(expected_loss_rate, risk_load=1.0):
+    """Fair coupon spread of a cat bond: expected loss rate times a risk load.
+
+    Investors demand a spread above the expected loss to bear the (undiversifiable,
+    fat-tailed) catastrophe risk: ``spread = (1 + risk_load) * expected_loss_rate``
+    (``risk_load = 0`` is the actuarially fair spread). At or above the expected
+    loss rate.
+    """
+    if not (0.0 <= expected_loss_rate <= 1.0):
+        raise ValueError("expected_loss_rate must be in [0, 1]")
+    if risk_load < 0:
+        raise ValueError("risk_load must be non-negative")
+    return (1.0 + risk_load) * expected_loss_rate
+
+
+def cat_bond_price(principal, coupon_rate, expected_loss_rate, r, maturity,
+                   risk_free_spread=0.0):
+    """Present value of a single-period cat bond.
+
+    Pays ``coupon_rate`` on the principal and returns the principal at maturity
+    unless a triggering event erodes it by the expected loss. Discounts the
+    expected principal repayment ``principal * (1 - expected_loss_rate)`` and the
+    coupon at ``r + risk_free_spread``. Falls as the expected loss rises.
+    """
+    if not (0.0 <= expected_loss_rate <= 1.0):
+        raise ValueError("expected_loss_rate must be in [0, 1]")
+    if maturity < 0:
+        raise ValueError("maturity must be non-negative")
+    disc = math.exp(-(r + risk_free_spread) * maturity)
+    coupon = principal * coupon_rate * maturity
+    repay = principal * (1.0 - expected_loss_rate)
+    return disc * (coupon + repay)
+
+
 def gompertz_makeham_hazard(age, a, b, c):
     """Gompertz-Makeham force of mortality ``mu(x) = a + b * c^x``.
 
