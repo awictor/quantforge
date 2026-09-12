@@ -1682,6 +1682,11 @@ cov = [[0.04, 0.01, 0.0], [0.01, 0.09, 0.02], [0.0, 0.02, 0.16]]
 min_variance_weights(cov)
 risk_parity_weights(cov)          # equal risk contributions
 var_budget([0.4, 0.4, 0.2], cov)  # % risk per position
+
+# Clustering-based and inverse-vol allocation (no matrix inversion).
+from quantforge import inverse_volatility_weights, hierarchical_risk_parity
+inverse_volatility_weights(cov)
+hierarchical_risk_parity(cov)     # Lopez de Prado HRP
 ```
 
 ## Performance metrics
