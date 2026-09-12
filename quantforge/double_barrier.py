@@ -17,6 +17,7 @@ Pure standard library.
 import math
 
 from .mathfns import norm_cdf
+from .bsm import call_price
 
 
 def double_knockout_call(S, K, L, U, t, r, sigma, b=None, q=0.0, terms=8):
@@ -85,3 +86,31 @@ def double_knockout_call(S, K, L, U, t, r, sigma, b=None, q=0.0, terms=8):
         )
         total += term_call
     return max(total, 0.0)
+
+
+def double_knockin_call(S, K, L, U, t, r, sigma, b=None, q=0.0, terms=8):
+    """Price a double-barrier knock-in call in closed form.
+
+    A double knock-in call comes alive only if the spot touches either barrier
+    (``L`` or ``U``) at some point before expiry; otherwise it expires worthless.
+    It is valued by the in-out parity
+
+        knock-in + knock-out = vanilla,
+
+    since exactly one of "the corridor is breached" and "the corridor is never
+    breached" occurs on every path. Parameters and defaults match
+    :func:`double_knockout_call`.
+
+    Returns
+    -------
+    float
+        Value of the knock-in call. Non-negative, never exceeds the vanilla call,
+        approaches zero as the barriers move far away (a breach becomes rare), and
+        rises toward the vanilla as the corridor tightens (a breach becomes
+        certain).
+    """
+    if b is None:
+        b = r
+    vanilla = call_price(S, K, t, r, sigma, b=b)
+    ko = double_knockout_call(S, K, L, U, t, r, sigma, b=b, terms=terms)
+    return max(vanilla - ko, 0.0)

@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.540.0] - 2026-09-12
+
+### Added
+- `double_barrier.py`: `double_knockin_call` prices a double-barrier knock-in call
+  -- alive only if the spot touches either barrier before expiry -- via the in-out
+  parity ``knock-in + knock-out = vanilla``. Cross-checked: parity holds to 1e-9,
+  the value is bounded by the vanilla call, it approaches zero as the barriers move
+  far away (a breach becomes rare), rises toward the vanilla as the corridor
+  tightens, and matches a fine-grid Monte Carlo in the continuous-monitoring limit
+  (discrete MC undercounts breaches and converges up onto it).
+
 ## [1.539.0] - 2026-09-12
 
 ### Documentation

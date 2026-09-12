@@ -70,3 +70,58 @@ def test_validation():
         double_knockout_call(S, K, 80, 90, T, R, SIG)    # U <= S
     with pytest.raises(ValueError):
         double_knockout_call(S, K, 80, 130, 0, R, SIG)   # t = 0
+
+
+# --- knock-in (in-out parity) ---
+
+from quantforge import double_knockin_call
+
+
+def test_in_out_parity():
+    van = call_price(S, K, T, R, SIG, b=B)
+    ki = double_knockin_call(S, K, 80, 130, T, R, SIG, b=B)
+    ko = double_knockout_call(S, K, 80, 130, T, R, SIG, b=B)
+    assert abs(ki + ko - van) < 1e-9
+
+
+def test_knockin_bounded_by_vanilla():
+    van = call_price(S, K, T, R, SIG, b=B)
+    assert 0.0 <= double_knockin_call(S, K, 80, 130, T, R, SIG, b=B) <= van
+
+
+def test_far_barriers_knockin_approaches_zero():
+    assert double_knockin_call(S, K, 1.0, 1e5, T, R, SIG, b=B) < 1e-6
+
+
+def test_tighter_corridor_raises_knockin():
+    tight = double_knockin_call(S, K, 95, 106, T, R, SIG, b=B)
+    wide = double_knockin_call(S, K, 70, 140, T, R, SIG, b=B)
+    assert tight > wide
+
+
+@pytest.mark.slow
+def test_knockin_matches_monte_carlo_in_continuous_limit():
+    import random
+
+    ki = double_knockin_call(S, K, 80, 130, T, R, SIG, b=B)
+    L, U, M, N = 80.0, 130.0, 6000, 30000
+    random.seed(23)
+    dt = T / M
+    drift = (B - 0.5 * SIG * SIG) * dt
+    vol = SIG * math.sqrt(dt)
+    disc = math.exp(-R * T)
+    acc = 0.0
+    for _ in range(N):
+        s = S
+        touched = False
+        for _ in range(M):
+            s *= math.exp(drift + vol * random.gauss(0, 1))
+            if s <= L or s >= U:
+                touched = True
+        if touched:
+            acc += max(s - K, 0.0)
+    mc = disc * acc / N
+    # Discrete MC undercounts breaches, so it sits below the closed form and
+    # converges up toward it as the step count rises.
+    assert mc < ki
+    assert abs(mc - ki) < 0.25

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.539.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.540.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -2376,6 +2376,28 @@ Auto-generated from `quantforge` v1.539.0 by `docs/gen_api.py` — do not edit b
 > ``[-0.9 S, 20 S]``, staying above the ``-shift`` floor).
 
 ## double_barrier
+
+### `double_knockin_call(S, K, L, U, t, r, sigma, b=None, q=0.0, terms=8)`  _function_
+
+> Price a double-barrier knock-in call in closed form.
+>
+> A double knock-in call comes alive only if the spot touches either barrier
+> (``L`` or ``U``) at some point before expiry; otherwise it expires worthless.
+> It is valued by the in-out parity
+>
+>     knock-in + knock-out = vanilla,
+>
+> since exactly one of "the corridor is breached" and "the corridor is never
+> breached" occurs on every path. Parameters and defaults match
+> :func:`double_knockout_call`.
+>
+> Returns
+> -------
+> float
+>     Value of the knock-in call. Non-negative, never exceeds the vanilla call,
+>     approaches zero as the barriers move far away (a breach becomes rare), and
+>     rises toward the vanilla as the corridor tightens (a breach becomes
+>     certain).
 
 ### `double_knockout_call(S, K, L, U, t, r, sigma, b=None, q=0.0, terms=8)`  _function_
 
