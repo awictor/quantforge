@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.482.0] - 2026-09-11
+
+### Documentation
+- README: added a "Sample risk measures" section covering the `riskmeasures`
+  module (VaR, ES, spectral/entropic risk, Euler component allocation), with
+  runnable examples verified against the installed package.
+
 ## [1.481.0] - 2026-09-11
 
 ### Added

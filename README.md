@@ -1555,6 +1555,21 @@ zeros = [0.02, 0.025, 0.028, 0.03, 0.033, 0.035, 0.037, 0.039, 0.04]
 beta0, beta1, beta2, tau = fit_nelson_siegel(mats, zeros)   # calibrate
 ```
 
+## Sample risk measures
+
+VaR, expected shortfall, spectral and entropic risk from a P&L sample, plus
+coherence checks and Euler component-ES allocation:
+
+```python
+from quantforge import (value_at_risk, sample_expected_shortfall,
+                        spectral_risk_exponential, component_expected_shortfall)
+
+pnl = [0.01, -0.02, 0.03, -0.05, 0.02, -0.10, 0.015, -0.03, -0.08, 0.01]
+value_at_risk(pnl, confidence=0.95)
+sample_expected_shortfall(pnl, confidence=0.95)     # coherent CVaR
+component_expected_shortfall([book_a_pnl, book_b_pnl])   # contributions sum to total ES
+```
+
 ## Structural credit (Merton)
 
 Firm equity as a call on assets, distance-to-default, default probability, credit
