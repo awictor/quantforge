@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.506.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.507.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -6298,6 +6298,39 @@ Auto-generated from `quantforge` v1.506.0 by `docs/gen_api.py` — do not edit b
 ### `overhedge_payoff(oh: quantforge.overhedge.Overhedge, spot_at_expiry: float, is_call=True) -> float`  _function_
 
 > Terminal payoff of the replicating spread at ``spot_at_expiry``.
+
+## pairs
+
+### `ou_half_life(spread)`  _function_
+
+> Mean-reversion half-life from an AR(1) fit to the spread.
+>
+> Regresses ``delta_t = a + b * spread_{t-1}`` (the discretized OU); the
+> mean-reversion speed is ``kappa = -b`` and the half-life is ``ln(2)/kappa``.
+> Positive and finite only for a mean-reverting (``-1 < b < 0``) spread; raises
+> otherwise.
+
+### `pairs_hedge_ratio(y, x)`  _function_
+
+> OLS hedge ratio (slope) of ``y`` on ``x`` through the mean.
+>
+> ``beta = cov(x, y) / var(x)`` -- the number of units of ``x`` to short against
+> one unit of ``y`` so the spread ``y - beta x`` is mean-reverting. Recovers the
+> true beta on a linear relationship.
+
+### `spread_series(y, x, beta=None)`  _function_
+
+> Spread ``y - beta x`` (hedge-ratio residual).
+>
+> ``beta`` defaults to the :func:`hedge_ratio`. The series a pairs trade bets
+> reverts to its mean.
+
+### `spread_zscore(spread, window=None)`  _function_
+
+> Latest spread z-score against its mean and std (full history or a window).
+>
+> ``(spread[-1] - mean) / std`` over the last ``window`` points (all if ``None``).
+> The pairs-trade entry signal: large magnitude means the spread is stretched.
 
 ## pca
 

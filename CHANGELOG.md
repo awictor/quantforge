@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.507.0] - 2026-09-12
+
+### Added
+- `pairs.py`: pairs-trading analytics. `pairs_hedge_ratio` (OLS slope of one leg
+  on the other), `spread_series`, `ou_half_life` (mean-reversion half-life from an
+  AR(1) fit to the spread), and `spread_zscore`. Cross-checked: the hedge ratio
+  recovers a known beta, the half-life falls in the expected range for a
+  cointegrated pair, and a constant (non-reverting) spread raises. Named
+  `pairs_hedge_ratio` to avoid colliding with the LDI `hedge_ratio`.
+
+### Documentation
+- README: expanded the "Trend and momentum signals" section with Bollinger bands
+  and the Donchian channel.
+
 ## [1.506.0] - 2026-09-12
 
 ### Added

@@ -1725,6 +1725,10 @@ ema(prices, span=12)
 macd(prices, fast=12, slow=26, signal=9)      # (macd_line, signal_line, histogram)
 rsi(prices, window=14)                         # 0-100 oscillator
 time_series_momentum(prices, lookback=60)      # +1 / -1 / 0 trend sign
+
+from quantforge import bollinger_bands, average_true_range, donchian_channel
+bollinger_bands(prices, window=20, num_std=2.0)          # (lower, middle, upper)
+donchian_channel(highs, lows, window=20)                 # breakout channel
 ```
 
 ## Performance metrics
