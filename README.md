@@ -1510,6 +1510,21 @@ hw_zero_from_curve(P0, r0=0.03, a=0.1, sigma=0.01, t=2.0, T=10.0)  # forward P(2
 At `t=0` it reproduces the input curve to machine precision (flat, sloped, or the
 `a→0` Ho-Lee limit); the `hw_B` helper gives the `B(t,T)` mean-reversion factor.
 
+`hw_bond_option` prices a European option on a zero-coupon bond in closed form
+(Jamshidian) off the same curve:
+
+```python
+from quantforge import hw_bond_option
+
+# call on the 5y zero, expiring in 1y, struck at the forward
+fwd = P0(5.0) / P0(1.0)
+hw_bond_option(P0, a=0.1, sigma=0.01, t_option=1.0, t_bond=5.0, strike=fwd, is_call=True)
+```
+
+Put-call parity holds exactly (`c - p = P(t_bond) - K·P(t_option)`); the price
+rises with volatility and collapses to intrinsic when vol is zero. Bond options are
+the building block for caps, floors, and swaptions.
+
 ## Callable bonds and OAS
 
 Callable/puttable bond pricing on a short-rate binomial tree and the
