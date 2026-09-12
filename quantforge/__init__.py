@@ -217,6 +217,9 @@ from .inflation import (
     yoy_caplet_price_normal, yoy_caplet_implied_normal_vol,
     real_zero_curve, nominal_zero_curve, real_discount_factor,
 )
+from .equity_comp import (
+    dilution_factor, warrant_price, eso_expected_life, eso_value,
+)
 from .mbs import (
     monthly_payment, cpr_to_smm, smm_to_cpr, psa_cpr, amortization_schedule,
     mbs_cashflows, weighted_average_life,
@@ -436,7 +439,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.412.0"
+__version__ = "1.413.0"
 
 __all__ = [
     "OptionType",
@@ -786,6 +789,10 @@ __all__ = [
     "real_zero_curve",
     "nominal_zero_curve",
     "real_discount_factor",
+    "dilution_factor",
+    "warrant_price",
+    "eso_expected_life",
+    "eso_value",
     "monthly_payment",
     "cpr_to_smm",
     "smm_to_cpr",

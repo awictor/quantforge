@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.413.0] - 2026-09-11
+
+### Added
+- `equity_comp.py`: warrants and employee stock options. `dilution_factor` and
+  `warrant_price` scale a vanilla call by `M/(M+N)` for the new shares created on
+  exercise; `eso_expected_life` gives the Hull-White expected life under a
+  post-vest exit rate; `eso_value` prices an ESO at that expected life times the
+  pre-vest survival probability (FASB 123R practical model). Cross-checked: the
+  warrant sits below the vanilla call by exactly the dilution factor, the ESO
+  below the full-term call, and both reduce to the vanilla with no dilution/exit.
+
 ## [1.412.0] - 2026-09-11
 
 ### Documentation

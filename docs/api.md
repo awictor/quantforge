@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.412.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.413.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1927,6 +1927,46 @@ Auto-generated from `quantforge` v1.412.0 by `docs/gen_api.py` — do not edit b
 >
 > Returns a :class:`KeyRateDV01`. By convention DV01 is negative for a long
 > bond-like position (rates up -> PV down).
+
+## equity_comp
+
+### `dilution_factor(existing_shares, new_shares)`  _function_
+
+> Dilution multiplier ``M / (M + N)`` for issuing ``N`` new shares on ``M``.
+>
+> Below one whenever new shares are created; one when ``N = 0``. Applied to a
+> warrant's per-option payoff because exercise expands the share count.
+
+### `eso_expected_life(vesting, contractual_term, exit_rate)`  _function_
+
+> Expected life of an ESO given post-vest exit and the contractual term.
+>
+> After vesting, holders leave (and exercise or forfeit) at a constant hazard
+> ``exit_rate``; the expected time to exercise, capped at the contractual term,
+> is
+>
+>     vesting + (1 - e^{-exit_rate * (T - vesting)}) / exit_rate
+>
+> -- between ``vesting`` (immediate exit) and ``contractual_term`` (no exit).
+
+### `eso_value(S, K, contractual_term, r, sigma, vesting, exit_rate, forfeiture_rate=0.0, b=None)`  _function_
+
+> Employee stock option value (Hull-White practical / FASB 123R style).
+>
+> Prices the ESO as a call at the :func:`eso_expected_life` rather than the full
+> term, then multiplies by the probability of surviving pre-vest forfeiture
+> ``e^{-forfeiture_rate * vesting}``. Cheaper than the vanilla call on the
+> contractual term because early exercise shortens the option and forfeiture
+> can extinguish it. With ``exit_rate = 0`` and ``forfeiture_rate = 0`` it
+> reduces to the vanilla call.
+
+### `warrant_price(S, K, t, r, sigma, existing_shares, new_shares, b=None)`  _function_
+
+> Warrant value: the vanilla call scaled by the :func:`dilution_factor`.
+>
+> A single-period dilution adjustment -- the standard textbook approximation
+> ``value = M/(M+N) * call(S, K, ...)`` -- which reduces to the plain call when
+> no new shares are issued. ``S`` is the current (pre-dilution) share price.
 
 ## exotics
 
