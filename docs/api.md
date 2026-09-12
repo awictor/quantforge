@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.677.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.678.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -7625,6 +7625,34 @@ Auto-generated from `quantforge` v1.677.0 by `docs/gen_api.py` — do not edit b
 > Expected loss to a reinsurance layer ``[attachment, attachment + limit]``.
 >
 > ``E[min(max(S - attachment, 0), limit)]`` -- the excess-of-loss layer cost.
+
+### `panjer_negative_binomial(size, prob, severity_pmf, max_k=None)`  _function_
+
+> Aggregate-loss distribution for compound negative-binomial claim counts.
+>
+> The claim count ``N ~ NegBinom(size=r, prob=p)`` (``P(N=n) = C(n+r-1, n)
+> p^r (1-p)^n``, mean ``r(1-p)/p``) is over-dispersed relative to Poisson
+> (variance > mean), capturing claim contagion. It is a Panjer ``(a, b)`` class
+> with ``a = 1 - p`` and ``b = (r - 1)(1 - p)``:
+>
+>     g_0 = p^r  (if severity has no mass at 0),
+>     g_k = 1/(1 - a f_0) * sum_{j=1}^{k} (a + b j / k) f_j g_{k-j}.
+>
+> Parameters
+> ----------
+> size : float
+>     The NB ``r`` (number of failures); ``r > 0``.
+> prob : float
+>     The NB success probability ``p`` in ``(0, 1]``.
+> severity_pmf : sequence of float
+>     Severity probabilities on an integer grid.
+> max_k : int, optional
+>     Aggregate grid cutoff.
+>
+> Returns
+> -------
+> list[float]
+>     ``g[k] = P(S = k)``; sums to ~1.
 
 ### `panjer_poisson(lam, severity_pmf, max_k=None)`  _function_
 

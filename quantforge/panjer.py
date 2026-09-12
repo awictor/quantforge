@@ -76,3 +76,60 @@ def layer_expected_loss(g, attachment, limit):
         loss = min(max(k - attachment, 0.0), limit)
         total += loss * g[k]
     return total
+
+
+def panjer_negative_binomial(size, prob, severity_pmf, max_k=None):
+    """Aggregate-loss distribution for compound negative-binomial claim counts.
+
+    The claim count ``N ~ NegBinom(size=r, prob=p)`` (``P(N=n) = C(n+r-1, n)
+    p^r (1-p)^n``, mean ``r(1-p)/p``) is over-dispersed relative to Poisson
+    (variance > mean), capturing claim contagion. It is a Panjer ``(a, b)`` class
+    with ``a = 1 - p`` and ``b = (r - 1)(1 - p)``:
+
+        g_0 = p^r  (if severity has no mass at 0),
+        g_k = 1/(1 - a f_0) * sum_{j=1}^{k} (a + b j / k) f_j g_{k-j}.
+
+    Parameters
+    ----------
+    size : float
+        The NB ``r`` (number of failures); ``r > 0``.
+    prob : float
+        The NB success probability ``p`` in ``(0, 1]``.
+    severity_pmf : sequence of float
+        Severity probabilities on an integer grid.
+    max_k : int, optional
+        Aggregate grid cutoff.
+
+    Returns
+    -------
+    list[float]
+        ``g[k] = P(S = k)``; sums to ~1.
+    """
+    import math
+    if size <= 0:
+        raise ValueError("size must be positive")
+    if not (0.0 < prob <= 1.0):
+        raise ValueError("prob must be in (0, 1]")
+    n = len(severity_pmf)
+    if n == 0:
+        raise ValueError("severity_pmf must be non-empty")
+    s = sum(severity_pmf)
+    if s <= 0:
+        raise ValueError("severity_pmf must sum to a positive value")
+    f = [p / s for p in severity_pmf]
+    a = 1.0 - prob
+    b = (size - 1.0) * (1.0 - prob)
+    mean_n = size * (1.0 - prob) / prob
+    if max_k is None:
+        max_k = int(mean_n * n) * 4 + 20
+
+    g = [0.0] * (max_k + 1)
+    # P(S=0) = P(N=0) when severity has no atom at 0; general PGF at f_0.
+    g[0] = prob ** size / (1.0 - a * f[0]) ** size
+    denom = 1.0 - a * f[0]
+    for k in range(1, max_k + 1):
+        acc = 0.0
+        for j in range(1, min(k, n - 1) + 1):
+            acc += (a + b * j / k) * f[j] * g[k - j]
+        g[k] = acc / denom
+    return g

@@ -16,6 +16,15 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.678.0] - 2026-09-12
+
+### Added
+- `panjer.py`: `panjer_negative_binomial` extends the Panjer recursion to
+  compound negative-binomial claim counts (over-dispersed frequency, capturing
+  contagion). Cross-checked: the distribution sums to 1, the mean and variance
+  match the compound-NB identities, and at a matched mean it is more dispersed
+  (heavier-tailed) than the Poisson aggregate.
+
 ## [1.677.0] - 2026-09-12
 
 ### Documentation
