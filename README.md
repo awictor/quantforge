@@ -2538,6 +2538,22 @@ deepest episode (indices into the equity curve). A series that ends underwater
 reports `recovery_index=None`; the longest underwater stretch need not coincide
 with the deepest drawdown.
 
+For downside-risk-adjusted return, `kappa_ratio` generalizes Sortino and
+Omega-Sharpe into one family (order 1 = Omega-Sharpe, order 2 = Sortino), and
+`upside_potential_ratio` rewards the chance of beating a target per unit of
+downside:
+
+```python
+from quantforge import kappa_ratio, upside_potential_ratio
+
+kappa_ratio(returns, tau=0.0, order=2)     # per-period Sortino
+kappa_ratio(returns, tau=0.0, order=3)     # penalizes deep shortfalls more
+upside_potential_ratio(returns, tau=0.0)   # upside expectation / downside deviation
+```
+
+A higher `order` weights deep shortfalls more heavily, so Kappa falls as the order
+rises for a left-skewed series.
+
 ## GARCH volatility
 
 Fit GARCH(1,1), forecast the term volatility, and price consistently with the

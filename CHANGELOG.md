@@ -16,6 +16,12 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.593.0] - 2026-09-12
+
+### Documentation
+- README: extended the Performance metrics section with `kappa_ratio` and
+  `upside_potential_ratio` (generalized downside-risk-adjusted return).
+
 ## [1.592.0] - 2026-09-12
 
 ### Added
