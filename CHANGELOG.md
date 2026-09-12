@@ -16,6 +16,12 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.591.0] - 2026-09-12
+
+### Documentation
+- README: extended the Performance metrics section with `drawdown_analytics`
+  (depth, time-to-recovery, longest underwater).
+
 ## [1.590.0] - 2026-09-12
 
 ### Added

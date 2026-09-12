@@ -2522,6 +2522,22 @@ probabilistic_sharpe_ratio(returns, benchmark_sr=0.0)       # P(true SR > 0)
 deflated_sharpe_ratio(returns, n_trials=100)                # selection-bias corrected
 ```
 
+Depth is only half the drawdown story — `drawdown_analytics` adds duration:
+
+```python
+from quantforge import drawdown_analytics
+
+a = drawdown_analytics(returns)
+a["max_drawdown_depth"]    # deepest peak-to-trough fractional drop
+a["time_to_recovery"]      # periods from trough back to the prior peak (None if never)
+a["longest_underwater"]    # most periods spent below a prior high
+```
+
+It also returns the `peak_index`, `trough_index`, and `recovery_index` of the
+deepest episode (indices into the equity curve). A series that ends underwater
+reports `recovery_index=None`; the longest underwater stretch need not coincide
+with the deepest drawdown.
+
 ## GARCH volatility
 
 Fit GARCH(1,1), forecast the term volatility, and price consistently with the
