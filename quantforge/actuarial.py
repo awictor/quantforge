@@ -16,6 +16,64 @@ life contract over the full table. Pure standard library.
 import math
 
 
+def gompertz_makeham_hazard(age, a, b, c):
+    """Gompertz-Makeham force of mortality ``mu(x) = a + b * c^x``.
+
+    ``a`` is the age-independent (accident) component and ``b c^x`` the
+    exponentially-rising Gompertz term. Increasing in age for ``c > 1``.
+    """
+    if a < 0 or b < 0:
+        raise ValueError("a and b must be non-negative")
+    if c <= 0:
+        raise ValueError("c must be positive")
+    return a + b * c ** age
+
+
+def gompertz_makeham_survival(age, years, a, b, c):
+    """Survival probability over ``years`` under Gompertz-Makeham mortality.
+
+    Integrates the force of mortality from ``age`` to ``age + years``:
+
+        tp_x = exp(-a t - (b / ln c) c^x (c^t - 1)),   t = years
+
+    (the closed-form integral of ``a + b c^s``). Falls monotonically with the
+    horizon; the ``c -> 1`` limit uses the exponential (Makeham-only) form.
+    """
+    if years < 0:
+        raise ValueError("years must be non-negative")
+    if a < 0 or b < 0:
+        raise ValueError("a and b must be non-negative")
+    if c <= 0:
+        raise ValueError("c must be positive")
+    makeham = a * years
+    if abs(c - 1.0) < 1e-12:
+        gompertz = b * years
+    else:
+        gompertz = b / math.log(c) * c ** age * (c ** years - 1.0)
+    return math.exp(-(makeham + gompertz))
+
+
+def gompertz_makeham_survival_curve(age, n_years, a, b, c):
+    """One-year survival probabilities ``[p_x, p_{x+1}, ...]`` for ``n_years``.
+
+    Each entry is the one-year Gompertz-Makeham survival at successive ages, ready
+    to feed the life-table functions (:func:`life_annuity_due`, etc.).
+    """
+    if n_years < 1:
+        raise ValueError("n_years must be a positive integer")
+    return [gompertz_makeham_survival(age + k, 1.0, a, b, c) for k in range(n_years)]
+
+
+def curtate_life_expectancy(one_year_survival):
+    """Curtate expectation of life ``e_x = sum_{k>=1} kp_x`` (whole years).
+
+    The expected number of complete future years lived, the sum of the cumulative
+    survival probabilities beyond time zero.
+    """
+    cum = survival_probabilities(one_year_survival)
+    return sum(cum[1:])
+
+
 def survival_probabilities(one_year_survival):
     """Cumulative survival ``[0p_x, 1p_x, 2p_x, ...]`` from one-year ``p_x`` values.
 

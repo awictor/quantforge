@@ -1,12 +1,44 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.424.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.425.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
+
+### `curtate_life_expectancy(one_year_survival)`  _function_
+
+> Curtate expectation of life ``e_x = sum_{k>=1} kp_x`` (whole years).
+>
+> The expected number of complete future years lived, the sum of the cumulative
+> survival probabilities beyond time zero.
 
 ### `endowment_insurance(one_year_survival, i, term)`  _function_
 
 > EPV of an endowment: term insurance plus a pure endowment at ``term``.
+
+### `gompertz_makeham_hazard(age, a, b, c)`  _function_
+
+> Gompertz-Makeham force of mortality ``mu(x) = a + b * c^x``.
+>
+> ``a`` is the age-independent (accident) component and ``b c^x`` the
+> exponentially-rising Gompertz term. Increasing in age for ``c > 1``.
+
+### `gompertz_makeham_survival(age, years, a, b, c)`  _function_
+
+> Survival probability over ``years`` under Gompertz-Makeham mortality.
+>
+> Integrates the force of mortality from ``age`` to ``age + years``:
+>
+>     tp_x = exp(-a t - (b / ln c) c^x (c^t - 1)),   t = years
+>
+> (the closed-form integral of ``a + b c^s``). Falls monotonically with the
+> horizon; the ``c -> 1`` limit uses the exponential (Makeham-only) form.
+
+### `gompertz_makeham_survival_curve(age, n_years, a, b, c)`  _function_
+
+> One-year survival probabilities ``[p_x, p_{x+1}, ...]`` for ``n_years``.
+>
+> Each entry is the one-year Gompertz-Makeham survival at successive ages, ready
+> to feed the life-table functions (:func:`life_annuity_due`, etc.).
 
 ### `life_annuity_due(one_year_survival, i)`  _function_
 

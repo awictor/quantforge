@@ -2,11 +2,18 @@
 
 import pytest
 
+import math
+
 from quantforge import (
     survival_probabilities, life_annuity_due, term_insurance,
     whole_life_insurance, pure_endowment, endowment_insurance,
     temporary_life_annuity_due, net_level_premium,
+    gompertz_makeham_hazard, gompertz_makeham_survival,
+    gompertz_makeham_survival_curve, curtate_life_expectancy,
 )
+
+
+GM_A, GM_B, GM_C = 0.0005, 0.0000758, 1.09
 
 
 PX = [0.99, 0.985, 0.98, 0.975, 0.97, 0.96, 0.95, 0.94, 0.92, 0.90]
@@ -48,6 +55,51 @@ def test_higher_interest_lowers_annuity():
 
 def test_pure_endowment_below_one():
     assert pure_endowment(PX, I, 5) < 1
+
+
+def test_gm_hazard_increases_with_age():
+    assert gompertz_makeham_hazard(70, GM_A, GM_B, GM_C) > \
+        gompertz_makeham_hazard(40, GM_A, GM_B, GM_C)
+
+
+def test_gm_survival_monotone_and_starts_at_one():
+    svs = [gompertz_makeham_survival(40, t, GM_A, GM_B, GM_C) for t in range(20)]
+    assert svs[0] == 1.0
+    assert all(svs[i] >= svs[i + 1] for i in range(len(svs) - 1))
+
+
+def test_gm_survival_matches_hazard_integral():
+    def num_surv(x, t, n=10000):
+        dt = t / n
+        s = sum(gompertz_makeham_hazard(x + k * dt, GM_A, GM_B, GM_C) * dt
+                for k in range(n))
+        return math.exp(-s)
+    assert gompertz_makeham_survival(40, 10, GM_A, GM_B, GM_C) == pytest.approx(
+        num_surv(40, 10), abs=1e-4)
+
+
+def test_gm_makeham_only_limit():
+    # c -> 1: pure exponential (constant hazard a + b).
+    assert gompertz_makeham_survival(40, 5, 0.01, 0.02, 1.0) == pytest.approx(
+        math.exp(-(0.01 + 0.02) * 5), abs=1e-9)
+
+
+def test_curtate_life_expectancy():
+    px = gompertz_makeham_survival_curve(40, 60, GM_A, GM_B, GM_C)
+    e = curtate_life_expectancy(px)
+    assert e == pytest.approx(sum(survival_probabilities(px)[1:]), abs=1e-12)
+    assert e > 0
+
+
+def test_life_expectancy_decreases_with_age():
+    e40 = curtate_life_expectancy(gompertz_makeham_survival_curve(40, 60, GM_A, GM_B, GM_C))
+    e70 = curtate_life_expectancy(gompertz_makeham_survival_curve(70, 40, GM_A, GM_B, GM_C))
+    assert e70 < e40
+
+
+def test_gm_validation():
+    with pytest.raises(ValueError):
+        gompertz_makeham_survival(40, 5, GM_A, GM_B, 0)
 
 
 def test_temporary_annuity_below_whole_life():

@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.425.0] - 2026-09-11
+
+### Added
+- `gompertz_makeham_hazard`, `gompertz_makeham_survival`,
+  `gompertz_makeham_survival_curve`, `curtate_life_expectancy` (in `actuarial.py`):
+  the Gompertz-Makeham force of mortality `a + b c^x`, its closed-form survival
+  probability, a one-year survival curve for the life-table functions, and the
+  curtate life expectancy `e_x = sum kp_x`. Cross-checked: the closed-form
+  survival matches a numerical hazard integral, the `c -> 1` limit is the
+  exponential (Makeham-only) form, and life expectancy falls with age.
+
 ## [1.424.0] - 2026-09-11
 
 ### Added
