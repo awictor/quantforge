@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.687.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.688.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -1322,6 +1322,30 @@ Auto-generated from `quantforge` v1.687.0 by `docs/gen_api.py` — do not edit b
 
 ## chain_ladder
 
+### `bornhuetter_ferguson(triangle, apriori_ultimates)`  _function_
+
+> Bornhuetter-Ferguson reserves blending development with a-priori ultimates.
+>
+> For each accident year the BF reserve is
+> ``apriori_ultimate * (1 - pct_developed)``, where ``pct_developed`` comes from
+> the chain-ladder development pattern. The BF ultimate is the latest paid plus
+> that reserve -- an a-priori-anchored estimate that is robust for green
+> (little-developed) years where chain-ladder is volatile.
+>
+> Parameters
+> ----------
+> triangle : list[list[float]]
+>     Cumulative-claims triangle (as in :func:`chain_ladder`).
+> apriori_ultimates : sequence of float
+>     A-priori ultimate loss per accident year (e.g. premium x expected loss
+>     ratio).
+>
+> Returns
+> -------
+> dict
+>     ``pattern`` (% developed by age), ``reserve`` and ``ultimate`` per year,
+>     and ``total_reserve``.
+
 ### `chain_ladder(triangle)`  _function_
 
 > Project a claims triangle to ultimate losses and reserves.
@@ -1337,6 +1361,14 @@ Auto-generated from `quantforge` v1.687.0 by `docs/gen_api.py` — do not edit b
 > ``triangle[i]`` is the observed cumulative claims for accident year ``i`` at
 > development ages ``0 .. len(triangle[i]) - 1``. Returns ``n - 1`` factors
 > ``f_0 .. f_{n-2}`` linking successive development ages.
+
+### `development_pattern(factors)`  _function_
+
+> Cumulative development pattern (% reported) from age-to-age factors.
+>
+> Returns ``pct[j]`` = fraction of ultimate developed by age ``j``, computed as
+> the reciprocal of the cumulative product of the remaining factors. The final
+> age is fully developed (``1.0``).
 
 ## cheyette
 

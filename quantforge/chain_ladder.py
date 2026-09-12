@@ -62,3 +62,64 @@ def chain_ladder(triangle):
         "reserve": reserve,
         "total_reserve": sum(reserve),
     }
+
+
+def development_pattern(factors):
+    """Cumulative development pattern (% reported) from age-to-age factors.
+
+    Returns ``pct[j]`` = fraction of ultimate developed by age ``j``, computed as
+    the reciprocal of the cumulative product of the remaining factors. The final
+    age is fully developed (``1.0``).
+    """
+    n = len(factors) + 1
+    pct = [0.0] * n
+    pct[n - 1] = 1.0
+    cdf = 1.0
+    for j in range(n - 2, -1, -1):
+        cdf *= factors[j]
+        pct[j] = 1.0 / cdf
+    return pct
+
+
+def bornhuetter_ferguson(triangle, apriori_ultimates):
+    """Bornhuetter-Ferguson reserves blending development with a-priori ultimates.
+
+    For each accident year the BF reserve is
+    ``apriori_ultimate * (1 - pct_developed)``, where ``pct_developed`` comes from
+    the chain-ladder development pattern. The BF ultimate is the latest paid plus
+    that reserve -- an a-priori-anchored estimate that is robust for green
+    (little-developed) years where chain-ladder is volatile.
+
+    Parameters
+    ----------
+    triangle : list[list[float]]
+        Cumulative-claims triangle (as in :func:`chain_ladder`).
+    apriori_ultimates : sequence of float
+        A-priori ultimate loss per accident year (e.g. premium x expected loss
+        ratio).
+
+    Returns
+    -------
+    dict
+        ``pattern`` (% developed by age), ``reserve`` and ``ultimate`` per year,
+        and ``total_reserve``.
+    """
+    n = len(triangle)
+    if len(apriori_ultimates) != n:
+        raise ValueError("apriori_ultimates must match the number of accident years")
+    f = development_factors(triangle)
+    pattern = development_pattern(f)
+    reserve = []
+    ultimate = []
+    for i in range(n):
+        age = len(triangle[i]) - 1
+        pct = pattern[age]
+        res = apriori_ultimates[i] * (1.0 - pct)
+        reserve.append(res)
+        ultimate.append(triangle[i][-1] + res)
+    return {
+        "pattern": pattern,
+        "reserve": reserve,
+        "ultimate": ultimate,
+        "total_reserve": sum(reserve),
+    }

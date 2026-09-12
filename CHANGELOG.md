@@ -16,6 +16,16 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.688.0] - 2026-09-12
+
+### Added
+- `chain_ladder.py`: `bornhuetter_ferguson` reserving blends the chain-ladder
+  `development_pattern` with an a-priori ultimate: reserve = a-priori x (1 - %
+  developed). Cross-checked: the development pattern matches the reciprocal
+  cumulative factors, a fully-developed year has zero reserve, reserves equal the
+  a-priori times the undeveloped fraction, and using the chain-ladder ultimate as
+  the a-priori reproduces the chain-ladder reserves exactly.
+
 ## [1.687.0] - 2026-09-12
 
 ### Documentation
