@@ -76,6 +76,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Factor models](#factor-models)
 - [Performance attribution (Brinson)](#performance-attribution-brinson)
 - [Bootstrap and jackknife](#bootstrap-and-jackknife)
+- [Hodrick-Prescott filter](#hodrick-prescott-filter)
 - [Markov chains](#markov-chains)
 - [Principal component analysis](#principal-component-analysis)
 - [Matrix utilities](#matrix-utilities)
@@ -1769,6 +1770,26 @@ bca_bootstrap_ci(returns)                        # bias-corrected accelerated
 stationary_bootstrap_ci(returns, mean_block=3)   # block bootstrap for autocorrelation
 jackknife_estimate(returns)                      # (estimate, standard_error)
 ```
+
+## Hodrick-Prescott filter
+
+Split a time series into a smooth trend and a cyclical residual by trading fit
+against the curvature of the trend. `hp_filter` solves the linear system
+`(I + lambda D'D) tau = y` with an O(n) banded factorization — no dense inverse.
+
+```python
+from quantforge import hp_filter
+
+y = [100, 101, 103, 102, 105, 107, 106, 109, 111, 110, 113, 115]
+trend, cycle = hp_filter(y, lam=1600)     # 1600 is the standard quarterly lambda
+trend[:2]                                  # -> [99.57, 100.89]  (smooth)
+cycle[:2]                                  # -> [0.425, 0.109]   (y - trend)
+```
+
+`trend + cycle` reconstructs `y` exactly. A larger `lambda` gives a smoother
+trend (`lambda -> inf` collapses to the least-squares straight line); `lambda = 0`
+returns the data untouched. Common choices: 1600 (quarterly), 129600 (monthly),
+6.25 (annual).
 
 ## Markov chains
 

@@ -4,6 +4,12 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.547.0] - 2026-09-12
+
+### Documentation
+- README: added a "Hodrick-Prescott filter" section documenting `hp_filter`, with
+  a snippet verified against the package; TOC regenerated to 89 entries.
+
 ## [1.546.0] - 2026-09-12
 
 ### Added
