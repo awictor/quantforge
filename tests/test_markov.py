@@ -4,7 +4,12 @@ import pytest
 
 from quantforge import (
     n_step_transition, stationary_distribution, expected_hitting_time,
+    fundamental_matrix, expected_steps_to_absorption, absorption_probabilities,
 )
+
+
+ABS_P = [[0.5, 0.3, 0.2], [0.1, 0.6, 0.3], [0.0, 0.0, 1.0]]
+TRANS = [0, 1]
 
 
 P = [[0.9, 0.1], [0.2, 0.8]]
@@ -43,6 +48,38 @@ def test_expected_hitting_time():
     h = expected_hitting_time(P, 0)
     assert h[0] == 0.0
     assert h[1] == pytest.approx(5.0, abs=1e-6)  # 1 + 0.8 h1 => h1 = 5
+
+
+def test_fundamental_matrix_inverts_i_minus_q():
+    N = fundamental_matrix(ABS_P, TRANS)
+    Q = [[ABS_P[i][j] for j in TRANS] for i in TRANS]
+    prod = [[sum(((1 if r == c else 0) - Q[r][c]) * N[c][cc] for c in range(2))
+             for cc in range(2)] for r in range(2)]
+    assert all(prod[i][j] == pytest.approx(1.0 if i == j else 0.0, abs=1e-9)
+               for i in range(2) for j in range(2))
+
+
+def test_expected_steps_matches_hitting_time():
+    steps = expected_steps_to_absorption(ABS_P, TRANS)
+    h = expected_hitting_time(ABS_P, 2)
+    assert steps[0] == pytest.approx(h[0], abs=1e-6)
+    assert all(s > 0 for s in steps)
+
+
+def test_absorption_probabilities_sum_to_one():
+    B = absorption_probabilities(ABS_P, TRANS, [2])
+    assert all(sum(row) == pytest.approx(1.0) for row in B)
+
+
+def test_two_absorbing_states():
+    P2 = [[0.4, 0.3, 0.2, 0.1], [0.2, 0.5, 0.1, 0.2], [0, 0, 1, 0], [0, 0, 0, 1]]
+    B = absorption_probabilities(P2, [0, 1], [2, 3])
+    assert all(sum(row) == pytest.approx(1.0) for row in B)
+
+
+def test_absorbing_validation():
+    with pytest.raises(ValueError):
+        fundamental_matrix(ABS_P, [])
 
 
 def test_validation():

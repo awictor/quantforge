@@ -67,6 +67,72 @@ def stationary_distribution(P, tol=1e-14, max_iter=100000):
     return [x / s for x in pi]
 
 
+def _invert(M):
+    """Invert a small dense matrix by Gauss-Jordan elimination."""
+    n = len(M)
+    a = [row[:] + [1.0 if i == j else 0.0 for j in range(n)]
+         for i, row in enumerate(M)]
+    for col in range(n):
+        piv = max(range(col, n), key=lambda r: abs(a[r][col]))
+        if abs(a[piv][col]) < 1e-15:
+            raise ValueError("singular matrix")
+        a[col], a[piv] = a[piv], a[col]
+        pv = a[col][col]
+        for j in range(2 * n):
+            a[col][j] /= pv
+        for r in range(n):
+            if r != col:
+                f = a[r][col]
+                for j in range(2 * n):
+                    a[r][j] -= f * a[col][j]
+    return [row[n:] for row in a]
+
+
+def fundamental_matrix(P, transient_states):
+    """Fundamental matrix ``N = (I - Q)^{-1}`` of an absorbing chain.
+
+    ``transient_states`` lists the indices of the non-absorbing states; ``Q`` is
+    their sub-transition block. ``N_ij`` is the expected number of visits to
+    transient state ``j`` starting from ``i`` before absorption. Requires the chain
+    to be absorbing (every transient state eventually reaches an absorbing one).
+    """
+    _validate_matrix(P)
+    m = len(transient_states)
+    if m == 0:
+        raise ValueError("need at least one transient state")
+    Q = [[P[i][j] for j in transient_states] for i in transient_states]
+    I_minus_Q = [[(1.0 if r == c else 0.0) - Q[r][c] for c in range(m)]
+                 for r in range(m)]
+    return _invert(I_minus_Q)
+
+
+def expected_steps_to_absorption(P, transient_states):
+    """Expected steps to absorption from each transient state.
+
+    Row sums of the :func:`fundamental_matrix` ``N`` -- the total expected visits
+    across all transient states before hitting an absorbing state. Positive for
+    every transient state.
+    """
+    N = fundamental_matrix(P, transient_states)
+    return [sum(row) for row in N]
+
+
+def absorption_probabilities(P, transient_states, absorbing_states):
+    """Probability of ending in each absorbing state from each transient state.
+
+    ``B = N R`` where ``N`` is the :func:`fundamental_matrix` and ``R`` is the
+    transient-to-absorbing transition block. Row ``i`` (a transient state) is a
+    distribution over ``absorbing_states`` summing to one.
+    """
+    N = fundamental_matrix(P, transient_states)
+    m = len(transient_states)
+    k = len(absorbing_states)
+    R = [[P[transient_states[r]][absorbing_states[c]] for c in range(k)]
+         for r in range(m)]
+    return [[sum(N[i][t] * R[t][c] for t in range(m)) for c in range(k)]
+            for i in range(m)]
+
+
 def expected_hitting_time(P, target):
     """Expected number of steps to first reach ``target`` from each state.
 

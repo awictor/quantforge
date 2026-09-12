@@ -219,6 +219,7 @@ from .inflation import (
 )
 from .markov import (
     n_step_transition, stationary_distribution, expected_hitting_time,
+    fundamental_matrix, expected_steps_to_absorption, absorption_probabilities,
 )
 from .resample import (
     bootstrap_ci, stationary_bootstrap_ci, jackknife_estimate, bca_bootstrap_ci,
@@ -514,7 +515,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.460.0"
+__version__ = "1.461.0"
 
 __all__ = [
     "OptionType",
@@ -867,6 +868,9 @@ __all__ = [
     "n_step_transition",
     "stationary_distribution",
     "expected_hitting_time",
+    "fundamental_matrix",
+    "expected_steps_to_absorption",
+    "absorption_probabilities",
     "bootstrap_ci",
     "stationary_bootstrap_ci",
     "jackknife_estimate",

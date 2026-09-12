@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.460.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.461.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -4912,6 +4912,14 @@ Auto-generated from `quantforge` v1.460.0 by `docs/gen_api.py` — do not edit b
 
 ## markov
 
+### `absorption_probabilities(P, transient_states, absorbing_states)`  _function_
+
+> Probability of ending in each absorbing state from each transient state.
+>
+> ``B = N R`` where ``N`` is the :func:`fundamental_matrix` and ``R`` is the
+> transient-to-absorbing transition block. Row ``i`` (a transient state) is a
+> distribution over ``absorbing_states`` summing to one.
+
 ### `expected_hitting_time(P, target)`  _function_
 
 > Expected number of steps to first reach ``target`` from each state.
@@ -4920,6 +4928,23 @@ Auto-generated from `quantforge` v1.460.0 by `docs/gen_api.py` — do not edit b
 > ``h_i = 1 + sum_j P_ij h_j`` otherwise, by Gaussian elimination. Returns the
 > vector of expected hitting times (``0`` at the target, ``inf`` conceptually if
 > unreachable -- the solver raises on a singular system in that case).
+
+### `expected_steps_to_absorption(P, transient_states)`  _function_
+
+> Expected steps to absorption from each transient state.
+>
+> Row sums of the :func:`fundamental_matrix` ``N`` -- the total expected visits
+> across all transient states before hitting an absorbing state. Positive for
+> every transient state.
+
+### `fundamental_matrix(P, transient_states)`  _function_
+
+> Fundamental matrix ``N = (I - Q)^{-1}`` of an absorbing chain.
+>
+> ``transient_states`` lists the indices of the non-absorbing states; ``Q`` is
+> their sub-transition block. ``N_ij`` is the expected number of visits to
+> transient state ``j`` starting from ``i`` before absorption. Requires the chain
+> to be absorbing (every transient state eventually reaches an absorbing one).
 
 ### `n_step_transition(P, n)`  _function_
 

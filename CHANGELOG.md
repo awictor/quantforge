@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.461.0] - 2026-09-11
+
+### Added
+- `fundamental_matrix`, `expected_steps_to_absorption`, `absorption_probabilities`
+  (in `markov.py`): absorbing-Markov-chain analytics (the credit-rating-migration
+  toolkit). The fundamental matrix `N = (I - Q)^{-1}`, expected steps to
+  absorption (its row sums), and the probability of ending in each absorbing state
+  (`N R`). Cross-checked: `N` inverts `I - Q`, expected steps match the hitting
+  time, and absorption probabilities sum to one across absorbing states.
+
 ## [1.460.0] - 2026-09-11
 
 ### Added
