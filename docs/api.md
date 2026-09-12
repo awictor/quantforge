@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.623.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.624.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -5399,6 +5399,19 @@ Auto-generated from `quantforge` v1.623.0 by `docs/gen_api.py` — do not edit b
 > dict
 >     ``labels`` (cluster index per point), ``centroids``, ``inertia`` (total
 >     within-cluster squared distance), and ``iterations``.
+
+## knn
+
+### `knn_classify(X_train, y_train, X_query, k=3)`  _function_
+
+> Classify each query row by majority vote of its ``k`` nearest neighbors.
+>
+> Ties are broken toward the label that is closest on average (the first
+> encountered at minimum total distance). Returns a predicted label per query.
+
+### `knn_regress(X_train, y_train, X_query, k=3)`  _function_
+
+> Predict each query as the mean target of its ``k`` nearest neighbors.
 
 ## kou
 

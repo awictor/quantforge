@@ -16,6 +16,15 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.624.0] - 2026-09-12
+
+### Added
+- `knn.py`: `knn_classify` (majority vote of the ``k`` nearest neighbors, ties
+  broken by nearest total distance) and `knn_regress` (mean target of the ``k``
+  nearest). Cross-checked: ``k=1`` reproduces the training labels exactly and the
+  nearest target for regression, separable classes and a linear target are
+  predicted correctly, and out-of-range ``k`` or mismatched inputs raise.
+
 ## [1.623.0] - 2026-09-12
 
 ### Documentation

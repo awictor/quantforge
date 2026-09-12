@@ -311,6 +311,7 @@ from .poly_features import polynomial_features
 from .kmeans import kmeans
 from .silhouette import silhouette_score, silhouette_samples
 from .agglomerative import linkage, fcluster
+from .knn import knn_classify, knn_regress
 from .hac import (
     autocovariance, autocorrelation, newey_west_variance, newey_west_mean_se,
 )
@@ -661,7 +662,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.623.0"
+__version__ = "1.624.0"
 
 __all__ = [
     "OptionType",
@@ -1152,6 +1153,8 @@ __all__ = [
     "silhouette_samples",
     "linkage",
     "fcluster",
+    "knn_classify",
+    "knn_regress",
     "autocovariance",
     "autocorrelation",
     "newey_west_variance",
