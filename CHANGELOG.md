@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.495.0] - 2026-09-11
+
+### Documentation
+- README: added a "Callable bonds and OAS" section covering the `callable_bond`
+  module (callable/puttable pricing on a short-rate tree, option-adjusted spread),
+  with runnable examples verified against the installed package.
+
 ## [1.494.0] - 2026-09-11
 
 ### Added

@@ -1150,6 +1150,22 @@ The three short-rate models expose analytic rate moments too —
 `vasicek_expected_rate` / `vasicek_rate_variance` / `vasicek_stationary_distribution`
 (Normal), the CIR equivalents (Gamma), and Ho-Lee (drifted Brownian).
 
+## Callable bonds and OAS
+
+Callable/puttable bond pricing on a short-rate binomial tree and the
+option-adjusted spread:
+
+```python
+from quantforge import (callable_bond_price, straight_bond_tree_price,
+                        option_adjusted_spread)
+
+straight = straight_bond_tree_price(100, coupon_rate=0.05, maturity=5, r0=0.04,
+                                    sigma=0.15)
+callable_ = callable_bond_price(100, 0.05, 5, 0.04, 0.15, call_price=102)  # <= straight
+option_adjusted_spread(market_price=99, face=100, coupon_rate=0.05, maturity=5,
+                       r0=0.04, sigma=0.15, call_price=110)
+```
+
 ## Inflation-linked bonds and derivatives
 
 Index-ratio mechanics, TIPS-style linker pricing/risk, the deflation floor,
