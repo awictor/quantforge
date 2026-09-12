@@ -16,6 +16,12 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.695.0] - 2026-09-12
+
+### Documentation
+- README: extended the Actuarial section with `exponential_tail_factor` and
+  `chain_ladder_with_tail`.
+
 ## [1.694.0] - 2026-09-12
 
 ### Added

@@ -2004,6 +2004,19 @@ cum = incremental_to_cumulative([[100, 50, 30], [110, 55], [120]])
 paid_to_date(cum)      # [180, 165, 120]
 ```
 
+To capture development past the last observed age, extrapolate a tail factor and
+apply it:
+
+```python
+from quantforge import exponential_tail_factor, chain_ladder_with_tail
+
+tail = exponential_tail_factor([1.5, 1.2, 1.1, 1.05])   # fits decaying excess-over-1
+chain_ladder_with_tail(cum, tail)["total_reserve"]
+```
+
+A unit tail reproduces plain chain-ladder; a decaying factor pattern gives a
+finite tail above 1, and a non-decaying one is rejected.
+
 ## Equity swaps and dispersion
 
 Total-return swaps, dividend swaps, variance/volatility swaps, and dispersion-
