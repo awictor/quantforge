@@ -78,6 +78,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Classification metrics](#classification-metrics)
 - [Cross-validation](#cross-validation)
 - [Feature scaling](#feature-scaling)
+- [k-nearest neighbors](#k-nearest-neighbors)
 - [Factor models](#factor-models)
 - [Performance attribution (Brinson)](#performance-attribution-brinson)
 - [Bootstrap and jackknife](#bootstrap-and-jackknife)
@@ -1909,6 +1910,22 @@ polynomial_features(X, degree=2, interaction_only=True)   # drops pure powers
 It returns the expanded matrix and the index-tuple for each column; the feature
 count is `C(p + d, d)`. Feed the result straight into `ols_fit`, `ridge_regression`,
 or `fit_logistic`.
+
+## k-nearest neighbors
+
+A lazy, non-parametric baseline for classification and regression: predict a query
+from its `k` closest training points. `knn_classify` votes on their labels;
+`knn_regress` averages their targets.
+
+```python
+from quantforge import knn_classify, knn_regress
+
+knn_classify(X_train, y_train, X_query, k=3)   # majority vote of the k nearest
+knn_regress(X_train, y_train, X_query, k=3)    # mean target of the k nearest
+```
+
+With `k=1` it reproduces the training labels (or the nearest target) exactly; a
+larger `k` smooths the decision boundary. No training step — the model is the data.
 
 ## Factor models
 

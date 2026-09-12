@@ -16,6 +16,12 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.625.0] - 2026-09-12
+
+### Documentation
+- README: added a "k-nearest neighbors" section documenting `knn_classify` and
+  `knn_regress`; TOC regenerated to 115 entries.
+
 ## [1.624.0] - 2026-09-12
 
 ### Added
