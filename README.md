@@ -48,6 +48,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Command line](#command-line)
 - [Quanto options](#quanto-options)
 - [Fixed income](#fixed-income)
+- [Capital budgeting](#capital-budgeting)
 - [Money-market yields](#money-market-yields)
 - [Callable bonds and OAS](#callable-bonds-and-oas)
 - [Carry and roll-down](#carry-and-roll-down)
@@ -1239,6 +1240,20 @@ key_rate_durations(cf, [0.5, 1, 2, 3, 5], [0.03, 0.032, 0.035, 0.037, 0.04])
 The three short-rate models expose analytic rate moments too —
 `vasicek_expected_rate` / `vasicek_rate_variance` / `vasicek_stationary_distribution`
 (Normal), the CIR equivalents (Gamma), and Ho-Lee (drifted Brownian).
+
+## Capital budgeting
+
+Project appraisal: NPV, IRR, MIRR, payback period, and profitability index:
+
+```python
+from quantforge import npv, irr, profitability_index, payback_period, mirr
+
+cashflows = [-1000, 300, 400, 500, 300]   # outlay then inflows
+npv(rate=0.10, cashflows=cashflows)
+irr(cashflows)                             # rate where NPV = 0
+profitability_index(0.10, cashflows)       # PV inflows / outlay
+mirr(cashflows, finance_rate=0.05, reinvest_rate=0.08)
+```
 
 ## Money-market yields
 
