@@ -393,6 +393,60 @@ def garch_option_price(params: GarchParams, last_return, last_variance,
 
 
 @dataclass(frozen=True)
+class EGarchParams:
+    """EGARCH(1,1) parameters (Nelson) on the log conditional variance.
+
+    ``ln h_t = omega + beta ln h_{t-1} + alpha (|z| - E|z|) + gamma z``, with the
+    standardized shock ``z = r/sqrt(h)`` and ``E|z| = sqrt(2/pi)`` for a Gaussian.
+    Modelling the *log* variance means ``h`` is positive for any parameters (no
+    constraints), and ``gamma < 0`` gives the leverage effect (negative shocks
+    raise volatility more). Stationary when ``|beta| < 1``.
+    """
+    omega: float
+    alpha: float
+    beta: float
+    gamma: float
+
+
+def egarch_variance(params: EGarchParams, last_return, last_variance):
+    """One-step-ahead EGARCH conditional variance (always positive).
+
+    Computes the standardized shock from the last return and variance and applies
+    the log-variance recursion, exponentiating back to a variance. Positive for
+    any parameters.
+    """
+    if last_variance <= 0:
+        raise ValueError("last_variance must be positive")
+    z = last_return / math.sqrt(last_variance)
+    e_abs = math.sqrt(2.0 / math.pi)
+    log_h = (params.omega + params.beta * math.log(last_variance)
+             + params.alpha * (abs(z) - e_abs) + params.gamma * z)
+    return math.exp(log_h)
+
+
+def egarch_forecast(params: EGarchParams, last_return, last_variance,
+                    horizon=1, periods_per_year: int = 252):
+    """Forecast annualized volatility ``horizon`` steps ahead under EGARCH.
+
+    One step uses :func:`egarch_variance`; beyond that the *log* variance
+    mean-reverts to its unconditional level ``omega/(1-beta)`` at rate ``beta`` per
+    step (the shock terms are mean-zero), and the result is exponentiated and
+    annualized. Returns the annualized volatility.
+    """
+    if horizon < 1:
+        raise ValueError("horizon must be >= 1")
+    if abs(params.beta) >= 1.0:
+        raise ValueError("beta must satisfy |beta| < 1 for stationarity")
+    h1 = egarch_variance(params, last_return, last_variance)
+    log_lr = params.omega / (1.0 - params.beta)
+    if horizon == 1:
+        log_h = math.log(h1)
+    else:
+        log_h = log_lr + (params.beta ** (horizon - 1)) * (math.log(h1) - log_lr)
+    return math.sqrt(math.exp(log_h) * periods_per_year)
+
+
+@dataclass(frozen=True)
 class GJRGarchParams:
     """GJR-GARCH(1,1,1) parameters with a leverage (asymmetry) term.
 

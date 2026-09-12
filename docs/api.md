@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.516.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.517.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -9397,6 +9397,16 @@ Auto-generated from `quantforge` v1.516.0 by `docs/gen_api.py` — do not edit b
 
 ## volatility
 
+### `EGarchParams(omega: float, alpha: float, beta: float, gamma: float) -> None`  _class_
+
+> EGARCH(1,1) parameters (Nelson) on the log conditional variance.
+>
+> ``ln h_t = omega + beta ln h_{t-1} + alpha (|z| - E|z|) + gamma z``, with the
+> standardized shock ``z = r/sqrt(h)`` and ``E|z| = sqrt(2/pi)`` for a Gaussian.
+> Modelling the *log* variance means ``h`` is positive for any parameters (no
+> constraints), and ``gamma < 0`` gives the leverage effect (negative shocks
+> raise volatility more). Stationary when ``|beta| < 1``.
+
 ### `GJRGarchParams(omega: float, alpha: float, beta: float, gamma: float) -> None`  _class_
 
 > GJR-GARCH(1,1,1) parameters with a leverage (asymmetry) term.
@@ -9423,6 +9433,23 @@ Auto-generated from `quantforge` v1.516.0 by `docs/gen_api.py` — do not edit b
 >
 > Uses the sample standard deviation of log returns with ``ddof`` degrees of
 > freedom removed (1 = unbiased sample variance).
+
+### `egarch_forecast(params: quantforge.volatility.EGarchParams, last_return, last_variance, horizon=1, periods_per_year: int = 252)`  _function_
+
+> Forecast annualized volatility ``horizon`` steps ahead under EGARCH.
+>
+> One step uses :func:`egarch_variance`; beyond that the *log* variance
+> mean-reverts to its unconditional level ``omega/(1-beta)`` at rate ``beta`` per
+> step (the shock terms are mean-zero), and the result is exponentiated and
+> annualized. Returns the annualized volatility.
+
+### `egarch_variance(params: quantforge.volatility.EGarchParams, last_return, last_variance)`  _function_
+
+> One-step-ahead EGARCH conditional variance (always positive).
+>
+> Computes the standardized shock from the last return and variance and applies
+> the log-variance recursion, exponentiating back to a variance. Positive for
+> any parameters.
 
 ### `ewma_vol(closes: Sequence[float], lam: float = 0.94, periods_per_year: int = 252) -> float`  _function_
 

@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.517.0] - 2026-09-12
+
+### Added
+- `EGarchParams`, `egarch_variance`, `egarch_forecast` (in `volatility.py`): the
+  Nelson EGARCH(1,1) model on the *log* conditional variance, so the variance is
+  positive for any parameters (no constraints) and `gamma < 0` gives the leverage
+  effect. Cross-checked: the variance is always positive (even for absurd
+  parameters), negative shocks raise it more, it is symmetric at `gamma = 0`, and
+  the forecast reverts to the unconditional log-variance level.
+
 ## [1.516.0] - 2026-09-12
 
 ### Added
