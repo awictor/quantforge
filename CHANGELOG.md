@@ -16,6 +16,17 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.622.0] - 2026-09-12
+
+### Added
+- `agglomerative.py`: `linkage` builds an agglomerative cluster tree (single /
+  complete / average linkage) with monotone merge distances, and `fcluster` cuts it
+  into a target number of clusters or below a distance threshold. Cross-checked:
+  there are ``n-1`` merges with non-decreasing distances, cutting into 3 recovers
+  three separated blobs purely, the distance-threshold cut agrees, the extreme cuts
+  give 1 and ``n`` clusters, and the complete-linkage final merge is at least the
+  single-linkage one.
+
 ## [1.621.0] - 2026-09-12
 
 ### Documentation

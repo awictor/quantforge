@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.621.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.622.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -140,6 +140,25 @@ Auto-generated from `quantforge` v1.621.0 by `docs/gen_api.py` — do not edit b
 ### `whole_life_insurance(one_year_survival, i)`  _function_
 
 > EPV of whole-life insurance: :func:`term_insurance` over the whole table.
+
+## agglomerative
+
+### `fcluster(X, merges, n_clusters=None, distance_threshold=None)`  _function_
+
+> Flatten a linkage into cluster labels.
+>
+> Provide either ``n_clusters`` (cut so that many clusters remain) or
+> ``distance_threshold`` (merge only below that distance). Returns a label per
+> original point, relabeled to ``0..k-1`` in order of first appearance.
+
+### `linkage(X, method='average')`  _function_
+
+> Agglomerative linkage over points ``X``.
+>
+> Returns a list of ``n-1`` merges, each ``(cluster_a, cluster_b, distance,
+> size)``. Cluster ids ``0..n-1`` are the singletons; merge ``m`` creates the new
+> id ``n + m``. Merge distances are non-decreasing for single/complete/average
+> linkage.
 
 ## american
 
