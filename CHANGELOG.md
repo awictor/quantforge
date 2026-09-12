@@ -16,6 +16,15 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.682.0] - 2026-09-12
+
+### Added
+- `panjer.py`: `aggregate_var` and `aggregate_tvar` compute the Value-at-Risk
+  (loss quantile) and Tail-VaR / CTE (expected loss beyond VaR) of a discrete
+  aggregate-loss distribution. Cross-checked: the VaR is the exact grid quantile,
+  TVaR is at least the VaR, both are non-decreasing in confidence, and TVaR at
+  near-zero confidence equals the mean.
+
 ## [1.681.0] - 2026-09-12
 
 ### Documentation

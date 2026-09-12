@@ -133,3 +133,34 @@ def panjer_negative_binomial(size, prob, severity_pmf, max_k=None):
             acc += (a + b * j / k) * f[j] * g[k - j]
         g[k] = acc / denom
     return g
+
+
+def aggregate_var(g, confidence=0.99):
+    """Value-at-Risk of a discrete aggregate distribution ``g`` (grid units).
+
+    The smallest grid point ``k`` with ``P(S <= k) >= confidence`` -- the loss
+    quantile. Non-decreasing in ``confidence``.
+    """
+    if not (0.0 < confidence < 1.0):
+        raise ValueError("confidence must be in (0, 1)")
+    cum = 0.0
+    for k in range(len(g)):
+        cum += g[k]
+        if cum >= confidence:
+            return k
+    return len(g) - 1
+
+
+def aggregate_tvar(g, confidence=0.99):
+    """Tail Value-at-Risk (CTE / expected shortfall) of a discrete aggregate loss.
+
+    The probability-weighted average loss in the tail beyond the VaR level,
+    ``E[S | S >= VaR]`` computed on the grid. Always at least the VaR, equals the
+    mean at ``confidence -> 0``, and is non-decreasing in ``confidence``.
+    """
+    var = aggregate_var(g, confidence)
+    tail_prob = sum(g[k] for k in range(var, len(g)))
+    if tail_prob <= 0.0:
+        return float(var)
+    tail_loss = sum(k * g[k] for k in range(var, len(g)))
+    return tail_loss / tail_prob

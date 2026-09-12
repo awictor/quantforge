@@ -345,7 +345,7 @@ from .swap import (
 from .fra import fra_forward_rate, fra_value
 from .panjer import (
     panjer_poisson, panjer_negative_binomial, aggregate_mean, stop_loss_premium,
-    layer_expected_loss,
+    layer_expected_loss, aggregate_var, aggregate_tvar,
 )
 from .distortion import (
     wang_premium, proportional_hazard_premium, expected_loss,
@@ -705,7 +705,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.681.0"
+__version__ = "1.682.0"
 
 __all__ = [
     "OptionType",
@@ -1245,6 +1245,8 @@ __all__ = [
     "wang_premium",
     "proportional_hazard_premium",
     "expected_loss",
+    "aggregate_var",
+    "aggregate_tvar",
     "hw_zero_from_curve",
     "hw_B",
     "hw_bond_option",
