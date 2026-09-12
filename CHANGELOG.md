@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.415.0] - 2026-09-11
+
+### Added
+- `conversion_value`, `straight_bond_floor`, `convertible_bond_value` (in
+  `equity_comp.py`): the parity value of a convertible, its credit-spread-adjusted
+  bond floor, and the component (bond floor + conversion call) valuation.
+  Cross-checked: the convertible sits at or above both the bond floor and the
+  conversion value, approaches the parity value deep in the money and the bond
+  floor deep out of the money, and rises with volatility while falling with the
+  credit spread.
+
 ## [1.414.0] - 2026-09-11
 
 ### Added

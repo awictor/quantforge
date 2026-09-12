@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.414.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.415.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1930,6 +1930,25 @@ Auto-generated from `quantforge` v1.414.0 by `docs/gen_api.py` — do not edit b
 
 ## equity_comp
 
+### `conversion_value(S, conversion_ratio)`  _function_
+
+> Parity (conversion) value of a convertible: ``conversion_ratio * S``.
+>
+> The worth of the shares the bond converts into -- the equity floor of the
+> convertible.
+
+### `convertible_bond_value(S, conversion_ratio, face, coupon_rate, maturity, r, sigma, credit_spread=0.0, freq=2)`  _function_
+
+> Convertible bond value via the component (bond floor + call) approximation.
+>
+> Values the convertible as its :func:`straight_bond_floor` plus a call option on
+> the ``conversion_ratio`` shares struck at the floor's per-share equivalent --
+> the standard decomposition ``CB = bond floor + conversion_ratio *
+> call(S, K=face/ratio adjusted)``. Here the call strike is set so that at
+> maturity the holder converts when ``conversion_ratio * S > face``, i.e. strike
+> ``= face / conversion_ratio`` on ``conversion_ratio`` shares. The result is at
+> least the bond floor and at least the conversion value.
+
 ### `dilution_factor(existing_shares, new_shares)`  _function_
 
 > Dilution multiplier ``M / (M + N)`` for issuing ``N`` new shares on ``M``.
@@ -1985,6 +2004,15 @@ Auto-generated from `quantforge` v1.414.0 by `docs/gen_api.py` — do not edit b
 > Each cash dividend is discounted at the continuously-compounded rate ``r``:
 > ``sum_i D_i e^{-r t_i}``. Dividends at or before time zero (``t <= 0``) are
 > excluded (already paid).
+
+### `straight_bond_floor(face, coupon_rate, maturity, r, credit_spread=0.0, freq=2)`  _function_
+
+> Investment (bond) value of a convertible ignoring the conversion option.
+>
+> Discounts the straight bond's coupons and principal at the risk-free rate plus
+> a ``credit_spread`` (continuously compounded). This is the debt floor: the
+> convertible cannot be worth less than this if held to maturity without
+> converting.
 
 ### `warrant_price(S, K, t, r, sigma, existing_shares, new_shares, b=None)`  _function_
 

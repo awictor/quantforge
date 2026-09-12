@@ -7,6 +7,7 @@ import pytest
 from quantforge import (
     dilution_factor, warrant_price, eso_expected_life, eso_value,
     pv_dividends, discrete_dividend_price, forward_with_dividends,
+    conversion_value, straight_bond_floor, convertible_bond_value,
 )
 from quantforge.bsm import call_price
 
@@ -56,6 +57,45 @@ def test_higher_exit_rate_lowers_value():
 def test_forfeiture_lowers_value():
     assert eso_value(S, K, 10.0, R, SIG, 2.0, 0.15, 0.1) < \
         eso_value(S, K, 10.0, R, SIG, 2.0, 0.15, 0.0)
+
+
+def test_conversion_value():
+    assert conversion_value(50, 20) == 1000
+
+
+def test_bond_floor_below_face():
+    floor = straight_bond_floor(1000, 0.04, 5, 0.05, 0.01)
+    assert floor < 1000
+
+
+def test_convertible_above_floor_and_parity():
+    floor = straight_bond_floor(1000, 0.04, 5, 0.05, 0.3 * 0 + 0.01)
+    c = convertible_bond_value(50, 20, 1000, 0.04, 5, 0.05, 0.3, 0.01)
+    assert c >= floor
+    assert c >= conversion_value(50, 20) - 1e-6
+
+
+def test_convertible_deep_itm_approaches_parity():
+    c = convertible_bond_value(200, 20, 1000, 0.04, 5, 0.05, 0.3, 0.01)
+    conv = conversion_value(200, 20)
+    assert abs(c - conv) / conv < 0.15
+
+
+def test_convertible_deep_otm_approaches_floor():
+    floor = straight_bond_floor(1000, 0.04, 5, 0.05, 0.01)
+    c = convertible_bond_value(5, 20, 1000, 0.04, 5, 0.05, 0.3, 0.01)
+    assert abs(c - floor) / floor < 0.05
+
+
+def test_convertible_spread_and_vol_effects():
+    base = convertible_bond_value(50, 20, 1000, 0.04, 5, 0.05, 0.3, 0.01)
+    assert convertible_bond_value(50, 20, 1000, 0.04, 5, 0.05, 0.3, 0.05) < base
+    assert convertible_bond_value(50, 20, 1000, 0.04, 5, 0.05, 0.5, 0.01) > base
+
+
+def test_convertible_validation():
+    with pytest.raises(ValueError):
+        convertible_bond_value(50, 0, 1000, 0.04, 5, 0.05, 0.3)
 
 
 def test_pv_dividends():

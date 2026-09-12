@@ -14,6 +14,59 @@ import math
 from .bsm import call_price
 
 
+def conversion_value(S, conversion_ratio):
+    """Parity (conversion) value of a convertible: ``conversion_ratio * S``.
+
+    The worth of the shares the bond converts into -- the equity floor of the
+    convertible.
+    """
+    if conversion_ratio < 0:
+        raise ValueError("conversion_ratio must be non-negative")
+    return conversion_ratio * S
+
+
+def straight_bond_floor(face, coupon_rate, maturity, r, credit_spread=0.0,
+                        freq=2):
+    """Investment (bond) value of a convertible ignoring the conversion option.
+
+    Discounts the straight bond's coupons and principal at the risk-free rate plus
+    a ``credit_spread`` (continuously compounded). This is the debt floor: the
+    convertible cannot be worth less than this if held to maturity without
+    converting.
+    """
+    if face <= 0 or maturity <= 0 or freq < 1:
+        raise ValueError("face, maturity must be positive and freq >= 1")
+    y = r + credit_spread
+    n = int(round(maturity * freq))
+    cpn = face * coupon_rate / freq
+    pv = 0.0
+    for i in range(1, n + 1):
+        t = i / freq
+        cash = cpn + (face if i == n else 0.0)
+        pv += cash * math.exp(-y * t)
+    return pv
+
+
+def convertible_bond_value(S, conversion_ratio, face, coupon_rate, maturity, r,
+                           sigma, credit_spread=0.0, freq=2):
+    """Convertible bond value via the component (bond floor + call) approximation.
+
+    Values the convertible as its :func:`straight_bond_floor` plus a call option on
+    the ``conversion_ratio`` shares struck at the floor's per-share equivalent --
+    the standard decomposition ``CB = bond floor + conversion_ratio *
+    call(S, K=face/ratio adjusted)``. Here the call strike is set so that at
+    maturity the holder converts when ``conversion_ratio * S > face``, i.e. strike
+    ``= face / conversion_ratio`` on ``conversion_ratio`` shares. The result is at
+    least the bond floor and at least the conversion value.
+    """
+    if conversion_ratio <= 0:
+        raise ValueError("conversion_ratio must be positive")
+    floor = straight_bond_floor(face, coupon_rate, maturity, r, credit_spread, freq)
+    strike = face / conversion_ratio
+    option = conversion_ratio * call_price(S, strike, maturity, r, sigma, b=r)
+    return floor + option
+
+
 def pv_dividends(dividends, r):
     """Present value of a discrete dividend schedule ``[(t, amount), ...]``.
 
