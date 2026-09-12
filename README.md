@@ -1980,6 +1980,20 @@ bornhuetter_ferguson(tri, apriori_ultimates=[200, 200, 200])["reserve"]
 Feeding the chain-ladder ultimate as the a-priori reproduces the chain-ladder
 reserves exactly, so the two methods are consistent endpoints of the same blend.
 
+`cape_cod` estimates the a-priori loss ratio from the data instead of assuming it —
+total losses over premium weighted by development:
+
+```python
+from quantforge import cape_cod
+
+r = cape_cod(tri, premiums=[300, 300, 300])
+r["elr"]              # fitted expected loss ratio
+r["total_reserve"]
+```
+
+Cape Cod equals Bornhuetter-Ferguson with a `premium x ELR` a-priori, so the three
+reserving methods share one development pattern and are mutually consistent.
+
 ## Equity swaps and dispersion
 
 Total-return swaps, dividend swaps, variance/volatility swaps, and dispersion-
