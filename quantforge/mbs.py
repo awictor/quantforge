@@ -178,6 +178,79 @@ def mbs_yield(cashflows, price, tol=1e-10, max_iter=100):
     return 0.5 * (lo + hi)
 
 
+def mbs_price_with_spread(cashflows, zero_rates, spread):
+    """Present value discounting each cashflow at its zero rate plus a spread.
+
+    ``zero_rates[i]`` is the monthly-compounded annualized zero rate for the cash
+    at ``cashflows[i]``'s month; every flow is discounted at ``zero_rate + spread``
+    (a parallel add-on, the static/Z-spread convention). Reduces to
+    :func:`mbs_price` at a flat curve.
+    """
+    if len(zero_rates) != len(cashflows):
+        raise ValueError("zero_rates and cashflows must align")
+    pv = 0.0
+    for row, z in zip(cashflows, zero_rates):
+        m, interest, _s, _p, total_principal, _b = row
+        cash = interest + total_principal
+        i = (z + spread) / 12.0
+        pv += cash / (1.0 + i) ** m
+    return pv
+
+
+def mbs_zspread(cashflows, zero_rates, price, tol=1e-12, max_iter=100):
+    """Static (Z-) spread over the zero curve reproducing an MBS ``price``.
+
+    Bisection on the constant spread added to every zero rate (price is monotone
+    decreasing in the spread). Inverse of :func:`mbs_price_with_spread`.
+    """
+    if price <= 0:
+        raise ValueError("price must be positive")
+    lo, hi = -0.5, 5.0
+    p_lo, p_hi = (mbs_price_with_spread(cashflows, zero_rates, lo),
+                  mbs_price_with_spread(cashflows, zero_rates, hi))
+    if not (min(p_lo, p_hi) - 1e-6 <= price <= max(p_lo, p_hi) + 1e-6):
+        raise ValueError("price outside the achievable spread range")
+    for _ in range(max_iter):
+        mid = 0.5 * (lo + hi)
+        pm = mbs_price_with_spread(cashflows, zero_rates, mid)
+        if abs(pm - price) < tol:
+            return mid
+        if pm > price:   # price too high -> raise spread
+            lo = mid
+        else:
+            hi = mid
+    return 0.5 * (lo + hi)
+
+
+def mbs_effective_duration(cashflows, annual_yield, bump=1e-4):
+    """Effective duration of an MBS from a parallel yield bump (central difference).
+
+    ``-(P(y+h) - P(y-h)) / (2 h P(y))`` on :func:`mbs_price`. Assumes the cashflows
+    are held fixed (a static-duration measure; true option-adjusted duration would
+    re-project prepayment at each bumped yield).
+    """
+    up = mbs_price(cashflows, annual_yield + bump)
+    dn = mbs_price(cashflows, annual_yield - bump)
+    base = mbs_price(cashflows, annual_yield)
+    if base <= 0:
+        raise ValueError("base price must be positive")
+    return -(up - dn) / (2.0 * bump * base)
+
+
+def mbs_effective_convexity(cashflows, annual_yield, bump=1e-4):
+    """Effective convexity of an MBS from a parallel yield bump.
+
+    ``(P(y+h) - 2 P(y) + P(y-h)) / (h^2 P(y))`` on :func:`mbs_price` (static
+    cashflows).
+    """
+    up = mbs_price(cashflows, annual_yield + bump)
+    dn = mbs_price(cashflows, annual_yield - bump)
+    base = mbs_price(cashflows, annual_yield)
+    if base <= 0:
+        raise ValueError("base price must be positive")
+    return (up - 2.0 * base + dn) / (bump * bump * base)
+
+
 def weighted_average_life(cashflows, balance):
     """Weighted-average life (years) from projected principal cashflows.
 

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.408.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.409.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -3981,6 +3981,21 @@ Auto-generated from `quantforge` v1.408.0 by `docs/gen_api.py` — do not edit b
 > total_principal, ending_balance), ...]`` rows. At ``psa = 0`` it reduces to the
 > no-prepayment schedule.
 
+### `mbs_effective_convexity(cashflows, annual_yield, bump=0.0001)`  _function_
+
+> Effective convexity of an MBS from a parallel yield bump.
+>
+> ``(P(y+h) - 2 P(y) + P(y-h)) / (h^2 P(y))`` on :func:`mbs_price` (static
+> cashflows).
+
+### `mbs_effective_duration(cashflows, annual_yield, bump=0.0001)`  _function_
+
+> Effective duration of an MBS from a parallel yield bump (central difference).
+>
+> ``-(P(y+h) - P(y-h)) / (2 h P(y))`` on :func:`mbs_price`. Assumes the cashflows
+> are held fixed (a static-duration measure; true option-adjusted duration would
+> re-project prepayment at each bumped yield).
+
 ### `mbs_price(cashflows, annual_yield)`  _function_
 
 > Present value of projected MBS cashflows at a monthly-compounded yield.
@@ -3989,12 +4004,28 @@ Auto-generated from `quantforge` v1.408.0 by `docs/gen_api.py` — do not edit b
 > ``interest + total_principal`` discounted by ``(1 + y/12)^{-month}``. Monotone
 > decreasing in ``annual_yield``.
 
+### `mbs_price_with_spread(cashflows, zero_rates, spread)`  _function_
+
+> Present value discounting each cashflow at its zero rate plus a spread.
+>
+> ``zero_rates[i]`` is the monthly-compounded annualized zero rate for the cash
+> at ``cashflows[i]``'s month; every flow is discounted at ``zero_rate + spread``
+> (a parallel add-on, the static/Z-spread convention). Reduces to
+> :func:`mbs_price` at a flat curve.
+
 ### `mbs_yield(cashflows, price, tol=1e-10, max_iter=100)`  _function_
 
 > Monthly-compounded annual yield reproducing an MBS ``price``.
 >
 > Bisection on :func:`mbs_price` (monotone decreasing in yield). Inverse of
 > :func:`mbs_price`.
+
+### `mbs_zspread(cashflows, zero_rates, price, tol=1e-12, max_iter=100)`  _function_
+
+> Static (Z-) spread over the zero curve reproducing an MBS ``price``.
+>
+> Bisection on the constant spread added to every zero rate (price is monotone
+> decreasing in the spread). Inverse of :func:`mbs_price_with_spread`.
 
 ### `monthly_payment(balance, annual_rate, term_months)`  _function_
 

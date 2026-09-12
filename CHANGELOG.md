@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.409.0] - 2026-09-11
+
+### Added
+- `mbs_price_with_spread`, `mbs_zspread`, `mbs_effective_duration`,
+  `mbs_effective_convexity` (in `mbs.py`): discount MBS cashflows off a zero curve
+  plus a parallel static spread, solve the Z-spread reproducing a price, and
+  measure effective duration/convexity from a parallel yield bump (static
+  cashflows). Cross-checked against the flat-curve price, Z-spread round-trip on
+  flat and sloped curves, and duration matching a central finite difference.
+
 ## [1.408.0] - 2026-09-11
 
 ### Added

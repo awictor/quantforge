@@ -221,6 +221,8 @@ from .mbs import (
     monthly_payment, cpr_to_smm, smm_to_cpr, psa_cpr, amortization_schedule,
     mbs_cashflows, weighted_average_life,
     mbs_cashflows_psa, mbs_price, mbs_yield,
+    mbs_price_with_spread, mbs_zspread, mbs_effective_duration,
+    mbs_effective_convexity,
 )
 from .weather import (
     heating_degree_days, cooling_degree_days, degree_day_index,
@@ -433,7 +435,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.408.0"
+__version__ = "1.409.0"
 
 __all__ = [
     "OptionType",
@@ -793,6 +795,10 @@ __all__ = [
     "mbs_cashflows_psa",
     "mbs_price",
     "mbs_yield",
+    "mbs_price_with_spread",
+    "mbs_zspread",
+    "mbs_effective_duration",
+    "mbs_effective_convexity",
     "heating_degree_days",
     "cooling_degree_days",
     "degree_day_index",

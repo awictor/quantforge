@@ -6,6 +6,8 @@ from quantforge import (
     monthly_payment, cpr_to_smm, smm_to_cpr, psa_cpr, amortization_schedule,
     mbs_cashflows, weighted_average_life,
     mbs_cashflows_psa, mbs_price, mbs_yield,
+    mbs_price_with_spread, mbs_zspread, mbs_effective_duration,
+    mbs_effective_convexity,
 )
 
 
@@ -49,6 +51,54 @@ def test_wal_shortens_with_prepayment():
     base = mbs_cashflows(300000, 0.05, 360, 0.0)
     fast = mbs_cashflows(300000, 0.05, 360, cpr_to_smm(0.06))
     assert weighted_average_life(fast, 300000) < weighted_average_life(base, 300000)
+
+
+def test_zspread_flat_curve_matches_price():
+    cf = mbs_cashflows_psa(300000, 0.05, 360, 100)
+    flat = [0.05] * len(cf)
+    assert mbs_price_with_spread(cf, flat, 0.0) == pytest.approx(
+        mbs_price(cf, 0.05), abs=1e-6)
+
+
+def test_zspread_inverts():
+    cf = mbs_cashflows_psa(300000, 0.05, 360, 100)
+    flat = [0.05] * len(cf)
+    target = mbs_price_with_spread(cf, flat, 0.01)
+    assert mbs_zspread(cf, flat, target) == pytest.approx(0.01, abs=1e-8)
+
+
+def test_zspread_sloped_curve():
+    cf = mbs_cashflows_psa(300000, 0.05, 360, 100)
+    n = len(cf)
+    slope = [0.03 + 0.02 * (i / n) for i in range(n)]
+    target = mbs_price_with_spread(cf, slope, 0.005)
+    assert mbs_zspread(cf, slope, target) == pytest.approx(0.005, abs=1e-8)
+
+
+def test_effective_duration_positive_matches_fd():
+    cf = mbs_cashflows_psa(300000, 0.05, 360, 100)
+    d = mbs_effective_duration(cf, 0.05)
+    assert d > 0
+    h = 1e-6
+    fd = -(mbs_price(cf, 0.05 + h) - mbs_price(cf, 0.05 - h)) / (
+        2 * h) / mbs_price(cf, 0.05)
+    assert d == pytest.approx(fd, abs=1e-2)
+
+
+def test_effective_convexity_order():
+    cf = mbs_cashflows_psa(300000, 0.05, 360, 100)
+    # Convexity is roughly duration^2 in magnitude for a bond-like profile.
+    d = mbs_effective_duration(cf, 0.05)
+    c = mbs_effective_convexity(cf, 0.05)
+    assert 0 < c < 10 * d * d
+
+
+def test_spread_duration_validation():
+    cf = mbs_cashflows_psa(300000, 0.05, 360, 100)
+    with pytest.raises(ValueError):
+        mbs_zspread(cf, [0.05] * len(cf), -5)
+    with pytest.raises(ValueError):
+        mbs_price_with_spread(cf, [0.05], 0.0)
 
 
 def test_psa_zero_reduces_to_no_prepay():
