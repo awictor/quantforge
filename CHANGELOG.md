@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.445.0] - 2026-09-11
+
+### Added
+- `liability_convexity`, `surplus_change_under_shock`, `funded_ratio_return` (in
+  `ldi.py`): the liability's interest-rate convexity, the second-order surplus
+  change under a parallel rate shock, and the funding-ratio return from asset/
+  liability returns. Cross-checked: convexity positive, a duration-and-convexity-
+  matched book leaves the surplus stable under a shock while a duration-only match
+  moves at second order, and the funding-ratio return is level-independent.
+
 ## [1.444.0] - 2026-09-11
 
 ### Added

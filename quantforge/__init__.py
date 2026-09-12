@@ -220,6 +220,7 @@ from .inflation import (
 from .ldi import (
     liability_pv, funding_ratio, surplus, liability_duration, hedge_ratio,
     required_hedge_duration, surplus_at_risk,
+    liability_convexity, surplus_change_under_shock, funded_ratio_return,
 )
 from .retirement import (
     portfolio_depletion_years, sustainable_withdrawal, withdrawal_balance_path,
@@ -490,7 +491,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.444.0"
+__version__ = "1.445.0"
 
 __all__ = [
     "OptionType",
@@ -847,6 +848,9 @@ __all__ = [
     "hedge_ratio",
     "required_hedge_duration",
     "surplus_at_risk",
+    "liability_convexity",
+    "surplus_change_under_shock",
+    "funded_ratio_return",
     "portfolio_depletion_years",
     "sustainable_withdrawal",
     "withdrawal_balance_path",

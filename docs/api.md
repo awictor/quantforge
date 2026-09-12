@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.444.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.445.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -4275,6 +4275,15 @@ Auto-generated from `quantforge` v1.444.0 by `docs/gen_api.py` — do not edit b
 
 ## ldi
 
+### `funded_ratio_return(asset_return, liability_return, funding_ratio_)`  _function_
+
+> Change in funding ratio from asset and liability returns.
+>
+> ``FR_new / FR_old - 1 = (1 + asset_return) / (1 + liability_return) - 1`` (the
+> funding ratio's own return is independent of its level). Positive when assets
+> outperform liabilities. ``funding_ratio_`` is accepted for context but the
+> fractional change does not depend on it.
+
 ### `funding_ratio(assets, liabilities)`  _function_
 
 > Funding ratio ``assets / liabilities`` (above 1 = surplus).
@@ -4287,6 +4296,14 @@ Auto-generated from `quantforge` v1.444.0 by `docs/gen_api.py` — do not edit b
 > the ratio of asset to liability dollar duration (DV01). One means the surplus
 > is immune to a parallel rate move; below one leaves residual liability
 > interest-rate risk.
+
+### `liability_convexity(cashflows, discount_rate)`  _function_
+
+> Convexity of the liability stream ``sum t^2 PV_i / sum PV_i``.
+>
+> The second-order interest-rate sensitivity; matching it in addition to
+> duration gives the surplus protection against larger, non-parallel rate moves
+> (Redington immunization's second condition).
 
 ### `liability_duration(cashflows, discount_rate)`  _function_
 
@@ -4320,6 +4337,18 @@ Auto-generated from `quantforge` v1.444.0 by `docs/gen_api.py` — do not edit b
 > Phi^{-1}(confidence)`` and ``surplus_volatility`` is the funded-status (surplus/
 > liabilities) return volatility. A one-sided downside measure (positive number =
 > potential shortfall), analogous to VaR for the plan surplus.
+
+### `surplus_change_under_shock(assets, asset_duration, asset_convexity, liabilities, liability_duration_, liability_convexity_, rate_shock)`  _function_
+
+> Second-order surplus change under a parallel rate shock ``dy``.
+>
+> Uses the duration-convexity expansion on each side:
+>
+>     dV = V * (-D dy + 0.5 C dy^2),
+>     d(surplus) = dAssets - dLiabilities.
+>
+> A duration-matched but convexity-mismatched book still moves at second order;
+> matching both leaves the surplus (nearly) unchanged.
 
 ## leisen_reimer
 

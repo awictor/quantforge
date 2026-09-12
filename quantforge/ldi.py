@@ -46,6 +46,53 @@ def liability_duration(cashflows, discount_rate):
     return sum(t * cf * math.exp(-discount_rate * t) for t, cf in cashflows) / pv
 
 
+def liability_convexity(cashflows, discount_rate):
+    """Convexity of the liability stream ``sum t^2 PV_i / sum PV_i``.
+
+    The second-order interest-rate sensitivity; matching it in addition to
+    duration gives the surplus protection against larger, non-parallel rate moves
+    (Redington immunization's second condition).
+    """
+    pv = liability_pv(cashflows, discount_rate)
+    if pv <= 0:
+        raise ValueError("liability PV must be positive")
+    return sum(t * t * cf * math.exp(-discount_rate * t)
+               for t, cf in cashflows) / pv
+
+
+def surplus_change_under_shock(assets, asset_duration, asset_convexity,
+                               liabilities, liability_duration_,
+                               liability_convexity_, rate_shock):
+    """Second-order surplus change under a parallel rate shock ``dy``.
+
+    Uses the duration-convexity expansion on each side:
+
+        dV = V * (-D dy + 0.5 C dy^2),
+        d(surplus) = dAssets - dLiabilities.
+
+    A duration-matched but convexity-mismatched book still moves at second order;
+    matching both leaves the surplus (nearly) unchanged.
+    """
+    d_assets = assets * (-asset_duration * rate_shock
+                         + 0.5 * asset_convexity * rate_shock * rate_shock)
+    d_liab = liabilities * (-liability_duration_ * rate_shock
+                            + 0.5 * liability_convexity_ * rate_shock * rate_shock)
+    return d_assets - d_liab
+
+
+def funded_ratio_return(asset_return, liability_return, funding_ratio_):
+    """Change in funding ratio from asset and liability returns.
+
+    ``FR_new / FR_old - 1 = (1 + asset_return) / (1 + liability_return) - 1`` (the
+    funding ratio's own return is independent of its level). Positive when assets
+    outperform liabilities. ``funding_ratio_`` is accepted for context but the
+    fractional change does not depend on it.
+    """
+    if liability_return <= -1.0:
+        raise ValueError("liability_return must exceed -100%")
+    return (1.0 + asset_return) / (1.0 + liability_return) - 1.0
+
+
 def hedge_ratio(asset_duration, asset_value, liability_duration_,
                 liability_value):
     """Fraction of the liability dollar-duration hedged by the assets.
