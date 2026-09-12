@@ -1938,6 +1938,20 @@ aggregate_tvar(g, confidence=0.99)    # expected loss beyond the 99% VaR
 
 TVaR is always at least the VaR and both rise with the confidence level.
 
+For experience rating, `buhlmann_premium` blends a risk's own mean with the
+collective mean by the credibility factor `Z = n / (n + k)`, `k = EPV / VHM`:
+
+```python
+from quantforge import buhlmann_premium, credibility_factor, buhlmann_straub_premium
+
+buhlmann_premium(own_mean=500, collective_mean=400, n=10, epv=100, vhm=20)
+buhlmann_straub_premium(claims=[50, 50, 50], exposures=[10, 10, 10],
+                        collective_mean=4.0, epv=100, vhm=20)   # unequal exposures
+```
+
+More data or a larger between-risk spread pulls `Z` toward 1 (trust the
+individual); more within-risk noise pulls it toward 0 (trust the collective).
+
 ## Equity swaps and dispersion
 
 Total-return swaps, dividend swaps, variance/volatility swaps, and dispersion-
