@@ -16,6 +16,13 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.611.0] - 2026-09-12
+
+### Documentation
+- README: added a "Classification metrics" section documenting `roc_auc`,
+  `precision_recall_f1`, `confusion_matrix`, `log_loss`, and `brier_score`; TOC
+  regenerated to 110 entries.
+
 ## [1.610.0] - 2026-09-12
 
 ### Added

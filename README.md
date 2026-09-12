@@ -75,6 +75,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Bond futures](#bond-futures)
 - [OLS regression](#ols-regression)
 - [Logistic regression](#logistic-regression)
+- [Classification metrics](#classification-metrics)
 - [Factor models](#factor-models)
 - [Performance attribution (Brinson)](#performance-attribution-brinson)
 - [Bootstrap and jackknife](#bootstrap-and-jackknife)
@@ -1830,6 +1831,27 @@ predict_proba(m, [[1, 0], [-1, 0]])   # -> [0.899, 0.275] class-1 probabilities
 It recovers the generating logit coefficients on simulated data, returns
 probabilities strictly in (0, 1), and classifies separable data near-perfectly. A
 positive coefficient makes the probability rise monotonically in that feature.
+
+## Classification metrics
+
+Evaluate a probabilistic classifier's scores against binary labels. `roc_auc` is
+the rank AUC; `precision_recall_f1` and `confusion_matrix` summarize a threshold;
+`log_loss` and `brier_score` score the probabilities directly.
+
+```python
+from quantforge import (roc_auc, precision_recall_f1, confusion_matrix,
+                        log_loss, brier_score)
+
+roc_auc(y_true, y_score)                 # 1 perfect, 0.5 random
+precision_recall_f1(y_true, y_score, threshold=0.5)   # (p, r, f1)
+confusion_matrix(y_true, y_score, 0.5)                # (tp, fp, fn, tn)
+log_loss(y_true, y_score)                # cross-entropy, 0 = perfect
+brier_score(y_true, y_score)             # mean squared prob error, 0 = perfect
+```
+
+AUC uses the Mann-Whitney rank statistic (ties count as half); the Brier score is
+0 for exact probabilities and 0.25 for all-0.5 guesses. Pair these with
+`fit_logistic` / `predict_proba` above.
 
 ## Factor models
 
