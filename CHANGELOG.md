@@ -16,6 +16,16 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.660.0] - 2026-09-12
+
+### Added
+- `ewma_cov.py`: `ewma_covariance_matrix` and `ewma_correlation_matrix` estimate an
+  exponentially-weighted (RiskMetrics, default ``lambda = 0.94``) covariance and
+  correlation from a multi-asset return panel. Cross-checked: the covariance is
+  symmetric and positive definite, the correlation has a unit diagonal and stays in
+  ``[-1, 1]``, and a shared-factor pair shows high correlation while an independent
+  asset shows ~0.
+
 ## [1.659.0] - 2026-09-12
 
 ### Documentation

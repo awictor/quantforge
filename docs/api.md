@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.659.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.660.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -3284,6 +3284,22 @@ Auto-generated from `quantforge` v1.659.0 by `docs/gen_api.py` — do not edit b
 > the ``k`` largest losses over the ``(k+1)``-th. Estimates the shape ``xi`` of a
 > heavy power-law tail (tail exponent ``alpha = 1/xi``); larger ``xi`` means a
 > heavier tail.
+
+## ewma_cov
+
+### `ewma_correlation_matrix(returns, lam=0.94)`  _function_
+
+> EWMA correlation matrix: the EWMA covariance normalized by its diagonal.
+>
+> Unit diagonal, off-diagonals in ``[-1, 1]``.
+
+### `ewma_covariance_matrix(returns, lam=0.94)`  _function_
+
+> EWMA covariance matrix of a return panel (rows = periods, cols = assets).
+>
+> Recurses ``Sigma_t = lam Sigma_{t-1} + (1-lam) r_t r_t'`` from the sample
+> covariance seed, treating returns as mean-zero (the RiskMetrics convention).
+> Returns the final ``p x p`` symmetric positive-semidefinite matrix.
 
 ## execution
 
