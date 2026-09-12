@@ -16,6 +16,12 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.657.0] - 2026-09-12
+
+### Documentation
+- README: extended the Numerical utilities section with `gradient`, `hessian`, and
+  `jacobian`.
+
 ## [1.656.0] - 2026-09-12
 
 ### Added

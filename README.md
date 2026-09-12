@@ -2761,6 +2761,11 @@ adaptive_simpson(math.sin, 0, math.pi)            # error-controlled -> 2.0
 from quantforge import golden_section_min, brent_min
 golden_section_min(lambda x: (x - 3) ** 2 + 1, -10, 10)   # -> (3.0, 1.0)
 brent_min(math.cos, 0, 2 * math.pi)                        # -> (pi, -1.0)
+
+# Central-difference gradient / Hessian / Jacobian (Greeks, calibration).
+from quantforge import gradient, hessian, jacobian
+gradient(lambda v: v[0] ** 2 + 3 * v[1] ** 2, [1.0, 2.0])   # -> [2.0, 12.0]
+hessian(lambda v: v[0] ** 2 + v[0] * v[1], [1.0, 1.0])       # -> [[2, 1], [1, 0]]
 ```
 
 ## Nelson-Siegel / Svensson curves
