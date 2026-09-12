@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.431.0] - 2026-09-11
+
+### Added
+- `futures_convexity.py`: interest-rate futures/forward convexity adjustment.
+  `ho_lee_convexity_adjustment` (`0.5 sigma^2 t1 t2`),
+  `hull_white_convexity_adjustment` (mean-reverting, reducing to Ho-Lee as
+  `a -> 0`), and `forward_from_futures` / `futures_from_forward` conversions.
+  Cross-checked: the adjustment is non-negative and grows with maturity, the
+  forward sits below the futures rate, the conversions round-trip, and mean
+  reversion dampens the adjustment.
+
 ## [1.430.0] - 2026-09-11
 
 ### Added

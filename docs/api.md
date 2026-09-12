@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.430.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.431.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -3121,6 +3121,45 @@ Auto-generated from `quantforge` v1.430.0 by `docs/gen_api.py` — do not edit b
 >     b: cost of carry (defaults to r).
 >
 > Returns the present value.
+
+## futures_convexity
+
+### `forward_from_futures(futures_rate, sigma, t1, t2, a=0.0)`  _function_
+
+> Forward rate from a futures rate, subtracting the convexity adjustment.
+>
+> Uses Hull-White (or Ho-Lee when ``a = 0``). The forward is below the futures
+> rate by the (non-negative) adjustment.
+
+### `futures_from_forward(forward_rate, sigma, t1, t2, a=0.0)`  _function_
+
+> Futures rate from a forward rate, adding the convexity adjustment.
+>
+> Inverse of :func:`forward_from_futures`; the futures rate is above the forward.
+
+### `ho_lee_convexity_adjustment(sigma, t1, t2)`  _function_
+
+> Ho-Lee convexity adjustment ``0.5 sigma^2 t1 t2`` (continuous-comp rates).
+>
+> ``t1`` is the time to the rate fixing, ``t2`` the time to the end of the
+> underlying accrual period (``t2 >= t1``). Non-negative, zero at zero vol, and
+> growing with both horizons and the volatility.
+
+### `hull_white_convexity_adjustment(sigma, a, t1, t2)`  _function_
+
+> Hull-White (mean-reverting) convexity adjustment.
+>
+> With mean-reversion speed ``a`` the adjustment is
+>
+>     adj = (sigma^2 / (2 a^2)) * (1 - e^{-a(t2 - t1)}) *
+>           [ (1 - e^{-a(t2 - t1)}) * (1 - e^{-2 a t1}) / (2 a)
+>             + a * B(0, t1)^2 ... ]  (standard HW futures-forward formula)
+>
+> Implemented in the common compact form
+>     adj = (sigma^2 / (2 a)) * B(t1, t2) * [ B(t1, t2) (1 - e^{-2 a t1})
+>           + 2 a B(0, t1)^2 ] / 2,
+> with ``B(u, v) = (1 - e^{-a (v - u)}) / a``. Reduces to
+> :func:`ho_lee_convexity_adjustment` as ``a -> 0``.
 
 ## fxdelta
 
