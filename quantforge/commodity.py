@@ -792,3 +792,53 @@ def is_backwardation(r, storage_cost=0.0, convenience_yield=0.0):
     forwards fall with maturity.
     """
     return net_cost_of_carry(r, storage_cost, convenience_yield) < 0.0
+
+
+def crack_spread_option(crude_forward, product_forwards, product_weights,
+                        strike, sigma_crude, sigma_products, corr_products_crude,
+                        r, expiry, is_call=True):
+    """Refinery crack-spread option (normal-model, handles negative spreads).
+
+    The crack spread is ``sum_i w_i P_i - crude`` -- the refining margin from a
+    barrel of crude yielding weighted refined products (e.g. 3:2:1 = 3 crude ->
+    2 gasoline + 1 heating oil). The weighted product basket is aggregated to a
+    single forward and volatility (lognormal moment-free: treat the sum as one
+    normal leg with variance ``sum_ij w_i w_j sigma_i sigma_j rho_ij``), then a
+    Bachelier spread option is priced against the crude leg.
+
+    Parameters
+    ----------
+    crude_forward, sigma_crude : the crude leg forward and (normal) volatility.
+    product_forwards, product_weights, sigma_products : per-product forwards,
+        yield weights, and normal volatilities.
+    corr_products_crude : correlation of each product with crude (list).
+    strike : the strike on the crack spread.
+    r, expiry : discount rate and maturity.
+    is_call : call on the refining margin if True.
+
+    Assumes products are mutually perfectly correlated within the basket (a common
+    simplification for a refinery's co-moving product slate); returns the Bachelier
+    spread-option value. Reduces to :func:`bachelier_spread_option` for a single
+    unit-weight product.
+    """
+    n = len(product_forwards)
+    if not (len(product_weights) == len(sigma_products) == len(corr_products_crude) == n):
+        raise ValueError("product arrays must have equal length")
+    if expiry < 0:
+        raise ValueError("expiry must be non-negative")
+
+    # Aggregate the weighted product basket into one forward and normal vol.
+    basket_fwd = sum(product_weights[i] * product_forwards[i] for i in range(n))
+    # Products assumed mutually perfectly correlated -> basket vol is the weighted
+    # sum of leg vols (in price units).
+    basket_vol = sum(product_weights[i] * sigma_products[i] for i in range(n))
+    # Basket-crude correlation: weighted average of leg correlations by vol share.
+    if basket_vol > 0:
+        rho_bc = sum(product_weights[i] * sigma_products[i] * corr_products_crude[i]
+                     for i in range(n)) / basket_vol
+    else:
+        rho_bc = 0.0
+    rho_bc = max(-1.0, min(1.0, rho_bc))
+    return bachelier_spread_option(basket_fwd, crude_forward, strike,
+                                   basket_vol, sigma_crude, rho_bc, r, expiry,
+                                   is_call=is_call)

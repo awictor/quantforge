@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.671.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.672.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -1737,6 +1737,32 @@ Auto-generated from `quantforge` v1.671.0 by `docs/gen_api.py` — do not edit b
 > ``forward_quotes`` is ``[(T, F(T)), ...]``. Inverts each quote with
 > :func:`implied_convenience_yield` at a common ``storage_cost``, so recomputing
 > the forward at each ``(T, y_T)`` reprices the input strip exactly.
+
+### `crack_spread_option(crude_forward, product_forwards, product_weights, strike, sigma_crude, sigma_products, corr_products_crude, r, expiry, is_call=True)`  _function_
+
+> Refinery crack-spread option (normal-model, handles negative spreads).
+>
+> The crack spread is ``sum_i w_i P_i - crude`` -- the refining margin from a
+> barrel of crude yielding weighted refined products (e.g. 3:2:1 = 3 crude ->
+> 2 gasoline + 1 heating oil). The weighted product basket is aggregated to a
+> single forward and volatility (lognormal moment-free: treat the sum as one
+> normal leg with variance ``sum_ij w_i w_j sigma_i sigma_j rho_ij``), then a
+> Bachelier spread option is priced against the crude leg.
+>
+> Parameters
+> ----------
+> crude_forward, sigma_crude : the crude leg forward and (normal) volatility.
+> product_forwards, product_weights, sigma_products : per-product forwards,
+>     yield weights, and normal volatilities.
+> corr_products_crude : correlation of each product with crude (list).
+> strike : the strike on the crack spread.
+> r, expiry : discount rate and maturity.
+> is_call : call on the refining margin if True.
+>
+> Assumes products are mutually perfectly correlated within the basket (a common
+> simplification for a refinery's co-moving product slate); returns the Bachelier
+> spread-option value. Reduces to :func:`bachelier_spread_option` for a single
+> unit-weight product.
 
 ### `geometric_asian_option(forward, strike, sigma, r, expiry, n_avg, is_call=True)`  _function_
 

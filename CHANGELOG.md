@@ -16,6 +16,16 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.672.0] - 2026-09-12
+
+### Added
+- `commodity.py`: `crack_spread_option` prices a refinery crack-spread option
+  (weighted refined-product basket minus crude, e.g. 3:2:1) via the normal-model
+  Bachelier spread, aggregating the product slate into one leg. Cross-checked: a
+  single unit-weight product reduces exactly to `bachelier_spread_option`, a 3:2:1
+  crack is positive, put-call parity holds, and a higher product volatility raises
+  the price.
+
 ## [1.671.0] - 2026-09-12
 
 ### Documentation

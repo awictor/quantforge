@@ -486,6 +486,7 @@ from .commodity import (
     schwartz_smith_futures_volatility,
     margrabe_exchange_option, kirk_spread_option,
     bachelier_spread_option, spread_option_mc, spark_spread_option, tolling_value,
+    crack_spread_option,
     commodity_swap_rate, commodity_swap_value, asian_commodity_option,
     geometric_asian_option, asian_commodity_option_mc, turnbull_wakeman_asian,
 )
@@ -697,7 +698,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.671.0"
+__version__ = "1.672.0"
 
 __all__ = [
     "OptionType",
@@ -1478,6 +1479,7 @@ __all__ = [
     "margrabe_exchange_option",
     "kirk_spread_option",
     "bachelier_spread_option",
+    "crack_spread_option",
     "spread_option_mc",
     "spark_spread_option",
     "tolling_value",
