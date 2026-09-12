@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.553.0] - 2026-09-12
+
+### Documentation
+- README: extended the Kalman-filter section with `kalman_regression_beta`
+  (time-varying regression slope / dynamic hedge ratio), with a snippet verified
+  against the package.
+
 ## [1.552.0] - 2026-09-12
 
 ### Added

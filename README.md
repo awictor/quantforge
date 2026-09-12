@@ -1816,6 +1816,23 @@ process noise dominates (trust each observation) and toward 0 as the observation
 noise dominates (heavy smoothing). With `Q = 0` and a diffuse prior the estimate
 is exactly the running mean (recursive least squares).
 
+For a **time-varying regression slope** — a dynamic hedge ratio, factor loading,
+or pairs beta — `kalman_regression_beta` filters `beta_t` from
+`y_t = beta_t * x_t + v_t` with the slope following a random walk. A positive
+process variance lets the beta drift and track a changing relationship:
+
+```python
+from quantforge import kalman_regression_beta
+
+# y's slope on x jumps from 1.0 to 3.0 partway through the sample.
+betas, variances = kalman_regression_beta(xs, ys, process_var=0.02, obs_var=0.09,
+                                          beta0=1.0, p0=1.0)
+# filtered slope: ~0.99 over the first regime, ~3.04 over the second
+```
+
+With `process_var = 0` and a diffuse prior it collapses to the static OLS slope
+`sum(x*y) / sum(x^2)`.
+
 ## Newey-West HAC variance
 
 The sample variance understates the variance of a mean when observations are
