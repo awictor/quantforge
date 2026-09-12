@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.547.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.548.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -4812,6 +4812,41 @@ Auto-generated from `quantforge` v1.547.0 by `docs/gen_api.py` — do not edit b
 > (natural) end conditions. The returned function evaluates the piecewise cubic
 > and is exact at the knots, C2 in between. Clamps to the end segments outside
 > ``[xs[0], xs[-1]]``.
+
+## kalman
+
+### `kalman_local_level(observations, process_var, obs_var, x0=None, p0=None)`  _function_
+
+> Run a scalar local-level Kalman filter over ``observations``.
+>
+> Parameters
+> ----------
+> observations : sequence of float
+>     The measured series ``y_t``.
+> process_var : float
+>     State (process) noise variance ``Q`` (>= 0).
+> obs_var : float
+>     Observation noise variance ``R`` (> 0).
+> x0 : float, optional
+>     Prior mean for the level. Defaults to the first observation.
+> p0 : float, optional
+>     Prior variance for the level. Defaults to ``obs_var`` (a diffuse-ish
+>     start). Larger values weight the data more at the outset.
+>
+> Returns
+> -------
+> (levels, variances, gains) : (list[float], list[float], list[float])
+>     The filtered level estimate, its posterior variance, and the Kalman gain
+>     at each step.
+
+### `kalman_steady_state_gain(process_var, obs_var)`  _function_
+
+> Steady-state Kalman gain for the local-level model.
+>
+> Solves the algebraic Riccati fixed point in closed form; depends only on the
+> signal-to-noise ratio ``q = process_var / obs_var``. Returns a gain in
+> ``(0, 1)`` that rises toward 1 as the process noise dominates and toward 0 as
+> the observation noise dominates.
 
 ## kim
 

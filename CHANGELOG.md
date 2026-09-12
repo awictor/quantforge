@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.548.0] - 2026-09-12
+
+### Added
+- `kalman.py`: `kalman_local_level` runs the exact scalar Kalman recursion for the
+  local-level (random-walk-plus-noise) state-space model, returning the filtered
+  level, its posterior variance, and the Kalman gain at each step;
+  `kalman_steady_state_gain` gives the closed-form Riccati fixed-point gain.
+  Cross-checked: the running gain converges to the steady-state formula,
+  ``R -> 0`` drives the gain to 1 and reproduces the data, ``Q -> 0`` with a
+  diffuse prior recovers the running mean with gain ``1/(t+1)`` (recursive least
+  squares), the posterior variance stays positive, and the steady-state gain is
+  monotone in the signal-to-noise ratio.
+
 ## [1.547.0] - 2026-09-12
 
 ### Documentation
