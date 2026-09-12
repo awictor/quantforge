@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.568.0] - 2026-09-12
+
+### Added
+- `cointegration.py`: `adf_test` runs the augmented Dickey-Fuller unit-root test
+  (constant, no trend, optional lagged differences) and `engle_granger` runs the
+  two-series cointegration test -- regress ``y`` on ``x`` and ADF-test the residual
+  spread, returning the hedge ratio and a cointegration verdict. Cross-checked: a
+  stationary AR(1) rejects the unit root (statistic ~ -18), a random walk does not
+  (verified on the majority of independent draws), a synthetic cointegrated pair is
+  detected with the correct hedge ratio, and two independent walks are not
+  cointegrated. Feeds directly into `fit_ornstein_uhlenbeck` for the spread.
+
 ## [1.567.0] - 2026-09-12
 
 ### Documentation

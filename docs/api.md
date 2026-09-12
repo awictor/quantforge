@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.567.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.568.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -1436,6 +1436,41 @@ Auto-generated from `quantforge` v1.567.0 by `docs/gen_api.py` — do not edit b
 > with payer swaptions for ``K >= S0`` and receiver swaptions for ``K < S0``,
 > each priced at the smile vol ``vol_fn(K)``. This captures the whole smile,
 > and with a flat ``vol_fn`` it reproduces :func:`cms_adjustment_standard`.
+
+## cointegration
+
+### `adf_test(y, lags=0)`  _function_
+
+> Augmented Dickey-Fuller test statistic for a unit root (constant, no trend).
+>
+> Parameters
+> ----------
+> y : sequence of float
+>     The series to test.
+> lags : int
+>     Number of lagged differences to include (the ``augmented`` part), to soak
+>     up serial correlation in the residuals.
+>
+> Returns
+> -------
+> dict
+>     ``{"statistic", "rho", "reject_1pct", "reject_5pct", "reject_10pct"}``.
+>     A more negative statistic is stronger evidence of stationarity; the
+>     booleans compare it to the Dickey-Fuller critical values.
+
+### `engle_granger(y, x, lags=0)`  _function_
+
+> Engle-Granger cointegration test between two series.
+>
+> Regresses ``y`` on ``x`` (with an intercept), then runs :func:`adf_test` on
+> the residual spread. Rejecting the unit root in the residual means ``y`` and
+> ``x`` are cointegrated.
+>
+> Returns
+> -------
+> dict
+>     ``{"hedge_ratio", "intercept", "adf", "cointegrated_5pct"}`` where ``adf``
+>     is the residual ADF result and ``cointegrated_5pct`` is its 5% rejection.
 
 ## commodity
 
