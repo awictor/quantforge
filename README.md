@@ -1331,6 +1331,32 @@ cat_bond_price(principal=1000, coupon_rate=0.06, expected_loss_rate=0.02,
                r=0.03, maturity=1.0)
 ```
 
+## Equity swaps and dispersion
+
+Total-return swaps, dividend swaps, variance/volatility swaps, and dispersion-
+trade P&L:
+
+```python
+from quantforge import (total_return_swap_value, dividend_swap_fair_strike,
+                        variance_swap_payoff, dispersion_trade_pnl)
+
+total_return_swap_value(1e6, start_price=100, end_price=110, dividends=3,
+                        funding_rate=0.03, spread=0.005, year_fraction=1.0)
+variance_swap_payoff(realized_vol=0.25, strike_vol=0.20, variance_notional=1e6)
+```
+
+## Futures/forward convexity
+
+Ho-Lee and Hull-White convexity adjustments converting interest-rate futures to
+forwards, plus a futures-strip-to-forward-curve bootstrap:
+
+```python
+from quantforge import forward_from_futures, forward_curve_from_futures_strip
+
+forward_from_futures(futures_rate=0.05, sigma=0.01, t1=2.0, t2=2.25)   # < futures
+forward_curve_from_futures_strip([(0.25, 0.5, 0.05), (0.5, 0.75, 0.052)], sigma=0.012)
+```
+
 ## FX forwards (covered interest parity)
 
 ```python

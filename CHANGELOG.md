@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.433.0] - 2026-09-11
+
+### Documentation
+- README: added "Equity swaps and dispersion" and "Futures/forward convexity"
+  sections covering the `equity_swap` and `futures_convexity` modules, with
+  runnable examples verified against the installed package.
+
 ## [1.432.0] - 2026-09-11
 
 ### Added
