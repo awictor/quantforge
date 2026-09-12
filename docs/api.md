@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.583.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.584.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -4099,6 +4099,26 @@ Auto-generated from `quantforge` v1.583.0 by `docs/gen_api.py` — do not edit b
 ### `g2pp_zero_bond(P0T, P0t, x, y, a, b, sigma, eta, rho, t, T)`  _function_
 
 > G2++ zero-coupon bond ``P(t,T)`` given the factor state ``(x, y)``.
+
+## gof_tests
+
+### `jarque_bera_test(returns)`  _function_
+
+> Jarque-Bera normality test: ``(statistic, p_value)``.
+>
+> The statistic is chi-square(2) under the normal null, so the p-value is its
+> upper-tail probability. A normal sample gives a small statistic and a large
+> p-value; a heavy-tailed or skewed sample gives a large statistic and a small
+> p-value.
+
+### `ks_two_sample(a, b)`  _function_
+
+> Two-sample Kolmogorov-Smirnov test: ``(D, p_value)``.
+>
+> ``D`` is the maximum absolute difference between the two empirical CDFs,
+> evaluated at every observed point. The p-value uses the asymptotic Kolmogorov
+> distribution with the effective sample size ``sqrt(n m / (n + m))``. A small p
+> rejects "the two samples come from the same distribution".
 
 ## gramcharlier
 

@@ -16,6 +16,17 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.584.0] - 2026-09-12
+
+### Added
+- `gof_tests.py`: goodness-of-fit tests -- `jarque_bera_test` returns the
+  Jarque-Bera normality statistic with its chi-square(2) p-value, and
+  `ks_two_sample` is the two-sample Kolmogorov-Smirnov test (max gap between the
+  empirical CDFs, with the asymptotic Kolmogorov p-value). Cross-checked: a normal
+  sample is not rejected while a heavy-tailed one is (JB ~ 1200); KS does not reject
+  two samples from the same distribution but rejects both a location shift and a
+  scale difference.
+
 ## [1.583.0] - 2026-09-12
 
 ### Documentation
