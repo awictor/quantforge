@@ -66,6 +66,51 @@ def asset_or_nothing(S, K, t, r, sigma, option_type=OptionType.CALL, b=None):
     return S * carry * norm_cdf(-d1)
 
 
+def contingent_premium_option(S, K, t, r, sigma, option_type=OptionType.CALL,
+                              b=None):
+    """Fair premium of a pay-later (contingent-premium) option.
+
+    The holder pays no premium up front; instead a fixed premium is paid at expiry
+    *only if* the option finishes in the money. For the deal to be fair at
+    inception the premium's expected discounted value must equal the vanilla price:
+
+        vanilla = premium * cash_or_nothing(cash=1),
+
+    so ``premium = vanilla / cash_or_nothing_unit``. The premium exceeds the
+    vanilla price (it is only collected in the ITM states). Reduces toward the
+    vanilla as the option goes deep in the money (ITM probability -> 1).
+    """
+    from .bsm import price as _bsm_price
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if b is None:
+        b = r
+    vanilla = _bsm_price(S, K, t, r, sigma, ot, b)
+    unit = cash_or_nothing(S, K, t, r, sigma, ot, b, cash=1.0)
+    if unit <= 0.0:
+        raise ValueError("zero in-the-money probability; premium undefined")
+    return vanilla / unit
+
+
+def pay_later_option_value(S, K, t, r, sigma, premium,
+                           option_type=OptionType.CALL, b=None):
+    """Value to the holder of a pay-later option with a contracted ``premium``.
+
+    ``vanilla - premium * cash_or_nothing(cash=1)`` -- the option payoff net of the
+    contingent premium collected only in the in-the-money states. Zero at the
+    :func:`contingent_premium_option` fair premium, positive below it, negative
+    above.
+    """
+    from .bsm import price as _bsm_price
+    ot = _coerce_type(option_type)
+    _validate(S, K, t, sigma)
+    if b is None:
+        b = r
+    vanilla = _bsm_price(S, K, t, r, sigma, ot, b)
+    unit = cash_or_nothing(S, K, t, r, sigma, ot, b, cash=1.0)
+    return vanilla - premium * unit
+
+
 def range_binary(S, K_low, K_high, t, r, sigma, b=None, cash=1.0):
     """Range binary (double digital): pays ``cash`` iff ``K_low <= S_T <= K_high``.
 

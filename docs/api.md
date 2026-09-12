@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.441.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.442.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -2627,6 +2627,20 @@ Auto-generated from `quantforge` v1.441.0 by `docs/gen_api.py` — do not edit b
 >
 > Call pays when S_T > K; put pays when S_T < K.
 
+### `contingent_premium_option(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> Fair premium of a pay-later (contingent-premium) option.
+>
+> The holder pays no premium up front; instead a fixed premium is paid at expiry
+> *only if* the option finishes in the money. For the deal to be fair at
+> inception the premium's expected discounted value must equal the vanilla price:
+>
+>     vanilla = premium * cash_or_nothing(cash=1),
+>
+> so ``premium = vanilla / cash_or_nothing_unit``. The premium exceeds the
+> vanilla price (it is only collected in the ITM states). Reduces toward the
+> vanilla as the option goes deep in the money (ITM probability -> 1).
+
 ### `digital_greeks(S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, cash=1.0)`  _function_
 
 > Delta and gamma of a cash-or-nothing digital by finite differences.
@@ -2904,6 +2918,15 @@ Auto-generated from `quantforge` v1.441.0 by `docs/gen_api.py` — do not edit b
 > (correlation ``rho = sqrt(t1/T2)``) to expiry. The down-out call is priced
 > directly; the down-in value follows from in-out parity ``KI = vanilla - KO``.
 > (Up-barrier partial-time calls have a distinct form and are not handled.)
+
+### `pay_later_option_value(S, K, t, r, sigma, premium, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
+
+> Value to the holder of a pay-later option with a contracted ``premium``.
+>
+> ``vanilla - premium * cash_or_nothing(cash=1)`` -- the option payoff net of the
+> contingent premium collected only in the in-the-money states. Zero at the
+> :func:`contingent_premium_option` fair premium, positive below it, negative
+> above.
 
 ### `power_option(S, K, t, r, sigma, power, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
 

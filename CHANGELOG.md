@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.442.0] - 2026-09-11
+
+### Added
+- `contingent_premium_option` and `pay_later_option_value` (in `exotics.py`): the
+  fair premium of a pay-later (contingent-premium) option -- premium paid at
+  expiry only if in the money -- and the holder's value at a contracted premium.
+  Cross-checked: the fair premium exceeds the vanilla price, the holder value is
+  zero at the fair premium (positive below, negative above), and the premium/
+  vanilla ratio approaches one deep in the money.
+
 ## [1.441.0] - 2026-09-11
 
 ### Documentation
