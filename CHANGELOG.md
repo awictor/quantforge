@@ -16,6 +16,17 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.636.0] - 2026-09-12
+
+### Added
+- `black_karasinski.py`: `bk_zero_coupon_bond` prices a zero-coupon bond under the
+  Black-Karasinski log-normal short-rate model (``d ln r = kappa(theta - ln r)dt +
+  sigma dW``, so rates stay positive) on a Hull-White-style trinomial tree in the
+  log rate. Cross-checked: the price stays in ``(0, 1]`` and near the flat
+  discount factor, falls as the rate rises, approaches 1 at short maturity,
+  converges across step counts, and falls as volatility rises (Jensen raises the
+  expected rate).
+
 ## [1.635.0] - 2026-09-12
 
 ### Documentation

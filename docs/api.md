@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.635.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.636.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -544,6 +544,33 @@ Auto-generated from `quantforge` v1.635.0 by `docs/gen_api.py` — do not edit b
 ### `skew_swap_from_smile(S0, t, r, vol_fn, q=0.0, n_strikes=401, width=8.0)`  _function_
 
 > Fair skew-swap value: the risk-neutral skewness from the BKM moments.
+
+## black_karasinski
+
+### `bk_zero_coupon_bond(r0, kappa, theta, sigma, t, steps=50)`  _function_
+
+> Zero-coupon bond price under Black-Karasinski via a trinomial tree.
+>
+> Parameters
+> ----------
+> r0 : float
+>     Current short rate (> 0).
+> kappa : float
+>     Mean-reversion speed of the log rate (> 0).
+> theta : float
+>     Long-run mean of the *log* rate (``ln`` of the target rate level).
+> sigma : float
+>     Volatility of the log rate (> 0).
+> t : float
+>     Bond maturity (years).
+> steps : int
+>     Number of tree steps.
+>
+> Returns
+> -------
+> float
+>     Price of a unit zero-coupon bond maturing at ``t``. Strictly in ``(0, 1]``
+>     for positive rates; falls as ``r0`` or ``sigma`` rises.
 
 ## bond_future
 
