@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.649.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.650.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -8221,6 +8221,27 @@ Auto-generated from `quantforge` v1.649.0 by `docs/gen_api.py` — do not edit b
 > ``corr_vega`` (dV/drho) are central finite differences of the closed form.
 > Returns a dict with ``price``, ``delta``, ``gamma``, ``vega``, ``fx_vega``,
 > ``corr_vega``.
+
+## rainbow_n
+
+### `rainbow_option_mc(spots, strike, t, r, sigmas, corr, q=None, best=True, is_call=True, n_paths=100000, seed=1234567)`  _function_
+
+> Monte Carlo price of an ``n``-asset best-of / worst-of option.
+>
+> Parameters
+> ----------
+> spots, sigmas : per-asset spot and volatility (length ``n``).
+> strike, t, r : option strike, maturity, risk-free rate.
+> corr : ``n x n`` correlation matrix.
+> q : optional per-asset dividend yields.
+> best : True for best-of (max), False for worst-of (min).
+> is_call : call if True, else put.
+> n_paths, seed : simulation controls.
+>
+> Returns
+> -------
+> float
+>     Discounted Monte Carlo option value.
 
 ## random_forest
 

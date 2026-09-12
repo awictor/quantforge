@@ -16,6 +16,15 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.650.0] - 2026-09-12
+
+### Added
+- `rainbow_n.py`: `rainbow_option_mc` prices an ``n``-asset best-of / worst-of
+  call or put by correlated-GBM Monte Carlo (Cholesky of the correlation matrix),
+  generalizing the two-asset rainbow options. Cross-checked: the two-asset case
+  matches the closed-form best-of/worst-of prices, ``worst-of <= single-asset <=
+  best-of`` holds, and a three-asset worst-of is below its best-of.
+
 ## [1.649.0] - 2026-09-12
 
 ### Documentation
