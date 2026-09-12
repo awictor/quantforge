@@ -5,6 +5,7 @@ import pytest
 from quantforge import (
     survival_probabilities, life_annuity_due, term_insurance,
     whole_life_insurance, pure_endowment, endowment_insurance,
+    temporary_life_annuity_due, net_level_premium,
 )
 
 
@@ -47,6 +48,37 @@ def test_higher_interest_lowers_annuity():
 
 def test_pure_endowment_below_one():
     assert pure_endowment(PX, I, 5) < 1
+
+
+def test_temporary_annuity_below_whole_life():
+    assert temporary_life_annuity_due(PX, I, 5) <= life_annuity_due(PX, I) + 1e-12
+
+
+def test_temporary_annuity_rises_with_term():
+    assert temporary_life_annuity_due(PX, I, 3) < temporary_life_annuity_due(PX, I, 8)
+
+
+def test_temporary_annuity_full_term_is_whole_life():
+    assert temporary_life_annuity_due(PX, I, len(PX) + 1) == pytest.approx(
+        life_annuity_due(PX, I), abs=1e-12)
+
+
+def test_net_premium_equivalence_whole_life():
+    P = net_level_premium(PX, I)
+    assert P * life_annuity_due(PX, I) == pytest.approx(whole_life_insurance(PX, I),
+                                                        abs=1e-12)
+    assert 0 < P < 1
+
+
+def test_net_premium_equivalence_endowment():
+    P = net_level_premium(PX, I, 5)
+    assert P * temporary_life_annuity_due(PX, I, 5) == pytest.approx(
+        endowment_insurance(PX, I, 5), abs=1e-12)
+
+
+def test_premium_validation():
+    with pytest.raises(ValueError):
+        temporary_life_annuity_due(PX, -1.5, 5)
 
 
 def test_validation():

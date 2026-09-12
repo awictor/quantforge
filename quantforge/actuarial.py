@@ -82,3 +82,41 @@ def endowment_insurance(one_year_survival, i, term):
     """EPV of an endowment: term insurance plus a pure endowment at ``term``."""
     return (term_insurance(one_year_survival, i, term)
             + pure_endowment(one_year_survival, i, term))
+
+
+def temporary_life_annuity_due(one_year_survival, i, term):
+    """EPV of an ``n``-year temporary life annuity-due.
+
+    ``a-due_{x:n} = sum_{k<n} v^k * kp_x`` -- pays 1 at the start of each year while
+    alive, for at most ``term`` years. Below the whole-life
+    :func:`life_annuity_due` and rising to it as ``term`` grows.
+    """
+    if i <= -1.0:
+        raise ValueError("interest rate must exceed -100%")
+    v = 1.0 / (1.0 + i)
+    cum = survival_probabilities(one_year_survival)
+    n = min(term, len(cum))
+    return sum(v ** k * cum[k] for k in range(n))
+
+
+def net_level_premium(one_year_survival, i, term=None):
+    """Net annual premium for a (term or whole-life) unit insurance.
+
+    By the equivalence principle the level premium equates the EPV of premiums
+    (a life annuity-due) to the EPV of benefits (the insurance):
+
+        P = A / a-due
+
+    Uses :func:`whole_life_insurance` over ``a-due`` for whole life (``term`` None)
+    or :func:`endowment_insurance` over the temporary annuity for an ``term``-year
+    endowment. The premium the insurer must charge to break even.
+    """
+    if term is None:
+        benefit = whole_life_insurance(one_year_survival, i)
+        annuity = life_annuity_due(one_year_survival, i)
+    else:
+        benefit = endowment_insurance(one_year_survival, i, term)
+        annuity = temporary_life_annuity_due(one_year_survival, i, term)
+    if annuity <= 0.0:
+        raise ValueError("annuity EPV must be positive")
+    return benefit / annuity

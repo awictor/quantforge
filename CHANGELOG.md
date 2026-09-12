@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.424.0] - 2026-09-11
+
+### Added
+- `temporary_life_annuity_due` and `net_level_premium` (in `actuarial.py`): an
+  n-year temporary life annuity-due and the equivalence-principle net level
+  premium `P = A / a-due` for whole-life or endowment insurance. Cross-checked:
+  the temporary annuity sits below whole life and rises to it with the term, and
+  the premium times the annuity recovers the benefit EPV (equivalence principle).
+
 ## [1.423.0] - 2026-09-11
 
 ### Added

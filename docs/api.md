@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.423.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.424.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -15,6 +15,19 @@ Auto-generated from `quantforge` v1.423.0 by `docs/gen_api.py` — do not edit b
 > ``a-due = sum_k v^k * kp_x`` paying 1 at the start of each year while alive,
 > ``v = 1/(1+i)``. Falls as interest or mortality rises.
 
+### `net_level_premium(one_year_survival, i, term=None)`  _function_
+
+> Net annual premium for a (term or whole-life) unit insurance.
+>
+> By the equivalence principle the level premium equates the EPV of premiums
+> (a life annuity-due) to the EPV of benefits (the insurance):
+>
+>     P = A / a-due
+>
+> Uses :func:`whole_life_insurance` over ``a-due`` for whole life (``term`` None)
+> or :func:`endowment_insurance` over the temporary annuity for an ``term``-year
+> endowment. The premium the insurer must charge to break even.
+
 ### `pure_endowment(one_year_survival, i, term)`  _function_
 
 > EPV of a unit pure endowment: ``v^n * np_x`` (pays 1 iff alive at ``n``).
@@ -25,6 +38,14 @@ Auto-generated from `quantforge` v1.423.0 by `docs/gen_api.py` — do not edit b
 >
 > ``kp_x = prod_{j<k} p_{x+j}``, starting at ``0p_x = 1``. The returned list has
 > one more entry than the input (the leading 1). Survival is non-increasing.
+
+### `temporary_life_annuity_due(one_year_survival, i, term)`  _function_
+
+> EPV of an ``n``-year temporary life annuity-due.
+>
+> ``a-due_{x:n} = sum_{k<n} v^k * kp_x`` -- pays 1 at the start of each year while
+> alive, for at most ``term`` years. Below the whole-life
+> :func:`life_annuity_due` and rising to it as ``term`` grows.
 
 ### `term_insurance(one_year_survival, i, term=None)`  _function_
 
