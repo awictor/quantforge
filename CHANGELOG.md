@@ -16,6 +16,12 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.599.0] - 2026-09-12
+
+### Documentation
+- README: extended the Autocorrelation section with `select_ar_order` (automatic
+  AR order selection by AIC / BIC).
+
 ## [1.598.0] - 2026-09-12
 
 ### Added

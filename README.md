@@ -2057,6 +2057,20 @@ The fit returns the coefficients, the mean-derived intercept, and the innovation
 variance; the forecast iterates the deterministic recursion, decaying toward the
 long-run mean for a stationary process.
 
+To pick the order automatically, `select_ar_order` minimizes AIC or BIC over a
+range of candidates:
+
+```python
+from quantforge import select_ar_order
+
+order, scores = select_ar_order(series, max_order=8, criterion="bic")
+# order = the BIC-minimizing AR order; scores = [(p, aic, bic), ...]
+```
+
+BIC's heavier `ln(n)` penalty favors more parsimonious models than AIC, so the
+BIC-selected order is never larger — it recovers the true order on simulated
+AR(1)/AR(2) data where AIC tends to over-fit.
+
 ## Rank dependence (Kendall / Spearman)
 
 Rank-based dependence captures monotone (not just linear) co-movement and is
