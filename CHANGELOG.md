@@ -16,6 +16,12 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.649.0] - 2026-09-12
+
+### Documentation
+- README: extended the Two-asset options section with `levy_basket_option` for
+  baskets of more than two assets.
+
 ## [1.648.0] - 2026-09-12
 
 ### Added
