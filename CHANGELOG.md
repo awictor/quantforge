@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.550.0] - 2026-09-12
+
+### Added
+- `hac.py`: `newey_west_variance` estimates the Newey-West (1987) HAC long-run
+  variance of a series via Bartlett-weighted autocovariances (the weighting that
+  guarantees a non-negative estimate), plus `newey_west_mean_se` for the HAC
+  standard error of the sample mean and `autocovariance` / `autocorrelation`
+  helpers. Cross-checked: lag 0 reduces to the sample variance, the estimate is
+  always non-negative, white noise stays near the sample variance, and on an
+  AR(1) it climbs toward the analytic long-run variance ``sigma^2 / (1 - phi)^2``
+  as the lag grows while the lag-1 autocorrelation recovers ``phi``.
+
 ## [1.549.0] - 2026-09-12
 
 ### Documentation

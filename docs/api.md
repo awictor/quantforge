@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.549.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.550.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -4122,6 +4122,45 @@ Auto-generated from `quantforge` v1.549.0 by `docs/gen_api.py` — do not edit b
 ### `zomma(S, K, t, r, sigma, b=None) -> float`  _function_
 
 > d(gamma)/d(sigma). Same for calls and puts.
+
+## hac
+
+### `autocorrelation(x, lag)`  _function_
+
+> Sample autocorrelation ``rho_k = gamma_k / gamma_0`` at ``lag``.
+
+### `autocovariance(x, lag)`  _function_
+
+> Biased (divisor ``n``) sample autocovariance of ``x`` at ``lag``.
+>
+> ``gamma_k = (1/n) sum_{t=k}^{n-1} (x_t - xbar)(x_{t-k} - xbar)``. The divisor
+> ``n`` (not ``n - k``) is what makes the autocovariance sequence positive
+> semidefinite, which the Newey-West weighting relies on.
+
+### `newey_west_mean_se(x, lags)`  _function_
+
+> HAC (Newey-West) standard error of the sample mean of ``x``.
+>
+> ``se = sqrt(sigma_LR^2 / n)`` with ``sigma_LR^2`` the Newey-West long-run
+> variance. For serially uncorrelated data this matches the usual
+> ``sqrt(var / n)``; positive autocorrelation inflates it.
+
+### `newey_west_variance(x, lags)`  _function_
+
+> Newey-West long-run variance of a series (Bartlett-weighted HAC).
+>
+> Parameters
+> ----------
+> x : sequence of float
+>     The series (e.g. demeaned returns or a moment condition).
+> lags : int
+>     Truncation lag ``L`` (>= 0). ``lags = 0`` reduces to the sample variance.
+>
+> Returns
+> -------
+> float
+>     The long-run variance estimate. Always non-negative thanks to the Bartlett
+>     weights.
 
 ## hedgesim
 
