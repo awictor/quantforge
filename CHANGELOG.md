@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.496.0] - 2026-09-11
+
+### Added
+- `carry_rolldown.py`: bond carry and roll-down return decomposition off a zero
+  curve. `carry_return` (coupon net of financing), `rolldown_return` (the price
+  gain purely from the yield rolling down the curve), and `total_carry_rolldown`.
+  Cross-checked: the roll-down is exactly zero on a flat curve, positive on an
+  upward curve (more when steeper), negative when inverted, and the total is
+  carry plus roll-down. The roll-down originally conflated time-value with the
+  yield change; isolating the yield-change effect fixed the flat-curve case.
+
 ## [1.495.0] - 2026-09-11
 
 ### Documentation

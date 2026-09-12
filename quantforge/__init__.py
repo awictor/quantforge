@@ -226,6 +226,9 @@ from .nelson_siegel import (
 )
 from .interpolation import natural_cubic_spline, monotone_cubic
 from .rootfind import bisection, brent, newton
+from .carry_rolldown import (
+    carry_return, rolldown_return, total_carry_rolldown,
+)
 from .callable_bond import (
     callable_bond_price, straight_bond_tree_price, call_option_value,
     callable_bond_price_with_spread, option_adjusted_spread,
@@ -554,7 +557,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.495.0"
+__version__ = "1.496.0"
 
 __all__ = [
     "OptionType",
@@ -914,6 +917,9 @@ __all__ = [
     "bisection",
     "brent",
     "newton",
+    "carry_return",
+    "rolldown_return",
+    "total_carry_rolldown",
     "callable_bond_price",
     "straight_bond_tree_price",
     "call_option_value",

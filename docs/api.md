@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.495.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.496.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -1027,6 +1027,35 @@ Auto-generated from `quantforge` v1.495.0 by `docs/gen_api.py` — do not edit b
 ### `levy_price(S, K, t, r, q, psi, option_type=<OptionType.CALL: 'call'>, alpha=1.5, upper=200.0) -> float`  _function_
 
 > Price a European call/put for a Levy model via Carr-Madan + parity.
+
+## carry_rolldown
+
+### `carry_return(coupon_rate, yield_now, horizon, financing_rate=0.0)`  _function_
+
+> Carry over a horizon: coupon income plus financing, per unit face.
+>
+> ``(coupon_rate - financing_rate) * horizon`` -- the running yield earned net
+> of the cost of funding the position, holding prices fixed. Positive when the
+> coupon exceeds the financing rate.
+
+### `rolldown_return(cashflows, curve, horizon)`  _function_
+
+> Roll-down return: the price gain purely from the yield rolling down the curve.
+>
+> Isolates the yield-change effect from the time-value growth. Values the
+> surviving cashflows (those maturing after the horizon), each at its *shortened*
+> maturity ``t - horizon``, under two curves: the rolled yield ``y(t - horizon)``
+> versus the unchanged-maturity yield ``y(t)``. The fractional difference is the
+> roll-down -- zero on a flat curve (the yield does not change as the bond rolls)
+> and positive on an upward-sloping curve (the bond rolls to a lower yield).
+
+### `total_carry_rolldown(cashflows, curve, coupon_rate, horizon, financing_rate=0.0)`  _function_
+
+> Total expected return = carry + roll-down over the horizon.
+>
+> Sums :func:`carry_return` and :func:`rolldown_return`. The expected holding-
+> period return if the curve is unchanged; the standard relative-value carry-
+> and-roll number.
 
 ## cev
 
