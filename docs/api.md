@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.689.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.690.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -1345,6 +1345,32 @@ Auto-generated from `quantforge` v1.689.0 by `docs/gen_api.py` — do not edit b
 > dict
 >     ``pattern`` (% developed by age), ``reserve`` and ``ultimate`` per year,
 >     and ``total_reserve``.
+
+### `cape_cod(triangle, premiums)`  _function_
+
+> Cape Cod (Stanard-Buhlmann) reserving.
+>
+> Like Bornhuetter-Ferguson but the a-priori loss ratio is estimated from the
+> data rather than assumed: the expected loss ratio is
+>
+>     ELR = sum_i latest_i / sum_i (premium_i * pct_developed_i),
+>
+> the total observed losses over the total "used-up" premium (premium weighted
+> by how developed each year is). Each year's a-priori ultimate is then
+> ``premium_i * ELR`` and its reserve ``apriori * (1 - pct_developed_i)``.
+>
+> Parameters
+> ----------
+> triangle : list[list[float]]
+>     Cumulative-claims triangle (as in :func:`chain_ladder`).
+> premiums : sequence of float
+>     Earned premium per accident year.
+>
+> Returns
+> -------
+> dict
+>     ``elr``, ``pattern``, ``reserve`` / ``ultimate`` per year, and
+>     ``total_reserve``.
 
 ### `chain_ladder(triangle)`  _function_
 

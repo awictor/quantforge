@@ -123,3 +123,57 @@ def bornhuetter_ferguson(triangle, apriori_ultimates):
         "ultimate": ultimate,
         "total_reserve": sum(reserve),
     }
+
+
+def cape_cod(triangle, premiums):
+    """Cape Cod (Stanard-Buhlmann) reserving.
+
+    Like Bornhuetter-Ferguson but the a-priori loss ratio is estimated from the
+    data rather than assumed: the expected loss ratio is
+
+        ELR = sum_i latest_i / sum_i (premium_i * pct_developed_i),
+
+    the total observed losses over the total "used-up" premium (premium weighted
+    by how developed each year is). Each year's a-priori ultimate is then
+    ``premium_i * ELR`` and its reserve ``apriori * (1 - pct_developed_i)``.
+
+    Parameters
+    ----------
+    triangle : list[list[float]]
+        Cumulative-claims triangle (as in :func:`chain_ladder`).
+    premiums : sequence of float
+        Earned premium per accident year.
+
+    Returns
+    -------
+    dict
+        ``elr``, ``pattern``, ``reserve`` / ``ultimate`` per year, and
+        ``total_reserve``.
+    """
+    n = len(triangle)
+    if len(premiums) != n:
+        raise ValueError("premiums must match the number of accident years")
+    f = development_factors(triangle)
+    pattern = development_pattern(f)
+    pct = [pattern[len(triangle[i]) - 1] for i in range(n)]
+
+    total_loss = sum(triangle[i][-1] for i in range(n))
+    used_premium = sum(premiums[i] * pct[i] for i in range(n))
+    if used_premium <= 0.0:
+        raise ValueError("total used-up premium must be positive")
+    elr = total_loss / used_premium
+
+    reserve = []
+    ultimate = []
+    for i in range(n):
+        apriori = premiums[i] * elr
+        res = apriori * (1.0 - pct[i])
+        reserve.append(res)
+        ultimate.append(triangle[i][-1] + res)
+    return {
+        "elr": elr,
+        "pattern": pattern,
+        "reserve": reserve,
+        "ultimate": ultimate,
+        "total_reserve": sum(reserve),
+    }

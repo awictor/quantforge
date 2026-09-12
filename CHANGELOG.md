@@ -16,6 +16,17 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.690.0] - 2026-09-12
+
+### Added
+- `chain_ladder.py`: `cape_cod` (Stanard-Buhlmann) reserving estimates the expected
+  loss ratio from the triangle and earned premium (total losses over used-up
+  premium) rather than assuming an a-priori, then reserves like Bornhuetter-
+  Ferguson. Cross-checked: the ELR equals losses over premium-weighted-by-
+  development, a fully-developed year has zero reserve, reserves equal
+  ``premium x ELR x undeveloped``, and Cape Cod matches BF with a
+  ``premium x ELR`` a-priori.
+
 ## [1.689.0] - 2026-09-12
 
 ### Documentation
