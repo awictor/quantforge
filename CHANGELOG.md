@@ -16,6 +16,17 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.630.0] - 2026-09-12
+
+### Added
+- `decision_stump.py`: `gini_impurity` and a one-split classifier --
+  `fit_decision_stump` finds the feature and threshold minimizing the
+  size-weighted Gini of the two children, and `predict_decision_stump` applies it.
+  Cross-checked: Gini is 0 for a pure node and 0.5 for a 50/50 split, a
+  single-feature-separable set is split perfectly (Gini 0), noisy data still
+  reduces Gini below the parent with >90% accuracy, and identical rows fall back
+  to the global majority.
+
 ## [1.629.0] - 2026-09-12
 
 ### Documentation

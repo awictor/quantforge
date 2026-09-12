@@ -318,6 +318,9 @@ from .naive_bayes import (
 from .encoding import (
     fit_label_encoder, label_encode, label_decode, one_hot_encode,
 )
+from .decision_stump import (
+    gini_impurity, fit_decision_stump, predict_decision_stump,
+)
 from .hac import (
     autocovariance, autocorrelation, newey_west_variance, newey_west_mean_se,
 )
@@ -668,7 +671,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.629.0"
+__version__ = "1.630.0"
 
 __all__ = [
     "OptionType",
@@ -1168,6 +1171,9 @@ __all__ = [
     "label_encode",
     "label_decode",
     "one_hot_encode",
+    "gini_impurity",
+    "fit_decision_stump",
+    "predict_decision_stump",
     "autocovariance",
     "autocorrelation",
     "newey_west_variance",

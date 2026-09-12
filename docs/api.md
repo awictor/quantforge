@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.629.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.630.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -2429,6 +2429,25 @@ Auto-generated from `quantforge` v1.629.0 by `docs/gen_api.py` — do not edit b
 >
 > Both dates are ``(year, month, day)`` tuples with ``end >= start``. Negative
 > intervals raise.
+
+## decision_stump
+
+### `fit_decision_stump(X, y)`  _function_
+
+> Fit a decision stump: the best single-feature threshold split.
+>
+> Scans every feature and every midpoint between adjacent sorted values, scoring
+> each candidate by the size-weighted Gini of the two sides. Returns
+> ``{"feature", "threshold", "left_label", "right_label", "gini"}`` where points
+> with ``x[feature] <= threshold`` take ``left_label``.
+
+### `gini_impurity(labels)`  _function_
+
+> Gini impurity ``1 - sum_c p_c^2`` of a label list (0 = pure).
+
+### `predict_decision_stump(stump, X_query)`  _function_
+
+> Predict labels for query rows under a fitted stump.
 
 ## density
 
