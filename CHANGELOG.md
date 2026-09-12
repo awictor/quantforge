@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.416.0] - 2026-09-11
+
+### Added
+- `conversion_premium`, `investment_premium`, `convertible_breakeven_years` (in
+  `equity_comp.py`): convertible-bond relative-value metrics -- the premium over
+  parity, the premium over the bond floor, and the years for the bond's income
+  advantage over the shares to recoup the conversion premium. Cross-checked: both
+  premiums are non-negative above parity/floor, the conversion premium is zero at
+  parity, and the breakeven is infinite when dividends exceed coupon income.
+
 ## [1.415.0] - 2026-09-11
 
 ### Added

@@ -8,6 +8,7 @@ from quantforge import (
     dilution_factor, warrant_price, eso_expected_life, eso_value,
     pv_dividends, discrete_dividend_price, forward_with_dividends,
     conversion_value, straight_bond_floor, convertible_bond_value,
+    conversion_premium, investment_premium, convertible_breakeven_years,
 )
 from quantforge.bsm import call_price
 
@@ -61,6 +62,38 @@ def test_forfeiture_lowers_value():
 
 def test_conversion_value():
     assert conversion_value(50, 20) == 1000
+
+
+def test_conversion_premium():
+    c = convertible_bond_value(50, 20, 1000, 0.04, 5, 0.05, 0.3, 0.01)
+    assert conversion_premium(c, 50, 20) == pytest.approx(c / 1000 - 1)
+    assert conversion_premium(c, 50, 20) >= 0
+    assert conversion_premium(1000, 50, 20) == pytest.approx(0.0)
+
+
+def test_investment_premium():
+    floor = straight_bond_floor(1000, 0.04, 5, 0.05, 0.01)
+    c = convertible_bond_value(50, 20, 1000, 0.04, 5, 0.05, 0.3, 0.01)
+    assert investment_premium(c, floor) == pytest.approx(c / floor - 1)
+    assert investment_premium(c, floor) >= 0
+
+
+def test_breakeven_years():
+    c = convertible_bond_value(50, 20, 1000, 0.04, 5, 0.05, 0.3, 0.01)
+    prem = c - conversion_value(50, 20)
+    assert convertible_breakeven_years(c, 50, 20, 40, 10) == pytest.approx(prem / 30)
+
+
+def test_breakeven_infinite_when_dividend_exceeds_coupon():
+    c = convertible_bond_value(50, 20, 1000, 0.04, 5, 0.05, 0.3, 0.01)
+    assert convertible_breakeven_years(c, 50, 20, 10, 40) == float("inf")
+
+
+def test_premium_validation():
+    with pytest.raises(ValueError):
+        conversion_premium(1000, 0, 20)
+    with pytest.raises(ValueError):
+        investment_premium(1000, 0)
 
 
 def test_bond_floor_below_face():

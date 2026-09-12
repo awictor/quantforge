@@ -67,6 +67,47 @@ def convertible_bond_value(S, conversion_ratio, face, coupon_rate, maturity, r,
     return floor + option
 
 
+def conversion_premium(convertible_price, S, conversion_ratio):
+    """Conversion (equity) premium: how far the convertible trades above parity.
+
+    ``convertible_price / conversion_value - 1`` -- the fractional premium an
+    investor pays over the value of the underlying shares for the bond's downside
+    protection. Non-negative when the convertible trades at or above parity.
+    """
+    parity = conversion_value(S, conversion_ratio)
+    if parity <= 0:
+        raise ValueError("conversion value must be positive")
+    return convertible_price / parity - 1.0
+
+
+def investment_premium(convertible_price, bond_floor):
+    """Investment premium: how far the convertible trades above its bond floor.
+
+    ``convertible_price / bond_floor - 1`` -- the fractional premium over the
+    straight-debt value, paid for the equity upside. Non-negative when the
+    convertible trades at or above its floor.
+    """
+    if bond_floor <= 0:
+        raise ValueError("bond_floor must be positive")
+    return convertible_price / bond_floor - 1.0
+
+
+def convertible_breakeven_years(convertible_price, S, conversion_ratio,
+                                bond_coupon_income, dividend_income):
+    """Years for extra income to recoup the conversion premium.
+
+    ``(convertible_price - conversion_value) / (bond_coupon_income -
+    dividend_income)`` -- the time for the convertible's income advantage over the
+    equivalent shares to pay back the dollar conversion premium. Requires the bond
+    to yield more than the shares (positive net income); returns ``inf`` if not.
+    """
+    premium_dollars = convertible_price - conversion_value(S, conversion_ratio)
+    net_income = bond_coupon_income - dividend_income
+    if net_income <= 0.0:
+        return float("inf")
+    return premium_dollars / net_income
+
+
 def pv_dividends(dividends, r):
     """Present value of a discrete dividend schedule ``[(t, amount), ...]``.
 

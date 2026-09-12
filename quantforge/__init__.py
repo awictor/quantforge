@@ -221,6 +221,7 @@ from .equity_comp import (
     dilution_factor, warrant_price, eso_expected_life, eso_value,
     pv_dividends, discrete_dividend_price, forward_with_dividends,
     conversion_value, straight_bond_floor, convertible_bond_value,
+    conversion_premium, investment_premium, convertible_breakeven_years,
 )
 from .mbs import (
     monthly_payment, cpr_to_smm, smm_to_cpr, psa_cpr, amortization_schedule,
@@ -441,7 +442,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.415.0"
+__version__ = "1.416.0"
 
 __all__ = [
     "OptionType",
@@ -801,6 +802,9 @@ __all__ = [
     "conversion_value",
     "straight_bond_floor",
     "convertible_bond_value",
+    "conversion_premium",
+    "investment_premium",
+    "convertible_breakeven_years",
     "monthly_payment",
     "cpr_to_smm",
     "smm_to_cpr",

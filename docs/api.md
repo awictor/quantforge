@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.415.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.416.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## american
 
@@ -1930,6 +1930,14 @@ Auto-generated from `quantforge` v1.415.0 by `docs/gen_api.py` — do not edit b
 
 ## equity_comp
 
+### `conversion_premium(convertible_price, S, conversion_ratio)`  _function_
+
+> Conversion (equity) premium: how far the convertible trades above parity.
+>
+> ``convertible_price / conversion_value - 1`` -- the fractional premium an
+> investor pays over the value of the underlying shares for the bond's downside
+> protection. Non-negative when the convertible trades at or above parity.
+
 ### `conversion_value(S, conversion_ratio)`  _function_
 
 > Parity (conversion) value of a convertible: ``conversion_ratio * S``.
@@ -1948,6 +1956,15 @@ Auto-generated from `quantforge` v1.415.0 by `docs/gen_api.py` — do not edit b
 > maturity the holder converts when ``conversion_ratio * S > face``, i.e. strike
 > ``= face / conversion_ratio`` on ``conversion_ratio`` shares. The result is at
 > least the bond floor and at least the conversion value.
+
+### `convertible_breakeven_years(convertible_price, S, conversion_ratio, bond_coupon_income, dividend_income)`  _function_
+
+> Years for extra income to recoup the conversion premium.
+>
+> ``(convertible_price - conversion_value) / (bond_coupon_income -
+> dividend_income)`` -- the time for the convertible's income advantage over the
+> equivalent shares to pay back the dollar conversion premium. Requires the bond
+> to yield more than the shares (positive net income); returns ``inf`` if not.
 
 ### `dilution_factor(existing_shares, new_shares)`  _function_
 
@@ -1996,6 +2013,14 @@ Auto-generated from `quantforge` v1.415.0 by `docs/gen_api.py` — do not edit b
 >
 > The escrowed-dividend forward: the dividend-stripped spot compounded at the
 > risk-free rate. Equals ``S e^{r t}`` when no dividends fall before ``t``.
+
+### `investment_premium(convertible_price, bond_floor)`  _function_
+
+> Investment premium: how far the convertible trades above its bond floor.
+>
+> ``convertible_price / bond_floor - 1`` -- the fractional premium over the
+> straight-debt value, paid for the equity upside. Non-negative when the
+> convertible trades at or above its floor.
 
 ### `pv_dividends(dividends, r)`  _function_
 
