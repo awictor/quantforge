@@ -80,6 +80,40 @@ def implied_repo_rate(bond_price, accrued_now, futures_price,
     return (invoice - dirty_now) / dirty_now * (day_count / days)
 
 
+def bond_dv01(price, modified_duration):
+    """Dollar value of a 1bp yield rise for a bond: ``duration * price * 1e-4``.
+
+    Positive magnitude of the price move per basis point (a price *fall* for a
+    yield rise). Reported as a positive number for hedge sizing.
+    """
+    if price < 0 or modified_duration < 0:
+        raise ValueError("price and duration must be non-negative")
+    return modified_duration * price * 1e-4
+
+
+def futures_dv01(ctd_dv01, ctd_conversion_factor):
+    """DV01 of a bond future from the CTD bond's DV01.
+
+    ``ctd_dv01 / conversion_factor`` -- the futures price moves ``1/CF`` of the
+    CTD price per unit yield (the conversion factor gears the delivery), so the
+    futures DV01 is the CTD DV01 divided by its conversion factor.
+    """
+    if ctd_conversion_factor <= 0:
+        raise ValueError("conversion factor must be positive")
+    return ctd_dv01 / ctd_conversion_factor
+
+
+def futures_hedge_ratio(bond_dv01_, futures_dv01_):
+    """Number of futures to hedge a cash bond's rate risk.
+
+    ``bond_dv01 / futures_dv01`` -- the contract count whose DV01 offsets the
+    bond's. Positive; a long bond position is hedged by selling this many futures.
+    """
+    if futures_dv01_ <= 0:
+        raise ValueError("futures DV01 must be positive")
+    return bond_dv01_ / futures_dv01_
+
+
 def cheapest_to_deliver(bonds, futures_price):
     """Index of the cheapest-to-deliver bond (minimum net basis).
 

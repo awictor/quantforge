@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.447.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.448.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -454,6 +454,13 @@ Auto-generated from `quantforge` v1.447.0 by `docs/gen_api.py` — do not edit b
 
 ## bond_future
 
+### `bond_future_dv01(price, modified_duration)`  _function_
+
+> Dollar value of a 1bp yield rise for a bond: ``duration * price * 1e-4``.
+>
+> Positive magnitude of the price move per basis point (a price *fall* for a
+> yield rise). Reported as a positive number for hedge sizing.
+
 ### `cheapest_to_deliver(bonds, futures_price)`  _function_
 
 > Index of the cheapest-to-deliver bond (minimum net basis).
@@ -474,6 +481,21 @@ Auto-generated from `quantforge` v1.447.0 by `docs/gen_api.py` — do not edit b
 > with ``c = coupon_rate``, ``y = notional_coupon``, ``n = years * freq``. Above
 > one for bonds with coupons over the notional, below one otherwise; exactly one
 > when the coupon equals the notional.
+
+### `futures_dv01(ctd_dv01, ctd_conversion_factor)`  _function_
+
+> DV01 of a bond future from the CTD bond's DV01.
+>
+> ``ctd_dv01 / conversion_factor`` -- the futures price moves ``1/CF`` of the
+> CTD price per unit yield (the conversion factor gears the delivery), so the
+> futures DV01 is the CTD DV01 divided by its conversion factor.
+
+### `futures_hedge_ratio(bond_dv01_, futures_dv01_)`  _function_
+
+> Number of futures to hedge a cash bond's rate risk.
+>
+> ``bond_dv01 / futures_dv01`` -- the contract count whose DV01 offsets the
+> bond's. Positive; a long bond position is hedged by selling this many futures.
 
 ### `gross_basis(bond_price, futures_price, conversion_factor_)`  _function_
 

@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.448.0] - 2026-09-11
+
+### Added
+- `bond_future_dv01`, `futures_dv01`, `futures_hedge_ratio` (in `bond_future.py`):
+  a bond DV01, the bond-future DV01 geared by the CTD conversion factor
+  (`ctd_dv01 / CF`), and the number of futures to hedge a cash bond. Cross-checked:
+  the futures DV01 gears up for a sub-one conversion factor, and the hedge ratio's
+  futures exactly offset the bond DV01. Exported as `bond_future_dv01` to avoid
+  colliding with `bondmath`'s `bond_dv01`.
+
 ## [1.447.0] - 2026-09-11
 
 ### Added

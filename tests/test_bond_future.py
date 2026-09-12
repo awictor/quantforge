@@ -5,6 +5,7 @@ import pytest
 from quantforge import (
     conversion_factor, invoice_price, gross_basis, net_basis,
     implied_repo_rate, cheapest_to_deliver,
+    bond_future_dv01, futures_dv01, futures_hedge_ratio,
 )
 
 
@@ -38,6 +39,40 @@ def test_cheapest_to_deliver_is_min_net_basis():
 def test_implied_repo_rises_with_futures():
     rr = implied_repo_rate(115, 1.0, 120, 0.95, 1.2, 60)
     assert implied_repo_rate(115, 1.0, 122, 0.95, 1.2, 60) > rr
+
+
+def test_bond_dv01_formula():
+    assert bond_future_dv01(120, 8.5) == pytest.approx(8.5 * 120 * 1e-4)
+
+
+def test_futures_dv01_gears_by_conversion_factor():
+    ctd = bond_future_dv01(115, 9.0)
+    f = futures_dv01(ctd, 0.95)
+    assert f == pytest.approx(ctd / 0.95)
+    assert f > ctd   # CF < 1 gears the futures DV01 up
+
+
+def test_hedge_ratio_offsets_bond_dv01():
+    ctd = bond_future_dv01(115, 9.0)
+    f = futures_dv01(ctd, 0.95)
+    bond = bond_future_dv01(120, 8.5)
+    n = futures_hedge_ratio(bond, f)
+    assert n == pytest.approx(bond / f)
+    assert n * f == pytest.approx(bond)
+
+
+def test_hedge_ratio_scales_with_bond_dv01():
+    ctd = bond_future_dv01(115, 9.0)
+    f = futures_dv01(ctd, 0.95)
+    bond = bond_future_dv01(120, 8.5)
+    assert futures_hedge_ratio(2 * bond, f) > futures_hedge_ratio(bond, f)
+
+
+def test_dv01_validation():
+    with pytest.raises(ValueError):
+        futures_dv01(1.0, 0)
+    with pytest.raises(ValueError):
+        futures_hedge_ratio(1.0, 0)
 
 
 def test_validation():
