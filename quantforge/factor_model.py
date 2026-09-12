@@ -77,3 +77,41 @@ def factor_expected_return(alpha, betas, factor_premia):
     if len(betas) != len(factor_premia):
         raise ValueError("betas and factor_premia must align")
     return alpha + sum(b * p for b, p in zip(betas, factor_premia))
+
+
+def factor_attribution(total_return, alpha, betas, factor_realized_returns):
+    """Decompose a realized return into factor contributions plus a residual.
+
+    Each factor contributes ``beta_k * factor_realized_return_k``; the residual is
+    ``total_return - alpha - sum(contributions)`` (the part not explained by the
+    factors, i.e. the model residual for the period). Returns a dict with
+    ``factor_contributions`` (list), ``alpha`` (the intercept as its own term), and
+    ``residual``. The alpha, factor contributions, and residual sum to
+    ``total_return`` by construction.
+    """
+    if len(betas) != len(factor_realized_returns):
+        raise ValueError("betas and factor_realized_returns must align")
+    contributions = [b * f for b, f in zip(betas, factor_realized_returns)]
+    residual = total_return - alpha - sum(contributions)
+    return {"factor_contributions": contributions, "alpha": alpha,
+            "residual": residual}
+
+
+def rolling_factor_beta(asset_returns, factor_returns, window):
+    """Rolling single-factor beta over a trailing ``window``.
+
+    Runs :func:`factor_regression` on each trailing window of length ``window``,
+    returning the list of first-factor betas (one per window end, from index
+    ``window - 1`` onward). Tracks how the factor loading drifts through time.
+    """
+    n = len(asset_returns)
+    if len(factor_returns) != n:
+        raise ValueError("asset and factor series must have equal length")
+    if window < 2 or window > n:
+        raise ValueError("window must be in [2, len(series)]")
+    out = []
+    for end in range(window, n + 1):
+        a = asset_returns[end - window:end]
+        f = factor_returns[end - window:end]
+        out.append(factor_regression(a, [f])["betas"][0])
+    return out

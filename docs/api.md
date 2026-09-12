@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.451.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.452.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -3327,6 +3327,17 @@ Auto-generated from `quantforge` v1.451.0 by `docs/gen_api.py` — do not edit b
 
 ## factor_model
 
+### `factor_attribution(total_return, alpha, betas, factor_realized_returns)`  _function_
+
+> Decompose a realized return into factor contributions plus a residual.
+>
+> Each factor contributes ``beta_k * factor_realized_return_k``; the residual is
+> ``total_return - alpha - sum(contributions)`` (the part not explained by the
+> factors, i.e. the model residual for the period). Returns a dict with
+> ``factor_contributions`` (list), ``alpha`` (the intercept as its own term), and
+> ``residual``. The alpha, factor contributions, and residual sum to
+> ``total_return`` by construction.
+
 ### `factor_expected_return(alpha, betas, factor_premia)`  _function_
 
 > Expected return from a fitted factor model: ``alpha + sum beta_k premium_k``.
@@ -3340,6 +3351,14 @@ Auto-generated from `quantforge` v1.451.0 by `docs/gen_api.py` — do not edit b
 > ``r_squared``, and ``residual_vol`` (standard deviation of the residuals).
 > Fits ``r_t = alpha + sum_k beta_k f_{k,t} + eps_t`` by minimizing the squared
 > residuals.
+
+### `rolling_factor_beta(asset_returns, factor_returns, window)`  _function_
+
+> Rolling single-factor beta over a trailing ``window``.
+>
+> Runs :func:`factor_regression` on each trailing window of length ``window``,
+> returning the list of first-factor betas (one per window end, from index
+> ``window - 1`` onward). Tracks how the factor loading drifts through time.
 
 ## forward
 

@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.452.0] - 2026-09-11
+
+### Added
+- `factor_attribution` and `rolling_factor_beta` (in `factor_model.py`): decompose
+  a realized return into per-factor contributions plus a residual (alpha + factor
+  contributions + residual sum to the total), and a trailing-window single-factor
+  beta. Cross-checked: the attribution components sum to the total return, the
+  contributions equal beta times factor return, and the rolling beta recovers a
+  constant loading.
+
 ## [1.451.0] - 2026-09-11
 
 ### Added
