@@ -372,6 +372,41 @@ def probabilistic_sharpe_ratio(returns, benchmark_sr=0.0):
     return norm_cdf(z)
 
 
+def deflated_sharpe_ratio(returns, n_trials, sr_variance=None):
+    """Deflated Sharpe ratio (Bailey-López de Prado): PSR against a trials-adjusted benchmark.
+
+    When many strategy variants are tested, the best in-sample Sharpe is inflated by
+    selection. The DSR is the :func:`probabilistic_sharpe_ratio` evaluated against a
+    benchmark equal to the *expected maximum* of ``n_trials`` independent Sharpe
+    estimates with cross-trial variance ``sr_variance``:
+
+        SR* = sqrt(sr_variance) * ((1 - gamma) Phi^{-1}(1 - 1/N)
+              + gamma Phi^{-1}(1 - 1/(N e)))
+
+    (``gamma`` the Euler-Mascheroni constant). Lower than the plain PSR for
+    ``n_trials > 1``, and falling as more trials are tested. ``sr_variance`` defaults
+    to the sampling variance ``1/(n-1)`` of a single per-period Sharpe estimate.
+    """
+    n = len(returns)
+    if n < 2:
+        raise ValueError("need at least two observations")
+    if n_trials < 1:
+        raise ValueError("n_trials must be a positive integer")
+    if sr_variance is None:
+        sr_variance = 1.0 / (n - 1)
+    if sr_variance < 0:
+        raise ValueError("sr_variance must be non-negative")
+    if n_trials == 1:
+        sr_star = 0.0
+    else:
+        gamma = 0.5772156649015329   # Euler-Mascheroni
+        e = math.e
+        z1 = _norm_ppf(1.0 - 1.0 / n_trials)
+        z2 = _norm_ppf(1.0 - 1.0 / (n_trials * e))
+        sr_star = math.sqrt(sr_variance) * ((1.0 - gamma) * z1 + gamma * z2)
+    return probabilistic_sharpe_ratio(returns, sr_star)
+
+
 def minimum_track_record_length(returns, benchmark_sr=0.0, confidence=0.95):
     """Minimum track record length for the Sharpe ratio to beat a benchmark.
 

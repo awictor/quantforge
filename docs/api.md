@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.484.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.485.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -6314,6 +6314,22 @@ Auto-generated from `quantforge` v1.484.0 by `docs/gen_api.py` — do not edit b
 ### `cumulative_return(returns: Sequence[float]) -> float`  _function_
 
 > Total compounded return over the series, ``prod(1 + r) - 1``.
+
+### `deflated_sharpe_ratio(returns, n_trials, sr_variance=None)`  _function_
+
+> Deflated Sharpe ratio (Bailey-López de Prado): PSR against a trials-adjusted benchmark.
+>
+> When many strategy variants are tested, the best in-sample Sharpe is inflated by
+> selection. The DSR is the :func:`probabilistic_sharpe_ratio` evaluated against a
+> benchmark equal to the *expected maximum* of ``n_trials`` independent Sharpe
+> estimates with cross-trial variance ``sr_variance``:
+>
+>     SR* = sqrt(sr_variance) * ((1 - gamma) Phi^{-1}(1 - 1/N)
+>           + gamma Phi^{-1}(1 - 1/(N e)))
+>
+> (``gamma`` the Euler-Mascheroni constant). Lower than the plain PSR for
+> ``n_trials > 1``, and falling as more trials are tested. ``sr_variance`` defaults
+> to the sampling variance ``1/(n-1)`` of a single per-period Sharpe estimate.
 
 ### `down_capture(returns, benchmark_returns) -> float`  _function_
 

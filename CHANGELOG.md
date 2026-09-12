@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.485.0] - 2026-09-11
+
+### Added
+- `deflated_sharpe_ratio` (in `perfmetrics.py`): the Bailey-López de Prado
+  deflated Sharpe ratio -- the probabilistic Sharpe ratio against a benchmark
+  equal to the expected maximum of `n_trials` Sharpe estimates, correcting for
+  the selection bias of testing many strategy variants. Cross-checked: reduces to
+  the plain PSR at one trial, deflates for more trials, is monotone decreasing in
+  the trial count, and stays in `[0, 1]`.
+
 ## [1.484.0] - 2026-09-11
 
 ### Added

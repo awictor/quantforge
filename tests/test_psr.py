@@ -5,7 +5,10 @@ import statistics
 
 import pytest
 
-from quantforge import probabilistic_sharpe_ratio, minimum_track_record_length
+from quantforge import (
+    probabilistic_sharpe_ratio, minimum_track_record_length,
+    deflated_sharpe_ratio,
+)
 
 
 def _sample():
@@ -36,6 +39,33 @@ def test_min_trl_longer_for_smaller_edge():
 def test_min_trl_requires_edge():
     with pytest.raises(ValueError):
         minimum_track_record_length(_sample(), 10.0, 0.95)
+
+
+def test_dsr_single_trial_equals_psr():
+    rets = _sample()
+    assert deflated_sharpe_ratio(rets, 1) == pytest.approx(
+        probabilistic_sharpe_ratio(rets, 0.0), abs=1e-12)
+
+
+def test_dsr_deflates_for_multiple_trials():
+    rets = _sample()
+    assert deflated_sharpe_ratio(rets, 10) < probabilistic_sharpe_ratio(rets, 0.0)
+
+
+def test_dsr_decreasing_in_trials():
+    rets = _sample()
+    assert deflated_sharpe_ratio(rets, 100) < deflated_sharpe_ratio(rets, 10) \
+        < deflated_sharpe_ratio(rets, 2)
+
+
+def test_dsr_in_unit_interval():
+    rets = _sample()
+    assert all(0 <= deflated_sharpe_ratio(rets, n) <= 1 for n in (1, 5, 50, 500))
+
+
+def test_dsr_validation():
+    with pytest.raises(ValueError):
+        deflated_sharpe_ratio(_sample(), 0)
 
 
 def test_validation():
