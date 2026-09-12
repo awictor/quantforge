@@ -16,6 +16,12 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.597.0] - 2026-09-12
+
+### Documentation
+- README: extended the Autocorrelation section with `fit_ar_yule_walker` and
+  `ar_forecast` (fit and project an AR model after identifying its order).
+
 ## [1.596.0] - 2026-09-12
 
 ### Added

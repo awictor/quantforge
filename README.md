@@ -2041,6 +2041,22 @@ An AR(p) shows a PACF that drops to ~0 beyond lag `p` with a geometrically
 decaying ACF; an MA(q) shows the mirror image — an ACF that cuts off after lag `q`.
 White noise is flat in both.
 
+Once the order is chosen, `fit_ar_yule_walker` fits the AR(p) coefficients by the
+Yule-Walker equations and `ar_forecast` projects the series forward:
+
+```python
+from quantforge import fit_ar_yule_walker, ar_forecast
+
+m = fit_ar_yule_walker(series, order=1)
+m["coefficients"]      # [phi_1, ...]
+m["noise_variance"]    # innovation variance
+ar_forecast(m, series[-1:], steps=5)   # mean-reverts toward m["mean"]
+```
+
+The fit returns the coefficients, the mean-derived intercept, and the innovation
+variance; the forecast iterates the deterministic recursion, decaying toward the
+long-run mean for a stationary process.
+
 ## Rank dependence (Kendall / Spearman)
 
 Rank-based dependence captures monotone (not just linear) co-movement and is
