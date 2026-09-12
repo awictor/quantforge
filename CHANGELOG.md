@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.559.0] - 2026-09-12
+
+### Documentation
+- README: extended the Realized volatility section with the intraday jump
+  decomposition (`realized_variance_from_returns`, `bipower_variation`,
+  `jump_variation`), with a snippet verified against the package.
+
 ## [1.558.0] - 2026-09-12
 
 ### Added

@@ -553,6 +553,25 @@ garch_forecast(p, last_return=returns[-1], last_variance=h, horizon=21)
 ``` Compare any of these against the implied
 vol from `implied_volatility` to trade realized-vs-implied.
 
+For **intraday** data, decompose the day's quadratic variation into a continuous
+part and jumps. Realized variance captures everything; bipower variation is
+jump-robust; their difference is the jump contribution.
+
+```python
+from quantforge import (realized_variance_from_returns, bipower_variation,
+                        jump_variation)
+
+r = [0.001, -0.002, 0.0015, -0.001, 0.05, 0.002,   # one big jump mid-series
+     -0.0015, 0.001, -0.002, 0.0018, -0.0012, 0.0009]
+
+realized_variance_from_returns(r)   # -> 0.002525  (total quadratic variation)
+bipower_variation(r)                # -> 0.000267  (continuous part, jump-robust)
+jump_variation(r)                   # -> 0.002258  (max(RV - BV, 0), the jump)
+```
+
+On a jump-free path RV and BV coincide and the jump variation is ~0; a jump lifts
+RV by roughly its square while BV barely moves.
+
 ## Delta-hedge P&L simulator
 
 Monte Carlo a discretely delta-hedged short option and see the hedging-error
