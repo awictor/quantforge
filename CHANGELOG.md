@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.543.0] - 2026-09-12
+
+### Documentation
+- README: added a "Covariance shrinkage (Ledoit-Wolf)" section documenting
+  `ledoit_wolf_shrinkage`, with a deterministic snippet verified against the
+  package; TOC regenerated to 88 entries.
+
 ## [1.542.0] - 2026-09-12
 
 ### Added

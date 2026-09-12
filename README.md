@@ -87,6 +87,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Structural credit (Merton)](#structural-credit-merton)
 - [Dual-currency deposits](#dual-currency-deposits)
 - [FX forwards (covered interest parity)](#fx-forwards-covered-interest-parity)
+- [Covariance shrinkage (Ledoit-Wolf)](#covariance-shrinkage-ledoit-wolf)
 - [Portfolio optimization](#portfolio-optimization)
 - [Rebalancing](#rebalancing)
 - [Portfolio insurance (CPPI)](#portfolio-insurance-cppi)
@@ -1928,6 +1929,35 @@ fx_forward(spot=1.10, r_price=0.05, r_base=0.03, t=1.0)   # EURUSD-style
 cross_rate(1.10, 1.25)                                     # EURGBP from EURUSD, GBPUSD
 triangular_arbitrage(1.10, 150, 1 / (1.10 * 150))         # == 1 if arbitrage-free
 ```
+
+## Covariance shrinkage (Ledoit-Wolf)
+
+The sample covariance is noisy when the number of assets is not small relative to
+the number of observations — a poor input to a mean-variance optimizer.
+`ledoit_wolf_shrinkage` blends it with a constant-correlation target by the
+data-driven Ledoit-Wolf (2004) intensity `delta`, which minimizes the expected
+distance to the true covariance.
+
+```python
+from quantforge import ledoit_wolf_shrinkage
+
+# rows = observations, columns = assets.
+returns = [
+    [0.01, 0.02, -0.01],
+    [-0.02, -0.01, 0.03],
+    [0.015, 0.01, -0.02],
+    [0.00, -0.015, 0.01],
+    [-0.005, 0.005, 0.00],
+]
+sigma, delta = ledoit_wolf_shrinkage(returns)
+delta                                   # -> 0.2008  (shrink 20% toward the target)
+sigma[0][0]                             # -> 0.00015 (asset-0 variance, preserved)
+```
+
+`delta` sits in `[0, 1]` and falls toward zero as the sample grows (the sample
+estimate becomes reliable); the result keeps each asset's own variance, pulls the
+correlations toward their average, and is symmetric positive definite. Feed
+`sigma` straight into the mean-variance optimizer below.
 
 ## Portfolio optimization
 
