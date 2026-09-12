@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.531.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.532.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -8118,6 +8118,17 @@ Auto-generated from `quantforge` v1.531.0 by `docs/gen_api.py` — do not edit b
 > period end dates (the start date itself is not included).
 
 ## shout
+
+### `ladder_call(S, K, rungs, t, r, sigma, steps=200, q=0.0)`  _function_
+
+> Ladder call price on a CRR tree.
+>
+> A ladder call locks in a guaranteed payoff each time the underlying touches a
+> preset rung ``L_i > K``: the terminal payoff is
+> ``max(S_T - K, max_touched L_i - K, 0)``. Priced by carrying the highest rung
+> reached along each tree path (a state variable on the sorted rungs) through
+> backward induction. At least the vanilla call; more/higher rungs raise the
+> value up to the shout-like limit.
 
 ### `shout_call(S, K, t, r, sigma, steps=200, q=0.0)`  _function_
 

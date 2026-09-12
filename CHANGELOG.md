@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.532.0] - 2026-09-12
+
+### Added
+- `shout.py`: `ladder_call` prices a ladder call on a CRR tree -- the payoff is
+  floored at the highest preset rung the underlying touches before expiry,
+  `max(S_T - K, max_touched L_i - K, 0)`, carried as a rung-state variable through
+  backward induction. Cross-checked: with no rungs it reproduces the plain CRR
+  European call to 1e-9, rungs at or below the strike are ignored, more/higher
+  rungs raise the value, and higher volatility raises the value.
+
 ## [1.531.0] - 2026-09-12
 
 ### Added
