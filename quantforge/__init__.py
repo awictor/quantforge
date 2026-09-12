@@ -219,6 +219,7 @@ from .inflation import (
 )
 from .brinson import (
     allocation_effect, selection_effect, interaction_effect, brinson_attribution,
+    carino_factor, linked_active_return, carino_linked_effects,
 )
 from .factor_model import (
     factor_regression, factor_expected_return, factor_attribution,
@@ -507,7 +508,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.454.0"
+__version__ = "1.455.0"
 
 __all__ = [
     "OptionType",
@@ -861,6 +862,9 @@ __all__ = [
     "selection_effect",
     "interaction_effect",
     "brinson_attribution",
+    "carino_factor",
+    "linked_active_return",
+    "carino_linked_effects",
     "factor_regression",
     "factor_expected_return",
     "factor_attribution",

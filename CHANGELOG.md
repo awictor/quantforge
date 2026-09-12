@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.455.0] - 2026-09-11
+
+### Added
+- `carino_factor`, `linked_active_return`, `carino_linked_effects` (in
+  `brinson.py`): Cariño (1999) multi-period linking so per-period Brinson effects
+  compound to the geometrically-linked active return. Cross-checked: the linked
+  active return is the geometric compounding, the Cariño-smoothed effects sum to it
+  (where naive arithmetic summation leaves a residual), and a single period reduces
+  to the arithmetic active return.
+
 ## [1.454.0] - 2026-09-11
 
 ### Added

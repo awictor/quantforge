@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.454.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.455.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## actuarial
 
@@ -736,12 +736,44 @@ Auto-generated from `quantforge` v1.454.0 by `docs/gen_api.py` — do not edit b
 > return), and ``total_effect`` (allocation + selection + interaction totals).
 > The total effect equals the active return by construction.
 
+### `carino_factor(portfolio_return, benchmark_return)`  _function_
+
+> Cariño (1999) smoothing factor linking arithmetic effects across periods.
+>
+> ``k = ln(1 + r_p) - ln(1 + r_b)) / (r_p - r_b)`` when the returns differ, else
+> ``1 / (1 + r_p)``. Scaling each period's arithmetic effects by ``k_t`` and
+> dividing by the total-period factor makes the smoothed effects compound
+> exactly to the geometric active return -- resolving the residual that plain
+> arithmetic summation leaves across multiple periods.
+
+### `carino_linked_effects(period_effects, portfolio_returns_by_period, benchmark_returns_by_period)`  _function_
+
+> Cariño-smoothed multi-period effect totals that link geometrically.
+>
+> ``period_effects`` is a list of per-period arithmetic effect totals (e.g. the
+> allocation totals from :func:`brinson_attribution` each period). Each is scaled
+> by its Cariño factor and divided by the total-period factor
+> ``k = (ln(1 + R_p) - ln(1 + R_b)) / (R_p - R_b)`` on the compounded returns, so
+> the smoothed effects across periods sum to the geometrically-linked active
+> return. Returns the smoothed per-period effect list.
+
 ### `interaction_effect(portfolio_weights, benchmark_weights, portfolio_returns, benchmark_returns)`  _function_
 
 > Per-segment interaction effect ``(w_p - w_b) * (r_p - r_b)``.
 >
 > The cross term -- the combined effect of active weighting and active selection
 > in the same segment.
+
+### `linked_active_return(portfolio_returns_by_period, benchmark_returns_by_period)`  _function_
+
+> Geometrically-linked active return over multiple periods.
+>
+> Compounds each side's total return across periods and returns the difference
+> of the geometric returns:
+>
+>     (prod(1 + r_p,t) - 1) - (prod(1 + r_b,t) - 1).
+>
+> The quantity multi-period Brinson effects must sum to under Cariño linking.
 
 ### `selection_effect(benchmark_weights, portfolio_returns, benchmark_returns)`  _function_
 

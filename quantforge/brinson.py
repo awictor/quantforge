@@ -59,6 +59,74 @@ def interaction_effect(portfolio_weights, benchmark_weights, portfolio_returns,
                 benchmark_returns)]
 
 
+def carino_factor(portfolio_return, benchmark_return):
+    """Cariño (1999) smoothing factor linking arithmetic effects across periods.
+
+    ``k = ln(1 + r_p) - ln(1 + r_b)) / (r_p - r_b)`` when the returns differ, else
+    ``1 / (1 + r_p)``. Scaling each period's arithmetic effects by ``k_t`` and
+    dividing by the total-period factor makes the smoothed effects compound
+    exactly to the geometric active return -- resolving the residual that plain
+    arithmetic summation leaves across multiple periods.
+    """
+    import math
+    if portfolio_return <= -1.0 or benchmark_return <= -1.0:
+        raise ValueError("returns must exceed -100%")
+    if abs(portfolio_return - benchmark_return) < 1e-12:
+        return 1.0 / (1.0 + portfolio_return)
+    return (math.log1p(portfolio_return) - math.log1p(benchmark_return)) \
+        / (portfolio_return - benchmark_return)
+
+
+def linked_active_return(portfolio_returns_by_period, benchmark_returns_by_period):
+    """Geometrically-linked active return over multiple periods.
+
+    Compounds each side's total return across periods and returns the difference
+    of the geometric returns:
+
+        (prod(1 + r_p,t) - 1) - (prod(1 + r_b,t) - 1).
+
+    The quantity multi-period Brinson effects must sum to under Cariño linking.
+    """
+    n = len(portfolio_returns_by_period)
+    if len(benchmark_returns_by_period) != n:
+        raise ValueError("period series must have equal length")
+    prod_p = 1.0
+    prod_b = 1.0
+    for rp, rb in zip(portfolio_returns_by_period, benchmark_returns_by_period):
+        prod_p *= 1.0 + rp
+        prod_b *= 1.0 + rb
+    return (prod_p - 1.0) - (prod_b - 1.0)
+
+
+def carino_linked_effects(period_effects, portfolio_returns_by_period,
+                          benchmark_returns_by_period):
+    """Cariño-smoothed multi-period effect totals that link geometrically.
+
+    ``period_effects`` is a list of per-period arithmetic effect totals (e.g. the
+    allocation totals from :func:`brinson_attribution` each period). Each is scaled
+    by its Cariño factor and divided by the total-period factor
+    ``k = (ln(1 + R_p) - ln(1 + R_b)) / (R_p - R_b)`` on the compounded returns, so
+    the smoothed effects across periods sum to the geometrically-linked active
+    return. Returns the smoothed per-period effect list.
+    """
+    n = len(period_effects)
+    if not (len(portfolio_returns_by_period) == len(benchmark_returns_by_period) == n):
+        raise ValueError("all period series must have equal length")
+    Rp = 1.0
+    Rb = 1.0
+    for rp, rb in zip(portfolio_returns_by_period, benchmark_returns_by_period):
+        Rp *= 1.0 + rp
+        Rb *= 1.0 + rb
+    Rp -= 1.0
+    Rb -= 1.0
+    k_total = carino_factor(Rp, Rb)
+    out = []
+    for eff, rp, rb in zip(period_effects, portfolio_returns_by_period,
+                           benchmark_returns_by_period):
+        out.append(eff * carino_factor(rp, rb) / k_total)
+    return out
+
+
 def brinson_attribution(portfolio_weights, benchmark_weights, portfolio_returns,
                         benchmark_returns):
     """Full Brinson attribution: allocation, selection, interaction, and totals.
