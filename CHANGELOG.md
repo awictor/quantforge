@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.964.0] - 2026-09-13
+
+### Added
+- `gradient_boost.py`: gradient-boosted regression trees (`fit_gradient_boost`,
+  `predict_gradient_boost`) — additive shallow trees fit to residuals with a shrinkage
+  learning rate. Cross-checked: beats a single shallow tree, training error falls
+  monotonically with the estimator count, a zero learning rate returns the mean, and it
+  generalizes on held-out data.
+
 ## [1.963.0] - 2026-09-13
 
 ### Documentation

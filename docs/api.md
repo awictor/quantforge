@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.963.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.964.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -5622,6 +5622,21 @@ Auto-generated from `quantforge` v1.963.0 by `docs/gen_api.py` — do not edit b
 > parameter), ``std_error`` (asymptotic, from the ``pi^2/6`` log-periodogram
 > variance), ``m`` and ``n``. ``d ~ 0`` indicates short memory, ``d > 0`` long
 > memory, ``d < 0`` anti-persistence.
+
+## gradient_boost
+
+### `fit_gradient_boost(X, y, n_estimators=100, learning_rate=0.1, max_depth=3, min_samples=2)`  _function_
+
+> Fit a gradient-boosted regression-tree ensemble (squared-error loss).
+>
+> Returns a dict with the initial ``base`` prediction (the mean of ``y``), the list
+> of ``trees``, and ``learning_rate``. Each tree is fit to the current residuals and
+> contributes ``learning_rate * its prediction``. Feed the result to
+> :func:`predict_gradient_boost`.
+
+### `predict_gradient_boost(model, X_query)`  _function_
+
+> Predict targets for ``X_query`` with a fitted gradient-boosted ensemble.
 
 ## gramcharlier
 
