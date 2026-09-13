@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.862.0] - 2026-09-13
+
+### Added
+- `platt_scaling.py`: Platt sigmoid probability calibration (`platt_fit`,
+  `platt_predict`, `platt_calibrate`) with Platt's smoothed targets and a Newton
+  solver on the regularized logistic loss. Cross-checked: the fit is a genuine loss
+  minimum (no local perturbation lowers it), the gradient is zero there, calibrated
+  probabilities rise monotonically with the score and stay in [0, 1].
+
 ## [1.861.0] - 2026-09-13
 
 ### Documentation

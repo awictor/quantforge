@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.861.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.862.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -9446,6 +9446,29 @@ Auto-generated from `quantforge` v1.861.0 by `docs/gen_api.py` — do not edit b
 ### `perpetual_exercise_boundary(K, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None)`  _function_
 
 > The optimal-exercise spot ``S*`` for a perpetual American option.
+
+## platt_scaling
+
+### `platt_calibrate(train_scores, train_labels, new_scores=None, max_iter=100)`  _function_
+
+> Fit Platt scaling and return ``(params, predict)``.
+>
+> ``params`` is ``(A, B)`` and ``predict(scores)`` maps raw scores to calibrated
+> probabilities. If ``new_scores`` is given, returns ``(params, calibrated_new)``
+> instead, applying the fit directly.
+
+### `platt_fit(scores, labels, max_iter=100, tol=1e-10)`  _function_
+
+> Fit Platt sigmoid parameters ``(A, B)`` to scores and binary labels.
+>
+> ``P(y=1|s) = 1 / (1 + exp(-(A s + B)))``. Uses Platt's smoothed targets and
+> Newton's method on the regularized logistic loss. Returns ``(A, B)``; a
+> well-separated classifier gives ``A > 0`` (probability rises with the score) in
+> this logistic-standard sign convention. Pure standard library.
+
+### `platt_predict(scores, A, B)`  _function_
+
+> Apply a fitted Platt sigmoid to scores, returning calibrated probabilities.
 
 ## poly_features
 
