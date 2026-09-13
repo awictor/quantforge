@@ -556,6 +556,7 @@ from .permutation_test import permutation_test, paired_permutation_test
 from .anderson_darling_ksample import anderson_darling_ksample
 from .variance_tests import levene_test, bartlett_test
 from .dagostino import dagostino_k2
+from .integrate2d import integrate2d_gauss, integrate2d_simpson
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -946,7 +947,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.993.0"
+__version__ = "1.994.0"
 
 __all__ = [
     "OptionType",
@@ -1770,6 +1771,8 @@ __all__ = [
     "levene_test",
     "bartlett_test",
     "dagostino_k2",
+    "integrate2d_gauss",
+    "integrate2d_simpson",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.993.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.994.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -7012,6 +7012,23 @@ Auto-generated from `quantforge` v1.993.0 by `docs/gen_api.py` — do not edit b
 > float
 >     Fair upfront premium at inception. At least zero; equals the plain
 >     European call value when ``installment`` is zero or ``pay_times`` empty.
+
+## integrate2d
+
+### `integrate2d_gauss(f, a, b, c, d, n=5)`  _function_
+
+> Tensor Gauss-Legendre integral of ``f(x, y)`` over ``[a, b] x [c, d]``.
+>
+> ``n`` in {2, 3, 4, 5} is the order per axis; exact for polynomials up to degree
+> ``2n - 1`` in each variable. Uses ``n^2`` function evaluations.
+
+### `integrate2d_simpson(f, a, b, c, d, nx=50, ny=50)`  _function_
+
+> Composite-Simpson double integral of ``f(x, y)`` over ``[a, b] x [c, d]``.
+>
+> Integrates in ``y`` for each ``x`` then in ``x`` (Fubini), each by composite
+> Simpson with ``ny`` / ``nx`` panels. Slower but robust for integrands the smooth
+> Gauss rule would miss.
 
 ## interpolation
 

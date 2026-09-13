@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.994.0] - 2026-09-13
+
+### Added
+- `integrate2d.py`: two-dimensional integration over a rectangle — `integrate2d_gauss`
+  (tensor Gauss-Legendre) and `integrate2d_simpson` (composite Simpson via Fubini).
+  Cross-checked: exact on separable polynomials up to the Gauss degree, recovers the
+  2-D Gaussian integral (pi) and sin*cos analytically, and the two rules agree to
+  machine precision on a smooth polynomial.
+
 ## [1.993.0] - 2026-09-13
 
 ### Documentation
