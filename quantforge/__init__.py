@@ -274,6 +274,7 @@ from .double_barrier import double_knockout_call, double_knockin_call
 from .range_accrual import range_accrual_note
 from .hp_filter import hp_filter
 from .kalman import kalman_local_level, kalman_steady_state_gain
+from .kalman_filter import kalman_filter, kalman_smoother
 from .kalman_beta import kalman_regression_beta
 from .theil_sen import theil_sen
 from .robust_stats import (
@@ -831,7 +832,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.843.0"
+__version__ = "1.844.0"
 
 __all__ = [
     "OptionType",
@@ -1264,6 +1265,8 @@ __all__ = [
     "hp_filter",
     "kalman_local_level",
     "kalman_steady_state_gain",
+    "kalman_filter",
+    "kalman_smoother",
     "kalman_regression_beta",
     "theil_sen",
     "median_absolute_deviation",

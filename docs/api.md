@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.843.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.844.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -6470,6 +6470,27 @@ Auto-generated from `quantforge` v1.843.0 by `docs/gen_api.py` — do not edit b
 > -------
 > (betas, variances) : (list[float], list[float])
 >     The filtered slope and its posterior variance at each step.
+
+## kalman_filter
+
+### `kalman_filter(observations, F, H, Q, R, x0, P0)`  _function_
+
+> Kalman filter over a sequence of observation vectors.
+>
+> ``F`` (state x state), ``H`` (obs x state), ``Q`` (state x state process cov),
+> ``R`` (obs x obs measurement cov), ``x0``/``P0`` the initial state mean and
+> covariance. Each entry of ``observations`` is an observation vector. Returns a
+> dict with ``states`` (filtered means), ``covariances``, and ``log_likelihood``
+> (the Gaussian log-likelihood of the observations from the prediction errors).
+
+### `kalman_smoother(observations, F, H, Q, R, x0, P0)`  _function_
+
+> Rauch-Tung-Striebel smoother: filter then a backward refinement pass.
+>
+> Returns a dict with ``states`` (smoothed means) and ``covariances``. Each smoothed
+> covariance is no larger (in the positive-definite sense; here checked on the
+> trace) than the corresponding filtered covariance, since the smoother conditions
+> on the whole series rather than only the past.
 
 ## kim
 

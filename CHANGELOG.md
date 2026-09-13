@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.844.0] - 2026-09-13
+
+### Added
+- `kalman_filter.py`: the general multivariate linear-Gaussian `kalman_filter`
+  (predict/update with the data log-likelihood) and `kalman_smoother` (RTS backward
+  pass). Cross-checked: with scalar 1x1 matrices it reproduces the existing
+  local-level filter to machine precision, the smoother's covariances never exceed
+  the filter's, a 2-D constant-velocity model tracks a moving target and recovers its
+  velocity, and the smoothed endpoint equals the filtered endpoint.
+
 ## [1.843.0] - 2026-09-13
 
 ### Documentation
