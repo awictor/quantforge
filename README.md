@@ -1962,6 +1962,21 @@ recovers a known impact coefficient from simulated data); `vpin` (Easley-Lopez d
 Prado-O'Hara) is the mean absolute order imbalance across equal-volume buckets —
 zero for balanced flow, one for one-sided.
 
+Those measures need each trade signed, which raw tapes rarely provide; three
+classifiers infer the aggressor side:
+
+```python
+from quantforge import tick_rule, quote_rule, lee_ready
+
+tick_rule(prices)                    # +1 uptick, -1 downtick, carry on a flat tick
+quote_rule(prices, bids, asks)       # side of the bid-ask midpoint (0 exactly at it)
+lee_ready(prices, bids, asks)        # Lee-Ready hybrid: quote rule, tick tiebreak
+```
+
+`lee_ready` is the standard choice: it signs by the quote midpoint away from it and
+falls back to the tick rule at the midpoint, so every trade gets a `+1 / -1` you can
+feed straight into `vpin` or `order_flow_imbalance`.
+
 ## Structured notes
 
 Principal-protected notes (capped and uncapped), reverse convertibles with a fair

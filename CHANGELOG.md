@@ -24,6 +24,13 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.749.0] - 2026-09-12
+
+### Documentation
+- README optimal-execution section now documents the trade-sign classifiers
+  (`tick_rule`, `quote_rule`, `lee_ready`) with a worked example, noting they
+  produce the signed flow the order-flow measures consume.
+
 ## [1.748.0] - 2026-09-12
 
 ### Added
