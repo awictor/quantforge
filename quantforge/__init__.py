@@ -488,6 +488,7 @@ from .rainbow_n import rainbow_option_mc
 from .curran_asian import curran_asian
 from .minimize1d import golden_section_min, brent_min
 from .numdiff import gradient, hessian, jacobian
+from .richardson_derivative import ridders_derivative, ridders_second_derivative
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -878,7 +879,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.899.0"
+__version__ = "1.900.0"
 
 __all__ = [
     "OptionType",
@@ -1598,6 +1599,8 @@ __all__ = [
     "gradient",
     "hessian",
     "jacobian",
+    "ridders_derivative",
+    "ridders_second_derivative",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

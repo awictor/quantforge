@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.899.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.900.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -10820,6 +10820,25 @@ Auto-generated from `quantforge` v1.899.0 by `docs/gen_api.py` — do not edit b
 >
 > The capital needed to fund the stream. Rises with the withdrawal, the horizon,
 > and the growth rate; falls with the discount rate.
+
+## richardson_derivative
+
+### `ridders_derivative(f, x, h=None, con=1.4, safe=2.0, ntab=10)`  _function_
+
+> First derivative ``f'(x)`` by Ridders' polynomial extrapolation.
+>
+> ``h`` is the initial step (defaults to a scale-aware value); ``con`` is the step
+> shrink factor per row, ``ntab`` the tableau size. Returns ``(derivative, error)``
+> where ``error`` is the estimated absolute error. Raises if ``f`` cannot be improved
+> at all.
+
+### `ridders_second_derivative(f, x, h=None, con=1.4, safe=2.0, ntab=10)`  _function_
+
+> Second derivative ``f''(x)`` by Ridders extrapolation of the central formula.
+>
+> Uses the three-point second difference ``(f(x+h) - 2 f(x) + f(x-h)) / h^2`` at a
+> shrinking step sequence with Richardson extrapolation. Returns
+> ``(second_derivative, error)``.
 
 ## ridge
 

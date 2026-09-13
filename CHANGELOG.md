@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.900.0] - 2026-09-13
+
+### Added
+- `richardson_derivative.py`: `ridders_derivative` and `ridders_second_derivative`,
+  high-accuracy numerical derivatives by Ridders' adaptive Richardson extrapolation
+  with an error estimate. Cross-checked: first and second derivatives of sin/exp/log/
+  power/reciprocal to near machine precision, an honest error estimate, and the
+  numerical derivative of the Black-Scholes price matching the closed-form delta.
+
 ## [1.899.0] - 2026-09-13
 
 ### Documentation
