@@ -310,6 +310,7 @@ from .hodges_lehmann import hodges_lehmann_location, hodges_lehmann_shift
 from .wilcoxon import wilcoxon_signed_rank_test, sign_test
 from .scale_tests import ansari_bradley_test, mood_test
 from .kruskal_wallis import kruskal_wallis_test, friedman_test
+from .dunn_test import dunn_test
 from .kalman_beta import kalman_regression_beta
 from .theil_sen import theil_sen
 from .robust_stats import (
@@ -869,7 +870,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.881.0"
+__version__ = "1.882.0"
 
 __all__ = [
     "OptionType",
@@ -1345,6 +1346,7 @@ __all__ = [
     "mood_test",
     "kruskal_wallis_test",
     "friedman_test",
+    "dunn_test",
     "kalman_regression_beta",
     "theil_sen",
     "median_absolute_deviation",

@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.882.0] - 2026-09-13
+
+### Added
+- `dunn_test.py`: Dunn's post-hoc pairwise rank test after a Kruskal-Wallis rejection,
+  using one pooled tie-corrected ranking with Holm/Bonferroni/none p-value adjustment.
+  Cross-checked: identical groups give z = 0, well-separated groups are significant
+  after adjustment, adjusted p-values never fall below the raw ones, and the pairwise
+  z^2 equals the Kruskal-Wallis H exactly on two groups.
+
 ## [1.881.0] - 2026-09-13
 
 ### Documentation

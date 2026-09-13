@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.881.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.882.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -3495,6 +3495,18 @@ Auto-generated from `quantforge` v1.881.0 by `docs/gen_api.py` — do not edit b
 ### `dual_swap_value(ois_curve, proj_curve, pay_times, fixed_rate, payer=True, basis=0.0)`  _function_
 
 > Value of a unit-notional swap (payer = pay fixed, receive float).
+
+## dunn_test
+
+### `dunn_test(groups, adjust='holm')`  _function_
+
+> Dunn's post-hoc pairwise test after Kruskal-Wallis.
+>
+> ``groups`` is a sequence of samples. Returns a list of pairwise result dicts, one
+> per unordered pair ``(i, j)``, each with ``groups`` ``(i, j)``, the ``z`` statistic,
+> the raw ``p_value`` and the ``p_adjusted`` value. ``adjust`` is ``"holm"``
+> (default), ``"bonferroni"`` or ``None`` for no correction. Uses one pooled ranking
+> with the tie correction, so it is consistent with the Kruskal-Wallis H.
 
 ## dv01
 
