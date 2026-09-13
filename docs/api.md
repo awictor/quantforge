@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.763.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.764.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -11872,6 +11872,26 @@ Auto-generated from `quantforge` v1.763.0 by `docs/gen_api.py` — do not edit b
 >
 > ``+1`` on an uptick, ``-1`` on a downtick, and the previous sign carried forward
 > on a zero tick (the first trade defaults to ``+1``). Needs at least one price.
+
+## transfer_entropy
+
+### `mutual_information(x, y, bins=8)`  _function_
+
+> Mutual information ``I(X;Y)`` in nats, from a 2-D histogram.
+>
+> Non-negative, zero iff ``X`` and ``Y`` are independent, and symmetric:
+> ``mutual_information(x, y) == mutual_information(y, x)``. ``bins`` sets the
+> discretization resolution. Aligned series of at least two points.
+
+### `transfer_entropy(source, target, bins=8)`  _function_
+
+> Transfer entropy ``TE_{source -> target}`` in nats (lag-1, Schreiber).
+>
+> Measures how much the source's present reduces uncertainty about the target's
+> next value beyond the target's own present. Built from the joint histogram of
+> ``(target_{t+1}, target_t, source_t)``. Directional: run it both ways to see
+> which series leads. Non-negative; near zero when the source carries no extra
+> information about the target's future. Aligned series of at least three points.
 
 ## trinomial
 

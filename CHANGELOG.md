@@ -24,6 +24,16 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.764.0] - 2026-09-12
+
+### Added
+- `transfer_entropy.py`: histogram-based `mutual_information` (symmetric, zero iff
+  independent) and Schreiber's directional `transfer_entropy` (lag-1). Cross-checked:
+  mutual information is near zero for independent series, symmetric in its arguments,
+  and large under dependence; transfer entropy is much larger in the driving
+  direction of a coupled system (``Y_{t+1} = 0.6 X_t + noise`` gives
+  ``TE_{X->Y} >> TE_{Y->X}``) and near zero for independent series.
+
 ## [1.763.0] - 2026-09-12
 
 ### Documentation
