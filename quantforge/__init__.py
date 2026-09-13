@@ -520,6 +520,7 @@ from .optimize import nelder_mead
 from .differential_evolution import differential_evolution
 from .nnls import nnls
 from .simulated_annealing import simulated_annealing
+from .bfgs import bfgs
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -910,7 +911,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.933.0"
+__version__ = "1.934.0"
 
 __all__ = [
     "OptionType",
@@ -1672,6 +1673,7 @@ __all__ = [
     "differential_evolution",
     "nnls",
     "simulated_annealing",
+    "bfgs",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

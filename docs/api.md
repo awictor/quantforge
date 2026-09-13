@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.933.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.934.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -629,6 +629,17 @@ Auto-generated from `quantforge` v1.933.0 by `docs/gen_api.py` — do not edit b
 >     DV01 sign convention (positive for a payer).
 >
 > A fixed ``seed`` is required for the CRN differences to be meaningful.
+
+## bfgs
+
+### `bfgs(func, x0, tol=1e-08, max_iter=500)`  _function_
+
+> Minimize ``func`` from ``x0`` by BFGS with a backtracking line search.
+>
+> ``func`` takes a length-``n`` list and returns a scalar; the gradient is computed by
+> central differences. Returns a dict with ``x`` (minimizer), ``fun`` (its value),
+> ``n_iter``, ``converged`` (gradient norm below ``tol``) and ``grad_norm``. Best for
+> smooth objectives; use a global method first if the landscape is multimodal.
 
 ## binomial
 

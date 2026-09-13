@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.934.0] - 2026-09-13
+
+### Added
+- `bfgs.py`: `bfgs`, a quasi-Newton minimizer building an inverse-Hessian approximation
+  from successive numerical gradients, with an Armijo backtracking line search.
+  Cross-checked: converges on a quadratic bowl in a couple of iterations (superlinear),
+  reaches the Rosenbrock minimum, matches the exact linear solve on a 5-D quadratic to
+  1e-6, and drives a smooth convex objective's gradient to zero.
+
 ## [1.933.0] - 2026-09-13
 
 ### Documentation
