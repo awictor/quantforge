@@ -3942,6 +3942,11 @@ min_variance_weights(cov)
 risk_parity_weights(cov)          # equal risk contributions
 var_budget([0.4, 0.4, 0.2], cov)  # % risk per position
 
+# Arbitrary risk budgets (generalizes risk parity) and the realized contributions.
+from quantforge import risk_budget_weights, risk_contributions
+w = risk_budget_weights(cov, budgets=[0.5, 0.3, 0.2])   # target risk shares
+risk_contributions(w, cov)        # each asset's variance contribution (sums to var)
+
 # Clustering-based and inverse-vol allocation (no matrix inversion).
 from quantforge import inverse_volatility_weights, hierarchical_risk_parity
 inverse_volatility_weights(cov)
