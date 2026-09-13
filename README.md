@@ -4562,6 +4562,26 @@ near machine precision without hand-tuning the step, unlike the fixed-step `grad
 The numerical Black-Scholes delta above landing on the closed-form value is the kind
 of cross-check that catches a sign or scaling slip in a hand-coded Greek.
 
+When the function can be evaluated on complex inputs, the complex-step method is even
+sharper — it has *no* subtractive cancellation, so the step can be made
+arbitrarily small:
+
+```python
+import cmath
+from quantforge import complex_step_derivative, complex_step_gradient
+
+complex_step_derivative(cmath.sin, 0.7)              # 0.7648421872844885
+complex_step_derivative(cmath.sin, 0.7, h=1e-100)    # identical — no round-off floor
+complex_step_gradient(lambda v: v[0]**2 + 3*v[1]**2 + v[0]*v[1], [1.0, 2.0])  # [4.0, 13.0]
+```
+
+`complex_step_derivative` evaluates `Im(f(x + i·h)) / h`: the imaginary part carries
+the derivative with an `O(h²)` error and no subtraction of nearby values, so even
+`h = 1e-100` gives a machine-precision result where a real finite difference would
+collapse to noise. The one requirement is that `f` be written with complex-safe
+operations (pass `cmath.sin` rather than `math.sin`, and avoid `abs`/`max`/comparisons
+that break on complex numbers).
+
 The special functions behind the distribution routines are public:
 
 ```python

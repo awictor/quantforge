@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.903.0] - 2026-09-13
+
+### Documentation
+- README: documented `complex_step_derivative` / `complex_step_gradient` in the
+  numerical-utilities section, including the `h = 1e-100` no-cancellation
+  demonstration. Every snippet value verified.
+
 ## [1.902.0] - 2026-09-13
 
 ### Added
