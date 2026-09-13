@@ -31,6 +31,12 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.899.0] - 2026-09-13
+
+### Documentation
+- README: extended the agreement section with `cohen_kappa`, `weighted_kappa` and
+  `fleiss_kappa` for categorical inter-rater agreement. Every snippet value verified.
+
 ## [1.898.0] - 2026-09-13
 
 ### Added

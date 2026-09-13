@@ -3105,6 +3105,30 @@ raters and are related to the single-rating forms by the Spearman-Brown formula.
 rater with a pure additive offset the consistency ICC(3) stays at 1 while the
 agreement ICC(2) drops — the same distinction Bland-Altman's bias exposes.
 
+For *categorical* ratings, kappa corrects the raw agreement for what chance alone would
+produce. `cohen_kappa` handles two raters on nominal labels, `weighted_kappa` handles
+ordinal categories (penalizing far-apart disagreements more), and `fleiss_kappa`
+extends to any number of raters:
+
+```python
+from quantforge import cohen_kappa, weighted_kappa, fleiss_kappa
+
+cohen_kappa(['y', 'y', 'n', 'n', 'y'], ['y', 'n', 'n', 'n', 'y'])   # 0.6154
+
+# ordinal: an off-by-one disagreement is scored far above an off-by-two one
+weighted_kappa([1, 2, 3, 2, 1], [1, 2, 2, 2, 1], "linear")   #  0.7059
+weighted_kappa([1, 2, 3, 2, 1], [3, 2, 1, 2, 3], "linear")   # -0.3636
+
+# m raters per subject: rows are per-category counts (each row sums to m)
+fleiss_kappa([[0, 0, 0, 0, 14], [0, 2, 6, 4, 2], [0, 0, 3, 5, 6],
+             [0, 3, 9, 2, 0], [2, 2, 8, 1, 1]])              # 0.2519
+```
+
+All three are `(p_observed - p_expected) / (1 - p_expected)`: 1 is perfect agreement,
+0 is chance level, negative is worse than chance. On two categories a linear
+`weighted_kappa` equals `cohen_kappa` exactly; `weighted_kappa` with `"quadratic"`
+weights is the usual choice for ordered scales and links back to the ICC.
+
 ## Isotonic regression (monotone fit)
 
 When you know the response only moves one way — a dose-response curve, a calibration
