@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.714.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.716.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -10384,6 +10384,47 @@ Auto-generated from `quantforge` v1.714.0 by `docs/gen_api.py` — do not edit b
 > :func:`quantforge.parisian_barrier_mc`, which it cross-checks. ``n_steps`` is
 > capped by the Sobol generator's dimension (now 12), so the window is resolved
 > to ``round(window / dt)`` consecutive steps.
+
+## special
+
+### `betainc(a, b, x)`  _function_
+
+> Regularized incomplete beta ``I_x(a, b)`` via the Lentz continued fraction.
+>
+> ``I_0 = 0``, ``I_1 = 1``, and the symmetry ``I_x(a, b) = 1 - I_{1-x}(b, a)`` is
+> used where the fraction converges slowly. Requires ``a, b > 0`` and
+> ``0 <= x <= 1``.
+
+### `digamma(x)`  _function_
+
+> Digamma ``psi(x) = d/dx ln Gamma(x)`` for ``x > 0``.
+>
+> Recurses up to ``x >= 6`` with ``psi(x) = psi(x+1) - 1/x``, then applies the
+> asymptotic (Stirling) series. Accurate to ~1e-12 for positive arguments.
+
+### `erfinv(y)`  _function_
+
+> Inverse error function on ``(-1, 1)``.
+>
+> A rational approximation (Giles) seeds a Newton-Halley refinement against
+> :func:`math.erf`, giving full double precision. ``erfinv(0) = 0`` and
+> ``erfinv(erf(x)) = x``.
+
+### `gammainc(a, x)`  _function_
+
+> Regularized lower incomplete gamma ``P(a, x) = gamma(a, x) / Gamma(a)``.
+>
+> Series for ``x < a + 1`` and the complement of the Lentz continued fraction
+> otherwise (Numerical Recipes). ``P(a, 0) = 0`` and ``P(a, x) -> 1`` as
+> ``x -> inf``. Requires ``a > 0`` and ``x >= 0``.
+
+### `gammaincc(a, x)`  _function_
+
+> Regularized upper incomplete gamma ``Q(a, x) = 1 - P(a, x)``.
+>
+> Uses the continued fraction directly for ``x >= a + 1`` (where it converges
+> fast) and the series complement otherwise, so ``gammainc(a, x) + gammaincc(a, x)
+> == 1`` to machine precision.
 
 ## spectral
 

@@ -16,6 +16,17 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.716.0] - 2026-09-12
+
+### Added
+- `special.py`: public special functions that underpin the distribution routines --
+  `gammainc`/`gammaincc` (regularized lower/upper incomplete gamma), `betainc`
+  (regularized incomplete beta), `digamma`, and `erfinv`. Cross-checked against
+  identities and known values: `P + Q = 1`, `P(1/2, x) = erf(sqrt(x))`,
+  `P(1, x) = 1 - e^{-x}`, the incomplete-beta symmetry `I_x(a,b) = 1 - I_{1-x}(b,a)`
+  and `I_x(1,1) = x`, `digamma(1) = -gamma` with the recurrence
+  `psi(x+1) = psi(x) + 1/x`, and `erf(erfinv(y)) = y` to machine precision.
+
 ## [1.715.0] - 2026-09-12
 
 ### Documentation

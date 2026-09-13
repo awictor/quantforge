@@ -235,6 +235,9 @@ from .gauss_hermite import (
 from .gauss_laguerre import (
     gauss_laguerre_nodes_weights, gauss_laguerre_integral,
 )
+from .special import (
+    gammainc, gammaincc, betainc, digamma, erfinv,
+)
 from .hrp import inverse_volatility_weights, hierarchical_risk_parity
 from .cppi import (
     discounted_floor, cushion, risky_exposure, cppi_path,
@@ -726,7 +729,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.715.0"
+__version__ = "1.716.0"
 
 __all__ = [
     "OptionType",
@@ -1097,6 +1100,11 @@ __all__ = [
     "gauss_hermite_expectation",
     "gauss_laguerre_nodes_weights",
     "gauss_laguerre_integral",
+    "gammainc",
+    "gammaincc",
+    "betainc",
+    "digamma",
+    "erfinv",
     "inverse_volatility_weights",
     "hierarchical_risk_parity",
     "discounted_floor",
