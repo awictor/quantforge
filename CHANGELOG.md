@@ -31,6 +31,12 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.975.0] - 2026-09-13
+
+### Documentation
+- README: documented `lowess` alongside the Savitzky-Golay filter in the smoothing
+  section.
+
 ## [1.974.0] - 2026-09-13
 
 ### Added

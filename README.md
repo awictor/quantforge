@@ -3009,6 +3009,23 @@ It reproduces polynomials up to `degree` exactly, so it introduces no bias on
 locally-polynomial signals, and the `deriv` argument gives a smoothed numerical
 derivative — useful for estimating slopes or curvature from noisy data.
 
+Where Savitzky-Golay uses a fixed window on evenly-spaced data, `lowess` handles
+irregular `x` and arbitrary curvature by fitting a local line in a moving
+tricube-weighted neighbourhood:
+
+```python
+from quantforge import lowess
+
+lowess(x, y, frac=0.3)                 # smoothed value at each x (span = 30% of points)
+lowess(x, y, frac=0.5, iterations=3)   # 3 robustifying passes down-weight outliers
+```
+
+`frac` sets the span (larger = smoother); it reproduces a straight line exactly, cuts a
+noisy sine's error well below the raw scatter, and keeps the input order on unsorted
+data. The Cleveland robustifying `iterations` bisquare-down-weight points with large
+residuals, so a handful of outliers don't distort the local fits — pin them back to the
+trend rather than bending the curve toward them.
+
 ## Kalman filter (local level)
 
 Track a slowly drifting level — a time-varying mean, a dynamic hedge ratio, a
