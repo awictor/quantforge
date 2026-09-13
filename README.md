@@ -3492,6 +3492,25 @@ chi-square; pass a 2×2 `table=[[a, b], [c, d]]` instead of `b`/`c` if you have 
 table. Cochran's Q reduces to the uncorrected McNemar statistic on two treatments, and
 its statistic is chi-square with `k - 1` degrees of freedom.
 
+For an *unpaired* 2×2 table with small counts — where the chi-square approximation is
+unreliable — `fisher_exact_test` gives the exact p-value from the hypergeometric
+distribution, plus the sample odds ratio:
+
+```python
+from quantforge import fisher_exact_test
+
+fisher_exact_test([[3, 1], [1, 3]])                 # the classic tea-tasting table
+# {'odds_ratio': 9.0, 'p_value': 0.4857}
+
+fisher_exact_test([[3, 1], [1, 3]], "greater")["p_value"]   # 0.2429  one-sided
+fisher_exact_test([[8, 2], [1, 5]])                 # {'odds_ratio': 20.0, 'p_value': 0.035}
+```
+
+Conditioning on the margins, it sums the probabilities of every table no more likely
+than the observed one (two-sided), or the upper/lower tail for `"greater"` / `"less"`.
+Use it in place of `chi_square_independence_test` whenever any expected cell count is
+small (the usual rule of thumb is below 5).
+
 For a proportion estimate, four confidence intervals span the accuracy/simplicity
 trade-off:
 

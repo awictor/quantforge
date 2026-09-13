@@ -31,6 +31,12 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.889.0] - 2026-09-13
+
+### Documentation
+- README: extended the hypothesis-test section with `fisher_exact_test` for small-count
+  2x2 tables. Every snippet value verified.
+
 ## [1.888.0] - 2026-09-13
 
 ### Added
