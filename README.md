@@ -635,6 +635,20 @@ realized_quarticity(r)      # (n/3) sum r^4, for jump-test standard errors
 Like bipower these ignore the jump and track the continuous integrated variance;
 MedRV additionally tolerates two close jumps and occasional zero returns.
 
+To decide *whether* a jump occurred, `bns_jump_test` gives the Barndorff-Nielsen-
+Shephard ratio statistic — `(RV - BV) / RV` standardized by the `tripower_quarticity`
+— which is asymptotically standard normal under the no-jump null:
+
+```python
+from quantforge import bns_jump_test, tripower_quarticity
+
+z, p = bns_jump_test(r)      # large z / small p rejects "no jump"
+tripower_quarticity(r)       # jump-robust integrated-quarticity scale
+```
+
+Under the null the statistic holds its ~5% size; a genuine jump drives `z` well
+above the normal critical value (power ~1 in simulation).
+
 At the finest sampling frequencies, microstructure noise biases the naive realized
 variance *upward* by `2 * n * Var(noise)` — and faster sampling makes it worse.
 `two_scale_realized_variance` (Zhang-Mykland-Aït-Sahalia) removes that bias by
