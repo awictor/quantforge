@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.904.0] - 2026-09-13
+
+### Added
+- `sequence_accel.py`: `aitken` (delta-squared acceleration), `shanks` (Shanks
+  transform) and `steffensen` (derivative-free quadratic fixed-point solver).
+  Cross-checked: Aitken cuts the Leibniz-pi partial-sum error by >100x and is exact on
+  a geometric series, Steffensen finds the cos fixed point and sqrt(2) to machine
+  precision in a handful of steps (vs ~69 for plain iteration), and Shanks matches
+  Aitken.
+
 ## [1.903.0] - 2026-09-13
 
 ### Documentation

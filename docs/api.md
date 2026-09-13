@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.903.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.904.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -11554,6 +11554,30 @@ Auto-generated from `quantforge` v1.903.0 by `docs/gen_api.py` — do not edit b
 > 12=annual) until ``maturity_years`` is reached, then applies
 > :func:`adjust_business_day` with ``convention``. Returns the list of adjusted
 > period end dates (the start date itself is not included).
+
+## sequence_accel
+
+### `aitken(sequence)`  _function_
+
+> Aitken's delta-squared acceleration of a sequence.
+>
+> Returns the accelerated sequence, two elements shorter than the input. Each output
+> term extrapolates the limit from three consecutive input terms; for a linearly
+> convergent sequence it converges markedly faster.
+
+### `shanks(sequence)`  _function_
+
+> Shanks transform of a sequence (one pass; same formula as :func:`aitken`).
+
+### `steffensen(g, x0, tol=1e-12, max_iter=100)`  _function_
+
+> Steffensen's method: quadratically-convergent fixed point of ``x = g(x)``.
+>
+> Applies Aitken acceleration to the fixed-point iterates, so it converges
+> quadratically like Newton's method but needs no derivative -- only the map ``g``.
+> Returns a dict with the ``root`` (the fixed point), ``iterations`` and
+> ``converged``. Raises if a zero denominator stalls the iteration before
+> convergence.
 
 ## serial_correlation
 
