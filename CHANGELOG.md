@@ -24,6 +24,17 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.742.0] - 2026-09-12
+
+### Added
+- `jump_test.py`: the Barndorff-Nielsen-Shephard / Huang-Tauchen realized-volatility
+  jump test (`bns_jump_test`) and its `tripower_quarticity` scale. The ratio
+  statistic ``sqrt(n)(RV-BV)/RV`` standardized by the tripower quarticity is
+  asymptotically standard normal under no jump; a large positive z rejects. Cross-
+  checked on a simulated diffusion: under the null the statistic is centred at zero
+  with ~5% rejection at the 5% level, the test has power ~1 against an added jump,
+  and the tripower quarticity is consistent for ``sigma^4`` and jump-robust.
+
 ## [1.741.0] - 2026-09-12
 
 ### Documentation

@@ -309,6 +309,7 @@ from .multiple_testing import (
 )
 from .svi_jumpwing import SVIJumpWing, raw_to_jumpwing, jumpwing_to_raw
 from .realized_kernel import realized_kernel
+from .jump_test import tripower_quarticity, bns_jump_test
 from .tail_dependence import (
     upper_tail_dependence, lower_tail_dependence, exceedance_correlation,
 )
@@ -754,7 +755,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.741.0"
+__version__ = "1.742.0"
 
 __all__ = [
     "OptionType",
@@ -1199,6 +1200,8 @@ __all__ = [
     "min_realized_variance",
     "med_realized_variance",
     "realized_quarticity",
+    "tripower_quarticity",
+    "bns_jump_test",
     "realized_volatility_signature",
     "two_scale_realized_variance",
     "realized_variance_naive",

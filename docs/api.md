@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.741.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.742.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -5936,6 +5936,26 @@ Auto-generated from `quantforge` v1.741.0 by `docs/gen_api.py` — do not edit b
 > (natural) end conditions. The returned function evaluates the piecewise cubic
 > and is exact at the knots, C2 in between. Clamps to the end segments outside
 > ``[xs[0], xs[-1]]``.
+
+## jump_test
+
+### `bns_jump_test(returns)`  _function_
+
+> Barndorff-Nielsen-Shephard ratio jump-test statistic and p-value.
+>
+> Returns ``(z, p_value)`` where ``z`` is the ratio statistic (asymptotically
+> ``N(0, 1)`` under no jump) and ``p_value`` is the upper-tail ``P(Z > z)``. A
+> small p-value rejects the no-jump null in favour of a jump having occurred
+> during the sampled period. Requires at least three returns.
+
+### `tripower_quarticity(returns)`  _function_
+
+> Tripower quarticity ``TQ``, a jump-robust estimator of integrated quarticity.
+>
+> ``TQ = n * mu_{4/3}^{-3} * sum |r_{i-2}|^{4/3} |r_{i-1}|^{4/3} |r_i|^{4/3}`` with
+> ``mu_{4/3} = 2^{2/3} Gamma(7/6) / Gamma(1/2)``. Robust to jumps (each enters only
+> one triple), it estimates ``integral sigma^4`` and sets the scale of the jump
+> test. Requires at least three returns.
 
 ## kalman
 
