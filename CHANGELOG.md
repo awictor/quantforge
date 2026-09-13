@@ -31,6 +31,12 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.847.0] - 2026-09-13
+
+### Documentation
+- README Hodrick-Prescott section now documents the Savitzky-Golay filter
+  (`savgol_filter`, `savgol_coeffs`) with a worked example.
+
 ## [1.846.0] - 2026-09-13
 
 ### Added

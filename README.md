@@ -2802,6 +2802,21 @@ trend (`lambda -> inf` collapses to the least-squares straight line); `lambda = 
 returns the data untouched. Common choices: 1600 (quarterly), 129600 (monthly),
 6.25 (annual).
 
+The Savitzky-Golay filter smooths (or differentiates) by fitting a local polynomial
+in a sliding window, preserving peak shape better than a moving average:
+
+```python
+from quantforge import savgol_filter, savgol_coeffs
+
+savgol_filter(series, window=11, degree=3)            # smoothed series
+savgol_filter(series, window=11, degree=3, deriv=1)   # smoothed first derivative
+savgol_coeffs(11, 3)                                  # the convolution weights
+```
+
+It reproduces polynomials up to `degree` exactly, so it introduces no bias on
+locally-polynomial signals, and the `deriv` argument gives a smoothed numerical
+derivative — useful for estimating slopes or curvature from noisy data.
+
 ## Kalman filter (local level)
 
 Track a slowly drifting level — a time-varying mean, a dynamic hedge ratio, a
