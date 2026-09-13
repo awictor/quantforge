@@ -3098,6 +3098,23 @@ fit["parameters"]        # -> [2.0, 0.5]  (recovered exactly)
 taken numerically -- and converges from a poor starting guess, making it the
 general calibration engine (vol surface, curve, or any parametric fit).
 
+The special functions behind the distribution routines are public:
+
+```python
+from quantforge import gammainc, gammaincc, betainc, digamma, erfinv
+
+gammainc(0.5, x=1.0)        # regularized lower incomplete gamma P(a, x) = erf(1)
+gammaincc(0.5, 1.0)         # upper Q(a, x) = 1 - P
+betainc(2.0, 3.0, x=0.4)    # regularized incomplete beta I_x(a, b)
+digamma(1.0)                # psi(1) = -euler_gamma
+erfinv(0.95)                # inverse error function
+```
+
+`gammainc`/`gammaincc` give the gamma, chi-square and Poisson CDFs; `betainc`
+gives the Student-t, F and binomial CDFs; `erfinv` gives normal quantiles
+(`erfinv(y) = norm_ppf((1+y)/2) / sqrt(2)`). They satisfy `P + Q = 1`,
+`I_x(a,b) = 1 - I_{1-x}(b,a)`, and `erf(erfinv(y)) = y` to machine precision.
+
 ## Nelson-Siegel / Svensson curves
 
 Parametric yield curves and least-squares calibration to observed zeros:
