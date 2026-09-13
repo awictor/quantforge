@@ -31,6 +31,12 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.883.0] - 2026-09-13
+
+### Documentation
+- README: extended the hypothesis-test section with `dunn_test`, the post-hoc
+  pairwise follow-up to Kruskal-Wallis. Every snippet value verified.
+
 ## [1.882.0] - 2026-09-13
 
 ### Added

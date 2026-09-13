@@ -3433,6 +3433,26 @@ equals the Mann-Whitney `z²` exactly. Friedman ranks *within* each block across
 treatments, so it removes between-block variation the way a paired test does — use it
 when the same subjects are measured under every condition.
 
+A significant Kruskal-Wallis tells you *some* group differs but not which pair.
+`dunn_test` is the post-hoc follow-up: it compares every pair using the one pooled
+ranking (so it stays consistent with the H statistic) and adjusts the p-values for the
+multiple comparisons:
+
+```python
+from quantforge import dunn_test
+
+for r in dunn_test([[1, 2, 3, 4, 5], [6, 7, 8, 9, 10], [11, 12, 13, 14, 15]]):
+    r["groups"], r["z"], r["p_value"], r["p_adjusted"]
+# (0, 1)  z -1.768  p 0.0771  adj 0.1542
+# (0, 2)  z -3.536  p 0.0004  adj 0.0012   <- only the far-apart pair survives
+# (1, 2)  z -1.768  p 0.0771  adj 0.1542
+```
+
+Each pair's z uses the tie-corrected standard error from the pooled ranking, and
+`adjust` selects `"holm"` (default), `"bonferroni"` or `None`. The pairwise `z²`
+equals the Kruskal-Wallis `H` on two groups, so Dunn's test is the natural drill-down
+after the omnibus test rejects.
+
 For a proportion estimate, four confidence intervals span the accuracy/simplicity
 trade-off:
 
