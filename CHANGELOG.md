@@ -24,6 +24,16 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.760.0] - 2026-09-12
+
+### Added
+- `dfa.py`: detrended fluctuation analysis (`dfa_exponent`, `dfa_fluctuations`) --
+  the scaling exponent from the RMS of the linearly-detrended integrated profile
+  across window sizes, robust to slow trends where rescaled-range analysis is not.
+  Cross-checked: white noise gives ``alpha ~ 0.5``, a random walk ``~ 1.5``,
+  differenced noise ``< 0.5`` (anti-persistent), and integrating a series adds one
+  to its exponent.
+
 ## [1.759.0] - 2026-09-12
 
 ### Documentation

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.759.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.760.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -2834,6 +2834,25 @@ Auto-generated from `quantforge` v1.759.0 by `docs/gen_api.py` — do not edit b
 > Returns ``(var, es)`` with both as positive loss numbers: ``var`` is the loss
 > the P&L does not exceed with probability ``confidence`` under the
 > risk-neutral density, and ``es`` the mean loss beyond it.
+
+## dfa
+
+### `dfa_exponent(x, scales=None)`  _function_
+
+> Detrended-fluctuation scaling exponent ``alpha``.
+>
+> The slope of ``log F(s)`` regressed on ``log s`` from :func:`dfa_fluctuations`.
+> ``alpha ~ 0.5`` for white noise, ``> 0.5`` for persistent series, ``< 0.5`` for
+> anti-persistent; it equals the Hurst exponent for a stationary long-memory
+> series and exceeds it by 1 for the integrated (random-walk) version.
+
+### `dfa_fluctuations(x, scales=None)`  _function_
+
+> Fluctuation function ``F(s)`` of DFA over a set of window sizes ``scales``.
+>
+> Returns ``(scales, fluctuations)``. ``scales`` defaults to a dyadic-ish grid
+> between 4 and ``len(x)//4``. Windows that do not divide the series exactly drop
+> the remainder. Requires at least 16 points.
 
 ## discount_curve
 
