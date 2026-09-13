@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.723.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.724.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -2452,6 +2452,25 @@ Auto-generated from `quantforge` v1.723.0 by `docs/gen_api.py` — do not edit b
 >
 > Ordinary (equal-weight) sample covariance over variance, the slope of a
 > regression of asset returns on market returns. Series must be equal length.
+
+## correlation_test
+
+### `pearson_correlation_test(x, y, confidence=0.95)`  _function_
+
+> Test ``H0: rho = 0`` and give a Fisher-z confidence interval for ``rho``.
+>
+> Returns a dict with ``r`` (the sample correlation), ``t_stat`` and ``df`` of the
+> two-sided t-test, ``p_value``, and ``conf_int`` ``[low, high]`` at ``confidence``
+> from Fisher's z-transform. The p-value is small when the correlation is unlikely
+> to be zero; the interval is clamped to ``[-1, 1]`` and, at ``|r| = 1``, collapses
+> to the point.
+
+### `pearson_r(x, y)`  _function_
+
+> Pearson product-moment correlation coefficient of paired samples.
+>
+> ``r = cov(x, y) / (sd(x) sd(y))`` in ``[-1, 1]``. Raises if either sample has
+> zero variance.
 
 ## cppi
 

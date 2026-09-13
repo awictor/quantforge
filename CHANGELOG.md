@@ -24,6 +24,16 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.724.0] - 2026-09-12
+
+### Added
+- `correlation_test.py`: `pearson_r` and `pearson_correlation_test` -- the sample
+  correlation with a two-sided t-test of ``rho = 0`` and a Fisher-z confidence
+  interval. Cross-checked: ``r`` matches a by-hand calculation, the t statistic
+  equals ``r sqrt((n-2)/(1-r^2))``, the Fisher interval covers the true correlation
+  at its nominal rate in a Monte Carlo (94.8% at the 95% level), and a strong
+  signal gives a vanishing p-value while noise does not.
+
 ## [1.723.0] - 2026-09-12
 
 ### Documentation
