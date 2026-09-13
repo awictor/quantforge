@@ -2739,6 +2739,25 @@ matches an empirical Monte-Carlo rejection rate; a zero effect gives power equal
 the significance level, and the sample sizes reproduce the standard textbook
 values. One-sample analogues are `one_sample_z_power` / `one_sample_z_sample_size`.
 
+Running many tests inflates false positives; the correction routines adjust a set
+of raw p-values so a fixed threshold controls the family-wise error or the
+false-discovery rate:
+
+```python
+from quantforge import (bonferroni, holm, benjamini_hochberg,
+                        benjamini_yekutieli)
+
+pvals = [0.01, 0.02, 0.03, 0.04, 0.05]
+bonferroni(pvals)            # [0.05, 0.10, 0.15, 0.20, 0.25]  (family-wise)
+holm(pvals)                  # step-down, dominates Bonferroni
+benjamini_hochberg(pvals)    # [0.05, ...]  (false-discovery rate)
+benjamini_yekutieli(pvals)   # FDR under arbitrary dependence
+```
+
+Each returns monotone adjusted p-values aligned with the input. `holm` is a strict
+improvement on `bonferroni` for family-wise control; `benjamini_hochberg` is the
+usual choice when many discoveries are expected and a controlled FDR is acceptable.
+
 ## Autocorrelation (ACF / PACF)
 
 Identify ARMA structure from the correlograms. `acf` is the autocorrelation at each

@@ -24,6 +24,13 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.733.0] - 2026-09-12
+
+### Documentation
+- README hypothesis-test section now documents the multiple-testing corrections
+  (`bonferroni`, `holm`, `benjamini_hochberg`, `benjamini_yekutieli`) with a worked
+  example and guidance on family-wise vs false-discovery control.
+
 ## [1.732.0] - 2026-09-12
 
 ### Added
