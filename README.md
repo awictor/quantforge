@@ -4563,6 +4563,28 @@ Chebyshev-Lobatto points and `chebyshev_barycentric_weights` their closed-form
 weights; interpolating a smooth function like `exp` on 25 Chebyshev nodes is accurate
 to machine precision, where 21 equispaced nodes on the Runge function are off by ~59.
 
+All of the above fit a *polynomial*. When the data has poles or a flattening tail,
+Thiele's method fits a *rational* function (a ratio of polynomials) as a continued
+fraction and still passes through every node:
+
+```python
+import math
+from quantforge import thiele_interpolate
+
+f = lambda x: (2 * x + 1) / (x * x + 1)
+xs = [0, 1, 2, 3, 4, -1]
+ys = [f(x) for x in xs]
+thiele_interpolate(xs, ys, 2.7)     # 0.77201448 — recovers the rational exactly
+
+xs = [0.1 * i for i in range(1, 10)]
+thiele_interpolate(xs, [math.tan(x) for x in xs], 0.55)   # 0.61310521 ~ tan(0.55)
+```
+
+Thiele builds the reciprocal-difference coefficients (`thiele_coefficients`) once and
+`thiele_eval` evaluates the continued fraction anywhere. Because it is rational, six
+nodes reproduce a degree-2-over-degree-2 rational to machine precision, and it captures
+the pole structure of `tan` that a polynomial of the same node count would badly miss.
+
 For expectations under a normal density, Gauss-Hermite quadrature is exact for
 polynomials up to degree `2n-1` and needs only a handful of nodes:
 
