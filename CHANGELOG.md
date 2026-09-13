@@ -31,6 +31,12 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.829.0] - 2026-09-13
+
+### Documentation
+- README matrix-utilities section now documents `condition_number`, `matrix_rank`,
+  `spectral_norm` and `frobenius_norm` with a worked example.
+
 ## [1.828.0] - 2026-09-13
 
 ### Added

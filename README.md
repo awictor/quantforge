@@ -3672,6 +3672,20 @@ determinant([[6, 1, 1], [4, -2, 5], [2, 8, 7]])   # -306, signed product of pivo
 `lu_decomposition` returns `P A = L U`; `lu_solve` forward/back-substitutes, and
 `determinant` is the signed product of the U pivots (zero for a singular matrix).
 
+SVD-based diagnostics summarize a matrix's conditioning and size:
+
+```python
+from quantforge import condition_number, matrix_rank, spectral_norm, frobenius_norm
+
+condition_number(A)   # sigma_max / sigma_min (inf if singular)
+matrix_rank(A)        # count of singular values above a relative tolerance
+spectral_norm(A)      # largest singular value (operator 2-norm)
+frobenius_norm(A)     # sqrt(sum a_ij^2)
+```
+
+A large `condition_number` warns that a solve will amplify errors; `matrix_rank`
+detects (numerical) rank deficiency before it corrupts a fit.
+
 ## Numerical utilities
 
 Cubic interpolation (natural spline and monotone Hermite), a spline-interpolated
