@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.865.0] - 2026-09-13
+
+### Documentation
+- README: extended the rank-dependence section with `kendall_tau_b` (tie correction),
+  `goodman_kruskal_gamma` and `kendall_tau_test`, contrasting tau-a and tau-b on an
+  aligned-tie example. Every snippet value verified.
+
 ## [1.864.0] - 2026-09-13
 
 ### Added

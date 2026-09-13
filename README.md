@@ -3488,6 +3488,30 @@ Both equal +1 for a strictly increasing relationship and -1 for decreasing;
 Spearman is unchanged by exponentiating a margin, where Pearson would move. Feed
 the pseudo-observations of each margin into a copula fit.
 
+Plain `kendall_tau` is the tau-a variant: ties drag it below `+/-1` even under a
+perfect monotone relation. `kendall_tau_b` applies the standard tie correction, and
+`kendall_tau_test` adds a significance test of `tau = 0`:
+
+```python
+from quantforge import kendall_tau, kendall_tau_b, goodman_kruskal_gamma, kendall_tau_test
+
+x = [1, 2, 2, 3, 4]
+y = [10, 20, 20, 30, 40]        # perfectly monotone, with an aligned tie
+
+kendall_tau(x, y)               # 0.9   (tau-a undershoots because of the tie)
+kendall_tau_b(x, y)             # 1.0   (tie-corrected — reaches +1)
+goodman_kruskal_gamma(x, y)     # ignores tied pairs entirely, (C - D) / (C + D)
+
+res = kendall_tau_test(x, y)
+res["tau_b"], res["z"], res["p_value"]   # normal-approx test of tau = 0
+```
+
+`kendall_tau_b` normalizes by the geometric mean of the untied-pair counts in each
+margin, so an aligned tie no longer caps the coefficient below one;
+`goodman_kruskal_gamma` drops tied pairs outright. The test uses the large-sample
+normal approximation with `Var(S) = n(n-1)(2n+5)/18`, returning a two-sided p-value
+equal to `erfc(|z| / sqrt(2))`.
+
 For the linear (Pearson) correlation with a significance test and interval,
 `pearson_correlation_test` returns the coefficient, a two-sided t-test of
 `rho = 0`, and a Fisher-z confidence interval:
