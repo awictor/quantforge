@@ -3472,6 +3472,20 @@ spectral_energy(series)                # equals sum(x^2) by Parseval
 A pure sinusoid peaks exactly at its frequency; a constant series has power only
 at zero frequency; white noise spreads its power evenly with no dominant peak.
 
+The periodogram uses a direct DFT; for the fast transform itself, `fft` / `ifft` give
+the radix-2 Cooley-Tukey pair (power-of-two lengths):
+
+```python
+from quantforge import fft, ifft
+
+X = fft(signal)        # O(n log n) complex spectrum
+ifft(X)                # recovers the signal (1/N scaled)
+```
+
+`fft` matches the direct DFT to machine precision but scales as `O(n log n)`;
+`ifft(fft(x))` round-trips. Handy for fast convolution and any spectral transform
+where the length is a power of two.
+
 ## Structural breaks (CUSUM / Chow)
 
 Detect when a mean or regime shifts. `cusum_mean` returns the standardized
