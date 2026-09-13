@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.950.0] - 2026-09-13
+
+### Added
+- `count_min.py`: `CountMinSketch` (streaming frequency estimation, one-sided
+  overestimate) and `BloomFilter` (approximate membership with no false negatives),
+  both on a stable SHA-1 double hash. Cross-checked: Count-Min never underestimates and
+  nails a heavy hitter, and the Bloom filter has zero false negatives with a
+  false-positive rate near its target.
+
 ## [1.949.0] - 2026-09-13
 
 ### Documentation

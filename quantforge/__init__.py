@@ -528,6 +528,7 @@ from .running_moments import RunningMoments
 from .streaming_quantile import P2Quantile, reservoir_sample
 from .ewma import EWMAStats, ewma
 from .hyperloglog import HyperLogLog
+from .count_min import CountMinSketch, BloomFilter
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -918,7 +919,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.949.0"
+__version__ = "1.950.0"
 
 __all__ = [
     "OptionType",
@@ -1697,6 +1698,8 @@ __all__ = [
     "EWMAStats",
     "ewma",
     "HyperLogLog",
+    "CountMinSketch",
+    "BloomFilter",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

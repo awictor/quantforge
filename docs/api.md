@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.949.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.950.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -2858,6 +2858,25 @@ Auto-generated from `quantforge` v1.949.0 by `docs/gen_api.py` — do not edit b
 >
 > ``r = cov(x, y) / (sd(x) sd(y))`` in ``[-1, 1]``. Raises if either sample has
 > zero variance.
+
+## count_min
+
+### `BloomFilter(capacity=1000, error_rate=0.01)`  _class_
+
+> Bloom filter for approximate set membership (no false negatives).
+>
+> ``capacity`` expected items and target ``error_rate`` size the bit array and hash
+> count optimally. :meth:`add` inserts, :meth:`contains` tests: a member always
+> returns True; a non-member returns True only with probability ~``error_rate``.
+
+### `CountMinSketch(width=1024, depth=5)`  _class_
+
+> Count-Min sketch for streaming frequency estimation.
+>
+> ``width`` counters per row, ``depth`` rows. The estimate never under-counts; the
+> over-count is at most about ``total_added / width`` with probability
+> ``1 - (1/2)^depth``. Add occurrences with :meth:`add` (optionally a count), query
+> with :meth:`estimate`.
 
 ## cppi
 
