@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.0.0] - 2026-09-13
+
+### Added
+- `richardson.py`: general Richardson extrapolation — `richardson_extrapolate` (accelerate
+  a sequence of step-halved estimates to the `h -> 0` limit for any leading error order
+  `p`) and `richardson_table` (the full convergence tableau). Cross-checked: a first-order
+  forward difference and second-order central difference extrapolate to the exact
+  derivative, the trapezoid sequence extrapolates to the Romberg integral, and it is
+  exact on the assumed error model.
+
 ## [1.999.0] - 2026-09-13
 
 ### Documentation

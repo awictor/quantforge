@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.999.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.0.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -11522,6 +11522,24 @@ Auto-generated from `quantforge` v1.999.0 by `docs/gen_api.py` — do not edit b
 >
 > The capital needed to fund the stream. Rises with the withdrawal, the horizon,
 > and the growth rate; falls with the discount rate.
+
+## richardson
+
+### `richardson_extrapolate(estimates, p=1.0, t=2.0)`  _function_
+
+> Richardson-extrapolate a sequence of step-halved estimates to the ``h -> 0`` limit.
+>
+> ``estimates[i] = A(h / t^i)``, ordered from coarsest to finest. ``p`` is the leading
+> error exponent (1 for first-order, 2 for a central difference, etc.), ``t`` the step
+> ratio between consecutive estimates. Returns the best (last-diagonal) extrapolated
+> value. Successive columns cancel the ``h^p, h^{p+1}, ...`` error terms.
+
+### `richardson_table(estimates, p=1.0, t=2.0)`  _function_
+
+> Full Richardson tableau (list of rows) for inspecting convergence.
+>
+> Row ``i`` holds ``T[i][0..i]``; the diagonal ``T[i][i]`` is the order-``i``
+> extrapolation. Handy to watch the estimate stabilize down the diagonal.
 
 ## richardson_derivative
 
