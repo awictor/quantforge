@@ -1451,6 +1451,20 @@ print(svi_butterfly_arbitrage(params))   # log-moneyness points that violate
 params = svi_repair_butterfly(params)    # shrink the wings until arbitrage-free
 ```
 
+The raw `(a, b, rho, m, s)` are hard to read; the Gatheral-Jacquier jump-wing form
+re-expresses a slice in trader quantities — ATM variance, ATM skew, and wing slopes:
+
+```python
+from quantforge import raw_to_jumpwing, jumpwing_to_raw
+
+jw = raw_to_jumpwing(params, t)
+jw.v, jw.psi, jw.p, jw.c   # ATM variance, ATM skew, left/right wing slopes
+jumpwing_to_raw(jw, t)     # exact inverse -> back to raw SVIParams
+```
+
+The map is closed-form and round-trips to machine precision, so you can calibrate in
+raw space and quote in jump-wing space (or vice versa).
+
 ## Command line
 
 Installing the package exposes a `quantforge` CLI:

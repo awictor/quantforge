@@ -24,6 +24,13 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.735.0] - 2026-09-12
+
+### Documentation
+- README SVI section now documents the jump-wing parameterization
+  (`raw_to_jumpwing`, `jumpwing_to_raw`) with a worked example, noting the map is
+  closed-form and round-trips to machine precision.
+
 ## [1.734.0] - 2026-09-12
 
 ### Added
