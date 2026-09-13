@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.988.0] - 2026-09-13
+
+### Added
+- `anderson_darling_ksample.py`: `anderson_darling_ksample`, the Scholz-Stephens
+  k-sample Anderson-Darling test for a common distribution (tie-corrected, with the
+  standardized statistic and an interpolated p-value). Cross-checked: reproduces the
+  Scholz-Stephens worked example (A2akN ~ 8.36, p < 0.01), is non-significant under a
+  shared distribution, flags differing means, and is calibrated under the null.
+
 ## [1.987.0] - 2026-09-13
 
 ### Documentation

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.987.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.988.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -225,6 +225,17 @@ Auto-generated from `quantforge` v1.987.0 by `docs/gen_api.py` — do not edit b
 > Returns ``(a2_star, p_value)`` where ``a2_star`` is the sample-size-adjusted
 > statistic. A small p-value rejects normality; the test is especially sensitive to
 > heavy tails and skew. Requires at least 8 observations for a meaningful p-value.
+
+## anderson_darling_ksample
+
+### `anderson_darling_ksample(*samples)`  _function_
+
+> Scholz-Stephens k-sample Anderson-Darling test.
+>
+> Pass two or more samples as separate sequence arguments. Returns a dict with the
+> raw statistic ``a2k``, the ``standardized`` statistic ``(A2k - (k-1)) / sqrt(var)``,
+> and an approximate ``p_value``. A small p-value rejects the null that all samples
+> share one distribution.
 
 ## andreasenhuge
 
