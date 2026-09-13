@@ -5055,6 +5055,30 @@ percent from a hundred to a hundred million distinct items. Duplicates never inf
 estimate, sketches `merge` into the union count, and the SHA-1 hash makes it
 deterministic across runs.
 
+Two more sketches cover *frequency* and *membership*. `CountMinSketch` estimates how
+often each item appeared (never under-counting), and `BloomFilter` tests set membership
+with no false negatives:
+
+```python
+from quantforge import CountMinSketch, BloomFilter
+
+cms = CountMinSketch(width=2048, depth=5)
+for item in stream:
+    cms.add(item)
+cms.estimate("hot_key")           # frequency estimate, an upper bound on the true count
+
+bf = BloomFilter(capacity=10000, error_rate=0.01)
+bf.add("seen_id")
+"seen_id" in bf                   # True; a never-added id is True only ~1% of the time
+```
+
+`CountMinSketch` hashes each item into one counter per row and returns the minimum, so
+collisions can only *over*-count — a heavy hitter's estimate is essentially exact while
+the memory stays fixed. `BloomFilter` sizes its bit array and hash count from the target
+`capacity` and `error_rate`; a member always tests present (no false negatives) and a
+non-member tests present only at about the configured false-positive rate. Both are
+deterministic through the shared SHA-1 hashing.
+
 The special functions behind the distribution routines are public:
 
 ```python
