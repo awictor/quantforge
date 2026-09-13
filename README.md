@@ -81,6 +81,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [OLS regression](#ols-regression)
 - [Logistic regression](#logistic-regression)
 - [Classification metrics](#classification-metrics)
+- [Forecast calibration (Brier decomposition)](#forecast-calibration-brier-decomposition)
 - [Cross-validation](#cross-validation)
 - [Feature scaling](#feature-scaling)
 - [k-nearest neighbors](#k-nearest-neighbors)
@@ -2551,6 +2552,46 @@ brier_score(y_true, y_score)             # mean squared prob error, 0 = perfect
 AUC uses the Mann-Whitney rank statistic (ties count as half); the Brier score is
 0 for exact probabilities and 0.25 for all-0.5 guesses. Pair these with
 `fit_logistic` / `predict_proba` above.
+
+## Forecast calibration (Brier decomposition)
+
+A single Brier score conflates two very different failings. Murphy's decomposition
+splits it into `reliability - resolution + uncertainty`: *reliability* is how far
+each forecast group's observed frequency drifts from the forecast (0 = perfectly
+calibrated, lower is better), *resolution* rewards forecasts that separate outcomes
+away from the base rate (higher is better), and *uncertainty* is the irreducible
+`obar (1 - obar)` variance of the outcome.
+
+```python
+from quantforge import brier_decomposition
+
+f = [0.2, 0.2, 0.8, 0.8, 0.6]
+o = [0,   1,   1,   1,   0]
+
+d = brier_decomposition(f, o)      # grouped by identical value -> exact identity
+d["reliability"]   # 0.124
+d["resolution"]    # 0.140
+d["uncertainty"]   # 0.240   (base rate 0.6 -> 0.6 * 0.4)
+d["brier"]         # 0.224 == reliability - resolution + uncertainty == raw Brier
+```
+
+With `n_bins=None` (the default) forecasts are grouped by identical value and the
+identity reconstructs the raw Brier score exactly; pass an integer `n_bins` to bin
+continuous forecasts (the reconstruction is then approximate). The
+`reliability_curve` returns the calibration diagram and `expected_calibration_error`
+its scalar summary:
+
+```python
+from quantforge import reliability_curve, expected_calibration_error
+
+reliability_curve(forecasts, outcomes, n_bins=5)   # [(mean_forecast, observed, count), ...]
+expected_calibration_error(forecasts, outcomes, n_bins=5)   # count-weighted |gap|
+```
+
+A well-calibrated forecaster's reliability curve sits on the `observed == forecast`
+diagonal, so its ECE is near zero (about 0.005 on a large calibrated sample) while a
+forecaster that always says 0.9 when the truth is 0.5 lands near 0.4. Feed the raw
+scores through `isotonic_fit` (above) to recalibrate, then re-measure here.
 
 ## Cross-validation
 

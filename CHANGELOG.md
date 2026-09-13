@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.861.0] - 2026-09-13
+
+### Documentation
+- README: new "Forecast calibration (Brier decomposition)" section covering
+  `brier_decomposition`, `reliability_curve` and `expected_calibration_error`, with a
+  pointer to `isotonic_fit` for recalibration. Every snippet value verified.
+
 ## [1.860.0] - 2026-09-13
 
 ### Added
