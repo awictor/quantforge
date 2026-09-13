@@ -24,6 +24,18 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.748.0] - 2026-09-12
+
+### Added
+- `trade_sign.py`: trade-sign classifiers that infer the aggressor side from tape
+  data -- `tick_rule` (sign by the last price change), `quote_rule` (side of the
+  bid-ask midpoint), and `lee_ready` (the Lee-Ready hybrid: quote rule with a
+  tick-rule tiebreak at the midpoint). These produce the signed order flow the
+  microstructure measures consume. Cross-checked: the tick rule signs upticks and
+  downticks and carries the prior sign on flat ticks, the quote rule is zero exactly
+  at the midpoint, Lee-Ready resolves those to +/-1 via the tick rule, and the
+  output feeds VPIN and the order-flow imbalance cleanly.
+
 ## [1.747.0] - 2026-09-12
 
 ### Documentation

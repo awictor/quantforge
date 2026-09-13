@@ -314,6 +314,7 @@ from .liquidity import roll_spread, amihud_illiquidity, corwin_schultz_spread
 from .microstructure import (
     kyle_lambda_regression, order_flow_imbalance, vpin,
 )
+from .trade_sign import tick_rule, quote_rule, lee_ready
 from .tail_dependence import (
     upper_tail_dependence, lower_tail_dependence, exceedance_correlation,
 )
@@ -759,7 +760,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.747.0"
+__version__ = "1.748.0"
 
 __all__ = [
     "OptionType",
@@ -1546,6 +1547,9 @@ __all__ = [
     "kyle_lambda_regression",
     "order_flow_imbalance",
     "vpin",
+    "tick_rule",
+    "quote_rule",
+    "lee_ready",
     "square_root_impact",
     "implementation_shortfall",
     "twap_schedule",

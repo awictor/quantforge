@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.747.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.748.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -11652,6 +11652,30 @@ Auto-generated from `quantforge` v1.747.0 by `docs/gen_api.py` — do not edit b
 >     The median pairwise slope and the median residual intercept. On exactly
 >     collinear data this reproduces the generating line; under heavy-tailed
 >     contamination it stays close to the clean fit where OLS is dragged away.
+
+## trade_sign
+
+### `lee_ready(prices, bids, asks)`  _function_
+
+> Lee-Ready trade classification: quote rule with a tick-rule tiebreak.
+>
+> Trades away from the midpoint are signed by the quote rule; trades exactly at
+> the midpoint are signed by the tick rule on the trade-price series. Returns a
+> list of ``+1 / -1`` signs (no zeros). Aligned series of at least one trade.
+
+### `quote_rule(prices, bids, asks)`  _function_
+
+> Classify trades by their side of the prevailing bid-ask midpoint.
+>
+> ``+1`` above the midpoint (buyer-initiated), ``-1`` below, and ``0`` exactly at
+> the midpoint (unclassified; :func:`lee_ready` resolves these). Aligned series.
+
+### `tick_rule(prices)`  _function_
+
+> Classify trades by the tick test on the trade-price series.
+>
+> ``+1`` on an uptick, ``-1`` on a downtick, and the previous sign carried forward
+> on a zero tick (the first trade defaults to ``+1``). Needs at least one price.
 
 ## trinomial
 
