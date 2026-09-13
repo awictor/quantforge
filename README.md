@@ -4607,6 +4607,30 @@ transform); `steffensen` fuses that extrapolation into a `x = g(x)` iteration to
 Newton-like quadratic convergence from a merely linear map — the cos fixed point above
 takes 5 steps where plain iteration needs about 69.
 
+For series that even Aitken barely dents, `wynn_epsilon` iterates the Shanks transform
+to all orders in one table, and `euler_transform` accelerates alternating series
+directly:
+
+```python
+from quantforge import wynn_epsilon, euler_transform
+
+ps = []
+acc = 0.0
+for k in range(20):
+    acc += (-1) ** k / (2 * k + 1)
+    ps.append(acc)
+wynn_epsilon(ps) * 4        # 3.141592653589792 — pi to machine precision from 20 terms
+
+euler_transform([1 / (k + 1) for k in range(30)])   # 0.6931471805  ~ ln 2
+```
+
+`wynn_epsilon` takes the *partial sums* and returns the best converged even-column
+estimate (it deliberately steps back from later columns once round-off degrades them);
+`euler_transform` takes the term *magnitudes* of an alternating series and reweights
+their forward differences by powers of one half. Wynn is the stronger general tool —
+it drives the slowly-alternating Leibniz series to full `double` precision from just
+twenty terms.
+
 The special functions behind the distribution routines are public:
 
 ```python
