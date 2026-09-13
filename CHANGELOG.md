@@ -31,6 +31,12 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.825.0] - 2026-09-13
+
+### Documentation
+- README matrix-utilities section now documents `svd` and `pseudo_inverse` with a
+  worked example, noting the numerical-rank and minimum-norm uses.
+
 ## [1.824.0] - 2026-09-13
 
 ### Added

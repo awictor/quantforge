@@ -3646,6 +3646,20 @@ x = qr_solve(A, b)                # least-squares solution, stabler than (A'A)^-
 `qr_solve` matches the OLS coefficients but stays accurate where the normal-equations
 matrix `A'A` would be near-singular — the preferred path for near-collinear designs.
 
+The singular value decomposition factors `A = U S V'` and gives the Moore-Penrose
+pseudo-inverse for rank-deficient or minimum-norm least squares:
+
+```python
+from quantforge import svd, pseudo_inverse
+
+U, s, V = svd(A)                  # s: descending singular values
+Aplus = pseudo_inverse(A)         # V S^+ U', truncating tiny singular values
+```
+
+The singular values are the square roots of the eigenvalues of `A'A`; ranking them
+exposes the numerical rank, and `pseudo_inverse` drops the near-zero ones so the
+solve stays stable even when `A` is rank-deficient.
+
 ## Numerical utilities
 
 Cubic interpolation (natural spline and monotone Hermite), a spline-interpolated
