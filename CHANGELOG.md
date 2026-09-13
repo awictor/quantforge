@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.855.0] - 2026-09-13
+
+### Documentation
+- README: new "Wavelet transform (Haar multiresolution)" section documenting
+  `haar_dwt`/`haar_idwt` and `wavelet_energy`, contrasting the scale-localized
+  wavelet view with the Fourier transform. Every snippet value verified to run
+  (reconstruction error ~1e-16, single-level average/difference, and the
+  Parseval energy split summing to one).
+
 ## [1.854.0] - 2026-09-13
 
 ### Added

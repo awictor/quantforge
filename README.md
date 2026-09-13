@@ -106,6 +106,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Rank dependence (Kendall / Spearman)](#rank-dependence-kendall--spearman)
 - [Gaussian-copula sampling](#gaussian-copula-sampling)
 - [Spectral analysis](#spectral-analysis)
+- [Wavelet transform (Haar multiresolution)](#wavelet-transform-haar-multiresolution)
 - [Structural breaks (CUSUM / Chow)](#structural-breaks-cusum--chow)
 - [Cointegration (ADF / Engle-Granger)](#cointegration-adf--engle-granger)
 - [Ornstein-Uhlenbeck calibration](#ornstein-uhlenbeck-calibration)
@@ -3512,6 +3513,54 @@ Welch splits the series into overlapping Hann-windowed segments and averages the
 periodograms — trading some frequency resolution for far less variance, so a
 spectral peak stands out cleanly against a noisy background where the raw
 periodogram would bury it.
+
+## Wavelet transform (Haar multiresolution)
+
+Where the Fourier transform asks *what frequencies are present*, the wavelet
+transform asks *what happens at each scale, and where*. The Haar transform is the
+simplest orthonormal wavelet: at each level it replaces adjacent pairs by their
+scaled sum (a coarse approximation) and difference (the detail), then recurses on
+the approximation — a multiresolution view of trend plus detail at every scale.
+Length must be a power of two.
+
+```python
+from quantforge import haar_dwt, haar_idwt
+
+approx, details = haar_dwt(series, levels=2)   # coarse trend + detail per level
+haar_idwt(approx, details)                     # exact reconstruction
+```
+
+`haar_dwt` returns the final coarse approximation and a list of detail-coefficient
+lists (finest level first); on a length-32 series with `levels=2` the finest detail
+has 16 coefficients, the next has 8, and the approximation has 8. Being orthonormal,
+`haar_idwt` reconstructs the input to machine precision (round-trip error ~1e-16).
+
+A single level is just the scaled pairwise average and difference:
+
+```python
+from quantforge import haar_dwt
+
+approx, details = haar_dwt([4.0, 2.0, 6.0, 8.0], levels=1)
+approx      # [4.2426, 9.8995]  == (x0+x1)/sqrt2, (x2+x3)/sqrt2
+details[0]  # [1.4142, -1.4142] == (x0-x1)/sqrt2, (x2-x3)/sqrt2
+```
+
+`wavelet_energy` decomposes total signal energy into the fraction sitting in each
+detail level and in the coarse approximation — because the transform is orthonormal,
+the fractions sum to one (Parseval):
+
+```python
+from quantforge import wavelet_energy
+
+e = wavelet_energy(series, levels=2)
+e["detail"]   # [0.0096, 0.0377] — energy fraction per level, finest first
+e["approx"]   # 0.9527 — coarse-approximation fraction
+```
+
+A smooth series (a clean sinusoid) concentrates almost all its energy in the coarse
+approximation with negligible detail; a noisy or bursty series spreads energy into
+the fine detail levels — so the profile is a compact scale-by-scale summary of how
+rough a signal is and where.
 
 ## Structural breaks (CUSUM / Chow)
 
