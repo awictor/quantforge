@@ -3138,6 +3138,25 @@ to small values; MASE is the scale-free choice for cross-series comparison.
 model adds value over a random walk — while `theil_u1` is a bounded, symmetric
 inequality measure.
 
+Those score a point forecast; for forecasts that carry uncertainty, proper scoring
+rules grade the whole distribution:
+
+```python
+from quantforge import (pinball_loss, interval_score, interval_coverage,
+                        crps_ensemble)
+
+pinball_loss(actual, quantile_fc, tau=0.9)         # quantile-regression loss
+interval_score(actual, lower, upper, alpha=0.1)    # Winkler score for a 90% interval
+interval_coverage(actual, lower, upper)            # fraction inside (should be ~0.9)
+crps_ensemble(y, ensemble_members)                 # CRPS of a sample forecast
+```
+
+`pinball_loss` is minimized at the true quantile (the objective behind quantile
+regression); `crps_ensemble` generalizes absolute error to a full predictive
+distribution and is zero only for a perfect forecast; `interval_score` rewards
+narrow intervals but penalizes actuals that fall outside, and `interval_coverage`
+checks the nominal level is met.
+
 ## Rank dependence (Kendall / Spearman)
 
 Rank-based dependence captures monotone (not just linear) co-movement and is
