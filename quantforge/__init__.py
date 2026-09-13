@@ -316,6 +316,11 @@ from .microstructure import (
     effective_spread, realized_spread, price_impact, quoted_spread,
 )
 from .trade_sign import tick_rule, quote_rule, lee_ready
+from .hawkes import (
+    intensity as hawkes_intensity, branching_ratio as hawkes_branching_ratio,
+    log_likelihood as hawkes_log_likelihood, simulate as hawkes_simulate,
+    fit as hawkes_fit,
+)
 from .tail_dependence import (
     upper_tail_dependence, lower_tail_dependence, exceedance_correlation,
 )
@@ -761,7 +766,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.751.0"
+__version__ = "1.752.0"
 
 __all__ = [
     "OptionType",
@@ -1555,6 +1560,11 @@ __all__ = [
     "tick_rule",
     "quote_rule",
     "lee_ready",
+    "hawkes_intensity",
+    "hawkes_branching_ratio",
+    "hawkes_log_likelihood",
+    "hawkes_simulate",
+    "hawkes_fit",
     "square_root_impact",
     "implementation_shortfall",
     "twap_schedule",

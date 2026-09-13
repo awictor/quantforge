@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.751.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.752.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -5020,6 +5020,48 @@ Auto-generated from `quantforge` v1.751.0 by `docs/gen_api.py` — do not edit b
 > float
 >     The long-run variance estimate. Always non-negative thanks to the Bartlett
 >     weights.
+
+## hawkes
+
+### `hawkes_branching_ratio(alpha, beta)`  _function_
+
+> Branching ratio ``alpha / beta`` -- expected offspring per event.
+>
+> Below 1 the process is stationary; at or above 1 it explodes.
+
+### `hawkes_fit(events, t_end=None, x0=None)`  _function_
+
+> Maximum-likelihood fit of ``(mu, alpha, beta)`` to observed event times.
+>
+> Maximizes :func:`log_likelihood` with Nelder-Mead over a log-parameterization
+> (keeping ``mu, alpha, beta`` positive). Returns a dict with ``mu``, ``alpha``,
+> ``beta``, ``branching_ratio`` and the attained ``log_likelihood``. Provide
+> ``x0 = (mu, alpha, beta)`` to seed the search.
+
+### `hawkes_intensity(t, history, mu, alpha, beta)`  _function_
+
+> Conditional intensity ``lambda(t)`` given past event times ``history``.
+>
+> Sums the exponential kernel over events strictly before ``t``.
+
+### `hawkes_log_likelihood(events, mu, alpha, beta, t_end=None)`  _function_
+
+> Exact log-likelihood of an exponential-kernel Hawkes process.
+>
+> Uses the standard recursion for the excitation term ``A_i = sum_{j<i}
+> exp(-beta (t_i - t_j))`` (updated as ``A_i = exp(-beta dt)(1 + A_{i-1})``), so it
+> is linear in the number of events. ``events`` is a sorted list of event times on
+> ``[0, t_end]`` (``t_end`` defaults to the last event). The log-likelihood is
+>
+>     sum_i log(mu + alpha A_i) - mu T - (alpha/beta) sum_i (1 - exp(-beta (T-t_i))).
+
+### `hawkes_simulate(mu, alpha, beta, t_max, seed=1234567)`  _function_
+
+> Simulate a Hawkes process on ``[0, t_max]`` by Ogata's thinning algorithm.
+>
+> Returns the sorted list of event times. Requires ``alpha < beta`` (stationarity)
+> for a well-behaved simulation. Deterministic given ``seed`` (an LCG uniform
+> stream).
 
 ## hedgesim
 

@@ -24,6 +24,23 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.752.0] - 2026-09-12
+
+### Added
+- `hawkes.py`: exponential-kernel self-exciting (Hawkes) point process --
+  `hawkes_intensity`, `hawkes_branching_ratio`, the exact recursive
+  `hawkes_log_likelihood`, `hawkes_simulate` (Ogata thinning), and the
+  maximum-likelihood `hawkes_fit`. Cross-checked: the recursive log-likelihood
+  matches a brute-force sum term for term, the simulated event rate matches the
+  stationary theory `mu / (1 - alpha/beta)` (and the Poisson limit at `alpha = 0`),
+  and the MLE recovers the parameters of a long simulated path.
+
+### Fixed
+- The Hawkes Ogata simulation used a strict `t_i < t` upper-intensity bound, which
+  dropped the just-fired event's own excitation and undersampled the process
+  (event rate ~30% low at high branching). The bound now includes events at `t`, so
+  the simulated rate matches the stationary mean.
+
 ## [1.751.0] - 2026-09-12
 
 ### Documentation
