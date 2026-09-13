@@ -313,6 +313,7 @@ from .kruskal_wallis import kruskal_wallis_test, friedman_test
 from .dunn_test import dunn_test
 from .jonckheere import jonckheere_terpstra_test
 from .cochran_mcnemar import mcnemar_test, cochran_q_test
+from .fisher_exact import fisher_exact_test
 from .kalman_beta import kalman_regression_beta
 from .theil_sen import theil_sen
 from .robust_stats import (
@@ -872,7 +873,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.887.0"
+__version__ = "1.888.0"
 
 __all__ = [
     "OptionType",
@@ -1352,6 +1353,7 @@ __all__ = [
     "jonckheere_terpstra_test",
     "mcnemar_test",
     "cochran_q_test",
+    "fisher_exact_test",
     "kalman_regression_beta",
     "theil_sen",
     "median_absolute_deviation",

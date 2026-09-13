@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.887.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.888.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -4802,6 +4802,18 @@ Auto-generated from `quantforge` v1.887.0 by `docs/gen_api.py` — do not edit b
 > Inverse FFT: recovers the sequence from its DFT (with the ``1/N`` scaling).
 >
 > ``ifft(fft(x)) == x`` up to floating error. Length must be a power of two.
+
+## fisher_exact
+
+### `fisher_exact_test(table, alternative='two-sided')`  _function_
+
+> Fisher's exact test for a 2x2 ``table`` ``[[a, b], [c, d]]``.
+>
+> ``alternative`` is ``"two-sided"`` (default), ``"greater"`` or ``"less"`` (one-sided
+> on the odds ratio). Returns a dict with the sample ``odds_ratio``
+> (``a d / (b c)``, ``inf`` if a denominator is zero) and the ``p_value``. The
+> two-sided p-value sums the probabilities of every table (given the margins) no more
+> probable than the observed one.
 
 ## forecast_combine
 

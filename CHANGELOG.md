@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.888.0] - 2026-09-13
+
+### Added
+- `fisher_exact.py`: `fisher_exact_test` for a 2x2 table (two-sided / greater / less)
+  via the hypergeometric distribution, returning the exact p-value and the sample odds
+  ratio. Cross-checked against the classic tea-tasting table (OR = 9, two-sided
+  p = 0.4857, one-sided 0.2429) and a known scipy case, plus the hypergeometric
+  probabilities summing to one and p ~ 1 under independence.
+
 ## [1.887.0] - 2026-09-13
 
 ### Documentation
