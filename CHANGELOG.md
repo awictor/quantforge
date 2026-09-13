@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.863.0] - 2026-09-13
+
+### Documentation
+- README: extended the calibration section with Platt scaling (`platt_fit`,
+  `platt_predict`, `platt_calibrate`) and guidance on choosing it versus
+  `isotonic_fit`. Every snippet value verified.
+
 ## [1.862.0] - 2026-09-13
 
 ### Added

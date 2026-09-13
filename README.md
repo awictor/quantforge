@@ -2593,6 +2593,28 @@ diagonal, so its ECE is near zero (about 0.005 on a large calibrated sample) whi
 forecaster that always says 0.9 when the truth is 0.5 lands near 0.4. Feed the raw
 scores through `isotonic_fit` (above) to recalibrate, then re-measure here.
 
+Where isotonic calibration assumes only monotonicity, **Platt scaling** assumes a
+sigmoidal miscalibration and fits a two-parameter logistic
+`P = 1 / (1 + exp(-(A s + B)))` — far more data-efficient, and the right choice when
+the raw scores are roughly logit-shaped but mis-scaled (an overconfident classifier):
+
+```python
+from quantforge import platt_fit, platt_predict, platt_calibrate
+
+A, B = platt_fit([-2, -1, 0, 1, 2], [0, 0, 0, 1, 1])
+platt_predict([-5, 0, 5], A, B)      # [0.0124, 0.3968, 0.9719]
+
+(params, predict) = platt_calibrate(train_scores, train_labels)
+predict(new_scores)                  # calibrated probabilities in [0, 1]
+```
+
+`platt_fit` minimizes the regularized logistic loss with Newton's method on Platt's
+smoothed targets (guarding the tails), returning `(A, B)`; `A > 0` means probability
+rises with the score. `platt_calibrate` bundles the fit and a `predict` closure, or
+applies directly if you pass `new_scores`. Choose Platt when data is scarce and the
+distortion is smooth; choose `isotonic_fit` when you have enough data and the
+distortion may be an arbitrary monotone shape.
+
 ## Cross-validation
 
 Model-agnostic out-of-sample evaluation. `k_fold_indices` yields disjoint
