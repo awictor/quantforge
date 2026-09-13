@@ -3660,6 +3660,18 @@ The singular values are the square roots of the eigenvalues of `A'A`; ranking th
 exposes the numerical rank, and `pseudo_inverse` drops the near-zero ones so the
 solve stays stable even when `A` is rank-deficient.
 
+For a square system, LU with partial pivoting gives the solve and the determinant:
+
+```python
+from quantforge import lu_decomposition, lu_solve, determinant
+
+lu_solve([[2, 1], [1, 3]], [5, 10])       # solve A x = b
+determinant([[6, 1, 1], [4, -2, 5], [2, 8, 7]])   # -306, signed product of pivots
+```
+
+`lu_decomposition` returns `P A = L U`; `lu_solve` forward/back-substitutes, and
+`determinant` is the signed product of the U pivots (zero for a singular matrix).
+
 ## Numerical utilities
 
 Cubic interpolation (natural spline and monotone Hermite), a spline-interpolated

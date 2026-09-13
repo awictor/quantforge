@@ -31,6 +31,12 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.827.0] - 2026-09-13
+
+### Documentation
+- README matrix-utilities section now documents `lu_decomposition`, `lu_solve` and
+  `determinant` with a worked example.
+
 ## [1.826.0] - 2026-09-13
 
 ### Added
