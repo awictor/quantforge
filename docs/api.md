@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.875.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.876.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -13866,6 +13866,27 @@ Auto-generated from `quantforge` v1.875.0 by `docs/gen_api.py` — do not edit b
 > Zero at ``horizon = 0``, rising monotonically to the stationary variance
 > ``sigma^2 / (2 kappa)`` as ``horizon -> inf`` (same form as the Schwartz
 > commodity model). ``sigma`` is the daily temperature volatility.
+
+## wilcoxon
+
+### `sign_test(x, mu0=0.0, y=None)`  _function_
+
+> Sign test that the (paired) sample median equals ``mu0``.
+>
+> Counts observations above ``mu0`` (or ``x_i > y_i`` for paired data), dropping
+> exact ties, and tests against Binomial(n, 1/2). Returns a dict with ``n_plus``,
+> ``n`` (non-tied count), the exact two-sided binomial ``p_value`` and the
+> normal-approximation ``z``.
+
+### `wilcoxon_signed_rank_test(x, mu0=0.0, y=None)`  _function_
+
+> Wilcoxon signed-rank test that the (paired) sample is centered at ``mu0``.
+>
+> If ``y`` is given the test runs on the paired differences ``x_i - y_i``; otherwise
+> on ``x_i - mu0``. Zero differences are dropped (Wilcoxon's convention); tied
+> absolute values receive average ranks. Returns a dict with ``statistic`` W (the
+> positive-rank sum), the ``z`` normal approximation (continuity-corrected, with the
+> tie correction to the variance) and the two-sided ``p_value``.
 
 ## xva
 

@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.876.0] - 2026-09-13
+
+### Added
+- `wilcoxon.py`: the `wilcoxon_signed_rank_test` (paired / one-sample, tie- and
+  zero-handled with a continuity-corrected normal approximation) and the `sign_test`
+  (exact two-sided binomial plus a normal approximation). Cross-checked: the W+
+  statistic matches hand computation and the classic all-positive textbook case
+  (W+ = 45, p = 0.0092), paired mode equals the one-sample test on the differences,
+  zeros are dropped, and the sign test's exact p-value matches the binomial CDF.
+
 ## [1.875.0] - 2026-09-13
 
 ### Documentation
