@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.725.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.726.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -5512,6 +5512,23 @@ Auto-generated from `quantforge` v1.725.0 by `docs/gen_api.py` — do not edit b
 > and references ``sum (O - E)^2 / E`` to a chi-square with
 > ``(rows - 1)(cols - 1)`` degrees of freedom. Returns ``(statistic, p_value)``.
 
+### `mann_whitney_u(a, b)`  _function_
+
+> Mann-Whitney U rank-sum test (two-sided, normal approximation with ties).
+>
+> Ranks the pooled samples (average ranks for ties) and forms the smaller of the
+> two U statistics; the p-value uses the normal approximation with a tie
+> correction to the variance and a continuity correction. Returns
+> ``(u, p_value)``, where ``u`` is ``min(U_a, U_b)``. A distribution-free
+> alternative to the two-sample t when normality is doubtful.
+
+### `one_sample_t_test(sample, mu0=0.0)`  _function_
+
+> One-sample two-sided Student-t test that the mean equals ``mu0``.
+>
+> ``t = (xbar - mu0) / (s / sqrt(n))`` on ``n - 1`` degrees of freedom. Returns
+> ``(t, p_value)``.
+
 ### `one_way_anova(*groups)`  _function_
 
 > One-way ANOVA F-test across two or more samples.
@@ -5520,6 +5537,13 @@ Auto-generated from `quantforge` v1.725.0 by `docs/gen_api.py` — do not edit b
 > squares and forms ``F = MS_between / MS_within``, referenced to an F with
 > ``(k - 1, N - k)`` degrees of freedom. Returns ``(F, p_value)``; a small
 > p-value rejects equality of the group means.
+
+### `paired_t_test(a, b)`  _function_
+
+> Paired (dependent) two-sided Student-t test on the within-pair differences.
+>
+> Equivalent to a one-sample t-test of ``a[i] - b[i]`` against zero, on ``n - 1``
+> degrees of freedom. Returns ``(t, p_value)``.
 
 ### `two_sample_t_test(a, b, equal_var=True)`  _function_
 

@@ -24,6 +24,17 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.726.0] - 2026-09-12
+
+### Added
+- `hypothesis.py` gains three more tests: `one_sample_t_test` (mean vs a reference),
+  `paired_t_test` (dependent samples), and `mann_whitney_u` (distribution-free
+  rank-sum with a tie- and continuity-corrected normal approximation).
+  Cross-checked: the one-sample t matches a by-hand calculation and is zero at the
+  sample mean, the paired t equals the one-sample t on the within-pair differences,
+  and the Mann-Whitney U gives complete separation (U = 0) for disjoint groups,
+  matches a known worked example, and is non-significant for identical samples.
+
 ## [1.725.0] - 2026-09-12
 
 ### Documentation

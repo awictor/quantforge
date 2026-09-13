@@ -5,7 +5,8 @@ distribution from :mod:`quantforge.distributions`:
 
 - chi-square goodness-of-fit and test of independence (chi-square tail),
 - one-way ANOVA (F tail),
-- two-sample Student-t, equal-variance (pooled) and Welch (unequal), and
+- one-sample, paired and two-sample Student-t (pooled and Welch),
+- the Mann-Whitney U rank-sum test (normal approximation), and
 - the exact binomial test (binomial tail).
 
 Pure standard library.
@@ -15,6 +16,7 @@ import math
 
 from .distributions import chi2_sf, f_cdf, binomial_pmf
 from .student_t import t_cdf
+from .mathfns import norm_cdf
 
 
 def _mean(xs):
@@ -129,6 +131,84 @@ def two_sample_t_test(a, b, equal_var=True):
     # Two-sided p-value from the t CDF.
     p = 2.0 * (1.0 - t_cdf(abs(t), df))
     return t, p
+
+
+def one_sample_t_test(sample, mu0=0.0):
+    """One-sample two-sided Student-t test that the mean equals ``mu0``.
+
+    ``t = (xbar - mu0) / (s / sqrt(n))`` on ``n - 1`` degrees of freedom. Returns
+    ``(t, p_value)``.
+    """
+    x = list(sample)
+    n = len(x)
+    if n < 2:
+        raise ValueError("need at least two observations")
+    m = _mean(x)
+    var = sum((v - m) ** 2 for v in x) / (n - 1)
+    if var == 0.0:
+        raise ValueError("zero-variance sample")
+    t = (m - mu0) / math.sqrt(var / n)
+    return t, 2.0 * (1.0 - t_cdf(abs(t), n - 1))
+
+
+def paired_t_test(a, b):
+    """Paired (dependent) two-sided Student-t test on the within-pair differences.
+
+    Equivalent to a one-sample t-test of ``a[i] - b[i]`` against zero, on ``n - 1``
+    degrees of freedom. Returns ``(t, p_value)``.
+    """
+    a = list(a)
+    b = list(b)
+    if len(a) != len(b):
+        raise ValueError("paired samples must have the same length")
+    if len(a) < 2:
+        raise ValueError("need at least two pairs")
+    diffs = [a[i] - b[i] for i in range(len(a))]
+    return one_sample_t_test(diffs, 0.0)
+
+
+def mann_whitney_u(a, b):
+    """Mann-Whitney U rank-sum test (two-sided, normal approximation with ties).
+
+    Ranks the pooled samples (average ranks for ties) and forms the smaller of the
+    two U statistics; the p-value uses the normal approximation with a tie
+    correction to the variance and a continuity correction. Returns
+    ``(u, p_value)``, where ``u`` is ``min(U_a, U_b)``. A distribution-free
+    alternative to the two-sample t when normality is doubtful.
+    """
+    a = list(a)
+    b = list(b)
+    na, nb = len(a), len(b)
+    if na < 1 or nb < 1:
+        raise ValueError("both samples must be non-empty")
+    pooled = [(v, 0) for v in a] + [(v, 1) for v in b]
+    pooled.sort(key=lambda t: t[0])
+    n = na + nb
+    # Average ranks for ties.
+    ranks = [0.0] * n
+    i = 0
+    tie_term = 0.0
+    while i < n:
+        j = i
+        while j + 1 < n and pooled[j + 1][0] == pooled[i][0]:
+            j += 1
+        avg = (i + j) / 2.0 + 1.0        # 1-based average rank
+        for k in range(i, j + 1):
+            ranks[k] = avg
+        t = j - i + 1
+        tie_term += t ** 3 - t
+        i = j + 1
+    rank_sum_a = sum(ranks[k] for k in range(n) if pooled[k][1] == 0)
+    u_a = rank_sum_a - na * (na + 1) / 2.0
+    u_b = na * nb - u_a
+    u = min(u_a, u_b)
+    mean_u = na * nb / 2.0
+    var_u = na * nb / 12.0 * ((n + 1) - tie_term / (n * (n - 1)))
+    if var_u <= 0.0:
+        return u, 1.0
+    z = (u - mean_u + 0.5) / math.sqrt(var_u)   # continuity correction toward mean
+    p = 2.0 * norm_cdf(z)                        # u <= mean_u so z <= 0
+    return u, min(1.0, p)
 
 
 def binomial_test(k, n, prob=0.5, alternative="two-sided"):

@@ -3,7 +3,8 @@
 import pytest
 
 from quantforge import (chi_square_gof_test, chi_square_independence_test,
-                        one_way_anova, two_sample_t_test, binomial_test)
+                        one_way_anova, two_sample_t_test, binomial_test,
+                        one_sample_t_test, paired_t_test, mann_whitney_u)
 
 
 def test_gof_uniform_die():
@@ -102,3 +103,59 @@ def test_validation():
         binomial_test(12, 10, 0.5)
     with pytest.raises(ValueError):
         binomial_test(5, 10, 0.5, "sideways")
+
+
+def test_one_sample_t_matches_manual():
+    import statistics
+    x = [5.1, 5.3, 4.9, 5.4, 5.2, 5.0, 5.5]
+    t, p = one_sample_t_test(x, 5.0)
+    m, sd = statistics.mean(x), statistics.stdev(x)
+    assert abs(t - (m - 5.0) / (sd / len(x) ** 0.5)) < 1e-9
+    assert 0.0 < p < 1.0
+
+
+def test_one_sample_t_zero_at_mean():
+    x = [1.0, 2.0, 3.0, 4.0, 5.0]
+    t, p = one_sample_t_test(x, 3.0)   # mu0 = sample mean
+    assert abs(t) < 1e-12
+    assert abs(p - 1.0) < 1e-9
+
+
+def test_paired_equals_one_sample_on_diffs():
+    a = [10, 12, 14, 11, 13]
+    b = [9, 11, 12, 10, 13]
+    tp, pp = paired_t_test(a, b)
+    td, pd = one_sample_t_test([ai - bi for ai, bi in zip(a, b)], 0.0)
+    assert abs(tp - td) < 1e-12
+    assert abs(pp - pd) < 1e-12
+
+
+def test_mann_whitney_disjoint_groups():
+    u, p = mann_whitney_u([1, 2, 3, 4], [5, 6, 7, 8])
+    assert u == 0.0            # complete separation
+    assert p < 0.05
+
+
+def test_mann_whitney_u_symmetry():
+    # U_a + U_b = n_a * n_b, and the reported u is the smaller of the two.
+    a = [19, 22, 16, 29, 24]
+    b = [20, 11, 17, 12]
+    u, p = mann_whitney_u(a, b)
+    assert u <= len(a) * len(b) / 2.0
+    assert abs(p - 0.1113) < 0.02
+
+
+def test_mann_whitney_identical_not_significant():
+    u, p = mann_whitney_u([1, 2, 3, 4, 5], [1, 2, 3, 4, 5])
+    assert abs(p - 1.0) < 1e-9
+
+
+def test_extra_validation():
+    with pytest.raises(ValueError):
+        one_sample_t_test([1.0])
+    with pytest.raises(ValueError):
+        one_sample_t_test([2.0, 2.0, 2.0])       # zero variance
+    with pytest.raises(ValueError):
+        paired_t_test([1.0, 2.0], [1.0])         # length mismatch
+    with pytest.raises(ValueError):
+        mann_whitney_u([], [1.0])
