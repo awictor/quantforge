@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.873.0] - 2026-09-13
+
+### Documentation
+- README: extended the goodness-of-fit section with `cramer_von_mises_2samp`,
+  contrasting its whole-curve squared-gap statistic with KS's single largest gap.
+  Every snippet value verified.
+
 ## [1.872.0] - 2026-09-13
 
 ### Added

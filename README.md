@@ -3302,6 +3302,26 @@ of permutations reaching the observed distance, so it catches differences a
 mean-focused t-test can miss (for example two samples with the same mean but different
 spread, where the energy test's p-value drops well below 0.05).
 
+Where KS uses only the single largest gap between the two empirical CDFs,
+`cramer_von_mises_2samp` integrates the *squared* gap across the whole curve — more
+powerful against differences spread through the distribution — and returns an
+asymptotic p-value from the limiting Cramér-von Mises law (no permutation needed):
+
+```python
+from quantforge import cramer_von_mises_2samp
+
+cramer_von_mises_2samp([1, 3, 5, 7, 9], [2, 4, 6, 8, 10])   # interleaved
+# {'statistic': 0.05, 'p_value': 0.8763}  — same distribution, not rejected
+
+cramer_von_mises_2samp([1, 2, 3, 4, 5], [6, 7, 8, 9, 10])   # fully separated
+# {'statistic': 0.85, 'p_value': 0.0056}  — clearly different
+```
+
+It uses Anderson's (1962) rank form of the statistic and evaluates the limiting
+distribution's upper tail through its `K_{1/4}` Bessel-function series; the asymptotic
+critical values it produces (0.461 → 0.05, 0.743 → 0.01) match the published tables,
+and its p-value tracks a permutation test closely.
+
 The classical parametric tests are built on the distribution CDFs, each returning
 `(statistic, p_value)`:
 
