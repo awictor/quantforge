@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.807.0] - 2026-09-13
+
+### Documentation
+- README performance-metrics section now documents the CAPM measures
+  (`market_beta`, `treynor_ratio`, `jensens_alpha`, `m_squared`) with a worked
+  example.
+
 ## [1.806.0] - 2026-09-13
 
 ### Added

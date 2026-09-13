@@ -4094,6 +4094,23 @@ upside_potential_ratio(returns, tau=0.0)   # upside expectation / downside devia
 A higher `order` weights deep shortfalls more heavily, so Kappa falls as the order
 rises for a left-skewed series.
 
+Against a benchmark, the CAPM measures decompose risk-adjusted return by systematic
+exposure:
+
+```python
+from quantforge import market_beta, treynor_ratio, jensens_alpha, m_squared
+
+market_beta(returns, market)                 # Cov/Var slope on the market
+treynor_ratio(returns, market)               # excess return per unit of beta
+jensens_alpha(returns, market)               # return beyond what beta explains
+m_squared(returns, market)                   # portfolio rescaled to market risk
+```
+
+`treynor_ratio` divides by beta (systematic risk) where Sharpe divides by total
+volatility; `jensens_alpha` is the CAPM regression intercept (positive = skill);
+`m_squared` restates the Sharpe ranking in return units directly comparable to the
+market.
+
 For tail risk that accounts for non-normal returns, the Cornish-Fisher pair adjusts
 the Gaussian quantile with the sample skewness and excess kurtosis:
 
