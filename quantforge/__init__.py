@@ -538,6 +538,7 @@ from .regression_tree import fit_regression_tree, predict_regression_tree
 from .gradient_boost import fit_gradient_boost, predict_gradient_boost
 from .dbscan import dbscan
 from .siegel_regression import repeated_median_regression
+from .huber_regression import huber_regression
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -928,7 +929,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.969.0"
+__version__ = "1.970.0"
 
 __all__ = [
     "OptionType",
@@ -1729,6 +1730,7 @@ __all__ = [
     "predict_gradient_boost",
     "dbscan",
     "repeated_median_regression",
+    "huber_regression",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

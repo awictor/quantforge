@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.970.0] - 2026-09-13
+
+### Added
+- `huber_regression.py`: `huber_regression`, a robust M-estimator by IRLS — Huber loss
+  (quadratic near zero, linear beyond `delta`) with a MAD-based residual scale.
+  Cross-checked: matches OLS on clean data, resists vertical outliers that drag the OLS
+  slope (1.997 vs 1.65 at the true 2), approaches OLS exactly as `delta` grows, and
+  recovers an exact line.
+
 ## [1.969.0] - 2026-09-13
 
 ### Documentation

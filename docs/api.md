@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.969.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.970.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -6276,6 +6276,17 @@ Auto-generated from `quantforge` v1.969.0 by `docs/gen_api.py` — do not edit b
 >
 > Each asset weighted by the reciprocal of its standard deviation, normalized to
 > sum to one. Higher-volatility assets get less capital; ignores correlations.
+
+## huber_regression
+
+### `huber_regression(X, y, delta=1.345, add_intercept=True, max_iter=50, tol=1e-08)`  _function_
+
+> Huber robust regression by IRLS.
+>
+> ``delta`` is the residual threshold (in robust-scale units) between the quadratic
+> and linear regions; the default 1.345 gives ~95% efficiency at the normal. Returns
+> a dict with ``coefficients``, ``n_iter`` and ``scale`` (the final robust residual
+> scale). Reduces toward OLS as ``delta`` grows.
 
 ## hull_white
 
