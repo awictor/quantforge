@@ -24,6 +24,13 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.729.0] - 2026-09-12
+
+### Documentation
+- README hypothesis-test section now documents the four proportion confidence
+  intervals (`wald_interval`, `wilson_interval`, `agresti_coull_interval`,
+  `clopper_pearson_interval`) with a worked example and guidance on which to use.
+
 ## [1.728.0] - 2026-09-12
 
 ### Added

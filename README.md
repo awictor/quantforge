@@ -2705,6 +2705,23 @@ binomial_test(k=8, n=10, prob=0.5)                        # exact binomial
 the binomial test is exact (no normal approximation), and the discrete p-values
 come from the same gamma/beta identities behind the distribution CDFs.
 
+For a proportion estimate, four confidence intervals span the accuracy/simplicity
+trade-off:
+
+```python
+from quantforge import (wald_interval, wilson_interval, agresti_coull_interval,
+                        clopper_pearson_interval)
+
+wald_interval(k=8, n=25)              # normal approximation (simplest)
+wilson_interval(8, 25)                # score interval, good small-sample coverage
+agresti_coull_interval(8, 25)
+clopper_pearson_interval(8, 25)       # exact, never under-covers
+```
+
+`clopper_pearson_interval` inverts the binomial CDF and is the widest (conservative
+but exact); `wilson_interval` is the practical default; `wald_interval` is accurate
+only for large `n` away from 0 or 1. All stay within `[0, 1]`.
+
 ## Autocorrelation (ACF / PACF)
 
 Identify ARMA structure from the correlograms. `acf` is the autocorrelation at each
