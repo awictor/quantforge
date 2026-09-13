@@ -1947,6 +1947,21 @@ autocovariance of price changes; `amihud_illiquidity` rises as volume falls; and
 `corwin_schultz_spread` needs only daily highs and lows. They complement the
 theoretical Kyle-lambda impact above.
 
+With signed trades, three order-flow measures gauge impact and toxicity directly:
+
+```python
+from quantforge import kyle_lambda_regression, order_flow_imbalance, vpin
+
+kyle_lambda_regression(price_changes, signed_volumes)   # empirical Kyle's lambda
+order_flow_imbalance(buy_volumes, sell_volumes)         # net signed volume, [-1, 1]
+vpin(buy_volumes, sell_volumes)                         # informed-trading proxy, [0, 1]
+```
+
+`kyle_lambda_regression` is the OLS slope of price change on signed order flow (it
+recovers a known impact coefficient from simulated data); `vpin` (Easley-Lopez de
+Prado-O'Hara) is the mean absolute order imbalance across equal-volume buckets —
+zero for balanced flow, one for one-sided.
+
 ## Structured notes
 
 Principal-protected notes (capped and uncapped), reverse convertibles with a fair

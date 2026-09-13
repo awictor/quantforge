@@ -24,6 +24,12 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.747.0] - 2026-09-12
+
+### Documentation
+- README optimal-execution section now documents the order-flow measures
+  (`kyle_lambda_regression`, `order_flow_imbalance`, `vpin`) with a worked example.
+
 ## [1.746.0] - 2026-09-12
 
 ### Added
