@@ -2742,6 +2742,20 @@ Lag 0 reduces to the sample variance; positive autocorrelation inflates both the
 long-run variance and the mean's standard error. On an AR(1) the estimate climbs
 toward the analytic `sigma^2 / (1 - phi)^2` as the lag grows.
 
+The same HAC variance backs the Diebold-Mariano test of equal predictive accuracy,
+which compares two forecasts by their loss differential:
+
+```python
+from quantforge import diebold_mariano
+
+dm, p = diebold_mariano(errors1, errors2, h=1)   # negative dm favors forecast 1
+```
+
+`errors1`/`errors2` are the two forecast-error series; the statistic standardizes
+their mean squared-error (or absolute-error) gap by its HAC standard error, with the
+Harvey small-sample correction. It is antisymmetric — swapping the forecasts flips
+the sign — so a large `|dm|` with a small p-value picks a winner.
+
 ## Theil-Sen robust regression
 
 Ordinary least squares is dragged by outliers. The Theil-Sen estimator takes the

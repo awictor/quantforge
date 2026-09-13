@@ -24,6 +24,12 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.771.0] - 2026-09-12
+
+### Documentation
+- README Newey-West HAC section now documents `diebold_mariano` with a worked
+  example, noting it reuses the HAC variance and is antisymmetric in its arguments.
+
 ## [1.770.0] - 2026-09-12
 
 ### Added
