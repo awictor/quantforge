@@ -3716,6 +3716,21 @@ P = matrix_exp(Q)     # one-period transition matrix: rows sum to 1, non-negativ
 zero maps to a valid stochastic matrix — the basis for continuous-time rating
 migration.
 
+The multivariate-normal density and its log-determinant are built stably on the
+Cholesky factor — the workhorse of Gaussian likelihoods:
+
+```python
+from quantforge import log_determinant, mvn_logpdf, mvn_pdf
+
+cov = [[1.0, 0.5], [0.5, 2.0]]
+log_determinant(cov)              # 2 * sum(log L_ii), no overflow
+mvn_logpdf([0.3, -0.1], mean=[0, 0], cov=cov)   # log N(x; mu, Sigma)
+```
+
+`mvn_logpdf` evaluates the Mahalanobis term by a triangular solve rather than an
+explicit inverse, so it stays accurate for high-dimensional or ill-conditioned
+covariances; it reduces to the univariate normal in one dimension.
+
 ## Numerical utilities
 
 Cubic interpolation (natural spline and monotone Hermite), a spline-interpolated
