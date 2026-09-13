@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.835.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.836.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -5125,6 +5125,18 @@ Auto-generated from `quantforge` v1.835.0 by `docs/gen_api.py` — do not edit b
 > ``sum_i w_i x_i^m = m!`` (the moments of the ``e^{-x}`` density). Exact for
 > polynomials up to degree ``2n - 1``. Nodes are positive and returned in
 > increasing order.
+
+## gmm
+
+### `fit_gaussian_mixture(data, k=2, max_iter=200, tol=1e-08, seed=1234567)`  _function_
+
+> Fit a ``k``-component 1-D Gaussian mixture by EM.
+>
+> Returns a dict with ``weights`` (mixing proportions summing to one), ``means``,
+> ``variances``, ``log_likelihood`` (of the final fit) and ``n_iter``. Components
+> are initialized at spread-out data quantiles (deterministic given ``seed``, which
+> only jitters the initial means). The log-likelihood is non-decreasing across
+> iterations. Requires at least ``k`` distinct points.
 
 ## gof_tests
 

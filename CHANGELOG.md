@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.836.0] - 2026-09-13
+
+### Added
+- `gmm.py`: `fit_gaussian_mixture`, a one-dimensional Gaussian-mixture fit by
+  expectation-maximization (responsibility E-step, weighted-moment M-step). Returns
+  the mixing weights, means, variances and log-likelihood. Cross-checked: it recovers
+  well-separated components and their mixing proportions, the weights sum to one, a
+  single component equals the sample mean and variance, and the log-likelihood is
+  non-decreasing across iterations.
+
 ## [1.835.0] - 2026-09-13
 
 ### Documentation
