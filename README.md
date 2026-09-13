@@ -5435,6 +5435,23 @@ mode oscillates and returns to its start after one period `2L/c`, and a localize
 splits into two half-height waves travelling in opposite directions, exactly as
 d'Alembert's solution predicts.
 
+The third PDE type, the *elliptic* Poisson equation `u_xx + u_yy = f` (steady-state heat,
+electrostatics), is a boundary-value problem in 2-D; `poisson2d` solves it by successive
+over-relaxation:
+
+```python
+from quantforge import poisson2d
+
+# f_grid is the source (zeros for Laplace); boundary holds the fixed edge values
+u, n_iter = poisson2d(f_grid, boundary, dx=0.05, dy=0.05, omega=1.8)
+```
+
+With `f_grid` all zeros it solves Laplace's equation, whose solution is harmonic — the
+maximum principle holds (no interior value exceeds the boundary range) and a linear
+boundary is reproduced exactly. `omega` is the over-relaxation factor in `(0, 2)`;
+tuning it toward ~1.8 converges several times faster than plain Gauss-Seidel (`omega=1`).
+A `sin*sin` source recovers its analytic solution to the `O(h^2)` discretization error.
+
 A Padé approximant turns a Taylor series into a *rational* function that often
 converges where the series itself diverges. `pade` builds `[m/n]` from Taylor
 coefficients and `pade_eval` evaluates it; `lentz_continued_fraction` evaluates a
