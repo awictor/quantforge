@@ -5417,6 +5417,24 @@ mode decays to its analytic `exp(-alpha (pi/L)² t)` amplitude, a step in the bo
 values relaxes to the exact linear steady state, and a localized bump spreads and
 flattens — the standard diffusive behaviour, solved by a tridiagonal system each step.
 
+For the *hyperbolic* wave equation `u_tt = c² u_xx` (vibrating string, acoustics),
+`wave_equation` marches an initial displacement and velocity forward by an explicit
+leapfrog scheme:
+
+```python
+from quantforge import wave_equation
+
+# plucked string u(x,0) = shape, at rest (v0 = 0), speed c
+u = wave_equation(u0, v0=[0.0] * len(u0), c=1.0, dx=0.005, dt=0.0025,
+                  n_steps=200, left=0.0, right=0.0)
+```
+
+Unlike the diffusion solver this one is *conditionally* stable — the Courant number
+`c·dt/dx` must stay `<= 1` (the CFL condition, enforced with a clear error). A standing
+mode oscillates and returns to its start after one period `2L/c`, and a localized pulse
+splits into two half-height waves travelling in opposite directions, exactly as
+d'Alembert's solution predicts.
+
 A Padé approximant turns a Taylor series into a *rational* function that often
 converges where the series itself diverges. `pade` builds `[m/n]` from Taylor
 coefficients and `pade_eval` evaluates it; `lentz_continued_fraction` evaluates a
