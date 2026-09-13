@@ -2722,6 +2722,23 @@ clopper_pearson_interval(8, 25)       # exact, never under-covers
 but exact); `wilson_interval` is the practical default; `wald_interval` is accurate
 only for large `n` away from 0 or 1. All stay within `[0, 1]`.
 
+Before running a test, size it. The power routines give the rejection probability
+for a planned design and invert it for the required sample size:
+
+```python
+from quantforge import (two_sample_t_power, two_sample_t_sample_size,
+                        proportion_sample_size)
+
+two_sample_t_power(effect_size=0.6, n_per_group=40)      # power at this design
+two_sample_t_sample_size(effect_size=0.5, power=0.80)    # -> ~64 per group
+proportion_sample_size(p1=0.50, p2=0.65, power=0.80)     # -> ~170 per group
+```
+
+`effect_size` is Cohen's `d` (mean gap in pooled-SD units). The computed power
+matches an empirical Monte-Carlo rejection rate; a zero effect gives power equal to
+the significance level, and the sample sizes reproduce the standard textbook
+values. One-sample analogues are `one_sample_z_power` / `one_sample_z_sample_size`.
+
 ## Autocorrelation (ACF / PACF)
 
 Identify ARMA structure from the correlograms. `acf` is the autocorrelation at each
