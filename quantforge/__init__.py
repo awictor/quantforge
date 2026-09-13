@@ -564,6 +564,7 @@ from .ode import rk4, rk45
 from .bvp import shooting_bvp
 from .symplectic import velocity_verlet, leapfrog
 from .heat_equation import heat_equation_cn
+from .wave_equation import wave_equation
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -954,7 +955,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "2.8.0"
+__version__ = "2.9.0"
 
 __all__ = [
     "OptionType",
@@ -1791,6 +1792,7 @@ __all__ = [
     "velocity_verlet",
     "leapfrog",
     "heat_equation_cn",
+    "wave_equation",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

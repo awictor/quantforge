@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.8.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.9.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -14841,6 +14841,17 @@ Auto-generated from `quantforge` v2.8.0 by `docs/gen_api.py` — do not edit by 
 > ``u in [0, 1]`` via the standard interval decomposition (SciPy's approach). ``p=1``
 > is earth-mover distance; ``p=2`` the quadratic transport cost. Returns a true metric
 > for ``p=1``. Both samples must be non-empty.
+
+## wave_equation
+
+### `wave_equation(u0, v0, c, dx, dt, n_steps, left=0.0, right=0.0)`  _function_
+
+> Explicit finite-difference evolution of ``u_tt = c^2 u_xx``.
+>
+> ``u0`` is the initial displacement profile (grid values), ``v0`` the initial
+> velocity (same length; pass zeros for a plucked start). Fixed ends at ``left`` /
+> ``right``. Returns the displacement after ``n_steps`` steps. Requires the CFL
+> condition ``c dt / dx <= 1`` for stability (raises otherwise).
 
 ## wavelet
 

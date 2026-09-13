@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.9.0] - 2026-09-13
+
+### Added
+- `wave_equation.py`: `wave_equation`, a 1-D wave-equation solver (`u_tt = c^2 u_xx`) by
+  the explicit central-difference (leapfrog) scheme with fixed ends, initial shape and
+  velocity. Cross-checked: a standing wave matches the d'Alembert solution, returns to
+  its start after a full period, a localized pulse splits into two half-height
+  travelling waves, and the CFL condition `c dt/dx <= 1` is enforced.
+
 ## [2.8.0] - 2026-09-13
 
 ### Documentation
