@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.801.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.802.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -1293,6 +1293,29 @@ Auto-generated from `quantforge` v1.801.0 by `docs/gen_api.py` — do not edit b
 > Sums :func:`carry_return` and :func:`rolldown_return`. The expected holding-
 > period return if the curve is unchanged; the standard relative-value carry-
 > and-roll number.
+
+## cdar
+
+### `average_drawdown(returns)`  _function_
+
+> Mean fractional drawdown over the return path (non-negative).
+
+### `conditional_drawdown_at_risk(returns, confidence=0.95)`  _function_
+
+> Conditional drawdown-at-risk (CDaR): mean of the worst ``1 - confidence`` drawdowns.
+>
+> The coherent drawdown analogue of expected shortfall (Chekhlov-Uryasev-
+> Zabarankin). Averages the deepest tail of the drawdown distribution beyond the
+> :func:`drawdown_at_risk` threshold, so ``CDaR >= DaR``. Falls back to the single
+> worst drawdown when the tail holds one observation.
+
+### `drawdown_at_risk(returns, confidence=0.95)`  _function_
+
+> Drawdown-at-risk: the ``confidence``-quantile of the drawdown distribution.
+>
+> The drawdown depth that is exceeded only ``1 - confidence`` of the time. A larger
+> confidence gives a deeper (more conservative) threshold. Uses the upper-tail
+> order statistic of the drawdown series.
 
 ## cev
 

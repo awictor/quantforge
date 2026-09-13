@@ -326,6 +326,9 @@ from .runs_test import runs_test, runs_test_binary
 from .anderson_darling import anderson_darling_normal
 from .arch_test import arch_lm_test
 from .kpss import kpss_test
+from .cdar import (
+    average_drawdown, drawdown_at_risk, conditional_drawdown_at_risk,
+)
 from .variance_ratio import variance_ratio, variance_ratio_zstat
 from .ou_fit import fit_ornstein_uhlenbeck
 from .cointegration import adf_test, engle_granger
@@ -804,7 +807,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.801.0"
+__version__ = "1.802.0"
 
 __all__ = [
     "OptionType",
@@ -1306,6 +1309,9 @@ __all__ = [
     "anderson_darling_normal",
     "arch_lm_test",
     "kpss_test",
+    "average_drawdown",
+    "drawdown_at_risk",
+    "conditional_drawdown_at_risk",
     "rescaled_range",
     "variance_ratio",
     "variance_ratio_zstat",

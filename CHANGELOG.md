@@ -31,6 +31,17 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.802.0] - 2026-09-13
+
+### Added
+- `cdar.py`: drawdown-based risk measures -- `average_drawdown`, `drawdown_at_risk`
+  (DaR, the drawdown quantile) and `conditional_drawdown_at_risk` (CDaR, the mean of
+  the worst-tail drawdowns, a coherent drawdown analogue of expected shortfall).
+  Cross-checked: the ordering ``CDaR >= DaR >= average >= 0`` holds, all are bounded
+  by the maximum drawdown, both are monotone in the confidence level, a monotonic
+  decline gives CDaR equal to the maximum drawdown, and a monotonically rising path
+  has zero drawdown.
+
 ## [1.801.0] - 2026-09-12
 
 ### Documentation
