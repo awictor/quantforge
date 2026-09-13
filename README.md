@@ -3061,6 +3061,21 @@ the Golub-Welsch eigen-decomposition of the Hermite recurrence; `gauss_hermite_n
 exposes them directly. Best for smooth integrands — a kinked payoff converges
 slowly, so integrate option payoffs with the density routines instead.
 
+For integrals over the half-line `[0, inf)`, Gauss-Laguerre uses the `e^{-x}`
+weight; the wrapper factors out an exponential rate so it also handles a plain
+`integral_0^inf g(x) dx`:
+
+```python
+from quantforge import gauss_laguerre_integral
+
+gauss_laguerre_integral(lambda x: math.exp(-2 * x), rate=2.0)          # -> 0.5
+gauss_laguerre_integral(lambda x: x * x * math.exp(-3 * x), rate=3.0)  # -> 2/27
+```
+
+Set `rate` near the integrand's true decay constant for best accuracy; it needs an
+exponential falloff, so an integrand like `1/(1+x^2)` (only algebraic decay) will
+not converge.
+
 # One-dimensional minimizers (line search / 1-D calibration).
 from quantforge import golden_section_min, brent_min
 golden_section_min(lambda x: (x - 3) ** 2 + 1, -10, 10)   # -> (3.0, 1.0)

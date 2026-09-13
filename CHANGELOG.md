@@ -16,6 +16,14 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.715.0] - 2026-09-12
+
+### Documentation
+- README numerics section now documents Gauss-Laguerre quadrature
+  (`gauss_laguerre_integral`, `gauss_laguerre_nodes_weights`) with a worked
+  example, noting the `rate` should match the integrand's exponential decay and
+  that algebraic-decay integrands will not converge.
+
 ## [1.714.0] - 2026-09-12
 
 ### Added
