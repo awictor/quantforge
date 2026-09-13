@@ -31,6 +31,18 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.814.0] - 2026-09-13
+
+### Added
+- `turbulence.py`: Kritzman-Li systemic-risk gauges -- `turbulence` /
+  `turbulence_series` (the Mahalanobis distance of a return vector from its
+  historical mean and covariance, spiking on unusual cross-asset moves) and
+  `absorption_ratio` (the variance share of the top principal components). Cross-
+  checked: in-sample multivariate-normal turbulence averages the number of assets,
+  an outlier vector gives a far larger value, the absorption ratio is
+  ``n_factors/n`` under equal variance and near one when a factor dominates, and
+  stays in ``[0, 1]``.
+
 ## [1.813.0] - 2026-09-13
 
 ### Documentation

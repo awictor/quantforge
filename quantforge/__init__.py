@@ -333,6 +333,7 @@ from .style_analysis import style_analysis
 from .concentration import (
     herfindahl_index, effective_number_of_constituents, effective_number_of_bets,
 )
+from .turbulence import turbulence, turbulence_series, absorption_ratio
 from .variance_ratio import variance_ratio, variance_ratio_zstat
 from .ou_fit import fit_ornstein_uhlenbeck
 from .cointegration import adf_test, engle_granger
@@ -814,7 +815,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.813.0"
+__version__ = "1.814.0"
 
 __all__ = [
     "OptionType",
@@ -1323,6 +1324,9 @@ __all__ = [
     "herfindahl_index",
     "effective_number_of_constituents",
     "effective_number_of_bets",
+    "turbulence",
+    "turbulence_series",
+    "absorption_ratio",
     "rescaled_range",
     "variance_ratio",
     "variance_ratio_zstat",

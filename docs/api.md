@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.813.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.814.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -12372,6 +12372,35 @@ Auto-generated from `quantforge` v1.813.0 by `docs/gen_api.py` — do not edit b
 >     american: if True, allow early exercise at every node; if False, price
 >         the European payoff (useful as a convergence cross-check).
 >     b: cost of carry (defaults to r). Dividend yield q enters as b = r - q.
+
+## turbulence
+
+### `absorption_ratio(cov, n_factors=None)`  _function_
+
+> Absorption ratio: variance share of the top principal components.
+>
+> Sums the ``n_factors`` largest eigenvalues of ``cov`` and divides by the total
+> (the trace). ``n_factors`` defaults to about a fifth of the assets (Kritzman-Li's
+> rule of thumb). In ``[0, 1]``: near ``n_factors / n`` when risk is spread evenly,
+> toward 1 when a few factors dominate -- a high or rising ratio signals a fragile,
+> tightly-coupled market.
+
+### `turbulence(observation, mean, cov)`  _function_
+
+> Financial turbulence: Mahalanobis distance of ``observation`` from ``mean``.
+>
+> ``d = (r - mu)' C^{-1} (r - mu)`` for a single return vector ``observation`` given
+> the historical ``mean`` and covariance ``cov``. Non-negative; larger means a more
+> unusual (stressed) cross-asset move. Under multivariate normality ``E[d]`` equals
+> the number of assets.
+
+### `turbulence_series(returns, mean=None, cov=None)`  _function_
+
+> Turbulence for each row of a return panel (rows = periods, cols = assets).
+>
+> If ``mean``/``cov`` are omitted they are estimated in-sample from ``returns``.
+> Returns one turbulence value per period; the average is close to the number of
+> assets when the data is multivariate normal.
 
 ## two_scale_rv
 
