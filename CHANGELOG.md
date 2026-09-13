@@ -16,6 +16,15 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.719.0] - 2026-09-12
+
+### Documentation
+- README gains a "Probability distributions" section documenting the gamma,
+  chi-square, Poisson, F and binomial routines with a worked example (textbook
+  chi-square/F critical values, tail p-value, Poisson/binomial CDFs), and a note
+  that the discrete CDFs use the gamma/beta identities for large-parameter
+  stability. TOC regenerated.
+
 ## [1.718.0] - 2026-09-12
 
 ### Added

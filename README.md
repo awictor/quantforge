@@ -111,6 +111,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Principal component analysis](#principal-component-analysis)
 - [Matrix utilities](#matrix-utilities)
 - [Numerical utilities](#numerical-utilities)
+- [Probability distributions](#probability-distributions)
 - [Nelson-Siegel / Svensson curves](#nelson-siegel--svensson-curves)
 - [Sample risk measures](#sample-risk-measures)
 - [Student-t fat tails](#student-t-fat-tails)
@@ -3114,6 +3115,28 @@ erfinv(0.95)                # inverse error function
 gives the Student-t, F and binomial CDFs; `erfinv` gives normal quantiles
 (`erfinv(y) = norm_ppf((1+y)/2) / sqrt(2)`). They satisfy `P + Q = 1`,
 `I_x(a,b) = 1 - I_{1-x}(b,a)`, and `erf(erfinv(y)) = y` to machine precision.
+
+## Probability distributions
+
+Gamma, chi-square, Poisson, F and binomial distributions built on those special
+functions — CDFs, densities or masses, and quantiles:
+
+```python
+from quantforge import (gamma_cdf, gamma_ppf, chi2_cdf, chi2_ppf, chi2_sf,
+                        poisson_cdf, poisson_pmf, f_ppf, binomial_cdf)
+
+chi2_ppf(0.95, df=10)            # -> 18.307  (textbook critical value)
+chi2_sf(18.307, df=10)           # -> 0.05    (upper-tail p-value)
+f_ppf(0.95, d1=1, d2=10)         # -> 4.965
+poisson_cdf(k=7, lam=4.3)        # P(N <= 7), via the gamma identity
+binomial_cdf(k=6, n=20, prob=0.3)
+gamma_ppf(0.5, shape=2.5, scale=3.0)   # gamma median
+```
+
+The Poisson and binomial CDFs use the incomplete-gamma and incomplete-beta
+identities (`P(N<=k) = Q(k+1, lam)`, `P(X<=k) = I_{1-p}(n-k, k+1)`), so they stay
+exact and stable at large parameters where summing masses would lose precision.
+Every continuous quantile inverts its CDF and round-trips to machine precision.
 
 ## Nelson-Siegel / Svensson curves
 
