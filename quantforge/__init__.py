@@ -359,7 +359,7 @@ from .acf import acf, pacf
 from .ar_model import fit_ar_yule_walker, ar_forecast
 from .ar_select import select_ar_order, ar_information_criteria
 from .holt_winters import holt_linear, holt_winters_add
-from .forecast_metrics import mae, rmse, mape, smape, mase
+from .forecast_metrics import mae, rmse, mape, smape, mase, theil_u1, theil_u2
 from .ols import ols_fit
 from .ridge import ridge_regression
 from .logistic import fit_logistic, predict_proba
@@ -784,7 +784,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.773.0"
+__version__ = "1.774.0"
 
 __all__ = [
     "OptionType",
@@ -1328,6 +1328,8 @@ __all__ = [
     "mape",
     "smape",
     "mase",
+    "theil_u1",
+    "theil_u2",
     "ols_fit",
     "ridge_regression",
     "fit_logistic",

@@ -24,6 +24,15 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.774.0] - 2026-09-12
+
+### Added
+- `forecast_metrics.py` gains Theil's U statistics: `theil_u2` (forecast RMSE over
+  the no-change naive RMSE) and `theil_u1` (the inequality coefficient bounded in
+  ``[0, 1]``). Cross-checked: a perfect forecast gives zero, the persistence forecast
+  gives ``U2 = 1`` exactly, a forecast better than naive gives ``U2 < 1`` and a worse
+  one ``U2 > 1``, and ``U1`` stays in ``[0, 1]``.
+
 ## [1.773.0] - 2026-09-12
 
 ### Documentation

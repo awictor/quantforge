@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.773.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.774.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -4558,6 +4558,23 @@ Auto-generated from `quantforge` v1.773.0 by `docs/gen_api.py` — do not edit b
 >
 > ``mean( |a - f| / ((|a| + |f|) / 2) )``. Terms with both ``a`` and ``f`` zero
 > contribute 0. Robust to small actuals and bounded, unlike plain MAPE.
+
+### `theil_u1(actual, forecast)`  _function_
+
+> Theil's U1 inequality coefficient, bounded in ``[0, 1]``.
+>
+> ``U1 = RMSE / (rms(actual) + rms(forecast))``. Zero for a perfect forecast and
+> one in the worst case; scale-free and symmetric. Distinct from
+> :func:`theil_u2`, which benchmarks against the naive forecast.
+
+### `theil_u2(actual, forecast, last_actual=None)`  _function_
+
+> Theil's U2 statistic: forecast RMSE over the no-change naive RMSE.
+>
+> The naive forecast for period ``t`` is the previous actual ``actual[t-1]`` (or
+> ``last_actual`` for the first point, if given). ``U2 < 1`` means the forecast
+> beats the random walk, ``= 1`` matches it, ``> 1`` is worse. Needs at least two
+> points (or one point plus ``last_actual``).
 
 ## forecast_test
 
