@@ -113,6 +113,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Markov chains](#markov-chains)
 - [K-means clustering](#k-means-clustering)
 - [Hierarchical clustering](#hierarchical-clustering)
+- [Gaussian mixture model](#gaussian-mixture-model)
 - [Principal component analysis](#principal-component-analysis)
 - [Market stress (turbulence / absorption ratio)](#market-stress-turbulence--absorption-ratio)
 - [Matrix utilities](#matrix-utilities)
@@ -3594,6 +3595,26 @@ fcluster(points, merges, distance_threshold=5)   # or cut below a distance
 Merge distances are monotone; cutting into the right number of clusters recovers
 separated groups purely. Complete linkage yields compact clusters, single linkage
 chains, and average sits between.
+
+## Gaussian mixture model
+
+Soft clustering: fit a return series as a mixture of normal regimes (e.g. calm vs
+turbulent) by expectation-maximization, recovering each regime's weight, mean and
+variance:
+
+```python
+from quantforge import fit_gaussian_mixture
+
+r = fit_gaussian_mixture(returns, k=2)
+r["weights"]        # regime probabilities (sum to 1)
+r["means"]          # regime mean returns
+r["variances"]      # regime variances
+r["log_likelihood"]
+```
+
+Unlike k-means' hard assignment, each point carries a responsibility to every
+component; the log-likelihood rises monotonically to a local optimum, and a
+single component reduces to the plain sample mean and variance.
 
 ## Principal component analysis
 
