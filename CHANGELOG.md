@@ -24,6 +24,18 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.732.0] - 2026-09-12
+
+### Added
+- `multiple_testing.py`: p-value corrections for multiple hypotheses --
+  `bonferroni` and `holm` (family-wise error rate), `benjamini_hochberg` (FDR under
+  independence/positive dependence) and `benjamini_yekutieli` (FDR under arbitrary
+  dependence). Each returns monotone adjusted p-values aligned with the input.
+  Cross-checked: Benjamini-Hochberg matches the known worked example, every method
+  gives an adjusted p at least the raw one, the conservativeness ordering holds
+  (Bonferroni >= Holm, Benjamini-Yekutieli >= Benjamini-Hochberg), and the input
+  order is preserved for unsorted p-values.
+
 ## [1.731.0] - 2026-09-12
 
 ### Documentation

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.731.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.732.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -7781,6 +7781,36 @@ Auto-generated from `quantforge` v1.731.0 by `docs/gen_api.py` — do not edit b
 >
 > with the exact :func:`worst_of_call_closed` and :func:`_disc_expected_min`.
 > Closed-form cross-check for the Monte Carlo :func:`worst_of_call` put.
+
+## multiple_testing
+
+### `benjamini_hochberg(pvals)`  _function_
+
+> Benjamini-Hochberg FDR-adjusted p-values (step-up).
+>
+> Sorts ascending, scales the ``k``-th smallest (1-based) by ``m / k``, takes a
+> running minimum from the largest down so the sequence is monotone, and unshuffles
+> to the input order. Controls the false-discovery rate under independence or
+> positive dependence; less conservative than family-wise methods.
+
+### `benjamini_yekutieli(pvals)`  _function_
+
+> Benjamini-Yekutieli FDR-adjusted p-values (arbitrary dependence).
+>
+> As Benjamini-Hochberg but with the extra factor ``c(m) = sum_{i=1}^m 1/i``, which
+> makes the procedure valid under any dependence structure at the cost of power.
+
+### `bonferroni(pvals)`  _function_
+
+> Bonferroni-adjusted p-values: ``min(1, m * p)`` for ``m`` tests.
+
+### `holm(pvals)`  _function_
+
+> Holm step-down family-wise adjusted p-values.
+>
+> Sorts ascending, scales the ``k``-th smallest (0-based) by ``m - k``, then takes
+> a running maximum so the sequence is monotone, and unshuffles to the input
+> order. Controls the family-wise error rate and dominates :func:`bonferroni`.
 
 ## naive_bayes
 

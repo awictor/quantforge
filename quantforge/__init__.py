@@ -302,6 +302,9 @@ from .power import (
     two_sample_t_power, two_sample_t_sample_size, one_sample_z_power,
     one_sample_z_sample_size, proportion_power, proportion_sample_size,
 )
+from .multiple_testing import (
+    bonferroni, holm, benjamini_hochberg, benjamini_yekutieli,
+)
 from .tail_dependence import (
     upper_tail_dependence, lower_tail_dependence, exceedance_correlation,
 )
@@ -747,7 +750,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.731.0"
+__version__ = "1.732.0"
 
 __all__ = [
     "OptionType",
@@ -1222,6 +1225,10 @@ __all__ = [
     "one_sample_z_sample_size",
     "proportion_power",
     "proportion_sample_size",
+    "bonferroni",
+    "holm",
+    "benjamini_hochberg",
+    "benjamini_yekutieli",
     "pseudo_observations",
     "upper_tail_dependence",
     "lower_tail_dependence",
