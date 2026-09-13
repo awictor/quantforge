@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.793.0] - 2026-09-12
+
+### Documentation
+- README gains a "Benford's law (first-digit anomaly detection)" section
+  documenting `benford_chi_square`, `benford_mad`, `first_digit_distribution` and
+  `benford_expected` with a worked example. TOC regenerated.
+
 ## [1.792.0] - 2026-09-12
 
 ### Added

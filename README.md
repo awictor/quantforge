@@ -98,6 +98,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Entropy (time-series regularity)](#entropy-time-series-regularity)
 - [Variance-ratio test](#variance-ratio-test)
 - [Serial correlation (Ljung-Box / Durbin-Watson)](#serial-correlation-ljung-box--durbin-watson)
+- [Benford's law (first-digit anomaly detection)](#benfords-law-first-digit-anomaly-detection)
 - [Goodness of fit (Jarque-Bera / KS)](#goodness-of-fit-jarque-bera--ks)
 - [Autocorrelation (ACF / PACF)](#autocorrelation-acf--pacf)
 - [Exponential smoothing (Holt / Holt-Winters)](#exponential-smoothing-holt--holt-winters)
@@ -3053,6 +3054,25 @@ durbin_watson(residuals)                # ~2 = clean, <2 positive, >2 negative
 White noise gives a large Ljung-Box p-value and a Durbin-Watson near 2; an AR(1)
 gives a huge Q with a vanishing p-value and a Durbin-Watson far from 2. The
 p-values use a self-contained chi-square survival function (no SciPy).
+
+## Benford's law (first-digit anomaly detection)
+
+Numbers spanning several orders of magnitude have leading digits distributed as
+`P(d) = log10(1 + 1/d)` — digit 1 leads ~30% of the time. Fabricated or constrained
+data often breaks this, so a conformance test flags datasets worth auditing:
+
+```python
+from quantforge import (benford_chi_square, benford_mad, first_digit_distribution,
+                        benford_expected)
+
+benford_chi_square(values)     # (chi2, p): small p rejects Benford conformance
+benford_mad(values)            # Nigrini MAD: < 0.006 close, > 0.015 nonconforming
+first_digit_distribution(values)   # observed (counts, proportions) for digits 1..9
+```
+
+Fibonacci numbers and powers of two conform (they span many magnitudes); a uniform
+sample is strongly rejected. The chi-square test is sample-size sensitive, so pair
+it with the size-independent `benford_mad` on large datasets.
 
 ## Goodness of fit (Jarque-Bera / KS)
 
