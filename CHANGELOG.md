@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.914.0] - 2026-09-13
+
+### Added
+- `polyroots.py`: `polynomial_roots`, an all-roots solver by the Durand-Kerner
+  (Weierstrass) simultaneous iteration — finds every real and complex root at once, no
+  deflation. Cross-checked: exact on quadratics/cubics, complex conjugate pairs, the
+  5th roots of unity and a double root, recovers the roots of 200 random polynomials,
+  and every returned root drives the polynomial to ~1e-15.
+
 ## [1.913.0] - 2026-09-13
 
 ### Documentation

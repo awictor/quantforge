@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.913.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.914.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -9866,6 +9866,17 @@ Auto-generated from `quantforge` v1.913.0 by `docs/gen_api.py` — do not edit b
 ### `newton_polynomial(xs, coef, x)`  _function_
 
 > Evaluate the Newton form with divided-difference ``coef`` at ``x`` (Horner).
+
+## polyroots
+
+### `polynomial_roots(coeffs, tol=1e-12, max_iter=500)`  _function_
+
+> All roots of a polynomial by the Durand-Kerner method.
+>
+> ``coeffs`` are the coefficients from the highest degree down (e.g. ``[1, -3, 2]``
+> for ``x^2 - 3x + 2``); real or complex. Returns a list of the ``n`` roots as
+> complex numbers (a root with a negligible imaginary part is still returned as
+> ``complex`` -- take ``.real`` if you know it is real). Leading zeros are trimmed.
 
 ## portfolio
 
