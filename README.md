@@ -3410,6 +3410,29 @@ deviation from the center rank, which a dispersed sample inflates by pushing val
 the extremes. Both assume the two samples share a location and return a
 normal-approximation p-value whose null z is calibrated to mean 0 and variance 1.
 
+For *more than two* groups, `kruskal_wallis_test` is the rank analogue of one-way
+ANOVA, and `friedman_test` handles repeated measures (a nonparametric two-way ANOVA
+with one observation per cell):
+
+```python
+from quantforge import kruskal_wallis_test, friedman_test
+
+kruskal_wallis_test([2.9, 3.0, 2.5, 2.6, 3.2],
+                    [3.8, 2.7, 4.0, 2.4],
+                    [2.8, 3.4, 3.7, 2.2, 2.0])
+# {'statistic': 0.7714, 'df': 2, 'p_value': 0.68}  — no group difference
+
+# one row per block (subject), one column per treatment
+friedman_test([[1, 2, 3], [2, 3, 1], [3, 1, 2], [1, 2, 3], [2, 3, 1]])
+# {'statistic': 0.4, 'df': 2, 'p_value': 0.8187}
+```
+
+Kruskal-Wallis pools and ranks all observations, comparing each group's mean rank to
+the overall mean (tie-corrected, chi-square with `k - 1` df); on two groups its `H`
+equals the Mann-Whitney `z²` exactly. Friedman ranks *within* each block across the
+treatments, so it removes between-block variation the way a paired test does — use it
+when the same subjects are measured under every condition.
+
 For a proportion estimate, four confidence intervals span the accuracy/simplicity
 trade-off:
 

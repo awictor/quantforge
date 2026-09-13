@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.881.0] - 2026-09-13
+
+### Documentation
+- README: extended the hypothesis-test section with `kruskal_wallis_test` and
+  `friedman_test` for k-sample and repeated-measures rank comparisons. Every snippet
+  value verified.
+
 ## [1.880.0] - 2026-09-13
 
 ### Added
