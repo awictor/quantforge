@@ -3646,10 +3646,16 @@ f = monotone_cubic([0, 1, 2, 3], [0, 0, 0, 1])   # no overshoot
 curve = SplineZeroCurve([0.5, 1, 2, 5, 10], [0.02, 0.025, 0.03, 0.035, 0.04])
 brent(lambda x: x * x - 2, 0, 2)                  # sqrt(2)
 
+# Chebyshev approximation: spectral accuracy for smooth functions.
+from quantforge import chebyshev_fit, chebyshev_eval, chebyshev_derivative
+import math
+c = chebyshev_fit(math.exp, 0, 2, degree=15)
+chebyshev_eval(c, 0, 2, 1.3)                       # ~ exp(1.3) to machine precision
+chebyshev_derivative(c, 0, 2)                      # coefficients of the derivative
+
 # Definite-integral quadrature.
 from quantforge import (simpson, gauss_legendre, adaptive_simpson, romberg,
                         clenshaw_curtis, tanh_sinh)
-import math
 simpson(lambda x: x * x, 0, 1)                    # composite Simpson
 gauss_legendre(lambda x: x ** 5, 0, 1, n=3)       # exact to degree 2n-1
 adaptive_simpson(math.sin, 0, math.pi)            # error-controlled -> 2.0
