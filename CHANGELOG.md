@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.880.0] - 2026-09-13
+
+### Added
+- `kruskal_wallis.py`: the `kruskal_wallis_test` (tie-corrected k-sample rank test,
+  nonparametric one-way ANOVA) and `friedman_test` (repeated-measures rank test).
+  Cross-checked: Kruskal-Wallis reproduces the textbook H = 0.7714 (p = 0.68), equals
+  the Mann-Whitney z^2 exactly on two groups, is calibrated under the null and detects
+  a three-group shift; Friedman matches its textbook value and flags a consistently
+  ordered treatment.
+
 ## [1.879.0] - 2026-09-13
 
 ### Documentation

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.879.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.880.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -6811,6 +6811,26 @@ Auto-generated from `quantforge` v1.879.0 by `docs/gen_api.py` — do not edit b
 > rejects stationarity (unlike ADF, where a small p-value supports it). The p-value
 > is interpolated/clamped against the asymptotic critical values, so it is reported
 > within ``[0.01, 0.10]`` at the bounds.
+
+## kruskal_wallis
+
+### `friedman_test(blocks)`  _function_
+
+> Friedman test for ``k`` related treatments over ``b`` blocks.
+>
+> ``blocks`` is a sequence of rows, each a length-``k`` sequence giving one block's
+> measurements across the treatments (e.g. one subject rated under every condition).
+> Ranks within each block, then compares treatment rank sums. Returns a dict with
+> the ``statistic``, ``df`` (``k - 1``) and the chi-square ``p_value``.
+
+### `kruskal_wallis_test(*groups)`  _function_
+
+> Kruskal-Wallis H test that ``k`` groups share a distribution.
+>
+> Pass each group as a separate sequence argument. Returns a dict with the
+> tie-corrected ``statistic`` H, the ``df`` (``k - 1``) and the chi-square upper-tail
+> ``p_value``. A small p-value rejects the null of equal distributions (specifically,
+> equal medians for similarly-shaped groups).
 
 ## lasso
 
