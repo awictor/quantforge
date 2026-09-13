@@ -24,6 +24,17 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.736.0] - 2026-09-12
+
+### Added
+- `quadrature.py`: `clenshaw_curtis` quadrature -- samples the integrand at the
+  Chebyshev extrema and combines them with the classic cosine-series weights.
+  Spectrally accurate for smooth integrands like Gauss-Legendre, but with a free
+  order ``n`` and nesting nodes, so it scales past the fixed 2-5 point Gauss rule.
+  Cross-checked to 1e-12 against closed forms (``sin`` over a half period, ``exp``,
+  a degree-7 polynomial exact at ``n = 8``, ``arctan'`` giving ``pi/4``, a Gaussian
+  against ``erf``), against Romberg on a damped cosine, and on the Runge function.
+
 ## [1.735.0] - 2026-09-12
 
 ### Documentation

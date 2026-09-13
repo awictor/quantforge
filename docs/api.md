@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.735.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.736.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -8902,6 +8902,19 @@ Auto-generated from `quantforge` v1.735.0 by `docs/gen_api.py` — do not edit b
 >
 > Recursively bisects where the Simpson estimate has not converged, so it
 > concentrates work on the hard parts of the integrand. Returns the integral.
+
+### `clenshaw_curtis(f, a, b, n=64)`  _function_
+
+> Clenshaw-Curtis quadrature: sample at Chebyshev points, weight by the DCT.
+>
+> Evaluates ``f`` at the ``n + 1`` Chebyshev extrema
+> ``x_j = cos(pi j / n)`` mapped to ``[a, b]`` and combines them with the classic
+> Clenshaw-Curtis weights (a discrete cosine sum of the even Chebyshev moments
+> ``2 / (1 - k^2)``). Like Gauss-Legendre it is spectrally accurate for smooth
+> integrands, but the order ``n`` is a free parameter and the nodes nest, so it is
+> a convenient high-order rule where the fixed 2-5 point Gauss rule is too coarse.
+>
+> ``n`` must be a positive even integer (rounded up). Pure standard library.
 
 ### `gauss_legendre(f, a, b, n=5)`  _function_
 

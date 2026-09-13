@@ -1,12 +1,13 @@
 """Numerical integration: trapezoid, Simpson, Gauss-Legendre, adaptive Simpson,
-Romberg, and tanh-sinh.
+Romberg, Clenshaw-Curtis, and tanh-sinh.
 
 General-purpose definite-integral routines for the many expected-value and
 density integrals across the library. Trapezoid and composite Simpson on a fixed
 grid, fixed-order Gauss-Legendre (exact for polynomials up to degree 2n-1), an
 error-controlled adaptive Simpson, Romberg (Richardson extrapolation on the
-trapezoid rule) for smooth integrands, and tanh-sinh (double-exponential) for
-integrable endpoint singularities. Pure standard library.
+trapezoid rule) and Clenshaw-Curtis (Chebyshev points) for smooth integrands, and
+tanh-sinh (double-exponential) for integrable endpoint singularities. Pure standard
+library.
 """
 
 import math
@@ -93,6 +94,42 @@ def adaptive_simpson(f, a, b, tol=1e-10, max_depth=50):
     fa, fb, fm = f(a), f(b), f(m)
     whole = (b - a) / 6.0 * (fa + 4.0 * fm + fb)
     return _adaptive(f, a, b, fa, fb, fm, whole, tol, max_depth)
+
+
+def clenshaw_curtis(f, a, b, n=64):
+    """Clenshaw-Curtis quadrature: sample at Chebyshev points, weight by the DCT.
+
+    Evaluates ``f`` at the ``n + 1`` Chebyshev extrema
+    ``x_j = cos(pi j / n)`` mapped to ``[a, b]`` and combines them with the classic
+    Clenshaw-Curtis weights (a discrete cosine sum of the even Chebyshev moments
+    ``2 / (1 - k^2)``). Like Gauss-Legendre it is spectrally accurate for smooth
+    integrands, but the order ``n`` is a free parameter and the nodes nest, so it is
+    a convenient high-order rule where the fixed 2-5 point Gauss rule is too coarse.
+
+    ``n`` must be a positive even integer (rounded up). Pure standard library.
+    """
+    if n < 2:
+        raise ValueError("n must be at least 2")
+    if n % 2:
+        n += 1
+    half = 0.5 * (b - a)
+    mid = 0.5 * (a + b)
+    # Function values at the Chebyshev extrema x_j = cos(pi j / n).
+    fx = [f(mid + half * math.cos(math.pi * j / n)) for j in range(n + 1)]
+    total = 0.0
+    for j in range(n + 1):
+        # Clenshaw-Curtis weight w_j on [-1, 1] via the cosine series.
+        theta_j = math.pi * j / n
+        wj = 1.0
+        for k in range(1, n // 2 + 1):
+            bk = 1.0 if k == n // 2 else 2.0
+            wj -= bk * math.cos(2.0 * k * theta_j) / (4.0 * k * k - 1.0)
+        wj *= 2.0 / n
+        # Endpoints carry half weight.
+        if j == 0 or j == n:
+            wj *= 0.5
+        total += wj * fx[j]
+    return total * half
 
 
 def romberg(f, a, b, max_order=10, tol=1e-12):

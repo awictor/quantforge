@@ -228,6 +228,7 @@ from .interpolation import natural_cubic_spline, monotone_cubic
 from .rootfind import bisection, brent, newton
 from .quadrature import (
     trapezoid, simpson, gauss_legendre, adaptive_simpson, tanh_sinh, romberg,
+    clenshaw_curtis,
 )
 from .gauss_hermite import (
     gauss_hermite_nodes_weights, gauss_hermite_expectation,
@@ -751,7 +752,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.735.0"
+__version__ = "1.736.0"
 
 __all__ = [
     "OptionType",
@@ -1118,6 +1119,7 @@ __all__ = [
     "adaptive_simpson",
     "tanh_sinh",
     "romberg",
+    "clenshaw_curtis",
     "gauss_hermite_nodes_weights",
     "gauss_hermite_expectation",
     "gauss_laguerre_nodes_weights",
