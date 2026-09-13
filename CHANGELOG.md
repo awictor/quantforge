@@ -31,6 +31,12 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.797.0] - 2026-09-12
+
+### Documentation
+- README goodness-of-fit section now documents `anderson_darling_normal` with a
+  worked example, noting its tail-sensitivity vs KS.
+
 ## [1.796.0] - 2026-09-12
 
 ### Added

@@ -3107,6 +3107,19 @@ catches any distributional difference — location, scale, or shape — not just
 difference in means, and its p-value uses the asymptotic Kolmogorov distribution
 (no SciPy).
 
+For a normality check that weights the tails, `anderson_darling_normal` is more
+powerful than KS against the heavy-tail and skew departures typical of returns:
+
+```python
+from quantforge import anderson_darling_normal
+
+a2, p = anderson_darling_normal(returns)   # small p rejects normality
+```
+
+It estimates the mean and standard deviation from the sample, applies the Stephens
+small-sample adjustment, and returns a D'Agostino-Stephens p-value. A clean normal
+sample passes; an exponential or fat-tailed one is strongly rejected.
+
 The classical parametric tests are built on the distribution CDFs, each returning
 `(statistic, p_value)`:
 
