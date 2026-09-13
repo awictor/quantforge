@@ -31,6 +31,12 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.957.0] - 2026-09-13
+
+### Documentation
+- README: documented `hyperdual_derivatives` and `second_derivative` in the
+  numerical-utilities section. Every snippet value verified.
+
 ## [1.956.0] - 2026-09-13
 
 ### Added

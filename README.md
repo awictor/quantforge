@@ -4915,6 +4915,22 @@ reads `f(x)` and `f'(x)` from a single dual evaluation per step, so — unlike t
 `newton` — you never supply a hand-coded derivative; it reaches sqrt(2) to machine
 precision in six iterations.
 
+For the *second* derivative, hyperdual numbers carry the value, both first-order slots
+and the cross term, so one evaluation returns `f`, `f'` and `f''` exactly:
+
+```python
+from quantforge import hyperdual_derivatives, second_derivative
+from quantforge.hyperdual import exp, sin
+
+hyperdual_derivatives(lambda x: x * x * x, 2.0)          # (8.0, 12.0, 12.0) = (f, f', f'')
+second_derivative(lambda x: exp(x) * sin(x), 0.8)        # 3.10109859
+```
+
+Unlike differencing a first-difference (which loses precision to a squared step),
+hyperdual second derivatives have no truncation error and agree with
+`ridders_second_derivative` to machine precision — the exact way to get gamma-style
+convexities when you control the pricing function's source.
+
 Slowly-converging sequences and fixed-point iterations can be accelerated with
 `aitken` (delta-squared), `shanks`, and `steffensen`:
 
