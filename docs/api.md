@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.716.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.718.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -2935,6 +2935,71 @@ Auto-generated from `quantforge` v1.716.0 by `docs/gen_api.py` — do not edit b
 > Distorts the survival function by ``g(u) = Phi(Phi^{-1}(u) + lam)`` and sums
 > it over the grid (unit spacing). ``lam = 0`` gives the expected loss; positive
 > ``lam`` adds a risk load. Monotone increasing in ``lam``.
+
+## distributions
+
+### `binomial_cdf(k, n, prob)`  _function_
+
+> Binomial CDF ``P(X <= k)`` for ``n`` trials with success probability ``prob``.
+>
+> Uses the incomplete-beta identity ``P(X <= k) = I_{1-p}(n - k, k + 1)``, exact
+> and stable for large ``n``. ``k`` is floored to an integer.
+
+### `binomial_pmf(k, n, prob)`  _function_
+
+> Binomial probability mass ``C(n, k) p^k (1-p)^{n-k}``.
+
+### `chi2_cdf(x, df)`  _function_
+
+> CDF of the chi-square distribution with ``df`` degrees of freedom.
+>
+> A gamma with ``shape = df/2`` and ``scale = 2``: ``F(x) = P(df/2, x/2)``.
+
+### `chi2_ppf(p, df)`  _function_
+
+> Quantile of the chi-square distribution for ``p`` in ``(0, 1)``.
+
+### `chi2_sf(x, df)`  _function_
+
+> Survival function ``1 - chi2_cdf(x, df)`` (upper tail, for p-values).
+
+### `f_cdf(x, d1, d2)`  _function_
+
+> CDF of the F distribution with ``(d1, d2)`` degrees of freedom.
+>
+> ``F(x) = I_{d1 x / (d1 x + d2)}(d1/2, d2/2)`` via the regularized incomplete
+> beta.
+
+### `f_ppf(p, d1, d2)`  _function_
+
+> Quantile of the F distribution for ``p`` in ``(0, 1)``.
+
+### `gamma_cdf(x, shape, scale=1.0)`  _function_
+
+> CDF of the gamma distribution ``Gamma(shape, scale)`` at ``x``.
+>
+> ``F(x) = P(shape, x / scale)`` via the regularized lower incomplete gamma.
+> Reduces to the exponential CDF ``1 - e^{-x/scale}`` when ``shape = 1``.
+
+### `gamma_pdf(x, shape, scale=1.0)`  _function_
+
+> Density of the gamma distribution at ``x >= 0``.
+
+### `gamma_ppf(p, shape, scale=1.0)`  _function_
+
+> Quantile (inverse CDF) of the gamma distribution for ``p`` in ``(0, 1)``.
+
+### `poisson_cdf(k, lam)`  _function_
+
+> Poisson CDF ``P(N <= k)`` via the gamma relation ``= Q(k+1, lam)``.
+>
+> Uses ``P(N <= k) = gammaincc(k + 1, lam)`` (the regularized upper incomplete
+> gamma), exact and stable for large ``lam`` where summing masses would lose
+> precision. ``k`` is floored to an integer.
+
+### `poisson_pmf(k, lam)`  _function_
+
+> Poisson probability mass ``P(N = k) = e^{-lam} lam^k / k!``.
 
 ## double_barrier
 

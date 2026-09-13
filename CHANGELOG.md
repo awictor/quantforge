@@ -16,6 +16,20 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.718.0] - 2026-09-12
+
+### Added
+- `distributions.py`: public gamma, chi-square, Poisson, F and binomial
+  distributions built on the incomplete gamma and beta functions -- CDFs, densities
+  or masses, and quantiles (`gamma_cdf`/`gamma_pdf`/`gamma_ppf`,
+  `chi2_cdf`/`chi2_sf`/`chi2_ppf`, `poisson_pmf`/`poisson_cdf`, `f_cdf`/`f_ppf`,
+  `binomial_cdf`/`binomial_pmf`). The Poisson and binomial CDFs use the gamma/beta
+  identities (`Q(k+1, lam)`, `I_{1-p}(n-k, k+1)`) for stability at large parameters.
+  Cross-checked: the gamma reduces to the exponential CDF, the chi-square and F
+  quantiles match textbook tables (`chi2_ppf(0.95, 10) = 18.307`,
+  `f_ppf(0.95, 1, 10) = 4.965`), the Poisson and binomial CDFs match direct mass
+  sums, masses sum to one, and every quantile round-trips its CDF.
+
 ## [1.717.0] - 2026-09-12
 
 ### Documentation

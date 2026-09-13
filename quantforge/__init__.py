@@ -238,6 +238,10 @@ from .gauss_laguerre import (
 from .special import (
     gammainc, gammaincc, betainc, digamma, erfinv,
 )
+from .distributions import (
+    gamma_cdf, gamma_pdf, gamma_ppf, chi2_cdf, chi2_sf, chi2_ppf,
+    poisson_pmf, poisson_cdf, f_cdf, f_ppf, binomial_cdf, binomial_pmf,
+)
 from .hrp import inverse_volatility_weights, hierarchical_risk_parity
 from .cppi import (
     discounted_floor, cushion, risky_exposure, cppi_path,
@@ -729,7 +733,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.717.0"
+__version__ = "1.718.0"
 
 __all__ = [
     "OptionType",
@@ -1105,6 +1109,18 @@ __all__ = [
     "betainc",
     "digamma",
     "erfinv",
+    "gamma_cdf",
+    "gamma_pdf",
+    "gamma_ppf",
+    "chi2_cdf",
+    "chi2_sf",
+    "chi2_ppf",
+    "poisson_pmf",
+    "poisson_cdf",
+    "f_cdf",
+    "f_ppf",
+    "binomial_cdf",
+    "binomial_pmf",
     "inverse_volatility_weights",
     "hierarchical_risk_parity",
     "discounted_floor",
