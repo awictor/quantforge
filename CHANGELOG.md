@@ -31,6 +31,17 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.860.0] - 2026-09-13
+
+### Added
+- `calibration.py`: Murphy's Brier-score decomposition (`brier_decomposition` into
+  reliability / resolution / uncertainty), the `reliability_curve` calibration
+  diagram, and `expected_calibration_error`. Cross-checked: the
+  reliability-resolution+uncertainty identity reconstructs the raw Brier score
+  exactly on 300 random cases, a perfect forecast has zero reliability, a
+  constant-at-base-rate forecast has zero resolution, and the reliability curve of a
+  well-calibrated forecaster sits on the diagonal (ECE ~0.005 vs ~0.42 miscalibrated).
+
 ## [1.859.0] - 2026-09-13
 
 ### Documentation

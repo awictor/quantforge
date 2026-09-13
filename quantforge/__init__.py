@@ -287,6 +287,11 @@ from .wavelet_denoise import (
     wavelet_denoise,
 )
 from .isotonic import isotonic_regression, isotonic_fit
+from .calibration import (
+    brier_decomposition,
+    reliability_curve,
+    expected_calibration_error,
+)
 from .kalman_beta import kalman_regression_beta
 from .theil_sen import theil_sen
 from .robust_stats import (
@@ -846,7 +851,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.859.0"
+__version__ = "1.860.0"
 
 __all__ = [
     "OptionType",
@@ -1297,6 +1302,9 @@ __all__ = [
     "wavelet_denoise",
     "isotonic_regression",
     "isotonic_fit",
+    "brier_decomposition",
+    "reliability_curve",
+    "expected_calibration_error",
     "kalman_regression_beta",
     "theil_sen",
     "median_absolute_deviation",

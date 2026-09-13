@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.859.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.860.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -1122,6 +1122,33 @@ Auto-generated from `quantforge` v1.859.0 by `docs/gen_api.py` — do not edit b
 ### `vega(S, K, t, r, sigma, b=None) -> float`  _function_
 
 > dPrice/dSigma, per 1.0 change in vol (divide by 100 for per-vol-point).
+
+## calibration
+
+### `brier_decomposition(forecasts, outcomes, n_bins=None)`  _function_
+
+> Murphy decomposition of the Brier score into reliability/resolution/uncertainty.
+>
+> Returns a dict with ``reliability``, ``resolution``, ``uncertainty``, ``brier``
+> (the reconstructed ``reliability - resolution + uncertainty``), and ``base_rate``.
+> With ``n_bins=None`` forecasts are grouped by identical value and the identity is
+> exact; with an integer ``n_bins`` they are put into equal-width bins on ``[0, 1]``
+> and the reconstruction is approximate.
+
+### `expected_calibration_error(forecasts, outcomes, n_bins=10)`  _function_
+
+> Expected calibration error: count-weighted mean ``|forecast - observed|`` per bin.
+>
+> Zero for a perfectly calibrated forecaster; the standard scalar summary of a
+> reliability diagram's departure from the diagonal.
+
+### `reliability_curve(forecasts, outcomes, n_bins=10)`  _function_
+
+> Calibration diagram: per-bin mean forecast vs observed frequency.
+>
+> Returns a list of ``(mean_forecast, observed_frequency, count)`` tuples, one per
+> non-empty equal-width bin. A perfectly calibrated forecaster lies on the diagonal
+> ``observed == forecast``.
 
 ## callable_bond
 
