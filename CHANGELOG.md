@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.926.0] - 2026-09-13
+
+### Added
+- `pcr.py`: `principal_components_regression` — regress on the top-``k`` principal
+  components of the predictors and map the fit back, a stable alternative to OLS under
+  collinearity. Cross-checked: retaining all components reproduces OLS coefficients and
+  intercept exactly, the retained explained-variance fraction is monotone in ``k`` and
+  reaches 1, and a single predictor matches OLS.
+
 ## [1.925.0] - 2026-09-13
 
 ### Documentation

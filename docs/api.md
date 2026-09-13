@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.925.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.926.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -9347,6 +9347,19 @@ Auto-generated from `quantforge` v1.925.0 by `docs/gen_api.py` — do not edit b
 > components. With all components it reproduces the original covariance exactly
 > (spectral decomposition); with ``k`` below the rank it is the best rank-``k``
 > approximation.
+
+## pcr
+
+### `principal_components_regression(X, y, n_components=None)`  _function_
+
+> Principal components regression of ``y`` on the columns of ``X``.
+>
+> Centers ``X`` and ``y``, runs PCA on the predictor covariance, keeps the top
+> ``n_components`` (default: all), regresses on the component scores, and maps the
+> coefficients back to the original variables. Returns a dict with ``coefficients``
+> (per original predictor), ``intercept``, ``n_components`` and the
+> ``explained_variance`` (cumulative fraction retained). Retaining all components
+> reproduces OLS.
 
 ## pde
 

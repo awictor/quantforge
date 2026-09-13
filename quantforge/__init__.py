@@ -515,6 +515,7 @@ from .thiele import thiele_coefficients, thiele_eval, thiele_interpolate
 from .ols_hac import white_hc0, newey_west
 from .wls import weighted_least_squares, generalized_least_squares
 from .rls import RecursiveLeastSquares, recursive_least_squares
+from .pcr import principal_components_regression
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -905,7 +906,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.925.0"
+__version__ = "1.926.0"
 
 __all__ = [
     "OptionType",
@@ -1662,6 +1663,7 @@ __all__ = [
     "generalized_least_squares",
     "RecursiveLeastSquares",
     "recursive_least_squares",
+    "principal_components_regression",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",
