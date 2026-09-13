@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.781.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.782.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -6344,6 +6344,18 @@ Auto-generated from `quantforge` v1.781.0 by `docs/gen_api.py` — do not edit b
 > ``p != 1/2``) tilts the smile into a skew.
 
 ## lasso
+
+### `elastic_net(X, y, alpha=1.0, l1_ratio=0.5, max_iter=1000, tol=1e-08)`  _function_
+
+> Fit an elastic-net regression: a mix of L1 (LASSO) and L2 (ridge) penalties.
+>
+> Minimizes ``(1/2n) ||y - X beta||^2 + alpha (l1_ratio ||beta||_1 +
+> 0.5 (1 - l1_ratio) ||beta||^2)`` by coordinate descent. ``l1_ratio = 1`` reduces
+> to :func:`lasso_regression` (pure L1, sparse); ``l1_ratio = 0`` is a ridge-style
+> L2 shrinkage. The L2 part groups correlated predictors while the L1 part still
+> selects, which is more stable than pure LASSO when features are collinear.
+> Returns ``[intercept, b_1, ..., b_p]`` on the original scale; the intercept is
+> unpenalized.
 
 ### `lasso_regression(X, y, alpha=1.0, max_iter=1000, tol=1e-08)`  _function_
 

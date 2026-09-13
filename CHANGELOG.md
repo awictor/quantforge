@@ -24,6 +24,15 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.782.0] - 2026-09-12
+
+### Added
+- `lasso.py` gains `elastic_net`, coordinate-descent regression with a mixed L1+L2
+  penalty (`l1_ratio` blends the two). Cross-checked: ``l1_ratio = 1`` reproduces
+  `lasso_regression` exactly, ``alpha = 0`` recovers OLS, it still zeros noise
+  features at intermediate mixes, and on near-duplicate correlated predictors it
+  shares weight between them (the grouping effect) where pure LASSO drops one.
+
 ## [1.781.0] - 2026-09-12
 
 ### Documentation
