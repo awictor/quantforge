@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.886.0] - 2026-09-13
+
+### Added
+- `cochran_mcnemar.py`: `mcnemar_test` (paired 2x2, exact two-sided binomial plus the
+  continuity-corrected chi-square) and `cochran_q_test` (k binary treatments over
+  shared blocks). Cross-checked: McNemar's exact p-value matches the binomial CDF and
+  the corrected chi-square matches hand computation, Cochran's Q on two treatments
+  equals the uncorrected McNemar statistic exactly, and Q is calibrated under the
+  null.
+
 ## [1.885.0] - 2026-09-13
 
 ### Documentation

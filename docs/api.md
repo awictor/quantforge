@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.885.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.886.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -1871,6 +1871,26 @@ Auto-generated from `quantforge` v1.885.0 by `docs/gen_api.py` — do not edit b
 > with payer swaptions for ``K >= S0`` and receiver swaptions for ``K < S0``,
 > each priced at the smile vol ``vol_fn(K)``. This captures the whole smile,
 > and with a flat ``vol_fn`` it reproduces :func:`cms_adjustment_standard`.
+
+## cochran_mcnemar
+
+### `cochran_q_test(blocks)`  _function_
+
+> Cochran's Q test for ``k`` binary treatments over ``b`` blocks.
+>
+> ``blocks`` is a sequence of rows, each a length-``k`` sequence of 0/1 outcomes for
+> one block across the treatments. Returns a dict with the ``statistic`` Q, ``df``
+> (``k - 1``) and the chi-square ``p_value``. Blocks whose outcomes are all-0 or
+> all-1 contribute nothing (as in the standard formulation).
+
+### `mcnemar_test(table=None, b=None, c=None)`  _function_
+
+> McNemar's test for a paired 2x2 table.
+>
+> Provide either the 2x2 ``table`` ``[[a, b], [c, d]]`` (a/d concordant, b/c
+> discordant) or the two discordant counts ``b`` and ``c`` directly. Returns a dict
+> with the discordant counts, the exact two-sided binomial ``p_value``, and the
+> continuity-corrected chi-square statistic ``chi2_cc`` with its ``p_value_chi2``.
 
 ## cointegration
 
