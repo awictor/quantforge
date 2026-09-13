@@ -281,7 +281,8 @@ from .robust_stats import (
 )
 from .realized import (
     realized_variance_from_returns, bipower_variation, jump_variation,
-    realized_volatility_signature,
+    realized_volatility_signature, min_realized_variance, med_realized_variance,
+    realized_quarticity,
 )
 from .two_scale_rv import (
     two_scale_realized_variance, realized_variance_naive, noise_variance_estimate,
@@ -753,7 +754,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.739.0"
+__version__ = "1.740.0"
 
 __all__ = [
     "OptionType",
@@ -1195,6 +1196,9 @@ __all__ = [
     "realized_variance_from_returns",
     "bipower_variation",
     "jump_variation",
+    "min_realized_variance",
+    "med_realized_variance",
+    "realized_quarticity",
     "realized_volatility_signature",
     "two_scale_realized_variance",
     "realized_variance_naive",

@@ -69,3 +69,60 @@ def realized_volatility_signature(returns, annualization=1.0):
     252). Defaults to 1 (the raw realized vol of the supplied returns).
     """
     return math.sqrt(realized_variance_from_returns(returns) * annualization)
+
+
+# Andersen-Dobrev-Schaumburg (2012) nearest-neighbour truncation constants.
+_MINRV_SCALE = math.pi / (math.pi - 2.0)
+_MEDRV_SCALE = math.pi / (6.0 - 4.0 * math.sqrt(3.0) + math.pi)
+
+
+def min_realized_variance(returns):
+    """MinRV jump-robust integrated-variance estimator (Andersen-Dobrev-Schaumburg).
+
+    ``MinRV = (pi / (pi - 2)) * (n / (n - 1)) * sum_i min(|r_i|, |r_{i+1}|)^2``. Each
+    term pairs adjacent returns and keeps the smaller magnitude, so an isolated jump
+    (which lands in one return) is discarded by the minimum. Converges to the
+    integrated variance of the continuous part; more robust to jumps than bipower
+    variation and to occasional zero returns. Requires at least two returns.
+    """
+    n = len(returns)
+    if n < 2:
+        raise ValueError("need at least 2 returns")
+    s = 0.0
+    for i in range(n - 1):
+        a, b = abs(returns[i]), abs(returns[i + 1])
+        m = a if a < b else b
+        s += m * m
+    return _MINRV_SCALE * (n / (n - 1.0)) * s
+
+
+def med_realized_variance(returns):
+    """MedRV jump-robust integrated-variance estimator (Andersen-Dobrev-Schaumburg).
+
+    ``MedRV = c * (n / (n - 2)) * sum_i median(|r_{i-1}|, |r_i|, |r_{i+1}|)^2`` with
+    ``c = pi / (6 - 4 sqrt(3) + pi)``. Taking the median of three neighbouring
+    magnitudes discards a lone jump and, unlike MinRV, is also robust to two nearby
+    jumps and less sensitive to zero returns. Requires at least three returns.
+    """
+    n = len(returns)
+    if n < 3:
+        raise ValueError("need at least 3 returns")
+    s = 0.0
+    for i in range(1, n - 1):
+        trio = sorted((abs(returns[i - 1]), abs(returns[i]), abs(returns[i + 1])))
+        med = trio[1]
+        s += med * med
+    return _MEDRV_SCALE * (n / (n - 2.0)) * s
+
+
+def realized_quarticity(returns):
+    """Realized quarticity ``(n / 3) * sum r_i^4``.
+
+    A consistent estimator of the integrated quarticity ``integral sigma^4``, which
+    sets the asymptotic variance of realized variance and appears in the standard
+    errors of realized-volatility jump tests. Non-negative.
+    """
+    n = len(returns)
+    if n == 0:
+        raise ValueError("need at least 1 return")
+    return (n / 3.0) * sum(r ** 4 for r in returns)

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.739.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.740.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -9397,6 +9397,33 @@ Auto-generated from `quantforge` v1.739.0 by `docs/gen_api.py` — do not edit b
 > Zero (up to sampling noise) for a purely continuous path; strictly positive
 > when the returns contain a jump. Clamped at zero because the estimator can go
 > slightly negative on jump-free data.
+
+### `med_realized_variance(returns)`  _function_
+
+> MedRV jump-robust integrated-variance estimator (Andersen-Dobrev-Schaumburg).
+>
+> ``MedRV = c * (n / (n - 2)) * sum_i median(|r_{i-1}|, |r_i|, |r_{i+1}|)^2`` with
+> ``c = pi / (6 - 4 sqrt(3) + pi)``. Taking the median of three neighbouring
+> magnitudes discards a lone jump and, unlike MinRV, is also robust to two nearby
+> jumps and less sensitive to zero returns. Requires at least three returns.
+
+### `min_realized_variance(returns)`  _function_
+
+> MinRV jump-robust integrated-variance estimator (Andersen-Dobrev-Schaumburg).
+>
+> ``MinRV = (pi / (pi - 2)) * (n / (n - 1)) * sum_i min(|r_i|, |r_{i+1}|)^2``. Each
+> term pairs adjacent returns and keeps the smaller magnitude, so an isolated jump
+> (which lands in one return) is discarded by the minimum. Converges to the
+> integrated variance of the continuous part; more robust to jumps than bipower
+> variation and to occasional zero returns. Requires at least two returns.
+
+### `realized_quarticity(returns)`  _function_
+
+> Realized quarticity ``(n / 3) * sum r_i^4``.
+>
+> A consistent estimator of the integrated quarticity ``integral sigma^4``, which
+> sets the asymptotic variance of realized variance and appears in the standard
+> errors of realized-volatility jump tests. Non-negative.
 
 ### `realized_variance_from_returns(returns)`  _function_
 

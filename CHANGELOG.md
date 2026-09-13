@@ -24,6 +24,18 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.740.0] - 2026-09-12
+
+### Added
+- `realized.py` gains `min_realized_variance` and `med_realized_variance` (the
+  Andersen-Dobrev-Schaumburg MinRV/MedRV nearest-neighbour jump-robust
+  integrated-variance estimators) and `realized_quarticity` (the `(n/3) sum r^4`
+  estimator of integrated quarticity). Cross-checked on a simulated diffusion: with
+  no jump MinRV, MedRV, bipower and RV all match the integrated variance; with a
+  large jump the RV inflates ~26x while MinRV and MedRV stay near the truth; the
+  quarticity is positive and consistent for `sigma^4`, and MedRV is unchanged by a
+  single spiked return (median of three).
+
 ## [1.739.0] - 2026-09-12
 
 ### Documentation
