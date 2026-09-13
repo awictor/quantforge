@@ -2674,6 +2674,24 @@ catches any distributional difference — location, scale, or shape — not just
 difference in means, and its p-value uses the asymptotic Kolmogorov distribution
 (no SciPy).
 
+The classical parametric tests are built on the distribution CDFs, each returning
+`(statistic, p_value)`:
+
+```python
+from quantforge import (chi_square_gof_test, chi_square_independence_test,
+                        one_way_anova, two_sample_t_test, binomial_test)
+
+chi_square_gof_test([16, 18, 16, 14, 12, 12])            # fit vs uniform
+chi_square_independence_test([[10, 20], [30, 40]])        # contingency table
+one_way_anova([5.1, 4.9, 5.5], [6.1, 5.9, 6.3])           # equal group means?
+two_sample_t_test(sample_a, sample_b, equal_var=False)    # Welch two-sample t
+binomial_test(k=8, n=10, prob=0.5)                        # exact binomial
+```
+
+`one_way_anova` on two groups reproduces the pooled `two_sample_t_test` exactly
+(`F = t^2`), the binomial test is exact (no normal approximation), and the discrete
+p-values come from the same gamma/beta identities behind the distribution CDFs.
+
 ## Autocorrelation (ACF / PACF)
 
 Identify ARMA structure from the correlograms. `acf` is the autocorrelation at each

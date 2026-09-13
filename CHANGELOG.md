@@ -16,6 +16,14 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.721.0] - 2026-09-12
+
+### Documentation
+- README distributional-tests section now documents the classical parametric tests
+  (`chi_square_gof_test`, `chi_square_independence_test`, `one_way_anova`,
+  `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
+  ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
+
 ## [1.720.0] - 2026-09-12
 
 ### Added
