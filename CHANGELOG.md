@@ -24,6 +24,17 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.738.0] - 2026-09-12
+
+### Added
+- `realized_kernel.py`: `realized_kernel`, the Barndorff-Nielsen-Hansen-Lunde-
+  Shephard realized-kernel estimator of integrated variance -- weighted intraday
+  return autocovariances (flat-top Parzen kernel) that cancel the microstructure-
+  noise bias in the naive realized variance. Cross-checked against a simulated
+  Brownian-motion price process: it matches the realized variance and the true
+  integrated variance without noise, and under i.i.d. noise its mean bias is far
+  below the naive estimator's (which inflates ~10x), while staying non-negative.
+
 ## [1.737.0] - 2026-09-12
 
 ### Documentation

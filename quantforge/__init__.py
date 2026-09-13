@@ -307,6 +307,7 @@ from .multiple_testing import (
     bonferroni, holm, benjamini_hochberg, benjamini_yekutieli,
 )
 from .svi_jumpwing import SVIJumpWing, raw_to_jumpwing, jumpwing_to_raw
+from .realized_kernel import realized_kernel
 from .tail_dependence import (
     upper_tail_dependence, lower_tail_dependence, exceedance_correlation,
 )
@@ -752,7 +753,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.737.0"
+__version__ = "1.738.0"
 
 __all__ = [
     "OptionType",
@@ -1197,6 +1198,7 @@ __all__ = [
     "realized_volatility_signature",
     "two_scale_realized_variance",
     "realized_variance_naive",
+    "realized_kernel",
     "noise_variance_estimate",
     "hurst_exponent",
     "rescaled_range",

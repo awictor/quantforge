@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.737.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.738.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -9412,6 +9412,19 @@ Auto-generated from `quantforge` v1.737.0 by `docs/gen_api.py` — do not edit b
 > ``annualization`` multiplies the variance before the square root (e.g. the
 > number of periods per year for intraday returns aggregated to one day times
 > 252). Defaults to 1 (the raw realized vol of the supplied returns).
+
+## realized_kernel
+
+### `realized_kernel(prices, bandwidth=None)`  _function_
+
+> Realized-kernel integrated-variance estimate from a (log) price series.
+>
+> Uses the flat-top Parzen kernel over ``bandwidth`` lags of the intraday-return
+> autocovariances. If ``bandwidth`` is ``None`` it defaults to the
+> Barndorff-Nielsen rule of thumb ``H ~ n^{3/5}`` (capped below the number of
+> returns). Robust to i.i.d. microstructure noise, unlike the naive realized
+> variance, and always non-negative for the Parzen kernel. Requires at least three
+> prices.
 
 ## rebalance
 
