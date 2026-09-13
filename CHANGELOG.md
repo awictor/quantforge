@@ -31,6 +31,17 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.916.0] - 2026-09-13
+
+### Added
+- `polynomial.py`: dense polynomial arithmetic on coefficient lists — `poly_add`,
+  `poly_sub`, `poly_mul`, `poly_divmod`, `poly_derivative`, `poly_integral`,
+  `poly_eval` and `poly_gcd`. Cross-checked: the product matches the FFT convolution,
+  the division identity `num = q*den + r` holds over 500 random pairs, derivative and
+  integral invert, and `gcd(p, p')` recovers a repeated root. Caught a non-terminating
+  loop in division by a constant (float round-off left a tiny leading residue that the
+  exact-zero trim never dropped); forced the cancelled leading term to zero.
+
 ## [1.915.0] - 2026-09-13
 
 ### Documentation

@@ -501,6 +501,16 @@ from .barycentric import (
     chebyshev_barycentric_weights,
 )
 from .polyroots import polynomial_roots
+from .polynomial import (
+    poly_add,
+    poly_sub,
+    poly_mul,
+    poly_divmod,
+    poly_derivative,
+    poly_integral,
+    poly_eval,
+    poly_gcd,
+)
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -891,7 +901,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.915.0"
+__version__ = "1.916.0"
 
 __all__ = [
     "OptionType",
@@ -1631,6 +1641,14 @@ __all__ = [
     "chebyshev_nodes",
     "chebyshev_barycentric_weights",
     "polynomial_roots",
+    "poly_add",
+    "poly_sub",
+    "poly_mul",
+    "poly_divmod",
+    "poly_derivative",
+    "poly_integral",
+    "poly_eval",
+    "poly_gcd",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.915.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.916.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -9866,6 +9866,50 @@ Auto-generated from `quantforge` v1.915.0 by `docs/gen_api.py` — do not edit b
 ### `newton_polynomial(xs, coef, x)`  _function_
 
 > Evaluate the Newton form with divided-difference ``coef`` at ``x`` (Horner).
+
+## polynomial
+
+### `poly_add(a, b)`  _function_
+
+> Sum of two polynomials (coefficient lists, low-degree-first).
+
+### `poly_derivative(c)`  _function_
+
+> Derivative of a polynomial: ``[c1, 2 c2, 3 c3, ...]``.
+
+### `poly_divmod(num, den)`  _function_
+
+> Polynomial long division: return ``(quotient, remainder)``.
+>
+> ``num = quotient * den + remainder`` with ``deg(remainder) < deg(den)``. Raises on
+> a zero divisor.
+
+### `poly_eval(c, x)`  _function_
+
+> Evaluate a polynomial at ``x`` by Horner's method.
+
+### `poly_gcd(a, b, tol=1e-09)`  _function_
+
+> Monic greatest common divisor of two polynomials (Euclidean algorithm).
+>
+> Returns the GCD normalized to a monic polynomial (leading coefficient 1); useful
+> for detecting and factoring out repeated roots (``gcd(p, p')``). Coefficients below
+> ``tol`` in the remainder are treated as zero to tame round-off.
+
+### `poly_integral(c, constant=0.0)`  _function_
+
+> Antiderivative of a polynomial, with integration constant ``constant``.
+
+### `poly_mul(a, b)`  _function_
+
+> Product of two polynomials by direct convolution.
+>
+> Exact for the small polynomials typical of algebra; for long polynomials the
+> FFT-based :func:`quantforge.convolve` is asymptotically faster.
+
+### `poly_sub(a, b)`  _function_
+
+> Difference ``a - b`` of two polynomials.
 
 ## polyroots
 
