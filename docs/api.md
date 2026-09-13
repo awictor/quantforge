@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.849.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.850.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -2318,6 +2318,25 @@ Auto-generated from `quantforge` v1.849.0 by `docs/gen_api.py` — do not edit b
 > the issuer caps it at ``call_price`` (both optional). Continuation discounts at
 > ``r + credit_spread`` (risky). ``q`` is the dividend yield. Returns the
 > time-zero convertible price.
+
+## convolution
+
+### `convolve(a, b)`  _function_
+
+> Full linear convolution of ``a`` and ``b`` via the FFT.
+>
+> Returns a real list of length ``len(a) + len(b) - 1`` -- equivalently the
+> coefficients of the product of the two polynomials with coefficients ``a`` and
+> ``b``. ``O(N log N)`` where ``N`` is the padded power-of-two length.
+
+### `fft_autocorrelation(x, max_lag=None)`  _function_
+
+> Autocorrelation of ``x`` at lags ``0..max_lag`` via the FFT.
+>
+> Uses the Wiener-Khinchin route (spectrum times its conjugate) on the
+> mean-subtracted series, then normalizes by lag-0 so ``acf[0] = 1``. ``max_lag``
+> defaults to ``len(x) - 1``. Matches a direct autocovariance sum but in
+> ``O(n log n)``.
 
 ## copula
 

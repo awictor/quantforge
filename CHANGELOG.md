@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.850.0] - 2026-09-13
+
+### Added
+- `convolution.py`: FFT-based `convolve` (full linear convolution / polynomial
+  product in ``O(n log n)``) and `fft_autocorrelation` (Wiener-Khinchin
+  autocorrelation, ``acf[0] = 1``). Cross-checked: the convolution matches a direct
+  ``O(n m)`` sum, gives the right polynomial product and delta identity, and the FFT
+  autocorrelation matches a direct autocovariance sum.
+
 ## [1.849.0] - 2026-09-13
 
 ### Documentation
