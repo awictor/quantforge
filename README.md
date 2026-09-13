@@ -2842,6 +2842,26 @@ betas, variances = kalman_regression_beta(xs, ys, process_var=0.02, obs_var=0.09
 With `process_var = 0` and a diffuse prior it collapses to the static OLS slope
 `sum(x*y) / sum(x^2)`.
 
+For a general multivariate state-space model, `kalman_filter` runs the full
+predict/update recursion with arbitrary transition `F`, observation `H`, and noise
+covariances `Q`, `R`; `kalman_smoother` adds the RTS backward pass:
+
+```python
+from quantforge import kalman_filter, kalman_smoother
+
+F = [[1, 1], [0, 1]]      # constant-velocity model: position, velocity
+H = [[1, 0]]              # observe position only
+Q = [[1e-4, 0], [0, 1e-4]]; R = [[0.5]]
+res = kalman_filter(observations, F, H, Q, R, x0=[0.0, 0.0], P0=[[1, 0], [0, 1]])
+res["states"], res["log_likelihood"]
+sm = kalman_smoother(observations, F, H, Q, R, x0=[0.0, 0.0], P0=[[1, 0], [0, 1]])
+```
+
+Each observation is a vector; the filter returns filtered means, covariances and the
+Gaussian data log-likelihood (for parameter tuning). The smoother conditions on the
+whole series, so its covariances never exceed the filter's. With 1x1 matrices it
+reduces exactly to `kalman_local_level`.
+
 ## Newey-West HAC variance
 
 The sample variance understates the variance of a mean when observations are
