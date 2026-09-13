@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.771.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.772.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -4499,6 +4499,33 @@ Auto-generated from `quantforge` v1.771.0 by `docs/gen_api.py` — do not edit b
 > Runs :func:`factor_regression` on each trailing window of length ``window``,
 > returning the list of first-factor betas (one per window end, from index
 > ``window - 1`` onward). Tracks how the factor loading drifts through time.
+
+## forecast_combine
+
+### `combine_forecasts(forecasts, weights)`  _function_
+
+> Weighted combination of aligned forecast series by ``weights``.
+
+### `inverse_mse_weights(error_series)`  _function_
+
+> Combination weights proportional to ``1 / MSE`` of each model's errors.
+>
+> ``error_series`` is a list of forecast-error series. A more accurate model (lower
+> MSE) gets more weight; weights sum to one. Ignores cross-model error correlation.
+
+### `optimal_combination_weights(error_series)`  _function_
+
+> Bates-Granger minimum-variance combination weights.
+>
+> ``w = Sigma^{-1} 1 / (1' Sigma^{-1} 1)`` where ``Sigma`` is the covariance of the
+> models' forecast errors. Minimizes the variance of the combined error and can put
+> negative weight on a model that hedges another's errors. Weights sum to one.
+
+### `simple_average_forecast(forecasts)`  _function_
+
+> Equal-weight combination of aligned forecast series.
+>
+> ``forecasts`` is a list of series (one per model); returns the point-wise mean.
 
 ## forecast_metrics
 

@@ -24,6 +24,17 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.772.0] - 2026-09-12
+
+### Added
+- `forecast_combine.py`: forecast-combination weights -- `simple_average_forecast`
+  (equal weights), `inverse_mse_weights` (proportional to ``1/MSE``),
+  `optimal_combination_weights` (Bates-Granger minimum-variance from the error
+  covariance) and a `combine_forecasts` helper. Cross-checked: all weight schemes
+  sum to one, inverse-MSE favors the more accurate model and reduces to equal weights
+  at equal variance, and the minimum-variance combination's error MSE never exceeds
+  the best individual model's (dramatically better when the errors hedge).
+
 ## [1.771.0] - 2026-09-12
 
 ### Documentation
