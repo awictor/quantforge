@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.907.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.908.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -9076,6 +9076,30 @@ Auto-generated from `quantforge` v1.907.0 by `docs/gen_api.py` — do not edit b
 ### `overhedge_payoff(oh: quantforge.overhedge.Overhedge, spot_at_expiry: float, is_call=True) -> float`  _function_
 
 > Terminal payoff of the replicating spread at ``spot_at_expiry``.
+
+## pade
+
+### `lentz_continued_fraction(a, b, tol=1e-15, max_iter=1000, tiny=1e-300)`  _function_
+
+> Evaluate a continued fraction by the modified Lentz algorithm.
+>
+> Computes ``b0 + a1/(b1 + a2/(b2 + ...))`` where ``a(k)`` and ``b(k)`` are callables
+> giving the ``k``-th partial numerator and denominator (``b(0)`` is the leading
+> term, ``a(0)`` is unused). Returns the converged value. Robust to zero
+> intermediate values via the ``tiny`` guard.
+
+### `pade(coeffs, m, n)`  _function_
+
+> Pade ``[m/n]`` approximant from Taylor coefficients ``coeffs``.
+>
+> ``coeffs[k]`` is the coefficient of ``x^k``; needs at least ``m + n + 1`` of them.
+> Returns ``(num, den)`` -- the numerator (length ``m+1``) and denominator (length
+> ``n+1``, normalized to ``den[0] = 1``) coefficient lists. The approximant's Taylor
+> series matches ``coeffs`` through order ``m + n``.
+
+### `pade_eval(num, den, x)`  _function_
+
+> Evaluate a Pade approximant ``(num, den)`` at ``x`` by Horner's method.
 
 ## pairs
 

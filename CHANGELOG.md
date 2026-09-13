@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.908.0] - 2026-09-13
+
+### Added
+- `pade.py`: `pade` (Pade [m/n] approximant from Taylor coefficients), `pade_eval`,
+  and `lentz_continued_fraction` (general modified-Lentz evaluator). Cross-checked:
+  the exp [2/2] coefficients are exact and the approximant beats the degree-4 Taylor
+  series, its own series matches the input coefficients through order m+n, a [4/4]
+  approximant of ln(1+x) converges at x=2 where the Taylor series diverges, and Lentz
+  reproduces tan(1) and the golden ratio.
+
 ## [1.907.0] - 2026-09-13
 
 ### Documentation
