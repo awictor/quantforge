@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.935.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.936.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -2484,6 +2484,30 @@ Auto-generated from `quantforge` v1.935.0 by `docs/gen_api.py` — do not edit b
 > Weights need not be normalized; they are normalized to sum to one first
 > (absolute values, for long-short books). Ranges from ``1/n`` (equal weight) to
 > ``1`` (a single holding).
+
+## conjugate_gradient
+
+### `conjugate_gradient(A, b, x0=None, tol=1e-10, max_iter=None)`  _function_
+
+> Solve a symmetric positive-definite system ``A x = b`` by conjugate gradient.
+>
+> Returns a dict with ``x`` (solution), ``residual_norm`` (``||b - A x||``) and
+> ``n_iter``. ``A`` must be symmetric positive-definite for convergence; converges in
+> at most ``n`` iterations in exact arithmetic.
+
+### `gauss_seidel(A, b, tol=1e-10, max_iter=None)`  _function_
+
+> Gauss-Seidel iteration for ``A x = b`` (uses freshly-updated components).
+>
+> Converges for diagonally dominant or SPD ``A``. Returns ``x``, ``residual_norm``
+> and ``n_iter``.
+
+### `jacobi(A, b, tol=1e-10, max_iter=None)`  _function_
+
+> Jacobi iteration for ``A x = b`` (all components updated from the old iterate).
+>
+> Converges for diagonally dominant ``A``; slower than Gauss-Seidel. Returns ``x``,
+> ``residual_norm`` and ``n_iter``.
 
 ## convertible_lattice
 

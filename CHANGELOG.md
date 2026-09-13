@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.936.0] - 2026-09-13
+
+### Added
+- `conjugate_gradient.py`: iterative linear solvers — `conjugate_gradient` (for
+  symmetric positive-definite systems), `gauss_seidel` and `jacobi` (stationary
+  iterations for diagonally dominant systems). Cross-checked: CG matches the direct
+  solve in at most n iterations, resolves an identity system in one step, Gauss-Seidel
+  converges in about half the iterations of Jacobi, all three agree, and a 30-D SPD
+  system is solved to ~1e-11.
+
 ## [1.935.0] - 2026-09-13
 
 ### Documentation
