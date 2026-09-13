@@ -114,6 +114,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [K-means clustering](#k-means-clustering)
 - [Hierarchical clustering](#hierarchical-clustering)
 - [Gaussian mixture model](#gaussian-mixture-model)
+- [Hidden Markov model](#hidden-markov-model)
 - [Principal component analysis](#principal-component-analysis)
 - [Market stress (turbulence / absorption ratio)](#market-stress-turbulence--absorption-ratio)
 - [Matrix utilities](#matrix-utilities)
@@ -3615,6 +3616,28 @@ r["log_likelihood"]
 Unlike k-means' hard assignment, each point carries a responsibility to every
 component; the log-likelihood rises monotonically to a local optimum, and a
 single component reduces to the plain sample mean and variance.
+
+## Hidden Markov model
+
+When the regimes are *sequential* — hidden states with a transition matrix — a
+discrete HMM scores an observation sequence and decodes the most-likely state path:
+
+```python
+from quantforge import hmm_forward, hmm_viterbi
+
+pi = [0.6, 0.4]                       # initial state distribution
+A = [[0.7, 0.3], [0.4, 0.6]]          # state transition matrix
+B = [[0.5, 0.5], [0.1, 0.9]]          # emission matrix (state -> symbol)
+obs = [0, 1, 1, 0]
+
+hmm_forward(pi, A, B, obs)            # log P(obs | model)
+path, logp = hmm_viterbi(pi, A, B, obs)   # most-likely hidden-state sequence
+```
+
+`hmm_forward` uses the scaled forward algorithm, so the log-likelihood stays finite
+on long sequences; `hmm_viterbi` runs in log space and returns the optimal path with
+its log-probability — the standard tools for regime inference where the state
+carries over in time.
 
 ## Principal component analysis
 
