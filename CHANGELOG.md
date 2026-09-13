@@ -31,6 +31,17 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.808.0] - 2026-09-13
+
+### Added
+- `style_analysis.py`: Sharpe's returns-based style analysis (`style_analysis`) --
+  explains a fund's returns as a long-only, fully-invested mix of index returns
+  (weights non-negative, summing to one) by projected-gradient descent on the
+  simplex, returning the implied style weights, the ``r_squared`` explained, and the
+  selection ``tracking_error``. Cross-checked: it recovers a known blend, the weights
+  lie on the simplex, an exact blend gives ``r_squared`` ~ 1, and a single matching
+  index gets weight one.
+
 ## [1.807.0] - 2026-09-13
 
 ### Documentation

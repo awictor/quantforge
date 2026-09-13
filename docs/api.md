@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.807.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.808.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -11906,6 +11906,18 @@ Auto-generated from `quantforge` v1.807.0 by `docs/gen_api.py` — do not edit b
 >
 > Returns the ``x`` with ``t_cdf(x, df) = p``. Symmetric: ``t_ppf(1-p) =
 > -t_ppf(p)``.
+
+## style_analysis
+
+### `style_analysis(fund_returns, index_returns, max_iter=5000, lr=None)`  _function_
+
+> Returns-based style analysis: implied long-only index weights of a fund.
+>
+> ``fund_returns`` is the return series; ``index_returns`` is a list of index
+> return series (one per style factor), each aligned with the fund. Returns a dict
+> with ``weights`` (non-negative, summing to one), ``r_squared`` (fraction of fund
+> variance explained by the style mix), and ``tracking_error`` (stdev of the
+> unexplained residual). Solved by projected-gradient descent on the simplex.
 
 ## surface
 
