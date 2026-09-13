@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.0.1 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.1.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -9461,6 +9461,23 @@ Auto-generated from `quantforge` v2.0.1 by `docs/gen_api.py` — do not edit by 
 > Central-difference Jacobian of a vector function ``f: R^n -> R^m``.
 >
 > Returns an ``m x n`` list of lists ``df_k/dx_i``.
+
+## ode
+
+### `rk4(f, t0, y0, t1, n=100)`  _function_
+
+> Fixed-step RK4 from ``t0`` to ``t1`` in ``n`` steps.
+>
+> ``f(t, y)`` returns the derivative (scalar or list matching ``y0``). Returns
+> ``(ts, ys)``: the ``n+1`` time points and the state at each (each state a list).
+
+### `rk45(f, t0, y0, t1, tol=1e-08, h0=None, max_steps=100000)`  _function_
+
+> Adaptive Dormand-Prince (RK45) integration from ``t0`` to ``t1``.
+>
+> Controls the step to keep the estimated local error near ``tol``. Returns
+> ``(ts, ys)`` at the accepted steps (non-uniform). ``h0`` is the initial step
+> (defaults to a fraction of the interval).
 
 ## ols
 

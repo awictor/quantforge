@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.1.0] - 2026-09-13
+
+### Added
+- `ode.py`: initial-value ODE solvers — `rk4` (fixed-step fourth-order Runge-Kutta) and
+  `rk45` (adaptive Dormand-Prince with an embedded error estimate). Handle scalar or
+  vector systems. Cross-checked: recover `exp(t)` and `exp(-t)` to ~1e-8, integrate the
+  harmonic-oscillator system back to `[1, 0]` at `2*pi`, match the logistic ODE's closed
+  form, and the scalar and vector paths agree.
+
 ## [2.0.1] - 2026-09-13
 
 ### Documentation

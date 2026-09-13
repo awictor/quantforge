@@ -560,6 +560,7 @@ from .integrate2d import integrate2d_gauss, integrate2d_simpson
 from .multivariate_normal_cdf import bivariate_normal_cdf, trivariate_normal_cdf
 from .laplace_inversion import laplace_inversion
 from .richardson import richardson_extrapolate, richardson_table
+from .ode import rk4, rk45
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -950,7 +951,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "2.0.1"
+__version__ = "2.1.0"
 
 __all__ = [
     "OptionType",
@@ -1781,6 +1782,8 @@ __all__ = [
     "laplace_inversion",
     "richardson_extrapolate",
     "richardson_table",
+    "rk4",
+    "rk45",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",
