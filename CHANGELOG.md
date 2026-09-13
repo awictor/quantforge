@@ -31,6 +31,17 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.816.0] - 2026-09-13
+
+### Added
+- `rmt.py`: random-matrix-theory denoising of a correlation matrix --
+  `marchenko_pastur_edge` (the ``(1 + sqrt(N/T))^2`` noise-eigenvalue cutoff) and
+  `clip_correlation_eigenvalues`, which replaces the sub-edge (noise) eigenvalues
+  with their average while keeping the signal eigenvalues, preserving the trace and
+  rescaling to unit diagonal. Cross-checked: the MP edge matches its formula, the
+  denoised matrix has unit diagonal and is symmetric, the top signal eigenvalue is
+  preserved while the noise bulk collapses, and the trace is unchanged.
+
 ## [1.815.0] - 2026-09-13
 
 ### Documentation

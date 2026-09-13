@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.815.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.816.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -10362,6 +10362,27 @@ Auto-generated from `quantforge` v1.815.0 by `docs/gen_api.py` — do not edit b
 >
 > The ``confidence`` quantile of the loss distribution (``-pnl``). Uses the
 > lower-index empirical quantile so the VaR is a realized sample loss.
+
+## rmt
+
+### `clip_correlation_eigenvalues(correlation, n_obs)`  _function_
+
+> Denoise a correlation matrix by clipping sub-Marchenko-Pastur eigenvalues.
+>
+> Eigen-decomposes ``correlation``, replaces every eigenvalue below the
+> Marchenko-Pastur edge with the average of those noise eigenvalues (keeping the
+> signal eigenvalues), and rebuilds the matrix, then rescales the diagonal back to
+> exactly one. The trace is preserved and the result is a valid, better-conditioned
+> correlation matrix. ``n_obs`` is the number of observations used to estimate
+> ``correlation``.
+
+### `marchenko_pastur_edge(n_assets, n_obs)`  _function_
+
+> Upper edge ``(1 + sqrt(N/T))^2`` of the Marchenko-Pastur spectrum.
+>
+> Eigenvalues of a noise correlation matrix (unit variances) lie below this; those
+> above it are candidate signal. Requires ``n_obs >= n_assets`` for a full-rank
+> sample.
 
 ## rnd
 
