@@ -31,6 +31,12 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.937.0] - 2026-09-13
+
+### Documentation
+- README: documented `conjugate_gradient`, `gauss_seidel` and `jacobi` in the
+  matrix-utilities section. Every snippet value verified.
+
 ## [1.936.0] - 2026-09-13
 
 ### Added

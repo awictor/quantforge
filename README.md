@@ -4497,6 +4497,27 @@ determinant([[6, 1, 1], [4, -2, 5], [2, 8, 7]])   # -306, signed product of pivo
 `lu_decomposition` returns `P A = L U`; `lu_solve` forward/back-substitutes, and
 `determinant` is the signed product of the U pivots (zero for a singular matrix).
 
+Direct solves cost `O(n³)`; for large or structured systems the iterative solvers only
+need matrix-vector products. `conjugate_gradient` is the method of choice for a
+symmetric positive-definite `A`, and `gauss_seidel` / `jacobi` handle diagonally
+dominant systems:
+
+```python
+from quantforge import conjugate_gradient, gauss_seidel, jacobi
+
+A = [[4, 1, 0], [1, 4, 1], [0, 1, 4]]
+b = [6, 12, 6]
+conjugate_gradient(A, b)["x"]     # [0.8571, 2.5714, 0.8571]
+gauss_seidel(A, b)["n_iter"]      # 12
+jacobi(A, b)["n_iter"]            # 25 — about twice as many as Gauss-Seidel
+```
+
+`conjugate_gradient` converges in at most `n` iterations for an SPD matrix (often far
+fewer) and returns the residual norm; `gauss_seidel` reuses each freshly-updated
+component within the sweep, so it typically converges in about half the iterations of
+`jacobi`. All three return `x`, `residual_norm` and `n_iter`, and agree with the direct
+`lu_solve` to machine precision on a well-conditioned system.
+
 SVD-based diagnostics summarize a matrix's conditioning and size:
 
 ```python
