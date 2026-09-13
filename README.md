@@ -4535,6 +4535,14 @@ from quantforge import gradient, hessian, jacobian
 gradient(lambda v: v[0] ** 2 + 3 * v[1] ** 2, [1.0, 2.0])   # -> [2.0, 12.0]
 hessian(lambda v: v[0] ** 2 + v[0] * v[1], [1.0, 1.0])       # -> [[2, 1], [1, 0]]
 
+# High-accuracy 1-D derivatives (Ridders' adaptive Richardson extrapolation).
+from quantforge import ridders_derivative, ridders_second_derivative, price, delta
+ridders_derivative(math.sin, 0.7)             # (0.764842187284, ~2e-14 error estimate)
+ridders_second_derivative(math.exp, 1.3)      # (3.6692966676, err) == exp(1.3)
+# numerical Black-Scholes delta matches the closed form to 8+ digits
+ridders_derivative(lambda S: price(S, 100, 1.0, 0.05, 0.2), 100.0)[0]  # 0.63683065
+delta(100, 100, 1.0, 0.05, 0.2)                                        # 0.63683065
+
 # Nonlinear least-squares calibration (Levenberg-Marquardt, finite-diff Jacobian).
 from quantforge import levenberg_marquardt
 xs = [i * 0.2 for i in range(30)]
@@ -4546,6 +4554,13 @@ fit["parameters"]        # -> [2.0, 0.5]  (recovered exactly)
 `levenberg_marquardt` needs only the model function -- the residual Jacobian is
 taken numerically -- and converges from a poor starting guess, making it the
 general calibration engine (vol surface, curve, or any parametric fit).
+
+`ridders_derivative` / `ridders_second_derivative` return `(value, error_estimate)`:
+they evaluate a central difference at a shrinking step sequence and Richardson-
+extrapolate across it, stopping when round-off starts to dominate — so they reach
+near machine precision without hand-tuning the step, unlike the fixed-step `gradient`.
+The numerical Black-Scholes delta above landing on the closed-form value is the kind
+of cross-check that catches a sign or scaling slip in a hand-coded Greek.
 
 The special functions behind the distribution routines are public:
 
