@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.917.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.918.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -13224,6 +13224,28 @@ Auto-generated from `quantforge` v1.917.0 by `docs/gen_api.py` — do not edit b
 >     The median pairwise slope and the median residual intercept. On exactly
 >     collinear data this reproduces the generating line; under heavy-tailed
 >     contamination it stays close to the clean fit where OLS is dragged away.
+
+## thiele
+
+### `thiele_coefficients(xs, ys)`  _function_
+
+> Reciprocal-difference coefficients for Thiele's continued fraction.
+>
+> Returns the list ``rho`` whose entries are the leading inverse differences used by
+> :func:`thiele_eval`. Length equals ``len(xs)``. Raises on duplicate nodes or a
+> degenerate (zero) difference that stalls the recursion.
+
+### `thiele_eval(xs, coeffs, x)`  _function_
+
+> Evaluate Thiele's continued fraction with reciprocal-difference ``coeffs``.
+>
+> ``coeffs`` come from :func:`thiele_coefficients`. Evaluated from the bottom up; the
+> ``rho[0]`` and ``rho[1]`` entries seed the fraction. Returns the rational
+> interpolant's value at ``x``.
+
+### `thiele_interpolate(xs, ys, x)`  _function_
+
+> Convenience: build Thiele coefficients and evaluate at ``x`` in one call.
 
 ## trade_sign
 

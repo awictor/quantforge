@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.918.0] - 2026-09-13
+
+### Added
+- `thiele.py`: Thiele's continued-fraction rational interpolation
+  (`thiele_coefficients`, `thiele_eval`, `thiele_interpolate`) via reciprocal
+  differences. Cross-checked: passes through every node, recovers a known rational
+  function `(2x+1)/(x^2+1)` to machine precision, and interpolates `tan` (which has
+  poles a polynomial can't model). Caught an off-by-one index bug in the
+  continued-fraction evaluation before shipping.
+
 ## [1.917.0] - 2026-09-13
 
 ### Documentation

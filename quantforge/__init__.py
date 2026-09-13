@@ -511,6 +511,7 @@ from .polynomial import (
     poly_eval,
     poly_gcd,
 )
+from .thiele import thiele_coefficients, thiele_eval, thiele_interpolate
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -901,7 +902,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.917.0"
+__version__ = "1.918.0"
 
 __all__ = [
     "OptionType",
@@ -1649,6 +1650,9 @@ __all__ = [
     "poly_integral",
     "poly_eval",
     "poly_gcd",
+    "thiele_coefficients",
+    "thiele_eval",
+    "thiele_interpolate",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",
