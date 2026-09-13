@@ -3821,6 +3821,23 @@ binomial_test(k=8, n=10, prob=0.5)                        # exact binomial
 the binomial test is exact (no normal approximation), and the discrete p-values
 come from the same gamma/beta identities behind the distribution CDFs.
 
+ANOVA assumes equal group variances; `levene_test` and `bartlett_test` check that:
+
+```python
+from quantforge import levene_test, bartlett_test
+
+levene_test(group_a, group_b, group_c)                 # median-centered (Brown-Forsythe)
+levene_test(group_a, group_b, group_c, center="mean")  # original Levene
+bartlett_test(group_a, group_b, group_c)               # likelihood ratio (chi-square)
+```
+
+`levene_test` runs one-way ANOVA on each point's absolute deviation from its group
+center — median-centered by default, the robust Brown-Forsythe form. `bartlett_test` is
+a likelihood-ratio test, more powerful under normality but sensitive to fat tails. Both
+stay non-significant on equal-variance groups and reject sharply when the spreads differ
+(a 1×/3×/6× split gives `p ~ 0`); pair them with `ansari_bradley_test` / `mood_test`
+(the two-sample rank versions) for the fully nonparametric route.
+
 For the *paired* nonparametric case, `wilcoxon_signed_rank_test` is the
 distribution-free counterpart of the paired t-test (and the test the Hodges-Lehmann
 location estimator inverts), while `sign_test` uses only the signs and so assumes
