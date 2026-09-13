@@ -4709,6 +4709,12 @@ from quantforge import golden_section_min, brent_min
 golden_section_min(lambda x: (x - 3) ** 2 + 1, -10, 10)   # -> (3.0, 1.0)
 brent_min(math.cos, 0, 2 * math.pi)                        # -> (pi, -1.0)
 
+# Multivariate minimizers: Nelder-Mead (local) and differential evolution (global).
+from quantforge import nelder_mead, differential_evolution
+nelder_mead(lambda v: (v[0] - 3) ** 2 + (v[1] + 1) ** 2, [0.0, 0.0])   # -> ([3.0, -1.0], 0.0)
+rosen = lambda v: (1 - v[0]) ** 2 + 100 * (v[1] - v[0] ** 2) ** 2
+differential_evolution(rosen, [(-5, 5), (-5, 5)], max_iter=2000)["x"]  # -> [1.0, 1.0]
+
 # Central-difference gradient / Hessian / Jacobian (Greeks, calibration).
 from quantforge import gradient, hessian, jacobian
 gradient(lambda v: v[0] ** 2 + 3 * v[1] ** 2, [1.0, 2.0])   # -> [2.0, 12.0]
@@ -4729,6 +4735,15 @@ ys = [2.0 * math.exp(0.5 * x) for x in xs]
 fit = levenberg_marquardt(lambda b, x: b[0] * math.exp(b[1] * x), xs, ys, [1.0, 0.1])
 fit["parameters"]        # -> [2.0, 0.5]  (recovered exactly)
 ```
+
+`nelder_mead` is the derivative-free local simplex minimizer (the engine behind several
+of the library's calibrations); `differential_evolution` is its global counterpart,
+evolving a population to escape local minima on multimodal, non-convex objectives where
+Nelder-Mead would stall. On the multimodal Rastrigin function `differential_evolution`
+reaches the global optimum while `nelder_mead` from a poor start settles into a nearby
+local pit; it is deterministic for a fixed `seed` and confines the search to the given
+box `bounds`. Use Nelder-Mead when you have a good starting guess and a smooth basin,
+differential evolution when the landscape is rough or the starting region is unknown.
 
 `levenberg_marquardt` needs only the model function -- the residual Jacobian is
 taken numerically -- and converges from a poor starting guess, making it the

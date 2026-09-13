@@ -31,6 +31,12 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.929.0] - 2026-09-13
+
+### Documentation
+- README: documented `nelder_mead` and `differential_evolution` in the
+  numerical-utilities section. Every snippet value verified.
+
 ## [1.928.0] - 2026-09-13
 
 ### Added
