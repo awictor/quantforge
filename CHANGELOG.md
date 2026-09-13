@@ -31,6 +31,12 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.885.0] - 2026-09-13
+
+### Documentation
+- README: extended the hypothesis-test section with `jonckheere_terpstra_test` for an
+  ordered-trend alternative to Kruskal-Wallis. Every snippet value verified.
+
 ## [1.884.0] - 2026-09-13
 
 ### Added

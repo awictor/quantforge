@@ -3453,6 +3453,24 @@ Each pair's z uses the tie-corrected standard error from the pooled ranking, and
 equals the Kruskal-Wallis `H` on two groups, so Dunn's test is the natural drill-down
 after the omnibus test rejects.
 
+When the groups have a *natural order* (dose levels, time buckets, rating tiers) and
+you expect a monotone response, `jonckheere_terpstra_test` is a directional trend test
+— much more powerful than Kruskal-Wallis, which spends power on differences in every
+direction:
+
+```python
+from quantforge import jonckheere_terpstra_test
+
+jonckheere_terpstra_test([[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12]])
+# {'statistic': 48.0, 'mean': 24.0, 'variance': 46.6667, 'z': 3.5132, 'p_value': 0.0004}
+```
+
+Pass the groups in the hypothesized order. It sums the Mann-Whitney concordances over
+every ordered pair, so a positive `z` signals an increasing trend across the group
+order and a negative one a decreasing trend (a perfectly reversed arrangement gives
+the mirror-image z). The null mean and tie-corrected variance are the closed-form
+Jonckheere values, and the p-value comes from the normal approximation.
+
 For a proportion estimate, four confidence intervals span the accuracy/simplicity
 trade-off:
 
