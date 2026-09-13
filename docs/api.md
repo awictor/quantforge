@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.791.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.792.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -504,6 +504,43 @@ Auto-generated from `quantforge` v1.791.0 by `docs/gen_api.py` — do not edit b
 > for ``S >= S*`` and a put for ``S <= S*``. Returns ``None`` when early
 > exercise is never optimal (an American call with ``b >= r`` equals its
 > European value, so there is no finite boundary).
+
+## benford
+
+### `benford_chi_square(values)`  _function_
+
+> Chi-square goodness-of-fit of first digits against Benford's law.
+>
+> ``sum (O_d - E_d)^2 / E_d`` over digits ``1..9`` with ``E_d = n P_benford(d)``,
+> referenced to a chi-square with 8 degrees of freedom. Returns
+> ``(statistic, p_value)``; a small p-value rejects Benford conformance.
+
+### `benford_expected()`  _function_
+
+> First-digit probabilities under Benford's law, ``d = 1..9``.
+>
+> Returns a list of 9 probabilities ``log10(1 + 1/d)`` summing to one.
+
+### `benford_mad(values)`  _function_
+
+> Nigrini's mean absolute deviation from Benford's first-digit law.
+>
+> ``MAD = (1/9) sum_d |observed_prop(d) - benford_prop(d)|``. Nigrini's rule of
+> thumb: below ~0.006 is close conformance, above ~0.015 is nonconformity.
+> Independent of sample size, unlike the chi-square statistic.
+
+### `first_digit(x)`  _function_
+
+> Leading (most significant) decimal digit of ``x``, ignoring sign and zeros.
+>
+> Returns an integer ``1..9``; raises for zero (no leading digit).
+
+### `first_digit_distribution(values)`  _function_
+
+> Observed first-digit counts and proportions for a dataset.
+>
+> Returns ``(counts, proportions)``, each a list of length 9 for digits ``1..9``.
+> Zero values are skipped. Requires at least one non-zero value.
 
 ## bermudan_swaption
 

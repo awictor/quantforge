@@ -318,6 +318,10 @@ from .survival import (
     kaplan_meier, nelson_aalen, survival_at, log_rank_test,
     median_survival_time, restricted_mean_survival_time,
 )
+from .benford import (
+    benford_expected, first_digit, first_digit_distribution,
+    benford_chi_square, benford_mad,
+)
 from .variance_ratio import variance_ratio, variance_ratio_zstat
 from .ou_fit import fit_ornstein_uhlenbeck
 from .cointegration import adf_test, engle_granger
@@ -796,7 +800,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.791.0"
+__version__ = "1.792.0"
 
 __all__ = [
     "OptionType",
@@ -1288,6 +1292,11 @@ __all__ = [
     "log_rank_test",
     "median_survival_time",
     "restricted_mean_survival_time",
+    "benford_expected",
+    "first_digit",
+    "first_digit_distribution",
+    "benford_chi_square",
+    "benford_mad",
     "rescaled_range",
     "variance_ratio",
     "variance_ratio_zstat",

@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.792.0] - 2026-09-12
+
+### Added
+- `benford.py`: Benford's-law first-digit analysis for anomaly detection --
+  `benford_expected`, `first_digit`, `first_digit_distribution`,
+  `benford_chi_square` (goodness-of-fit, 8 df) and `benford_mad` (Nigrini's mean
+  absolute deviation). Cross-checked: the expected probabilities sum to one with
+  ``P(1) = 0.301``, Fibonacci numbers and powers of two conform (not rejected, MAD
+  below Nigrini's 0.006 threshold), and a uniform sample is strongly rejected.
+
 ## [1.791.0] - 2026-09-12
 
 ### Documentation
