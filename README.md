@@ -3120,7 +3120,7 @@ Score forecasts against realized values with scale-dependent and scale-free
 errors. `mase` divides the MAE by a seasonal-naive benchmark, so `< 1` beats naive.
 
 ```python
-from quantforge import mae, rmse, mape, smape, mase
+from quantforge import mae, rmse, mape, smape, mase, theil_u1, theil_u2
 
 actual, fc = [100, 102, 101, 105, 108], [101, 100, 103, 104, 107]
 mae(actual, fc)      # 1.4    absolute error
@@ -3128,10 +3128,15 @@ rmse(actual, fc)     # 1.483  penalizes big misses
 mape(actual, fc)     # 0.0136 scale-free (fraction)
 smape(actual, fc)    # 0.0136 symmetric, bounded [0, 2]
 mase(actual, fc, train=[95, 96, 98, 99, 100], season=1)   # vs naive: <1 beats it
+theil_u2(actual, fc)  # forecast RMSE / no-change RMSE: <1 beats the random walk
+theil_u1(actual, fc)  # inequality coefficient in [0, 1]
 ```
 
 MAPE is scale-invariant but undefined at zero actuals; sMAPE is bounded and robust
 to small values; MASE is the scale-free choice for cross-series comparison.
+`theil_u2` benchmarks against the persistence (no-change) forecast — `< 1` means the
+model adds value over a random walk — while `theil_u1` is a bounded, symmetric
+inequality measure.
 
 ## Rank dependence (Kendall / Spearman)
 

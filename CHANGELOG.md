@@ -24,6 +24,12 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.775.0] - 2026-09-12
+
+### Documentation
+- README forecast-accuracy section now documents `theil_u1` and `theil_u2` alongside
+  the other error metrics.
+
 ## [1.774.0] - 2026-09-12
 
 ### Added
