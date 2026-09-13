@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.997.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.998.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -7371,6 +7371,16 @@ Auto-generated from `quantforge` v1.997.0 by `docs/gen_api.py` — do not edit b
 > tie-corrected ``statistic`` H, the ``df`` (``k - 1``) and the chi-square upper-tail
 > ``p_value``. A small p-value rejects the null of equal distributions (specifically,
 > equal medians for similarly-shaped groups).
+
+## laplace_inversion
+
+### `laplace_inversion(F, t, N=12)`  _function_
+
+> Invert the Laplace transform ``F(s)`` at time ``t`` by Gaver-Stehfest.
+>
+> ``F`` is a callable of a single real argument ``s > 0``. ``N`` (even, default 12) is
+> the number of terms. Returns the estimated ``f(t)``. Best for smooth,
+> non-oscillatory functions; oscillatory or discontinuous ``f`` invert poorly.
 
 ## lasso
 

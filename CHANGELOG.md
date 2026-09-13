@@ -31,6 +31,14 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.998.0] - 2026-09-13
+
+### Added
+- `laplace_inversion.py`: `laplace_inversion`, real-arithmetic numerical inversion of a
+  Laplace transform by the Gaver-Stehfest algorithm. Cross-checked against known
+  transform pairs (constant, ramp, `t^2`, decaying exponential, `sqrt(t)`, cosine),
+  recovering the time function to ~1e-3 or better on smooth, non-oscillatory targets.
+
 ## [1.997.0] - 2026-09-13
 
 ### Documentation
