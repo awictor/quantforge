@@ -2642,6 +2642,23 @@ It recovers the generating logit coefficients on simulated data, returns
 probabilities strictly in (0, 1), and classifies separable data near-perfectly. A
 positive coefficient makes the probability rise monotonically in that feature.
 
+For *count* responses — event frequencies, claim counts, arrival rates —
+`poisson_regression` is the matching GLM: it models `E[y|x] = exp(x'beta)` with a log
+link (so the rate is always positive) and fits by IRLS:
+
+```python
+from quantforge import poisson_regression, poisson_predict
+
+m = poisson_regression(X, y)      # y is non-negative counts
+m["coefficients"]                  # [intercept, b1, ...] on the log-rate scale
+poisson_predict(m, X_query)        # predicted rates exp(x'beta), always > 0
+```
+
+It recovers a known log-linear rate from sampled counts, the intercept-only fit gives
+`exp(intercept) = ` the mean count, and every prediction is positive. Use it instead of
+OLS whenever the response is a count whose variance grows with its mean — the Gaussian
+assumption breaks there, but the Poisson mean-variance link is built in.
+
 ## Classification metrics
 
 Evaluate a probabilistic classifier's scores against binary labels. `roc_auc` is
