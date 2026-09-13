@@ -31,6 +31,17 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.810.0] - 2026-09-13
+
+### Added
+- `concentration.py`: portfolio concentration measures -- `herfindahl_index`
+  (``sum w_i^2``), `effective_number_of_constituents` (``1/HHI``) and Meucci's
+  `effective_number_of_bets` (exp-entropy of the uncorrelated principal-component
+  risk contributions). Cross-checked: equal weights give ENC = n, concentration
+  drives ENC toward 1, ENB equals n for equal weights under an identity covariance
+  (independent equal-risk factors) and falls toward 1 when one factor dominates, and
+  ENB is bounded by n.
+
 ## [1.809.0] - 2026-09-13
 
 ### Documentation

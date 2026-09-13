@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.809.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.810.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -2252,6 +2252,33 @@ Auto-generated from `quantforge` v1.809.0 by `docs/gen_api.py` — do not edit b
 > shifting both expiries together). Returns a dict with ``price`` and those
 > fields. ``kind`` is one of ``call-on-call``/``call-on-put``/``put-on-call``/
 > ``put-on-put``.
+
+## concentration
+
+### `effective_number_of_bets(weights, cov)`  _function_
+
+> Meucci's effective number of bets from the weights and covariance.
+>
+> Diagonalizes the covariance into uncorrelated principal-component factors, splits
+> the portfolio variance into each factor's contribution ``p_k`` (summing to one),
+> and returns ``exp(-sum p_k ln p_k)`` -- the exponential of the entropy of those
+> contributions. Counts independent risk sources: ``n`` when the variance is spread
+> evenly across uncorrelated factors, and down toward 1 when one factor dominates.
+
+### `effective_number_of_constituents(weights)`  _function_
+
+> Effective number of holdings ``1 / HHI``.
+>
+> The count of equally-weighted positions with the same concentration. Equals the
+> number of holdings at equal weight and approaches 1 as weight concentrates.
+
+### `herfindahl_index(weights)`  _function_
+
+> Herfindahl-Hirschman concentration index ``sum w_i^2``.
+>
+> Weights need not be normalized; they are normalized to sum to one first
+> (absolute values, for long-short books). Ranges from ``1/n`` (equal weight) to
+> ``1`` (a single holding).
 
 ## convertible_lattice
 
