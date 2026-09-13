@@ -5013,6 +5013,27 @@ the data. `reservoir_sample` (Vitter's algorithm R) is deterministic for a fixed
 and returns every stream element with equal probability; if the stream is shorter than
 `k` it returns all of it.
 
+When recent data should count more than old — a drifting mean or a changing volatility
+— `EWMAStats` keeps an exponentially-weighted mean and variance online (the RiskMetrics
+recursion), with no fixed window:
+
+```python
+from quantforge import EWMAStats, ewma
+
+vol = EWMAStats(lam=0.94)        # ~ a month of daily memory
+for r in returns:
+    vol.update(r)
+vol.mean, vol.std()              # running EW mean and volatility
+
+ewma([1, 2, 3, 4, 5], lam=0.94)  # [1.0, 1.06, 1.1764, 1.3458, 1.5651]
+```
+
+Larger `lam` means longer memory (effective window about `1 / (1 - lam)`, so `0.94` ≈ 17
+observations). The variance follows the RiskMetrics form — squared deviation from the
+previous mean — so `EWMAStats` reacts within a handful of points when volatility shifts
+regime, unlike a long fixed-window estimate that would smear the change. The batch
+`ewma` returns the running mean at every step for the whole series.
+
 The special functions behind the distribution routines are public:
 
 ```python
