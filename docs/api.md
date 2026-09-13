@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.4.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.5.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -13820,6 +13820,25 @@ Auto-generated from `quantforge` v2.4.0 by `docs/gen_api.py` — do not edit by 
 > A payer pays ``fixed_rate`` and receives float; its value is the float-leg PV
 > (``P(start) - P(end)``) minus the fixed-leg PV (``fixed_rate * annuity``),
 > times ``notional``. A receiver is the negative. Zero at the par swap rate.
+
+## symplectic
+
+### `leapfrog(force, q0, v0, dt, n_steps)`  _function_
+
+> Leapfrog (kick-drift-kick) integration of ``q'' = force(q)`` (unit mass, velocity form).
+>
+> ``force(q)`` returns the acceleration. Returns ``(qs, vs)`` positions and velocities.
+> Algebraically equivalent to :func:`velocity_verlet` with unit mass; kept as the
+> velocity-space form common in N-body simulation.
+
+### `velocity_verlet(force, q0, p0, mass, dt, n_steps)`  _function_
+
+> Velocity-Verlet integration of ``q'' = force(q) / mass``.
+>
+> ``force(q)`` returns the force (accel * mass) as the same shape as ``q0``; ``p`` is
+> the momentum ``mass * velocity``. Returns ``(qs, ps)``: the ``n_steps + 1`` position
+> and momentum states (each a list). Second-order accurate and symplectic, so total
+> energy stays bounded over long runs.
 
 ## t_copula_sample
 

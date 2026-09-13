@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.5.0] - 2026-09-13
+
+### Added
+- `symplectic.py`: `velocity_verlet` and `leapfrog`, symplectic integrators for
+  Hamiltonian systems that keep the total energy *bounded* over long runs (unlike a
+  drifting general RK). Cross-checked: harmonic-oscillator energy oscillates within a
+  tiny band rather than drifting, one period returns to the start, leapfrog equals
+  velocity Verlet at unit mass, a circular orbit keeps its radius over 10k steps, and
+  the scheme is time-reversible.
+
 ## [2.4.0] - 2026-09-13
 
 ### Documentation
