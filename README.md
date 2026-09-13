@@ -3146,6 +3146,23 @@ theil_sen(x, y)         # -> (2.0, 5.0)   slope and intercept, unmoved by the ou
 The median pairwise slope shrugs off the two corrupted points that would tilt an
 OLS line. Pairs sharing an `x` value are skipped.
 
+`repeated_median_regression` (Siegel) pushes the robustness further to a **50%
+breakdown point** — the theoretical maximum — by taking, for each point, the median of
+its slopes to every other point, then the median of those:
+
+```python
+from quantforge import repeated_median_regression
+
+x = list(range(10))
+y = [2 * xi + 1 for xi in x]
+y[5] = 1000                                  # gross outlier
+repeated_median_regression(x, y)             # (2.0, 1.0) — completely unmoved
+```
+
+The double median tolerates nearly half the data being corrupted where Theil-Sen (a
+single median of slopes, ~29% breakdown) starts to fail — the estimator to reach for
+when contamination is severe, at the same `O(n²)` cost.
+
 Theil-Sen still assumes `x` is exact. When *both* variables carry measurement error
 (comparing two instruments or assays), OLS biases the slope toward zero;
 `deming_regression` accounts for error in both and `orthogonal_regression` is its
