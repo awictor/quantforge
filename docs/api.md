@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.867.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.868.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -1537,6 +1537,30 @@ Auto-generated from `quantforge` v1.867.0 by `docs/gen_api.py` — do not edit b
 ### `paid_to_date(cumulative_triangle)`  _function_
 
 > Latest (diagonal) paid amount per accident year of a cumulative triangle.
+
+## chatterjee
+
+### `blomqvist_beta(x, y)`  _function_
+
+> Blomqvist's beta (medial correlation).
+>
+> ``beta = (n_concordant - n_discordant) / n_used`` where a point is concordant if
+> it sits in the same direction from both medians (both above or both below) and
+> discordant otherwise; points exactly on a median are dropped (``n_used`` counts
+> only the points kept). Lies in ``[-1, 1]``:
+> +1 comonotone, -1 countermonotone, 0 under independence.
+
+### `chatterjee_xi(x, y)`  _function_
+
+> Chatterjee's xi rank correlation of ``Y`` on ``X`` (asymmetric).
+>
+> Sorts by ``x`` (ties in ``x`` broken by stable order), then with
+> ``r_i`` = #{j : y_j <= y_(i)} and ``l_i`` = #{j : y_j >= y_(i)},
+>
+>     xi = 1 - n * sum_i |r_{i+1} - r_i| / (2 * sum_i l_i (n - l_i)).
+>
+> Zero under independence, approaching 1 when ``Y`` is a noiseless function of
+> ``X``. Handles ties in ``y`` via the general (Azadkia-Chatterjee) form.
 
 ## chebyshev
 

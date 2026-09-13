@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.868.0] - 2026-09-13
+
+### Added
+- `chatterjee.py`: Chatterjee's (2020) `chatterjee_xi` rank correlation and
+  Blomqvist's `blomqvist_beta` medial correlation. Cross-checked: xi approaches 1 for
+  a noiseless monotone relation, is near zero under independence, reaches ~0.99 on a
+  multi-period sine where Kendall's tau is nearly blind (nonmonotone functional
+  dependence), and matches a reference implementation on 300 random cases; Blomqvist
+  gives +/-1 at the comonotone/countermonotone extremes and ~0 under independence.
+
 ## [1.867.0] - 2026-09-13
 
 ### Documentation
