@@ -3738,6 +3738,24 @@ It estimates the mean and standard deviation from the sample, applies the Stephe
 small-sample adjustment, and returns a D'Agostino-Stephens p-value. A clean normal
 sample passes; an exponential or fat-tailed one is strongly rejected.
 
+`dagostino_k2` gives an omnibus normality test that reports *why* it rejects — a
+skewness Z and a kurtosis Z combined into one chi-square statistic:
+
+```python
+from quantforge import dagostino_k2
+
+r = dagostino_k2(returns)
+r["k2"], r["p_value"]        # omnibus statistic and p-value
+r["z_skew"], r["z_kurt"]     # which shape departure drives the rejection
+```
+
+It transforms the sample skewness and kurtosis to standard-normal scores (D'Agostino
+and Anscombe-Glynn) and sums their squares, so a large `z_skew` flags asymmetry and a
+large positive `z_kurt` flags heavy tails (negative = light tails). It passes clean
+normals, has a well-calibrated ~5% null rejection rate, and detects the skew and fat
+tails typical of returns — the component Z scores tell you which. Needs a moderate
+sample (>= 20).
+
 To test whether *several* samples share one (unspecified) distribution — the
 nonparametric analogue of one-way ANOVA, but sensitive to any distributional difference
 — `anderson_darling_ksample` runs the Scholz-Stephens k-sample AD test:

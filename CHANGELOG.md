@@ -31,6 +31,11 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.993.0] - 2026-09-13
+
+### Documentation
+- README: documented `dagostino_k2` in the goodness-of-fit section.
+
 ## [1.992.0] - 2026-09-13
 
 ### Added
