@@ -125,3 +125,41 @@ def entropic_risk(pnl, risk_aversion=1.0):
     m = max(-risk_aversion * x for x in pnl)   # for numerical stability
     s = sum(math.exp(-risk_aversion * x - m) for x in pnl) / n
     return (m + math.log(s)) / risk_aversion
+
+
+def expectile(pnl, tau=0.95):
+    """Expectile of a P&L sample at level ``tau`` (returned as a positive loss).
+
+    The ``tau``-expectile ``e`` solves the asymmetric-least-squares first-order
+    condition ``tau * E[(X - e)_+] = (1 - tau) * E[(e - X)_-]`` on the loss variable
+    ``X = -pnl``. The expectile is the only risk measure that is both coherent (for
+    ``tau >= 0.5``) and elicitable, unlike VaR (elicitable, not coherent) and ES
+    (coherent, not elicitable). ``tau = 0.5`` gives the mean loss; larger ``tau``
+    weights the right (loss) tail more. Solved by bisection on the monotone
+    condition.
+    """
+    if not pnl:
+        raise ValueError("pnl sample must be non-empty")
+    if not (0.0 < tau < 1.0):
+        raise ValueError("tau must be in (0, 1)")
+    losses = [-x for x in pnl]
+
+    def g(e):
+        # tau * sum (x - e)_+ - (1 - tau) * sum (e - x)_+  ; increasing in e (sign flip)
+        pos = sum(x - e for x in losses if x > e)
+        neg = sum(e - x for x in losses if x < e)
+        return tau * pos - (1.0 - tau) * neg
+
+    lo, hi = min(losses), max(losses)
+    if lo == hi:
+        return lo
+    # g is decreasing in e (more mass below), so bracket the root of g(e) = 0.
+    for _ in range(200):
+        mid = 0.5 * (lo + hi)
+        if g(mid) > 0.0:
+            lo = mid
+        else:
+            hi = mid
+        if hi - lo < 1e-12 * (1.0 + abs(mid)):
+            break
+    return 0.5 * (lo + hi)

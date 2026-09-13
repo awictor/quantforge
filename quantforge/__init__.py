@@ -438,7 +438,7 @@ from .student_t import (
 )
 from .riskmeasures import (
     value_at_risk, expected_shortfall as sample_expected_shortfall,
-    spectral_risk_exponential, entropic_risk,
+    spectral_risk_exponential, entropic_risk, expectile,
     is_subadditive, component_expected_shortfall,
 )
 from .linalg import (
@@ -779,7 +779,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.767.0"
+__version__ = "1.768.0"
 
 __all__ = [
     "OptionType",
@@ -1439,6 +1439,7 @@ __all__ = [
     "sample_expected_shortfall",
     "spectral_risk_exponential",
     "entropic_risk",
+    "expectile",
     "is_subadditive",
     "component_expected_shortfall",
     "jacobi_eigen",

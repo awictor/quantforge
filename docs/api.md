@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.767.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.768.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -9958,6 +9958,18 @@ Auto-generated from `quantforge` v1.767.0 by `docs/gen_api.py` — do not edit b
 > The exponential-utility certainty equivalent of the loss; ``theta =
 > risk_aversion``. Convex and increasing in ``theta``; approaches the mean loss
 > ``-E[X]`` as ``theta -> 0`` and the worst loss as ``theta -> inf``.
+
+### `expectile(pnl, tau=0.95)`  _function_
+
+> Expectile of a P&L sample at level ``tau`` (returned as a positive loss).
+>
+> The ``tau``-expectile ``e`` solves the asymmetric-least-squares first-order
+> condition ``tau * E[(X - e)_+] = (1 - tau) * E[(e - X)_-]`` on the loss variable
+> ``X = -pnl``. The expectile is the only risk measure that is both coherent (for
+> ``tau >= 0.5``) and elicitable, unlike VaR (elicitable, not coherent) and ES
+> (coherent, not elicitable). ``tau = 0.5`` gives the mean loss; larger ``tau``
+> weights the right (loss) tail more. Solved by bisection on the monotone
+> condition.
 
 ### `is_subadditive(pnl_a, pnl_b, confidence=0.95)`  _function_
 

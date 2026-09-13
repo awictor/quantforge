@@ -24,6 +24,15 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.768.0] - 2026-09-12
+
+### Added
+- `riskmeasures.py`: `expectile`, the ``tau``-expectile of a P&L sample -- the only
+  risk measure that is both coherent (for ``tau >= 0.5``) and elicitable. Solved by
+  bisection on the asymmetric-least-squares first-order condition. Cross-checked:
+  the 0.5-expectile equals the mean loss, it is monotone in ``tau`` and above the
+  mean for ``tau > 0.5``, and the first-order condition holds at the solution.
+
 ## [1.767.0] - 2026-09-12
 
 ### Documentation
