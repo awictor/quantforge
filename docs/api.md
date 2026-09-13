@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.937.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.938.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -10257,6 +10257,29 @@ Auto-generated from `quantforge` v1.937.0 by `docs/gen_api.py` — do not edit b
 >
 > Inverts the normal-approximation power: ``n = 2 (z_{alpha/2} + z_{beta})^2 /
 > d^2``, rounded up. Raises for a zero effect size (infinite sample).
+
+## power_iteration
+
+### `inverse_iteration(A, mu=0.0, x0=None, tol=1e-12, max_iter=1000)`  _function_
+
+> Eigenpair of ``A`` whose eigenvalue is closest to the shift ``mu``.
+>
+> Runs power iteration on ``(A - mu I)^{-1}``. With ``mu = 0`` this finds the
+> smallest-magnitude eigenvalue; with ``mu`` near a known approximate eigenvalue it
+> refines that one. Returns the same dict shape as :func:`power_iteration`.
+
+### `power_iteration(A, x0=None, tol=1e-12, max_iter=1000)`  _function_
+
+> Dominant eigenpair of ``A`` by power iteration.
+>
+> Returns a dict with ``eigenvalue`` (largest magnitude, via the Rayleigh quotient),
+> ``eigenvector`` (unit norm), ``n_iter`` and ``converged``. Converges when the
+> dominant eigenvalue is unique in magnitude; the sign convention makes the first
+> non-negligible component positive.
+
+### `rayleigh_quotient(A, x)`  _function_
+
+> Rayleigh quotient ``x' A x / x' x`` -- the least-squares eigenvalue for ``x``.
 
 ## prob_forecast
 

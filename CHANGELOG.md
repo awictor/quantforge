@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.938.0] - 2026-09-13
+
+### Added
+- `power_iteration.py`: individual-eigenpair methods — `power_iteration` (dominant
+  eigenvalue/vector), `inverse_iteration` (eigenvalue nearest a shift, e.g. the
+  smallest), and `rayleigh_quotient`. Cross-checked against the full `jacobi_eigen`
+  spectrum: power iteration recovers the largest eigenvalue and inverse iteration the
+  smallest and any shift-targeted one, the eigenvector residual `||A v - lam v||` is
+  ~1e-5, and the Rayleigh quotient is exact on a true eigenvector.
+
 ## [1.937.0] - 2026-09-13
 
 ### Documentation
