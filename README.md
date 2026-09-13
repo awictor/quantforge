@@ -4047,6 +4047,22 @@ deepest episode (indices into the equity curve). A series that ends underwater
 reports `recovery_index=None`; the longest underwater stretch need not coincide
 with the deepest drawdown.
 
+For drawdown-based *risk* measures — the drawdown analogues of VaR and expected
+shortfall — use the drawdown-at-risk family:
+
+```python
+from quantforge import (average_drawdown, drawdown_at_risk,
+                        conditional_drawdown_at_risk)
+
+average_drawdown(returns)                              # mean drawdown over the path
+drawdown_at_risk(returns, confidence=0.95)             # DaR: the drawdown quantile
+conditional_drawdown_at_risk(returns, confidence=0.95) # CDaR: mean of the worst tail
+```
+
+`CDaR >= DaR >= average_drawdown >= 0`, all capped by the maximum drawdown. CDaR is
+coherent (the drawdown analogue of expected shortfall) and is the objective in
+drawdown-constrained portfolio optimization.
+
 For downside-risk-adjusted return, `kappa_ratio` generalizes Sortino and
 Omega-Sharpe into one family (order 1 = Omega-Sharpe, order 2 = Sortino), and
 `upside_potential_ratio` rewards the chance of beating a target per unit of

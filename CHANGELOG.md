@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.803.0] - 2026-09-13
+
+### Documentation
+- README performance-metrics section now documents the drawdown risk measures
+  (`average_drawdown`, `drawdown_at_risk`, `conditional_drawdown_at_risk`) with a
+  worked example.
+
 ## [1.802.0] - 2026-09-13
 
 ### Added
