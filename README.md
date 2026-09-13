@@ -5071,6 +5071,24 @@ integrates in `y` for each `x` and then in `x` (Fubini), converging on the wider
 less-smooth cases where the fixed Gauss rule is too coarse (it recovers the 2-D Gaussian
 integral `pi` on a large box).
 
+To recover a time function from a Laplace transform known only as a formula,
+`laplace_inversion` uses the real-arithmetic Gaver-Stehfest algorithm:
+
+```python
+from quantforge import laplace_inversion
+
+laplace_inversion(lambda s: 1.0 / (s * s), t=2.0)     # 2.0 (transform of f(t) = t)
+laplace_inversion(lambda s: 1.0 / (s + 2.0), t=1.0)   # 0.1354 ~ exp(-2)
+```
+
+It evaluates `F(s)` at real points `k ln2 / t` and combines them with tabulated
+coefficients, so no complex contour is needed. It recovers constants, polynomials,
+`sqrt(t)`, and decaying exponentials to ~1e-3 or better; like all Gaver-Stehfest
+implementations it struggles with oscillatory or fast-growing functions (limited by
+double precision), so keep the target smooth and non-oscillatory. Useful for inverting
+transform-domain formulas in queueing, diffusion, and arithmetic-Asian / occupation-time
+pricing.
+
 # One-dimensional minimizers (line search / 1-D calibration).
 from quantforge import golden_section_min, brent_min
 golden_section_min(lambda x: (x - 3) ** 2 + 1, -10, 10)   # -> (3.0, 1.0)
