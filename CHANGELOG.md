@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.898.0] - 2026-09-13
+
+### Added
+- `cohen_kappa.py`: chance-corrected categorical agreement — `cohen_kappa` (two
+  raters, nominal), `weighted_kappa` (ordinal, linear/quadratic distance weights) and
+  `fleiss_kappa` (m raters). Cross-checked: perfect agreement gives 1 and chance-level
+  gives ~0, Cohen matches a hand computation (0.6154), a two-category linear weighted
+  kappa equals Cohen's exactly, weighting rewards near-misses over wild disagreements,
+  and Fleiss reproduces its textbook value (0.2519).
+
 ## [1.897.0] - 2026-09-13
 
 ### Documentation

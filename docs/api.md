@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.897.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.898.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -1910,6 +1910,32 @@ Auto-generated from `quantforge` v1.897.0 by `docs/gen_api.py` — do not edit b
 > discordant) or the two discordant counts ``b`` and ``c`` directly. Returns a dict
 > with the discordant counts, the exact two-sided binomial ``p_value``, and the
 > continuity-corrected chi-square statistic ``chi2_cc`` with its ``p_value_chi2``.
+
+## cohen_kappa
+
+### `cohen_kappa(rater_a, rater_b)`  _function_
+
+> Cohen's kappa for two raters over nominal categories.
+>
+> ``rater_a`` and ``rater_b`` are equal-length label sequences. Returns the
+> chance-corrected agreement in ``[-1, 1]``.
+
+### `fleiss_kappa(table)`  _function_
+
+> Fleiss' kappa for ``m`` raters per subject over fixed categories.
+>
+> ``table`` is a list of rows, one per subject, each giving the count of raters
+> assigning each category (every row sums to the same ``m``). Returns the
+> chance-corrected multi-rater agreement.
+
+### `weighted_kappa(rater_a, rater_b, weights='linear')`  _function_
+
+> Weighted kappa for two raters over ordinal categories.
+>
+> Disagreements are penalized by category distance: ``weights="linear"`` uses
+> ``|i - j| / (k - 1)`` and ``"quadratic"`` uses ``(i - j)^2 / (k - 1)^2``. The
+> labels must be sortable into their ordinal order. Quadratic weighting is the common
+> choice and, for a square table, coincides with an ICC-style measure.
 
 ## cointegration
 
