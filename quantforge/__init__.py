@@ -335,6 +335,7 @@ from .concentration import (
 )
 from .turbulence import turbulence, turbulence_series, absorption_ratio
 from .rmt import marchenko_pastur_edge, clip_correlation_eigenvalues
+from .chebyshev import chebyshev_fit, chebyshev_eval, chebyshev_derivative
 from .variance_ratio import variance_ratio, variance_ratio_zstat
 from .ou_fit import fit_ornstein_uhlenbeck
 from .cointegration import adf_test, engle_granger
@@ -816,7 +817,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.817.0"
+__version__ = "1.818.0"
 
 __all__ = [
     "OptionType",
@@ -1330,6 +1331,9 @@ __all__ = [
     "absorption_ratio",
     "marchenko_pastur_edge",
     "clip_correlation_eigenvalues",
+    "chebyshev_fit",
+    "chebyshev_eval",
+    "chebyshev_derivative",
     "rescaled_range",
     "variance_ratio",
     "variance_ratio_zstat",

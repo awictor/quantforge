@@ -31,6 +31,18 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.818.0] - 2026-09-13
+
+### Added
+- `chebyshev.py`: Chebyshev polynomial approximation on an interval -- `chebyshev_fit`
+  (coefficients from the Chebyshev-extrema DCT), `chebyshev_eval` (stable Clenshaw
+  recurrence) and `chebyshev_derivative`. Cross-checked: it is exact for polynomials
+  up to the truncation degree, reaches machine precision on ``exp`` and ``sin`` at
+  modest degree, the coefficients decay geometrically for smooth functions, and the
+  differentiated series matches ``d/dx exp = exp`` and ``d/dx sin = cos``. Fixed the
+  Chebyshev-Lobatto top-coefficient half-weight that had aliased an exact
+  degree-``n`` fit.
+
 ## [1.817.0] - 2026-09-13
 
 ### Documentation

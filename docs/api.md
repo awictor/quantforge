@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.817.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.818.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -1510,6 +1510,32 @@ Auto-generated from `quantforge` v1.817.0 by `docs/gen_api.py` — do not edit b
 ### `paid_to_date(cumulative_triangle)`  _function_
 
 > Latest (diagonal) paid amount per accident year of a cumulative triangle.
+
+## chebyshev
+
+### `chebyshev_derivative(coeffs, a, b)`  _function_
+
+> Chebyshev coefficients of the derivative of a series on ``[a, b]``.
+>
+> Applies the standard Chebyshev differentiation recurrence and the chain-rule
+> factor ``2 / (b - a)``. The returned coefficients evaluate (via
+> :func:`chebyshev_eval`) to ``f'`` on the same interval.
+
+### `chebyshev_eval(coeffs, a, b, x)`  _function_
+
+> Evaluate a Chebyshev series at ``x`` by the Clenshaw recurrence.
+>
+> ``coeffs`` are from :func:`chebyshev_fit`; the ``c_0`` term is taken at half
+> weight (the standard convention). Stable across ``[a, b]``.
+
+### `chebyshev_fit(f, a, b, degree)`  _function_
+
+> Chebyshev coefficients of ``f`` on ``[a, b]`` up to ``degree``.
+>
+> Samples ``f`` at the ``degree + 1`` Chebyshev extrema and takes the discrete
+> cosine transform. Returns the coefficient list ``[c_0, ..., c_degree]`` (the
+> ``c_0`` term is the mean level, used at half weight by :func:`chebyshev_eval`).
+> Exact for polynomials of degree ``<= degree``.
 
 ## cheyette
 
