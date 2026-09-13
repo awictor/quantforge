@@ -618,6 +618,23 @@ jump_variation(r)                   # -> 0.002258  (max(RV - BV, 0), the jump)
 On a jump-free path RV and BV coincide and the jump variation is ~0; a jump lifts
 RV by roughly its square while BV barely moves.
 
+`min_realized_variance` and `med_realized_variance` (Andersen-Dobrev-Schaumburg)
+are nearest-neighbour jump-robust alternatives to bipower — MinRV keeps the smaller
+of each adjacent pair, MedRV the median of each triple — and `realized_quarticity`
+estimates the integrated quarticity that sets RV's standard error:
+
+```python
+from quantforge import (min_realized_variance, med_realized_variance,
+                        realized_quarticity)
+
+min_realized_variance(r)    # jump-robust, discards the lone jump
+med_realized_variance(r)    # median of three; also robust to two nearby jumps
+realized_quarticity(r)      # (n/3) sum r^4, for jump-test standard errors
+```
+
+Like bipower these ignore the jump and track the continuous integrated variance;
+MedRV additionally tolerates two close jumps and occasional zero returns.
+
 At the finest sampling frequencies, microstructure noise biases the naive realized
 variance *upward* by `2 * n * Var(noise)` — and faster sampling makes it worse.
 `two_scale_realized_variance` (Zhang-Mykland-Aït-Sahalia) removes that bias by
