@@ -3181,6 +3181,24 @@ Unlike Theil-Sen/Siegel it extends naturally to multiple regressors and gives st
 error-ready coefficients, trading a little breakdown resistance for efficiency and
 generality.
 
+When outliers exceed even 50% — the point where every median estimator fails —
+`ransac_line` still recovers the true line by consensus: it fits many minimal (2-point)
+candidates and keeps the one the most points agree with, then refits on that inlier set:
+
+```python
+from quantforge import ransac_line
+
+# 100 points on y = 2x + 5, with 60 of them replaced by gross noise
+r = ransac_line(x, y, threshold=3.0, n_iterations=500)
+r["slope"], r["intercept"], r["n_inliers"]   # 2.001, 4.905, 40 (the clean points)
+```
+
+`threshold` is the residual within which a point counts as an inlier; a point is kept
+if it lands there. RANSAC pays for its robustness with randomness (seed it for
+reproducibility) and needs a threshold matched to the noise scale, but it is the tool
+for majority-or-minority linear structure buried in heavy contamination — where
+Theil-Sen, Siegel, and Huber all break down.
+
 Theil-Sen still assumes `x` is exact. When *both* variables carry measurement error
 (comparing two instruments or assays), OLS biases the slope toward zero;
 `deming_regression` accounts for error in both and `orthogonal_regression` is its
