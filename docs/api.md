@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.837.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.838.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -5580,6 +5580,25 @@ Auto-generated from `quantforge` v1.837.0 by `docs/gen_api.py` — do not edit b
 >
 > Returns an :class:`MCResult`. Puts come from simulating the same paths and
 > taking the put payoff (parity holds path-by-path at the terminal spot).
+
+## hmm
+
+### `hmm_forward(pi, A, B, obs)`  _function_
+
+> Log-likelihood ``log P(obs | model)`` by the scaled forward algorithm.
+>
+> Rescales the forward variables at each step (dividing by their sum) and
+> accumulates the log of the scale factors, so the likelihood is exact without
+> underflow on long sequences. ``pi`` initial distribution, ``A`` transition, ``B``
+> emission matrices; ``obs`` a list of symbol indices.
+
+### `hmm_viterbi(pi, A, B, obs)`  _function_
+
+> Most-likely hidden-state path (Viterbi) and its log-probability.
+>
+> Dynamic programming in log space; returns ``(path, log_prob)`` where ``path`` is
+> the list of state indices maximizing the joint probability of states and
+> observations. Ties are broken toward the lower state index.
 
 ## holee
 

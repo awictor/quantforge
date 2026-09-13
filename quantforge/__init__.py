@@ -346,6 +346,7 @@ from .lu import lu_decomposition, lu_solve, determinant
 from .matrix_exp import matrix_exp
 from .mvn import log_determinant, mvn_logpdf, mvn_pdf
 from .gmm import fit_gaussian_mixture
+from .hmm import hmm_forward, hmm_viterbi
 from .variance_ratio import variance_ratio, variance_ratio_zstat
 from .ou_fit import fit_ornstein_uhlenbeck
 from .cointegration import adf_test, engle_granger
@@ -828,7 +829,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.837.0"
+__version__ = "1.838.0"
 
 __all__ = [
     "OptionType",
@@ -1362,6 +1363,8 @@ __all__ = [
     "mvn_logpdf",
     "mvn_pdf",
     "fit_gaussian_mixture",
+    "hmm_forward",
+    "hmm_viterbi",
     "rescaled_range",
     "variance_ratio",
     "variance_ratio_zstat",

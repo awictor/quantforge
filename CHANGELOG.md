@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.838.0] - 2026-09-13
+
+### Added
+- `hmm.py`: discrete hidden Markov model with `hmm_forward` (sequence log-likelihood
+  by the scaled forward algorithm, underflow-safe) and `hmm_viterbi` (most-likely
+  hidden-state path by log-space dynamic programming). Cross-checked: the forward
+  log-likelihood matches a brute-force sum over all state paths, the Viterbi path and
+  its log-probability match a brute-force argmax, a deterministic HMM recovers the
+  exact path, and the scaled forward pass stays finite on a 1000-step sequence.
+
 ## [1.837.0] - 2026-09-13
 
 ### Documentation
