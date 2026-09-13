@@ -31,6 +31,17 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.866.0] - 2026-09-13
+
+### Added
+- `distance_correlation.py`: Szekely-Rizzo distance correlation
+  (`distance_correlation`, `distance_covariance`, `distance_variance`) via
+  double-centered distance matrices — a dependence measure that is zero iff the
+  variables are independent, detecting nonlinear structure Pearson misses.
+  Cross-checked: 1 for a linear relation, near 0 under independence, ~0.5 on a
+  parabola where Pearson is ~0, matches a brute-force reference on 200 random cases,
+  and stays in [0, 1].
+
 ## [1.865.0] - 2026-09-13
 
 ### Documentation

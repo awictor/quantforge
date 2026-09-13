@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.865.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.866.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -3133,6 +3133,27 @@ Auto-generated from `quantforge` v1.865.0 by `docs/gen_api.py` — do not edit b
 > across the quotes. Minimises the squared vol error over the shift by
 > golden-section search on ``[shift_lo, shift_hi]`` (defaults scale with spot:
 > ``[-0.9 S, 20 S]``, staying above the ``-shift`` floor).
+
+## distance_correlation
+
+### `distance_correlation(x, y)`  _function_
+
+> Distance correlation ``dCor(x, y)`` in ``[0, 1]``.
+>
+> ``dCov(x, y) / sqrt(dVar(x) dVar(y))``. Zero exactly under independence (unlike
+> Pearson, this holds for nonlinear dependence too), 1 for a tight linear relation.
+> Returns 0 if either sample is constant (distance variance zero).
+
+### `distance_covariance(x, y)`  _function_
+
+> Distance covariance ``dCov(x, y)`` (the square root of the mean product).
+>
+> Zero if and only if ``x`` and ``y`` are independent (in the population). Returns a
+> non-negative value on the same scale as the data.
+
+### `distance_variance(x)`  _function_
+
+> Distance variance ``dVar(x) = dCov(x, x)``; zero only for a constant sample.
 
 ## distortion
 
