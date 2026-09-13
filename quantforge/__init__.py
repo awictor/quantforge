@@ -311,6 +311,9 @@ from .svi_jumpwing import SVIJumpWing, raw_to_jumpwing, jumpwing_to_raw
 from .realized_kernel import realized_kernel
 from .jump_test import tripower_quarticity, bns_jump_test
 from .liquidity import roll_spread, amihud_illiquidity, corwin_schultz_spread
+from .microstructure import (
+    kyle_lambda_regression, order_flow_imbalance, vpin,
+)
 from .tail_dependence import (
     upper_tail_dependence, lower_tail_dependence, exceedance_correlation,
 )
@@ -756,7 +759,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.745.0"
+__version__ = "1.746.0"
 
 __all__ = [
     "OptionType",
@@ -1540,6 +1543,9 @@ __all__ = [
     "roll_spread",
     "amihud_illiquidity",
     "corwin_schultz_spread",
+    "kyle_lambda_regression",
+    "order_flow_imbalance",
+    "vpin",
     "square_root_impact",
     "implementation_shortfall",
     "twap_schedule",

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.745.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.746.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -7128,6 +7128,35 @@ Auto-generated from `quantforge` v1.745.0 by `docs/gen_api.py` — do not edit b
 > ``(log_moneyness, vol)`` pairs sorted by strike (log-moneyness on the forward
 > ``F = S e^{b t}``). Jumps fatten the tails, so the smile curves up in the
 > wings; a negative mean jump ``mu_j`` tilts it into a downward skew.
+
+## microstructure
+
+### `kyle_lambda_regression(price_changes, signed_volumes)`  _function_
+
+> Empirical Kyle's lambda: slope of price change on signed order flow.
+>
+> Fits ``dP = alpha + lambda * signed_volume`` by ordinary least squares and
+> returns ``lambda`` (price move per unit of net signed volume). ``signed_volumes``
+> should be signed by trade direction (buys positive, sells negative). A larger
+> lambda means a less liquid, higher-impact market. Requires at least three
+> aligned observations with non-constant order flow.
+
+### `order_flow_imbalance(buy_volumes, sell_volumes)`  _function_
+
+> Net signed volume over total volume: ``sum(buy - sell) / sum(buy + sell)``.
+>
+> In ``[-1, 1]``: positive when buys dominate, negative when sells do. Aligned
+> non-negative volume series.
+
+### `vpin(buy_volumes, sell_volumes)`  _function_
+
+> Volume-synchronized probability of informed trading (VPIN).
+>
+> Given per-bucket buy and sell volumes (equal-volume buckets), VPIN is the mean
+> of ``|buy - sell| / (buy + sell)`` across buckets -- the average absolute order
+> imbalance. In ``[0, 1]``: near zero when buys and sells balance, near one when
+> trading is one-sided (a proxy for informed order flow / toxicity). Aligned
+> non-negative series with at least one bucket.
 
 ## minimize1d
 

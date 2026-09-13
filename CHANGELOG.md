@@ -24,6 +24,17 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.746.0] - 2026-09-12
+
+### Added
+- `microstructure.py`: order-flow measures from trade data --
+  `kyle_lambda_regression` (empirical Kyle's lambda, the OLS slope of price change
+  on signed order flow), `order_flow_imbalance` (net signed volume over total), and
+  `vpin` (volume-synchronized probability of informed trading). Cross-checked: the
+  regression recovers a known price-impact coefficient from simulated data and is
+  zero when the flow carries no impact; the imbalance and VPIN are correctly signed
+  / bounded, with VPIN zero for balanced flow and one for one-sided flow.
+
 ## [1.745.0] - 2026-09-12
 
 ### Documentation
