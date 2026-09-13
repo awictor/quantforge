@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.986.0] - 2026-09-13
+
+### Added
+- `permutation_test.py`: `permutation_test` (two-sample, any statistic, label shuffling)
+  and `paired_permutation_test` (sign-flip on within-pair differences), both seeded and
+  deterministic. Cross-checked: detects a mean or median difference, is non-significant
+  under the null, calibrated rejection rate, custom statistics work, and the paired form
+  flags a consistent within-pair shift.
+
 ## [1.985.0] - 2026-09-13
 
 ### Documentation

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.985.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.986.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -10182,6 +10182,25 @@ Auto-generated from `quantforge` v1.985.0 by `docs/gen_api.py` — do not edit b
 > Up-capture ratio: the asset's geometric return in up-benchmark periods
 > divided by the benchmark's. Above 1 means the asset outpaces the benchmark
 > in rising markets.
+
+## permutation_test
+
+### `paired_permutation_test(x, y, n_permutations=9999, alternative='two-sided', seed=1234567)`  _function_
+
+> Paired permutation test on the within-pair differences ``x_i - y_i``.
+>
+> Under the null the sign of each difference is exchangeable, so each permutation
+> flips signs at random. The statistic is the mean difference. Returns the same dict
+> shape as :func:`permutation_test`.
+
+### `permutation_test(a, b, statistic=None, n_permutations=9999, alternative='two-sided', seed=1234567)`  _function_
+
+> Two-sample permutation test.
+>
+> ``statistic(a, b)`` defaults to the difference in means. Pools the two samples,
+> reshuffles the labels ``n_permutations`` times, and returns a dict with the
+> ``observed`` statistic and the ``p_value``. ``alternative`` is ``"two-sided"``,
+> ``"greater"`` or ``"less"``. Deterministic for a fixed ``seed``.
 
 ## perpetual
 
