@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.7.0] - 2026-09-13
+
+### Added
+- `heat_equation.py`: `heat_equation_cn`, a general 1-D heat/diffusion solver
+  (`u_t = alpha u_xx`) by Crank-Nicolson with Dirichlet boundaries — second-order in
+  space and time and unconditionally stable. Cross-checked: a sine mode decays to its
+  analytic `exp(-alpha (pi/L)^2 t)` profile, boundaries are held, the steady state is
+  the exact linear profile, a Gaussian bump diffuses, and huge time steps stay stable.
+
 ## [2.6.0] - 2026-09-13
 
 ### Documentation

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.6.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.7.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -5976,6 +5976,17 @@ Auto-generated from `quantforge` v2.6.0 by `docs/gen_api.py` — do not edit by 
 > Returns the sorted list of event times. Requires ``alpha < beta`` (stationarity)
 > for a well-behaved simulation. Deterministic given ``seed`` (an LCG uniform
 > stream).
+
+## heat_equation
+
+### `heat_equation_cn(u0, alpha, dx, dt, n_steps, left=None, right=None)`  _function_
+
+> Crank-Nicolson evolution of ``u_t = alpha u_xx``.
+>
+> ``u0`` is the initial profile (interior + boundary grid values). ``dx``/``dt`` the
+> space/time steps, ``alpha`` the diffusivity. ``left``/``right`` fix the Dirichlet
+> boundary values (default: hold the initial endpoints). Returns the profile after
+> ``n_steps`` steps. Unconditionally stable, second-order in space and time.
 
 ## hedgesim
 
