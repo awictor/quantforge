@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.972.0] - 2026-09-13
+
+### Added
+- `ransac.py`: `ransac_line`, RANSAC robust line fitting — minimal 2-point samples,
+  largest inlier consensus set, then a least-squares refit on the inliers. Cross-checked:
+  recovers the true line with 60% of the data corrupted (beyond any median estimator's
+  breakdown), is exact on clean data, deterministic for a fixed seed, and locks onto the
+  majority structure amid gross contamination.
+
 ## [1.971.0] - 2026-09-13
 
 ### Documentation

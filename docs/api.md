@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.971.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.972.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -10808,6 +10808,17 @@ Auto-generated from `quantforge` v1.971.0 by `docs/gen_api.py` — do not edit b
 >     Discounted expected coupon. Non-negative, rises with a wider band, and
 >     approaches ``notional * coupon * e^{-r t}`` as the band widens to cover
 >     the whole positive axis.
+
+## ransac
+
+### `ransac_line(x, y, threshold, n_iterations=200, seed=1234567)`  _function_
+
+> RANSAC line fit; returns a dict with the consensus model.
+>
+> ``threshold`` is the maximum residual for a point to count as an inlier. Runs
+> ``n_iterations`` minimal (2-point) fits, keeps the model with the most inliers, and
+> refits least squares on that inlier set. Returns ``slope``, ``intercept``,
+> ``inliers`` (index list) and ``n_inliers``. Deterministic for a fixed ``seed``.
 
 ## rates
 
