@@ -3582,6 +3582,23 @@ the asymmetric information loss (infinite where the reference has zero mass);
 `bhattacharyya_distance` measures overlap. They satisfy the Pinsker inequality
 (`TV <= sqrt(KL/2)`) and all vanish exactly when the two distributions coincide.
 
+Those compare aligned *bins*; to compare two raw *samples* (accounting for how far mass
+must move along the axis), `wasserstein_distance` gives the earth-mover distance:
+
+```python
+from quantforge import wasserstein_distance
+
+wasserstein_distance([1, 2, 3, 4, 5], [4, 5, 6, 7, 8])   # 3.0 — a pure shift of 3
+wasserstein_distance([0.0], [1.0])                       # 1.0 — mass moved one unit
+wasserstein_distance(sample_a, sample_b, p=2)            # quadratic transport cost
+```
+
+Unlike the divergences it works on samples of *different* sizes (merging their empirical
+CDFs), is finite even for disjoint supports, and — being a ground-distance metric —
+reflects *how far* probability mass moved, not just that it differs. A constant shift of
+the whole sample returns exactly that shift; `wasserstein1_sorted` is a faster path when
+the two samples are the same length.
+
 ## Variance-ratio test
 
 The Lo-MacKinlay variance ratio tests the random-walk null: under it the variance

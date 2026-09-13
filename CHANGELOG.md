@@ -31,6 +31,12 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.983.0] - 2026-09-13
+
+### Documentation
+- README: documented `wasserstein_distance` / `wasserstein1_sorted` in the
+  information-theory section. Every snippet value verified.
+
 ## [1.982.0] - 2026-09-13
 
 ### Added
