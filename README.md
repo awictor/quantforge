@@ -3486,6 +3486,19 @@ ifft(X)                # recovers the signal (1/N scaled)
 `ifft(fft(x))` round-trips. Handy for fast convolution and any spectral transform
 where the length is a power of two.
 
+Two FFT-backed conveniences build on it:
+
+```python
+from quantforge import convolve, fft_autocorrelation
+
+convolve([1, 2, 3], [4, 5, 6, 7])     # full linear conv / polynomial product
+fft_autocorrelation(series, max_lag=20)   # autocorrelation, acf[0] = 1
+```
+
+`convolve` is the coefficient product of two polynomials in `O(n log n)` (matching a
+direct convolution), and `fft_autocorrelation` computes the whole autocorrelation via
+Wiener-Khinchin — far faster than the direct lag-by-lag sum on long series.
+
 ## Structural breaks (CUSUM / Chow)
 
 Detect when a mean or regime shifts. `cusum_mean` returns the standardized
