@@ -31,6 +31,17 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.856.0] - 2026-09-13
+
+### Added
+- `wavelet_denoise.py`: Donoho-Johnstone wavelet shrinkage on Haar detail
+  coefficients (`wavelet_denoise`) with `soft_threshold`/`hard_threshold` rules, the
+  `mad_sigma` robust noise estimate (median absolute deviation), and the VisuShrink
+  `universal_threshold` (`sigma * sqrt(2 log n)`). Cross-checked: MAD recovers the
+  true noise scale of orthonormal Haar detail to within 8%, denoising cuts MSE
+  against the clean signal, a zero threshold is the identity, and a huge threshold
+  keeps only the coarse approximation.
+
 ## [1.855.0] - 2026-09-13
 
 ### Documentation

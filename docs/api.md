@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.855.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.856.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -13532,6 +13532,39 @@ Auto-generated from `quantforge` v1.855.0 by `docs/gen_api.py` — do not edit b
 > one because the Haar transform is orthonormal (Parseval). A smooth series
 > concentrates energy in the approximation; a noisy one spreads it into the fine
 > details.
+
+## wavelet_denoise
+
+### `hard_threshold(x, lam)`  _function_
+
+> Hard-threshold (keep or kill): ``x`` if ``|x| > lam`` else ``0``.
+
+### `mad_sigma(detail)`  _function_
+
+> Robust noise-scale estimate from detail coefficients.
+>
+> ``sigma = median(|d|) / 0.6745`` -- the median absolute deviation rescaled to
+> match the standard deviation of a Gaussian. Robust to the few large
+> (signal-bearing) coefficients that would inflate a plain standard deviation.
+
+### `soft_threshold(x, lam)`  _function_
+
+> Soft-threshold (shrink toward zero): ``sign(x) * max(|x| - lam, 0)``.
+
+### `universal_threshold(n, sigma)`  _function_
+
+> VisuShrink universal threshold ``sigma * sqrt(2 log n)``.
+
+### `wavelet_denoise(x, levels=None, mode='soft', threshold=None)`  _function_
+
+> Denoise a signal by Haar wavelet shrinkage.
+>
+> Transforms ``x`` with :func:`haar_dwt`, shrinks every detail coefficient with the
+> ``soft`` (default) or ``hard`` rule at the given ``threshold``, and inverts. If
+> ``threshold`` is None the VisuShrink universal threshold is used, with the noise
+> scale estimated by :func:`mad_sigma` from the finest detail level. The coarse
+> approximation is left untouched (it carries the trend, not noise). Length must be
+> a power of two. Returns the reconstructed, denoised signal.
 
 ## weather
 

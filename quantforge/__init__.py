@@ -279,6 +279,13 @@ from .savgol import savgol_coeffs, savgol_filter
 from .fft import fft, ifft
 from .convolution import convolve, fft_autocorrelation
 from .wavelet import haar_dwt, haar_idwt, wavelet_energy
+from .wavelet_denoise import (
+    soft_threshold,
+    hard_threshold,
+    mad_sigma,
+    universal_threshold,
+    wavelet_denoise,
+)
 from .kalman_beta import kalman_regression_beta
 from .theil_sen import theil_sen
 from .robust_stats import (
@@ -838,7 +845,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.855.0"
+__version__ = "1.856.0"
 
 __all__ = [
     "OptionType",
@@ -1282,6 +1289,11 @@ __all__ = [
     "haar_dwt",
     "haar_idwt",
     "wavelet_energy",
+    "soft_threshold",
+    "hard_threshold",
+    "mad_sigma",
+    "universal_threshold",
+    "wavelet_denoise",
     "kalman_regression_beta",
     "theil_sen",
     "median_absolute_deviation",
