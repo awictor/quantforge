@@ -2203,23 +2203,30 @@ futures_hedge_ratio(bond_dv01_=bond_future_dv01(120, 8.5), futures_dv01_=fut_dv0
 ## OLS regression
 
 General multivariate ordinary least squares with the standard diagnostics —
-coefficient standard errors, t-statistics, R-squared, adjusted R-squared, and the
-F-statistic. An intercept column is added by default.
+coefficient standard errors, t-statistics, two-sided p-values and confidence
+intervals, R-squared, adjusted R-squared, and the overall F-statistic with its
+p-value. An intercept column is added by default.
 
 ```python
 from quantforge import ols_fit
 
 X = [[1, 2], [2, 1], [3, 4], [4, 3], [5, 5]]
 y = [5, 4, 10, 9, 13]
-m = ols_fit(X, y)
+m = ols_fit(X, y, confidence=0.95)
 m["coefficients"]     # [intercept, b1, b2]
 m["t_stats"]          # significance of each coefficient
-m["r_squared"], m["adj_r_squared"], m["f_stat"]
+m["p_values"]         # two-sided p-value per coefficient
+m["conf_int"]         # [low, high] per coefficient at `confidence`
+m["r_squared"], m["adj_r_squared"]
+m["f_stat"], m["f_pvalue"]   # overall model significance
 ```
 
-An exact linear relationship gives R-squared 1 and zero residuals; adjusted
-R-squared never exceeds R-squared. For the finance-specific alpha/beta return
-regression, see the next section.
+The p-values and intervals come from the same t and F distributions in the library:
+for a single regressor the overall F equals the slope t-squared and shares its
+p-value, and the intervals widen with the confidence level. An exact linear
+relationship gives R-squared 1 and zero residuals; adjusted R-squared never exceeds
+R-squared. For the finance-specific alpha/beta return regression, see the next
+section.
 
 When regressors are collinear or numerous, `ridge_regression` adds an L2 penalty
 that shrinks the slopes and keeps the system solvable:

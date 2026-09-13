@@ -24,6 +24,13 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.723.0] - 2026-09-12
+
+### Documentation
+- README OLS section now documents the new inferential outputs (`p_values`,
+  `conf_int`, `f_pvalue`, `confidence` argument) and notes they come from the
+  library's t and F distributions, with the single-regressor `F = t^2` identity.
+
 ## [1.722.0] - 2026-09-12
 
 ### Changed
