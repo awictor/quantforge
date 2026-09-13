@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.941.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.942.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -11587,6 +11587,16 @@ Auto-generated from `quantforge` v1.941.0 by `docs/gen_api.py` — do not edit b
 > fraction in ``(0, 1)``. Decreasing in the drift-to-variance ratio: a stronger
 > edge makes a given loss less likely. Returns 1 for a non-positive drift (a
 > driftless or losing account eventually hits any loss level almost surely).
+
+## running_moments
+
+### `RunningMoments(values=None)`  _class_
+
+> One-pass accumulator for mean, variance, skewness, and excess kurtosis.
+>
+> Feed values with :meth:`update` (or a whole iterable to the constructor). Read
+> :attr:`mean`, :meth:`variance`, :meth:`skewness`, :meth:`kurtosis` at any time.
+> ``+`` merges two accumulators into one covering both samples, exactly.
 
 ## runs_test
 

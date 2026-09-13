@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.942.0] - 2026-09-13
+
+### Added
+- `running_moments.py`: `RunningMoments`, a one-pass accumulator for mean, variance,
+  skewness and excess kurtosis via Terriberry's stable central-moment recurrences, with
+  a `+` operator that merges two accumulators exactly (parallel reduction).
+  Cross-checked: all four moments match the batch statistics, splitting a sample and
+  merging the parts reproduces the full accumulator (M2/M3/M4 to ~1e-10), a 10-way merge
+  equals a single pass, symmetric data has zero skew and normal data ~0 excess kurtosis.
+
 ## [1.941.0] - 2026-09-13
 
 ### Documentation
