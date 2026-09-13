@@ -5341,6 +5341,23 @@ Romberg integration (feed it the trapezoid sequence with `p=2` and it returns th
 Romberg value). `richardson_table` exposes the full triangular tableau so you can watch
 the diagonal stabilize.
 
+For initial-value ODEs `y'(t) = f(t, y)`, `rk4` is the fixed-step fourth-order
+Runge-Kutta and `rk45` the adaptive Dormand-Prince method (scalar or vector systems):
+
+```python
+from quantforge import rk4, rk45
+
+rk4(lambda t, y: y, 0, 1.0, 1.0, n=100)[1][-1][0]        # 2.71828183 = e
+ts, ys = rk45(lambda t, y: [y[1], -y[0]], 0, [1.0, 0.0], 2*math.pi, tol=1e-10)
+ys[-1]                                                    # [1.0, -0.0] — oscillator back to start
+```
+
+Both return `(ts, ys)` — the time points and the state (a list) at each. `rk4` uses `n`
+equal steps and is `O(h^4)` accurate for smooth problems; `rk45` carries an embedded
+error estimate to resize the step, taking small steps only where the solution moves
+fast, and returns the accepted (non-uniform) points. Pass a vector `y0` for a system —
+the harmonic oscillator above integrates `[y, y']` back to `[1, 0]` over a full period.
+
 A Padé approximant turns a Taylor series into a *rational* function that often
 converges where the series itself diverges. `pade` builds `[m/n]` from Taylor
 coefficients and `pade_eval` evaluates it; `lentz_continued_fraction` evaluates a

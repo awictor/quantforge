@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.1.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.2.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
