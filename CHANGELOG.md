@@ -24,6 +24,18 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.758.0] - 2026-09-12
+
+### Added
+- `gph.py`: the Geweke-Porter-Hudak estimator of the long-memory parameter ``d``
+  (`gph_estimate`, a log-periodogram regression with the asymptotic ``pi^2/6``
+  standard error) and `fractional_integrate` (apply ``(1 - L)^{-d}``, the inverse of
+  the fractional difference, for generating ARFIMA(0,d,0) series). Cross-checked:
+  white noise gives ``d`` insignificantly different from zero, the estimator recovers
+  a known memory parameter from a fractionally-integrated series, the standard error
+  shrinks with the bandwidth, and integrate-then-difference round-trips to white
+  noise.
+
 ## [1.757.0] - 2026-09-12
 
 ### Documentation

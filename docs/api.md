@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.757.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.758.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -4892,6 +4892,26 @@ Auto-generated from `quantforge` v1.757.0 by `docs/gen_api.py` — do not edit b
 > evaluated at every observed point. The p-value uses the asymptotic Kolmogorov
 > distribution with the effective sample size ``sqrt(n m / (n + m))``. A small p
 > rejects "the two samples come from the same distribution".
+
+## gph
+
+### `fractional_integrate(noise, d)`  _function_
+
+> Fractionally integrate white ``noise`` by order ``d``: apply ``(1 - L)^{-d}``.
+>
+> The inverse of :func:`quantforge.fracdiff.fractional_difference`; useful for
+> generating ARFIMA(0, d, 0) test series. Uses the binomial weights of
+> ``(1 - L)^{-d}``, ``w_0 = 1``, ``w_k = w_{k-1} (k - 1 + d) / k``.
+
+### `gph_estimate(x, m=None)`  _function_
+
+> Estimate the fractional-integration order ``d`` by the GPH regression.
+>
+> ``x`` is the series; ``m`` is the number of low frequencies used (defaults to
+> ``floor(sqrt(n))``, the common bandwidth). Returns a dict with ``d`` (the memory
+> parameter), ``std_error`` (asymptotic, from the ``pi^2/6`` log-periodogram
+> variance), ``m`` and ``n``. ``d ~ 0`` indicates short memory, ``d > 0`` long
+> memory, ``d < 0`` anti-persistence.
 
 ## gramcharlier
 
