@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.3.0] - 2026-09-13
+
+### Added
+- `bvp.py`: `shooting_bvp`, the shooting method for two-point boundary-value problems
+  (`y'' = f(t, y, y')` with fixed `y(a)` and `y(b)`) — guesses the initial slope,
+  integrates with adaptive RK45, and Brent-root-finds the slope that hits the far
+  boundary. Cross-checked: recovers the analytic slope and solution for `y''=y`
+  (sinh), `y''=-y` (sine), `y''=6t` (cubic, every computed point on `t^3`), and a
+  problem with a first-derivative term.
+
 ## [2.2.0] - 2026-09-13
 
 ### Documentation

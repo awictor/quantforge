@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.2.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.3.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -1218,6 +1218,17 @@ Auto-generated from `quantforge` v2.2.0 by `docs/gen_api.py` — do not edit by 
 ### `vega(S, K, t, r, sigma, b=None) -> float`  _function_
 
 > dPrice/dSigma, per 1.0 change in vol (divide by 100 for per-vol-point).
+
+## bvp
+
+### `shooting_bvp(f, a, b, alpha, beta, s_lo, s_hi, tol=1e-08)`  _function_
+
+> Solve ``y'' = f(t, y, y')`` with ``y(a)=alpha``, ``y(b)=beta`` by shooting.
+>
+> ``f(t, y, yp)`` returns ``y''``. ``s_lo, s_hi`` bracket the unknown initial slope
+> ``y'(a)`` (the terminal residual must change sign across them). Returns a dict with
+> the found initial ``slope``, and the solution ``ts`` / ``ys`` (state = ``[y, y']``)
+> from the accepted RK45 steps.
 
 ## calibration
 
