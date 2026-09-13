@@ -1931,6 +1931,22 @@ square_root_impact(order_size=1e5, sigma=0.3, daily_volume=1e7)
 vwap_schedule(1e6, volume_profile=[100, 200, 300, 400])
 ```
 
+Those impact models are theoretical; to measure liquidity from realized price and
+volume data, three low-frequency proxies:
+
+```python
+from quantforge import roll_spread, amihud_illiquidity, corwin_schultz_spread
+
+roll_spread(prices)                          # 2 sqrt(-cov(dP, dP_lag)): effective spread
+amihud_illiquidity(returns, dollar_volumes)  # |return| per dollar traded
+corwin_schultz_spread(highs, lows)           # spread from consecutive high-low ranges
+```
+
+`roll_spread` recovers a known bid-ask-bounce spread from the negative
+autocovariance of price changes; `amihud_illiquidity` rises as volume falls; and
+`corwin_schultz_spread` needs only daily highs and lows. They complement the
+theoretical Kyle-lambda impact above.
+
 ## Structured notes
 
 Principal-protected notes (capped and uncapped), reverse convertibles with a fair
