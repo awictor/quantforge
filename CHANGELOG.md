@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.935.0] - 2026-09-13
+
+### Documentation
+- README: documented `bfgs` alongside the other multivariate optimizers in the
+  numerical-utilities section, framed as the smooth-objective / local-polish choice.
+  Every snippet value verified.
+
 ## [1.934.0] - 2026-09-13
 
 ### Added

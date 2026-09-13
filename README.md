@@ -4763,6 +4763,25 @@ good fit when each objective evaluation is expensive. Differential evolution is 
 the more reliable global search; simulated annealing shines on very high-dimensional or
 combinatorial-flavoured landscapes where maintaining a population is costly.
 
+When the objective is *smooth*, a gradient method converges far faster than any of the
+above. `bfgs` is a quasi-Newton minimizer that builds an inverse-Hessian approximation
+from successive numerical gradients — near-Newton speed using only the objective:
+
+```python
+from quantforge import bfgs
+
+bfgs(lambda v: (v[0] - 3) ** 2 + (v[1] + 1) ** 2, [0.0, 0.0])["x"]   # [3.0, -1.0], 2 iters
+bfgs(lambda v: (1 - v[0]) ** 2 + 100 * (v[1] - v[0] ** 2) ** 2, [-1.2, 1.0])["x"]  # [1.0, 1.0]
+```
+
+It reaches a quadratic's minimum in a couple of iterations (superlinear convergence)
+and the Rosenbrock minimum in a few dozen, where the derivative-free methods take
+thousands of evaluations. An Armijo backtracking line search keeps every step a descent,
+and it resets to steepest descent if the Hessian approximation loses positive-
+definiteness. Use `bfgs` for smooth local refinement — often as a fast polish after a
+global method (`differential_evolution` or `simulated_annealing`) has located the right
+basin.
+
 `levenberg_marquardt` needs only the model function -- the residual Jacobian is
 taken numerically -- and converges from a poor starting guess, making it the
 general calibration engine (vol surface, curve, or any parametric fit).
