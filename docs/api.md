@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.977.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.978.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -10167,6 +10167,21 @@ Auto-generated from `quantforge` v1.977.0 by `docs/gen_api.py` — do not edit b
 ### `platt_predict(scores, A, B)`  _function_
 
 > Apply a fitted Platt sigmoid to scores, returning calibrated probabilities.
+
+## poisson_regression
+
+### `poisson_predict(model, X_query, add_intercept=True)`  _function_
+
+> Predicted rates ``exp(x' beta)`` for rows ``X_query``.
+
+### `poisson_regression(X, y, add_intercept=True, max_iter=50, tol=1e-08)`  _function_
+
+> Fit a Poisson GLM (log link) by IRLS.
+>
+> ``y`` are non-negative counts. Returns a dict with ``coefficients`` (intercept first
+> if added), ``n_iter`` and the ``log_likelihood`` at convergence. Predicted rate for
+> a row is ``exp(x' beta)``. Uses Fisher-scoring IRLS: working response
+> ``z = eta + (y - mu)/mu`` with weights ``mu``.
 
 ## poly_features
 

@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.978.0] - 2026-09-13
+
+### Added
+- `poisson_regression.py`: `poisson_regression` (Poisson GLM with a log link, fit by
+  Fisher-scoring IRLS) and `poisson_predict`. Cross-checked: recovers a known
+  log-linear rate from sampled counts, the intercept-only fit reproduces log of the
+  mean count, predictions are always positive, and the full model's log-likelihood
+  beats the null.
+
 ## [1.977.0] - 2026-09-13
 
 ### Documentation

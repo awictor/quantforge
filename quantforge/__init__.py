@@ -542,6 +542,7 @@ from .huber_regression import huber_regression
 from .ransac import ransac_line
 from .lowess import lowess
 from .bayesian_regression import bayesian_linear_regression, bayesian_predict
+from .poisson_regression import poisson_regression, poisson_predict
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -932,7 +933,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.977.0"
+__version__ = "1.978.0"
 
 __all__ = [
     "OptionType",
@@ -1738,6 +1739,8 @@ __all__ = [
     "lowess",
     "bayesian_linear_regression",
     "bayesian_predict",
+    "poisson_regression",
+    "poisson_predict",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",
