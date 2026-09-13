@@ -24,6 +24,13 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.725.0] - 2026-09-12
+
+### Documentation
+- README rank-dependence section now documents `pearson_r` and
+  `pearson_correlation_test` (the linear correlation with a t-test and Fisher-z
+  interval) alongside the rank-based Kendall/Spearman measures.
+
 ## [1.724.0] - 2026-09-12
 
 ### Added

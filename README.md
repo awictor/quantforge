@@ -2805,6 +2805,23 @@ Both equal +1 for a strictly increasing relationship and -1 for decreasing;
 Spearman is unchanged by exponentiating a margin, where Pearson would move. Feed
 the pseudo-observations of each margin into a copula fit.
 
+For the linear (Pearson) correlation with a significance test and interval,
+`pearson_correlation_test` returns the coefficient, a two-sided t-test of
+`rho = 0`, and a Fisher-z confidence interval:
+
+```python
+from quantforge import pearson_r, pearson_correlation_test
+
+pearson_r(x, y)                                  # coefficient only
+res = pearson_correlation_test(x, y, confidence=0.95)
+res["r"], res["t_stat"], res["p_value"]          # t = r sqrt((n-2)/(1-r^2))
+res["conf_int"]                                  # [low, high] via atanh(r)
+```
+
+The t-test uses the library's Student-t CDF and the interval Fisher's
+variance-stabilizing transform; perfect `+/-1` correlation collapses the interval
+to the point.
+
 Correlation says nothing about whether two assets crash *together* — tail
 dependence does. `upper_tail_dependence` / `lower_tail_dependence` estimate
 `P(U > q | V > q)` on the rank scale, and `exceedance_correlation` is the
