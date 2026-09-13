@@ -31,6 +31,12 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.801.0] - 2026-09-12
+
+### Documentation
+- README cointegration section now documents `kpss_test` as the confirmatory
+  complement to ADF, with a worked example and the joint-interpretation note.
+
 ## [1.800.0] - 2026-09-12
 
 ### Added

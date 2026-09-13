@@ -109,6 +109,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Structural breaks (CUSUM / Chow)](#structural-breaks-cusum--chow)
 - [Cointegration (ADF / Engle-Granger)](#cointegration-adf--engle-granger)
 - [Ornstein-Uhlenbeck calibration](#ornstein-uhlenbeck-calibration)
+- [Ornstein-Uhlenbeck calibration](#ornstein-uhlenbeck-calibration)
 - [Markov chains](#markov-chains)
 - [K-means clustering](#k-means-clustering)
 - [Hierarchical clustering](#hierarchical-clustering)
@@ -3457,6 +3458,22 @@ c["cointegrated_5pct"]                  # True if the residual spread is station
 A stationary series gives a strongly negative ADF statistic and rejects the unit
 root; two independent random walks do not. When a pair is cointegrated, feed the
 residual spread straight into `fit_ornstein_uhlenbeck` to size the trade.
+
+`kpss_test` is the complementary confirmatory test — its null is *stationarity*, so
+a small p-value rejects it (the opposite of ADF):
+
+```python
+from quantforge import kpss_test
+
+eta, p = kpss_test(series)                  # level stationarity ("c")
+eta, p = kpss_test(series, regression="ct") # trend stationarity
+```
+
+Agreement between the two (ADF rejects the unit root *and* KPSS fails to reject
+stationarity) is stronger evidence than either alone; disagreement flags a
+borderline or trending series.
+
+## Ornstein-Uhlenbeck calibration
 
 ## Ornstein-Uhlenbeck calibration
 
