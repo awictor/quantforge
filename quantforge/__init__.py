@@ -311,6 +311,9 @@ from .prob_forecast import (
 )
 from .quantile_regression import quantile_regression
 from .lasso import lasso_regression, elastic_net
+from .info_criteria import (
+    gaussian_log_likelihood, aic, aicc, bic, hqic,
+)
 from .variance_ratio import variance_ratio, variance_ratio_zstat
 from .ou_fit import fit_ornstein_uhlenbeck
 from .cointegration import adf_test, engle_granger
@@ -789,7 +792,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.783.0"
+__version__ = "1.784.0"
 
 __all__ = [
     "OptionType",
@@ -1270,6 +1273,11 @@ __all__ = [
     "quantile_regression",
     "lasso_regression",
     "elastic_net",
+    "gaussian_log_likelihood",
+    "aic",
+    "aicc",
+    "bic",
+    "hqic",
     "rescaled_range",
     "variance_ratio",
     "variance_ratio_zstat",

@@ -24,6 +24,17 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.784.0] - 2026-09-12
+
+### Added
+- `info_criteria.py`: generic model-selection criteria from a log-likelihood --
+  `aic`, `aicc` (small-sample corrected), `bic`, `hqic`, plus
+  `gaussian_log_likelihood` to turn a residual sum of squares into the log-likelihood
+  they consume. Cross-checked: the Gaussian log-likelihood matches its direct MLE
+  form, BIC exceeds AIC for ``n >= 8``, AICc approaches AIC as ``n`` grows, the
+  penalties order ``AIC < HQIC < BIC``, more parameters raise every criterion, and a
+  smaller RSS lowers the AIC.
+
 ## [1.783.0] - 2026-09-12
 
 ### Documentation

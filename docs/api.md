@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.783.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.784.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -6108,6 +6108,40 @@ Auto-generated from `quantforge` v1.783.0 by `docs/gen_api.py` — do not edit b
 >
 > Inflation-leg receiver's value: ``notional * (I_T/I_0 - (1+k)^T)`` at maturity,
 > discounted by ``discount_factor``. Zero at the par :func:`zc_inflation_swap_rate`.
+
+## info_criteria
+
+### `aic(log_likelihood, k)`  _function_
+
+> Akaike information criterion ``-2 logL + 2k`` (``k`` = number of parameters).
+
+### `aicc(log_likelihood, k, n)`  _function_
+
+> Small-sample corrected AIC ``AIC + 2k(k+1)/(n-k-1)``.
+>
+> Approaches :func:`aic` as ``n`` grows; use it when ``n`` is not much larger than
+> ``k``. Requires ``n > k + 1``.
+
+### `bic(log_likelihood, k, n)`  _function_
+
+> Bayesian (Schwarz) information criterion ``-2 logL + k ln n``.
+>
+> Penalizes complexity more than AIC for ``n >= 8`` (``ln n > 2``), so it selects
+> more parsimonious models.
+
+### `gaussian_log_likelihood(rss, n)`  _function_
+
+> Concentrated Gaussian log-likelihood from a residual sum of squares.
+>
+> ``logL = -n/2 (ln(2 pi) + ln(rss/n) + 1)`` at the MLE noise variance
+> ``sigma^2 = rss/n``. Increases (toward zero from below) as the fit improves.
+
+### `hqic(log_likelihood, k, n)`  _function_
+
+> Hannan-Quinn information criterion ``-2 logL + 2k ln(ln n)``.
+>
+> A penalty between AIC and BIC for moderate ``n``. Requires ``n >= 3`` so that
+> ``ln(ln n)`` is defined and positive.
 
 ## installment
 
