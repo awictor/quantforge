@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.961.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.962.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -11154,6 +11154,21 @@ Auto-generated from `quantforge` v1.961.0 by `docs/gen_api.py` — do not edit b
 >
 > The fraction of the portfolio traded to move from current to target weights;
 > zero when already on target, up to one for a full turnover.
+
+## regression_tree
+
+### `fit_regression_tree(X, y, max_depth=5, min_samples=2)`  _function_
+
+> Fit a CART regression tree.
+>
+> ``X`` is a list of feature rows, ``y`` the numeric targets. Splits greedily to
+> maximize squared-error reduction until ``max_depth`` or ``min_samples`` stops it;
+> leaves store the mean target. Returns a nested-dict tree for
+> :func:`predict_regression_tree`.
+
+### `predict_regression_tree(tree, X_query)`  _function_
+
+> Predict targets for rows ``X_query`` with a fitted regression tree.
 
 ## resample
 

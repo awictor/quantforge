@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.962.0] - 2026-09-13
+
+### Added
+- `regression_tree.py`: CART regression tree (`fit_regression_tree`,
+  `predict_regression_tree`) — recursive squared-error-reduction splits with mean-valued
+  leaves. Cross-checked: recovers a step function exactly, collapses a constant target to
+  a single leaf, lowers MSE monotonically with depth on a parabola, and picks the
+  relevant feature in a two-feature problem.
+
 ## [1.961.0] - 2026-09-13
 
 ### Documentation
