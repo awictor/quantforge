@@ -301,6 +301,7 @@ from .var_backtest import (
     kupiec_pof, christoffersen_independence, christoffersen_cc,
     acerbi_szekely_es,
 )
+from .forecast_test import diebold_mariano
 from .variance_ratio import variance_ratio, variance_ratio_zstat
 from .ou_fit import fit_ornstein_uhlenbeck
 from .cointegration import adf_test, engle_granger
@@ -779,7 +780,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.769.0"
+__version__ = "1.770.0"
 
 __all__ = [
     "OptionType",
@@ -1248,6 +1249,7 @@ __all__ = [
     "christoffersen_independence",
     "christoffersen_cc",
     "acerbi_szekely_es",
+    "diebold_mariano",
     "rescaled_range",
     "variance_ratio",
     "variance_ratio_zstat",

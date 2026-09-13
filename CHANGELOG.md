@@ -24,6 +24,17 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.770.0] - 2026-09-12
+
+### Added
+- `forecast_test.py`: the Diebold-Mariano test of equal predictive accuracy
+  (`diebold_mariano`) -- standardizes the mean loss differential of two forecasts by
+  its Newey-West HAC standard error, with the Harvey-Leybourne-Newbold small-sample
+  correction and a Student-t reference. Cross-checked: a lower-variance forecast
+  gives a significantly negative statistic, the test is antisymmetric in its
+  arguments (swapping flips the sign, same p-value), and two equally-accurate
+  forecasts are not rejected.
+
 ## [1.769.0] - 2026-09-12
 
 ### Documentation

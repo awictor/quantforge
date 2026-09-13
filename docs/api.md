@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.769.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.770.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -4531,6 +4531,19 @@ Auto-generated from `quantforge` v1.769.0 by `docs/gen_api.py` — do not edit b
 >
 > ``mean( |a - f| / ((|a| + |f|) / 2) )``. Terms with both ``a`` and ``f`` zero
 > contribute 0. Robust to small actuals and bounded, unlike plain MAPE.
+
+## forecast_test
+
+### `diebold_mariano(errors1, errors2, h=1, power=2)`  _function_
+
+> Diebold-Mariano statistic and two-sided p-value for equal predictive accuracy.
+>
+> ``errors1`` / ``errors2`` are the forecast-error series of the two models
+> (target minus forecast), ``h`` the forecast horizon (sets the number of
+> autocovariance lags ``h - 1`` in the HAC variance), and ``power`` the loss
+> exponent (2 = squared error, 1 = absolute error). Returns ``(DM, p_value)`` with
+> the Harvey-Leybourne-Newbold small-sample correction and a Student-t reference on
+> ``n - 1`` degrees of freedom. A negative ``DM`` favors the first forecast.
 
 ## forward
 
