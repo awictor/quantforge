@@ -315,6 +315,7 @@ from .jonckheere import jonckheere_terpstra_test
 from .cochran_mcnemar import mcnemar_test, cochran_q_test
 from .fisher_exact import fisher_exact_test
 from .deming import deming_regression, orthogonal_regression
+from .passing_bablok import passing_bablok_regression
 from .kalman_beta import kalman_regression_beta
 from .theil_sen import theil_sen
 from .robust_stats import (
@@ -874,7 +875,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.891.0"
+__version__ = "1.892.0"
 
 __all__ = [
     "OptionType",
@@ -1357,6 +1358,7 @@ __all__ = [
     "fisher_exact_test",
     "deming_regression",
     "orthogonal_regression",
+    "passing_bablok_regression",
     "kalman_regression_beta",
     "theil_sen",
     "median_absolute_deviation",

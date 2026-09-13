@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.891.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.892.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -9141,6 +9141,16 @@ Auto-generated from `quantforge` v1.891.0 by `docs/gen_api.py` — do not edit b
 > float
 >     The annualized par coupon rate. On a flat curve it equals the flat rate;
 >     a bond bearing this coupon prices to exactly par.
+
+## passing_bablok
+
+### `passing_bablok_regression(x, y)`  _function_
+
+> Passing-Bablok regression of ``y`` on ``x``.
+>
+> Returns ``(slope, intercept)`` for ``y = slope * x + intercept``. Robust to
+> outliers in either variable and symmetric in ``x`` and ``y`` (up to reciprocal
+> slope), the standard nonparametric alternative to Deming regression.
 
 ## pca
 

@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.892.0] - 2026-09-13
+
+### Added
+- `passing_bablok.py`: `passing_bablok_regression`, the robust nonparametric
+  method-comparison fit (shifted median of pairwise slopes with the K offset and the
+  slope = -1 exclusion). Cross-checked: exact on a noiseless line, unmoved by a gross
+  outlier, recovers the true slope on noisy data, exact on a decreasing line, and
+  symmetric (reciprocal slope) fitting x on y; no index errors over 1000 random
+  inputs.
+
 ## [1.891.0] - 2026-09-13
 
 ### Documentation
