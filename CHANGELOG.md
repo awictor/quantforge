@@ -31,6 +31,17 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.830.0] - 2026-09-13
+
+### Added
+- `matrix_exp.py`: `matrix_exp`, the matrix exponential by scaling-and-squaring with
+  a Pade(6,6) approximant -- turns a continuous-time Markov generator ``Q`` into the
+  transition matrix ``exp(Q t)``. Cross-checked: ``exp(0) = I``, a diagonal matrix
+  exponentiates entrywise, a nilpotent matrix gives ``I + N``, ``exp(A) exp(-A) = I``,
+  a rate-generator maps to a valid stochastic matrix (rows sum to one, non-negative),
+  and small-norm results match the truncated series. Fixed a Pade denominator sign
+  (``V - U``, not ``V - 2U``) caught by the diagonal check.
+
 ## [1.829.0] - 2026-09-13
 
 ### Documentation

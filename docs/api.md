@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.829.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.830.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -7265,6 +7265,16 @@ Auto-generated from `quantforge` v1.829.0 by `docs/gen_api.py` — do not edit b
 > Iterates a uniform start under ``P`` until convergence. For an irreducible
 > aperiodic chain this is the unique long-run state distribution; the returned
 > vector is non-negative and sums to one.
+
+## matrix_exp
+
+### `matrix_exp(A)`  _function_
+
+> Matrix exponential ``exp(A)`` by scaling-and-squaring with Pade(6,6).
+>
+> ``A`` is a square matrix. Returns ``exp(A)``; ``exp(0) = I``, ``exp`` of a
+> diagonal matrix is the diagonal of exponentials, and it satisfies the defining
+> series. Accurate across a wide norm range thanks to the scaling step.
 
 ## mbs
 
