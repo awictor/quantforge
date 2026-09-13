@@ -3932,6 +3932,21 @@ estimate becomes reliable); the result keeps each asset's own variance, pulls th
 correlations toward their average, and is symmetric positive definite. Feed
 `sigma` straight into the mean-variance optimizer below.
 
+An alternative to shrinkage is random-matrix-theory denoising, which cleans only the
+noise eigenvalues instead of pulling the whole matrix toward a target:
+
+```python
+from quantforge import marchenko_pastur_edge, clip_correlation_eigenvalues
+
+marchenko_pastur_edge(n_assets=50, n_obs=250)          # noise-eigenvalue cutoff
+clip_correlation_eigenvalues(correlation, n_obs=250)   # clip the noise bulk
+```
+
+Eigenvalues below the Marchenko-Pastur edge `(1 + sqrt(N/T))^2` are consistent with
+pure noise; `clip_correlation_eigenvalues` replaces them with their average while
+keeping the signal eigenvalues, so the trace is preserved and the matrix stays a
+correlation matrix — better-conditioned for optimization.
+
 For a *time-varying* estimate that weights recent data more heavily, use the
 exponentially-weighted (RiskMetrics) covariance:
 

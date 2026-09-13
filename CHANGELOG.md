@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.817.0] - 2026-09-13
+
+### Documentation
+- README covariance-shrinkage section now documents the RMT denoising routines
+  (`marchenko_pastur_edge`, `clip_correlation_eigenvalues`) as an alternative to
+  shrinkage.
+
 ## [1.816.0] - 2026-09-13
 
 ### Added
