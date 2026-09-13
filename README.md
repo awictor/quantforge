@@ -5496,6 +5496,22 @@ gives the Student-t, F and binomial CDFs; `erfinv` gives normal quantiles
 (`erfinv(y) = norm_ppf((1+y)/2) / sqrt(2)`). They satisfy `P + Q = 1`,
 `I_x(a,b) = 1 - I_{1-x}(b,a)`, and `erf(erfinv(y)) = y` to machine precision.
 
+The correlated-normal CDFs behind the multi-asset and compound-option models are public
+too:
+
+```python
+from quantforge import bivariate_normal_cdf, trivariate_normal_cdf
+
+bivariate_normal_cdf(0.0, 0.0, 0.5)                 # 0.333333 = 1/4 + asin(0.5)/(2 pi)
+trivariate_normal_cdf(0.0, 0.0, 0.0, 0.3, 0.3, 0.3) # 0.19775
+```
+
+`bivariate_normal_cdf(a, b, rho)` is the Drezner-Wesolowsky single-integral form
+(accurate to ~1e-7); `trivariate_normal_cdf(a, b, c, r12, r13, r23)` reduces the third
+variable to a one-dimensional integral of the bivariate CDF (Genz). Both reduce to the
+product of marginals at zero correlation and are monotone in each correlation — the
+ingredients for spread, exchange, and two-factor compound-option pricing.
+
 ## Probability distributions
 
 Gamma, chi-square, Poisson, F and binomial distributions built on those special

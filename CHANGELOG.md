@@ -31,6 +31,12 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.997.0] - 2026-09-13
+
+### Documentation
+- README: documented `bivariate_normal_cdf` and `trivariate_normal_cdf` in the
+  special-functions section. Every snippet value verified.
+
 ## [1.996.0] - 2026-09-13
 
 ### Added
