@@ -232,6 +232,9 @@ from .quadrature import (
 from .gauss_hermite import (
     gauss_hermite_nodes_weights, gauss_hermite_expectation,
 )
+from .gauss_laguerre import (
+    gauss_laguerre_nodes_weights, gauss_laguerre_integral,
+)
 from .hrp import inverse_volatility_weights, hierarchical_risk_parity
 from .cppi import (
     discounted_floor, cushion, risky_exposure, cppi_path,
@@ -723,7 +726,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.713.0"
+__version__ = "1.714.0"
 
 __all__ = [
     "OptionType",
@@ -1092,6 +1095,8 @@ __all__ = [
     "romberg",
     "gauss_hermite_nodes_weights",
     "gauss_hermite_expectation",
+    "gauss_laguerre_nodes_weights",
+    "gauss_laguerre_integral",
     "inverse_volatility_weights",
     "hierarchical_risk_parity",
     "discounted_floor",

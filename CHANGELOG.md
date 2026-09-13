@@ -16,6 +16,19 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.714.0] - 2026-09-12
+
+### Added
+- `gauss_laguerre.py`: `gauss_laguerre_nodes_weights` and
+  `gauss_laguerre_integral` for integrals over the half-line against the ``e^{-x}``
+  weight, exact for polynomials up to degree ``2n - 1``. Nodes and weights are the
+  Golub-Welsch eigen-decomposition of the Laguerre Jacobi matrix (diagonal
+  ``2k + 1``, off-diagonal ``k``); the wrapper integrates a general
+  ``integral_0^inf g(x) dx`` by factoring out an exponential rate. Cross-checked:
+  the moments reproduce the factorials ``m!``, and ``integral_0^inf e^{-2x} = 1/2``,
+  ``integral_0^inf x^2 e^{-3x} = 2/27``, ``integral_0^inf e^{-x^2} = sqrt(pi)/2``,
+  and ``integral_0^inf e^{-x}/(1+x) dx`` all match their closed forms.
+
 ## [1.713.0] - 2026-09-12
 
 ### Documentation

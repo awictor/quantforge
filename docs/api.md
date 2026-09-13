@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.712.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.714.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -4737,6 +4737,30 @@ Auto-generated from `quantforge` v1.712.0 by `docs/gen_api.py` — do not edit b
 > normal density), so ``sum_i w_i = 1`` and ``sum_i w_i x_i^{2m}`` reproduces the
 > standard-normal moments. Exact for polynomials up to degree ``2n - 1``. Nodes
 > are symmetric about zero and returned in increasing order.
+
+## gauss_laguerre
+
+### `gauss_laguerre_integral(g, n=32, rate=1.0)`  _function_
+
+> Approximate ``integral_0^inf g(x) dx`` by Gauss-Laguerre quadrature.
+>
+> Writes the integrand as ``g(x) = [g(x) e^{rate * x}] e^{-rate * x}`` and applies
+> the ``e^{-x}`` rule after the substitution ``u = rate * x``:
+>
+>     integral_0^inf g(x) dx = (1/rate) sum_i w_i g(x_i / rate) e^{x_i}.
+>
+> ``rate`` should roughly match the integrand's exponential decay for best
+> accuracy (choose ``rate`` near the true decay constant). Exact when
+> ``g(x) e^{rate x}`` is a polynomial of degree up to ``2n - 1``.
+
+### `gauss_laguerre_nodes_weights(n)`  _function_
+
+> Gauss-Laguerre nodes and weights for the weight ``e^{-x}`` on ``[0, inf)``.
+>
+> Returns ``(nodes, weights)`` with ``sum_i w_i = 1`` and
+> ``sum_i w_i x_i^m = m!`` (the moments of the ``e^{-x}`` density). Exact for
+> polynomials up to degree ``2n - 1``. Nodes are positive and returned in
+> increasing order.
 
 ## gof_tests
 
