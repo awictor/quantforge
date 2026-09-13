@@ -31,6 +31,12 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.809.0] - 2026-09-13
+
+### Documentation
+- README factor-models section now documents `style_analysis` (Sharpe RBSA) next to
+  the unconstrained factor regression, with a worked example.
+
 ## [1.808.0] - 2026-09-13
 
 ### Added

@@ -2726,6 +2726,22 @@ factor_attribution(total_return=0.05, alpha=fit["alpha"], betas=fit["betas"],
                    factor_realized_returns=[0.02, 0.01, -0.005])
 ```
 
+Where `factor_regression` allows any (signed, unbounded) loadings, Sharpe's
+returns-based `style_analysis` constrains them to a long-only, fully-invested mix —
+the implied asset-class weights of a fund from its returns alone:
+
+```python
+from quantforge import style_analysis
+
+res = style_analysis(fund_returns, [large_cap, small_cap, bonds])
+res["weights"]           # non-negative, sum to 1: the implied style mix
+res["r_squared"]         # variance explained by the style
+res["tracking_error"]    # selection (active) return the mix cannot explain
+```
+
+The simplex constraint makes the weights interpretable as portfolio holdings; the
+unexplained residual is the manager's selection return.
+
 ## Performance attribution (Brinson)
 
 Brinson-Hood-Beebower allocation/selection/interaction effects with Cariño
