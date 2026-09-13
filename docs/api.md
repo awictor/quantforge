@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.803.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.804.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -8811,6 +8811,14 @@ Auto-generated from `quantforge` v1.803.0 by `docs/gen_api.py` — do not edit b
 > Annualized volatility: the sample standard deviation times
 > ``sqrt(periods_per_year)``.
 
+### `burke_ratio(returns: Sequence[float], risk_free=0.0, periods_per_year=252) -> float`  _function_
+
+> Burke ratio: annualized excess return over the root-sum-of-squared drawdowns.
+>
+> ``ann_excess / sqrt(sum(drawdown_t^2))`` -- penalizes a few deep drawdowns more
+> than many shallow ones (an L2 denominator), unlike the L1 :func:`sterling_ratio`.
+> Higher is better; raises when there is no drawdown.
+
 ### `calmar_ratio(returns: Sequence[float], periods_per_year=252) -> float`  _function_
 
 > Calmar ratio: annualized return divided by the maximum drawdown.
@@ -8891,6 +8899,14 @@ Auto-generated from `quantforge` v1.803.0 by `docs/gen_api.py` — do not edit b
 > Compounds the returns into an equity curve and returns, for each period, the
 > non-negative drawdown ``(peak - equity)/peak`` at that point (0 at a new
 > high). The maximum of this curve is :func:`max_drawdown`.
+
+### `gain_to_pain_ratio(returns: Sequence[float]) -> float`  _function_
+
+> Gain-to-pain ratio: sum of returns over the sum of the absolute losses.
+>
+> ``sum(r) / sum(|r| for r < 0)`` (Schwager). A scale-free profitability-vs-pain
+> measure -- above 1 means net gains exceed the total loss magnitude. Returns
+> ``inf`` when there are no losing periods; raises on an empty series.
 
 ### `historical_cvar(returns, confidence=0.95) -> float`  _function_
 
@@ -9041,6 +9057,14 @@ Auto-generated from `quantforge` v1.803.0 by `docs/gen_api.py` — do not edit b
 > Downside deviation uses only returns below ``target`` (root-mean-square of
 > the shortfalls, divided by the full sample count -- the standard
 > convention). Raises if there is no downside.
+
+### `sterling_ratio(returns: Sequence[float], risk_free=0.0, periods_per_year=252, excess=0.1) -> float`  _function_
+
+> Sterling ratio: annualized excess return over the average drawdown plus a margin.
+>
+> ``ann_excess / (average_drawdown + excess)`` with the classic ``excess = 10%``
+> margin that keeps the denominator from collapsing on shallow-drawdown series.
+> Higher is better; the drawdown is the mean underwater depth (the pain index).
 
 ### `tail_ratio(returns: Sequence[float], pct=5.0) -> float`  _function_
 

@@ -692,3 +692,50 @@ def profit_factor(returns: Sequence[float]) -> float:
     if losses == 0.0:
         return float("inf")
     return gains / losses
+
+
+def gain_to_pain_ratio(returns: Sequence[float]) -> float:
+    """Gain-to-pain ratio: sum of returns over the sum of the absolute losses.
+
+    ``sum(r) / sum(|r| for r < 0)`` (Schwager). A scale-free profitability-vs-pain
+    measure -- above 1 means net gains exceed the total loss magnitude. Returns
+    ``inf`` when there are no losing periods; raises on an empty series.
+    """
+    if not returns:
+        raise ValueError("need at least one return")
+    total = sum(returns)
+    loss = sum(-r for r in returns if r < 0.0)
+    if loss == 0.0:
+        return float("inf")
+    return total / loss
+
+
+def sterling_ratio(returns: Sequence[float], risk_free=0.0,
+                   periods_per_year=252, excess=0.10) -> float:
+    """Sterling ratio: annualized excess return over the average drawdown plus a margin.
+
+    ``ann_excess / (average_drawdown + excess)`` with the classic ``excess = 10%``
+    margin that keeps the denominator from collapsing on shallow-drawdown series.
+    Higher is better; the drawdown is the mean underwater depth (the pain index).
+    """
+    dd = drawdown_curve(returns)
+    avg_dd = sum(dd) / len(dd) if dd else 0.0
+    denom = avg_dd + excess
+    ann_excess = (_mean(returns) - risk_free / periods_per_year) * periods_per_year
+    return ann_excess / denom
+
+
+def burke_ratio(returns: Sequence[float], risk_free=0.0,
+                periods_per_year=252) -> float:
+    """Burke ratio: annualized excess return over the root-sum-of-squared drawdowns.
+
+    ``ann_excess / sqrt(sum(drawdown_t^2))`` -- penalizes a few deep drawdowns more
+    than many shallow ones (an L2 denominator), unlike the L1 :func:`sterling_ratio`.
+    Higher is better; raises when there is no drawdown.
+    """
+    dd = drawdown_curve(returns)
+    ss = math.sqrt(sum(d * d for d in dd))
+    if ss <= 0.0:
+        raise ValueError("no drawdown; Burke ratio is undefined")
+    ann_excess = (_mean(returns) - risk_free / periods_per_year) * periods_per_year
+    return ann_excess / ss

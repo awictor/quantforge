@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.804.0] - 2026-09-13
+
+### Added
+- `perfmetrics.py` gains three drawdown-adjusted return ratios: `gain_to_pain_ratio`
+  (Schwager, sum of returns over the summed absolute losses), `sterling_ratio`
+  (annualized excess over the average drawdown plus a 10% margin), and `burke_ratio`
+  (annualized excess over the root-sum-of-squared drawdowns). Cross-checked: each
+  matches its component formula, the gain-to-pain ratio is infinite without losses,
+  and the L2 Burke ratio penalizes a deep drawdown more than a shallow one.
+
 ## [1.803.0] - 2026-09-13
 
 ### Documentation
