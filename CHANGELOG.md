@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.974.0] - 2026-09-13
+
+### Added
+- `lowess.py`: `lowess`, locally-weighted scatterplot smoothing (tricube kernel, local
+  linear fits, Cleveland robustifying iterations). Cross-checked: reproduces a straight
+  line, smooths a noisy sine below the raw error, a larger `frac` is smoother, it keeps
+  input order on unsorted data, and the robust iterations pin an outlier's neighbours to
+  the true trend (caught a degenerate median-scale case that let a lone outlier drag the
+  fit).
+
 ## [1.973.0] - 2026-09-13
 
 ### Documentation

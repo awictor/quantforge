@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.973.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.974.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -7714,6 +7714,17 @@ Auto-generated from `quantforge` v1.973.0 by `docs/gen_api.py` — do not edit b
 > (:func:`fixed_strike_lookback`, which needs ``K``). Returns a dict with
 > delta, gamma, vega, and theta (calendar, per year). ``s_extreme`` (the
 > running min/max) defaults to the current spot.
+
+## lowess
+
+### `lowess(x, y, frac=0.3, iterations=3)`  _function_
+
+> LOWESS smooth of ``(x, y)``; returns the fitted value at each ``x``.
+>
+> ``frac`` is the span -- the fraction of points in each local neighbourhood (larger
+> = smoother). ``iterations`` robustifying passes (Cleveland) down-weight outliers by
+> a bisquare of their residuals; ``iterations=1`` disables robustifying. Points need
+> not be sorted. Returns a list aligned to the input order.
 
 ## lsm
 
