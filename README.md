@@ -5054,6 +5054,23 @@ Set `rate` near the integrand's true decay constant for best accuracy; it needs 
 exponential falloff, so an integrand like `1/(1+x^2)` (only algebraic decay) will
 not converge.
 
+For a double integral over a rectangle, `integrate2d_gauss` is the tensor
+Gauss-Legendre rule and `integrate2d_simpson` the composite-Simpson fallback:
+
+```python
+from quantforge import integrate2d_gauss, integrate2d_simpson
+
+integrate2d_gauss(lambda x, y: x * y, 0, 1, 0, 1)        # 0.25
+integrate2d_gauss(lambda x, y: x + y, 0, 1, 0, 1, n=2)   # 1.0
+integrate2d_simpson(lambda x, y: math.exp(-(x*x + y*y)), -6, 6, -6, 6, nx=200, ny=200)  # ~pi
+```
+
+`integrate2d_gauss` uses `n^2` evaluations and is exact for polynomials up to degree
+`2n-1` in each variable — the right tool for smooth integrands. `integrate2d_simpson`
+integrates in `y` for each `x` and then in `x` (Fubini), converging on the wider or
+less-smooth cases where the fixed Gauss rule is too coarse (it recovers the 2-D Gaussian
+integral `pi` on a large box).
+
 # One-dimensional minimizers (line search / 1-D calibration).
 from quantforge import golden_section_min, brent_min
 golden_section_min(lambda x: (x - 3) ** 2 + 1, -10, 10)   # -> (3.0, 1.0)
