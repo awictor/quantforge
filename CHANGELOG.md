@@ -31,6 +31,17 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.872.0] - 2026-09-13
+
+### Added
+- `cramer_von_mises.py`: the two-sample Cramer-von Mises test
+  (`cramer_von_mises_2samp`, Anderson's 1962 rank statistic) with an asymptotic
+  p-value from the limiting distribution (computed via its Bessel-K_{1/4} series).
+  Cross-checked: the asymptotic tail reproduces the published critical values
+  (0.461 -> 0.05, 0.743 -> 0.01, 0.347 -> 0.10), the p-value agrees with a
+  permutation test, a location shift is rejected, and the null rejection rate sits
+  near alpha.
+
 ## [1.871.0] - 2026-09-13
 
 ### Documentation

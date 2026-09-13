@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.871.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.872.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -2707,6 +2707,16 @@ Auto-generated from `quantforge` v1.871.0 by `docs/gen_api.py` — do not edit b
 > The dollar amount in the risky asset: the multiplier times the
 > :func:`cushion`, capped at total wealth (no leverage) and floored at zero.
 > Zero once wealth hits the floor, protecting the guarantee.
+
+## cramer_von_mises
+
+### `cramer_von_mises_2samp(a, b)`  _function_
+
+> Two-sample Cramer-von Mises test.
+>
+> Returns a dict with the ``statistic`` (Anderson's ``T``) and the asymptotic
+> ``p_value`` from the limiting Cramer-von Mises distribution. A small p-value
+> rejects the null that ``a`` and ``b`` are drawn from the same distribution.
 
 ## credibility
 
