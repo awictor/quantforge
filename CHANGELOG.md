@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.796.0] - 2026-09-12
+
+### Added
+- `anderson_darling.py`: `anderson_darling_normal`, the Anderson-Darling test of
+  normality (mean/sd estimated), with the Stephens small-sample adjustment and the
+  D'Agostino-Stephens p-value approximation. More tail-sensitive than
+  Kolmogorov-Smirnov. Cross-checked: normal samples hold the 5% size and are not
+  rejected, while exponential (skewed) and heavy-tailed mixtures are strongly
+  rejected; the statistic is non-negative.
+
 ## [1.795.0] - 2026-09-12
 
 ### Documentation

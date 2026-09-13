@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.795.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.796.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -215,6 +215,16 @@ Auto-generated from `quantforge` v1.795.0 by `docs/gen_api.py` — do not edit b
 > exercise early. The premium is non-negative and is (near) zero for an
 > American call with no dividends (``b >= r``), where early exercise is never
 > optimal.
+
+## anderson_darling
+
+### `anderson_darling_normal(values)`  _function_
+
+> Anderson-Darling test that ``values`` are normal (mean/sd estimated).
+>
+> Returns ``(a2_star, p_value)`` where ``a2_star`` is the sample-size-adjusted
+> statistic. A small p-value rejects normality; the test is especially sensitive to
+> heavy tails and skew. Requires at least 8 observations for a meaningful p-value.
 
 ## andreasenhuge
 
