@@ -2503,6 +2503,30 @@ an identity `cov` reduces to OLS. GLS whitens the system with the Cholesky facto
 `Sigma` and then runs OLS on the transformed data, so with the correct covariance it is
 the minimum-variance linear unbiased estimator.
 
+For streaming data — or a fit that must adapt as it goes — `RecursiveLeastSquares`
+updates the coefficients one observation at a time without re-solving, and a forgetting
+factor lets it track slowly-varying coefficients:
+
+```python
+from quantforge import RecursiveLeastSquares, recursive_least_squares
+
+# batch wrapper: with forgetting = 1 this matches OLS on the same design
+recursive_least_squares([[1.0, 1.0], [1.0, 2.0], [1.0, 3.0]], [3, 5, 7])   # [1.0, 2.0]
+
+# streaming, adaptive: forgetting < 1 down-weights old data
+rls = RecursiveLeastSquares(n_features=2, forgetting=0.98)
+for x_row, y_t in stream:
+    rls.update(x_row, y_t)      # x_row includes a leading 1.0 for the intercept
+    rls.beta                    # current coefficient estimate
+rls.predict([1.0, x_new])
+```
+
+Each `update` is `O(k²)` via the Sherman-Morrison identity — no matrix re-inversion and
+no need to store history. With `forgetting = 1` it converges to the exact batch OLS fit;
+with `forgetting < 1` it down-weights the past geometrically, so it re-adapts within a
+few dozen points when the underlying slope shifts (adaptive filtering, time-varying
+betas).
+
 When regressors are collinear or numerous, `ridge_regression` adds an L2 penalty
 that shrinks the slopes and keeps the system solvable:
 
