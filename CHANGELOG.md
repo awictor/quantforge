@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.956.0] - 2026-09-13
+
+### Added
+- `hyperdual.py`: hyperdual numbers for exact first *and* second derivatives in one
+  evaluation — a `HyperDual` type plus `hyperdual_derivatives` (returns
+  `(f, f', f'')`) and `second_derivative`. Cross-checked: first and second derivatives
+  of elementary and composite functions are exact, the second derivative agrees with
+  `ridders_second_derivative`, and the first derivative matches the plain dual number.
+
 ## [1.955.0] - 2026-09-13
 
 ### Documentation

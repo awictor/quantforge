@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.955.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.956.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -6367,6 +6367,27 @@ Auto-generated from `quantforge` v1.955.0 by `docs/gen_api.py` — do not edit b
 >
 > ``R`` is the range of the cumulative demeaned series; ``S`` is the window's
 > population standard deviation. Returns 0 when the window is constant.
+
+## hyperdual
+
+### `HyperDual(f0, f1=0.0, f2=0.0, f12=0.0)`  _class_
+
+> Hyperdual number ``f0 + f1 e1 + f2 e2 + f12 e1e2`` for 1st/2nd derivatives.
+>
+> Seed a variable as ``HyperDual(x, 1.0, 1.0, 0.0)``; arithmetic and this module's
+> elementary functions propagate all four parts exactly. After evaluating ``f``, the
+> result's ``f1`` (or ``f2``) is ``f'(x)`` and ``f12`` is ``f''(x)``.
+
+### `hyperdual_derivatives(f, x)`  _function_
+
+> Return ``(f(x), f'(x), f''(x))`` exactly by one hyperdual evaluation.
+>
+> ``f`` must accept a :class:`HyperDual` built from hyperdual arithmetic and this
+> module's elementary functions. No finite-difference error in either derivative.
+
+### `second_derivative(f, x)`  _function_
+
+> Exact ``f''(x)`` by hyperdual autodiff.
 
 ## hyperloglog
 
