@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.805.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.806.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -8947,6 +8947,14 @@ Auto-generated from `quantforge` v1.805.0 by `docs/gen_api.py` — do not edit b
 > degrees of freedom under normality. Larger values reject normality (the 5%
 > critical value is ~5.99). Uses the population skew/kurtosis.
 
+### `jensens_alpha(returns, market_returns, risk_free=0.0, periods_per_year=252) -> float`  _function_
+
+> Jensen's alpha: annualized CAPM-risk-adjusted excess return.
+>
+> ``alpha = ann(r - rf) - beta * ann(market - rf)`` -- the intercept of the CAPM
+> regression, the return earned beyond what the market beta explains. Positive
+> alpha is outperformance. Uses the ordinary :func:`market_beta`.
+
 ### `longest_drawdown_duration(returns: Sequence[float]) -> int`  _function_
 
 > Longest run of consecutive underwater periods (below a prior peak).
@@ -8954,6 +8962,22 @@ Auto-generated from `quantforge` v1.805.0 by `docs/gen_api.py` — do not edit b
 > Counts the maximum number of periods between a peak and the point the equity
 > curve first recovers to (or exceeds) it. A series that never falls below its
 > running peak returns 0.
+
+### `m_squared(returns, market_returns, risk_free=0.0, periods_per_year=252) -> float`  _function_
+
+> Modigliani M-squared: the portfolio's return rescaled to the market's risk.
+>
+> Levers/de-levers the portfolio (with the risk-free asset) to match the market's
+> volatility, then reports the resulting annualized return -- a Sharpe-based
+> measure in return units directly comparable to the market. Equals
+> ``rf_ann + sharpe * market_vol``. Raises on zero portfolio variance.
+
+### `market_beta(asset_returns, market_returns) -> float`  _function_
+
+> Ordinary CAPM beta: ``Cov(asset, market) / Var(market)`` over all periods.
+>
+> The slope of the asset's returns regressed on the market's. Equal-length series
+> of at least two points; raises on zero market variance.
 
 ### `max_drawdown(returns: Sequence[float]) -> float`  _function_
 
@@ -9080,6 +9104,14 @@ Auto-generated from `quantforge` v1.805.0 by `docs/gen_api.py` — do not edit b
 >
 > ``active_t = r_t - b_t``; the sample standard deviation (ddof=1) scaled by
 > ``sqrt(periods_per_year)``. Series must be equal length.
+
+### `treynor_ratio(returns, market_returns, risk_free=0.0, periods_per_year=252) -> float`  _function_
+
+> Treynor ratio: annualized excess return per unit of market beta.
+>
+> ``ann_excess / beta`` where ``beta`` is the CAPM :func:`market_beta`. Like Sharpe
+> but dividing by systematic (non-diversifiable) risk instead of total volatility,
+> so it rewards return per unit of market exposure. Raises for a non-positive beta.
 
 ### `ulcer_index(returns: Sequence[float]) -> float`  _function_
 

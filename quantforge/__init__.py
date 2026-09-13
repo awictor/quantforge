@@ -638,6 +638,7 @@ from .perfmetrics import (
     profit_factor, drawdown_curve, longest_drawdown_duration, rolling_sharpe,
     ulcer_index, pain_index, ulcer_performance_index, pain_ratio,
     gain_to_pain_ratio, sterling_ratio, burke_ratio,
+    market_beta, treynor_ratio, jensens_alpha, m_squared,
     probabilistic_sharpe_ratio, minimum_track_record_length,
     deflated_sharpe_ratio,
     omega_ratio, tail_ratio, tracking_error, information_ratio,
@@ -808,7 +809,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.805.0"
+__version__ = "1.806.0"
 
 __all__ = [
     "OptionType",
@@ -1845,6 +1846,10 @@ __all__ = [
     "gain_to_pain_ratio",
     "sterling_ratio",
     "burke_ratio",
+    "market_beta",
+    "treynor_ratio",
+    "jensens_alpha",
+    "m_squared",
     "probabilistic_sharpe_ratio",
     "minimum_track_record_length",
     "deflated_sharpe_ratio",

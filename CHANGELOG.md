@@ -31,6 +31,17 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.806.0] - 2026-09-13
+
+### Added
+- `perfmetrics.py` gains CAPM-based performance measures: `market_beta`,
+  `treynor_ratio` (excess return per unit of beta), `jensens_alpha` (CAPM
+  risk-adjusted excess) and `m_squared` (Modigliani, the portfolio rescaled to the
+  market's risk). Cross-checked: the market's beta against itself is 1 and a
+  1.5x-levered portfolio recovers beta 1.5, Treynor matches its manual formula,
+  Jensen's alpha is ~0 for a pure-beta portfolio and recovers an injected constant
+  alpha, and M-squared equals the annualized Sharpe times the market volatility.
+
 ## [1.805.0] - 2026-09-13
 
 ### Documentation

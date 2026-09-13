@@ -739,3 +739,72 @@ def burke_ratio(returns: Sequence[float], risk_free=0.0,
         raise ValueError("no drawdown; Burke ratio is undefined")
     ann_excess = (_mean(returns) - risk_free / periods_per_year) * periods_per_year
     return ann_excess / ss
+
+
+def market_beta(asset_returns, market_returns) -> float:
+    """Ordinary CAPM beta: ``Cov(asset, market) / Var(market)`` over all periods.
+
+    The slope of the asset's returns regressed on the market's. Equal-length series
+    of at least two points; raises on zero market variance.
+    """
+    n = len(asset_returns)
+    if n < 2 or len(market_returns) != n:
+        raise ValueError("series must be equal length with at least two points")
+    ma = sum(asset_returns) / n
+    mm = sum(market_returns) / n
+    cov = sum((asset_returns[i] - ma) * (market_returns[i] - mm) for i in range(n)) / n
+    var = sum((market_returns[i] - mm) ** 2 for i in range(n)) / n
+    if var <= 0.0:
+        raise ValueError("market variance must be positive")
+    return cov / var
+
+
+def treynor_ratio(returns, market_returns, risk_free=0.0,
+                  periods_per_year=252) -> float:
+    """Treynor ratio: annualized excess return per unit of market beta.
+
+    ``ann_excess / beta`` where ``beta`` is the CAPM :func:`market_beta`. Like Sharpe
+    but dividing by systematic (non-diversifiable) risk instead of total volatility,
+    so it rewards return per unit of market exposure. Raises for a non-positive beta.
+    """
+    beta = market_beta(returns, market_returns)
+    if beta <= 0.0:
+        raise ValueError("Treynor ratio needs a positive beta")
+    ann_excess = (_mean(returns) - risk_free / periods_per_year) * periods_per_year
+    return ann_excess / beta
+
+
+def jensens_alpha(returns, market_returns, risk_free=0.0,
+                  periods_per_year=252) -> float:
+    """Jensen's alpha: annualized CAPM-risk-adjusted excess return.
+
+    ``alpha = ann(r - rf) - beta * ann(market - rf)`` -- the intercept of the CAPM
+    regression, the return earned beyond what the market beta explains. Positive
+    alpha is outperformance. Uses the ordinary :func:`market_beta`.
+    """
+    beta = market_beta(returns, market_returns)
+    rf = risk_free / periods_per_year
+    asset_excess = (_mean(returns) - rf) * periods_per_year
+    market_excess = (_mean(market_returns) - rf) * periods_per_year
+    return asset_excess - beta * market_excess
+
+
+def m_squared(returns, market_returns, risk_free=0.0,
+              periods_per_year=252) -> float:
+    """Modigliani M-squared: the portfolio's return rescaled to the market's risk.
+
+    Levers/de-levers the portfolio (with the risk-free asset) to match the market's
+    volatility, then reports the resulting annualized return -- a Sharpe-based
+    measure in return units directly comparable to the market. Equals
+    ``rf_ann + sharpe * market_vol``. Raises on zero portfolio variance.
+    """
+    if len(returns) < 2 or len(market_returns) != len(returns):
+        raise ValueError("series must be equal length with at least two points")
+    sd_p = _std(returns)
+    if sd_p <= 0.0:
+        raise ValueError("zero-variance portfolio")
+    rf = risk_free / periods_per_year
+    sharpe_ann = (_mean(returns) - rf) / sd_p * math.sqrt(periods_per_year)
+    market_vol_ann = _std(market_returns) * math.sqrt(periods_per_year)
+    rf_ann = rf * periods_per_year
+    return rf_ann + sharpe_ann * market_vol_ann
