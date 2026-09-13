@@ -4749,6 +4749,26 @@ differential evolution when the landscape is rough or the starting region is unk
 taken numerically -- and converges from a poor starting guess, making it the
 general calibration engine (vol surface, curve, or any parametric fit).
 
+When the coefficients must be non-negative -- weights, proportions, spectral mixing --
+`nnls` solves `min ||A x - b||²` subject to `x >= 0` exactly by the Lawson-Hanson
+active-set method:
+
+```python
+from quantforge import nnls
+
+nnls([[1, 0], [0, 1], [1, 1]], [2, 3, 5])["x"]     # [2.0, 3.0] — exact non-negative fit
+nnls([[1.0], [1.0]], [-2.0, -3.0])["x"]            # [0.0] — the negative OLS root is clamped
+r = nnls([[1, 1], [1, 2], [1, 3]], [1, 2, 2])
+r["x"], r["residual_norm"]                          # [0.6667, 0.5], 0.4082
+```
+
+Where the unconstrained least-squares solution is already non-negative, `nnls`
+reproduces it; otherwise it returns the best feasible fit, often with several
+coefficients exactly zero (a natural sparsity, no penalty needed). The result satisfies
+the Karush-Kuhn-Tucker conditions — the objective gradient is zero along the active
+(positive) coefficients and non-positive along the zeroed ones — so it is the global
+constrained optimum, not a heuristic.
+
 `ridders_derivative` / `ridders_second_derivative` return `(value, error_estimate)`:
 they evaluate a central difference at a shrinking step sequence and Richardson-
 extrapolate across it, stopping when round-off starts to dominate — so they reach
