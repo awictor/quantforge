@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.952.0] - 2026-09-13
+
+### Added
+- `dual.py`: forward-mode automatic differentiation with a `Dual` number type and the
+  `dual_derivative` helper (plus dual-aware `exp`/`log`/`sqrt`/`sin`/`cos`/`tan`/`tanh`).
+  Cross-checked: exact (zero-error) derivatives of elementary and composite functions,
+  correct product/quotient/chain rules, a dual exponent (`x**x`), and agreement with the
+  complex-step derivative to machine precision.
+
 ## [1.951.0] - 2026-09-13
 
 ### Documentation

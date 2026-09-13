@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.951.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.952.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -3634,6 +3634,24 @@ Auto-generated from `quantforge` v1.951.0 by `docs/gen_api.py` — do not edit b
 > ``time_to_recovery`` (periods from trough to recovery, or ``None`` if never),
 > and ``longest_underwater`` (the most periods spent below a prior peak).
 > ``recovery_index`` is ``None`` if the deepest drawdown never recovers.
+
+## dual
+
+### `Dual(value, deriv=0.0)`  _class_
+
+> A dual number ``value + deriv * eps`` for forward-mode autodiff.
+>
+> Construct a variable as ``Dual(x, 1.0)`` and a constant as ``Dual(c)``. Arithmetic
+> and the module's elementary functions propagate the derivative exactly via the
+> chain rule; read ``.value`` and ``.deriv`` from the result.
+
+### `dual_derivative(f, x)`  _function_
+
+> Exact derivative ``f'(x)`` by forward-mode autodiff.
+>
+> ``f`` must accept a :class:`Dual` and return a :class:`Dual`, built from ``Dual``
+> arithmetic and this module's elementary functions (``exp``, ``log``, ``sin``, ...).
+> Returns ``f'(x)`` with no truncation error.
 
 ## dual_currency
 
