@@ -31,6 +31,17 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.842.0] - 2026-09-13
+
+### Added
+- `hmm.py` gains `hmm_baum_welch` (Baum-Welch EM parameter estimation from an
+  observation sequence) and `hmm_simulate` (sample states and observations from an
+  HMM). Cross-checked: on a long simulated sticky two-state chain it recovers the
+  transition and emission matrices (up to a state permutation), the fitted
+  log-likelihood beats the true model's on the data, and the log-likelihood is
+  non-decreasing. Uses a strongly-asymmetric initialization to escape the symmetric
+  saddle point that traps a uniform start.
+
 ## [1.841.0] - 2026-09-13
 
 ### Documentation

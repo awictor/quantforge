@@ -135,3 +135,121 @@ def hmm_posterior(pi, A, B, obs):
         s = sum(g) or 1e-300
         gamma.append([v / s for v in g])
     return gamma
+
+
+def _lcg(seed):
+    state = seed & 0x7FFFFFFF
+    def rand():
+        nonlocal state
+        state = (1103515245 * state + 12345) & 0x7FFFFFFF
+        return (state + 0.5) / 0x80000000
+    return rand
+
+
+def hmm_simulate(pi, A, B, length, seed=1234567):
+    """Simulate ``length`` observations from an HMM. Returns ``(states, obs)``."""
+    n = _check(pi, A, B, [0])
+    m = len(B[0])
+    rand = _lcg(seed)
+
+    def draw(probs):
+        u = rand()
+        acc = 0.0
+        for i, p in enumerate(probs):
+            acc += p
+            if u <= acc:
+                return i
+        return len(probs) - 1
+
+    states = [draw(pi)]
+    obs = [draw(B[states[0]])]
+    for _ in range(1, length):
+        s = draw(A[states[-1]])
+        states.append(s)
+        obs.append(draw(B[s]))
+    return states, obs
+
+
+def hmm_baum_welch(obs, n_states, n_symbols, max_iter=100, tol=1e-6, seed=1234567):
+    """Baum-Welch (EM) estimate of HMM parameters from an observation sequence.
+
+    Iterates the forward-backward E-step and the re-estimation M-step from a
+    near-uniform (seed-jittered) start, returning a dict with ``pi``, ``A``, ``B``,
+    ``log_likelihood`` and ``n_iter``. The log-likelihood is non-decreasing; the
+    labelling of states is arbitrary (identifiable only up to a permutation). Pure
+    standard library.
+    """
+    T = len(obs)
+    if T < 2:
+        raise ValueError("need at least two observations")
+    if any(not (0 <= o < n_symbols) for o in obs):
+        raise ValueError("observation symbol out of range")
+    rand = _lcg(seed)
+    n, m = n_states, n_symbols
+
+    def norm(row):
+        s = sum(row)
+        return [v / s for v in row] if s > 0 else [1.0 / len(row)] * len(row)
+
+    # Strongly asymmetric start: a near-uniform init is a symmetric saddle point
+    # that Baum-Welch cannot leave, so bias each state toward a different symbol.
+    pi = norm([1.0 + rand() for _ in range(n)])
+    A = [norm([(3.0 if i == j else 1.0) + rand() for j in range(n)]) for i in range(n)]
+    B = [norm([(3.0 if (o % n) == i else 1.0) + rand() for o in range(m)])
+         for i in range(n)]
+
+    prev_ll = -float("inf")
+    n_iter = 0
+    for it in range(max_iter):
+        n_iter = it + 1
+        # Scaled forward.
+        alpha = [[0.0] * n for _ in range(T)]
+        c = [0.0] * T
+        a0 = [pi[i] * B[i][obs[0]] for i in range(n)]
+        c[0] = sum(a0) or 1e-300
+        alpha[0] = [v / c[0] for v in a0]
+        for t in range(1, T):
+            row = [B[j][obs[t]] * sum(alpha[t - 1][i] * A[i][j] for i in range(n))
+                   for j in range(n)]
+            c[t] = sum(row) or 1e-300
+            alpha[t] = [v / c[t] for v in row]
+        ll = sum(math.log(ct) for ct in c)
+        # Scaled backward.
+        beta = [[0.0] * n for _ in range(T)]
+        beta[T - 1] = [1.0 / c[T - 1]] * n
+        for t in range(T - 2, -1, -1):
+            for i in range(n):
+                beta[t][i] = sum(A[i][j] * B[j][obs[t + 1]] * beta[t + 1][j]
+                                 for j in range(n)) / c[t]
+        # Gamma and xi accumulation.
+        gamma = []
+        for t in range(T):
+            g = [alpha[t][i] * beta[t][i] for i in range(n)]
+            s = sum(g) or 1e-300
+            gamma.append([v / s for v in g])
+        # Re-estimate.
+        pi = gamma[0][:]
+        A_num = [[0.0] * n for _ in range(n)]
+        A_den = [0.0] * n
+        for t in range(T - 1):
+            denom = sum(alpha[t][i] * A[i][j] * B[j][obs[t + 1]] * beta[t + 1][j]
+                        for i in range(n) for j in range(n)) or 1e-300
+            for i in range(n):
+                A_den[i] += gamma[t][i]
+                for j in range(n):
+                    xi = alpha[t][i] * A[i][j] * B[j][obs[t + 1]] * beta[t + 1][j] / denom
+                    A_num[i][j] += xi
+        A = [[(A_num[i][j] / A_den[i]) if A_den[i] > 0 else 1.0 / n
+              for j in range(n)] for i in range(n)]
+        B_num = [[0.0] * m for _ in range(n)]
+        B_den = [0.0] * n
+        for t in range(T):
+            for i in range(n):
+                B_den[i] += gamma[t][i]
+                B_num[i][obs[t]] += gamma[t][i]
+        B = [[(B_num[i][o] / B_den[i]) if B_den[i] > 0 else 1.0 / m
+              for o in range(m)] for i in range(n)]
+        if ll - prev_ll < tol:
+            break
+        prev_ll = ll
+    return {"pi": pi, "A": A, "B": B, "log_likelihood": ll, "n_iter": n_iter}

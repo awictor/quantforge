@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.841.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.842.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -5583,6 +5583,16 @@ Auto-generated from `quantforge` v1.841.0 by `docs/gen_api.py` — do not edit b
 
 ## hmm
 
+### `hmm_baum_welch(obs, n_states, n_symbols, max_iter=100, tol=1e-06, seed=1234567)`  _function_
+
+> Baum-Welch (EM) estimate of HMM parameters from an observation sequence.
+>
+> Iterates the forward-backward E-step and the re-estimation M-step from a
+> near-uniform (seed-jittered) start, returning a dict with ``pi``, ``A``, ``B``,
+> ``log_likelihood`` and ``n_iter``. The log-likelihood is non-decreasing; the
+> labelling of states is arbitrary (identifiable only up to a permutation). Pure
+> standard library.
+
 ### `hmm_forward(pi, A, B, obs)`  _function_
 
 > Log-likelihood ``log P(obs | model)`` by the scaled forward algorithm.
@@ -5600,6 +5610,10 @@ Auto-generated from `quantforge` v1.841.0 by `docs/gen_api.py` — do not edit b
 > distributions, one per time step, each summing to one -- the probability of being
 > in each hidden state at that time given the *entire* observation sequence (unlike
 > Viterbi's single best path, this is the per-time marginal). Pure standard library.
+
+### `hmm_simulate(pi, A, B, length, seed=1234567)`  _function_
+
+> Simulate ``length`` observations from an HMM. Returns ``(states, obs)``.
 
 ### `hmm_viterbi(pi, A, B, obs)`  _function_
 
