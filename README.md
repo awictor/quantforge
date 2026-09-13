@@ -2869,6 +2869,25 @@ predict_random_forest(f, X_query)
 The forest generalizes at least as well as any one tree on held-out data and is
 reproducible for a fixed seed.
 
+The same recursive splitting works for a *numeric* target: `fit_regression_tree` splits
+to minimize squared error and predicts the mean of each leaf, a piecewise-constant
+regressor for nonlinear relationships:
+
+```python
+from quantforge import fit_regression_tree, predict_regression_tree
+
+X = [[float(i)] for i in range(10)]
+y = [0.0 if i < 5 else 10.0 for i in range(10)]
+t = fit_regression_tree(X, y, max_depth=3)
+predict_regression_tree(t, [[2.0], [7.0]])   # [0.0, 10.0] — step recovered exactly
+```
+
+It recovers a step function exactly, collapses a constant target to one leaf, and its
+error falls monotonically as `max_depth` grows (deeper = finer piecewise fit, so cap
+depth and validate to avoid overfitting). A leaf predicts the mean of the training
+targets that reach it, so the fit is a step function — pair it with bagging for a smooth
+ensemble, the regression analogue of the random forest above.
+
 ## Factor models
 
 Multi-factor OLS return regression (alpha, betas, R-squared), factor attribution,

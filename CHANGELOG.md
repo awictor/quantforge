@@ -31,6 +31,12 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.963.0] - 2026-09-13
+
+### Documentation
+- README: documented `fit_regression_tree` / `predict_regression_tree` alongside the
+  classification tree and random forest. Every snippet value verified.
+
 ## [1.962.0] - 2026-09-13
 
 ### Added
