@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.959.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.960.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -7031,6 +7031,31 @@ Auto-generated from `quantforge` v1.959.0 by `docs/gen_api.py` — do not edit b
 > covariance is no larger (in the positive-definite sense; here checked on the
 > trace) than the corresponding filtered covariance, since the smoother conditions
 > on the whole series rather than only the past.
+
+## kde
+
+### `kde(data, x, bandwidth=None, rule='silverman')`  _function_
+
+> Evaluate the Gaussian KDE of ``data`` at point(s) ``x``.
+>
+> ``bandwidth`` overrides the rule (``"silverman"`` or ``"scott"``). ``x`` may be a
+> scalar (returns a float) or an iterable (returns a list). The estimate is
+> non-negative everywhere and integrates to one.
+
+### `kde_function(data, bandwidth=None, rule='silverman')`  _function_
+
+> Return a callable density estimator ``f(x)`` for ``data`` (bandwidth fixed once).
+
+### `scott_bandwidth(data)`  _function_
+
+> Scott's rule-of-thumb bandwidth ``h = std * n^{-1/5}``.
+
+### `silverman_bandwidth(data)`  _function_
+
+> Silverman's rule-of-thumb bandwidth.
+>
+> ``h = 0.9 * min(std, IQR/1.34) * n^{-1/5}`` -- robust to mild non-normality via the
+> IQR term. The standard default for a unimodal, roughly-Gaussian sample.
 
 ## kendall_test
 

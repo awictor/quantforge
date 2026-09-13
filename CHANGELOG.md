@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.960.0] - 2026-09-13
+
+### Added
+- `kde.py`: Gaussian kernel density estimation — `kde` (pointwise), `kde_function`
+  (callable estimator), and the `silverman_bandwidth` / `scott_bandwidth` rules.
+  Cross-checked: the estimate integrates to one and is non-negative, recovers the
+  N(0,1) and N(5,2) densities at their peaks, and resolves a bimodal sample with both
+  modes above the valley.
+
 ## [1.959.0] - 2026-09-13
 
 ### Documentation
