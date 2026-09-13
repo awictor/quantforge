@@ -3738,6 +3738,24 @@ It estimates the mean and standard deviation from the sample, applies the Stephe
 small-sample adjustment, and returns a D'Agostino-Stephens p-value. A clean normal
 sample passes; an exponential or fat-tailed one is strongly rejected.
 
+To test whether *several* samples share one (unspecified) distribution — the
+nonparametric analogue of one-way ANOVA, but sensitive to any distributional difference
+— `anderson_darling_ksample` runs the Scholz-Stephens k-sample AD test:
+
+```python
+from quantforge import anderson_darling_ksample
+
+anderson_darling_ksample(group_a, group_b, group_c)
+# {'a2k': 8.3926, 'standardized': 4.4798, 'p_value': 0.0055} on the SS worked example
+```
+
+It compares each sample's empirical CDF to the pooled CDF with the tail-weighting
+Anderson-Darling metric, handles ties, and reports the raw `a2k`, the `standardized`
+statistic `(A2k - (k-1))/sqrt(var)`, and an interpolated `p_value`. It reproduces the
+Scholz-Stephens (1987) worked example, stays non-significant when the samples share a
+distribution, and flags differences in location, scale, or shape that a means-only test
+would miss.
+
 For a fully distribution-free two-sample test that needs no CDF assumption at all,
 `energy_distance` and its permutation test `energy_test` compare two samples by the
 Székely-Rizzo statistic `2A - B - C` (mean cross-sample distance minus the two mean
