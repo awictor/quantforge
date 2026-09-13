@@ -2458,6 +2458,28 @@ relationship gives R-squared 1 and zero residuals; adjusted R-squared never exce
 R-squared. For the finance-specific alpha/beta return regression, see the next
 section.
 
+Those standard errors assume homoskedastic, serially-uncorrelated errors. When that
+fails — volatility clustering, autocorrelated residuals — use the sandwich estimator:
+`white_hc0` for heteroskedasticity and `newey_west` for heteroskedasticity *and*
+autocorrelation:
+
+```python
+from quantforge import white_hc0, newey_west
+
+w = white_hc0(X, y)                  # HC0 robust SEs
+w["coefficients"], w["std_errors"], w["t_stats"]
+
+nw = newey_west(X, y, lags=8)        # Bartlett-weighted HAC SEs
+nw["std_errors"]                     # valid under autocorrelated residuals
+```
+
+Both return the same coefficients as `ols_fit` (only the standard errors change).
+`newey_west` with `lags=0` reduces exactly to `white_hc0`. Under heteroskedastic errors
+the White SE is larger than the (invalid) OLS SE; under AR(1) residuals the Newey-West
+SE grows larger still, which is the correction that keeps the t-statistics honest —
+the covariance is `(X'X)^{-1} S (X'X)^{-1}` with the meat `S` built from the residual
+score vectors.
+
 When regressors are collinear or numerous, `ridge_regression` adds an L2 penalty
 that shrinks the slopes and keeps the system solvable:
 
