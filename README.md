@@ -5375,6 +5375,30 @@ bracket a sign change in the boundary residual. The result carries the found `sl
 the `(ts, ys)` solution; on the linear test problems it recovers the analytic slope and
 every interior point to machine precision.
 
+For long-horizon *conservative* systems (orbits, molecular dynamics), a general RK
+method slowly drifts the total energy; `velocity_verlet` and `leapfrog` are symplectic
+integrators that keep it bounded instead:
+
+```python
+from quantforge import velocity_verlet, leapfrog
+
+# harmonic oscillator q'' = -q, mass 1, over 2000 steps
+qs, ps = velocity_verlet(lambda q: -q, q0=1.0, p0=0.0, mass=1.0, dt=0.05, n_steps=2000)
+# energy 0.5(p^2 + q^2) oscillates in a tiny band around 0.5 — it does not drift
+
+# 2-D circular orbit under central gravity keeps its radius over 10k steps
+def gravity(q):
+    r = (q[0] ** 2 + q[1] ** 2) ** 0.5
+    return [-q[0] / r ** 3, -q[1] / r ** 3]
+qs, ps = velocity_verlet(gravity, [1.0, 0.0], [0.0, 1.0], mass=1.0, dt=0.001, n_steps=10000)
+```
+
+`velocity_verlet` takes the force (position → force) and evolves position and momentum;
+`leapfrog` is the equivalent velocity-form for unit mass. Both are second-order and
+time-reversible, and because they preserve phase-space structure the energy error
+oscillates rather than accumulating — exactly what you want for a simulation run over
+many periods, where RK4's small per-step energy leak would compound.
+
 A Padé approximant turns a Taylor series into a *rational* function that often
 converges where the series itself diverges. `pade` builds `[m/n]` from Taylor
 coefficients and `pade_eval` evaluates it; `lentz_continued_fraction` evaluates a

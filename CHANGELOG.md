@@ -31,6 +31,12 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.6.0] - 2026-09-13
+
+### Documentation
+- README: documented `velocity_verlet` and `leapfrog` in the numerical-utilities
+  section, after the ODE/BVP solvers.
+
 ## [2.5.0] - 2026-09-13
 
 ### Added
