@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.929.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.930.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -9024,6 +9024,16 @@ Auto-generated from `quantforge` v1.929.0 by `docs/gen_api.py` — do not edit b
 > Prices a call at each strike and inverts to a Black-Scholes implied vol,
 > returning ``(log_moneyness, vol)`` pairs sorted by strike on the forward
 > ``F = S e^{(r-q) t}``. ``beta < 0`` tilts the smile into a downward skew.
+
+## nnls
+
+### `nnls(A, b, max_iter=None, tol=1e-10)`  _function_
+
+> Non-negative least squares: ``min ||A x - b||^2`` with ``x >= 0``.
+>
+> ``A`` is an ``m x n`` matrix (list of rows), ``b`` a length-``m`` vector. Returns a
+> dict with the non-negative solution ``x`` (length ``n``), the ``residual_norm``
+> ``||A x - b||``, and ``n_iter``. Uses the Lawson-Hanson active-set method.
 
 ## numdiff
 

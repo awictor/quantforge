@@ -518,6 +518,7 @@ from .rls import RecursiveLeastSquares, recursive_least_squares
 from .pcr import principal_components_regression
 from .optimize import nelder_mead
 from .differential_evolution import differential_evolution
+from .nnls import nnls
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -908,7 +909,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.929.0"
+__version__ = "1.930.0"
 
 __all__ = [
     "OptionType",
@@ -1668,6 +1669,7 @@ __all__ = [
     "principal_components_regression",
     "nelder_mead",
     "differential_evolution",
+    "nnls",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

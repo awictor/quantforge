@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.930.0] - 2026-09-13
+
+### Added
+- `nnls.py`: `nnls`, non-negative least squares by the Lawson-Hanson active-set
+  method (`min ||A x - b||^2` subject to `x >= 0`). Cross-checked: reproduces the exact
+  fit when the unconstrained solution is already non-negative, clamps an otherwise-
+  negative coefficient to zero, every solution is non-negative over 200 random cases,
+  and the KKT optimality conditions hold (gradient ~0 on the active coefficients,
+  <=0 on the zeroed ones) on 200 more.
+
 ## [1.929.0] - 2026-09-13
 
 ### Documentation
