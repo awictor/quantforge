@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.958.0] - 2026-09-13
+
+### Added
+- `logsumexp.py`: numerically stable `logsumexp` (max-shifted, optional weights),
+  `softmax` and `log_softmax`. Cross-checked: matches the naive formula on small
+  inputs, never overflows on ~1000-scale values (where the naive version returns inf)
+  or underflows on very negative ones, softmax sums to one and stays stable at large
+  scale, and log-softmax is consistent with log(softmax).
+
 ## [1.957.0] - 2026-09-13
 
 ### Documentation

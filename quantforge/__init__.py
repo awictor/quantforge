@@ -532,6 +532,7 @@ from .count_min import CountMinSketch, BloomFilter
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
+from .logsumexp import logsumexp, softmax, log_softmax
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -922,7 +923,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.957.0"
+__version__ = "1.958.0"
 
 __all__ = [
     "OptionType",
@@ -1710,6 +1711,9 @@ __all__ = [
     "HyperDual",
     "hyperdual_derivatives",
     "second_derivative",
+    "logsumexp",
+    "softmax",
+    "log_softmax",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

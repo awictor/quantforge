@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.957.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.958.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -7577,6 +7577,24 @@ Auto-generated from `quantforge` v1.957.0 by `docs/gen_api.py` — do not edit b
 ### `predict_proba(model, X, add_intercept=True)`  _function_
 
 > Predicted P(y=1) for each row of ``X`` under a fitted logistic model.
+
+## logsumexp
+
+### `log_softmax(x)`  _function_
+
+> Stable log-softmax: ``x_i - logsumexp(x)`` (avoids the overflow of ``log(softmax)``).
+
+### `logsumexp(x, weights=None)`  _function_
+
+> Stable ``log(sum_i w_i exp(x_i))`` (weights default to 1).
+>
+> Shifts by the maximum so it never overflows; returns ``-inf`` if every weighted
+> term is zero. With ``weights`` it is the log of a weighted sum of exponentials
+> (weights must be non-negative).
+
+### `softmax(x)`  _function_
+
+> Stable softmax: ``exp(x_i) / sum_j exp(x_j)``, a probability vector summing to 1.
 
 ## lookback
 
