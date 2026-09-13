@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.939.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.940.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -2414,6 +2414,36 @@ Auto-generated from `quantforge` v1.939.0 by `docs/gen_api.py` — do not edit b
 > ``forward`` with variance ``v``. More accurate than the fixed 1/3-variance
 > :func:`asian_commodity_option`; at ``n = 1`` (``v = sigma^2 T``) it reduces to
 > the vanilla. Put and call satisfy ``C - P = e^{-r T}(forward - K)``.
+
+## compensated
+
+### `accurate_dot(a, b)`  _function_
+
+> Compensated dot product of two equal-length vectors.
+
+### `kahan_sum(values)`  _function_
+
+> Kahan compensated summation of ``values``.
+>
+> Maintains a compensation term for the low-order bits dropped at each addition, so
+> the result is far more accurate than the naive running sum for long or
+> poorly-scaled sequences.
+
+### `neumaier_sum(values)`  _function_
+
+> Neumaier (improved Kahan) summation.
+>
+> Like :func:`kahan_sum` but also correct when an individual term exceeds the running
+> total in magnitude -- it accumulates the correction from whichever operand is
+> larger. The most robust simple compensated sum.
+
+### `welford(values)`  _function_
+
+> Welford's stable one-pass mean and sample variance.
+>
+> Returns ``(mean, variance, n)`` with the sample (``n-1``) variance. Numerically
+> stable for large-mean, small-spread data where ``mean(x^2) - mean(x)^2`` loses all
+> precision to cancellation. Raises on an empty input.
 
 ## complex_step
 

@@ -523,6 +523,7 @@ from .simulated_annealing import simulated_annealing
 from .bfgs import bfgs
 from .conjugate_gradient import conjugate_gradient, gauss_seidel, jacobi
 from .power_iteration import power_iteration, inverse_iteration, rayleigh_quotient
+from .compensated import kahan_sum, neumaier_sum, accurate_dot, welford
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -913,7 +914,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.939.0"
+__version__ = "1.940.0"
 
 __all__ = [
     "OptionType",
@@ -1682,6 +1683,10 @@ __all__ = [
     "power_iteration",
     "inverse_iteration",
     "rayleigh_quotient",
+    "kahan_sum",
+    "neumaier_sum",
+    "accurate_dot",
+    "welford",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

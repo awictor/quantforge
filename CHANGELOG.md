@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.940.0] - 2026-09-13
+
+### Added
+- `compensated.py`: numerically stable summation and statistics — `kahan_sum`,
+  `neumaier_sum`, `accurate_dot` (compensated dot product) and `welford` (one-pass
+  stable mean/variance). Cross-checked: Neumaier handles catastrophic cancellation
+  (`[1, 1e100, 1, -1e100] -> 2`), matches `math.fsum` on scaled sequences, Kahan beats
+  the naive running sum of a million `0.1`s, and Welford recovers the variance of
+  large-mean data where the textbook `E[x^2]-E[x]^2` collapses to zero.
+
 ## [1.939.0] - 2026-09-13
 
 ### Documentation
