@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.975.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.976.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -559,6 +559,28 @@ Auto-generated from `quantforge` v1.975.0 by `docs/gen_api.py` — do not edit b
 > for ``S >= S*`` and a put for ``S <= S*``. Returns ``None`` when early
 > exercise is never optimal (an American call with ``b >= r`` equals its
 > European value, so there is no finite boundary).
+
+## bayesian_regression
+
+### `bayesian_linear_regression(X, y, alpha=1.0, beta_noise=1.0, add_intercept=True)`  _function_
+
+> Conjugate Bayesian linear regression posterior.
+>
+> ``alpha`` is the prior precision (larger = stronger shrinkage toward zero),
+> ``beta_noise`` the noise precision (``1 / variance``). Returns a dict with the
+> posterior ``mean`` (coefficient vector, intercept first if added), the posterior
+> ``covariance`` matrix, and ``std`` (per-coefficient posterior standard deviations).
+> The mean equals ridge regression with ``lambda = alpha / beta_noise`` that also
+> penalizes the intercept (the prior shrinks *every* coefficient toward zero).
+
+### `bayesian_predict(model, x_row)`  _function_
+
+> Predictive mean and variance for a new point ``x_row``.
+>
+> Returns ``(mean, variance)`` where the variance is the *predictive* variance
+> ``1/beta_noise + x' S x`` -- observation noise plus the posterior uncertainty in
+> the coefficients (so it widens where data is sparse). ``x_row`` excludes the
+> intercept if the model was fit with one.
 
 ## benford
 

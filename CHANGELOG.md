@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.976.0] - 2026-09-13
+
+### Added
+- `bayesian_regression.py`: `bayesian_linear_regression` (conjugate Gaussian posterior
+  over the coefficients) and `bayesian_predict` (predictive mean and variance).
+  Cross-checked: a weak prior approaches OLS, the posterior mean equals ridge with a
+  penalized intercept, posterior std shrinks with more data, a stronger prior shrinks
+  the coefficients, and the predictive variance widens on extrapolation.
+
 ## [1.975.0] - 2026-09-13
 
 ### Documentation
