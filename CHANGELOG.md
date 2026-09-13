@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.966.0] - 2026-09-13
+
+### Added
+- `dbscan.py`: `dbscan` density-based clustering — no preset cluster count, finds
+  arbitrarily-shaped clusters, and labels low-density points as noise (`-1`).
+  Cross-checked: separates two blobs with zero noise, flags a far outlier as noise,
+  clusters two non-convex concentric rings (which k-means cannot), collapses to all-noise
+  at tiny `eps` and one cluster at huge `eps`, and is deterministic.
+
 ## [1.965.0] - 2026-09-13
 
 ### Documentation

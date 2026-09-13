@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.965.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.966.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -3108,6 +3108,16 @@ Auto-generated from `quantforge` v1.965.0 by `docs/gen_api.py` — do not edit b
 >
 > Both dates are ``(year, month, day)`` tuples with ``end >= start``. Negative
 > intervals raise.
+
+## dbscan
+
+### `dbscan(X, eps, min_samples)`  _function_
+
+> Cluster points ``X`` by DBSCAN; return a label per point.
+>
+> ``eps`` is the neighbourhood radius, ``min_samples`` the core-point threshold
+> (counting the point itself). Labels are ``0, 1, ...`` for clusters and ``-1`` for
+> noise. No cluster count is required; clusters may be non-convex.
 
 ## decision_stump
 
