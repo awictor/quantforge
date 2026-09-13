@@ -4376,6 +4376,23 @@ silhouette_score(points, r["labels"])   # ~1 tight/separated, ~0 overlapping, <0
 Picking the `k` that maximizes the silhouette is a common alternative to the
 inertia elbow; a wrong `k` scores strictly lower on well-separated data.
 
+When the cluster count is unknown or the groups aren't blob-shaped, `dbscan` clusters
+by *density* instead — no preset `k`, arbitrary shapes, and explicit noise labels:
+
+```python
+from quantforge import dbscan
+
+labels = dbscan(points, eps=1.0, min_samples=5)
+# 0, 1, ... for clusters; -1 for noise (low-density outliers)
+```
+
+A point is a *core* point if at least `min_samples` neighbours lie within `eps`;
+clusters grow by connecting core points, and anything unreachable is labelled `-1`.
+It separates well-spaced blobs with no noise, flags far outliers as `-1`, and — unlike
+k-means — recovers two non-convex concentric rings as distinct clusters. Tune `eps`
+(the neighbourhood radius) to the data scale: too small labels everything noise, too
+large merges everything into one cluster.
+
 ## Hierarchical clustering
 
 Build a bottom-up cluster tree with single, complete, or average linkage, then cut
