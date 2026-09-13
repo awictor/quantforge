@@ -31,6 +31,12 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.795.0] - 2026-09-12
+
+### Documentation
+- README serial-correlation section now documents the Wald-Wolfowitz `runs_test`
+  and `runs_test_binary` with a worked example.
+
 ## [1.794.0] - 2026-09-12
 
 ### Added

@@ -3055,6 +3055,21 @@ White noise gives a large Ljung-Box p-value and a Durbin-Watson near 2; an AR(1)
 gives a huge Q with a vanishing p-value and a Durbin-Watson far from 2. The
 p-values use a self-contained chi-square survival function (no SciPy).
 
+The Wald-Wolfowitz runs test checks randomness a different way — by counting streaks
+rather than autocorrelation:
+
+```python
+from quantforge import runs_test, runs_test_binary
+
+runs_test(values)                # dichotomize about the median, test the sign runs
+runs_test_binary([1, 0, 1, 1, 0, 0])   # two-symbol sequence directly
+```
+
+Both return a two-sided `(z, p_value)`: `z < 0` (too few runs) flags clustering or a
+trend, `z > 0` (too many) flags over-alternation / mean reversion. It is
+distribution-free, so it catches nonrandomness a linear autocorrelation test can
+miss.
+
 ## Benford's law (first-digit anomaly detection)
 
 Numbers spanning several orders of magnitude have leading digits distributed as
