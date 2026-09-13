@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.901.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.902.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -2370,6 +2370,25 @@ Auto-generated from `quantforge` v1.901.0 by `docs/gen_api.py` — do not edit b
 > ``forward`` with variance ``v``. More accurate than the fixed 1/3-variance
 > :func:`asian_commodity_option`; at ``n = 1`` (``v = sigma^2 T``) it reduces to
 > the vanilla. Put and call satisfy ``C - P = e^{-r T}(forward - K)``.
+
+## complex_step
+
+### `complex_step_derivative(f, x, h=1e-20)`  _function_
+
+> First derivative ``f'(x)`` by the complex-step method.
+>
+> ``f`` must accept a complex argument and be analytic near ``x``. Returns the
+> derivative ``Im(f(x + i h)) / h``; because there is no subtraction of nearby
+> values, the tiny default ``h = 1e-20`` gives essentially machine-precision
+> accuracy. Raises ``TypeError`` (propagated) if ``f`` is not complex-safe.
+
+### `complex_step_gradient(f, x, h=1e-20)`  _function_
+
+> Gradient of a scalar ``f`` of a vector ``x`` by the complex-step method.
+>
+> Perturbs each coordinate by ``i h`` in turn. ``f`` must accept a list/sequence of
+> (possibly complex) components and return a complex-safe scalar. Returns the list of
+> partial derivatives, each to near machine precision.
 
 ## compound
 

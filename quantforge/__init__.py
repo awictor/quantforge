@@ -489,6 +489,7 @@ from .curran_asian import curran_asian
 from .minimize1d import golden_section_min, brent_min
 from .numdiff import gradient, hessian, jacobian
 from .richardson_derivative import ridders_derivative, ridders_second_derivative
+from .complex_step import complex_step_derivative, complex_step_gradient
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -879,7 +880,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.901.0"
+__version__ = "1.902.0"
 
 __all__ = [
     "OptionType",
@@ -1601,6 +1602,8 @@ __all__ = [
     "jacobian",
     "ridders_derivative",
     "ridders_second_derivative",
+    "complex_step_derivative",
+    "complex_step_gradient",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",
