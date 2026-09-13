@@ -3563,6 +3563,25 @@ Transfer entropy is asymmetric, so `transfer_entropy(x, y)` and
 `transfer_entropy(y, x)` reveal lead-lag: in a coupled system where `x` drives `y`,
 the `x -> y` value dominates. Both are near zero for independent series.
 
+To compare two *distributions* directly (histograms, empirical PMFs, model vs market
+probabilities), the divergence functions quantify how far apart they are:
+
+```python
+from quantforge import (kl_divergence, jensen_shannon_divergence,
+                        hellinger_distance, total_variation_distance)
+
+kl_divergence([0.7, 0.3], [0.5, 0.5])              # 0.08228 nats (asymmetric)
+jensen_shannon_divergence([0.7, 0.3], [0.5, 0.5])  # 0.02101 (symmetric, <= log 2)
+total_variation_distance([0.7, 0.3], [0.5, 0.5])   # 0.2 (largest event-probability gap)
+```
+
+Inputs are any non-negative weight vectors (normalized internally). `kl_divergence` is
+the asymmetric information loss (infinite where the reference has zero mass);
+`jensen_shannon_divergence` is its symmetric, always-finite cousin;
+`hellinger_distance` and `total_variation_distance` are bounded `[0, 1]` metrics; and
+`bhattacharyya_distance` measures overlap. They satisfy the Pinsker inequality
+(`TV <= sqrt(KL/2)`) and all vanish exactly when the two distributions coincide.
+
 ## Variance-ratio test
 
 The Lo-MacKinlay variance ratio tests the random-walk null: under it the variance
