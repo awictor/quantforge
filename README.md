@@ -5358,6 +5358,23 @@ error estimate to resize the step, taking small steps only where the solution mo
 fast, and returns the accepted (non-uniform) points. Pass a vector `y0` for a system —
 the harmonic oscillator above integrates `[y, y']` back to `[1, 0]` over a full period.
 
+When the solution is pinned at *both* ends instead of given an initial slope,
+`shooting_bvp` solves the two-point boundary-value problem `y'' = f(t, y, y')`:
+
+```python
+from quantforge import shooting_bvp
+
+# y'' = y, y(0) = 0, y(1) = 1  ->  y = sinh(t)/sinh(1)
+r = shooting_bvp(lambda t, y, yp: y, 0, 1, alpha=0.0, beta=1.0, s_lo=-5, s_hi=5)
+r["slope"]     # 0.85091813 = 1/sinh(1), the initial slope y'(0)
+```
+
+It guesses the initial slope, integrates to the far end with adaptive RK45, and
+Brent-root-finds the slope whose terminal value hits `beta` — so `s_lo`/`s_hi` must
+bracket a sign change in the boundary residual. The result carries the found `slope` and
+the `(ts, ys)` solution; on the linear test problems it recovers the analytic slope and
+every interior point to machine precision.
+
 A Padé approximant turns a Taylor series into a *rational* function that often
 converges where the series itself diverges. `pade` builds `[m/n]` from Taylor
 coefficients and `pade_eval` evaluates it; `lentz_continued_fraction` evaluates a
