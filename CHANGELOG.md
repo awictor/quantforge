@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.815.0] - 2026-09-13
+
+### Documentation
+- README gains a "Market stress (turbulence / absorption ratio)" section
+  documenting `turbulence_series` and `absorption_ratio` with a worked example. TOC
+  regenerated.
+
 ## [1.814.0] - 2026-09-13
 
 ### Added

@@ -114,6 +114,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [K-means clustering](#k-means-clustering)
 - [Hierarchical clustering](#hierarchical-clustering)
 - [Principal component analysis](#principal-component-analysis)
+- [Market stress (turbulence / absorption ratio)](#market-stress-turbulence--absorption-ratio)
 - [Matrix utilities](#matrix-utilities)
 - [Numerical utilities](#numerical-utilities)
 - [Probability distributions](#probability-distributions)
@@ -3596,6 +3597,23 @@ res["variances"], res["loadings"], res["cumulative_explained"]
 pca_scenario(component_index=0, n_sigma=2.0, variances=res["variances"],
              loadings=res["loadings"])
 ```
+
+## Market stress (turbulence / absorption ratio)
+
+Two Kritzman-Li systemic-risk gauges. `turbulence` is the Mahalanobis distance of a
+return vector from its history — it spikes on large, *unusual* cross-asset moves
+that a volatility reading misses. `absorption_ratio` is the variance share of the
+top principal components — high when risk is concentrated in a few factors:
+
+```python
+from quantforge import turbulence_series, absorption_ratio
+
+turbulence_series(returns_panel)     # one turbulence value per period (mean ~ n_assets)
+absorption_ratio(cov, n_factors=2)   # fraction of variance in the top 2 PCs, in [0, 1]
+```
+
+A turbulence spike marks a stressed regime; a rising absorption ratio marks a
+fragile, tightly-coupled market that has historically preceded drawdowns.
 
 ## Matrix utilities
 
