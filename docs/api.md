@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.765.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.766.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -11995,6 +11995,40 @@ Auto-generated from `quantforge` v1.765.0 by `docs/gen_api.py` — do not edit b
 ### `pillar_vols(atm, rr, bf)`  _function_
 
 > Return (sigma_25put, sigma_atm, sigma_25call) from ATM / RR / BF quotes.
+
+## var_backtest
+
+### `acerbi_szekely_es(losses, var_forecasts, es_forecasts, alpha=0.01)`  _function_
+
+> Acerbi-Szekely (2014) Expected-Shortfall test statistic (their Z2).
+>
+> ``Z = (1 / (n alpha)) sum_t hit_t * loss_t / ES_t - 1``, where ``hit_t`` marks a
+> VaR exception. Near zero when ES is well calibrated; positive when realized tail
+> losses exceed the forecast ES (the model understates risk), negative when it
+> overstates. Returns the scalar statistic.
+
+### `christoffersen_cc(losses, var_forecasts, alpha=0.01)`  _function_
+
+> Christoffersen conditional-coverage test: coverage and independence jointly.
+>
+> The sum of :func:`kupiec_pof` and :func:`christoffersen_independence` LR
+> statistics, tested as a chi-square(2). Returns ``(LR, p_value)``.
+
+### `christoffersen_independence(losses, var_forecasts)`  _function_
+
+> Christoffersen independence test: exceptions should not cluster.
+>
+> Fits a first-order Markov chain to the exception indicator and tests that the
+> probability of an exception does not depend on whether the previous period was an
+> exception. Returns ``(LR, p_value)``, a chi-square(1) LR test.
+
+### `kupiec_pof(losses, var_forecasts, alpha=0.01)`  _function_
+
+> Kupiec proportion-of-failures (unconditional-coverage) test.
+>
+> ``alpha`` is the VaR tail probability (e.g. 0.01 for 99% VaR), so the expected
+> exception rate is ``alpha``. Returns ``(LR, p_value)`` with ``LR`` a
+> chi-square(1) likelihood ratio; a small p-value rejects the model's coverage.
 
 ## variance_ratio
 

@@ -24,6 +24,17 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.766.0] - 2026-09-12
+
+### Added
+- `var_backtest.py`: Value-at-Risk / Expected-Shortfall backtests -- `kupiec_pof`
+  (unconditional coverage), `christoffersen_independence` and `christoffersen_cc`
+  (exception clustering / joint conditional coverage), and `acerbi_szekely_es` (the
+  Acerbi-Szekely ES calibration statistic). Cross-checked on simulated normal losses:
+  a correctly-specified 99% VaR/ES passes all three tests with the AS statistic near
+  zero; too-low a VaR is rejected by Kupiec; and an understated (overstated) ES gives
+  a positive (negative) AS statistic.
+
 ## [1.765.0] - 2026-09-12
 
 ### Documentation
