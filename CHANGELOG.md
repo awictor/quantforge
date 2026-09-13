@@ -31,6 +31,17 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.944.0] - 2026-09-13
+
+### Added
+- `streaming_quantile.py`: `P2Quantile` (Jain-Chlamtac P-square one-pass quantile
+  estimator, O(1) memory) and `reservoir_sample` (Vitter uniform sampling from a stream
+  of unknown length). Cross-checked: P-square tracks the uniform median, the true 95th
+  percentile to 0.01, and the normal 90th percentile; the reservoir gives uniform
+  coverage and is deterministic. Caught an LCG low-bit bias -- `state % (i+1)` gave a
+  badly skewed reservoir (the LCG's lowest bit merely alternates); switched to a
+  high-bit float index.
+
 ## [1.943.0] - 2026-09-13
 
 ### Documentation

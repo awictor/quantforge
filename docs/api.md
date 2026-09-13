@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.943.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.944.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -12771,6 +12771,24 @@ Auto-generated from `quantforge` v1.943.0 by `docs/gen_api.py` — do not edit b
 >
 > A call spread with K_long < K_short is a bull spread; a put spread with
 > K_long > K_short is a bear spread.
+
+## streaming_quantile
+
+### `P2Quantile(p)`  _class_
+
+> P-square streaming estimator of a single quantile ``p`` in ``[0, 1]``.
+>
+> Feed values with :meth:`update`; read the current estimate from :meth:`value`.
+> Uses five markers and O(1) memory; accuracy improves as the stream grows. Best for
+> smooth, stationary streams -- it approximates the true quantile without storing data.
+
+### `reservoir_sample(stream, k, seed=1234567)`  _function_
+
+> Vitter reservoir sample: ``k`` uniform items from a stream of unknown length.
+>
+> ``stream`` is any iterable. Returns a list of up to ``k`` items, each element of the
+> stream equally likely to be included. One pass, O(k) memory. Deterministic for a
+> fixed ``seed``.
 
 ## structural_break
 
