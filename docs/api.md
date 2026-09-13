@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.857.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.858.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -6423,6 +6423,27 @@ Auto-generated from `quantforge` v1.857.0 by `docs/gen_api.py` — do not edit b
 > (natural) end conditions. The returned function evaluates the piecewise cubic
 > and is exact at the knots, C2 in between. Clamps to the end segments outside
 > ``[xs[0], xs[-1]]``.
+
+## isotonic
+
+### `isotonic_fit(x, y, weights=None, increasing=True)`  _function_
+
+> Fit an isotonic step function of ``x`` and return a predictor callable.
+>
+> Sorts by ``x``, runs :func:`isotonic_regression` on the reordered response, and
+> returns ``(y_hat, predict)`` where ``y_hat`` is the fit aligned to the *original*
+> input order and ``predict(x_new)`` interpolates the monotone step fit at a new
+> point (linear between fitted knots, clamped to the endpoints). Ties in ``x`` share
+> a fitted value.
+
+### `isotonic_regression(y, weights=None, increasing=True)`  _function_
+
+> Weighted isotonic regression by pool-adjacent-violators.
+>
+> Returns the fitted values ``y_hat`` (same length as ``y``) forming the monotone
+> sequence closest to ``y`` in weighted least squares. ``weights`` defaults to all
+> ones; ``increasing=False`` fits a non-increasing sequence. The fit is a step
+> function: tied blocks share their common weighted mean.
 
 ## jump_test
 

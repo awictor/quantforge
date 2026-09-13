@@ -286,6 +286,7 @@ from .wavelet_denoise import (
     universal_threshold,
     wavelet_denoise,
 )
+from .isotonic import isotonic_regression, isotonic_fit
 from .kalman_beta import kalman_regression_beta
 from .theil_sen import theil_sen
 from .robust_stats import (
@@ -845,7 +846,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.857.0"
+__version__ = "1.858.0"
 
 __all__ = [
     "OptionType",
@@ -1294,6 +1295,8 @@ __all__ = [
     "mad_sigma",
     "universal_threshold",
     "wavelet_denoise",
+    "isotonic_regression",
+    "isotonic_fit",
     "kalman_regression_beta",
     "theil_sen",
     "median_absolute_deviation",

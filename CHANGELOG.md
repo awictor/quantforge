@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.858.0] - 2026-09-13
+
+### Added
+- `isotonic.py`: weighted isotonic (monotone) regression by pool-adjacent-violators
+  (`isotonic_regression`) and `isotonic_fit`, which sorts by `x`, fits, realigns to
+  the original order, and returns an interpolating predictor. Cross-checked against
+  the independent max-min weighted-average formula on 300 random weighted cases, plus
+  optimality (beats `sorted(y)` in weighted SSE) and decreasing fits.
+
 ## [1.857.0] - 2026-09-13
 
 ### Documentation
