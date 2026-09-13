@@ -2852,6 +2852,21 @@ A clean sine scores near zero; white noise scores high. `sample_entropy` drops t
 self-matches that bias `approximate_entropy`, and `permutation_entropy` is invariant
 to any monotone transform of the data, so it reads the same on prices or their logs.
 
+For dependence *between* two series, `mutual_information` scores shared information
+(symmetric, zero iff independent) and `transfer_entropy` scores *directed* flow —
+how much one series's past predicts another's future:
+
+```python
+from quantforge import mutual_information, transfer_entropy
+
+mutual_information(x, y)             # nats of shared information (symmetric)
+transfer_entropy(source, target)    # directed: source's past -> target's future
+```
+
+Transfer entropy is asymmetric, so `transfer_entropy(x, y)` and
+`transfer_entropy(y, x)` reveal lead-lag: in a coupled system where `x` drives `y`,
+the `x -> y` value dominates. Both are near zero for independent series.
+
 ## Variance-ratio test
 
 The Lo-MacKinlay variance ratio tests the random-walk null: under it the variance
