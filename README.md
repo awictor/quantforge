@@ -3062,6 +3062,27 @@ that makes it consistent for method comparison rather than a plain Theil-Sen fit
 needs no distributional assumption and tolerates outliers in either variable, at the
 cost of the `O(n²)` pair enumeration.
 
+Regression tells you how two methods *relate*; `bland_altman` and
+`concordance_correlation` tell you how well they *agree*. A high correlation can hide
+poor agreement — a constant offset correlates perfectly but never matches:
+
+```python
+from quantforge import bland_altman, concordance_correlation
+
+r = bland_altman([10, 20, 30, 40], [12, 19, 33, 38])
+r["bias"], r["lower"], r["upper"]    # -0.5, -5.1657, 4.1657 (95% limits of agreement)
+r["means"], r["diffs"]               # per-point arrays for the Bland-Altman plot
+
+concordance_correlation([1, 2, 3, 4, 5], [3, 4, 5, 6, 7])   # 0.5 (Pearson is 1.0)
+```
+
+`bland_altman` reports the bias (mean difference) and the limits `bias ± 1.96·sd`,
+within which about 95% of method-to-method differences fall. Lin's
+`concordance_correlation` folds precision (correlation) and accuracy (closeness to the
+`y = x` line) into one `[-1, 1]` index that equals 1 only when every point lies on the
+line of identity — so the constant `+2` offset above pulls it down to 0.5 even though
+the Pearson correlation is a perfect 1.0.
+
 ## Isotonic regression (monotone fit)
 
 When you know the response only moves one way — a dose-response curve, a calibration
