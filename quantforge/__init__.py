@@ -310,6 +310,7 @@ from .prob_forecast import (
     pinball_loss, interval_score, coverage as interval_coverage, crps_ensemble,
 )
 from .quantile_regression import quantile_regression
+from .lasso import lasso_regression
 from .variance_ratio import variance_ratio, variance_ratio_zstat
 from .ou_fit import fit_ornstein_uhlenbeck
 from .cointegration import adf_test, engle_granger
@@ -788,7 +789,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.779.0"
+__version__ = "1.780.0"
 
 __all__ = [
     "OptionType",
@@ -1267,6 +1268,7 @@ __all__ = [
     "interval_coverage",
     "crps_ensemble",
     "quantile_regression",
+    "lasso_regression",
     "rescaled_range",
     "variance_ratio",
     "variance_ratio_zstat",

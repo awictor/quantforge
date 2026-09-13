@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.779.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.780.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -6342,6 +6342,18 @@ Auto-generated from `quantforge` v1.779.0 by `docs/gen_api.py` — do not edit b
 > returning ``(log_moneyness, vol)`` pairs sorted by strike on the forward
 > ``F = S e^{(r-q) t}``. An asymmetric jump distribution (``eta1 != eta2`` or
 > ``p != 1/2``) tilts the smile into a skew.
+
+## lasso
+
+### `lasso_regression(X, y, alpha=1.0, max_iter=1000, tol=1e-08)`  _function_
+
+> Fit a LASSO regression ``y ~ X beta`` by coordinate descent.
+>
+> Returns ``[intercept, b_1, ..., b_p]`` on the original feature scale. ``alpha``
+> is the L1 penalty strength: ``alpha = 0`` recovers ordinary least squares, and a
+> large ``alpha`` drives all slopes to zero (the fit collapses to the mean of
+> ``y``). Features are standardized internally so the penalty applies evenly; the
+> intercept is never penalized. A slope set to exactly zero has been selected out.
 
 ## ldi
 
