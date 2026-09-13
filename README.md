@@ -3041,6 +3041,27 @@ first principal-component slope; `lam -> infinity` recovers ordinary OLS of `y` 
 `x`. The fitted line always passes through the sample means, and the orthogonal slope
 is symmetric — fitting `x` on `y` gives exactly its reciprocal.
 
+Deming assumes the errors are Gaussian; `passing_bablok_regression` is the
+distribution-free method-comparison alternative — the standard choice in clinical
+chemistry — combining errors-in-variables handling with full outlier resistance:
+
+```python
+from quantforge import passing_bablok_regression
+
+passing_bablok_regression([1, 2, 3, 4, 5], [3, 5, 7, 9, 11])   # (2.0, 1.0)
+
+x = list(range(1, 11))
+y = [2 * xi + 1 for xi in x]
+y[5] = 100                       # a gross outlier
+passing_bablok_regression(x, y)  # (2.0, 1.0) — the median slope shrugs it off
+```
+
+It takes the median of all pairwise slopes but discards slopes of `-1` (and vertical
+pairs) and *shifts* the median rank by the number of slopes below `-1`, the correction
+that makes it consistent for method comparison rather than a plain Theil-Sen fit. It
+needs no distributional assumption and tolerates outliers in either variable, at the
+cost of the `O(n²)` pair enumeration.
+
 ## Isotonic regression (monotone fit)
 
 When you know the response only moves one way — a dose-response curve, a calibration
