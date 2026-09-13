@@ -3639,6 +3639,18 @@ on long sequences; `hmm_viterbi` runs in log space and returns the optimal path 
 its log-probability — the standard tools for regime inference where the state
 carries over in time.
 
+For the per-time state probabilities (not just the single best path), `hmm_posterior`
+runs the forward-backward algorithm:
+
+```python
+from quantforge import hmm_posterior
+
+gamma = hmm_posterior(pi, A, B, obs)   # gamma[t][i] = P(state_t = i | obs)
+```
+
+Each `gamma[t]` is a distribution over states summing to one, using the *entire*
+observation sequence — the smoothed marginal, softer than Viterbi's hard assignment.
+
 ## Principal component analysis
 
 Covariance-matrix PCA via Jacobi eigendecomposition -- the yield-curve
