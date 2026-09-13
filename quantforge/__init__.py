@@ -530,6 +530,7 @@ from .ewma import EWMAStats, ewma
 from .hyperloglog import HyperLogLog
 from .count_min import CountMinSketch, BloomFilter
 from .dual import Dual, derivative as dual_derivative
+from .dual_calculus import dual_gradient, dual_newton
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -920,7 +921,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.953.0"
+__version__ = "1.954.0"
 
 __all__ = [
     "OptionType",
@@ -1703,6 +1704,8 @@ __all__ = [
     "BloomFilter",
     "Dual",
     "dual_derivative",
+    "dual_gradient",
+    "dual_newton",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

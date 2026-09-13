@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.954.0] - 2026-09-13
+
+### Added
+- `dual_calculus.py`: `dual_gradient` (exact multivariate gradient via forward-mode
+  autodiff) and `dual_newton` (Newton's method that gets `f'` from autodiff, so no
+  hand-coded derivative is needed). Cross-checked: the gradient matches the analytic
+  and numerical gradients including transcendentals, and `dual_newton` finds sqrt(2)
+  and ln(2) to machine precision, agreeing with the library's `newton`.
+
 ## [1.953.0] - 2026-09-13
 
 ### Documentation

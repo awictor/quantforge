@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.953.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.954.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -3652,6 +3652,25 @@ Auto-generated from `quantforge` v1.953.0 by `docs/gen_api.py` — do not edit b
 > ``f`` must accept a :class:`Dual` and return a :class:`Dual`, built from ``Dual``
 > arithmetic and this module's elementary functions (``exp``, ``log``, ``sin``, ...).
 > Returns ``f'(x)`` with no truncation error.
+
+## dual_calculus
+
+### `dual_gradient(f, x)`  _function_
+
+> Exact gradient of a scalar ``f`` of a vector ``x`` by forward-mode autodiff.
+>
+> ``f`` takes a list of (possibly :class:`Dual`) components and returns a scalar
+> ``Dual``. Seeds each coordinate's derivative to 1 in turn, so the result is the
+> vector of partial derivatives with no truncation error. ``n`` function evaluations.
+
+### `dual_newton(f, x0, tol=1e-12, max_iter=100)`  _function_
+
+> Newton's method for ``f(x) = 0`` using autodiff for the derivative.
+>
+> ``f`` must accept a :class:`Dual` and return a :class:`Dual`. Each step evaluates
+> ``f`` once on a seeded dual, reading both ``f(x)`` and ``f'(x)`` at no extra cost,
+> so no separate derivative function is needed. Returns a dict with ``root``,
+> ``iterations`` and ``converged``. Raises if the derivative vanishes.
 
 ## dual_currency
 
