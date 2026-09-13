@@ -24,6 +24,16 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.778.0] - 2026-09-12
+
+### Added
+- `quantile_regression.py`: linear `quantile_regression` fitting a conditional
+  ``tau``-quantile by minimizing the pinball loss via iteratively-reweighted least
+  squares. Cross-checked: the median fit recovers the true slope and intercept, the
+  intercept rises with ``tau`` while the slope stays put under homoskedastic noise,
+  the fitted line has the residual-quantile property (a fraction ``tau`` of points
+  fall below it), and it beats OLS on the pinball loss at its target quantile.
+
 ## [1.777.0] - 2026-09-12
 
 ### Documentation

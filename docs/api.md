@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.777.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.778.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -9329,6 +9329,18 @@ Auto-generated from `quantforge` v1.777.0 by `docs/gen_api.py` — do not edit b
 ### `trapezoid(f, a, b, n=1000)`  _function_
 
 > Composite trapezoid rule with ``n`` sub-intervals over ``[a, b]``.
+
+## quantile_regression
+
+### `quantile_regression(X, y, tau=0.5, add_intercept=True, max_iter=200, tol=1e-08)`  _function_
+
+> Fit a linear ``tau``-quantile regression ``y ~ X beta``.
+>
+> Returns the coefficient list (intercept first if added). ``tau`` in ``(0, 1)``
+> selects the conditional quantile: 0.5 is the median (least-absolute-deviations)
+> fit, higher ``tau`` tracks the upper conditional tail. Solved by IRLS on the
+> asymmetric absolute loss; a small floor keeps the reweighting stable at zero
+> residuals.
 
 ## quanto
 
