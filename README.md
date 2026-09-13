@@ -2818,6 +2818,20 @@ fractional_integrate(white_noise, d=0.4)     # build an ARFIMA(0, 0.4, 0) path
 `d = 0` (short memory); estimate it, then difference by that `d` with
 `fractional_difference` to obtain a stationary, memory-preserved series.
 
+`dfa_exponent` is a third estimator, detrended fluctuation analysis, which removes a
+polynomial trend in each window and so tolerates slow drift that biases R/S:
+
+```python
+from quantforge import dfa_exponent, dfa_fluctuations
+
+dfa_exponent(series)                 # alpha ~ 0.5 white, > 0.5 persistent, < 0.5 anti
+dfa_fluctuations(series)             # (scales, F(s)) for the log-log fit
+```
+
+`alpha` equals the Hurst exponent for a stationary long-memory series and exceeds it
+by one for the integrated version, so a random walk reads `~1.5` where white noise
+reads `~0.5`.
+
 ## Variance-ratio test
 
 The Lo-MacKinlay variance ratio tests the random-walk null: under it the variance
