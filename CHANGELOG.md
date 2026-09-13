@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.984.0] - 2026-09-13
+
+### Added
+- `ecdf.py`: the empirical CDF (`ecdf`), sample `quantile` (linear/lower/higher/nearest
+  interpolation), and `qq_points` for quantile-quantile comparison. Cross-checked: the
+  ECDF runs 0->1 monotonically, the linear quantile matches `statistics.quantiles`,
+  quantiles recover the normal median and 97.5% point, and a Q-Q pairing sits on the
+  diagonal for matched samples and shows the right slope under a scale difference.
+
 ## [1.983.0] - 2026-09-13
 
 ### Documentation

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.983.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.984.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -3855,6 +3855,32 @@ Auto-generated from `quantforge` v1.983.0 by `docs/gen_api.py` — do not edit b
 >
 > Returns a :class:`KeyRateDV01`. By convention DV01 is negative for a long
 > bond-like position (rates up -> PV down).
+
+## ecdf
+
+### `ecdf(data, x)`  _function_
+
+> Empirical CDF ``F_n(x) = #{data_i <= x} / n`` at point(s) ``x``.
+>
+> ``x`` may be a scalar (returns a float in ``[0, 1]``) or an iterable (returns a
+> list). Right-continuous step function.
+
+### `qq_points(sample, reference)`  _function_
+
+> Quantile-quantile pairing of two samples for a Q-Q plot.
+>
+> Returns a list of ``(reference_quantile, sample_quantile)`` pairs evaluated at the
+> plotting positions ``(i - 0.5)/m`` of the smaller sample size ``m``. On the y = x
+> line the two samples share a distribution; a slope or curvature departure reveals a
+> scale or shape difference. ``reference`` may be another sample.
+
+### `quantile(data, p, method='linear')`  _function_
+
+> Sample quantile at probability ``p`` in ``[0, 1]``.
+>
+> ``method`` selects the interpolation on the order statistics: ``"linear"`` (the
+> NumPy default, ``(n-1)p`` position), ``"lower"``, ``"higher"``, or ``"nearest"``.
+> ``p`` may be a scalar or iterable. Matches the standard percentile conventions.
 
 ## encoding
 
