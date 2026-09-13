@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.11.0] - 2026-09-13
+
+### Added
+- `poisson2d.py`: `poisson2d`, a 2-D Poisson/Laplace solver (`u_xx + u_yy = f`) on a
+  rectangle with Dirichlet boundaries by successive over-relaxation. Cross-checked: a
+  linear (harmonic) boundary is recovered exactly, a `sin*sin` source matches its
+  analytic solution to `O(h^2)`, the maximum principle holds (interior stays within the
+  boundary range), and SOR converges about 7x faster than plain Gauss-Seidel.
+
 ## [2.10.0] - 2026-09-13
 
 ### Documentation

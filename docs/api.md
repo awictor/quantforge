@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.10.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.11.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -10345,6 +10345,18 @@ Auto-generated from `quantforge` v2.10.0 by `docs/gen_api.py` — do not edit by
 ### `platt_predict(scores, A, B)`  _function_
 
 > Apply a fitted Platt sigmoid to scores, returning calibrated probabilities.
+
+## poisson2d
+
+### `poisson2d(f_grid, boundary, dx, dy, omega=1.5, tol=1e-08, max_iter=10000)`  _function_
+
+> Solve ``u_xx + u_yy = f`` on a grid by SOR with Dirichlet boundaries.
+>
+> ``f_grid`` is the source term ``f`` as a 2-D list (rows = y, cols = x);
+> ``boundary`` a same-shaped grid whose *edge* values set the fixed boundary (interior
+> entries are the initial guess). ``dx``/``dy`` are the grid spacings, ``omega`` the
+> SOR factor in ``(0, 2)`` (1 = Gauss-Seidel). Returns ``(u, n_iter)`` -- the solution
+> grid and the sweeps taken. Laplace is the ``f_grid`` all-zero case.
 
 ## poisson_regression
 
