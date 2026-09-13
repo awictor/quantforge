@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.761.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.762.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -3335,6 +3335,36 @@ Auto-generated from `quantforge` v1.761.0 by `docs/gen_api.py` — do not edit b
 >
 > Non-negative, and zero exactly when ``p == q``. Terms with ``p_i == 0`` are
 > dropped (limit ``0 log 0 = 0``).
+
+## entropy_ts
+
+### `approximate_entropy(series, m=2, r=None)`  _function_
+
+> Approximate entropy ``ApEn(m, r)`` (Pincus).
+>
+> ``r`` is the tolerance for a match (defaults to ``0.2 * std(series)``). Returns
+> ``phi_m - phi_{m+1}``; near zero for a perfectly regular series and larger for an
+> irregular one. Includes self-matches, so it is biased low on short series -- use
+> :func:`sample_entropy` when that matters.
+
+### `permutation_entropy(series, m=3, normalize=True)`  _function_
+
+> Permutation entropy (Bandt-Pompe) from the ordinal patterns of length ``m``.
+>
+> Slides a window of ``m`` points, records which permutation sorts each window, and
+> returns the Shannon entropy of the pattern distribution. With ``normalize=True``
+> it is divided by ``log(m!)`` to land in ``[0, 1]`` -- 0 for a monotone series, 1
+> for one whose orderings are uniformly random. Invariant to any monotone transform
+> of the series.
+
+### `sample_entropy(series, m=2, r=None)`  _function_
+
+> Sample entropy ``SampEn(m, r)`` (Richman-Moorman).
+>
+> ``-log(A / B)`` where ``B`` counts template matches of length ``m`` and ``A`` of
+> length ``m + 1``, both excluding self-matches. Larger means less regular / more
+> complex. ``r`` defaults to ``0.2 * std(series)``. Raises if no longer-template
+> matches occur (entropy would be infinite).
 
 ## equity_comp
 

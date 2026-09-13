@@ -24,6 +24,16 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.762.0] - 2026-09-12
+
+### Added
+- `entropy_ts.py`: time-series regularity measures -- `approximate_entropy`
+  (Pincus), `sample_entropy` (Richman-Moorman) and `permutation_entropy`
+  (Bandt-Pompe). Cross-checked: a regular sine has far lower approximate/sample
+  entropy than white noise, permutation entropy is exactly zero for a monotone
+  series and near one for noise, stays in ``[0, 1]``, and is invariant to a monotone
+  transform of the series.
+
 ## [1.761.0] - 2026-09-12
 
 ### Documentation

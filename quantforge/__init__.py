@@ -293,6 +293,9 @@ from .fracdiff import (
 )
 from .gph import gph_estimate, fractional_integrate
 from .dfa import dfa_exponent, dfa_fluctuations
+from .entropy_ts import (
+    approximate_entropy, sample_entropy, permutation_entropy,
+)
 from .variance_ratio import variance_ratio, variance_ratio_zstat
 from .ou_fit import fit_ornstein_uhlenbeck
 from .cointegration import adf_test, engle_granger
@@ -771,7 +774,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.761.0"
+__version__ = "1.762.0"
 
 __all__ = [
     "OptionType",
@@ -1231,6 +1234,9 @@ __all__ = [
     "fractional_integrate",
     "dfa_exponent",
     "dfa_fluctuations",
+    "approximate_entropy",
+    "sample_entropy",
+    "permutation_entropy",
     "rescaled_range",
     "variance_ratio",
     "variance_ratio_zstat",
