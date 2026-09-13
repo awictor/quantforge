@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.811.0] - 2026-09-13
+
+### Documentation
+- README portfolio-optimization section now documents the concentration measures
+  (`herfindahl_index`, `effective_number_of_constituents`, `effective_number_of_bets`)
+  with a worked example.
+
 ## [1.810.0] - 2026-09-13
 
 ### Added

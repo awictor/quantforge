@@ -3948,6 +3948,23 @@ inverse_volatility_weights(cov)
 hierarchical_risk_parity(cov)     # Lopez de Prado HRP
 ```
 
+Measure how diversified a set of weights actually is — nominal count vs independent
+risk sources:
+
+```python
+from quantforge import (herfindahl_index, effective_number_of_constituents,
+                        effective_number_of_bets)
+
+herfindahl_index(weights)                    # sum of squared weights
+effective_number_of_constituents(weights)    # 1/HHI: equal-weight-equivalent count
+effective_number_of_bets(weights, cov)        # Meucci: independent risk sources
+```
+
+`effective_number_of_constituents` counts positions by weight; Meucci's
+`effective_number_of_bets` counts *uncorrelated* risk factors, so a portfolio of
+many correlated names can hold dozens of constituents but only a handful of real
+bets.
+
 ## Rebalancing
 
 Weight drift, turnover, transaction-cost drag, and no-trade-band rebalancing:
