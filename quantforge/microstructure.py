@@ -8,10 +8,15 @@ with estimators built directly from signed trades:
 - ``order_flow_imbalance`` -- net signed volume over total volume in a window,
 - ``vpin`` -- the volume-synchronized probability of informed trading (Easley,
   Lopez de Prado, O'Hara), the mean absolute order imbalance across equal-volume
-  buckets.
+  buckets,
+- the transaction-cost spread decomposition ``quoted_spread``,
+  ``effective_spread``, ``realized_spread`` and ``price_impact``, which satisfy the
+  identity ``effective = realized + price_impact``.
 
 Pure standard library.
 """
+
+import math
 
 
 def kyle_lambda_regression(price_changes, signed_volumes):
@@ -76,3 +81,80 @@ def vpin(buy_volumes, sell_volumes):
     if count == 0:
         raise ValueError("all buckets have zero volume")
     return total / count
+
+
+def _spread_inputs(trade_prices, mids, signs):
+    n = len(trade_prices)
+    if n == 0 or len(mids) != n or len(signs) != n:
+        raise ValueError("trade_prices, mids, signs must be equal-length, non-empty")
+    if any(s not in (-1, 1) for s in signs):
+        raise ValueError("signs must be +1 (buy) or -1 (sell)")
+    return n
+
+
+def effective_spread(trade_prices, mids, signs):
+    """Average effective (proportional) spread ``2 * sign * (price - mid) / mid``.
+
+    The cost actually paid relative to the midpoint at the time of the trade:
+    ``sign`` is ``+1`` for buys and ``-1`` for sells. Returned as the mean over the
+    trades, in the same units as ``price / mid`` (a fraction). Wider than the quoted
+    spread when trades walk the book, tighter when they occur inside it.
+    """
+    n = _spread_inputs(trade_prices, mids, signs)
+    if any(m <= 0.0 for m in mids):
+        raise ValueError("midpoints must be positive")
+    return sum(2.0 * signs[i] * (trade_prices[i] - mids[i]) / mids[i]
+               for i in range(n)) / n
+
+
+def realized_spread(trade_prices, mids, future_mids, signs):
+    """Average realized (proportional) spread ``2 * sign * (price - mid_future) / mid``.
+
+    The portion of the effective spread the liquidity provider *keeps* -- the trade
+    price against the midpoint a short horizon later (``future_mids``), so it nets
+    out the permanent price move. ``mids`` is the quote midpoint at the trade,
+    ``future_mids`` the midpoint after the impact horizon. Mean over the trades.
+    """
+    n = _spread_inputs(trade_prices, mids, signs)
+    if len(future_mids) != n:
+        raise ValueError("future_mids must align with the trades")
+    if any(m <= 0.0 for m in mids):
+        raise ValueError("midpoints must be positive")
+    return sum(2.0 * signs[i] * (trade_prices[i] - future_mids[i]) / mids[i]
+               for i in range(n)) / n
+
+
+def price_impact(trade_prices, mids, future_mids, signs):
+    """Average (proportional) price impact ``2 * sign * (mid_future - mid) / mid``.
+
+    The permanent midpoint move in the trade's direction over the impact horizon --
+    the informational half of the spread. By construction
+    ``effective = realized + price_impact`` term by term (both defined with the same
+    ``2 * sign / mid`` scaling), so this equals the gap between the effective and
+    realized spreads.
+    """
+    n = _spread_inputs(trade_prices, mids, signs)
+    if len(future_mids) != n:
+        raise ValueError("future_mids must align with the trades")
+    if any(m <= 0.0 for m in mids):
+        raise ValueError("midpoints must be positive")
+    return sum(2.0 * signs[i] * (future_mids[i] - mids[i]) / mids[i]
+               for i in range(n)) / n
+
+
+def quoted_spread(bids, asks):
+    """Average proportional quoted spread ``(ask - bid) / midpoint``.
+
+    The posted cost of a round trip, independent of where trades actually print.
+    Aligned bid/ask series with positive midpoints.
+    """
+    n = len(bids)
+    if n == 0 or len(asks) != n:
+        raise ValueError("bids and asks must be equal-length, non-empty")
+    total = 0.0
+    for i in range(n):
+        mid = 0.5 * (bids[i] + asks[i])
+        if mid <= 0.0:
+            raise ValueError("midpoints must be positive")
+        total += (asks[i] - bids[i]) / mid
+    return total / n

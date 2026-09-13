@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.749.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.750.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -7131,6 +7131,15 @@ Auto-generated from `quantforge` v1.749.0 by `docs/gen_api.py` — do not edit b
 
 ## microstructure
 
+### `effective_spread(trade_prices, mids, signs)`  _function_
+
+> Average effective (proportional) spread ``2 * sign * (price - mid) / mid``.
+>
+> The cost actually paid relative to the midpoint at the time of the trade:
+> ``sign`` is ``+1`` for buys and ``-1`` for sells. Returned as the mean over the
+> trades, in the same units as ``price / mid`` (a fraction). Wider than the quoted
+> spread when trades walk the book, tighter when they occur inside it.
+
 ### `kyle_lambda_regression(price_changes, signed_volumes)`  _function_
 
 > Empirical Kyle's lambda: slope of price change on signed order flow.
@@ -7147,6 +7156,32 @@ Auto-generated from `quantforge` v1.749.0 by `docs/gen_api.py` — do not edit b
 >
 > In ``[-1, 1]``: positive when buys dominate, negative when sells do. Aligned
 > non-negative volume series.
+
+### `price_impact(trade_prices, mids, future_mids, signs)`  _function_
+
+> Average (proportional) price impact ``2 * sign * (mid_future - mid) / mid``.
+>
+> The permanent midpoint move in the trade's direction over the impact horizon --
+> the informational half of the spread. By construction
+> ``effective = realized + price_impact`` term by term (both defined with the same
+> ``2 * sign / mid`` scaling), so this equals the gap between the effective and
+> realized spreads.
+
+### `quoted_spread(bids, asks)`  _function_
+
+> Average proportional quoted spread ``(ask - bid) / midpoint``.
+>
+> The posted cost of a round trip, independent of where trades actually print.
+> Aligned bid/ask series with positive midpoints.
+
+### `realized_spread(trade_prices, mids, future_mids, signs)`  _function_
+
+> Average realized (proportional) spread ``2 * sign * (price - mid_future) / mid``.
+>
+> The portion of the effective spread the liquidity provider *keeps* -- the trade
+> price against the midpoint a short horizon later (``future_mids``), so it nets
+> out the permanent price move. ``mids`` is the quote midpoint at the trade,
+> ``future_mids`` the midpoint after the impact horizon. Mean over the trades.
 
 ### `vpin(buy_volumes, sell_volumes)`  _function_
 

@@ -24,6 +24,16 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.750.0] - 2026-09-12
+
+### Added
+- `microstructure.py` gains the transaction-cost spread decomposition:
+  `quoted_spread`, `effective_spread`, `realized_spread` and `price_impact`. Cross-
+  checked: the decomposition identity `effective = realized + price_impact` holds
+  term by term; with no midpoint move the realized spread equals the effective and
+  the impact is zero; and a trade at the mid with a permanent move is pure price
+  impact (zero effective, positive impact).
+
 ## [1.749.0] - 2026-09-12
 
 ### Documentation
