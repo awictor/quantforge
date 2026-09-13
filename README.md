@@ -2527,6 +2527,26 @@ with `forgetting < 1` it down-weights the past geometrically, so it re-adapts wi
 few dozen points when the underlying slope shifts (adaptive filtering, time-varying
 betas).
 
+When the predictors are collinear (correlated factors, an over-parameterized curve),
+`principal_components_regression` rotates them onto their principal components, keeps
+the top `k`, and regresses on those — dropping the low-variance directions that make
+OLS unstable:
+
+```python
+from quantforge import principal_components_regression
+
+pcr = principal_components_regression(X, y, n_components=2)
+pcr["coefficients"], pcr["intercept"]     # in the original predictor space
+pcr["explained_variance"]                 # fraction of predictor variance kept
+```
+
+Retaining all components reproduces OLS exactly; keeping fewer trades a little bias for
+much lower variance and stays well-behaved even when two predictors are nearly
+identical (where OLS coefficients blow up). The `explained_variance` field reports how
+much predictor variance the retained components capture, so you can pick `k` from a
+scree-style cutoff. The coefficients are mapped back to the original variables, so they
+plug into the same prediction as any other fit.
+
 When regressors are collinear or numerous, `ridge_regression` adds an L2 penalty
 that shrinks the slopes and keeps the system solvable:
 
