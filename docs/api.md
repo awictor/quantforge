@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.945.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.946.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -4115,6 +4115,24 @@ Auto-generated from `quantforge` v1.945.0 by `docs/gen_api.py` — do not edit b
 > the ``k`` largest losses over the ``(k+1)``-th. Estimates the shape ``xi`` of a
 > heavy power-law tail (tail exponent ``alpha = 1/xi``); larger ``xi`` means a
 > heavier tail.
+
+## ewma
+
+### `EWMAStats(lam=0.94, values=None)`  _class_
+
+> Streaming exponentially-weighted mean, variance and volatility.
+>
+> ``lam`` is the decay in ``(0, 1)`` (larger = longer memory). Feed points with
+> :meth:`update`; read :attr:`mean`, :meth:`variance`, :meth:`std`. The first point
+> seeds the mean; variance builds from the second. Effective window is about
+> ``1 / (1 - lam)`` observations.
+
+### `ewma(values, lam=0.94)`  _function_
+
+> Exponentially-weighted moving mean of a whole series (list output).
+>
+> Returns the running EWMA at each step, seeded from the first value. A convenience
+> wrapper over :class:`EWMAStats` for batch use.
 
 ## ewma_cov
 

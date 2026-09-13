@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.946.0] - 2026-09-13
+
+### Added
+- `ewma.py`: `EWMAStats`, a streaming exponentially-weighted mean/variance/volatility
+  accumulator (the single-series RiskMetrics recursion), plus the `ewma` batch helper.
+  Cross-checked: constant series gives zero variance, the batch output matches the
+  manual recursion, it tracks a step change with the expected lag, recovers the vol of
+  N(0,2), and reacts sharply to a volatility regime change.
+
 ## [1.945.0] - 2026-09-13
 
 ### Documentation

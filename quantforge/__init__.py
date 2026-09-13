@@ -526,6 +526,7 @@ from .power_iteration import power_iteration, inverse_iteration, rayleigh_quotie
 from .compensated import kahan_sum, neumaier_sum, accurate_dot, welford
 from .running_moments import RunningMoments
 from .streaming_quantile import P2Quantile, reservoir_sample
+from .ewma import EWMAStats, ewma
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -916,7 +917,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.945.0"
+__version__ = "1.946.0"
 
 __all__ = [
     "OptionType",
@@ -1692,6 +1693,8 @@ __all__ = [
     "RunningMoments",
     "P2Quantile",
     "reservoir_sample",
+    "EWMAStats",
+    "ewma",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",
