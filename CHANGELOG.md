@@ -31,6 +31,12 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.14.0] - 2026-09-13
+
+### Documentation
+- README: documented `dct` and `idct` in the spectral-analysis section, alongside the
+  FFT.
+
 ## [2.13.0] - 2026-09-13
 
 ### Added

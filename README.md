@@ -4372,6 +4372,22 @@ fft_autocorrelation(series, max_lag=20)   # autocorrelation, acf[0] = 1
 direct convolution), and `fft_autocorrelation` computes the whole autocorrelation via
 Wiener-Khinchin — far faster than the direct lag-by-lag sum on long series.
 
+The real-valued cousin of the FFT, the discrete cosine transform, is `dct` (DCT-II) with
+inverse `idct` (DCT-III):
+
+```python
+from quantforge import dct, idct
+
+X = dct(signal)        # orthonormal cosine spectrum
+idct(X)                # recovers the signal exactly
+```
+
+The DCT expresses a real signal as a sum of cosines and, being orthonormal, preserves
+energy and round-trips to machine precision. It packs most of a smooth signal's energy
+into the first few coefficients (a smooth curve puts >95% in its first four) — the
+compaction property behind JPEG and MP3 — so it doubles as a compression and
+denoising basis. Unlike the FFT it needs no power-of-two length.
+
 The raw periodogram is noisy; `welch_psd` averages windowed segment periodograms for
 a much lower-variance spectral-density estimate:
 
