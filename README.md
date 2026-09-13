@@ -2786,6 +2786,23 @@ hurst_exponent(mean_reverting)   # <0.5  (moves tend to reverse)
 A reading well above 0.5 flags a trend-following regime; well below flags a
 mean-reversion regime.
 
+For a long-memory series, integer differencing (`d = 1`) removes the unit root but
+destroys the memory; fractional differencing `(1 - L)^d` for real `d` makes it
+stationary while keeping most of the autocorrelation:
+
+```python
+from quantforge import (fractional_difference, fixed_width_fracdiff,
+                        fracdiff_weights)
+
+fractional_difference(series, d=0.4)         # (1-L)^0.4 by the full expansion
+fixed_width_fracdiff(series, d=0.4)          # Lopez de Prado's fixed-width window
+fracdiff_weights(0.4, 10)                    # the binomial filter weights
+```
+
+Integer orders recover the ordinary differences (`d = 1` is the first difference,
+`d = 2` the second); a fractional `d` in `(0, 1)` is the useful middle ground, with
+weights that decay slowly rather than truncating at order `d`.
+
 ## Variance-ratio test
 
 The Lo-MacKinlay variance ratio tests the random-walk null: under it the variance
