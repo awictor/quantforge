@@ -2756,6 +2756,24 @@ their mean squared-error (or absolute-error) gap by its HAC standard error, with
 Harvey small-sample correction. It is antisymmetric — swapping the forecasts flips
 the sign — so a large `|dm|` with a small p-value picks a winner.
 
+Rather than pick one forecast, combine them — an average usually beats the best
+single model. Three weighting schemes:
+
+```python
+from quantforge import (simple_average_forecast, inverse_mse_weights,
+                        optimal_combination_weights, combine_forecasts)
+
+simple_average_forecast([f1, f2, f3])          # equal weights
+w = inverse_mse_weights([errors1, errors2])    # proportional to 1/MSE
+w = optimal_combination_weights([errors1, errors2])   # Bates-Granger min-variance
+combine_forecasts([f1, f2], w)                 # apply the weights to the forecasts
+```
+
+All schemes sum to one. `inverse_mse_weights` leans on the more accurate model;
+`optimal_combination_weights` uses the error covariance, so it can put negative
+weight on a model that hedges another's errors and drive the combined error variance
+below either individual model's.
+
 ## Theil-Sen robust regression
 
 Ordinary least squares is dragged by outliers. The Theil-Sen estimator takes the

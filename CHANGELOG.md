@@ -24,6 +24,13 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.773.0] - 2026-09-12
+
+### Documentation
+- README Newey-West HAC section now documents the forecast-combination routines
+  (`simple_average_forecast`, `inverse_mse_weights`, `optimal_combination_weights`,
+  `combine_forecasts`) with a worked example.
+
 ## [1.772.0] - 2026-09-12
 
 ### Added
