@@ -3633,6 +3633,19 @@ basket_option_mc([100, 100, 100], [1/3, 1/3, 1/3], strike=100, t=1, r=0.05,
                  sigmas=[0.2, 0.25, 0.3], correlation=corr)
 ```
 
+Householder QR factors a (tall) matrix as `A = Q R` and solves least squares without
+the ill-conditioned normal equations:
+
+```python
+from quantforge import qr_decomposition, qr_solve
+
+Q, R = qr_decomposition(A)        # Q orthogonal, R upper triangular
+x = qr_solve(A, b)                # least-squares solution, stabler than (A'A)^-1 A'b
+```
+
+`qr_solve` matches the OLS coefficients but stays accurate where the normal-equations
+matrix `A'A` would be near-singular — the preferred path for near-collinear designs.
+
 ## Numerical utilities
 
 Cubic interpolation (natural spline and monotone Hermite), a spline-interpolated

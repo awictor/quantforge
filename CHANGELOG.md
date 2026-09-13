@@ -31,6 +31,12 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.823.0] - 2026-09-13
+
+### Documentation
+- README matrix-utilities section now documents `qr_decomposition` and `qr_solve`
+  with a worked example, noting the stability advantage over the normal equations.
+
 ## [1.822.0] - 2026-09-13
 
 ### Added
