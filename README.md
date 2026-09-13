@@ -3163,6 +3163,24 @@ The double median tolerates nearly half the data being corrupted where Theil-Sen
 single median of slopes, ~29% breakdown) starts to fail — the estimator to reach for
 when contamination is severe, at the same `O(n²)` cost.
 
+Between OLS and the fully-robust medians sits `huber_regression`, an M-estimator that
+is quadratic (OLS-efficient) for small residuals and linear (bounded influence) beyond
+a threshold `delta`, fit by iteratively reweighted least squares:
+
+```python
+from quantforge import huber_regression
+
+# 50 points on y = 2x + 1 with four gross vertical outliers
+h = huber_regression(X, y)
+h["coefficients"][1]     # 1.997 — near the true slope 2 (OLS is dragged to ~1.65)
+```
+
+The default `delta = 1.345` gives ~95% efficiency at the normal while down-weighting
+points whose robust-scaled residual exceeds it; a large `delta` recovers OLS exactly.
+Unlike Theil-Sen/Siegel it extends naturally to multiple regressors and gives standard-
+error-ready coefficients, trading a little breakdown resistance for efficiency and
+generality.
+
 Theil-Sen still assumes `x` is exact. When *both* variables carry measurement error
 (comparing two instruments or assays), OLS biases the slope toward zero;
 `deming_regression` accounts for error in both and `orthogonal_regression` is its
