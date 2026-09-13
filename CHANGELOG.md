@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.846.0] - 2026-09-13
+
+### Added
+- `savgol.py`: the Savitzky-Golay filter -- `savgol_coeffs` (convolution weights from
+  the window's Vandermonde normal equations) and `savgol_filter` (smoothing or
+  differentiation, with proper polynomial edge handling). Cross-checked: the
+  smoothing weights sum to one and derivative weights to zero, it reproduces
+  polynomials up to the fit degree exactly, the first derivative of a quadratic is
+  recovered, and it cuts the variance of a noisy series by more than half.
+
 ## [1.845.0] - 2026-09-13
 
 ### Documentation

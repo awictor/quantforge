@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.845.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.846.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -11028,6 +11028,27 @@ Auto-generated from `quantforge` v1.845.0 by `docs/gen_api.py` — do not edit b
 >
 > Uses the standard expansion with the ATM limit handled separately to avoid
 > the removable 0/0 singularity at ``F == K``.
+
+## savgol
+
+### `savgol_coeffs(window, degree, deriv=0)`  _function_
+
+> Savitzky-Golay convolution coefficients for a window of odd length ``window``.
+>
+> Returns the ``window`` weights that, dotted with the windowed samples, give the
+> fitted value (``deriv = 0``) or the ``deriv``-th derivative at the window center.
+> ``window`` must be odd and larger than ``degree``. For unit spacing; scale a
+> derivative by ``1 / h^deriv`` for spacing ``h``.
+
+### `savgol_filter(data, window, degree, deriv=0)`  _function_
+
+> Apply a Savitzky-Golay filter to ``data``.
+>
+> Smooths (``deriv = 0``) or differentiates the series with a length-``window``,
+> degree-``degree`` polynomial fit. Interior points use the centered convolution;
+> the ``half`` points at each end are fitted from the nearest full window (so the
+> output has the same length as the input). Exactly reproduces polynomials up to
+> ``degree``.
 
 ## scaling
 
