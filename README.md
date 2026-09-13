@@ -5034,6 +5034,27 @@ previous mean — so `EWMAStats` reacts within a handful of points when volatili
 regime, unlike a long fixed-window estimate that would smear the change. The batch
 `ewma` returns the running mean at every step for the whole series.
 
+Counting *distinct* items exactly costs memory proportional to the count; `HyperLogLog`
+estimates it from a few kilobytes of registers regardless of stream size:
+
+```python
+from quantforge import HyperLogLog
+
+hll = HyperLogLog(p=14)               # 2^14 registers, ~0.8% typical error
+for item in stream:                   # any stringifiable value
+    hll.add(item)
+hll.count()                           # estimated distinct count
+
+a.merge(b)                            # union cardinality of two sketches (same p)
+```
+
+Each item is hashed; the leading-zero count of the hash tail feeds a register chosen by
+its leading bits, and the harmonic mean across registers estimates the cardinality.
+Accuracy is about `1.04 / sqrt(2^p)` — under 1% at `p = 14` — and stays within a few
+percent from a hundred to a hundred million distinct items. Duplicates never inflate the
+estimate, sketches `merge` into the union count, and the SHA-1 hash makes it
+deterministic across runs.
+
 The special functions behind the distribution routines are public:
 
 ```python

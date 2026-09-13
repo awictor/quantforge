@@ -31,6 +31,11 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.949.0] - 2026-09-13
+
+### Documentation
+- README: documented `HyperLogLog` in the numerical-utilities section.
+
 ## [1.948.0] - 2026-09-13
 
 ### Added
