@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.879.0] - 2026-09-13
+
+### Documentation
+- README: extended the hypothesis-test section with `ansari_bradley_test` and
+  `mood_test` for nonparametric equal-dispersion testing, contrasting them with a
+  location rank test that misses a spread difference.
+
 ## [1.878.0] - 2026-09-13
 
 ### Added

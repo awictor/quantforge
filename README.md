@@ -3390,6 +3390,26 @@ and `p = 0.0092`. The sign test counts observations above the hypothesized media
 tests that count against `Binomial(n, 1/2)`, returning the exact two-sided p-value —
 maximally robust, at the cost of power.
 
+All the rank tests above chase a *location* shift and are blind to a pure difference
+in *spread*. `ansari_bradley_test` and `mood_test` fill that gap — nonparametric
+two-sample tests of equal dispersion:
+
+```python
+from quantforge import ansari_bradley_test, mood_test, mann_whitney_u
+
+# two samples, same median, very different spread (sigma 1 vs 4)
+ansari_bradley_test(x, y)["p_value"]   # small — flags the scale difference
+mood_test(x, y)["p_value"]             # small — same conclusion
+
+mann_whitney_u(x, y)                   # a location test barely reacts (p ~ 0.1)
+```
+
+Ansari-Bradley scores the pooled ranks from the outside in (`min(r, N+1-r)`), so a
+tightly-concentrated sample earns higher scores; Mood sums each observation's squared
+deviation from the center rank, which a dispersed sample inflates by pushing values to
+the extremes. Both assume the two samples share a location and return a
+normal-approximation p-value whose null z is calibrated to mean 0 and variance 1.
+
 For a proportion estimate, four confidence intervals span the accuracy/simplicity
 trade-off:
 
