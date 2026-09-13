@@ -24,6 +24,13 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.769.0] - 2026-09-12
+
+### Documentation
+- README sample-risk-measures section now documents `expectile`, noting it is the
+  only coherent-and-elicitable risk measure and is backtestable by a single scoring
+  function.
+
 ## [1.768.0] - 2026-09-12
 
 ### Added

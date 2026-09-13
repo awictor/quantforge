@@ -3527,6 +3527,19 @@ sample_expected_shortfall(pnl, confidence=0.95)     # coherent CVaR
 component_expected_shortfall([book_a_pnl, book_b_pnl])   # contributions sum to total ES
 ```
 
+The `expectile` is the only risk measure that is both coherent and elicitable —
+VaR is elicitable but not coherent, ES coherent but not elicitable:
+
+```python
+from quantforge import expectile
+
+expectile(pnl, tau=0.5)      # = mean loss
+expectile(pnl, tau=0.95)     # tail-weighted; monotone in tau
+```
+
+It solves the asymmetric-least-squares condition on the loss variable, so unlike a
+quantile it is backtestable by a single scoring function.
+
 ## Student-t fat tails
 
 The Student-t distribution (pdf/cdf/quantile), fat-tailed parametric VaR / ES,
