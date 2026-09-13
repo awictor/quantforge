@@ -3365,6 +3365,31 @@ binomial_test(k=8, n=10, prob=0.5)                        # exact binomial
 the binomial test is exact (no normal approximation), and the discrete p-values
 come from the same gamma/beta identities behind the distribution CDFs.
 
+For the *paired* nonparametric case, `wilcoxon_signed_rank_test` is the
+distribution-free counterpart of the paired t-test (and the test the Hodges-Lehmann
+location estimator inverts), while `sign_test` uses only the signs and so assumes
+nothing about symmetry:
+
+```python
+from quantforge import wilcoxon_signed_rank_test, sign_test
+
+before = [125, 132, 128, 140, 135]
+after  = [120, 128, 125, 138, 130]
+
+r = wilcoxon_signed_rank_test(before, y=after)   # paired differences
+r["statistic"], r["p_value"]                     # W+ = 15.0, p = 0.0579
+
+sign_test([1, 1, 1, 1, 1, 1, 1, 1, -1, -1])      # n_plus 8 of 10
+# {'n_plus': 8, 'n': 10, 'p_value': 0.10937, ...}  exact two-sided binomial
+```
+
+The signed-rank test ranks the absolute differences (average ranks for ties, zero
+differences dropped) and sums the positive ranks, comparing to a continuity-corrected
+normal approximation; on the classic all-positive textbook sample it gives `W+ = 45`
+and `p = 0.0092`. The sign test counts observations above the hypothesized median and
+tests that count against `Binomial(n, 1/2)`, returning the exact two-sided p-value —
+maximally robust, at the cost of power.
+
 For a proportion estimate, four confidence intervals span the accuracy/simplicity
 trade-off:
 
