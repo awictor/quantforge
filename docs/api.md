@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.811.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.812.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -9346,6 +9346,25 @@ Auto-generated from `quantforge` v1.811.0 by `docs/gen_api.py` — do not edit b
 ### `portfolio_variance(weights, cov) -> float`  _function_
 
 > Portfolio variance ``w^T C w``.
+
+### `risk_budget_weights(cov, budgets, tol=1e-12, max_iter=2000) -> list`  _function_
+
+> Long-only weights whose percentage risk contributions match ``budgets``.
+>
+> Generalizes :func:`risk_parity_weights` (which targets equal budgets) to an
+> arbitrary risk-budget vector. Solves the fixed point
+> ``w_i <- sqrt(budget_i * w_i / (C w)_i)`` renormalized, so at convergence the
+> percentage risk contribution of asset ``i`` equals ``budget_i / sum(budgets)``.
+> ``budgets`` must be positive; they are normalized internally. Weights are
+> positive and sum to one.
+
+### `risk_contributions(weights, cov) -> list`  _function_
+
+> Contribution of each asset to total portfolio variance.
+>
+> ``RC_i = w_i (C w)_i``. The contributions sum to the portfolio variance
+> ``w' C w``; dividing by that sum gives the percentage risk contributions. Equal
+> percentage contributions is the risk-parity condition.
 
 ### `risk_parity_weights(cov, tol=1e-10, max_iter=1000) -> list`  _function_
 

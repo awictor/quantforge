@@ -31,6 +31,17 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.812.0] - 2026-09-13
+
+### Added
+- `portopt.py` gains `risk_contributions` (each asset's ``w_i (C w)_i`` share of the
+  portfolio variance) and `risk_budget_weights`, which generalizes risk parity to an
+  arbitrary target risk-budget vector via the fixed point
+  ``w_i <- sqrt(b_i w_i / (C w)_i)``. Cross-checked: an equal budget reproduces
+  `risk_parity_weights`, the achieved percentage contributions match the target
+  budget, the contributions sum to the portfolio variance, and the weights are
+  positive and sum to one.
+
 ## [1.811.0] - 2026-09-13
 
 ### Documentation

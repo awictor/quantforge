@@ -392,3 +392,49 @@ def risk_parity_weights(cov, tol=1e-10, max_iter=1000) -> list:
             break
         w = new
     return w
+
+
+def risk_contributions(weights, cov) -> list:
+    """Contribution of each asset to total portfolio variance.
+
+    ``RC_i = w_i (C w)_i``. The contributions sum to the portfolio variance
+    ``w' C w``; dividing by that sum gives the percentage risk contributions. Equal
+    percentage contributions is the risk-parity condition.
+    """
+    n = _check_cov(cov)
+    if len(weights) != n:
+        raise ValueError("weights must match the covariance dimension")
+    cw = _matvec(cov, weights)
+    return [weights[i] * cw[i] for i in range(n)]
+
+
+def risk_budget_weights(cov, budgets, tol=1e-12, max_iter=2000) -> list:
+    """Long-only weights whose percentage risk contributions match ``budgets``.
+
+    Generalizes :func:`risk_parity_weights` (which targets equal budgets) to an
+    arbitrary risk-budget vector. Solves the fixed point
+    ``w_i <- sqrt(budget_i * w_i / (C w)_i)`` renormalized, so at convergence the
+    percentage risk contribution of asset ``i`` equals ``budget_i / sum(budgets)``.
+    ``budgets`` must be positive; they are normalized internally. Weights are
+    positive and sum to one.
+    """
+    n = _check_cov(cov)
+    if len(budgets) != n:
+        raise ValueError("budgets must match the covariance dimension")
+    if any(b <= 0.0 for b in budgets):
+        raise ValueError("budgets must be positive")
+    total_b = sum(budgets)
+    b = [x / total_b for x in budgets]
+    w = [1.0 / n] * n
+    for _ in range(max_iter):
+        cw = _matvec(cov, w)
+        if any(v <= 0.0 for v in cw):
+            raise ValueError("covariance not positive-definite for risk budgeting")
+        new = [math.sqrt(b[i] * w[i] / cw[i]) for i in range(n)]
+        ssum = sum(new)
+        new = [v / ssum for v in new]
+        if max(abs(new[i] - w[i]) for i in range(n)) < tol:
+            w = new
+            break
+        w = new
+    return w
