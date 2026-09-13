@@ -16,6 +16,18 @@ All notable changes to QuantForge are documented here. The format follows
   a view and zero without, a stronger view costs more entropy, and an infeasible
   target (outside the scenario range) is rejected.
 
+## [1.720.0] - 2026-09-12
+
+### Added
+- `hypothesis.py`: classical hypothesis tests built on the distribution CDFs, each
+  returning `(statistic, p_value)` -- `chi_square_gof_test`,
+  `chi_square_independence_test`, `one_way_anova` (F test), `two_sample_t_test`
+  (pooled and Welch), and the exact `binomial_test`. Cross-checked: the chi-square
+  goodness-of-fit statistic matches a by-hand calculation, the two-group ANOVA F
+  equals the pooled t-squared with an identical p-value, the pooled and Welch t
+  agree for equal sizes and variance, and the two-sided binomial p-value matches
+  the symmetric-tail sum.
+
 ## [1.719.0] - 2026-09-12
 
 ### Documentation

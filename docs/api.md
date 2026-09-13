@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.718.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.720.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -5465,6 +5465,50 @@ Auto-generated from `quantforge` v1.718.0 by `docs/gen_api.py` — do not edit b
 >
 > ``R`` is the range of the cumulative demeaned series; ``S`` is the window's
 > population standard deviation. Returns 0 when the window is constant.
+
+## hypothesis
+
+### `binomial_test(k, n, prob=0.5, alternative='two-sided')`  _function_
+
+> Exact binomial test that the success probability equals ``prob``.
+>
+> ``alternative`` is ``"greater"`` (``P(X >= k)``), ``"less"`` (``P(X <= k)``), or
+> ``"two-sided"`` (sum of all outcome probabilities no larger than the observed
+> one). Returns ``(proportion, p_value)`` where ``proportion = k / n``.
+
+### `chi_square_gof_test(observed, expected=None)`  _function_
+
+> Pearson chi-square goodness-of-fit test.
+>
+> Compares observed counts against ``expected`` (defaults to a uniform
+> distribution over the categories). The statistic ``sum (O - E)^2 / E`` is
+> referenced to a chi-square with ``k - 1`` degrees of freedom. Returns
+> ``(statistic, p_value)``; a small p-value rejects the fit.
+
+### `chi_square_independence_test(table)`  _function_
+
+> Chi-square test of independence for a contingency ``table`` (rows x cols).
+>
+> Uses the row/column marginals to form the expected counts under independence
+> and references ``sum (O - E)^2 / E`` to a chi-square with
+> ``(rows - 1)(cols - 1)`` degrees of freedom. Returns ``(statistic, p_value)``.
+
+### `one_way_anova(*groups)`  _function_
+
+> One-way ANOVA F-test across two or more samples.
+>
+> Partitions the total variation into between-group and within-group sums of
+> squares and forms ``F = MS_between / MS_within``, referenced to an F with
+> ``(k - 1, N - k)`` degrees of freedom. Returns ``(F, p_value)``; a small
+> p-value rejects equality of the group means.
+
+### `two_sample_t_test(a, b, equal_var=True)`  _function_
+
+> Two-sample Student-t test of equal means, two-sided.
+>
+> With ``equal_var=True`` uses the pooled-variance t-test (``n_a + n_b - 2``
+> degrees of freedom); with ``equal_var=False`` uses Welch's t-test with the
+> Welch-Satterthwaite degrees of freedom. Returns ``(t, p_value)``.
 
 ## implied
 

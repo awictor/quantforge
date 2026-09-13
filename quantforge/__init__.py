@@ -298,6 +298,10 @@ from .tail_dependence import (
 )
 from .serial_correlation import ljung_box, box_pierce, durbin_watson
 from .gof_tests import jarque_bera_test, ks_two_sample
+from .hypothesis import (
+    chi_square_gof_test, chi_square_independence_test, one_way_anova,
+    two_sample_t_test, binomial_test,
+)
 from .copula_sample import gaussian_copula_sample, inverse_transform
 from .t_copula_sample import student_t_copula_sample
 from .drawdown import drawdown_analytics
@@ -733,7 +737,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.719.0"
+__version__ = "1.720.0"
 
 __all__ = [
     "OptionType",
@@ -1205,6 +1209,11 @@ __all__ = [
     "durbin_watson",
     "jarque_bera_test",
     "ks_two_sample",
+    "chi_square_gof_test",
+    "chi_square_independence_test",
+    "one_way_anova",
+    "two_sample_t_test",
+    "binomial_test",
     "gaussian_copula_sample",
     "inverse_transform",
     "student_t_copula_sample",
