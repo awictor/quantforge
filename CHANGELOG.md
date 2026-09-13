@@ -24,6 +24,13 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.767.0] - 2026-09-12
+
+### Documentation
+- README portfolio-risk section now documents the VaR/ES backtests (`kupiec_pof`,
+  `christoffersen_cc`, `christoffersen_independence`, `acerbi_szekely_es`) with a
+  worked example.
+
 ## [1.766.0] - 2026-09-12
 
 ### Added

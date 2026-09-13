@@ -725,6 +725,22 @@ VaR is a positive loss number; Expected Shortfall (CVaR) is the mean loss
 beyond it. The parametric/historical estimators assume a single underlying;
 the MC estimator reprices every position exactly.
 
+Once a model is live, backtest it against realized losses. The coverage tests check
+the exception rate and clustering; the Acerbi-Szekely statistic checks the ES:
+
+```python
+from quantforge import (kupiec_pof, christoffersen_cc, acerbi_szekely_es)
+
+kupiec_pof(losses, var_forecasts, alpha=0.01)        # (LR, p): unconditional coverage
+christoffersen_cc(losses, var_forecasts, alpha=0.01) # (LR, p): coverage + independence
+acerbi_szekely_es(losses, var_forecasts, es_forecasts, alpha=0.01)   # ~0 if ES calibrated
+```
+
+A well-specified 99% VaR passes Kupiec and Christoffersen (large p-values); too-low
+a VaR is rejected. The Acerbi-Szekely statistic sits near zero when ES is right,
+turns positive when the model understates the tail, negative when it overstates.
+`christoffersen_independence` isolates the exception-clustering piece on its own.
+
 ## Monte Carlo (with variance reduction)
 
 For payoffs without a closed form. The engine uses the standard-library RNG,
