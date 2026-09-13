@@ -3562,6 +3562,40 @@ approximation with negligible detail; a noisy or bursty series spreads energy in
 the fine detail levels — so the profile is a compact scale-by-scale summary of how
 rough a signal is and where.
 
+That energy split is exactly what makes wavelet *denoising* work. Donoho and
+Johnstone's shrinkage transforms a noisy signal, shrinks the small detail
+coefficients toward zero (noise spreads thinly across many small ones), and inverts —
+the few large coefficients carrying real structure survive:
+
+```python
+from quantforge import wavelet_denoise
+
+clean_estimate = wavelet_denoise(noisy, mode="soft")   # VisuShrink threshold, auto
+```
+
+With no threshold given it uses the VisuShrink universal threshold
+`sigma * sqrt(2 log n)`, estimating the noise scale `sigma` robustly from the finest
+detail level. On a length-1024 sinusoid plus N(0, 0.4) noise the mean-squared error
+against the clean signal drops from about 0.164 (noisy) to 0.102 (denoised). `mode`
+is `"soft"` (shrink) or `"hard"` (keep-or-kill); pass an explicit `threshold` to
+override the automatic choice.
+
+The pieces are exposed directly for custom shrinkage:
+
+```python
+from quantforge import mad_sigma, universal_threshold, soft_threshold, haar_dwt
+
+approx, details = haar_dwt(noisy)
+sigma = mad_sigma(details[0])            # median-absolute-deviation noise scale
+lam = universal_threshold(len(noisy), sigma)   # ~1.53 here
+soft_threshold(coefficient, lam)         # sign(x) * max(|x| - lam, 0)
+```
+
+`mad_sigma` uses the median absolute deviation (`median(|d|) / 0.6745`) so a few
+large signal coefficients don't inflate the noise estimate the way a plain standard
+deviation would — the robustness is what lets a single finest-level pass calibrate
+the threshold for the whole signal.
+
 ## Structural breaks (CUSUM / Chow)
 
 Detect when a mean or regime shifts. `cusum_mean` returns the standardized

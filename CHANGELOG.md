@@ -31,6 +31,14 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.857.0] - 2026-09-13
+
+### Documentation
+- README: extended the wavelet section with wavelet denoising — `wavelet_denoise`
+  (VisuShrink soft/hard shrinkage) plus the exposed `mad_sigma`, `universal_threshold`
+  and `soft_threshold` building blocks. Snippet values verified (MSE 0.164 → 0.102 on
+  a noisy sinusoid, threshold ~1.53).
+
 ## [1.856.0] - 2026-09-13
 
 ### Added
