@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.826.0] - 2026-09-13
+
+### Added
+- `lu.py`: LU decomposition with partial pivoting (`lu_decomposition`, ``P A = L U``),
+  the linear solve `lu_solve`, and `determinant` (signed product of the U pivots).
+  Cross-checked: known 2x2/3x3 determinants (including a singular zero), ``P A = L U``
+  to machine precision, the L/U triangular structure, an ``A x = b`` residual at
+  machine precision, and a zero leading pivot handled by row swapping.
+
 ## [1.825.0] - 2026-09-13
 
 ### Documentation

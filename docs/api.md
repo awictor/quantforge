@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.825.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.826.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -7152,6 +7152,30 @@ Auto-generated from `quantforge` v1.825.0 by `docs/gen_api.py` — do not edit b
 >
 > Returns ``leverage`` -- a dict ``{t: {k_center: L}}`` -- and the callable
 > ``lev_fn(spot, t)`` that interpolates it, suitable for an LSV Monte Carlo.
+
+## lu
+
+### `determinant(A)`  _function_
+
+> Determinant of a square matrix as the signed product of the LU pivots.
+>
+> ``det = sign * prod(U[i][i])``. Returns 0 for a singular matrix.
+
+### `lu_decomposition(A)`  _function_
+
+> LU decomposition with partial pivoting of a square matrix.
+>
+> Returns ``(L, U, piv, sign)`` where ``L`` is unit lower-triangular, ``U`` upper-
+> triangular, ``piv`` the row-permutation (as a list mapping output row -> source
+> row) so that ``A[piv] = L U``, and ``sign`` the permutation parity (+1/-1) used
+> by :func:`determinant`. Raises on a singular matrix.
+
+### `lu_solve(A, b)`  _function_
+
+> Solve ``A x = b`` via LU with partial pivoting.
+>
+> Factorizes ``A``, permutes ``b``, then forward- and back-substitutes. Returns the
+> solution vector. Raises on a singular matrix.
 
 ## mack
 
