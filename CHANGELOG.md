@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.794.0] - 2026-09-12
+
+### Added
+- `runs_test.py`: the Wald-Wolfowitz runs test for sequence randomness --
+  `runs_test` (dichotomizes a numeric series about its median) and
+  `runs_test_binary` (two-symbol sequence), each returning a two-sided ``(z,
+  p_value)``. Cross-checked: a random series holds its 5% size, sorted data gives
+  too few runs (``z << 0``, clustering), an alternating series gives too many
+  (``z >> 0``), and a known 3+3 binary case matches the closed-form z.
+
 ## [1.793.0] - 2026-09-12
 
 ### Documentation

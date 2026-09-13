@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.793.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.794.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -10479,6 +10479,25 @@ Auto-generated from `quantforge` v1.793.0 by `docs/gen_api.py` — do not edit b
 > fraction in ``(0, 1)``. Decreasing in the drift-to-variance ratio: a stronger
 > edge makes a given loss less likely. Returns 1 for a non-positive drift (a
 > driftless or losing account eventually hits any loss level almost surely).
+
+## runs_test
+
+### `runs_test(values)`  _function_
+
+> Runs test on a numeric series, dichotomized about its median.
+>
+> Values above the median are one symbol, below the other; values exactly equal to
+> the median are dropped. Returns ``(z, p_value)`` for the null that the sequence
+> of above/below signs is random. A small p-value rejects randomness: ``z < 0`` for
+> trending/clustered data, ``z > 0`` for over-alternating (mean-reverting) data.
+
+### `runs_test_binary(sequence)`  _function_
+
+> Wald-Wolfowitz runs test on a two-symbol sequence.
+>
+> ``sequence`` is any list of two distinct values (e.g. 0/1, +/-). Returns
+> ``(z, p_value)``; a negative ``z`` (few runs) signals clustering, a positive
+> ``z`` (many runs) over-alternation. Requires at least one of each symbol.
 
 ## sabr
 
