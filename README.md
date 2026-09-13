@@ -3082,6 +3082,25 @@ max(winsorize(x, 0.1))                # -> 13      (the 1000 is clipped in)
 The scaled MAD and IQR both estimate the same underlying sigma the standard
 deviation would give on clean data, but ignore the outlier that inflates it.
 
+For robust *location* with far higher efficiency than the median, the
+Hodges-Lehmann estimator is the median of all pairwise averages `(x_i + x_j) / 2` — a
+29% breakdown point yet ~96% efficiency at the normal, and the point estimate that
+pairs with the Wilcoxon signed-rank test:
+
+```python
+from quantforge import hodges_lehmann_location, hodges_lehmann_shift
+
+x = [10, 11, 9, 12, 10, 11, 9, 10, 13, 8, 1000]   # one gross outlier
+hodges_lehmann_location(x)      # 10.5  (mean would be ~100)
+
+hodges_lehmann_shift([1, 2, 3, 4, 5], [6, 7, 8, 9, 10])   # 5  — the typical y - x gap
+```
+
+`hodges_lehmann_shift` is the two-sample analogue — the median of every pairwise
+difference `y_j - x_i` — the robust shift estimate that inverts the Wilcoxon rank-sum
+test. On a pure `+5` translation it returns exactly `5`, and it stays near zero when
+the two samples share a distribution.
+
 ## Hurst exponent (long memory)
 
 Measure the persistence of a series with the Hurst exponent via rescaled-range
