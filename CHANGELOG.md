@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.870.0] - 2026-09-13
+
+### Added
+- `energy_distance.py`: the Szekely-Rizzo `energy_distance` two-sample statistic
+  (`2A - B - C`) and `energy_test`, its permutation test of equal distributions.
+  Cross-checked: zero for identical samples, symmetric, matches a brute-force
+  reference on 300 random cases, grows with mean separation, and the permutation test
+  flags both a mean shift and a variance-only difference (same mean) that a t-test
+  would miss.
+
 ## [1.869.0] - 2026-09-13
 
 ### Documentation

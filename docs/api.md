@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.869.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.870.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -3529,6 +3529,26 @@ Auto-generated from `quantforge` v1.869.0 by `docs/gen_api.py` — do not edit b
 >
 > Each row is a length-``len(categories)`` list of 0/1; a known category sets one
 > entry to 1 (rows sum to 1), an unseen category yields an all-zero row.
+
+## energy_distance
+
+### `energy_distance(a, b)`  _function_
+
+> Energy distance ``2 A - B - C`` between two samples.
+>
+> Non-negative; zero only when the empirical distributions coincide. ``A`` is the
+> mean cross-sample absolute distance, ``B`` and ``C`` the mean within-sample
+> distances (each normalized by the squared sample size, i.e. including the zero
+> diagonal, per Szekely-Rizzo).
+
+### `energy_test(a, b, n_permutations=999, seed=1234567)`  _function_
+
+> Permutation test of equal distributions via the energy distance.
+>
+> Pools the two samples, reshuffles the group labels ``n_permutations`` times, and
+> returns a dict with the observed ``statistic``, the ``p_value``
+> ``(1 + #{perm >= observed}) / (1 + n_permutations)``, and ``n_permutations``.
+> A small p-value is evidence the two samples come from different distributions.
 
 ## entropy_pooling
 
