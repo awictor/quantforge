@@ -24,6 +24,12 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.785.0] - 2026-09-12
+
+### Documentation
+- README cross-validation section now documents the generic information criteria
+  (`gaussian_log_likelihood`, `aic`, `aicc`, `bic`, `hqic`) with a worked example.
+
 ## [1.784.0] - 2026-09-12
 
 ### Added

@@ -2518,6 +2518,21 @@ The test folds tile the data exactly (disjoint, covering every index once) with
 sizes differing by at most one; a seeded shuffle is reproducible. Pair with
 `fit_logistic`/`ols_fit` and the metrics above for a full evaluation loop.
 
+For an in-sample penalty instead of cross-validation, the information criteria trade
+fit against complexity — the model with the lowest value wins:
+
+```python
+from quantforge import gaussian_log_likelihood, aic, aicc, bic, hqic
+
+ll = gaussian_log_likelihood(rss=12.5, n=50)   # from a least-squares fit
+aic(ll, k=4); bic(ll, k=4, n=50)               # k = params incl. noise variance
+aicc(ll, 4, 50); hqic(ll, 4, 50)
+```
+
+`aic` rewards fit lightly; `bic` penalizes complexity harder for large `n` (favoring
+parsimony); `aicc` corrects AIC when `n` is small; `hqic` sits between. Feed a
+least-squares RSS through `gaussian_log_likelihood` first.
+
 ## Feature scaling
 
 Fit a scaler on training data, apply it to test data — no leakage.
