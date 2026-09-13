@@ -306,6 +306,7 @@ from .distance_correlation import (
 from .chatterjee import chatterjee_xi, blomqvist_beta
 from .energy_distance import energy_distance, energy_test
 from .cramer_von_mises import cramer_von_mises_2samp
+from .hodges_lehmann import hodges_lehmann_location, hodges_lehmann_shift
 from .kalman_beta import kalman_regression_beta
 from .theil_sen import theil_sen
 from .robust_stats import (
@@ -865,7 +866,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.873.0"
+__version__ = "1.874.0"
 
 __all__ = [
     "OptionType",
@@ -1333,6 +1334,8 @@ __all__ = [
     "energy_distance",
     "energy_test",
     "cramer_von_mises_2samp",
+    "hodges_lehmann_location",
+    "hodges_lehmann_shift",
     "kalman_regression_beta",
     "theil_sen",
     "median_absolute_deviation",

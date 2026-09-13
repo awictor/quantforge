@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.874.0] - 2026-09-13
+
+### Added
+- `hodges_lehmann.py`: the Hodges-Lehmann robust location (`hodges_lehmann_location`,
+  median of Walsh averages) and two-sample shift (`hodges_lehmann_shift`, median of
+  pairwise differences). Cross-checked: exact on symmetric data and a pure +5 shift,
+  matches a brute-force reference on 500 random cases, barely moves under a gross
+  outlier that drags the mean past 90, and the shift is antisymmetric and ~0 for two
+  samples from the same distribution.
+
 ## [1.873.0] - 2026-09-13
 
 ### Documentation

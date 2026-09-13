@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.873.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.874.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -5758,6 +5758,25 @@ Auto-generated from `quantforge` v1.873.0 by `docs/gen_api.py` — do not edit b
 > Dynamic programming in log space; returns ``(path, log_prob)`` where ``path`` is
 > the list of state indices maximizing the joint probability of states and
 > observations. Ties are broken toward the lower state index.
+
+## hodges_lehmann
+
+### `hodges_lehmann_location(x)`  _function_
+
+> One-sample Hodges-Lehmann estimator: median of the Walsh averages.
+>
+> Median of ``(x_i + x_j) / 2`` over all ``i <= j`` (including ``i == j``). Robust
+> (29% breakdown) and highly efficient at the normal; estimates the center of a
+> symmetric distribution.
+
+### `hodges_lehmann_shift(x, y)`  _function_
+
+> Two-sample Hodges-Lehmann shift: median of all pairwise differences.
+>
+> Median of ``y_j - x_i`` over every pair. The robust estimate of the location
+> shift between the two samples, consistent with the Wilcoxon rank-sum test (the
+> shift for which the test would not reject). Positive means ``y`` is shifted above
+> ``x``.
 
 ## holee
 
