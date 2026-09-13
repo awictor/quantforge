@@ -2888,6 +2888,25 @@ depth and validate to avoid overfitting). A leaf predicts the mean of the traini
 targets that reach it, so the fit is a step function — pair it with bagging for a smooth
 ensemble, the regression analogue of the random forest above.
 
+For a stronger regressor, `fit_gradient_boost` boosts *shallow* trees additively: each
+new tree fits the residuals of the ensemble so far, corrected by a shrinkage learning
+rate:
+
+```python
+from quantforge import fit_gradient_boost, predict_gradient_boost
+
+m = fit_gradient_boost(X, y, n_estimators=100, learning_rate=0.1, max_depth=3)
+predict_gradient_boost(m, X_query)
+```
+
+With squared-error loss the residual is the negative gradient, so this is gradient
+descent in function space — a hundred depth-3 trees fit a smooth nonlinearity far more
+accurately than one deep tree while resisting overfit through the small `learning_rate`.
+Training error falls monotonically as `n_estimators` grows; a `learning_rate` of 0
+leaves the prediction at the target mean. The shallow-tree-plus-small-rate combination
+is the classic bias-variance sweet spot — validate `n_estimators` and `learning_rate`
+together, since more trees demand a smaller rate to avoid overfitting.
+
 ## Factor models
 
 Multi-factor OLS return regression (alpha, betas, R-squared), factor attribution,

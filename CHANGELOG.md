@@ -31,6 +31,12 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.965.0] - 2026-09-13
+
+### Documentation
+- README: documented `fit_gradient_boost` / `predict_gradient_boost` alongside the
+  regression tree in the ML section.
+
 ## [1.964.0] - 2026-09-13
 
 ### Added
