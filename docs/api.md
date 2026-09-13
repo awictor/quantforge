@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.755.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.756.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -4581,6 +4581,33 @@ Auto-generated from `quantforge` v1.755.0 by `docs/gen_api.py` — do not edit b
 > A payer (long the FRA, paying fixed ``contract_rate``) gains when the forward
 > rate exceeds the contract rate: ``notional * tau * (f - K) * P(t2)``. A
 > receiver is the negative. Zero at the fair (forward) rate.
+
+## fracdiff
+
+### `fixed_width_fracdiff(series, d, threshold=1e-05)`  _function_
+
+> Fixed-width fractional differencing (Lopez de Prado).
+>
+> Truncates the weight window at the first ``|w_k| < threshold`` and applies that
+> fixed-length filter, so every output point uses the same weights. Returns the
+> valid portion (length ``len(series) - width + 1``), where ``width`` is the number
+> of retained weights. Preserves stationarity with a constant memory window.
+
+### `fracdiff_weights(d, n)`  _function_
+
+> Binomial weights ``w_0..w_{n-1}`` of the operator ``(1 - L)^d``.
+>
+> ``w_0 = 1`` and ``w_k = w_{k-1} * -(d - k + 1) / k``. For integer ``d`` the
+> weights vanish beyond ``k = d`` (e.g. ``d = 1`` gives ``[1, -1]`` then zeros).
+
+### `fractional_difference(series, d)`  _function_
+
+> Fractionally difference ``series`` by the full expansion of ``(1 - L)^d``.
+>
+> Returns a list the same length as ``series``; entry ``t`` is
+> ``sum_{k=0}^{t} w_k * series[t - k]`` (a growing backward window, so early
+> entries use fewer weights). ``d = 0`` returns the series unchanged and ``d = 1``
+> returns the first difference (with the first entry equal to ``series[0]``).
 
 ## futures_convexity
 

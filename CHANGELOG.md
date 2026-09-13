@@ -24,6 +24,17 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.756.0] - 2026-09-12
+
+### Added
+- `fracdiff.py`: fractional differencing for long-memory (ARFIMA) series --
+  `fracdiff_weights` (binomial weights of ``(1 - L)^d``), `fractional_difference`
+  (full expansion) and `fixed_width_fracdiff` (Lopez de Prado's fixed-window
+  variant). Cross-checked: integer orders reproduce the standard differences
+  (``d = 0`` identity, ``d = 1`` first difference, ``d = 2`` second difference), the
+  weights follow the ``w_k = w_{k-1} (k-1-d)/k`` recursion and decay slowly for
+  fractional ``d``, and the fixed-width filter trims to a constant memory window.
+
 ## [1.755.0] - 2026-09-12
 
 ### Documentation
