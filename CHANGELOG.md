@@ -31,6 +31,17 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.832.0] - 2026-09-13
+
+### Added
+- `markov.py` gains continuous-time chain support: `generator_to_transition`
+  (``P(t) = exp(Q t)`` from a rate generator, validated for zero row sums and
+  non-negative off-diagonals) and `generator_default_probability` (cumulative
+  default at each horizon from a rating generator). Cross-checked: ``P(0)`` is the
+  identity, transition rows sum to one and are non-negative, the semigroup
+  ``P(1) P(1) = P(2)`` holds, default probabilities are non-decreasing, and an
+  absorbing state stays with probability one.
+
 ## [1.831.0] - 2026-09-13
 
 ### Documentation

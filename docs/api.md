@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.831.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.832.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -7241,6 +7241,23 @@ Auto-generated from `quantforge` v1.831.0 by `docs/gen_api.py` — do not edit b
 > their sub-transition block. ``N_ij`` is the expected number of visits to
 > transient state ``j`` starting from ``i`` before absorption. Requires the chain
 > to be absorbing (every transient state eventually reaches an absorbing one).
+
+### `generator_default_probability(Q, default_state, horizons, start_state=0)`  _function_
+
+> Cumulative default probability at each horizon from a rating generator.
+>
+> Exponentiates ``Q`` to each horizon and reads the transition probability from
+> ``start_state`` into the absorbing ``default_state``. Returns one probability per
+> horizon; non-decreasing when the default state is absorbing.
+
+### `generator_to_transition(Q, t=1.0)`  _function_
+
+> Transition matrix ``P(t) = exp(Q t)`` of a continuous-time Markov chain.
+>
+> ``Q`` is a rate generator (rows summing to zero, non-negative off-diagonals).
+> Returns the ``t``-horizon transition matrix, whose rows sum to one with
+> non-negative entries. ``P(0)`` is the identity and ``P(s) P(t) = P(s + t)``
+> (the semigroup property). The basis for continuous-time rating migration.
 
 ### `marginal_default_probabilities(P, default_state, horizons, start_state=0)`  _function_
 

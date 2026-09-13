@@ -213,3 +213,57 @@ def expected_hitting_time(P, target):
     for r, i in enumerate(idx):
         h[i] = b[r]
     return h
+
+
+def _validate_generator(Q):
+    """Check ``Q`` is a valid continuous-time generator: rows sum ~0, off-diag >= 0."""
+    n = len(Q)
+    if n == 0 or any(len(row) != n for row in Q):
+        raise ValueError("Q must be a non-empty square matrix")
+    for i in range(n):
+        if abs(sum(Q[i])) > 1e-6:
+            raise ValueError("generator rows must sum to zero")
+        for j in range(n):
+            if i != j and Q[i][j] < -1e-12:
+                raise ValueError("off-diagonal generator entries must be non-negative")
+        if Q[i][i] > 1e-12:
+            raise ValueError("diagonal generator entries must be non-positive")
+    return n
+
+
+def generator_to_transition(Q, t=1.0):
+    """Transition matrix ``P(t) = exp(Q t)`` of a continuous-time Markov chain.
+
+    ``Q`` is a rate generator (rows summing to zero, non-negative off-diagonals).
+    Returns the ``t``-horizon transition matrix, whose rows sum to one with
+    non-negative entries. ``P(0)`` is the identity and ``P(s) P(t) = P(s + t)``
+    (the semigroup property). The basis for continuous-time rating migration.
+    """
+    from .matrix_exp import matrix_exp
+    _validate_generator(Q)
+    if t < 0.0:
+        raise ValueError("t must be non-negative")
+    n = len(Q)
+    Qt = [[Q[i][j] * t for j in range(n)] for i in range(n)]
+    P = matrix_exp(Qt)
+    # Clean tiny negatives and renormalize rows against roundoff.
+    for i in range(n):
+        row = [max(0.0, P[i][j]) for j in range(n)]
+        s = sum(row)
+        P[i] = [v / s for v in row] if s > 0 else row
+    return P
+
+
+def generator_default_probability(Q, default_state, horizons, start_state=0):
+    """Cumulative default probability at each horizon from a rating generator.
+
+    Exponentiates ``Q`` to each horizon and reads the transition probability from
+    ``start_state`` into the absorbing ``default_state``. Returns one probability per
+    horizon; non-decreasing when the default state is absorbing.
+    """
+    _validate_generator(Q)
+    out = []
+    for h in horizons:
+        P = generator_to_transition(Q, h)
+        out.append(P[start_state][default_state])
+    return out

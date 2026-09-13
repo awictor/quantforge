@@ -498,6 +498,7 @@ from .markov import (
     n_step_transition, stationary_distribution, expected_hitting_time,
     fundamental_matrix, expected_steps_to_absorption, absorption_probabilities,
     cumulative_default_term_structure, marginal_default_probabilities,
+    generator_to_transition, generator_default_probability,
 )
 from .resample import (
     bootstrap_ci, stationary_bootstrap_ci, jackknife_estimate, bca_bootstrap_ci,
@@ -825,7 +826,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.831.0"
+__version__ = "1.832.0"
 
 __all__ = [
     "OptionType",
@@ -1578,6 +1579,8 @@ __all__ = [
     "absorption_probabilities",
     "cumulative_default_term_structure",
     "marginal_default_probabilities",
+    "generator_to_transition",
+    "generator_default_probability",
     "bootstrap_ci",
     "stationary_bootstrap_ci",
     "moving_block_bootstrap_ci",
