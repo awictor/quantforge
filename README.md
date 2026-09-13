@@ -2432,6 +2432,20 @@ lasso_regression(X, y, alpha=0.1)    # irrelevant features set to exactly 0
 selection) and finally collapses the fit to `mean(y)`. The intercept is never
 penalized and coefficients come back on the original scale.
 
+`elastic_net` blends the two penalties (`l1_ratio` sets the mix), keeping LASSO's
+feature selection while sharing weight across correlated predictors like ridge:
+
+```python
+from quantforge import elastic_net
+
+elastic_net(X, y, alpha=0.1, l1_ratio=1.0)    # == lasso_regression
+elastic_net(X, y, alpha=0.1, l1_ratio=0.5)    # L1 + L2 mix
+```
+
+With `l1_ratio = 1` it is pure LASSO; lowering it adds L2 shrinkage, which on
+near-duplicate features spreads the weight between them (the grouping effect) rather
+than arbitrarily dropping one.
+
 To fit a conditional *quantile* rather than the mean, `quantile_regression`
 minimizes the pinball loss (via iteratively-reweighted least squares):
 
