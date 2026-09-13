@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.992.0] - 2026-09-13
+
+### Added
+- `dagostino.py`: `dagostino_k2`, the D'Agostino-Pearson K^2 omnibus normality test
+  (skewness Z + kurtosis Z, chi-square with 2 df). Cross-checked: null rejection rate
+  ~0.05, rejects skewed (exponential) data via `z_skew` and heavy tails via `z_kurt`,
+  gives a negative kurtosis Z for light-tailed uniform data, passes clean normals, and
+  has high power against exponential samples.
+
 ## [1.991.0] - 2026-09-13
 
 ### Documentation

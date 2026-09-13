@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.991.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.992.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -3128,6 +3128,17 @@ Auto-generated from `quantforge` v1.991.0 by `docs/gen_api.py` — do not edit b
 > Parameters mirror :func:`~quantforge.turnbull_wakeman_asian`. Returns the
 > discounted option value; call and put satisfy
 > ``C - P = e^{-rT}(forward - strike)``.
+
+## dagostino
+
+### `dagostino_k2(values)`  _function_
+
+> D'Agostino-Pearson K^2 omnibus normality test.
+>
+> Returns a dict with the ``k2`` statistic (chi-square, 2 df), its ``p_value``, and
+> the component ``z_skew`` and ``z_kurt`` standard scores. A small p-value rejects
+> normality; the components show whether skew, tails, or both drive it. Needs at least
+> 20 observations for the transforms to be reliable.
 
 ## daycount
 
