@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.823.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.824.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -12112,6 +12112,26 @@ Auto-generated from `quantforge` v1.823.0 by `docs/gen_api.py` — do not edit b
 > ``estimator`` is ``"km"`` (Kaplan-Meier) or ``"na"`` (``exp(-Nelson-Aalen)``).
 > Returns the survival at the largest event time ``<= query`` (1 before the first
 > event).
+
+## svd
+
+### `pseudo_inverse(A, rcond=1e-12)`  _function_
+
+> Moore-Penrose pseudo-inverse ``A^+`` via the SVD.
+>
+> ``A^+ = V S^+ U'`` with the reciprocals of the singular values above
+> ``rcond * s_max`` (smaller ones treated as zero). For a full-rank tall ``A`` this
+> is ``(A' A)^{-1} A'``; applied to ``b`` it gives the minimum-norm least-squares
+> solution. Returns the ``n x m`` pseudo-inverse.
+
+### `svd(A, tol=1e-14, max_sweeps=60)`  _function_
+
+> One-sided Jacobi SVD of an ``m x n`` matrix (``m >= n``).
+>
+> Returns ``(U, s, V)`` where ``U`` is ``m x n`` with orthonormal columns, ``s`` is
+> the length-``n`` list of singular values (descending, non-negative), and ``V`` is
+> ``n x n`` orthogonal, such that ``A = U diag(s) V'``. Iteratively rotates column
+> pairs until they are orthogonal.
 
 ## svi
 

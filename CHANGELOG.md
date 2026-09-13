@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.824.0] - 2026-09-13
+
+### Added
+- `svd.py`: one-sided Jacobi singular value decomposition (`svd`, ``A = U S V'``) and
+  the Moore-Penrose `pseudo_inverse`. Cross-checked: ``U S V'`` reconstructs ``A`` and
+  ``U`` has orthonormal columns to machine precision, the singular values are
+  non-negative, descending, and equal the square roots of the eigenvalues of
+  ``A' A``, and the pseudo-inverse gives the same least-squares solution as the QR
+  solver.
+
 ## [1.823.0] - 2026-09-13
 
 ### Documentation
