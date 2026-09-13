@@ -3300,6 +3300,25 @@ difference `y_j - x_i` — the robust shift estimate that inverts the Wilcoxon r
 test. On a pure `+5` translation it returns exactly `5`, and it stays near zero when
 the two samples share a distribution.
 
+To see a sample's *shape* without a histogram's arbitrary bin edges, `kde` builds a
+smooth Gaussian kernel density estimate:
+
+```python
+from quantforge import kde, kde_function, silverman_bandwidth
+
+kde(returns, x=0.0)                     # density at a point (bandwidth auto-selected)
+f = kde_function(returns)               # a callable density estimator
+kde(returns, [-0.02, 0.0, 0.02])        # evaluate at several points at once
+silverman_bandwidth(returns)            # the rule-of-thumb bandwidth it uses
+```
+
+The estimate is non-negative and integrates to one, converges to the true density as
+the sample grows (recovering the standard-normal peak of ~0.399 on N(0,1) data), and
+resolves multiple modes a single summary statistic would hide. The bandwidth defaults
+to Silverman's rule (`0.9 min(std, IQR/1.34) n^{-1/5}`, robust to mild non-normality);
+pass `rule="scott"` or an explicit `bandwidth` to override — smaller is spikier, larger
+is smoother.
+
 ## Hurst exponent (long memory)
 
 Measure the persistence of a series with the Hurst exponent via rescaled-range
