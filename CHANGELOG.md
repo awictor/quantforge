@@ -31,6 +31,12 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.945.0] - 2026-09-13
+
+### Documentation
+- README: documented `P2Quantile` and `reservoir_sample` in the numerical-utilities
+  section.
+
 ## [1.944.0] - 2026-09-13
 
 ### Added

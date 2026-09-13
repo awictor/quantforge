@@ -4991,6 +4991,28 @@ splitting a sample across workers and merging their accumulators reproduces the
 single-pass result to ~1e-10 — the associativity that makes it a true parallel
 reduction for large or distributed data.
 
+Quantiles need sorting — unless you estimate them online. `P2Quantile` tracks a single
+quantile in O(1) memory (no data stored), and `reservoir_sample` draws a uniform sample
+from a stream of unknown length in one pass:
+
+```python
+from quantforge import P2Quantile, reservoir_sample
+
+q = P2Quantile(0.95)                    # track the 95th percentile
+for x in stream:
+    q.update(x)
+q.value()                               # running estimate, within ~1% on a large stream
+
+reservoir_sample(range(1_000_000), k=100)   # 100 items, each equally likely, one pass
+```
+
+`P2Quantile` uses the Jain-Chlamtac P-square algorithm — five markers that shift by a
+piecewise-parabolic rule — and on a large uniform stream its median lands near 0.5 and
+its 95th percentile matches the true order statistic to about 0.01, all without holding
+the data. `reservoir_sample` (Vitter's algorithm R) is deterministic for a fixed `seed`
+and returns every stream element with equal probability; if the stream is shorter than
+`k` it returns all of it.
+
 The special functions behind the distribution routines are public:
 
 ```python
