@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.928.0] - 2026-09-13
+
+### Added
+- `differential_evolution.py`: `differential_evolution`, a derivative-free global
+  optimizer (Storn-Price), reproducible via a seeded LCG. Also exposes the previously
+  internal `nelder_mead` local minimizer publicly. Cross-checked: finds the global
+  minimum of sphere / Rosenbrock / Rastrigin / Ackley, beats Nelder-Mead on the
+  multimodal Rastrigin (where the local method gets stuck), is deterministic for a
+  fixed seed, and respects the box bounds.
+
 ## [1.927.0] - 2026-09-13
 
 ### Documentation

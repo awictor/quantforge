@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.927.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.928.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -3202,6 +3202,18 @@ Auto-generated from `quantforge` v1.927.0 by `docs/gen_api.py` — do not edit b
 > Returns ``(scales, fluctuations)``. ``scales`` defaults to a dyadic-ish grid
 > between 4 and ``len(x)//4``. Windows that do not divide the series exactly drop
 > the remainder. Requires at least 16 points.
+
+## differential_evolution
+
+### `differential_evolution(func, bounds, pop_size=None, F=0.8, cr=0.9, max_iter=1000, tol=1e-12, seed=1234567)`  _function_
+
+> Minimize ``func`` over box ``bounds`` by differential evolution.
+>
+> ``bounds`` is a list of ``(lo, hi)`` per dimension. ``func`` takes a length-``d``
+> list and returns a scalar. ``pop_size`` defaults to ``max(15, 10*d)``; ``F`` is the
+> differential weight, ``cr`` the crossover rate. Returns a dict with ``x`` (best
+> vector), ``fun`` (its objective), ``n_iter`` and ``converged`` (population spread
+> below ``tol``). Deterministic for a fixed ``seed``.
 
 ## discount_curve
 
@@ -9080,6 +9092,16 @@ Auto-generated from `quantforge` v1.927.0 by `docs/gen_api.py` — do not edit b
 >
 > Returns a dict with ``coefficients``, robust ``std_errors``, ``t_stats`` and the
 > full ``cov`` matrix. Valid when errors are heteroskedastic but not autocorrelated.
+
+## optimize
+
+### `nelder_mead(f: Callable[[List[float]], float], x0: Sequence[float], step: float = 0.1, max_iter: int = 2000, tol: float = 1e-10, alpha: float = 1.0, gamma: float = 2.0, rho: float = 0.5, sigma: float = 0.5)`  _function_
+
+> Minimize ``f`` over R^n from ``x0``. Returns (best_x, best_f).
+>
+> A textbook Nelder-Mead: build an initial simplex by perturbing each
+> coordinate, then reflect/expand/contract/shrink until the spread of
+> function values falls below ``tol`` or ``max_iter`` is hit.
 
 ## ou_fit
 
