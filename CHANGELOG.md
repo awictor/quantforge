@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.948.0] - 2026-09-13
+
+### Added
+- `hyperloglog.py`: `HyperLogLog`, a streaming distinct-count (cardinality) estimator
+  using `2^p` small registers and a stable SHA-1 hash, with mergeable sketches.
+  Cross-checked: relative error under 5% from 100 to 100,000 distinct items, duplicates
+  don't inflate the count, `merge` gives the union cardinality, small-range linear
+  counting is near-exact, and it is deterministic across runs.
+
 ## [1.947.0] - 2026-09-13
 
 ### Documentation

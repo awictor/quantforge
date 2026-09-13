@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.947.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.948.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -6311,6 +6311,18 @@ Auto-generated from `quantforge` v1.947.0 by `docs/gen_api.py` — do not edit b
 >
 > ``R`` is the range of the cumulative demeaned series; ``S`` is the window's
 > population standard deviation. Returns 0 when the window is constant.
+
+## hyperloglog
+
+### `HyperLogLog(p=14)`  _class_
+
+> HyperLogLog distinct-count estimator with ``2^p`` registers.
+>
+> ``p`` in ``[4, 16]`` trades memory for accuracy: ``m = 2^p`` registers give a
+> relative error near ``1.04 / sqrt(m)`` (``p = 14`` -> ~0.8%). Add items with
+> :meth:`add` (any hashable stringifiable value); read the estimate from
+> :meth:`count`. Two sketches with the same ``p`` merge via :meth:`merge` (union
+> cardinality), the property that makes it distributable.
 
 ## hypothesis
 
