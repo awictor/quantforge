@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.990.0] - 2026-09-13
+
+### Added
+- `variance_tests.py`: `levene_test` (Levene / median-centered Brown-Forsythe, F-test on
+  absolute deviations) and `bartlett_test` (likelihood-ratio, chi-square) for equal
+  variance across groups. Cross-checked: non-significant on equal-variance groups,
+  strongly significant on 1x/3x/6x spreads, both `center` variants work, and the null
+  rejection rate is calibrated.
+
 ## [1.989.0] - 2026-09-13
 
 ### Documentation

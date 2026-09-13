@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.989.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.990.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -14040,6 +14040,24 @@ Auto-generated from `quantforge` v1.989.0 by `docs/gen_api.py` — do not edit b
 > Divides ``VR(q) - 1`` by the robust standard error assembled from the
 > autocorrelations of squared demeaned returns. Asymptotically standard normal
 > under the random-walk null; ``|z| > 1.96`` rejects at 5%.
+
+## variance_tests
+
+### `bartlett_test(*groups)`  _function_
+
+> Bartlett's test for equal variance (likelihood ratio, chi-square).
+>
+> Returns a dict with the ``statistic``, ``df`` (``k-1``) and the ``p_value``. More
+> powerful than Levene under normality but sensitive to non-normal tails. Requires at
+> least two observations per group.
+
+### `levene_test(*groups, center='median')`  _function_
+
+> Levene / Brown-Forsythe test for equal variance across groups.
+>
+> ``center="median"`` (default) is the robust Brown-Forsythe form; ``"mean"`` is the
+> original Levene. Returns a dict with the ``statistic`` (F), ``df`` ``(k-1, N-k)`` and
+> the ``p_value``. A small p-value rejects equal variance.
 
 ## variancegamma
 
