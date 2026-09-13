@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.893.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.894.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -648,6 +648,25 @@ Auto-generated from `quantforge` v1.893.0 by `docs/gen_api.py` — do not edit b
 > float
 >     Price of a unit zero-coupon bond maturing at ``t``. Strictly in ``(0, 1]``
 >     for positive rates; falls as ``r0`` or ``sigma`` rises.
+
+## bland_altman
+
+### `bland_altman(x, y, k=1.96)`  _function_
+
+> Bland-Altman agreement statistics for paired measurements.
+>
+> Returns a dict with the ``bias`` (mean of ``x - y``), ``sd`` of the differences,
+> the ``lower`` and ``upper`` limits of agreement (``bias +/- k * sd``), and the
+> per-point ``means`` and ``diffs`` for plotting. ``k`` defaults to 1.96 (95% limits).
+
+### `concordance_correlation(x, y)`  _function_
+
+> Lin's concordance correlation coefficient (CCC) of paired measurements.
+>
+> ``CCC = 2 s_xy / (s_x^2 + s_y^2 + (mx - my)^2)`` -- Pearson correlation penalized
+> for any departure from the line of identity ``y = x``. Lies in ``[-1, 1]``: 1 only
+> when the points fall exactly on ``y = x``, and it drops below the Pearson value
+> whenever there is a systematic offset or scale difference.
 
 ## bond_future
 

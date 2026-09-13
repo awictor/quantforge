@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.894.0] - 2026-09-13
+
+### Added
+- `bland_altman.py`: `bland_altman` agreement analysis (bias, SD and 95% limits of
+  agreement plus per-point means/diffs) and `concordance_correlation` (Lin's CCC).
+  Cross-checked: identical methods give zero bias and CCC 1, a constant offset drops
+  CCC below the Pearson value (0.5 vs 1), the CCC matches a reference formula on 300
+  random cases and never exceeds |Pearson|, and about 95% of differences fall inside
+  the limits of agreement.
+
 ## [1.893.0] - 2026-09-13
 
 ### Documentation
