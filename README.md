@@ -94,6 +94,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Theil-Sen robust regression](#theil-sen-robust-regression)
 - [Robust scale and location](#robust-scale-and-location)
 - [Hurst exponent (long memory)](#hurst-exponent-long-memory)
+- [Entropy (time-series regularity)](#entropy-time-series-regularity)
 - [Variance-ratio test](#variance-ratio-test)
 - [Serial correlation (Ljung-Box / Durbin-Watson)](#serial-correlation-ljung-box--durbin-watson)
 - [Goodness of fit (Jarque-Bera / KS)](#goodness-of-fit-jarque-bera--ks)
@@ -2831,6 +2832,25 @@ dfa_fluctuations(series)             # (scales, F(s)) for the log-log fit
 `alpha` equals the Hurst exponent for a stationary long-memory series and exceeds it
 by one for the integrated version, so a random walk reads `~1.5` where white noise
 reads `~0.5`.
+
+## Entropy (time-series regularity)
+
+Measure how unpredictable a series is. `approximate_entropy` and `sample_entropy`
+score the log-likelihood that short runs which stay close remain close one step
+later; `permutation_entropy` is the entropy of the ordinal patterns, normalized to
+`[0, 1]`:
+
+```python
+from quantforge import approximate_entropy, sample_entropy, permutation_entropy
+
+sample_entropy(returns)              # 0 = perfectly regular, larger = more complex
+approximate_entropy(returns, m=2)    # Pincus ApEn (biased low on short series)
+permutation_entropy(returns, m=3)    # 0 monotone, ~1 for random orderings
+```
+
+A clean sine scores near zero; white noise scores high. `sample_entropy` drops the
+self-matches that bias `approximate_entropy`, and `permutation_entropy` is invariant
+to any monotone transform of the data, so it reads the same on prices or their logs.
 
 ## Variance-ratio test
 

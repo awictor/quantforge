@@ -24,6 +24,13 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.763.0] - 2026-09-12
+
+### Documentation
+- README gains an "Entropy (time-series regularity)" section documenting
+  `approximate_entropy`, `sample_entropy` and `permutation_entropy` with a worked
+  example. TOC regenerated.
+
 ## [1.762.0] - 2026-09-12
 
 ### Added
