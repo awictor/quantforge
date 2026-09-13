@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.729.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.730.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -8779,6 +8779,51 @@ Auto-generated from `quantforge` v1.729.0 by `docs/gen_api.py` — do not edit b
 > ``w_i (C w)_i / (w^T C w)`` -- the component VaRs normalized to sum to 1.
 > Independent of the confidence level and horizon (they cancel). Shows how the
 > total risk is distributed across positions; equal entries mean risk parity.
+
+## power
+
+### `one_sample_z_power(effect_size, n, alpha=0.05)`  _function_
+
+> Power of a two-sided one-sample mean test (z-test, normal approx).
+>
+> ``effect_size`` is the mean shift in SD units; the noncentrality is
+> ``effect_size sqrt(n)``.
+
+### `one_sample_z_sample_size(effect_size, power=0.8, alpha=0.05)`  _function_
+
+> Sample size for a target ``power`` in a one-sample mean test.
+>
+> ``n = (z_{alpha/2} + z_{beta})^2 / d^2``, rounded up.
+
+### `proportion_power(p1, p2, n_per_group, alpha=0.05)`  _function_
+
+> Power of a two-sided two-proportion test (normal approximation).
+>
+> Uses the unpooled standard error at the alternative and the pooled standard
+> error under the null. ``p1``, ``p2`` are the two success probabilities.
+
+### `proportion_sample_size(p1, p2, power=0.8, alpha=0.05)`  _function_
+
+> Per-group sample size for a target ``power`` in a two-proportion test.
+>
+> ``n = (z_{alpha/2} sqrt(2 pbar (1-pbar)) + z_{beta} sqrt(p1(1-p1)+p2(1-p2)))^2 /
+> (p1 - p2)^2``, rounded up.
+
+### `two_sample_t_power(effect_size, n_per_group, alpha=0.05)`  _function_
+
+> Power of a two-sided two-sample test for a mean difference (normal approx).
+>
+> ``effect_size`` is Cohen's ``d`` (mean difference in pooled-SD units). With
+> ``n_per_group`` observations in each arm the noncentrality is
+> ``d sqrt(n / 2)``, and the power is ``Phi(ncp - z_{alpha/2})`` plus the far
+> tail. Increases with the effect size, the sample size, and ``alpha``.
+
+### `two_sample_t_sample_size(effect_size, power=0.8, alpha=0.05)`  _function_
+
+> Per-group sample size for a target ``power`` in a two-sample mean test.
+>
+> Inverts the normal-approximation power: ``n = 2 (z_{alpha/2} + z_{beta})^2 /
+> d^2``, rounded up. Raises for a zero effect size (infinite sample).
 
 ## proportion_ci
 

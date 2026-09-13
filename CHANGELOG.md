@@ -24,6 +24,19 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.730.0] - 2026-09-12
+
+### Added
+- `power.py`: statistical power and sample-size calculations (normal approximation)
+  for the two-sample and one-sample mean tests (Cohen's d) and the two-proportion
+  test -- `two_sample_t_power`/`two_sample_t_sample_size`,
+  `one_sample_z_power`/`one_sample_z_sample_size`,
+  `proportion_power`/`proportion_sample_size`. Cross-checked: the computed power
+  equals an empirical Monte-Carlo rejection rate, the sample sizes reproduce
+  textbook values (~64 per group for d=0.5 at 80% power; ~170 per group for a
+  0.50 vs 0.65 proportion), each solved sample size delivers at least the target
+  power, and a zero effect gives power equal to the significance level.
+
 ## [1.729.0] - 2026-09-12
 
 ### Documentation

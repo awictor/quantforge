@@ -298,6 +298,10 @@ from .proportion_ci import (
     wald_interval, wilson_interval, agresti_coull_interval,
     clopper_pearson_interval,
 )
+from .power import (
+    two_sample_t_power, two_sample_t_sample_size, one_sample_z_power,
+    one_sample_z_sample_size, proportion_power, proportion_sample_size,
+)
 from .tail_dependence import (
     upper_tail_dependence, lower_tail_dependence, exceedance_correlation,
 )
@@ -743,7 +747,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.729.0"
+__version__ = "1.730.0"
 
 __all__ = [
     "OptionType",
@@ -1212,6 +1216,12 @@ __all__ = [
     "wilson_interval",
     "agresti_coull_interval",
     "clopper_pearson_interval",
+    "two_sample_t_power",
+    "two_sample_t_sample_size",
+    "one_sample_z_power",
+    "one_sample_z_sample_size",
+    "proportion_power",
+    "proportion_sample_size",
     "pseudo_observations",
     "upper_tail_dependence",
     "lower_tail_dependence",
