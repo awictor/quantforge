@@ -31,6 +31,17 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.884.0] - 2026-09-13
+
+### Added
+- `jonckheere.py`: the `jonckheere_terpstra_test` for a monotone trend across ordered
+  groups (a directional, more powerful alternative to Kruskal-Wallis when the groups
+  have a natural order). Cross-checked: the null mean and tie-corrected variance match
+  the closed-form formulas, a perfectly increasing arrangement gives the maximal
+  statistic and a large positive z (decreasing gives the mirror-image negative z), the
+  null z is calibrated (mean ~0, variance ~1 over 2000 replications), and a graded
+  mean shift is detected.
+
 ## [1.883.0] - 2026-09-13
 
 ### Documentation

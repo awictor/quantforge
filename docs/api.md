@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.883.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.884.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -6577,6 +6577,17 @@ Auto-generated from `quantforge` v1.883.0 by `docs/gen_api.py` — do not edit b
 > sequence closest to ``y`` in weighted least squares. ``weights`` defaults to all
 > ones; ``increasing=False`` fits a non-increasing sequence. The fit is a step
 > function: tied blocks share their common weighted mean.
+
+## jonckheere
+
+### `jonckheere_terpstra_test(groups)`  _function_
+
+> Jonckheere-Terpstra trend test across ordered ``groups``.
+>
+> ``groups`` is a sequence of samples given in the hypothesized order (e.g. from
+> lowest dose to highest). Returns a dict with the ``statistic`` J, its null ``mean``
+> and ``variance`` (tie-corrected), the ``z`` normal approximation and the two-sided
+> ``p_value``. A positive ``z`` indicates an increasing trend across the group order.
 
 ## jump_test
 
