@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.980.0] - 2026-09-13
+
+### Added
+- `divergences.py`: distances between discrete distributions — `kl_divergence`,
+  `jensen_shannon_divergence`, `hellinger_distance`, `total_variation_distance` and
+  `bhattacharyya_distance` (all on auto-normalized weight vectors). Cross-checked:
+  identical distributions give zero, KL is asymmetric while JS is symmetric and bounded
+  by log 2, Hellinger/TV stay in [0, 1], disjoint supports give TV = 1 and infinite
+  Bhattacharyya, and the Pinsker inequality (TV <= sqrt(KL/2)) holds.
+
 ## [1.979.0] - 2026-09-13
 
 ### Documentation

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.979.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.980.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -3536,6 +3536,34 @@ Auto-generated from `quantforge` v1.979.0 by `docs/gen_api.py` — do not edit b
 ### `poisson_pmf(k, lam)`  _function_
 
 > Poisson probability mass ``P(N = k) = e^{-lam} lam^k / k!``.
+
+## divergences
+
+### `bhattacharyya_distance(p, q)`  _function_
+
+> Bhattacharyya distance ``-log(sum sqrt(p_i q_i))`` (0 for identical, grows apart).
+
+### `hellinger_distance(p, q)`  _function_
+
+> Hellinger distance ``(1/sqrt2) sqrt(sum (sqrt(p_i) - sqrt(q_i))^2)`` in ``[0, 1]``.
+
+### `jensen_shannon_divergence(p, q)`  _function_
+
+> Jensen-Shannon divergence (symmetric, bounded by ``log 2``) in nats.
+>
+> ``0.5 KL(p || m) + 0.5 KL(q || m)`` with ``m = (p + q)/2``. Always finite; its
+> square root is a metric.
+
+### `kl_divergence(p, q)`  _function_
+
+> Kullback-Leibler divergence ``sum p_i log(p_i / q_i)`` in nats.
+>
+> Asymmetric and non-negative (zero iff ``p == q``). Raises if some ``q_i == 0`` where
+> ``p_i > 0`` (the divergence is infinite there).
+
+### `total_variation_distance(p, q)`  _function_
+
+> Total-variation distance ``(1/2) sum |p_i - q_i|`` in ``[0, 1]``.
 
 ## double_barrier
 
