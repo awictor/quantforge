@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.822.0] - 2026-09-13
+
+### Added
+- `qr.py`: Householder QR decomposition (`qr_decomposition`) and QR least squares
+  (`qr_solve`). `A = Q R` with orthogonal ``Q`` and upper-triangular ``R``; solving
+  ``R x = Q' b`` avoids the ill-conditioned normal-equations matrix and is the stabler
+  regression solver. Cross-checked: ``Q R`` reconstructs ``A`` and ``Q' Q = I`` to
+  machine precision, ``R`` is upper triangular, and `qr_solve` matches the OLS
+  coefficients.
+
 ## [1.821.0] - 2026-09-13
 
 ### Documentation

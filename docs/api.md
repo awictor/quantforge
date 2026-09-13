@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.821.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.822.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -9553,6 +9553,23 @@ Auto-generated from `quantforge` v1.821.0 by `docs/gen_api.py` — do not edit b
 >
 > Skips index 0 (the origin) by convention via a 1-based offset internally,
 > so callers can pass 0, 1, 2, ... and get well-spread points.
+
+## qr
+
+### `qr_decomposition(A)`  _function_
+
+> Householder QR of an ``m x n`` matrix ``A`` (``m >= n``).
+>
+> Returns ``(Q, R)`` with ``Q`` an ``m x m`` orthogonal matrix and ``R`` an
+> ``m x n`` upper-triangular matrix such that ``A = Q R``. Pure Python lists.
+
+### `qr_solve(A, b)`  _function_
+
+> Least-squares solution of ``A x = b`` via QR (``x`` minimizes ||A x - b||).
+>
+> Computes ``Q' b`` and back-substitutes the upper-triangular ``R``. Numerically
+> stabler than the normal equations for ill-conditioned ``A``. ``A`` is ``m x n``
+> with ``m >= n``; returns the length-``n`` coefficient vector.
 
 ## quadrature
 
