@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.913.0] - 2026-09-13
+
+### Documentation
+- README: documented `barycentric_weights`, `barycentric_eval`, `chebyshev_nodes` and
+  `chebyshev_barycentric_weights` in the numerical-utilities section, including the
+  Runge-phenomenon comparison. Every snippet value verified.
+
 ## [1.912.0] - 2026-09-13
 
 ### Added

@@ -4515,6 +4515,34 @@ extrapolates a tabulated sequence to any target, feeding it a step-size sequence
 `x = 0` performs Richardson extrapolation — the derivative example above lands on
 `cos(1)` to 13 digits, the same idea `romberg` uses on the trapezoid rule.
 
+For repeated evaluation, the barycentric form precomputes weights once and then
+evaluates in `O(n)` per point, stably — and on Chebyshev nodes it converges spectrally
+instead of oscillating (the Runge phenomenon):
+
+```python
+from quantforge import (barycentric_weights, barycentric_eval,
+                        chebyshev_nodes, chebyshev_barycentric_weights)
+
+runge = lambda x: 1 / (1 + 25 * x * x)
+grid = [i / 100 for i in range(-99, 100)]
+
+cn = chebyshev_nodes(-1, 1, 21)
+cw = barycentric_weights(cn)
+cy = [runge(x) for x in cn]
+max(abs(barycentric_eval(cn, cy, cw, x) - runge(x)) for x in grid)   # ~0.0177
+
+en = [-1 + 2 * i / 20 for i in range(21)]           # 21 equispaced nodes
+ew = barycentric_weights(en)
+ey = [runge(x) for x in en]
+max(abs(barycentric_eval(en, ey, ew, x) - runge(x)) for x in grid)   # ~58.6 — blows up
+```
+
+`barycentric_weights` costs `O(n²)` once; each `barycentric_eval` is `O(n)`, so
+changing the sampled `ys` (same nodes) is free. `chebyshev_nodes` gives the
+Chebyshev-Lobatto points and `chebyshev_barycentric_weights` their closed-form
+weights; interpolating a smooth function like `exp` on 25 Chebyshev nodes is accurate
+to machine precision, where 21 equispaced nodes on the Runge function are off by ~59.
+
 For expectations under a normal density, Gauss-Hermite quadrature is exact for
 polynomials up to degree `2n-1` and needs only a handful of nodes:
 
