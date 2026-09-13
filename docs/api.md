@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.921.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.922.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -14321,6 +14321,25 @@ Auto-generated from `quantforge` v1.921.0 by `docs/gen_api.py` — do not edit b
 > absolute values receive average ranks. Returns a dict with ``statistic`` W (the
 > positive-rank sum), the ``z`` normal approximation (continuity-corrected, with the
 > tie correction to the variance) and the two-sided ``p_value``.
+
+## wls
+
+### `generalized_least_squares(X, y, cov, add_intercept=True)`  _function_
+
+> Generalized least squares for a known error covariance ``cov`` (Sigma).
+>
+> Whitens the system with the Cholesky factor of ``Sigma`` (``Sigma = L L'``), so
+> ``L^{-1} y = L^{-1} X beta + white noise``, then applies OLS. Returns a dict with
+> ``coefficients`` and ``std_errors``. A diagonal ``cov`` reproduces weighted least
+> squares with ``weights = 1 / diag(cov)``.
+
+### `weighted_least_squares(X, y, weights, add_intercept=True)`  _function_
+
+> Weighted least squares: minimize ``sum w_t (y_t - x_t beta)^2``.
+>
+> ``weights`` is a length-``n`` list of non-negative weights (larger = more trusted).
+> Returns a dict with ``coefficients``, ``std_errors`` (using the weighted residual
+> variance), ``residuals`` and ``r_squared`` (weighted). Equal weights reproduce OLS.
 
 ## xva
 

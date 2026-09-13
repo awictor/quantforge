@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.922.0] - 2026-09-13
+
+### Added
+- `wls.py`: `weighted_least_squares` (minimize weighted squared residuals) and
+  `generalized_least_squares` (known error covariance, solved by Cholesky whitening).
+  Cross-checked: equal weights reproduce OLS coefficients and standard errors exactly,
+  a diagonal GLS covariance equals WLS with `1/diag` weights, an identity covariance
+  reduces to OLS, and GLS with an AR(1) covariance recovers the true slope.
+
 ## [1.921.0] - 2026-09-13
 
 ### Documentation
