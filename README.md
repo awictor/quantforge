@@ -2016,6 +2016,21 @@ each event; below 1 the process is stationary with mean rate `mu / (1 - alpha/be
 which the simulator reproduces. `hawkes_fit` maximizes the exact `O(n)` recursive
 log-likelihood, and `hawkes_simulate` uses Ogata thinning.
 
+To check a fit, the time-rescaling theorem turns a correct model's events into
+unit-rate Poisson arrivals; `hawkes_residuals` computes those rescaled inter-event
+times (i.i.d. `Exp(1)` when the model holds) and `hawkes_gof_test` runs a
+Kolmogorov-Smirnov test against `Exp(1)`:
+
+```python
+from quantforge import hawkes_residuals, hawkes_gof_test
+
+res = hawkes_residuals(events, fit["mu"], fit["alpha"], fit["beta"])   # ~ Exp(1)
+D, p = hawkes_gof_test(events, fit["mu"], fit["alpha"], fit["beta"])   # small p rejects
+```
+
+A well-specified model gives residuals with mean one and a large p-value; wrong
+parameters push the p-value to zero.
+
 ## Structured notes
 
 Principal-protected notes (capped and uncapped), reverse convertibles with a fair
