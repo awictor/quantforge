@@ -31,6 +31,17 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.820.0] - 2026-09-13
+
+### Added
+- `gauss_kronrod.py`: `gauss_kronrod`, adaptive Gauss-Kronrod (G7-K15) quadrature
+  with an embedded error estimate. The 15-point Kronrod rule reuses the 7-point
+  Gauss nodes, so one evaluation set yields both the estimate and a local error
+  bound; the interval with the largest error is bisected until the total falls below
+  the tolerance (the scheme behind QUADPACK's QAG). Cross-checked to 1e-11 against
+  closed forms, exact on a degree-7 polynomial, resolves a sharp peak that a fixed
+  rule would miss, and the single-panel error estimate bounds the true error.
+
 ## [1.819.0] - 2026-09-13
 
 ### Documentation

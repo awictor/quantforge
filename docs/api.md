@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.819.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.820.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -5089,6 +5089,18 @@ Auto-generated from `quantforge` v1.819.0 by `docs/gen_api.py` — do not edit b
 > normal density), so ``sum_i w_i = 1`` and ``sum_i w_i x_i^{2m}`` reproduces the
 > standard-normal moments. Exact for polynomials up to degree ``2n - 1``. Nodes
 > are symmetric about zero and returned in increasing order.
+
+## gauss_kronrod
+
+### `gauss_kronrod(f, a, b, tol=1e-10, max_intervals=1000)`  _function_
+
+> Adaptive Gauss-Kronrod (G7-K15) integral of ``f`` over ``[a, b]``.
+>
+> Starts with one panel and repeatedly bisects the panel with the largest local
+> error estimate until the total estimated error falls below ``tol`` (or
+> ``max_intervals`` panels are used). Returns the integral. Concentrates
+> evaluations where the integrand is hardest, so it handles peaks and mild
+> endpoint behaviour that a fixed rule would miss.
 
 ## gauss_laguerre
 
