@@ -24,6 +24,13 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.759.0] - 2026-09-12
+
+### Documentation
+- README long-memory section now documents `gph_estimate` and
+  `fractional_integrate` alongside fractional differencing, closing the
+  estimate-then-difference workflow.
+
 ## [1.758.0] - 2026-09-12
 
 ### Added

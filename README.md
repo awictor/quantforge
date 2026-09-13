@@ -2803,6 +2803,21 @@ Integer orders recover the ordinary differences (`d = 1` is the first difference
 `d = 2` the second); a fractional `d` in `(0, 1)` is the useful middle ground, with
 weights that decay slowly rather than truncating at order `d`.
 
+To pick `d` from the data, `gph_estimate` runs the Geweke-Porter-Hudak
+log-periodogram regression; `fractional_integrate` is the inverse operator
+`(1 - L)^{-d}`, handy for generating test series:
+
+```python
+from quantforge import gph_estimate, fractional_integrate
+
+gph_estimate(series)["d"]                    # estimated memory parameter (+ std_error)
+fractional_integrate(white_noise, d=0.4)     # build an ARFIMA(0, 0.4, 0) path
+```
+
+`gph_estimate` returns `d` and its asymptotic standard error, so you can test
+`d = 0` (short memory); estimate it, then difference by that `d` with
+`fractional_difference` to obtain a stationary, memory-preserved series.
+
 ## Variance-ratio test
 
 The Lo-MacKinlay variance ratio tests the random-walk null: under it the variance
