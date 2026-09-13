@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.931.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.932.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -11984,6 +11984,18 @@ Auto-generated from `quantforge` v1.931.0 by `docs/gen_api.py` — do not edit b
 >
 > Near 1 = dense, well-separated clusters; near 0 = overlapping; negative =
 > mostly misassigned. Use it to compare label sets or pick ``k``.
+
+## simulated_annealing
+
+### `simulated_annealing(func, x0, bounds=None, T0=1.0, cooling=0.995, step=1.0, max_iter=10000, seed=1234567)`  _function_
+
+> Minimize ``func`` from start ``x0`` by simulated annealing.
+>
+> ``func`` takes a length-``d`` list and returns a scalar. ``bounds`` is an optional
+> list of ``(lo, hi)`` per dimension (proposals are clamped into the box). ``T0`` is
+> the initial temperature, ``cooling`` the per-iteration geometric decay, ``step`` the
+> proposal scale (shrinks with temperature). Returns a dict with ``x`` (best point),
+> ``fun`` (its value), ``n_iter`` and ``final_temp``. Deterministic for a fixed seed.
 
 ## sizing
 

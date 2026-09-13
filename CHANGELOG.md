@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.932.0] - 2026-09-13
+
+### Added
+- `simulated_annealing.py`: `simulated_annealing`, a single-point global optimizer that
+  accepts uphill moves by the Metropolis criterion with geometric cooling, reproducible
+  via a seeded LCG. Cross-checked: minimizes sphere and Rosenbrock, climbs out of the
+  multimodal Rastrigin's local minima where Nelder-Mead stalls, is deterministic for a
+  fixed seed, and respects the box bounds.
+
 ## [1.931.0] - 2026-09-13
 
 ### Documentation
