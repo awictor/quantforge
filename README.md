@@ -4874,6 +4874,30 @@ collapse to noise. The one requirement is that `f` be written with complex-safe
 operations (pass `cmath.sin` rather than `math.sin`, and avoid `abs`/`max`/comparisons
 that break on complex numbers).
 
+`dual_derivative` goes one better with forward-mode automatic differentiation: a `Dual`
+number `a + b·eps` (with `eps² = 0`) carries the value and its derivative together, so
+the chain rule is exact by construction — no truncation *or* round-off, and no
+complex-analyticity requirement:
+
+```python
+from quantforge import dual_derivative, Dual
+from quantforge.dual import exp, sin
+
+dual_derivative(lambda x: x * x * x, 2.0)          # 12.0 — exact, zero error
+dual_derivative(lambda x: exp(x) * sin(x), 0.8)    # 3.14705464
+
+x = Dual(3.0, 1.0)                                 # a variable seeded with derivative 1
+r = x * x + 2 * x + 1                              # (x+1)^2
+r.value, r.deriv                                   # 16.0, 8.0
+```
+
+Write the function with `Dual` arithmetic and the module's dual-aware
+`exp`/`log`/`sqrt`/`sin`/`cos`/`tan`/`tanh`; `dual_derivative(f, x)` returns `f'(x)` to
+the last bit. It even differentiates a dual exponent like `x**x` correctly. Reach for
+it when you control the function's source (the exact-derivative gold standard); use
+`complex_step_derivative` or `ridders_derivative` when you only have a black-box
+callable.
+
 Slowly-converging sequences and fixed-point iterations can be accelerated with
 `aitken` (delta-squared), `shanks`, and `steffensen`:
 
