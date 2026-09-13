@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.924.0] - 2026-09-13
+
+### Added
+- `rls.py`: `RecursiveLeastSquares` (online OLS updated one observation at a time via
+  the Sherman-Morrison identity, with an optional forgetting factor) and the
+  `recursive_least_squares` batch wrapper. Cross-checked: with `forgetting = 1` the
+  estimate matches batch OLS, it recovers an exact line through noise-free points,
+  `predict` works, and a forgetting factor < 1 tracks a mid-stream slope regime change.
+
 ## [1.923.0] - 2026-09-13
 
 ### Documentation

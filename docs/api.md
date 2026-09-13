@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.923.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.924.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -11134,6 +11134,27 @@ Auto-generated from `quantforge` v1.923.0 by `docs/gen_api.py` — do not edit b
 >
 > The ``confidence`` quantile of the loss distribution (``-pnl``). Uses the
 > lower-index empirical quantile so the VaR is a realized sample loss.
+
+## rls
+
+### `RecursiveLeastSquares(n_features, forgetting=1.0, delta=1000000.0)`  _class_
+
+> Online multivariate least squares with an optional forgetting factor.
+>
+> Feed observations one at a time with :meth:`update`; read the current fit from
+> :attr:`beta`. ``n_features`` is the regressor count (include a constant 1 in each
+> ``x`` for an intercept). ``forgetting`` in ``(0, 1]`` down-weights past data
+> (``1`` = ordinary growing-window OLS); ``delta`` sets the prior ``P = delta * I``
+> (large = diffuse prior). With ``forgetting = 1`` the estimate matches batch OLS
+> once enough points have arrived.
+
+### `recursive_least_squares(X, y, forgetting=1.0, delta=1000000.0)`  _function_
+
+> Fit RLS over a whole dataset and return the final coefficient vector.
+>
+> Convenience wrapper: streams the rows of ``X`` (each already including any
+> intercept column) through :class:`RecursiveLeastSquares`. With ``forgetting = 1``
+> the result matches batch OLS on the same design.
 
 ## rmt
 
