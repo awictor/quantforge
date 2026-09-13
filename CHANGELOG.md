@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.854.0] - 2026-09-13
+
+### Added
+- `wavelet.py`: the multilevel Haar discrete wavelet transform (`haar_dwt`,
+  `haar_idwt`) and `wavelet_energy` (energy fraction per detail level and the coarse
+  approximation). Cross-checked: the transform reconstructs exactly, a constant has
+  no detail (all energy in the approximation), it preserves total energy (Parseval),
+  the energy fractions sum to one, and a single level gives the scaled
+  average/difference of each pair.
+
 ## [1.853.0] - 2026-09-13
 
 ### Documentation

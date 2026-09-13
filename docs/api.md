@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.853.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.854.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -13504,6 +13504,34 @@ Auto-generated from `quantforge` v1.853.0 by `docs/gen_api.py` — do not edit b
 > ``vrp`` (realized - implied; usually negative), ``ratio``
 > (realized / implied), and ``vol_premium`` (implied vol - realized vol, the
 > usual positive number quoted in vol points).
+
+## wavelet
+
+### `haar_dwt(x, levels=None)`  _function_
+
+> Multilevel Haar wavelet transform.
+>
+> Returns ``(approx, details)`` where ``approx`` is the final coarse-approximation
+> list and ``details`` is a list (finest level first) of the detail-coefficient
+> lists at each level. ``levels`` defaults to the maximum ``log2(len(x))``. Length
+> must be a power of two.
+
+### `haar_idwt(approx, details)`  _function_
+
+> Invert :func:`haar_dwt`, reconstructing the original signal.
+>
+> Takes the coarse approximation and the per-level detail lists (finest first) and
+> returns the reconstructed series. Exact up to floating error.
+
+### `wavelet_energy(x, levels=None)`  _function_
+
+> Fraction of signal energy in each Haar detail level and the coarse approximation.
+>
+> Returns a dict with ``detail`` (a list of energy fractions, finest level first)
+> and ``approx`` (the coarse-approximation energy fraction). The fractions sum to
+> one because the Haar transform is orthonormal (Parseval). A smooth series
+> concentrates energy in the approximation; a noisy one spreads it into the fine
+> details.
 
 ## weather
 
