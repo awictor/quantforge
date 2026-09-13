@@ -67,6 +67,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Weather derivatives](#weather-derivatives)
 - [Equity compensation and convertibles](#equity-compensation-and-convertibles)
 - [Optimal execution](#optimal-execution)
+- [Hawkes self-exciting process](#hawkes-self-exciting-process)
 - [Structured notes](#structured-notes)
 - [Actuarial (life contingencies and cat bonds)](#actuarial-life-contingencies-and-cat-bonds)
 - [Equity swaps and dispersion](#equity-swaps-and-dispersion)
@@ -1993,6 +1994,27 @@ price_impact(prices, mids, future_mids, signs)         # permanent move
 The decomposition satisfies `effective = realized + price_impact` term by term:
 `future_mids` is the midpoint a short horizon after each trade, so the realized
 spread nets out the permanent move that the price impact captures.
+
+## Hawkes self-exciting process
+
+Trades and order arrivals cluster: each event lifts the chance of the next. A
+Hawkes process with an exponential kernel captures that, with intensity
+`lambda(t) = mu + sum alpha exp(-beta (t - t_i))`:
+
+```python
+from quantforge import (hawkes_intensity, hawkes_branching_ratio,
+                        hawkes_log_likelihood, hawkes_simulate, hawkes_fit)
+
+events = hawkes_simulate(mu=0.5, alpha=0.9, beta=2.0, t_max=5000)
+fit = hawkes_fit(events)
+fit["mu"], fit["alpha"], fit["beta"], fit["branching_ratio"]   # recovered params
+hawkes_intensity(t=10.0, history=events, mu=0.5, alpha=0.9, beta=2.0)
+```
+
+The branching ratio `alpha / beta` is the expected number of events triggered by
+each event; below 1 the process is stationary with mean rate `mu / (1 - alpha/beta)`,
+which the simulator reproduces. `hawkes_fit` maximizes the exact `O(n)` recursive
+log-likelihood, and `hawkes_simulate` uses Ogata thinning.
 
 ## Structured notes
 
