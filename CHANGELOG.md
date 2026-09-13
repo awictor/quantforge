@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.859.0] - 2026-09-13
+
+### Documentation
+- README: new "Isotonic regression (monotone fit)" section covering
+  `isotonic_regression` (PAVA) and `isotonic_fit`, framed around dose-response and
+  probability calibration. Every snippet value verified.
+
 ## [1.858.0] - 2026-09-13
 
 ### Added

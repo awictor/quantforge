@@ -93,6 +93,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Kalman filter (local level)](#kalman-filter-local-level)
 - [Newey-West HAC variance](#newey-west-hac-variance)
 - [Theil-Sen robust regression](#theil-sen-robust-regression)
+- [Isotonic regression (monotone fit)](#isotonic-regression-monotone-fit)
 - [Robust scale and location](#robust-scale-and-location)
 - [Hurst exponent (long memory)](#hurst-exponent-long-memory)
 - [Entropy (time-series regularity)](#entropy-time-series-regularity)
@@ -2954,6 +2955,47 @@ theil_sen(x, y)         # -> (2.0, 5.0)   slope and intercept, unmoved by the ou
 
 The median pairwise slope shrugs off the two corrupted points that would tilt an
 OLS line. Pairs sharing an `x` value are skipped.
+
+## Isotonic regression (monotone fit)
+
+When you know the response only moves one way — a dose-response curve, a calibration
+map from model scores to probabilities — but don't want to assume a functional form,
+fit the best *monotone* step function instead. Isotonic regression finds the
+non-decreasing sequence closest to the data in weighted least squares; the
+pool-adjacent-violators algorithm solves it exactly in one linear sweep, pooling any
+out-of-order adjacent blocks into their weighted mean.
+
+```python
+from quantforge import isotonic_regression
+
+isotonic_regression([1, 2, 4, 2, 5])                     # -> [1, 2, 3, 3, 5]
+isotonic_regression([5, 2, 4, 2, 1], increasing=False)   # -> [5, 3, 3, 2, 1]
+```
+
+The `4, 2` pair violates the increasing order, so it collapses to their mean `3`;
+everything already in order is left untouched. Pass `weights` for a weighted fit and
+`increasing=False` for a non-increasing one.
+
+`isotonic_fit` sorts by `x`, fits, realigns the result to the original input order,
+and returns an interpolating predictor — the shape used for probability calibration,
+where raw model scores are mapped to monotone-increasing calibrated probabilities:
+
+```python
+from quantforge import isotonic_fit
+
+scores = [0.1, 0.4, 0.35, 0.8, 0.7, 0.9]
+labels = [0,   0,   1,    1,   1,   1]
+
+y_hat, predict = isotonic_fit(scores, labels)
+y_hat          # [0.0, 0.5, 0.5, 1.0, 1.0, 1.0]  fit aligned to input order
+predict(0.5)   # 0.6667  linear interpolation between fitted knots
+predict(0.0)   # 0.0     clamped to the low endpoint
+```
+
+The fitted probabilities never decrease as the score rises — the monotonicity a
+calibration map should have — and `predict` interpolates linearly between knots,
+clamping past the data range. It is the exact least-squares monotone fit, verified
+against the independent max-min weighted-average formula.
 
 ## Robust scale and location
 
