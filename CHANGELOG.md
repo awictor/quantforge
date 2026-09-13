@@ -31,6 +31,17 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.800.0] - 2026-09-12
+
+### Added
+- `kpss.py`: `kpss_test`, the Kwiatkowski-Phillips-Schmidt-Shin stationarity test
+  (level ``"c"`` or trend ``"ct"``), the complement of ADF -- its null is
+  stationarity, so a small p-value rejects it. The statistic uses the Newey-West
+  long-run variance and is compared to the asymptotic critical values.
+  Cross-checked: white noise is not rejected (and ADF rejects its unit root, the
+  opposite conclusion), a random walk is rejected, and a linear-trend-plus-noise
+  series is stationary under ``"ct"`` but rejected under ``"c"``.
+
 ## [1.799.0] - 2026-09-12
 
 ### Documentation

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.799.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.800.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -6435,6 +6435,20 @@ Auto-generated from `quantforge` v1.799.0 by `docs/gen_api.py` — do not edit b
 > returning ``(log_moneyness, vol)`` pairs sorted by strike on the forward
 > ``F = S e^{(r-q) t}``. An asymmetric jump distribution (``eta1 != eta2`` or
 > ``p != 1/2``) tilts the smile into a skew.
+
+## kpss
+
+### `kpss_test(y, lags=None, regression='c')`  _function_
+
+> KPSS stationarity test statistic and approximate p-value.
+>
+> ``regression`` is ``"c"`` for level stationarity (residuals about the mean) or
+> ``"ct"`` for trend stationarity (residuals about a fitted linear trend).
+> ``lags`` sets the Newey-West bandwidth for the long-run variance (defaults to
+> ``floor(4 (n/100)^{1/4})``). Returns ``(eta, p_value)``; a *small* p-value
+> rejects stationarity (unlike ADF, where a small p-value supports it). The p-value
+> is interpolated/clamped against the asymptotic critical values, so it is reported
+> within ``[0.01, 0.10]`` at the bounds.
 
 ## lasso
 
