@@ -2097,6 +2097,18 @@ Censored subjects stay in the risk set until their censoring time, then drop out
 without an event. With no censoring the Kaplan-Meier curve is just `1 - ECDF`; the
 Nelson-Aalen hazard relates to it by `S(t) ~ exp(-H(t))`.
 
+To test whether two groups' survival differs, `log_rank_test` (Mantel-Cox)
+accumulates observed-minus-expected events across the pooled timeline:
+
+```python
+from quantforge import log_rank_test
+
+chi2, p = log_rank_test(times_a, events_a, times_b, events_b)   # small p: curves differ
+```
+
+It returns a chi-square(1) statistic and p-value — the standard test for equal
+hazards between two censored samples, and symmetric in the two groups.
+
 ## Actuarial (life contingencies and cat bonds)
 
 Life-table survival, annuities and insurance EPVs, the equivalence-principle net
