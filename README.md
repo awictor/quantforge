@@ -5136,6 +5136,23 @@ the memory stays fixed. `BloomFilter` sizes its bit array and hash count from th
 non-member tests present only at about the configured false-positive rate. Both are
 deterministic through the shared SHA-1 hashing.
 
+`log(sum(exp(x)))` overflows the instant any `x` is large; `logsumexp` shifts by the
+maximum first, so it stays exact where the naive form returns `inf`, and `softmax` /
+`log_softmax` build the normalized (log-)probability transforms on it:
+
+```python
+from quantforge import logsumexp, softmax, log_softmax
+
+logsumexp([1000.0, 1001.0, 1002.0])   # 1002.407606 — naive exp() would overflow to inf
+softmax([1.0, 2.0, 3.0])              # [0.09, 0.2447, 0.6652], sums to 1
+log_softmax([1.0, 2.0, 3.0])          # x_i - logsumexp(x), avoids log(0)
+```
+
+`logsumexp` takes optional non-negative `weights` for a log-weighted-sum-exp (mixture
+likelihoods); `softmax` is stable even on 1000-scale inputs, and `log_softmax` computes
+`x_i - logsumexp(x)` directly rather than the overflow-prone `log(softmax(x))` — the
+log-likelihood form used in classification and Boltzmann-style weighting.
+
 The special functions behind the distribution routines are public:
 
 ```python
