@@ -2109,6 +2109,20 @@ chi2, p = log_rank_test(times_a, events_a, times_b, events_b)   # small p: curve
 It returns a chi-square(1) statistic and p-value — the standard test for equal
 hazards between two censored samples, and symmetric in the two groups.
 
+Two summaries condense a curve into a number: `median_survival_time` (where survival
+crosses 0.5) and `restricted_mean_survival_time` (area under the curve up to a
+horizon):
+
+```python
+from quantforge import median_survival_time, restricted_mean_survival_time
+
+median_survival_time(times, events)                    # None if it never reaches 0.5
+restricted_mean_survival_time(times, events, tau=5.0)  # expected time capped at tau
+```
+
+RMST is defined even when the tail is censored (unlike the plain mean), never
+exceeds `tau`, and grows with it; the median can be `None` under heavy censoring.
+
 ## Actuarial (life contingencies and cat bonds)
 
 Life-table survival, annuities and insurance EPVs, the equivalence-principle net
