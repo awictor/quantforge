@@ -3147,18 +3147,22 @@ curve = SplineZeroCurve([0.5, 1, 2, 5, 10], [0.02, 0.025, 0.03, 0.035, 0.04])
 brent(lambda x: x * x - 2, 0, 2)                  # sqrt(2)
 
 # Definite-integral quadrature.
-from quantforge import simpson, gauss_legendre, adaptive_simpson, romberg, tanh_sinh
+from quantforge import (simpson, gauss_legendre, adaptive_simpson, romberg,
+                        clenshaw_curtis, tanh_sinh)
 import math
 simpson(lambda x: x * x, 0, 1)                    # composite Simpson
 gauss_legendre(lambda x: x ** 5, 0, 1, n=3)       # exact to degree 2n-1
 adaptive_simpson(math.sin, 0, math.pi)            # error-controlled -> 2.0
 romberg(math.sin, 0, math.pi)                     # Richardson extrapolation -> 2.0
+clenshaw_curtis(math.sin, 0, math.pi, n=64)       # Chebyshev points -> 2.0
 tanh_sinh(lambda x: 1 / math.sqrt(x), 0, 1)       # endpoint singularity -> 2.0
 
-`romberg` (Richardson extrapolation on the trapezoid rule) reaches machine
-precision in a few interval halvings on smooth integrands. `tanh_sinh`
-(double-exponential) is the one to reach for when the integrand blows up at an
-endpoint — `1/sqrt(x)`, `ln x`, `sqrt(1-x^2)` at `x = ±1` — where Simpson and
+`romberg` (Richardson extrapolation on the trapezoid rule) and `clenshaw_curtis`
+(sampling at Chebyshev points) both reach machine precision on smooth integrands;
+Clenshaw-Curtis takes a free order `n`, scaling past the fixed 2-5 point
+Gauss-Legendre rule and handling awkward integrands like the Runge function.
+`tanh_sinh` (double-exponential) is the one to reach for when the integrand blows up
+at an endpoint — `1/sqrt(x)`, `ln x`, `sqrt(1-x^2)` at `x = ±1` — where Simpson and
 Gauss-Legendre lose accuracy; it evaluates strictly inside the interval and
 converges on the singular cases to machine precision.
 
