@@ -24,6 +24,16 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.786.0] - 2026-09-12
+
+### Added
+- `survival.py`: nonparametric survival estimators for right-censored data --
+  `kaplan_meier` (product-limit survival), `nelson_aalen` (cumulative hazard), and
+  `survival_at` to evaluate the step curve. Cross-checked: with no censoring the KM
+  estimate equals ``1 - ECDF``, it is non-increasing in ``[0, 1]``, a censored
+  worked example matches by hand, the Nelson-Aalen hazard is the running
+  ``sum d_i/n_i`` and ``exp(-H)`` tracks KM while the risk set is large.
+
 ## [1.785.0] - 2026-09-12
 
 ### Documentation

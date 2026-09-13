@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.785.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.786.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -11749,6 +11749,34 @@ Auto-generated from `quantforge` v1.785.0 by `docs/gen_api.py` — do not edit b
 ### `VolSurface(slices: List[quantforge.surface.SurfaceSlice])`  _class_
 
 > A term structure of SVI smiles with calendar-arbitrage diagnostics.
+
+## survival
+
+### `kaplan_meier(times, events)`  _function_
+
+> Kaplan-Meier product-limit survival estimate.
+>
+> Returns ``(event_times, survival)`` giving the step-function survival ``S(t)``
+> at each distinct time where an event occurs; censoring times only shrink the risk
+> set. ``S`` starts at 1, is non-increasing, and drops by the factor
+> ``1 - d_i / n_i`` at each event time. With no censoring it equals
+> ``1 - ECDF(t)``.
+
+### `nelson_aalen(times, events)`  _function_
+
+> Nelson-Aalen cumulative-hazard estimate.
+>
+> Returns ``(event_times, cumulative_hazard)`` with ``H(t) = sum d_i / n_i`` over
+> event times up to ``t``. Non-decreasing from 0; ``exp(-H(t))`` approximates the
+> Kaplan-Meier survival (they agree closely when the per-step hazard is small).
+
+### `survival_at(times, events, query, estimator='km')`  _function_
+
+> Evaluate the survival function at ``query`` from a fitted step curve.
+>
+> ``estimator`` is ``"km"`` (Kaplan-Meier) or ``"na"`` (``exp(-Nelson-Aalen)``).
+> Returns the survival at the largest event time ``<= query`` (1 before the first
+> event).
 
 ## svi
 
