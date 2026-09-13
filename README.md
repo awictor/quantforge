@@ -4969,6 +4969,28 @@ total); summing a million `0.1`s it stays exact where the naive loop drifts by ~
 large-mean data (e.g. values near `1e9`) where `mean(x²) − mean(x)²` collapses to zero
 through catastrophic cancellation.
 
+`RunningMoments` extends the one-pass idea to the third and fourth moments — mean,
+variance, skewness and excess kurtosis as data streams in — and two accumulators
+*merge* exactly, so partial results from parallel chunks combine into the whole:
+
+```python
+from quantforge import RunningMoments
+
+rm = RunningMoments([2, 4, 4, 4, 5, 5, 7, 9])
+rm.mean, rm.variance()        # 5.0, 4.5714
+rm.skewness(), rm.kurtosis()  # 0.6563, -0.2188
+
+a = RunningMoments([2, 4, 4, 4])
+b = RunningMoments([5, 5, 7, 9])
+(a + b).mean                  # 5.0 — same as the combined sample, computed by merge
+```
+
+Feed values with `update(x)` or an iterable to the constructor; read any moment at any
+time. The `+` operator uses the Chan/Terriberry parallel-combination formulas, so
+splitting a sample across workers and merging their accumulators reproduces the
+single-pass result to ~1e-10 — the associativity that makes it a true parallel
+reduction for large or distributed data.
+
 The special functions behind the distribution routines are public:
 
 ```python
