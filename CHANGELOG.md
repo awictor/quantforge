@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.790.0] - 2026-09-12
+
+### Added
+- `survival.py` gains `median_survival_time` (earliest time Kaplan-Meier drops to
+  0.5, or ``None`` if it never does) and `restricted_mean_survival_time` (RMST, the
+  area under the KM curve up to a horizon). Cross-checked: the no-censoring median
+  matches the sorted median, RMST matches a by-hand step integral and the
+  exponential closed form ``(1 - e^{-lambda tau})/lambda``, it grows with the horizon
+  and is capped by it, and the median is ``None`` when every observation is censored.
+
 ## [1.789.0] - 2026-09-12
 
 ### Documentation

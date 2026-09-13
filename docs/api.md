@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.789.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.790.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -11776,6 +11776,13 @@ Auto-generated from `quantforge` v1.789.0 by `docs/gen_api.py` — do not edit b
 > is asymptotically chi-square(1). Returns ``(chi2, p_value)``; a small p-value
 > rejects equal survival between the groups. Uses the chi-square survival function.
 
+### `median_survival_time(times, events)`  _function_
+
+> Median survival: the earliest time at which Kaplan-Meier ``S(t) <= 0.5``.
+>
+> Returns ``None`` if the curve never falls to ``0.5`` (survival stays above the
+> median over the observed range, e.g. under heavy censoring).
+
 ### `nelson_aalen(times, events)`  _function_
 
 > Nelson-Aalen cumulative-hazard estimate.
@@ -11783,6 +11790,15 @@ Auto-generated from `quantforge` v1.789.0 by `docs/gen_api.py` — do not edit b
 > Returns ``(event_times, cumulative_hazard)`` with ``H(t) = sum d_i / n_i`` over
 > event times up to ``t``. Non-decreasing from 0; ``exp(-H(t))`` approximates the
 > Kaplan-Meier survival (they agree closely when the per-step hazard is small).
+
+### `restricted_mean_survival_time(times, events, tau)`  _function_
+
+> Restricted mean survival time (RMST): area under KM up to horizon ``tau``.
+>
+> ``RMST(tau) = integral_0^tau S(t) dt`` where ``S`` is the Kaplan-Meier step
+> function (``S = 1`` before the first event). The expected event time capped at
+> ``tau`` -- a censoring-robust summary that, unlike the mean, is always defined
+> even when the tail of the curve is not estimable. ``tau > 0``.
 
 ### `survival_at(times, events, query, estimator='km')`  _function_
 

@@ -160,3 +160,43 @@ def log_rank_test(times1, events1, times2, events2):
         return 0.0, 1.0
     chi2 = o_minus_e * o_minus_e / var
     return chi2, chi2_sf(chi2, 1)
+
+
+def median_survival_time(times, events):
+    """Median survival: the earliest time at which Kaplan-Meier ``S(t) <= 0.5``.
+
+    Returns ``None`` if the curve never falls to ``0.5`` (survival stays above the
+    median over the observed range, e.g. under heavy censoring).
+    """
+    ts, ss = kaplan_meier(times, events)
+    for i in range(len(ts)):
+        if ss[i] <= 0.5:
+            return ts[i]
+    return None
+
+
+def restricted_mean_survival_time(times, events, tau):
+    """Restricted mean survival time (RMST): area under KM up to horizon ``tau``.
+
+    ``RMST(tau) = integral_0^tau S(t) dt`` where ``S`` is the Kaplan-Meier step
+    function (``S = 1`` before the first event). The expected event time capped at
+    ``tau`` -- a censoring-robust summary that, unlike the mean, is always defined
+    even when the tail of the curve is not estimable. ``tau > 0``.
+    """
+    if tau <= 0.0:
+        raise ValueError("tau must be positive")
+    ts, ss = kaplan_meier(times, events)
+    area = 0.0
+    prev_t = 0.0
+    prev_s = 1.0        # survival is 1 before the first event
+    for i in range(len(ts)):
+        t = ts[i]
+        if t >= tau:
+            area += prev_s * (tau - prev_t)
+            return area
+        area += prev_s * (t - prev_t)
+        prev_t = t
+        prev_s = ss[i]
+    # Horizon beyond the last event: extend the final level to tau.
+    area += prev_s * (tau - prev_t)
+    return area
