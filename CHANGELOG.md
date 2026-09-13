@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.869.0] - 2026-09-13
+
+### Documentation
+- README: extended the rank-dependence section with `chatterjee_xi` and
+  `blomqvist_beta`, showing xi flag a V-shaped function where Kendall's tau is exactly
+  zero. Every snippet value verified.
+
 ## [1.868.0] - 2026-09-13
 
 ### Added

@@ -3534,6 +3534,30 @@ relation), `distance_covariance` is the unnormalized version, and
 correlation is exactly zero — it is blind to the U-shape — while distance
 correlation reports a clear 0.52, flagging the dependence.
 
+`chatterjee_xi` is a newer (2020) rank coefficient built for the same job but with an
+`O(n log n)` cost and an asymmetric reading — it measures how far `Y` is a *function*
+of `X`, running from 0 under independence toward 1 as `Y` becomes a noiseless function
+of `X`, monotone or not:
+
+```python
+from quantforge import chatterjee_xi, blomqvist_beta, kendall_tau_b
+
+x = [1, 2, 3, 4, 5, 6, 7]
+y = [3, 2, 1, 0, 1, 2, 3]        # a V — a clean function of x, but non-monotone
+
+kendall_tau_b(x, y)              # 0.0    — rank correlation cancels on the V
+chatterjee_xi(x, y)             # 0.25   — sees the functional dependence
+chatterjee_xi(list(range(1000)), list(range(1000)))   # 0.997 -> 1 for a monotone map
+
+blomqvist_beta([1, 2, 3, 4, 5], [10, 20, 30, 40, 50])  # 1.0  comonotone
+```
+
+Chatterjee's `xi` climbs toward 1 as the sample grows whenever `Y = f(X)` exactly
+(the V above would too, at larger `n`), which is what makes it a functional-dependence
+detector rather than a monotonicity one. `blomqvist_beta` is the median-based
+"medial" correlation — the rescaled fraction of points in the concordant quadrants
+around the two medians — a fast, robust cousin of Kendall's tau in `[-1, 1]`.
+
 For the linear (Pearson) correlation with a significance test and interval,
 `pearson_correlation_test` returns the coefficient, a two-sided t-test of
 `rho = 0`, and a Fisher-z confidence interval:
