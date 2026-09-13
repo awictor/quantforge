@@ -2561,6 +2561,27 @@ A larger `alpha` shrinks the slope coefficients more (the intercept is not
 penalized); ridge stays solvable even under perfect collinearity, where OLS is
 singular.
 
+`bayesian_linear_regression` gives ridge a probabilistic reading: with a Gaussian prior
+it returns a full posterior over the coefficients, so you get credible intervals and a
+predictive variance the point estimate can't express:
+
+```python
+from quantforge import bayesian_linear_regression, bayesian_predict
+
+m = bayesian_linear_regression(X, y, alpha=1.0, beta_noise=4.0)
+m["mean"], m["std"]                 # posterior coefficient means and std devs
+mean, var = bayesian_predict(m, x_new)   # predictive mean and variance at a new point
+```
+
+`alpha` is the prior precision (shrinkage strength) and `beta_noise` the noise precision;
+the posterior mean equals ridge with `lambda = alpha / beta_noise`, a weak prior recovers
+OLS, and a stronger prior shrinks the coefficients further. The predictive variance is
+`1/beta_noise + xᵀΣx` — observation noise plus coefficient uncertainty — so it widens
+where data is sparse or when extrapolating, flagging where the model is guessing.
+
+Where ridge shrinks every slope, `lasso_regression` (L1 penalty, coordinate
+descent) drives some to exactly zero — so it also selects features:
+
 Where ridge shrinks every slope, `lasso_regression` (L1 penalty, coordinate
 descent) drives some to exactly zero — so it also selects features:
 

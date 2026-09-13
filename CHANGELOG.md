@@ -31,6 +31,12 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.977.0] - 2026-09-13
+
+### Documentation
+- README: documented `bayesian_linear_regression` and `bayesian_predict` in the
+  OLS-regression section, alongside ridge.
+
 ## [1.976.0] - 2026-09-13
 
 ### Added
