@@ -3533,6 +3533,21 @@ expected_steps_to_absorption(A, transient_states=[0, 1])
 absorption_probabilities(A, transient_states=[0, 1], absorbing_states=[2])
 ```
 
+In continuous time the chain is specified by a rate generator `Q` (rows summing to
+zero); the transition matrix over horizon `t` is `exp(Q t)`:
+
+```python
+from quantforge import generator_to_transition, generator_default_probability
+
+Q = [[-0.15, 0.12, 0.03], [0.05, -0.20, 0.15], [0.0, 0.0, 0.0]]   # 2 grades + default
+generator_to_transition(Q, t=1.0)                     # 1-year transition matrix
+generator_default_probability(Q, default_state=2, horizons=[1, 2, 5, 10])
+```
+
+`P(t) = exp(Q t)` has the semigroup property `P(s) P(t) = P(s+t)`, so a single
+generator prices migration at every horizon — the continuous-time basis for
+rating-transition and default-term-structure modeling.
+
 ## K-means clustering
 
 Partition points into `k` clusters by Lloyd's algorithm with k-means++ seeding —

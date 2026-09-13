@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.833.0] - 2026-09-13
+
+### Documentation
+- README Markov-chains section now documents the continuous-time
+  `generator_to_transition` and `generator_default_probability` with a worked rating
+  generator.
+
 ## [1.832.0] - 2026-09-13
 
 ### Added
