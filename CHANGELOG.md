@@ -24,6 +24,17 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.744.0] - 2026-09-12
+
+### Added
+- `liquidity.py`: low-frequency liquidity and transaction-cost proxies --
+  `roll_spread` (Roll's effective spread from the serial covariance of price
+  changes), `amihud_illiquidity` (absolute return per dollar of volume), and
+  `corwin_schultz_spread` (high-low spread estimator). Cross-checked: Roll recovers
+  a known bid-ask-bounce spread from a simulated tape (0.10 -> ~0.10), Amihud scales
+  inversely with volume (10x less volume -> 10x the measure), and Corwin-Schultz is
+  non-negative and rises monotonically with the true spread.
+
 ## [1.743.0] - 2026-09-12
 
 ### Documentation

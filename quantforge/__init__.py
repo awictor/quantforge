@@ -310,6 +310,7 @@ from .multiple_testing import (
 from .svi_jumpwing import SVIJumpWing, raw_to_jumpwing, jumpwing_to_raw
 from .realized_kernel import realized_kernel
 from .jump_test import tripower_quarticity, bns_jump_test
+from .liquidity import roll_spread, amihud_illiquidity, corwin_schultz_spread
 from .tail_dependence import (
     upper_tail_dependence, lower_tail_dependence, exceedance_correlation,
 )
@@ -755,7 +756,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.743.0"
+__version__ = "1.744.0"
 
 __all__ = [
     "OptionType",
@@ -1536,6 +1537,9 @@ __all__ = [
     "efficient_frontier_point",
     "kyle_lambda",
     "kyle_impact",
+    "roll_spread",
+    "amihud_illiquidity",
+    "corwin_schultz_spread",
     "square_root_impact",
     "implementation_shortfall",
     "twap_schedule",

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.743.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.744.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -6391,6 +6391,35 @@ Auto-generated from `quantforge` v1.743.0 by `docs/gen_api.py` — do not edit b
 > onto the unit-diagonal set, iterating to convergence. Returns a symmetric PSD
 > matrix with unit diagonal; a matrix that is already a valid correlation is
 > returned essentially unchanged.
+
+## liquidity
+
+### `amihud_illiquidity(returns, dollar_volumes)`  _function_
+
+> Amihud illiquidity: average of ``|return| / dollar_volume`` over the period.
+>
+> A larger value means a given dollar of trading moves the price more (a less
+> liquid asset). ``returns`` and ``dollar_volumes`` are aligned daily series.
+
+### `corwin_schultz_spread(highs, lows)`  _function_
+
+> Corwin-Schultz high-low bid-ask spread estimator.
+>
+> Uses consecutive daily high/low ranges: the two-day range reflects both
+> volatility and the spread, while single-day ranges scale with volatility alone,
+> so their combination isolates the spread. Returns the average estimated
+> proportional spread over the sample, floored at zero each day (negative daily
+> estimates, a known small-sample artefact, are set to zero). ``highs`` and
+> ``lows`` are aligned and at least two long.
+
+### `roll_spread(prices)`  _function_
+
+> Roll's implied effective spread from a series of transaction prices.
+>
+> Bid-ask bounce makes successive price changes negatively autocovaried; Roll's
+> estimator is ``spread = 2 sqrt(-cov(dP_t, dP_{t-1}))``. When the sample
+> autocovariance is non-negative (no detectable bounce) the estimate is zero.
+> ``prices`` are levels; at least three are needed.
 
 ## localvol
 
