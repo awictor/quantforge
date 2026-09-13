@@ -31,6 +31,12 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.831.0] - 2026-09-13
+
+### Documentation
+- README matrix-utilities section now documents `matrix_exp` with a worked
+  Markov-generator example.
+
 ## [1.830.0] - 2026-09-13
 
 ### Added

@@ -3686,6 +3686,21 @@ frobenius_norm(A)     # sqrt(sum a_ij^2)
 A large `condition_number` warns that a solve will amplify errors; `matrix_rank`
 detects (numerical) rank deficiency before it corrupts a fit.
 
+`matrix_exp` computes the matrix exponential (scaling-and-squaring with a Pade
+approximant) — the operation that turns a continuous-time Markov generator into a
+transition matrix:
+
+```python
+from quantforge import matrix_exp
+
+Q = [[-0.3, 0.2, 0.1], [0.1, -0.2, 0.1], [0.05, 0.05, -0.1]]   # rate generator
+P = matrix_exp(Q)     # one-period transition matrix: rows sum to 1, non-negative
+```
+
+`exp(0)` is the identity, `exp(A) exp(-A) = I`, and a generator whose rows sum to
+zero maps to a valid stochastic matrix — the basis for continuous-time rating
+migration.
+
 ## Numerical utilities
 
 Cubic interpolation (natural spline and monotone Hermite), a spline-interpolated
