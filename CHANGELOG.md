@@ -31,6 +31,12 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.955.0] - 2026-09-13
+
+### Documentation
+- README: documented `dual_gradient` and `dual_newton` in the numerical-utilities
+  section. Every snippet value verified.
+
 ## [1.954.0] - 2026-09-13
 
 ### Added

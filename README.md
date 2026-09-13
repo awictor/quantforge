@@ -4898,6 +4898,23 @@ it when you control the function's source (the exact-derivative gold standard); 
 `complex_step_derivative` or `ridders_derivative` when you only have a black-box
 callable.
 
+Two helpers build on it: `dual_gradient` for the exact gradient of a scalar function of
+a vector, and `dual_newton` for a Newton root solve that needs *only* the function (its
+derivative comes from autodiff):
+
+```python
+from quantforge import dual_gradient, dual_newton
+
+dual_gradient(lambda v: v[0]**2 + 3*v[1]**2 + v[0]*v[1], [1.0, 2.0])   # [4.0, 13.0]
+dual_newton(lambda x: x*x - 2, 1.0)["root"]                           # 1.414213562373
+```
+
+`dual_gradient` seeds each coordinate's derivative to 1 in turn (`n` exact evaluations),
+matching the analytic gradient to the last bit including transcendentals. `dual_newton`
+reads `f(x)` and `f'(x)` from a single dual evaluation per step, so — unlike the library
+`newton` — you never supply a hand-coded derivative; it reaches sqrt(2) to machine
+precision in six iterations.
+
 Slowly-converging sequences and fixed-point iterations can be accelerated with
 `aitken` (delta-squared), `shanks`, and `steffensen`:
 
