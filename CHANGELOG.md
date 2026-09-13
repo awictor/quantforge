@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.834.0] - 2026-09-13
+
+### Added
+- `mvn.py`: multivariate-normal density and log-determinant via Cholesky --
+  `log_determinant` (``2 sum log L_ii``, stable), `mvn_logpdf` (full log-density with
+  the Mahalanobis term as a triangular solve, no explicit inverse) and `mvn_pdf`.
+  Cross-checked: the log-determinant matches ``ln 24`` for ``diag(2,3,4)`` and the LU
+  determinant, the density reduces to the univariate normal, a 2-D density integrates
+  to one, and it peaks at the mean.
+
 ## [1.833.0] - 2026-09-13
 
 ### Documentation

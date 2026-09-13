@@ -344,6 +344,7 @@ from .svd import (
 )
 from .lu import lu_decomposition, lu_solve, determinant
 from .matrix_exp import matrix_exp
+from .mvn import log_determinant, mvn_logpdf, mvn_pdf
 from .variance_ratio import variance_ratio, variance_ratio_zstat
 from .ou_fit import fit_ornstein_uhlenbeck
 from .cointegration import adf_test, engle_granger
@@ -826,7 +827,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.833.0"
+__version__ = "1.834.0"
 
 __all__ = [
     "OptionType",
@@ -1356,6 +1357,9 @@ __all__ = [
     "lu_solve",
     "determinant",
     "matrix_exp",
+    "log_determinant",
+    "mvn_logpdf",
+    "mvn_pdf",
     "rescaled_range",
     "variance_ratio",
     "variance_ratio_zstat",

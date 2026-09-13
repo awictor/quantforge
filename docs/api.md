@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.833.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.834.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -8412,6 +8412,28 @@ Auto-generated from `quantforge` v1.833.0 by `docs/gen_api.py` — do not edit b
 > Sorts ascending, scales the ``k``-th smallest (0-based) by ``m - k``, then takes
 > a running maximum so the sequence is monotone, and unshuffles to the input
 > order. Controls the family-wise error rate and dominates :func:`bonferroni`.
+
+## mvn
+
+### `log_determinant(cov)`  _function_
+
+> Log-determinant of a symmetric positive-definite matrix via Cholesky.
+>
+> ``log det Sigma = 2 sum_i log L_ii``. Numerically stable where a direct product
+> of eigenvalues (or the determinant) would under/overflow. Raises if ``cov`` is
+> not positive definite.
+
+### `mvn_logpdf(x, mean, cov)`  _function_
+
+> Log-density of the multivariate normal ``N(mean, cov)`` at ``x``.
+>
+> ``-0.5 [ k ln(2 pi) + ln|Sigma| + (x-mu)' Sigma^{-1} (x-mu) ]``. The quadratic
+> form is evaluated as ``||L^{-1}(x-mu)||^2`` from the Cholesky factor, avoiding an
+> explicit inverse. Reduces to the univariate normal log-density for ``k = 1``.
+
+### `mvn_pdf(x, mean, cov)`  _function_
+
+> Density of the multivariate normal ``N(mean, cov)`` at ``x`` (``exp`` of the log).
 
 ## naive_bayes
 
