@@ -31,6 +31,12 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.843.0] - 2026-09-13
+
+### Documentation
+- README Hidden Markov model section now documents `hmm_baum_welch` and
+  `hmm_simulate` with a worked example.
+
 ## [1.842.0] - 2026-09-13
 
 ### Added

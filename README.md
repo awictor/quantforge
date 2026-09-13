@@ -3651,6 +3651,21 @@ gamma = hmm_posterior(pi, A, B, obs)   # gamma[t][i] = P(state_t = i | obs)
 Each `gamma[t]` is a distribution over states summing to one, using the *entire*
 observation sequence — the smoothed marginal, softer than Viterbi's hard assignment.
 
+When the parameters are unknown, `hmm_baum_welch` estimates them from the
+observations by EM, and `hmm_simulate` draws sequences from a model:
+
+```python
+from quantforge import hmm_simulate, hmm_baum_welch
+
+states, obs = hmm_simulate(pi, A, B, length=2000, seed=1)
+fit = hmm_baum_welch(obs, n_states=2, n_symbols=2)
+fit["pi"], fit["A"], fit["B"], fit["log_likelihood"]
+```
+
+Baum-Welch iterates forward-backward to a local optimum with a monotone
+log-likelihood, recovering the transition and emission matrices up to a relabelling
+of the hidden states.
+
 ## Principal component analysis
 
 Covariance-matrix PCA via Jacobi eigendecomposition -- the yield-curve
