@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.863.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.864.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -6573,6 +6573,29 @@ Auto-generated from `quantforge` v1.863.0 by `docs/gen_api.py` — do not edit b
 > covariance is no larger (in the positive-definite sense; here checked on the
 > trace) than the corresponding filtered covariance, since the smoother conditions
 > on the whole series rather than only the past.
+
+## kendall_test
+
+### `goodman_kruskal_gamma(x, y)`  _function_
+
+> Goodman-Kruskal gamma: ``(C - D) / (C + D)``, ignoring all tied pairs.
+
+### `kendall_tau_b(x, y)`  _function_
+
+> Tie-corrected Kendall's tau-b.
+>
+> ``(C - D) / sqrt((C + D + Tx)(C + D + Ty))`` where ``C``/``D`` are concordant/
+> discordant pairs and ``Tx``/``Ty`` are pairs tied only in ``x`` / only in ``y``.
+> Reaches +/-1 for a perfect monotone relationship even when ties are present.
+
+### `kendall_tau_test(x, y)`  _function_
+
+> Test ``tau = 0`` by the large-sample normal approximation.
+>
+> Returns a dict with ``tau_b``, the ``z`` statistic and the two-sided ``p_value``.
+> The variance of the concordance statistic ``S = C - D`` under independence is
+> ``n(n-1)(2n+5)/18`` (no tie correction to the variance -- adequate away from heavy
+> ties); ``z = S / sqrt(Var S)``.
 
 ## kim
 

@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.864.0] - 2026-09-13
+
+### Added
+- `kendall_test.py`: tie-corrected `kendall_tau_b`, Goodman-Kruskal
+  `goodman_kruskal_gamma`, and `kendall_tau_test` (large-sample normal approximation
+  for tau = 0). Cross-checked: tau-b reaches +/-1 for a perfect monotone relation
+  even with aligned ties, matches the existing tau-a on 300 tie-free random cases,
+  the p-value equals `erfc(|z|/sqrt2)`, and the S-variance uses `n(n-1)(2n+5)/18`.
+
 ## [1.863.0] - 2026-09-13
 
 ### Documentation
