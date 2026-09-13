@@ -557,6 +557,7 @@ from .anderson_darling_ksample import anderson_darling_ksample
 from .variance_tests import levene_test, bartlett_test
 from .dagostino import dagostino_k2
 from .integrate2d import integrate2d_gauss, integrate2d_simpson
+from .multivariate_normal_cdf import bivariate_normal_cdf, trivariate_normal_cdf
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -947,7 +948,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.995.0"
+__version__ = "1.996.0"
 
 __all__ = [
     "OptionType",
@@ -1773,6 +1774,8 @@ __all__ = [
     "dagostino_k2",
     "integrate2d_gauss",
     "integrate2d_simpson",
+    "bivariate_normal_cdf",
+    "trivariate_normal_cdf",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.996.0] - 2026-09-13
+
+### Added
+- `multivariate_normal_cdf.py`: public `bivariate_normal_cdf` (Drezner-Wesolowsky, the
+  routine behind the American/compound models) and `trivariate_normal_cdf` (Genz
+  reduction to a 1-D integral of the bivariate CDF). Cross-checked: the bivariate matches
+  the orthant formula `1/4 + asin(rho)/(2pi)` to ~1e-9, both reduce to the product form at
+  zero correlation, the trivariate collapses to the bivariate when the third bound is
+  infinite, is monotone in correlation, and is permutation-symmetric.
+
 ## [1.995.0] - 2026-09-13
 
 ### Documentation

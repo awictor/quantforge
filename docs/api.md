@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.995.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.996.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -9275,6 +9275,23 @@ Auto-generated from `quantforge` v1.995.0 by `docs/gen_api.py` — do not edit b
 > Sorts ascending, scales the ``k``-th smallest (0-based) by ``m - k``, then takes
 > a running maximum so the sequence is monotone, and unshuffles to the input
 > order. Controls the family-wise error rate and dominates :func:`bonferroni`.
+
+## multivariate_normal_cdf
+
+### `bivariate_normal_cdf(a, b, rho)`  _function_
+
+> Standard bivariate normal CDF ``P(X1 <= a, X2 <= b; corr=rho)``.
+>
+> ``rho`` in ``[-1, 1]``. Accurate to ~1e-7 across the usable correlation range.
+
+### `trivariate_normal_cdf(a, b, c, r12, r13, r23, n=24)`  _function_
+
+> Standard trivariate normal CDF ``P(X1<=a, X2<=b, X3<=c)``.
+>
+> ``r12, r13, r23`` are the pairwise correlations of a valid 3x3 correlation matrix.
+> Uses the reduction ``P3 = P(X3<=c) * ...`` via a 1-D integral over the third
+> variable of a conditional bivariate CDF (Genz). ``n`` sets the quadrature panels.
+> Falls back to the product/independent forms when correlations vanish.
 
 ## mvn
 
