@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.889.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.890.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -2977,6 +2977,23 @@ Auto-generated from `quantforge` v1.889.0 by `docs/gen_api.py` — do not edit b
 ### `tree_depth(tree)`  _function_
 
 > Depth of a fitted tree (a single leaf has depth 0).
+
+## deming
+
+### `deming_regression(x, y, lam=1.0)`  _function_
+
+> Deming (errors-in-variables) regression of ``y`` on ``x``.
+>
+> ``lam`` is the ratio of the error variances ``var(eps_x) / var(eps_y)`` (default 1,
+> i.e. orthogonal regression). Returns ``(slope, intercept)`` for the fitted line
+> ``y = slope * x + intercept``. Requires a non-zero ``Sxy``.
+
+### `orthogonal_regression(x, y)`  _function_
+
+> Orthogonal (total-least-squares) regression: Deming with ``lambda = 1``.
+>
+> Minimizes the perpendicular distances to the line, treating ``x`` and ``y``
+> symmetrically. Returns ``(slope, intercept)``.
 
 ## density
 

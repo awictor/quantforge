@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.890.0] - 2026-09-13
+
+### Added
+- `deming.py`: `deming_regression` (errors-in-variables line fitting with an error-
+  variance ratio `lambda`) and `orthogonal_regression` (total least squares, the
+  `lambda = 1` case). Cross-checked: exact on a noiseless line for every lambda,
+  `lambda -> infinity` recovers the OLS slope, orthogonal regression equals the PCA
+  first-eigenvector slope and is symmetric (`slope_xy * slope_yx = 1`), and the fit
+  passes through the sample means.
+
 ## [1.889.0] - 2026-09-13
 
 ### Documentation
