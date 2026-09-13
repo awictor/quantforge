@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.968.0] - 2026-09-13
+
+### Added
+- `siegel_regression.py`: Siegel's `repeated_median_regression`, a 50%-breakdown robust
+  line fit (median of per-point median slopes). Cross-checked: exact on a clean line,
+  recovers the true slope/intercept with 40% of the data corrupted (past Theil-Sen's
+  ~29% limit), matches Theil-Sen on clean noisy data, and is unmoved by a single gross
+  outlier.
+
 ## [1.967.0] - 2026-09-13
 
 ### Documentation

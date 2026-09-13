@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.967.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.968.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -12184,6 +12184,16 @@ Auto-generated from `quantforge` v1.967.0 by `docs/gen_api.py` — do not edit b
 >
 > ``returns`` is a sequence of ``n`` observations, each a length-``p`` sequence.
 > Returns a ``p x p`` list-of-lists.
+
+## siegel_regression
+
+### `repeated_median_regression(x, y)`  _function_
+
+> Siegel repeated-median regression; returns ``(slope, intercept)``.
+>
+> For each point, the median of its slopes to all other points; the overall slope is
+> the median of those. 50% breakdown point -- robust to nearly half the data being
+> corrupted. Points sharing an ``x`` value contribute no slope for that pair.
 
 ## signals
 
