@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.897.0] - 2026-09-13
+
+### Documentation
+- README: extended the robust-regression / agreement section with the `icc`
+  intraclass correlation family for multi-rater reliability. Every snippet value
+  verified.
+
 ## [1.896.0] - 2026-09-13
 
 ### Added

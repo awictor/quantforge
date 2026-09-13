@@ -3083,6 +3083,28 @@ within which about 95% of method-to-method differences fall. Lin's
 line of identity — so the constant `+2` offset above pulls it down to 0.5 even though
 the Pearson correlation is a perfect 1.0.
 
+With three or more raters, the intraclass correlation coefficient generalizes this to
+"what fraction of the variance is between subjects rather than measurement noise".
+`icc` returns the full Shrout-Fleiss family from a subjects × raters table:
+
+```python
+from quantforge import icc
+
+data = [[9, 2, 5, 8], [6, 1, 3, 2], [8, 4, 6, 8],
+        [7, 1, 2, 6], [10, 5, 6, 9], [6, 2, 4, 7]]
+
+r = icc(data)
+r["icc1"], r["icc2_1"], r["icc3_1"]   # 0.1657, 0.2898, 0.7148 (single-rating forms)
+r["icc2_k"], r["icc3_k"]              # 0.6201, 0.9093 (mean-of-k-raters forms)
+```
+
+`icc1` is the one-way model (different raters per subject); `icc2_*` treats raters as a
+random sample and measures absolute agreement; `icc3_*` treats them as fixed and
+measures consistency (ignoring rater bias). The `_k` forms apply to the mean of `k`
+raters and are related to the single-rating forms by the Spearman-Brown formula. On a
+rater with a pure additive offset the consistency ICC(3) stays at 1 while the
+agreement ICC(2) drops — the same distinction Bland-Altman's bias exposes.
+
 ## Isotonic regression (monotone fit)
 
 When you know the response only moves one way — a dose-response curve, a calibration
