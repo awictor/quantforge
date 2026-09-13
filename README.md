@@ -4745,6 +4745,24 @@ local pit; it is deterministic for a fixed `seed` and confines the search to the
 box `bounds`. Use Nelder-Mead when you have a good starting guess and a smooth basin,
 differential evolution when the landscape is rough or the starting region is unknown.
 
+`simulated_annealing` is a third option — a single point that occasionally accepts a
+*worse* move (probability `exp(-delta / T)`) so it can climb out of a local minimum, with
+the temperature `T` cooling geometrically toward a settled basin:
+
+```python
+from quantforge import simulated_annealing
+
+rosen = lambda v: (1 - v[0]) ** 2 + 100 * (v[1] - v[0] ** 2) ** 2
+simulated_annealing(rosen, [-3.0, 3.0], bounds=[(-5, 5), (-5, 5)],
+                    T0=2.0, max_iter=50000)["x"]     # ~ [1.0, 1.0]
+```
+
+It shares the same reproducibility (`seed`) and box-`bounds` behaviour as
+`differential_evolution` but keeps no population, so it is cheaper per iteration and a
+good fit when each objective evaluation is expensive. Differential evolution is usually
+the more reliable global search; simulated annealing shines on very high-dimensional or
+combinatorial-flavoured landscapes where maintaining a population is costly.
+
 `levenberg_marquardt` needs only the model function -- the residual Jacobian is
 taken numerically -- and converges from a poor starting guess, making it the
 general calibration engine (vol surface, curve, or any parametric fit).

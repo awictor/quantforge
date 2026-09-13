@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.933.0] - 2026-09-13
+
+### Documentation
+- README: documented `simulated_annealing` alongside the other multivariate optimizers
+  in the numerical-utilities section, with guidance on choosing it versus differential
+  evolution. Snippet value verified.
+
 ## [1.932.0] - 2026-09-13
 
 ### Added
