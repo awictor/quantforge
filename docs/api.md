@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.839.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.840.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -5591,6 +5591,15 @@ Auto-generated from `quantforge` v1.839.0 by `docs/gen_api.py` — do not edit b
 > accumulates the log of the scale factors, so the likelihood is exact without
 > underflow on long sequences. ``pi`` initial distribution, ``A`` transition, ``B``
 > emission matrices; ``obs`` a list of symbol indices.
+
+### `hmm_posterior(pi, A, B, obs)`  _function_
+
+> Smoothed posterior state probabilities ``P(state_t = i | obs)`` (gamma).
+>
+> Runs the scaled forward-backward algorithm and returns a list of length-``n``
+> distributions, one per time step, each summing to one -- the probability of being
+> in each hidden state at that time given the *entire* observation sequence (unlike
+> Viterbi's single best path, this is the per-time marginal). Pure standard library.
 
 ### `hmm_viterbi(pi, A, B, obs)`  _function_
 

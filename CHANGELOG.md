@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.840.0] - 2026-09-13
+
+### Added
+- `hmm.py` gains `hmm_posterior`, the scaled forward-backward smoothed posterior
+  state probabilities ``P(state_t = i | obs)`` (one distribution per time step, each
+  summing to one). Cross-checked: the marginals match a brute-force sum over all
+  paths at every step, a deterministic HMM concentrates the posterior on the true
+  state, and the rows normalize.
+
 ## [1.839.0] - 2026-09-13
 
 ### Documentation
