@@ -31,6 +31,12 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.987.0] - 2026-09-13
+
+### Documentation
+- README: documented `permutation_test` and `paired_permutation_test` in the
+  bootstrap/resampling section.
+
 ## [1.986.0] - 2026-09-13
 
 ### Added

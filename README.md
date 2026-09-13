@@ -3012,6 +3012,26 @@ The IID bootstrap under-covers autocorrelated data; both block bootstraps widen
 the interval to restore coverage (with `block = 1` the moving-block reduces to the
 IID interval).
 
+Where the bootstrap builds a confidence interval, a permutation test gives an
+assumption-free *p-value* for a group difference — shuffling the labels to build the
+null directly. `permutation_test` handles two independent samples and any statistic;
+`paired_permutation_test` handles matched pairs:
+
+```python
+from quantforge import permutation_test, paired_permutation_test
+
+permutation_test(group_a, group_b)                       # difference in means, two-sided
+permutation_test(a, b, statistic=lambda a, b: median(a) - median(b))
+paired_permutation_test(before, after, alternative="greater")
+```
+
+The default statistic is the difference in means, but any `statistic(a, b)` works
+(median difference, correlation, a custom loss) — the test is valid for all of them.
+`permutation_test` reshuffles the pooled labels; `paired_permutation_test` flips the
+sign of each within-pair difference. Both are seeded (deterministic), report a p-value
+that is calibrated under the null, and need no distributional assumption — the
+significance companion to the bootstrap's intervals.
+
 ## Hodrick-Prescott filter
 
 Split a time series into a smooth trend and a cyclical residual by trading fit
