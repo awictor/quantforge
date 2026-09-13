@@ -3019,6 +3019,28 @@ theil_sen(x, y)         # -> (2.0, 5.0)   slope and intercept, unmoved by the ou
 The median pairwise slope shrugs off the two corrupted points that would tilt an
 OLS line. Pairs sharing an `x` value are skipped.
 
+Theil-Sen still assumes `x` is exact. When *both* variables carry measurement error
+(comparing two instruments or assays), OLS biases the slope toward zero;
+`deming_regression` accounts for error in both and `orthogonal_regression` is its
+symmetric (total-least-squares) special case:
+
+```python
+from quantforge import deming_regression, orthogonal_regression
+
+deming_regression([1, 2, 3, 4, 5], [3, 5, 7, 9, 11])   # (2.0, 1.0) — exact on a line
+
+x = [1, 2, 3, 4, 5, 6]
+y = [1.1, 2.3, 2.9, 4.2, 5.1, 5.8]
+orthogonal_regression(x, y)          # (0.9522, 0.234)  slope, intercept
+deming_regression(x, y, lam=4.0)     # lam = var(err_x) / var(err_y)
+```
+
+The `lam` argument is the ratio of the two error variances: `lam = 1` (the
+`orthogonal_regression` default) minimizes perpendicular distances and equals the
+first principal-component slope; `lam -> infinity` recovers ordinary OLS of `y` on
+`x`. The fitted line always passes through the sample means, and the orthogonal slope
+is symmetric — fitting `x` on `y` gives exactly its reciprocal.
+
 ## Isotonic regression (monotone fit)
 
 When you know the response only moves one way — a dose-response curve, a calibration

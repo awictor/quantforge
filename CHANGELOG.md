@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.891.0] - 2026-09-13
+
+### Documentation
+- README: extended the robust-regression section with `deming_regression` and
+  `orthogonal_regression` for errors-in-variables fitting. Every snippet value
+  verified.
+
 ## [1.890.0] - 2026-09-13
 
 ### Added
