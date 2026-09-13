@@ -24,6 +24,18 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.776.0] - 2026-09-12
+
+### Added
+- `prob_forecast.py`: proper scoring rules for probabilistic forecasts --
+  `pinball_loss` (quantile loss), `interval_score` (Winkler score for prediction
+  intervals), `interval_coverage`, and `crps_ensemble` (continuous ranked
+  probability score of a sample forecast). Cross-checked: the pinball loss is
+  minimized at the true quantile and is asymmetric in ``tau``; CRPS reduces to the
+  absolute error for a single-member ensemble and is zero for a perfect forecast;
+  coverage counts actuals inside their intervals; and the interval score rewards
+  tight covering intervals while penalizing misses.
+
 ## [1.775.0] - 2026-09-12
 
 ### Documentation

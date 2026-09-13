@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.775.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.776.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -9185,6 +9185,41 @@ Auto-generated from `quantforge` v1.775.0 by `docs/gen_api.py` — do not edit b
 >
 > Inverts the normal-approximation power: ``n = 2 (z_{alpha/2} + z_{beta})^2 /
 > d^2``, rounded up. Raises for a zero effect size (infinite sample).
+
+## prob_forecast
+
+### `crps_ensemble(actual, ensemble)`  _function_
+
+> Continuous ranked probability score of an ensemble forecast (single target).
+>
+> Uses the empirical-CDF form ``CRPS = mean|X - y| - 0.5 mean|X - X'|`` where ``X``,
+> ``X'`` are independent ensemble members and ``y`` the realized value. Reduces to
+> the absolute error for a deterministic (single-member) forecast, and is zero when
+> every member equals the target. ``ensemble`` is the list of member forecasts.
+
+### `interval_coverage(actual, lower, upper)`  _function_
+
+> Empirical coverage: fraction of actuals within ``[lower, upper]``.
+>
+> Should match the interval's nominal level (e.g. ~0.9 for a 90% interval).
+
+### `interval_score(actual, lower, upper, alpha=0.1)`  _function_
+
+> Winkler interval score for central ``1 - alpha`` prediction intervals.
+>
+> ``S = (upper - lower) + (2/alpha)(lower - a) if a < lower
+>                       + (2/alpha)(a - upper) if a > upper``.
+> Rewards narrow intervals and penalizes actuals falling outside, scaled so the
+> penalty grows as the nominal coverage tightens. Lower is better. Aligned series.
+
+### `pinball_loss(actual, quantile_forecast, tau)`  _function_
+
+> Average pinball (quantile) loss at level ``tau``.
+>
+> ``L = mean( tau (a - q)      if a >= q
+>             (1 - tau)(q - a)  otherwise )``.
+> Minimized in expectation when ``quantile_forecast`` is the true ``tau``-quantile
+> of the target. Aligned series; ``tau`` in ``(0, 1)``.
 
 ## proportion_ci
 
