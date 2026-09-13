@@ -2418,6 +2418,20 @@ A larger `alpha` shrinks the slope coefficients more (the intercept is not
 penalized); ridge stays solvable even under perfect collinearity, where OLS is
 singular.
 
+To fit a conditional *quantile* rather than the mean, `quantile_regression`
+minimizes the pinball loss (via iteratively-reweighted least squares):
+
+```python
+from quantforge import quantile_regression
+
+quantile_regression(X, y, tau=0.5)    # median (least-absolute-deviations) fit
+quantile_regression(X, y, tau=0.9)    # upper conditional-tail line
+```
+
+`tau = 0.5` is the robust median regression; a higher `tau` traces the upper tail.
+The fit has the defining quantile property — a fraction `tau` of the points fall
+below the line — and minimizes the same pinball loss that `pinball_loss` scores.
+
 ## Logistic regression
 
 Binary classification / default-probability modeling by iteratively reweighted
