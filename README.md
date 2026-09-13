@@ -3281,6 +3281,27 @@ It estimates the mean and standard deviation from the sample, applies the Stephe
 small-sample adjustment, and returns a D'Agostino-Stephens p-value. A clean normal
 sample passes; an exponential or fat-tailed one is strongly rejected.
 
+For a fully distribution-free two-sample test that needs no CDF assumption at all,
+`energy_distance` and its permutation test `energy_test` compare two samples by the
+Székely-Rizzo statistic `2A - B - C` (mean cross-sample distance minus the two mean
+within-sample distances):
+
+```python
+from quantforge import energy_distance, energy_test
+
+energy_distance([1, 2, 3, 4, 5], [1, 2, 3, 4, 5])   # 0.0 — identical samples
+
+res = energy_test(sample_a, sample_b, n_permutations=299)
+res["statistic"], res["p_value"]        # small p rejects "same distribution"
+```
+
+The statistic is zero if and only if the empirical distributions coincide and grows
+with any distributional gap — location, scale, or shape. `energy_test` pools the two
+samples, reshuffles the group labels `n_permutations` times, and reports the fraction
+of permutations reaching the observed distance, so it catches differences a
+mean-focused t-test can miss (for example two samples with the same mean but different
+spread, where the energy test's p-value drops well below 0.05).
+
 The classical parametric tests are built on the distribution CDFs, each returning
 `(statistic, p_value)`:
 
