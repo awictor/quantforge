@@ -4465,6 +4465,11 @@ f = monotone_cubic([0, 1, 2, 3], [0, 0, 0, 1])   # no overshoot
 curve = SplineZeroCurve([0.5, 1, 2, 5, 10], [0.02, 0.025, 0.03, 0.035, 0.04])
 brent(lambda x: x * x - 2, 0, 2)                  # sqrt(2)
 
+# All roots of a polynomial at once (real and complex) by Durand-Kerner.
+from quantforge import polynomial_roots
+polynomial_roots([1, -6, 11, -6])   # (x-1)(x-2)(x-3) -> roots near 1, 2, 3
+polynomial_roots([1, 0, 1])         # x^2 + 1 -> +/- 1j
+
 # Exact polynomial interpolation through n points (Neville / Newton form).
 from quantforge import neville, divided_differences, newton_polynomial
 xs = [0, 1, 2, 3]

@@ -31,6 +31,12 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.915.0] - 2026-09-13
+
+### Documentation
+- README: documented `polynomial_roots` alongside the scalar root finders in the
+  numerical-utilities section. Every snippet value verified.
+
 ## [1.914.0] - 2026-09-13
 
 ### Added
