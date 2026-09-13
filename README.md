@@ -3499,6 +3499,20 @@ fft_autocorrelation(series, max_lag=20)   # autocorrelation, acf[0] = 1
 direct convolution), and `fft_autocorrelation` computes the whole autocorrelation via
 Wiener-Khinchin — far faster than the direct lag-by-lag sum on long series.
 
+The raw periodogram is noisy; `welch_psd` averages windowed segment periodograms for
+a much lower-variance spectral-density estimate:
+
+```python
+from quantforge import welch_psd
+
+freqs, power = welch_psd(series, segment_length=256)   # smoothed one-sided PSD
+```
+
+Welch splits the series into overlapping Hann-windowed segments and averages their
+periodograms — trading some frequency resolution for far less variance, so a
+spectral peak stands out cleanly against a noisy background where the raw
+periodogram would bury it.
+
 ## Structural breaks (CUSUM / Chow)
 
 Detect when a mean or regime shifts. `cusum_mean` returns the standardized
