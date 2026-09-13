@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.788.0] - 2026-09-12
+
+### Added
+- `survival.py` gains `log_rank_test`, the Mantel-Cox log-rank test comparing two
+  survival curves via the accumulated observed-minus-expected events and their
+  hypergeometric variance, referenced to a chi-square(1). Cross-checked: two samples
+  from the same hazard are not rejected, a threefold-faster hazard is strongly
+  rejected, identical data gives a zero statistic, and the statistic is symmetric in
+  the two groups.
+
 ## [1.786.0] - 2026-09-12
 
 ### Added

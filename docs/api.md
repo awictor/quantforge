@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.787.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.788.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -11761,6 +11761,20 @@ Auto-generated from `quantforge` v1.787.0 by `docs/gen_api.py` — do not edit b
 > set. ``S`` starts at 1, is non-increasing, and drops by the factor
 > ``1 - d_i / n_i`` at each event time. With no censoring it equals
 > ``1 - ECDF(t)``.
+
+### `log_rank_test(times1, events1, times2, events2)`  _function_
+
+> Log-rank (Mantel-Cox) test comparing two survival curves.
+>
+> At each distinct event time across the pooled sample, compares the observed
+> events in group 1 with the number expected under the null of equal hazards
+> (proportional to each group's share of the risk set), accumulating the
+> observed-minus-expected and its hypergeometric variance. The statistic
+>
+>     chi2 = (sum (O1 - E1))^2 / sum V1
+>
+> is asymptotically chi-square(1). Returns ``(chi2, p_value)``; a small p-value
+> rejects equal survival between the groups. Uses the chi-square survival function.
 
 ### `nelson_aalen(times, events)`  _function_
 

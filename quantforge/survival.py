@@ -110,3 +110,53 @@ def survival_at(times, events, query, estimator="km"):
         else:
             break
     return s
+
+
+def log_rank_test(times1, events1, times2, events2):
+    """Log-rank (Mantel-Cox) test comparing two survival curves.
+
+    At each distinct event time across the pooled sample, compares the observed
+    events in group 1 with the number expected under the null of equal hazards
+    (proportional to each group's share of the risk set), accumulating the
+    observed-minus-expected and its hypergeometric variance. The statistic
+
+        chi2 = (sum (O1 - E1))^2 / sum V1
+
+    is asymptotically chi-square(1). Returns ``(chi2, p_value)``; a small p-value
+    rejects equal survival between the groups. Uses the chi-square survival function.
+    """
+    from .distributions import chi2_sf
+
+    rows1 = {t: (d, c, n) for t, d, c, n in _risk_table(times1, events1)}
+    rows2 = {t: (d, c, n) for t, d, c, n in _risk_table(times2, events2)}
+    all_times = sorted(set(rows1) | set(rows2))
+
+    n1 = len(times1)
+    n2 = len(times2)
+    if n1 == 0 or n2 == 0:
+        raise ValueError("both groups must be non-empty")
+
+    # Walk the pooled timeline, tracking each group's risk set.
+    risk1, risk2 = n1, n2
+    # Map time -> (events, censored) for each group.
+    ec1 = {t: (rows1[t][0], rows1[t][1]) for t in rows1}
+    ec2 = {t: (rows2[t][0], rows2[t][1]) for t in rows2}
+
+    o_minus_e = 0.0
+    var = 0.0
+    for t in all_times:
+        d1, c1 = ec1.get(t, (0, 0))
+        d2, c2 = ec2.get(t, (0, 0))
+        d = d1 + d2
+        n = risk1 + risk2
+        if n > 1 and d > 0:
+            e1 = d * risk1 / n
+            o_minus_e += d1 - e1
+            var += (d * (risk1 / n) * (1 - risk1 / n) * (n - d) / (n - 1))
+        risk1 -= (d1 + c1)
+        risk2 -= (d2 + c2)
+
+    if var <= 0.0:
+        return 0.0, 1.0
+    chi2 = o_minus_e * o_minus_e / var
+    return chi2, chi2_sf(chi2, 1)
