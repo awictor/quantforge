@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.798.0] - 2026-09-12
+
+### Added
+- `arch_test.py`: `arch_lm_test`, Engle's ARCH-LM test for conditional
+  heteroskedasticity (volatility clustering). Regresses the squared series on its
+  own lags and returns ``(n R^2, p_value)`` referenced to a chi-square with ``lags``
+  degrees of freedom. Cross-checked: iid data holds the 5% size and is not rejected,
+  while a simulated GARCH(1,1) series is strongly rejected.
+
 ## [1.797.0] - 2026-09-12
 
 ### Documentation

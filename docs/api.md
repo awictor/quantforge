@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.797.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.798.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -331,6 +331,18 @@ Auto-generated from `quantforge` v1.797.0 by `docs/gen_api.py` — do not edit b
 > (best_order, scores) : (int, list[tuple])
 >     The selected order and a list of ``(order, aic, bic)`` for every candidate.
 >     BIC tends to pick an order no larger than AIC.
+
+## arch_test
+
+### `arch_lm_test(residuals, lags=1)`  _function_
+
+> Engle ARCH-LM test on a residual (or return) series.
+>
+> Regresses the squared series on ``lags`` of its own past and returns
+> ``(LM, p_value)`` with ``LM = m * R^2`` (``m`` the number of regression rows)
+> referenced to a chi-square with ``lags`` degrees of freedom. A small p-value
+> rejects "no ARCH effect", i.e. detects volatility clustering. Subtracts the mean
+> first, so it works on returns directly. Requires ``len > 2 * lags + 1``.
 
 ## attribution
 

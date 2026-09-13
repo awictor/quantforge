@@ -324,6 +324,7 @@ from .benford import (
 )
 from .runs_test import runs_test, runs_test_binary
 from .anderson_darling import anderson_darling_normal
+from .arch_test import arch_lm_test
 from .variance_ratio import variance_ratio, variance_ratio_zstat
 from .ou_fit import fit_ornstein_uhlenbeck
 from .cointegration import adf_test, engle_granger
@@ -802,7 +803,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.797.0"
+__version__ = "1.798.0"
 
 __all__ = [
     "OptionType",
@@ -1302,6 +1303,7 @@ __all__ = [
     "runs_test",
     "runs_test_binary",
     "anderson_darling_normal",
+    "arch_lm_test",
     "rescaled_range",
     "variance_ratio",
     "variance_ratio_zstat",
