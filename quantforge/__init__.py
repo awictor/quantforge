@@ -294,6 +294,10 @@ from .spectral import dft, periodogram, dominant_frequency, spectral_energy
 from .entropy_pooling import entropy_pooling_mean, relative_entropy
 from .copula_stats import kendall_tau, spearman_rho, pseudo_observations
 from .correlation_test import pearson_r, pearson_correlation_test
+from .proportion_ci import (
+    wald_interval, wilson_interval, agresti_coull_interval,
+    clopper_pearson_interval,
+)
 from .tail_dependence import (
     upper_tail_dependence, lower_tail_dependence, exceedance_correlation,
 )
@@ -739,7 +743,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.727.0"
+__version__ = "1.728.0"
 
 __all__ = [
     "OptionType",
@@ -1204,6 +1208,10 @@ __all__ = [
     "spearman_rho",
     "pearson_r",
     "pearson_correlation_test",
+    "wald_interval",
+    "wilson_interval",
+    "agresti_coull_interval",
+    "clopper_pearson_interval",
     "pseudo_observations",
     "upper_tail_dependence",
     "lower_tail_dependence",

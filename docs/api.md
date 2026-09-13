@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.727.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.728.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -8779,6 +8779,29 @@ Auto-generated from `quantforge` v1.727.0 by `docs/gen_api.py` — do not edit b
 > ``w_i (C w)_i / (w^T C w)`` -- the component VaRs normalized to sum to 1.
 > Independent of the confidence level and horizon (they cancel). Shows how the
 > total risk is distributed across positions; equal entries mean risk parity.
+
+## proportion_ci
+
+### `agresti_coull_interval(k, n, confidence=0.95)`  _function_
+
+> Agresti-Coull interval: a Wald interval on ``z^2``-adjusted counts.
+
+### `clopper_pearson_interval(k, n, confidence=0.95)`  _function_
+
+> Exact Clopper-Pearson interval by inverting the binomial CDF.
+>
+> The lower limit is the ``p`` with ``P(X >= k) = alpha/2`` and the upper limit the
+> ``p`` with ``P(X <= k) = alpha/2`` (``alpha = 1 - confidence``); the boundary
+> cases ``k = 0`` and ``k = n`` give a one-sided interval. Guaranteed to cover at
+> least ``confidence`` of the time -- conservative but never under-covering.
+
+### `wald_interval(k, n, confidence=0.95)`  _function_
+
+> Normal-approximation (Wald) interval, clamped to ``[0, 1]``.
+
+### `wilson_interval(k, n, confidence=0.95)`  _function_
+
+> Wilson score interval -- stays in ``[0, 1]`` with good small-sample coverage.
 
 ## qmc
 

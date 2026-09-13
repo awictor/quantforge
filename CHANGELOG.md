@@ -24,6 +24,17 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.728.0] - 2026-09-12
+
+### Added
+- `proportion_ci.py`: four confidence intervals for a binomial proportion --
+  `wald_interval` (normal approximation), `wilson_interval` (score),
+  `agresti_coull_interval`, and the exact `clopper_pearson_interval` (by inverting
+  the binomial CDF). Cross-checked: Clopper-Pearson matches the textbook `(2, 10)`
+  interval `[0.0252, 0.5561]`, every interval contains the point estimate and stays
+  in `[0, 1]`, Wald converges to Wilson for large `n`, the exact interval is the
+  widest, and its Monte-Carlo coverage is at least the nominal level.
+
 ## [1.727.0] - 2026-09-12
 
 ### Documentation
