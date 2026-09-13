@@ -24,6 +24,18 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.734.0] - 2026-09-12
+
+### Added
+- `svi_jumpwing.py`: the Gatheral-Jacquier jump-wing parameterization of an SVI
+  slice (`SVIJumpWing`, `raw_to_jumpwing`, `jumpwing_to_raw`) -- trader-friendly ATM
+  variance, ATM skew, and left/right wing slopes, with the closed-form map to and
+  from the raw `(a, b, rho, m, s)` parameters at a fixed expiry. Cross-checked: the
+  jump-wing ATM variance equals the raw ATM total variance, the skew matches a
+  finite-difference of the total-variance curve, the wing slopes match the raw
+  asymptotics, and raw -> jump-wing -> raw reproduces the smile to machine precision
+  across expiries and both skew signs.
+
 ## [1.733.0] - 2026-09-12
 
 ### Documentation

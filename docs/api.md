@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.733.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.734.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -11411,6 +11411,25 @@ Auto-generated from `quantforge` v1.733.0 by `docs/gen_api.py` — do not edit b
 >
 > Maps each strike to ``p.implied_vol(ln(K/F), t)`` and feeds the smile to
 > :func:`quantforge.vix_from_smile`. A flat slice returns ``100 * sigma``.
+
+## svi_jumpwing
+
+### `SVIJumpWing(v: float, psi: float, p: float, c: float, vtilde: float) -> None`  _class_
+
+> SVIJumpWing(v: float, psi: float, p: float, c: float, vtilde: float)
+
+### `jumpwing_to_raw(jw: quantforge.svi_jumpwing.SVIJumpWing, t: float) -> quantforge.svi.SVIParams`  _function_
+
+> Convert jump-wing parameters back to raw SVI at expiry ``t``.
+>
+> Inverts :func:`raw_to_jumpwing` with the Gatheral-Jacquier formulas. ``t`` is the
+> expiry in years.
+
+### `raw_to_jumpwing(params: quantforge.svi.SVIParams, t: float) -> quantforge.svi_jumpwing.SVIJumpWing`  _function_
+
+> Convert raw SVI parameters to the jump-wing parameterization at expiry ``t``.
+>
+> Uses the closed-form Gatheral-Jacquier map. ``t`` is the expiry in years.
 
 ## swap
 

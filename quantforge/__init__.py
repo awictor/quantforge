@@ -305,6 +305,7 @@ from .power import (
 from .multiple_testing import (
     bonferroni, holm, benjamini_hochberg, benjamini_yekutieli,
 )
+from .svi_jumpwing import SVIJumpWing, raw_to_jumpwing, jumpwing_to_raw
 from .tail_dependence import (
     upper_tail_dependence, lower_tail_dependence, exceedance_correlation,
 )
@@ -750,7 +751,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.733.0"
+__version__ = "1.734.0"
 
 __all__ = [
     "OptionType",
@@ -1769,6 +1770,9 @@ __all__ = [
     "Book",
     "price_book",
     "SVIParams",
+    "SVIJumpWing",
+    "raw_to_jumpwing",
+    "jumpwing_to_raw",
     "calibrate_svi",
     "svi_g",
     "svi_butterfly_arbitrage",
