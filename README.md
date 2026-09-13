@@ -4631,6 +4631,33 @@ their forward differences by powers of one half. Wynn is the stronger general to
 it drives the slowly-alternating Leibniz series to full `double` precision from just
 twenty terms.
 
+A Padé approximant turns a Taylor series into a *rational* function that often
+converges where the series itself diverges. `pade` builds `[m/n]` from Taylor
+coefficients and `pade_eval` evaluates it; `lentz_continued_fraction` evaluates a
+general continued fraction by the modified Lentz algorithm:
+
+```python
+import math
+from quantforge import pade, pade_eval, lentz_continued_fraction
+
+coeffs = [1 / math.factorial(k) for k in range(5)]     # exp Taylor series
+num, den = pade(coeffs, 2, 2)                          # [2/2] approximant of exp
+pade_eval(num, den, 1.0)                               # 2.7142857 (vs e = 2.7182818)
+
+# ln(1+x): its Taylor series diverges at x = 2, but the [4/4] Pade converges
+lc = [0.0] + [(-1) ** (k + 1) / k for k in range(1, 9)]
+pade_eval(*pade(lc, 4, 4), 2.0)                        # 1.09857 ~ ln 3
+
+# golden ratio 1 + 1/(1 + 1/(1 + ...))
+lentz_continued_fraction(lambda k: 1.0, lambda k: 1.0)  # 1.6180339887
+```
+
+`pade` matches the input series through order `m + n` but, being rational, models
+poles and wide ranges the polynomial can't — the `ln 3` example lands within `1e-4`
+where the raw Taylor series has no hope. `lentz_continued_fraction` takes callables
+for the partial numerators `a(k)` and denominators `b(k)` and is the same
+numerically-stable engine behind the library's incomplete-gamma and beta functions.
+
 The special functions behind the distribution routines are public:
 
 ```python
