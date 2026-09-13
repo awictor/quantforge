@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.919.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.920.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -9062,6 +9062,24 @@ Auto-generated from `quantforge` v1.919.0 by `docs/gen_api.py` — do not edit b
 >     ``[low, high]`` at ``confidence``), ``r_squared``, ``adj_r_squared``,
 >     ``f_stat``, ``f_pvalue`` (overall significance), ``residuals``, ``n_obs``,
 >     ``df_resid``.
+
+## ols_hac
+
+### `newey_west(X, y, lags, add_intercept=True)`  _function_
+
+> Newey-West HAC OLS standard errors (heteroskedasticity + autocorrelation).
+>
+> Adds Bartlett-weighted cross-products of the score vectors ``e_t x_t`` out to
+> ``lags`` lags to the White meat, so the covariance is consistent under both
+> heteroskedasticity and serial correlation. Returns the same dict shape as
+> :func:`white_hc0`. ``lags = 0`` reduces exactly to White (HC0).
+
+### `white_hc0(X, y, add_intercept=True)`  _function_
+
+> White (HC0) heteroskedasticity-consistent OLS standard errors.
+>
+> Returns a dict with ``coefficients``, robust ``std_errors``, ``t_stats`` and the
+> full ``cov`` matrix. Valid when errors are heteroskedastic but not autocorrelated.
 
 ## ou_fit
 

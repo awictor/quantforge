@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.920.0] - 2026-09-13
+
+### Added
+- `ols_hac.py`: robust OLS standard errors via the sandwich estimator — `white_hc0`
+  (heteroskedasticity-consistent) and `newey_west` (Bartlett-weighted HAC, valid under
+  autocorrelation too). Cross-checked: coefficients match plain OLS, `newey_west` with
+  0 lags equals White exactly, the White SE grows under heteroskedastic errors where
+  the OLS SE is wrong, and the Newey-West SE grows further under AR(1) errors.
+
 ## [1.919.0] - 2026-09-13
 
 ### Documentation
