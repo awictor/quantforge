@@ -317,6 +317,7 @@ from .fisher_exact import fisher_exact_test
 from .deming import deming_regression, orthogonal_regression
 from .passing_bablok import passing_bablok_regression
 from .bland_altman import bland_altman, concordance_correlation
+from .icc import icc
 from .kalman_beta import kalman_regression_beta
 from .theil_sen import theil_sen
 from .robust_stats import (
@@ -876,7 +877,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.895.0"
+__version__ = "1.896.0"
 
 __all__ = [
     "OptionType",
@@ -1362,6 +1363,7 @@ __all__ = [
     "passing_bablok_regression",
     "bland_altman",
     "concordance_correlation",
+    "icc",
     "kalman_regression_beta",
     "theil_sen",
     "median_absolute_deviation",

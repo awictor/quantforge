@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.896.0] - 2026-09-13
+
+### Added
+- `icc.py`: the `icc` intraclass correlation coefficients (Shrout-Fleiss ICC(1),
+  ICC(2,1)/(2,k), ICC(3,1)/(3,k)) from a two-way ANOVA variance decomposition.
+  Cross-checked: reproduces the canonical Shrout-Fleiss (1979) table values, gives 1
+  under perfect agreement and ~0 under noise, satisfies the Spearman-Brown relation
+  between single and average-rater forms, and consistency (ICC3) exceeds absolute
+  agreement (ICC2) under a rater offset.
+
 ## [1.895.0] - 2026-09-13
 
 ### Documentation

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.895.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.896.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -6206,6 +6206,17 @@ Auto-generated from `quantforge` v1.895.0 by `docs/gen_api.py` — do not edit b
 > With ``equal_var=True`` uses the pooled-variance t-test (``n_a + n_b - 2``
 > degrees of freedom); with ``equal_var=False`` uses Welch's t-test with the
 > Welch-Satterthwaite degrees of freedom. Returns ``(t, p_value)``.
+
+## icc
+
+### `icc(data)`  _function_
+
+> Shrout-Fleiss intraclass correlation coefficients.
+>
+> ``data`` is a list of rows, one per subject, each a length-``k`` list of the
+> ``k`` raters' scores (a balanced subjects x raters table). Returns a dict with
+> ``icc1``, ``icc2_1``, ``icc2_k``, ``icc3_1`` and ``icc3_k``. Requires at least two
+> subjects and two raters.
 
 ## implied
 
