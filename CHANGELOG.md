@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.910.0] - 2026-09-13
+
+### Added
+- `polyinterp.py`: `neville` (polynomial interpolation at a point with an error
+  estimate), `divided_differences` and `newton_polynomial` (Newton form).
+  Cross-checked: exact recovery of a cubic and 200 random polynomials, Neville equals
+  the Newton form, the leading divided difference equals the leading coefficient, an
+  honest error estimate, and Richardson extrapolation via Neville recovers a
+  derivative to 1e-13.
+
 ## [1.909.0] - 2026-09-13
 
 ### Documentation

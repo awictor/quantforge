@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.909.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.910.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -9812,6 +9812,27 @@ Auto-generated from `quantforge` v1.909.0 by `docs/gen_api.py` — do not edit b
 >     The expanded matrix and, for each column, the tuple of input indices whose
 >     product forms it (``()`` for the bias). With ``degree=1`` and a bias this
 >     is the original matrix with a leading ones column.
+
+## polyinterp
+
+### `divided_differences(xs, ys)`  _function_
+
+> Newton divided-difference coefficients for the points ``(xs, ys)``.
+>
+> Returns the list ``[f[x0], f[x0,x1], ...]`` -- the leading coefficients of the
+> Newton form, computed in ``O(n^2)``. Feed these to :func:`newton_polynomial`.
+
+### `neville(xs, ys, x)`  _function_
+
+> Evaluate the interpolating polynomial at ``x`` by Neville's algorithm.
+>
+> Returns ``(value, error_estimate)`` where the error estimate is the magnitude of
+> the last correction -- a practical indicator of interpolation accuracy and the
+> basis of Richardson extrapolation (interpolating to ``x = 0`` in the step size).
+
+### `newton_polynomial(xs, coef, x)`  _function_
+
+> Evaluate the Newton form with divided-difference ``coef`` at ``x`` (Horner).
 
 ## portfolio
 
