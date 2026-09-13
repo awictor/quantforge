@@ -2418,6 +2418,20 @@ A larger `alpha` shrinks the slope coefficients more (the intercept is not
 penalized); ridge stays solvable even under perfect collinearity, where OLS is
 singular.
 
+Where ridge shrinks every slope, `lasso_regression` (L1 penalty, coordinate
+descent) drives some to exactly zero — so it also selects features:
+
+```python
+from quantforge import lasso_regression
+
+lasso_regression(X, y, alpha=0.0)    # reproduces OLS
+lasso_regression(X, y, alpha=0.1)    # irrelevant features set to exactly 0
+```
+
+`alpha = 0` is OLS; raising it zeros out the weakest predictors first (feature
+selection) and finally collapses the fit to `mean(y)`. The intercept is never
+penalized and coefficients come back on the original scale.
+
 To fit a conditional *quantile* rather than the mean, `quantile_regression`
 minimizes the pinball loss (via iteratively-reweighted least squares):
 

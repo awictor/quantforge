@@ -24,6 +24,12 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.781.0] - 2026-09-12
+
+### Documentation
+- README regression section now documents `lasso_regression` next to ridge, noting
+  the exact-zero feature selection.
+
 ## [1.780.0] - 2026-09-12
 
 ### Added
