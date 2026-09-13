@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.827.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.828.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -12139,6 +12139,25 @@ Auto-generated from `quantforge` v1.827.0 by `docs/gen_api.py` — do not edit b
 
 ## svd
 
+### `condition_number(A)`  _function_
+
+> Spectral condition number ``sigma_max / sigma_min`` of ``A``.
+>
+> The ratio of the largest to smallest singular value; large means ``A`` is
+> ill-conditioned (small perturbations blow up the solution). One for an orthogonal
+> matrix; ``inf`` when ``A`` is singular (a zero singular value).
+
+### `frobenius_norm(A)`  _function_
+
+> Frobenius norm ``sqrt(sum a_ij^2)`` -- equivalently ``sqrt(sum sigma_k^2)``.
+
+### `matrix_rank(A, rcond=1e-12)`  _function_
+
+> Numerical rank: the number of singular values above ``rcond * sigma_max``.
+>
+> Counts the singular directions that carry real signal; singular values below the
+> relative tolerance are treated as numerical zeros.
+
 ### `pseudo_inverse(A, rcond=1e-12)`  _function_
 
 > Moore-Penrose pseudo-inverse ``A^+`` via the SVD.
@@ -12147,6 +12166,10 @@ Auto-generated from `quantforge` v1.827.0 by `docs/gen_api.py` — do not edit b
 > ``rcond * s_max`` (smaller ones treated as zero). For a full-rank tall ``A`` this
 > is ``(A' A)^{-1} A'``; applied to ``b`` it gives the minimum-norm least-squares
 > solution. Returns the ``n x m`` pseudo-inverse.
+
+### `spectral_norm(A)`  _function_
+
+> Spectral (operator 2-) norm: the largest singular value of ``A``.
 
 ### `svd(A, tol=1e-14, max_sweeps=60)`  _function_
 

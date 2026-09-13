@@ -90,3 +90,42 @@ def pseudo_inverse(A, rcond=1e-12):
         for j in range(m):
             out[i][j] = sum(V[i][k] * sinv[k] * U[j][k] for k in range(n))
     return out
+
+
+def condition_number(A):
+    """Spectral condition number ``sigma_max / sigma_min`` of ``A``.
+
+    The ratio of the largest to smallest singular value; large means ``A`` is
+    ill-conditioned (small perturbations blow up the solution). One for an orthogonal
+    matrix; ``inf`` when ``A`` is singular (a zero singular value).
+    """
+    _, s, _ = svd(A)
+    if not s or s[-1] <= 0.0:
+        return float("inf")
+    return s[0] / s[-1]
+
+
+def matrix_rank(A, rcond=1e-12):
+    """Numerical rank: the number of singular values above ``rcond * sigma_max``.
+
+    Counts the singular directions that carry real signal; singular values below the
+    relative tolerance are treated as numerical zeros.
+    """
+    _, s, _ = svd(A)
+    if not s:
+        return 0
+    smax = s[0]
+    if smax <= 0.0:
+        return 0
+    return sum(1 for sj in s if sj > rcond * smax)
+
+
+def spectral_norm(A):
+    """Spectral (operator 2-) norm: the largest singular value of ``A``."""
+    _, s, _ = svd(A)
+    return s[0] if s else 0.0
+
+
+def frobenius_norm(A):
+    """Frobenius norm ``sqrt(sum a_ij^2)`` -- equivalently ``sqrt(sum sigma_k^2)``."""
+    return sum(a * a for row in A for a in row) ** 0.5

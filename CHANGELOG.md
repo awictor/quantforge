@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.828.0] - 2026-09-13
+
+### Added
+- `svd.py` gains SVD-based matrix diagnostics: `condition_number`
+  (``sigma_max/sigma_min``), `matrix_rank` (singular values above a relative
+  tolerance), `spectral_norm` (largest singular value) and `frobenius_norm`. Cross-
+  checked: the identity has condition 1, ``diag(1000, 1)`` gives 1000, a singular
+  matrix is infinite, the rank counts the non-zero singular values, and the norms
+  match their singular-value forms.
+
 ## [1.827.0] - 2026-09-13
 
 ### Documentation
