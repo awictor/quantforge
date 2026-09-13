@@ -31,6 +31,12 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.0.1] - 2026-09-13
+
+### Documentation
+- README: documented `richardson_extrapolate` and `richardson_table` in the
+  numerical-utilities section. Every snippet value verified.
+
 ## [2.0.0] - 2026-09-13
 
 ### Added

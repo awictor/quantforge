@@ -5324,6 +5324,23 @@ their forward differences by powers of one half. Wynn is the stronger general to
 it drives the slowly-alternating Leibniz series to full `double` precision from just
 twenty terms.
 
+When you control the *step size*, `richardson_extrapolate` accelerates a sequence of
+estimates `A(h), A(h/2), A(h/4), ...` to the `h -> 0` limit by cancelling the leading
+error terms:
+
+```python
+from quantforge import richardson_extrapolate
+
+cd = lambda h: (math.sin(1 + h) - math.sin(1 - h)) / (2 * h)   # central diff, O(h^2)
+richardson_extrapolate([cd(0.2 / 2**i) for i in range(6)], p=2)   # 0.5403023058681 = cos(1)
+```
+
+`p` is the leading error exponent (1 for a forward difference, 2 for a central one), and
+each tableau column cancels the next error term — this is exactly the engine behind
+Romberg integration (feed it the trapezoid sequence with `p=2` and it returns the
+Romberg value). `richardson_table` exposes the full triangular tableau so you can watch
+the diagonal stabilize.
+
 A Padé approximant turns a Taylor series into a *rational* function that often
 converges where the series itself diverges. `pade` builds `[m/n]` from Taylor
 coefficients and `pade_eval` evaluates it; `lentz_continued_fraction` evaluates a
