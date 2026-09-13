@@ -4031,6 +4031,21 @@ probabilistic_sharpe_ratio(returns, benchmark_sr=0.0)       # P(true SR > 0)
 deflated_sharpe_ratio(returns, n_trials=100)                # selection-bias corrected
 ```
 
+More drawdown-adjusted return ratios, each dividing return by a different pain
+denominator:
+
+```python
+from quantforge import gain_to_pain_ratio, sterling_ratio, burke_ratio
+
+gain_to_pain_ratio(returns)   # sum(returns) / sum(|losses|); inf if never loses
+sterling_ratio(returns)       # excess return / (average drawdown + 10% margin)
+burke_ratio(returns)          # excess return / sqrt(sum of squared drawdowns)
+```
+
+`sterling_ratio` uses the L1 average drawdown; `burke_ratio` the L2 root-sum-of-
+squares, so Burke penalizes a few deep drawdowns more heavily than many shallow
+ones. `gain_to_pain_ratio` is the scale-free profitability-vs-pain summary.
+
 Depth is only half the drawdown story — `drawdown_analytics` adds duration:
 
 ```python
