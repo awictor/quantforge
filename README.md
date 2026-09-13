@@ -3465,6 +3465,24 @@ to Silverman's rule (`0.9 min(std, IQR/1.34) n^{-1/5}`, robust to mild non-norma
 pass `rule="scott"` or an explicit `bandwidth` to override — smaller is spikier, larger
 is smoother.
 
+For the raw distributional building blocks, `ecdf` gives the empirical CDF, `quantile`
+the sample quantile (the inverse), and `qq_points` a quantile-quantile pairing:
+
+```python
+from quantforge import ecdf, quantile, qq_points
+
+ecdf(sample, x=0.0)                    # fraction of the sample at or below 0
+quantile(sample, 0.95)                 # the 95th percentile (linear interpolation)
+qq_points(sample, reference)           # [(ref_quantile, sample_quantile), ...] for a Q-Q plot
+```
+
+`ecdf` is a right-continuous step from 0 to 1 (scalar or vectorized over `x`);
+`quantile` supports the usual `linear`/`lower`/`higher`/`nearest` conventions and
+matches `statistics.quantiles` on the linear rule. `qq_points` pairs the two samples at
+matched plotting positions — points fall on the `y = x` line when the distributions
+agree, and a slope or bend exposes a scale or shape difference (the visual companion to
+the KS and Cramér-von Mises tests).
+
 ## Hurst exponent (long memory)
 
 Measure the persistence of a series with the Hurst exponent via rescaled-range
