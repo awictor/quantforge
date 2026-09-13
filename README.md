@@ -631,6 +631,20 @@ realized_variance_naive(prices)        # -> 0.00309  (inflated by noise)
 two_scale_realized_variance(prices)    # -> 0.00224  (bias-corrected)
 ```
 
+`realized_kernel` (Barndorff-Nielsen-Hansen-Lunde-Shephard) is an alternative
+noise-robust estimator that adds flat-top Parzen-weighted return autocovariances:
+
+```python
+from quantforge import realized_kernel
+
+realized_kernel(prices)                # noise-robust integrated variance
+realized_kernel(prices, bandwidth=20)  # or fix the number of lags
+```
+
+The autocovariance terms cancel the noise inflation in the sum of squared returns,
+so the kernel tracks the true integrated variance where the naive estimator runs
+~10x high; the bandwidth defaults to the `n^{3/5}` rule of thumb.
+
 ## Delta-hedge P&L simulator
 
 Monte Carlo a discretely delta-hedged short option and see the hedging-error
