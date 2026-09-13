@@ -5399,6 +5399,24 @@ time-reversible, and because they preserve phase-space structure the energy erro
 oscillates rather than accumulating — exactly what you want for a simulation run over
 many periods, where RK4's small per-step energy leak would compound.
 
+For a diffusion PDE `u_t = alpha u_xx` (heat conduction, or the transformed
+Black-Scholes equation), `heat_equation_cn` marches an initial profile forward by
+Crank-Nicolson:
+
+```python
+from quantforge import heat_equation_cn
+
+# initial profile u0 on a grid of spacing dx, diffusivity alpha, fixed endpoints
+u = heat_equation_cn(u0, alpha=0.5, dx=0.01, dt=0.0005, n_steps=200, left=0.0, right=0.0)
+```
+
+Crank-Nicolson averages the explicit and implicit Euler steps, so it is second-order in
+both space and time and *unconditionally stable* — no CFL restriction linking `dt` to
+`dx²`, so you can take large time steps without the solution blowing up. A sine initial
+mode decays to its analytic `exp(-alpha (pi/L)² t)` amplitude, a step in the boundary
+values relaxes to the exact linear steady state, and a localized bump spreads and
+flattens — the standard diffusive behaviour, solved by a tridiagonal system each step.
+
 A Padé approximant turns a Taylor series into a *rational* function that often
 converges where the series itself diverges. `pade` builds `[m/n]` from Taylor
 coefficients and `pade_eval` evaluates it; `lentz_continued_fraction` evaluates a
