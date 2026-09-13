@@ -2480,6 +2480,29 @@ SE grows larger still, which is the correction that keeps the t-statistics hones
 the covariance is `(X'X)^{-1} S (X'X)^{-1}` with the meat `S` built from the residual
 score vectors.
 
+Robust standard errors keep the *inference* honest but leave the OLS point estimate
+inefficient. When you know the error structure, weighting restores efficiency:
+`weighted_least_squares` down-weights noisy observations, and
+`generalized_least_squares` handles a full error covariance:
+
+```python
+from quantforge import weighted_least_squares, generalized_least_squares
+
+# weights proportional to 1 / var(eps_t): noisy points count less
+w = weighted_least_squares(X, y, weights=[1 / v for v in error_variances])
+w["coefficients"], w["std_errors"], w["r_squared"]
+
+# known error covariance Sigma (e.g. AR(1) residuals): whitened by its Cholesky factor
+g = generalized_least_squares(X, y, cov=Sigma)
+g["coefficients"], g["std_errors"]
+```
+
+Equal weights make `weighted_least_squares` reproduce OLS exactly; a diagonal `cov`
+makes `generalized_least_squares` coincide with WLS using `1 / diag(cov)` weights, and
+an identity `cov` reduces to OLS. GLS whitens the system with the Cholesky factor of
+`Sigma` and then runs OLS on the transformed data, so with the correct covariance it is
+the minimum-variance linear unbiased estimator.
+
 When regressors are collinear or numerous, `ridge_regression` adds an L2 penalty
 that shrinks the slopes and keeps the system solvable:
 

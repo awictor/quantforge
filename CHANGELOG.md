@@ -31,6 +31,12 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.923.0] - 2026-09-13
+
+### Documentation
+- README: documented `weighted_least_squares` and `generalized_least_squares` in the
+  OLS-regression section.
+
 ## [1.922.0] - 2026-09-13
 
 ### Added
