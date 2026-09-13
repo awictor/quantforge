@@ -69,6 +69,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Optimal execution](#optimal-execution)
 - [Hawkes self-exciting process](#hawkes-self-exciting-process)
 - [Structured notes](#structured-notes)
+- [Survival analysis (Kaplan-Meier / Nelson-Aalen)](#survival-analysis-kaplan-meier--nelson-aalen)
 - [Actuarial (life contingencies and cat bonds)](#actuarial-life-contingencies-and-cat-bonds)
 - [Equity swaps and dispersion](#equity-swaps-and-dispersion)
 - [Futures/forward convexity](#futuresforward-convexity)
@@ -2076,6 +2077,25 @@ phoenix_autocall_mc(S=100, t=3, r=0.03, sigma=0.25, observation_times=[1, 2, 3],
 
 The memory feature (paying missed coupons on the next barrier touch) raises the
 value; a lower coupon barrier pays more often.
+
+## Survival analysis (Kaplan-Meier / Nelson-Aalen)
+
+Nonparametric survival and hazard from right-censored data — defaults, lapses, or
+any time-to-event where some observations are cut short:
+
+```python
+from quantforge import kaplan_meier, nelson_aalen, survival_at
+
+times  = [2, 3, 3, 5, 7]
+events = [1, 1, 0, 1, 1]          # 0 = right-censored
+t, s = kaplan_meier(times, events)      # product-limit survival S(t)
+t, h = nelson_aalen(times, events)      # cumulative hazard H(t)
+survival_at(times, events, query=4)     # S(4)
+```
+
+Censored subjects stay in the risk set until their censoring time, then drop out
+without an event. With no censoring the Kaplan-Meier curve is just `1 - ECDF`; the
+Nelson-Aalen hazard relates to it by `S(t) ~ exp(-H(t))`.
 
 ## Actuarial (life contingencies and cat bonds)
 

@@ -24,6 +24,13 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.787.0] - 2026-09-12
+
+### Documentation
+- README gains a "Survival analysis (Kaplan-Meier / Nelson-Aalen)" section
+  documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
+  right-censored example. TOC regenerated.
+
 ## [1.786.0] - 2026-09-12
 
 ### Added
