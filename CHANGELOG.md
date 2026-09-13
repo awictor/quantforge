@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.848.0] - 2026-09-13
+
+### Added
+- `fft.py`: public radix-2 Cooley-Tukey `fft` and `ifft` (power-of-two lengths),
+  exposing the ``O(n log n)`` transform used internally by the Carr-Madan pricer for
+  general spectral work. Cross-checked: the FFT matches a direct DFT, ``ifft(fft(x))``
+  round-trips, a unit impulse gives a flat spectrum and a constant a single spike,
+  and the transform is linear.
+
 ## [1.847.0] - 2026-09-13
 
 ### Documentation

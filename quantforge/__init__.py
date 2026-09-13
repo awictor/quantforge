@@ -276,6 +276,7 @@ from .hp_filter import hp_filter
 from .kalman import kalman_local_level, kalman_steady_state_gain
 from .kalman_filter import kalman_filter, kalman_smoother
 from .savgol import savgol_coeffs, savgol_filter
+from .fft import fft, ifft
 from .kalman_beta import kalman_regression_beta
 from .theil_sen import theil_sen
 from .robust_stats import (
@@ -833,7 +834,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.847.0"
+__version__ = "1.848.0"
 
 __all__ = [
     "OptionType",
@@ -1270,6 +1271,8 @@ __all__ = [
     "kalman_smoother",
     "savgol_coeffs",
     "savgol_filter",
+    "fft",
+    "ifft",
     "kalman_regression_beta",
     "theil_sen",
     "median_absolute_deviation",

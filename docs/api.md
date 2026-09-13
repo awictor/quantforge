@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.847.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.848.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -4634,6 +4634,21 @@ Auto-generated from `quantforge` v1.847.0 by `docs/gen_api.py` — do not edit b
 > Runs :func:`factor_regression` on each trailing window of length ``window``,
 > returning the list of first-factor betas (one per window end, from index
 > ``window - 1`` onward). Tracks how the factor loading drifts through time.
+
+## fft
+
+### `fft(x)`  _function_
+
+> Forward FFT of a sequence whose length is a power of two.
+>
+> Returns the complex DFT ``X_k = sum_n x_n exp(-2 pi i k n / N)``. Accepts real or
+> complex input; raises unless the length is a positive power of two.
+
+### `ifft(x)`  _function_
+
+> Inverse FFT: recovers the sequence from its DFT (with the ``1/N`` scaling).
+>
+> ``ifft(fft(x)) == x`` up to floating error. Length must be a power of two.
 
 ## forecast_combine
 
