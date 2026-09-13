@@ -4470,6 +4470,14 @@ from quantforge import polynomial_roots
 polynomial_roots([1, -6, 11, -6])   # (x-1)(x-2)(x-3) -> roots near 1, 2, 3
 polynomial_roots([1, 0, 1])         # x^2 + 1 -> +/- 1j
 
+# Dense polynomial algebra on coefficient lists (low-degree-first).
+from quantforge import (poly_mul, poly_divmod, poly_derivative, poly_gcd, poly_eval)
+poly_mul([1, 1], [-1, 1])           # (1+x)(x-1) -> [-1, 0, 1]  = x^2 - 1
+poly_divmod([-1, 0, 1], [-1, 1])    # (x^2-1)/(x-1) -> ([1, 1], [0.0])
+poly_derivative([0, 0, 0, 1])       # d/dx x^3 -> [0, 0, 3]
+poly_gcd([-2, 5, -4, 1], poly_derivative([-2, 5, -4, 1]))  # (x-1)^2(x-2): gcd = [-1, 1] = x-1
+poly_eval([1, 2, 3], 2)             # 1 + 2*2 + 3*4 = 17
+
 # Exact polynomial interpolation through n points (Neville / Newton form).
 from quantforge import neville, divided_differences, newton_polynomial
 xs = [0, 1, 2, 3]
@@ -4512,6 +4520,13 @@ resolves sharp peaks a fixed rule would smear over.
 at an endpoint — `1/sqrt(x)`, `ln x`, `sqrt(1-x^2)` at `x = ±1` — where Simpson and
 Gauss-Legendre lose accuracy; it evaluates strictly inside the interval and
 converges on the singular cases to machine precision.
+
+`polynomial_roots` finds every root at once; the `poly_*` helpers are the surrounding
+algebra — `poly_mul` / `poly_divmod` (long division returning quotient and remainder),
+`poly_derivative` / `poly_integral`, `poly_eval` (Horner), and `poly_gcd`, whose
+`gcd(p, p')` recovers the repeated-root factor. Coefficients are low-degree-first, and
+`poly_mul` is the exact direct product (use the FFT-based `convolve` for long
+polynomials).
 
 `neville` evaluates the unique degree-`(n-1)` polynomial through `n` points at one
 `x`, returning `(value, error_estimate)`; `divided_differences` / `newton_polynomial`
