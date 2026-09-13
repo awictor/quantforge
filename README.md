@@ -3471,6 +3471,27 @@ order and a negative one a decreasing trend (a perfectly reversed arrangement gi
 the mirror-image z). The null mean and tie-corrected variance are the closed-form
 Jonckheere values, and the p-value comes from the normal approximation.
 
+For paired *binary* outcomes, `mcnemar_test` is the analogue of the paired t-test (two
+measurements per subject) and `cochran_q_test` extends it to `k` binary treatments —
+the binary special case of Friedman:
+
+```python
+from quantforge import mcnemar_test, cochran_q_test
+
+mcnemar_test(b=10, c=2)      # b, c are the discordant counts
+# {'b': 10, 'c': 2, 'p_value': 0.0386, 'chi2_cc': 4.0833, 'p_value_chi2': 0.0433}
+
+# k binary treatments over shared blocks (one row per block)
+cochran_q_test([[0, 0, 1], [0, 1, 1], [0, 0, 1], [1, 0, 1], [0, 0, 1], [0, 1, 1]])
+# {'statistic': 7.0, 'df': 2, 'p_value': 0.0302}
+```
+
+McNemar looks only at the *discordant* pairs (`b` = 0→1, `c` = 1→0) and tests
+`b == c`, returning the exact two-sided binomial p-value plus the continuity-corrected
+chi-square; pass a 2×2 `table=[[a, b], [c, d]]` instead of `b`/`c` if you have the full
+table. Cochran's Q reduces to the uncorrected McNemar statistic on two treatments, and
+its statistic is chi-square with `k - 1` degrees of freedom.
+
 For a proportion estimate, four confidence intervals span the accuracy/simplicity
 trade-off:
 
