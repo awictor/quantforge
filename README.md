@@ -1977,6 +1977,23 @@ lee_ready(prices, bids, asks)        # Lee-Ready hybrid: quote rule, tick tiebre
 falls back to the tick rule at the midpoint, so every trade gets a `+1 / -1` you can
 feed straight into `vpin` or `order_flow_imbalance`.
 
+Signed trades and quotes also decompose the trading cost into what the liquidity
+provider keeps and the permanent price move:
+
+```python
+from quantforge import (quoted_spread, effective_spread, realized_spread,
+                        price_impact)
+
+quoted_spread(bids, asks)                              # posted (ask - bid) / mid
+effective_spread(prices, mids, signs)                  # cost actually paid vs mid
+realized_spread(prices, mids, future_mids, signs)      # provider's kept portion
+price_impact(prices, mids, future_mids, signs)         # permanent move
+```
+
+The decomposition satisfies `effective = realized + price_impact` term by term:
+`future_mids` is the midpoint a short horizon after each trade, so the realized
+spread nets out the permanent move that the price impact captures.
+
 ## Structured notes
 
 Principal-protected notes (capped and uncapped), reverse convertibles with a fair

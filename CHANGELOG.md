@@ -24,6 +24,13 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.751.0] - 2026-09-12
+
+### Documentation
+- README optimal-execution section now documents the spread decomposition
+  (`quoted_spread`, `effective_spread`, `realized_spread`, `price_impact`) with a
+  worked example and the `effective = realized + price_impact` identity.
+
 ## [1.750.0] - 2026-09-12
 
 ### Added
