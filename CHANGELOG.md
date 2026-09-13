@@ -31,6 +31,12 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.941.0] - 2026-09-13
+
+### Documentation
+- README: documented `neumaier_sum`, `kahan_sum`, `accurate_dot` and `welford` in the
+  numerical-utilities section. Every snippet value verified.
+
 ## [1.940.0] - 2026-09-13
 
 ### Added

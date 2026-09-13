@@ -4950,6 +4950,25 @@ where the raw Taylor series has no hope. `lentz_continued_fraction` takes callab
 for the partial numerators `a(k)` and denominators `b(k)` and is the same
 numerically-stable engine behind the library's incomplete-gamma and beta functions.
 
+Long or badly-scaled sums lose low-order bits; the compensated routines recover them.
+`neumaier_sum` (and `kahan_sum`) carry a running correction, `accurate_dot` does the
+same for a dot product, and `welford` computes a one-pass mean and variance that stays
+stable where the textbook formula cancels:
+
+```python
+from quantforge import neumaier_sum, accurate_dot, welford
+
+neumaier_sum([1.0, 1e100, 1.0, -1e100])        # 2.0 — naive summation loses the 1s
+accurate_dot([1e8, 1, -1e8], [1, 1, 1])        # 1.0 — exact despite the cancellation
+welford([2, 4, 4, 4, 5, 5, 7, 9])              # (mean 5.0, variance 4.5714, n 8)
+```
+
+`neumaier_sum` is the robust default (correct even when a term dwarfs the running
+total); summing a million `0.1`s it stays exact where the naive loop drifts by ~1e-6.
+`welford` returns `(mean, variance, n)` in a single pass and recovers the variance of
+large-mean data (e.g. values near `1e9`) where `mean(x²) − mean(x)²` collapses to zero
+through catastrophic cancellation.
+
 The special functions behind the distribution routines are public:
 
 ```python
