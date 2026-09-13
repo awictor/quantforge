@@ -144,3 +144,56 @@ def fit(events, t_end=None, x0=None):
         "branching_ratio": alpha / beta,
         "log_likelihood": log_likelihood(events, mu, alpha, beta, T),
     }
+
+
+def residuals(events, mu, alpha, beta):
+    """Time-rescaling residuals of a fitted Hawkes process.
+
+    By the time-rescaling theorem the integrated intensity (compensator) between
+    consecutive events, ``tau_i = integral_{t_{i-1}}^{t_i} lambda(u) du``, is a
+    sequence of i.i.d. unit-rate exponentials when the model is correctly specified.
+    Computes those ``tau_i`` for ``i >= 1`` using the exponential-kernel recursion,
+
+        tau_i = mu (t_i - t_{i-1})
+                + (alpha/beta) sum_{j<i} [exp(-beta (t_{i-1}-t_j)) - exp(-beta (t_i-t_j))],
+
+    accumulated via a running kernel sum. Returns the list of ``n - 1`` residuals.
+    """
+    if mu <= 0.0 or alpha < 0.0 or beta <= 0.0:
+        raise ValueError("require mu > 0, alpha >= 0, beta > 0")
+    n = len(events)
+    if n < 2:
+        raise ValueError("need at least two events")
+    taus = []
+    # B_i = sum_{j : t_j <= t_{i-1}} exp(-beta (t_{i-1} - t_j)), the kernel sum at the
+    # left endpoint of interval i (including the event at t_{i-1}). B_1 = 1 (only t_0),
+    # and B_{i+1} = 1 + exp(-beta dt_i) B_i.
+    b = 1.0
+    for i in range(1, n):
+        dt = events[i] - events[i - 1]
+        tau = mu * dt + (alpha / beta) * (1.0 - math.exp(-beta * dt)) * b
+        taus.append(tau)
+        b = 1.0 + math.exp(-beta * dt) * b
+    return taus
+
+
+def gof_test(events, mu, alpha, beta):
+    """Kolmogorov-Smirnov goodness-of-fit of a fitted Hawkes model.
+
+    Applies the time-rescaling theorem: under a correct model the :func:`residuals`
+    are i.i.d. unit-rate exponentials. Returns ``(D, p_value)`` from a one-sample KS
+    test of the residuals against the ``Exp(1)`` CDF; a small p-value rejects the
+    fitted model. Requires at least three events.
+    """
+    from .gof_tests import _ks_pvalue
+
+    taus = residuals(events, mu, alpha, beta)
+    m = len(taus)
+    if m < 2:
+        raise ValueError("need at least three events")
+    s = sorted(taus)
+    d = 0.0
+    for i, x in enumerate(s):
+        cdf = 1.0 - math.exp(-x)          # Exp(1) CDF
+        d = max(d, abs((i + 1) / m - cdf), abs(cdf - i / m))
+    return d, _ks_pvalue(d, math.sqrt(m))     # _ks_pvalue expects the effective size

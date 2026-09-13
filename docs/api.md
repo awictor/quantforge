@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.753.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.754.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -5038,6 +5038,15 @@ Auto-generated from `quantforge` v1.753.0 by `docs/gen_api.py` — do not edit b
 > ``beta``, ``branching_ratio`` and the attained ``log_likelihood``. Provide
 > ``x0 = (mu, alpha, beta)`` to seed the search.
 
+### `hawkes_gof_test(events, mu, alpha, beta)`  _function_
+
+> Kolmogorov-Smirnov goodness-of-fit of a fitted Hawkes model.
+>
+> Applies the time-rescaling theorem: under a correct model the :func:`residuals`
+> are i.i.d. unit-rate exponentials. Returns ``(D, p_value)`` from a one-sample KS
+> test of the residuals against the ``Exp(1)`` CDF; a small p-value rejects the
+> fitted model. Requires at least three events.
+
 ### `hawkes_intensity(t, history, mu, alpha, beta)`  _function_
 
 > Conditional intensity ``lambda(t)`` given past event times ``history``.
@@ -5054,6 +5063,20 @@ Auto-generated from `quantforge` v1.753.0 by `docs/gen_api.py` — do not edit b
 > ``[0, t_end]`` (``t_end`` defaults to the last event). The log-likelihood is
 >
 >     sum_i log(mu + alpha A_i) - mu T - (alpha/beta) sum_i (1 - exp(-beta (T-t_i))).
+
+### `hawkes_residuals(events, mu, alpha, beta)`  _function_
+
+> Time-rescaling residuals of a fitted Hawkes process.
+>
+> By the time-rescaling theorem the integrated intensity (compensator) between
+> consecutive events, ``tau_i = integral_{t_{i-1}}^{t_i} lambda(u) du``, is a
+> sequence of i.i.d. unit-rate exponentials when the model is correctly specified.
+> Computes those ``tau_i`` for ``i >= 1`` using the exponential-kernel recursion,
+>
+>     tau_i = mu (t_i - t_{i-1})
+>             + (alpha/beta) sum_{j<i} [exp(-beta (t_{i-1}-t_j)) - exp(-beta (t_i-t_j))],
+>
+> accumulated via a running kernel sum. Returns the list of ``n - 1`` residuals.
 
 ### `hawkes_simulate(mu, alpha, beta, t_max, seed=1234567)`  _function_
 

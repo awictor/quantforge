@@ -319,7 +319,7 @@ from .trade_sign import tick_rule, quote_rule, lee_ready
 from .hawkes import (
     intensity as hawkes_intensity, branching_ratio as hawkes_branching_ratio,
     log_likelihood as hawkes_log_likelihood, simulate as hawkes_simulate,
-    fit as hawkes_fit,
+    fit as hawkes_fit, residuals as hawkes_residuals, gof_test as hawkes_gof_test,
 )
 from .tail_dependence import (
     upper_tail_dependence, lower_tail_dependence, exceedance_correlation,
@@ -766,7 +766,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.753.0"
+__version__ = "1.754.0"
 
 __all__ = [
     "OptionType",
@@ -1565,6 +1565,8 @@ __all__ = [
     "hawkes_log_likelihood",
     "hawkes_simulate",
     "hawkes_fit",
+    "hawkes_residuals",
+    "hawkes_gof_test",
     "square_root_impact",
     "implementation_shortfall",
     "twap_schedule",

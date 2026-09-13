@@ -24,6 +24,17 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.754.0] - 2026-09-12
+
+### Added
+- `hawkes.py` gains time-rescaling diagnostics: `hawkes_residuals` (the integrated
+  intensity between events, i.i.d. unit exponentials under a correct model) and
+  `hawkes_gof_test` (a one-sample Kolmogorov-Smirnov test of those residuals against
+  the Exp(1) CDF). Cross-checked: the residual recursion matches a brute-force
+  compensator to machine precision, the residuals of a well-fit path have mean one,
+  and the GOF test accepts the true model (p ~ 0.6) while rejecting wrong parameters
+  (p ~ 0).
+
 ## [1.753.0] - 2026-09-12
 
 ### Documentation
