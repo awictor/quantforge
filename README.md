@@ -4465,6 +4465,19 @@ f = monotone_cubic([0, 1, 2, 3], [0, 0, 0, 1])   # no overshoot
 curve = SplineZeroCurve([0.5, 1, 2, 5, 10], [0.02, 0.025, 0.03, 0.035, 0.04])
 brent(lambda x: x * x - 2, 0, 2)                  # sqrt(2)
 
+# Exact polynomial interpolation through n points (Neville / Newton form).
+from quantforge import neville, divided_differences, newton_polynomial
+xs = [0, 1, 2, 3]
+ys = [2 * x**3 - 3 * x**2 + x - 5 for x in xs]
+neville(xs, ys, 1.5)                     # (-3.5, 0.75) -> (value, error estimate)
+coef = divided_differences(xs, ys)       # [-5, 0.0, 3.0, 2.0]; leading term = leading coeff
+newton_polynomial(xs, coef, 1.5)         # -3.5, evaluate the Newton form anywhere
+# Neville doubles as Richardson extrapolation: interpolate a step-size sequence to h=0
+import math
+cd = lambda h: (math.sin(1 + h) - math.sin(1 - h)) / (2 * h)
+hs = [0.4, 0.2, 0.1, 0.05]
+neville([h * h for h in hs], [cd(h) for h in hs], 0.0)[0]   # 0.5403023059 ~ cos(1)
+
 # Chebyshev approximation: spectral accuracy for smooth functions.
 from quantforge import chebyshev_fit, chebyshev_eval, chebyshev_derivative
 import math
@@ -4494,6 +4507,13 @@ resolves sharp peaks a fixed rule would smear over.
 at an endpoint — `1/sqrt(x)`, `ln x`, `sqrt(1-x^2)` at `x = ±1` — where Simpson and
 Gauss-Legendre lose accuracy; it evaluates strictly inside the interval and
 converges on the singular cases to machine precision.
+
+`neville` evaluates the unique degree-`(n-1)` polynomial through `n` points at one
+`x`, returning `(value, error_estimate)`; `divided_differences` / `newton_polynomial`
+build the Newton form once and evaluate it cheaply at many points. Because Neville
+extrapolates a tabulated sequence to any target, feeding it a step-size sequence and
+`x = 0` performs Richardson extrapolation — the derivative example above lands on
+`cos(1)` to 13 digits, the same idea `romberg` uses on the trapezoid rule.
 
 For expectations under a normal density, Gauss-Hermite quadrature is exact for
 polynomials up to degree `2n-1` and needs only a handful of nodes:
