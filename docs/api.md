@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.851.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.852.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -11706,6 +11706,17 @@ Auto-generated from `quantforge` v1.851.0 by `docs/gen_api.py` — do not edit b
 >
 > By Parseval's theorem this equals ``sum_t x_t^2`` (the time-domain energy),
 > which the tests use as a consistency check.
+
+### `welch_psd(x, segment_length=None, overlap=0.5)`  _function_
+
+> Welch's power-spectral-density estimate: averaged windowed periodograms.
+>
+> Splits ``x`` into overlapping segments of ``segment_length`` (default ``n // 8``,
+> clamped to at least 8), applies a Hann window to each, and averages their
+> periodograms. Averaging trades frequency resolution for a much lower-variance
+> spectral estimate than the raw periodogram. ``overlap`` is the fractional segment
+> overlap in ``[0, 1)``. Returns ``(freqs, power)`` with one-sided normalized
+> frequencies in ``[0, 0.5]``.
 
 ## spline
 

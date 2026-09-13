@@ -357,7 +357,9 @@ from .variance_ratio import variance_ratio, variance_ratio_zstat
 from .ou_fit import fit_ornstein_uhlenbeck
 from .cointegration import adf_test, engle_granger
 from .structural_break import cusum_mean, cusum_break_detected, chow_test
-from .spectral import dft, periodogram, dominant_frequency, spectral_energy
+from .spectral import (
+    dft, periodogram, dominant_frequency, spectral_energy, welch_psd,
+)
 from .entropy_pooling import entropy_pooling_mean, relative_entropy
 from .copula_stats import kendall_tau, spearman_rho, pseudo_observations
 from .correlation_test import pearson_r, pearson_correlation_test
@@ -835,7 +837,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.851.0"
+__version__ = "1.852.0"
 
 __all__ = [
     "OptionType",
@@ -1395,6 +1397,7 @@ __all__ = [
     "periodogram",
     "dominant_frequency",
     "spectral_energy",
+    "welch_psd",
     "entropy_pooling_mean",
     "relative_entropy",
     "kendall_tau",

@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.852.0] - 2026-09-13
+
+### Added
+- `spectral.py` gains `welch_psd`, Welch's averaged-periodogram power-spectral-density
+  estimate: overlapping Hann-windowed segments averaged for a low-variance spectrum.
+  Cross-checked: it peaks at a sinusoid's frequency (including a noisy one), and its
+  variance is far below the raw periodogram's on white noise (the variance reduction
+  Welch is for).
+
 ## [1.851.0] - 2026-09-13
 
 ### Documentation
