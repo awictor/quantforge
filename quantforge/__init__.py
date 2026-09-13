@@ -566,6 +566,7 @@ from .symplectic import velocity_verlet, leapfrog
 from .heat_equation import heat_equation_cn
 from .wave_equation import wave_equation
 from .poisson2d import poisson2d
+from .dct import dct, idct
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -956,7 +957,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "2.12.0"
+__version__ = "2.13.0"
 
 __all__ = [
     "OptionType",
@@ -1795,6 +1796,8 @@ __all__ = [
     "heat_equation_cn",
     "wave_equation",
     "poisson2d",
+    "dct",
+    "idct",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

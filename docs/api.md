@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.12.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.13.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -3173,6 +3173,23 @@ Auto-generated from `quantforge` v2.12.0 by `docs/gen_api.py` — do not edit by
 > ``eps`` is the neighbourhood radius, ``min_samples`` the core-point threshold
 > (counting the point itself). Labels are ``0, 1, ...`` for clusters and ``-1`` for
 > noise. No cluster count is required; clusters may be non-convex.
+
+## dct
+
+### `dct(x)`  _function_
+
+> Orthonormal DCT-II of a real sequence.
+>
+> ``X[k] = s(k) sum_n x[n] cos(pi (2n+1) k / (2N))`` with the orthonormal scaling
+> ``s(0) = sqrt(1/N)``, ``s(k>0) = sqrt(2/N)``. Energy-preserving; pair with
+> :func:`idct`.
+
+### `idct(X)`  _function_
+
+> Orthonormal inverse DCT (DCT-III) -- exact inverse of :func:`dct`.
+>
+> ``x[n] = sum_k s(k) X[k] cos(pi (2n+1) k / (2N))`` with the same orthonormal scaling.
+> Recovers the original sequence to machine precision.
 
 ## decision_stump
 

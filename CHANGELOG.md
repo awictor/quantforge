@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.13.0] - 2026-09-13
+
+### Added
+- `dct.py`: the orthonormal discrete cosine transform `dct` (DCT-II) and its inverse
+  `idct` (DCT-III). Cross-checked: `idct(dct(x)) == x` to machine precision, energy is
+  preserved (Parseval), a constant maps to a pure DC coefficient, a smooth signal packs
+  >95% of its energy into the first four coefficients (compaction), a single cosine mode
+  isolates one coefficient, and the transform is linear.
+
 ## [2.12.0] - 2026-09-13
 
 ### Documentation
