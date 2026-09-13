@@ -31,6 +31,12 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.821.0] - 2026-09-13
+
+### Documentation
+- README numerics section now shows `gauss_kronrod` as the general-purpose adaptive
+  quadrature, noting its embedded error estimate and sharp-peak resolution.
+
 ## [1.820.0] - 2026-09-13
 
 ### Added
