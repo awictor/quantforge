@@ -491,6 +491,7 @@ from .numdiff import gradient, hessian, jacobian
 from .richardson_derivative import ridders_derivative, ridders_second_derivative
 from .complex_step import complex_step_derivative, complex_step_gradient
 from .sequence_accel import aitken, shanks, steffensen
+from .series_transform import wynn_epsilon, euler_transform
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -881,7 +882,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.905.0"
+__version__ = "1.906.0"
 
 __all__ = [
     "OptionType",
@@ -1608,6 +1609,8 @@ __all__ = [
     "aitken",
     "shanks",
     "steffensen",
+    "wynn_epsilon",
+    "euler_transform",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

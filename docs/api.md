@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.905.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.906.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -11602,6 +11602,27 @@ Auto-generated from `quantforge` v1.905.0 by `docs/gen_api.py` — do not edit b
 > Returns ``(Q, p_value)`` with ``Q = n(n+2) sum_{k=1}^{lags} rho_k^2 / (n-k)``
 > and the chi-square(``lags``) p-value. Large Q / small p rejects "the first
 > ``lags`` autocorrelations are jointly zero".
+
+## series_transform
+
+### `euler_transform(terms)`  _function_
+
+> Euler transform of an alternating series ``sum_{k>=0} (-1)^k terms[k]``.
+>
+> ``terms`` are the non-negative magnitudes ``a_k`` (the alternating sign is applied
+> internally). Returns the accelerated estimate of the sum via
+> ``sum_k (-1)^k a_k = sum_n (-1)^0 * Delta^n a_0 / 2^{n+1}`` -- forward differences
+> reweighted by powers of one half, which converges geometrically even when the raw
+> alternating series crawls.
+
+### `wynn_epsilon(partial_sums)`  _function_
+
+> Accelerate a sequence of partial sums with Wynn's epsilon algorithm.
+>
+> ``partial_sums`` is the list ``[s_0, s_1, ...]``. Returns the best (last stable)
+> even-column estimate of the limit. The epsilon table is built with the recurrence
+> ``eps[k+1][j] = eps[k-1][j+1] + 1 / (eps[k][j+1] - eps[k][j])``; the even columns
+> hold the accelerated limits.
 
 ## shout
 

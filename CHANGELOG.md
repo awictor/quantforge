@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.906.0] - 2026-09-13
+
+### Added
+- `series_transform.py`: `wynn_epsilon` (Wynn's epsilon algorithm — Shanks iterated to
+  all orders) and `euler_transform` (alternating-series acceleration). Cross-checked:
+  Wynn takes the Leibniz-pi partial sums to machine precision and is exact on a
+  geometric series (picking the best even-column estimate to dodge post-convergence
+  round-off), and the Euler transform recovers pi/4 and ln 2 to 1e-6 / 1e-9.
+
 ## [1.905.0] - 2026-09-13
 
 ### Documentation
