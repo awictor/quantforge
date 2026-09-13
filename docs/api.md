@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.911.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.912.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -447,6 +447,39 @@ Auto-generated from `quantforge` v1.911.0 by `docs/gen_api.py` — do not edit b
 ### `bachelier_vega(F, K, t, r, sigma) -> float`  _function_
 
 > dPrice/dsigma_N (per unit of normal vol). Same for calls and puts.
+
+## barycentric
+
+### `barycentric_eval(xs, ys, weights, x)`  _function_
+
+> Evaluate the barycentric interpolant at ``x`` in ``O(n)``.
+>
+> ``weights`` come from :func:`barycentric_weights`. Handles the case where ``x``
+> coincides with a node exactly (returns that node's value).
+
+### `barycentric_weights(xs)`  _function_
+
+> Barycentric weights ``w_j = 1 / prod_{k != j} (x_j - x_k)`` for nodes ``xs``.
+>
+> ``O(n^2)`` one-time cost; feed the result to :func:`barycentric_eval`. Raises on
+> duplicate nodes.
+
+### `chebyshev_barycentric_weights(n)`  _function_
+
+> Closed-form barycentric weights for the ``n`` Chebyshev-Lobatto nodes.
+>
+> ``w_i = (-1)^i delta_i`` with the endpoints halved (``delta = 1/2`` at ``i = 0,
+> n-1`` and ``1`` inside). These pair with :func:`chebyshev_nodes` and are far more
+> stable than recomputing the general product. Returned in increasing-``x`` order to
+> match :func:`chebyshev_nodes`.
+
+### `chebyshev_nodes(a, b, n)`  _function_
+
+> The ``n`` Chebyshev points of the second kind (Chebyshev-Lobatto) on ``[a, b]``.
+>
+> ``x_i = (a+b)/2 + (b-a)/2 * cos(i pi / (n-1))`` -- the nodes that make polynomial
+> interpolation converge spectrally for smooth functions and avoid Runge
+> oscillation. Returns them in increasing order.
 
 ## basket_default
 

@@ -494,6 +494,12 @@ from .sequence_accel import aitken, shanks, steffensen
 from .series_transform import wynn_epsilon, euler_transform
 from .pade import pade, pade_eval, lentz_continued_fraction
 from .polyinterp import neville, divided_differences, newton_polynomial
+from .barycentric import (
+    barycentric_weights,
+    barycentric_eval,
+    chebyshev_nodes,
+    chebyshev_barycentric_weights,
+)
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -884,7 +890,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.911.0"
+__version__ = "1.912.0"
 
 __all__ = [
     "OptionType",
@@ -1619,6 +1625,10 @@ __all__ = [
     "neville",
     "divided_differences",
     "newton_polynomial",
+    "barycentric_weights",
+    "barycentric_eval",
+    "chebyshev_nodes",
+    "chebyshev_barycentric_weights",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

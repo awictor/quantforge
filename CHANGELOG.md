@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.912.0] - 2026-09-13
+
+### Added
+- `barycentric.py`: stable, reusable barycentric Lagrange interpolation
+  (`barycentric_weights`, `barycentric_eval`) plus `chebyshev_nodes` and the
+  closed-form `chebyshev_barycentric_weights`. Cross-checked: matches Neville, exact at
+  nodes, the closed-form Chebyshev weights agree with the general ones, and on the
+  Runge function Chebyshev nodes converge (max error ~0.02) where equispaced nodes blow
+  up (~59) — with exp interpolated to machine precision on 25 Chebyshev points.
+
 ## [1.911.0] - 2026-09-13
 
 ### Documentation
