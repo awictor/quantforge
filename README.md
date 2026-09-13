@@ -3512,6 +3512,28 @@ margin, so an aligned tie no longer caps the coefficient below one;
 normal approximation with `Var(S) = n(n-1)(2n+5)/18`, returning a two-sided p-value
 equal to `erfc(|z| / sqrt(2))`.
 
+Kendall and Spearman still only see *monotone* co-movement. **Distance correlation**
+(Székely-Rizzo) sees *any* dependence: it is zero if and only if the two variables
+are independent, so it catches nonlinear structure a rank or linear correlation
+misses entirely.
+
+```python
+from quantforge import distance_correlation, distance_covariance, distance_variance
+
+distance_correlation([1, 2, 3, 4, 5], [2, 4, 6, 8, 10])   # 1.0  — tight linear
+
+x = [-2, -1, 0, 1, 2]
+y = [4, 1, 0, 1, 4]        # y = x^2, symmetric -> Pearson is exactly 0
+distance_correlation(x, y)                                # 0.5159 — dependence seen
+```
+
+It double-centers each sample's pairwise-distance matrix and takes the mean product;
+`distance_correlation` lands in `[0, 1]` (0 under independence, 1 for a tight linear
+relation), `distance_covariance` is the unnormalized version, and
+`distance_variance` is `dCov(x, x)`. On the symmetric parabola above, Pearson
+correlation is exactly zero — it is blind to the U-shape — while distance
+correlation reports a clear 0.52, flagging the dependence.
+
 For the linear (Pearson) correlation with a significance test and interval,
 `pearson_correlation_test` returns the coefficient, a two-sided t-test of
 `rho = 0`, and a Fisher-z confidence interval:

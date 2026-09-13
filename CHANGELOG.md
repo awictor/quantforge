@@ -31,6 +31,14 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.867.0] - 2026-09-13
+
+### Documentation
+- README: extended the rank-dependence section with distance correlation
+  (`distance_correlation`, `distance_covariance`, `distance_variance`), showing it
+  flag a symmetric parabola where Pearson is exactly zero. Every snippet value
+  verified.
+
 ## [1.866.0] - 2026-09-13
 
 ### Added
