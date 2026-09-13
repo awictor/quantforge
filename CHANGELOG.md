@@ -24,6 +24,17 @@ All notable changes to QuantForge are documented here. The format follows
   `two_sample_t_test`, `binomial_test`) with a worked example, noting the two-group
   ANOVA reproduces the pooled t-test (`F = t^2`) and the binomial test is exact.
 
+## [1.722.0] - 2026-09-12
+
+### Changed
+- `ols_fit` now also reports inferential statistics built on the distribution CDFs:
+  two-sided coefficient `p_values` and `conf_int` (from the t distribution at a new
+  `confidence` argument, default 0.95) and the overall `f_pvalue`. Existing keys are
+  unchanged. Cross-checked: for a single regressor the overall F equals the slope
+  t-squared and its p-value matches the slope's, the intervals are symmetric about
+  the coefficient and widen with the confidence level, a strong linear signal gives
+  a vanishing slope p-value, and noise gives a non-significant one.
+
 ## [1.720.0] - 2026-09-12
 
 ### Added

@@ -9,9 +9,11 @@ is added by default. Pure standard library (uses a Gauss-Jordan inverse).
 import math
 
 from .portopt import _invert
+from .student_t import t_cdf, t_ppf
+from .distributions import f_cdf
 
 
-def ols_fit(X, y, add_intercept=True):
+def ols_fit(X, y, add_intercept=True, confidence=0.95):
     """Fit an OLS regression and return coefficients with diagnostics.
 
     Parameters
@@ -23,14 +25,20 @@ def ols_fit(X, y, add_intercept=True):
         Response vector of length ``n``.
     add_intercept : bool
         Prepend a column of ones (the default).
+    confidence : float
+        Confidence level for the coefficient intervals (default 0.95).
 
     Returns
     -------
     dict
         ``coefficients`` (intercept first if added), ``std_errors``, ``t_stats``,
-        ``r_squared``, ``adj_r_squared``, ``f_stat``, ``residuals``, ``n_obs``,
+        ``p_values`` (two-sided, per coefficient), ``conf_int`` (list of
+        ``[low, high]`` at ``confidence``), ``r_squared``, ``adj_r_squared``,
+        ``f_stat``, ``f_pvalue`` (overall significance), ``residuals``, ``n_obs``,
         ``df_resid``.
     """
+    if not (0.0 < confidence < 1.0):
+        raise ValueError("confidence must be in (0, 1)")
     n = len(y)
     if n == 0:
         raise ValueError("need at least one observation")
@@ -64,6 +72,16 @@ def ols_fit(X, y, add_intercept=True):
                for i in range(p)]
     t_stats = [beta[i] / std_err[i] if std_err[i] > 0 else 0.0 for i in range(p)]
 
+    # Two-sided coefficient p-values and confidence intervals from the t distribution.
+    if df_resid > 0:
+        p_values = [2.0 * (1.0 - t_cdf(abs(t_stats[i]), df_resid)) for i in range(p)]
+        t_crit = t_ppf(0.5 * (1.0 + confidence), df_resid)
+    else:
+        p_values = [float("nan")] * p
+        t_crit = float("nan")
+    conf_int = [[beta[i] - t_crit * std_err[i], beta[i] + t_crit * std_err[i]]
+                for i in range(p)]
+
     r2 = 1.0 - ss_res / ss_tot if ss_tot > 0 else 1.0
     # Adjusted R^2 and F use the number of non-intercept regressors.
     k = p - 1 if add_intercept else p
@@ -72,14 +90,22 @@ def ols_fit(X, y, add_intercept=True):
         f_stat = ((ss_tot - ss_res) / k) / (ss_res / df_resid)
     else:
         f_stat = float("inf") if ss_res == 0 else 0.0
+    # Overall F-test p-value: P(F_{k, df_resid} > f_stat).
+    if k > 0 and df_resid > 0 and math.isfinite(f_stat):
+        f_pvalue = 1.0 - f_cdf(f_stat, k, df_resid)
+    else:
+        f_pvalue = 0.0 if f_stat == float("inf") else float("nan")
 
     return {
         "coefficients": beta,
         "std_errors": std_err,
         "t_stats": t_stats,
+        "p_values": p_values,
+        "conf_int": conf_int,
         "r_squared": r2,
         "adj_r_squared": adj_r2,
         "f_stat": f_stat,
+        "f_pvalue": f_pvalue,
         "residuals": resid,
         "n_obs": n,
         "df_resid": df_resid,

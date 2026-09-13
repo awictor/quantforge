@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.720.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.722.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -7868,7 +7868,7 @@ Auto-generated from `quantforge` v1.720.0 by `docs/gen_api.py` — do not edit b
 
 ## ols
 
-### `ols_fit(X, y, add_intercept=True)`  _function_
+### `ols_fit(X, y, add_intercept=True, confidence=0.95)`  _function_
 
 > Fit an OLS regression and return coefficients with diagnostics.
 >
@@ -7881,12 +7881,16 @@ Auto-generated from `quantforge` v1.720.0 by `docs/gen_api.py` — do not edit b
 >     Response vector of length ``n``.
 > add_intercept : bool
 >     Prepend a column of ones (the default).
+> confidence : float
+>     Confidence level for the coefficient intervals (default 0.95).
 >
 > Returns
 > -------
 > dict
 >     ``coefficients`` (intercept first if added), ``std_errors``, ``t_stats``,
->     ``r_squared``, ``adj_r_squared``, ``f_stat``, ``residuals``, ``n_obs``,
+>     ``p_values`` (two-sided, per coefficient), ``conf_int`` (list of
+>     ``[low, high]`` at ``confidence``), ``r_squared``, ``adj_r_squared``,
+>     ``f_stat``, ``f_pvalue`` (overall significance), ``residuals``, ``n_obs``,
 >     ``df_resid``.
 
 ## ou_fit

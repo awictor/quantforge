@@ -57,8 +57,66 @@ def test_simple_regression_matches_closed_form():
     assert abs(m["coefficients"][1] - slope) < 1e-9
 
 
+def test_f_equals_slope_t_squared_single_regressor():
+    # With one regressor the overall F equals the slope t-statistic squared.
+    X = [[1], [2], [3], [4], [5]]
+    y = [2.1, 4.3, 5.9, 8.2, 9.8]
+    r = ols_fit(X, y)
+    assert abs(r["f_stat"] - r["t_stats"][1] ** 2) < 1e-6
+    # And the F p-value equals the slope's two-sided p-value.
+    assert abs(r["f_pvalue"] - r["p_values"][1]) < 1e-9
+
+
+def test_pvalues_in_unit_interval_and_ordered_by_t():
+    X = [[1], [2], [3], [4], [5]]
+    y = [2.1, 4.3, 5.9, 8.2, 9.8]
+    r = ols_fit(X, y)
+    for pv in r["p_values"]:
+        assert 0.0 <= pv <= 1.0
+    # The larger |t| (slope) has the smaller p-value.
+    assert r["p_values"][1] < r["p_values"][0]
+
+
+def test_conf_int_symmetric_and_contains_coef():
+    X = [[1], [2], [3], [4], [5]]
+    y = [2.1, 4.3, 5.9, 8.2, 9.8]
+    r = ols_fit(X, y, confidence=0.95)
+    for b, (lo, hi) in zip(r["coefficients"], r["conf_int"]):
+        assert lo < b < hi
+        assert abs((lo + hi) / 2 - b) < 1e-9
+
+
+def test_higher_confidence_widens_interval():
+    X = [[1], [2], [3], [4], [5]]
+    y = [2.1, 4.3, 5.9, 8.2, 9.8]
+    r90 = ols_fit(X, y, confidence=0.90)
+    r99 = ols_fit(X, y, confidence=0.99)
+    w90 = r90["conf_int"][1][1] - r90["conf_int"][1][0]
+    w99 = r99["conf_int"][1][1] - r99["conf_int"][1][0]
+    assert w99 > w90
+
+
+def test_significant_slope_has_tiny_pvalue():
+    random.seed(1)
+    X = [[i * 0.1] for i in range(60)]
+    y = [3.0 + 2.0 * row[0] + random.gauss(0, 0.05) for row in X]
+    r = ols_fit(X, y)
+    assert r["p_values"][1] < 1e-20
+    assert r["f_pvalue"] < 1e-20
+
+
+def test_noise_only_slope_not_significant():
+    random.seed(2)
+    X = [[random.gauss(0, 1)] for _ in range(80)]
+    y = [random.gauss(0, 1) for _ in range(80)]   # y independent of X
+    r = ols_fit(X, y)
+    assert r["p_values"][1] > 0.05
+
+
 def test_validation():
     with pytest.raises(ValueError):
         ols_fit([[1.0]], [1.0])            # n <= p
     with pytest.raises(ValueError):
         ols_fit([[1.0], [2.0]], [1.0])     # X, y length mismatch
+    with pytest.raises(ValueError):
+        ols_fit([[1.0], [2.0], [3.0]], [1.0, 2.0, 3.0], confidence=1.5)
