@@ -4582,6 +4582,31 @@ collapse to noise. The one requirement is that `f` be written with complex-safe
 operations (pass `cmath.sin` rather than `math.sin`, and avoid `abs`/`max`/comparisons
 that break on complex numbers).
 
+Slowly-converging sequences and fixed-point iterations can be accelerated with
+`aitken` (delta-squared), `shanks`, and `steffensen`:
+
+```python
+import math
+from quantforge import aitken, steffensen
+
+# partial sums of the Leibniz series for pi/4 converge painfully slowly
+seq = []
+acc = 0.0
+for k in range(20):
+    acc += (-1) ** k / (2 * k + 1)
+    seq.append(acc)
+seq[-1] * 4          # 3.09162  — still wrong in the 2nd decimal after 20 terms
+aitken(seq)[-1] * 4  # 3.1415563 — Aitken extrapolation, three digits better
+
+# Steffensen: quadratic fixed-point convergence with no derivative
+steffensen(math.cos, 0.5)   # {'root': 0.7390851332, 'iterations': 5, 'converged': True}
+```
+
+`aitken` extrapolates each limit from three consecutive terms (`shanks` is the same
+transform); `steffensen` fuses that extrapolation into a `x = g(x)` iteration to get
+Newton-like quadratic convergence from a merely linear map — the cos fixed point above
+takes 5 steps where plain iteration needs about 69.
+
 The special functions behind the distribution routines are public:
 
 ```python
