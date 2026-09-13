@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.981.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.982.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -14618,6 +14618,24 @@ Auto-generated from `quantforge` v1.981.0 by `docs/gen_api.py` — do not edit b
 > ``vrp`` (realized - implied; usually negative), ``ratio``
 > (realized / implied), and ``vol_premium`` (implied vol - realized vol, the
 > usual positive number quoted in vol points).
+
+## wasserstein
+
+### `wasserstein1_sorted(x, y)`  _function_
+
+> 1-Wasserstein distance for two equal-length samples (sorted-difference form).
+>
+> ``W_1 = mean_i |x_(i) - y_(i)|`` after sorting each sample. Requires equal lengths;
+> use :func:`wasserstein_distance` for unequal sizes.
+
+### `wasserstein_distance(x, y, p=1)`  _function_
+
+> p-Wasserstein distance between two 1-D samples of any sizes.
+>
+> Merges the empirical CDFs and integrates ``|F_x^{-1}(u) - F_y^{-1}(u)|^p`` over
+> ``u in [0, 1]`` via the standard interval decomposition (SciPy's approach). ``p=1``
+> is earth-mover distance; ``p=2`` the quadratic transport cost. Returns a true metric
+> for ``p=1``. Both samples must be non-empty.
 
 ## wavelet
 

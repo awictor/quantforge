@@ -550,6 +550,7 @@ from .divergences import (
     total_variation_distance,
     bhattacharyya_distance,
 )
+from .wasserstein import wasserstein_distance, wasserstein1_sorted
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -940,7 +941,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.981.0"
+__version__ = "1.982.0"
 
 __all__ = [
     "OptionType",
@@ -1753,6 +1754,8 @@ __all__ = [
     "hellinger_distance",
     "total_variation_distance",
     "bhattacharyya_distance",
+    "wasserstein_distance",
+    "wasserstein1_sorted",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

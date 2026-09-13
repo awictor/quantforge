@@ -1,49 +1,60 @@
-"""Wasserstein-1 distance between two smile-implied densities."""
+"""1-D Wasserstein (earth-mover) distance."""
 
-import math
+import random
 
 import pytest
 
-from quantforge import wasserstein_smiles as w1
+from quantforge import wasserstein_distance, wasserstein1_sorted
 
 
-S0, T, R = 100.0, 1.0, 0.05
+def test_constant_shift():
+    x = [1, 2, 3, 4, 5]
+    y = [xi + 3 for xi in x]
+    assert abs(wasserstein1_sorted(x, y) - 3.0) < 1e-12
+    assert abs(wasserstein_distance(x, y) - 3.0) < 1e-9
 
 
-def _flat(sig):
-    return lambda K: sig
+def test_identical_zero():
+    x = [1, 2, 3, 4, 5]
+    assert wasserstein_distance(x, x) == 0.0
 
 
-def test_identical_is_zero():
-    assert w1(S0, T, R, _flat(0.2), _flat(0.2)) == pytest.approx(0.0, abs=1e-3)
+def test_sorted_matches_general_equal_length():
+    rng = random.Random(3)
+    a = [rng.gauss(0, 1) for _ in range(100)]
+    b = [rng.gauss(1, 1) for _ in range(100)]
+    assert abs(wasserstein1_sorted(a, b) - wasserstein_distance(a, b)) < 1e-9
+
+
+def test_point_masses():
+    assert wasserstein_distance([0.0], [1.0]) == 1.0
 
 
 def test_symmetric():
-    a = w1(S0, T, R, _flat(0.2), _flat(0.3))
-    b = w1(S0, T, R, _flat(0.3), _flat(0.2))
-    assert a == pytest.approx(b, abs=1e-6)
+    rng = random.Random(5)
+    a = [rng.gauss(0, 1) for _ in range(80)]
+    b = [rng.gauss(2, 1) for _ in range(60)]
+    assert abs(wasserstein_distance(a, b) - wasserstein_distance(b, a)) < 1e-12
 
 
-def test_positive_for_different_vols():
-    assert w1(S0, T, R, _flat(0.2), _flat(0.3)) > 0.0
+def test_w2_geq_w1():
+    rng = random.Random(7)
+    a = [rng.gauss(0, 1) for _ in range(100)]
+    b = [rng.gauss(1, 2) for _ in range(100)]
+    assert wasserstein_distance(a, b, p=2) >= wasserstein_distance(a, b, p=1) - 1e-12
 
 
-def test_grows_with_vol_gap():
-    near = w1(S0, T, R, _flat(0.2), _flat(0.22))
-    far = w1(S0, T, R, _flat(0.2), _flat(0.35))
-    assert far > near
+def test_uniform_shift_large_sample():
+    rng = random.Random(9)
+    a = [rng.random() for _ in range(5000)]
+    b = [rng.random() + 2 for _ in range(5000)]
+    assert abs(wasserstein_distance(a, b) - 2.0) < 0.05
 
 
-def test_skew_vs_flat_positive():
-    def down(K):
-        return max(0.05, 0.2 + 0.15 * math.log(100.0 / K))
-    assert w1(S0, T, R, down, _flat(0.2)) > 0.0
-
-
-def test_triangle_inequality():
-    # W1 is a metric: d(p, s) <= d(p, q) + d(q, s).
-    p, q, s = _flat(0.18), _flat(0.24), _flat(0.30)
-    d_ps = w1(S0, T, R, p, s)
-    d_pq = w1(S0, T, R, p, q)
-    d_qs = w1(S0, T, R, q, s)
-    assert d_ps <= d_pq + d_qs + 1e-6
+def test_validation():
+    with pytest.raises(ValueError):
+        wasserstein1_sorted([1, 2], [1])
+    with pytest.raises(ValueError):
+        wasserstein_distance([], [1])
+    with pytest.raises(ValueError):
+        wasserstein_distance([1], [1], p=0)

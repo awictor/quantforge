@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.982.0] - 2026-09-13
+
+### Added
+- `wasserstein.py`: 1-D Wasserstein (earth-mover) distance — `wasserstein_distance`
+  (any sizes, any `p`, via merged empirical CDFs) and `wasserstein1_sorted` (fast
+  equal-length sorted-difference form). Cross-checked: a constant shift gives exactly
+  that distance, identical samples give zero, point masses at 0 and 1 give 1, it is
+  symmetric, `W2 >= W1`, and a uniform shift of 2 is recovered on large samples.
+
 ## [1.981.0] - 2026-09-13
 
 ### Documentation
