@@ -31,6 +31,12 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.799.0] - 2026-09-12
+
+### Documentation
+- README GARCH section now documents `arch_lm_test` with a worked example as the
+  pre-fit check for volatility clustering.
+
 ## [1.798.0] - 2026-09-12
 
 ### Added

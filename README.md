@@ -4082,6 +4082,18 @@ eg = EGarchParams(omega=-0.1, alpha=0.15, beta=0.95, gamma=-0.08)
 egarch_forecast(eg, last_return=-0.02, last_variance=4e-4, horizon=5)
 ```
 
+Before fitting a GARCH model, check that the returns actually show ARCH effects —
+Engle's LM test regresses the squared returns on their own lags:
+
+```python
+from quantforge import arch_lm_test
+
+lm, p = arch_lm_test(returns, lags=5)   # small p: volatility clustering present
+```
+
+A small p-value means the variance depends on the recent past, so a GARCH model is
+warranted; iid returns are not rejected.
+
 ## Model coverage
 
 | Instrument            | Set the carry `b` to | Function            |
