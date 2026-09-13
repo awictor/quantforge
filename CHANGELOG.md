@@ -31,6 +31,17 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [1.878.0] - 2026-09-13
+
+### Added
+- `scale_tests.py`: the nonparametric two-sample dispersion tests
+  `ansari_bradley_test` (outside-in rank scores) and `mood_test` (squared rank
+  deviations), each with a normal-approximation p-value. Cross-checked: the null z is
+  calibrated (mean ~0, variance ~1 over 500 replications), both reject a 1x-vs-4x
+  spread difference at equal location that a rank-sum location test would miss, the
+  null rejection rate sits near alpha, and the Ansari statistic matches a hand
+  computation.
+
 ## [1.877.0] - 2026-09-13
 
 ### Documentation

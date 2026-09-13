@@ -308,6 +308,7 @@ from .energy_distance import energy_distance, energy_test
 from .cramer_von_mises import cramer_von_mises_2samp
 from .hodges_lehmann import hodges_lehmann_location, hodges_lehmann_shift
 from .wilcoxon import wilcoxon_signed_rank_test, sign_test
+from .scale_tests import ansari_bradley_test, mood_test
 from .kalman_beta import kalman_regression_beta
 from .theil_sen import theil_sen
 from .robust_stats import (
@@ -867,7 +868,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "1.877.0"
+__version__ = "1.878.0"
 
 __all__ = [
     "OptionType",
@@ -1339,6 +1340,8 @@ __all__ = [
     "hodges_lehmann_shift",
     "wilcoxon_signed_rank_test",
     "sign_test",
+    "ansari_bradley_test",
+    "mood_test",
     "kalman_regression_beta",
     "theil_sen",
     "median_absolute_deviation",

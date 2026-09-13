@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v1.877.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v1.878.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -11271,6 +11271,26 @@ Auto-generated from `quantforge` v1.877.0 by `docs/gen_api.py` — do not edit b
 > the ``half`` points at each end are fitted from the nearest full window (so the
 > output has the same length as the input). Exactly reproduces polynomials up to
 > ``degree``.
+
+## scale_tests
+
+### `ansari_bradley_test(x, y)`  _function_
+
+> Ansari-Bradley two-sample test of equal dispersion.
+>
+> Scores the pooled ranks from the outside in (``min(r, N+1-r)``) and sums the
+> scores over ``x``. Returns a dict with the ``statistic`` (that sum), the ``z``
+> normal approximation and the two-sided ``p_value``. Assumes the two samples share
+> a location; a smaller ``x`` spread pushes ``x`` toward the center (higher scores).
+
+### `mood_test(x, y)`  _function_
+
+> Mood two-sample test of equal dispersion.
+>
+> Sums the squared rank deviations ``(r - (N+1)/2)^2`` over ``x``. Returns a dict
+> with the ``statistic``, the ``z`` normal approximation and the two-sided
+> ``p_value``. A more dispersed ``x`` sends its values to the rank extremes and
+> raises the statistic. Assumes a common location.
 
 ## scaling
 
