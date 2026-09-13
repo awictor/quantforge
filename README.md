@@ -4518,6 +4518,26 @@ component within the sweep, so it typically converges in about half the iteratio
 `jacobi`. All three return `x`, `residual_norm` and `n_iter`, and agree with the direct
 `lu_solve` to machine precision on a well-conditioned system.
 
+When only *one* eigenpair is needed, power iteration is far cheaper than the full
+`jacobi_eigen` spectrum: `power_iteration` finds the dominant (largest-magnitude)
+eigenvalue and `inverse_iteration` the one nearest a shift `mu`:
+
+```python
+from quantforge import power_iteration, inverse_iteration, rayleigh_quotient
+
+A = [[4, 1, 0], [1, 3, 1], [0, 1, 2]]      # eigenvalues 1.2679, 3, 4.7321
+power_iteration(A)["eigenvalue"]           # 4.7321 (dominant)
+inverse_iteration(A, mu=0.0)["eigenvalue"] # 1.2679 (closest to 0 = smallest magnitude)
+rayleigh_quotient(A, [0.79, 0.58, 0.21])   # eigenvalue estimate for a given vector
+```
+
+`power_iteration` repeatedly multiplies by `A` and renormalizes; `inverse_iteration`
+runs the same loop on `(A - mu I)^{-1}`, so a shift near a known approximate eigenvalue
+refines it (and `mu = 0` targets the smallest magnitude). Both return `eigenvalue`,
+`eigenvector` (unit norm), `n_iter` and `converged`, and match the corresponding
+`jacobi_eigen` value to `1e-5`. The Rayleigh quotient `x'Ax / x'x` is the best
+eigenvalue estimate for any vector and is exact on a true eigenvector.
+
 SVD-based diagnostics summarize a matrix's conditioning and size:
 
 ```python
