@@ -31,6 +31,17 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.23.0] - 2026-09-13
+
+### Added
+- `cross_correlation.py`: FFT cross-correlation and lead-lag detection between two
+  series — `cross_correlation` (raw, over positive and negative lags),
+  `normalized_cross_correlation` (correlation coefficient in [-1, 1]), and
+  `lag_at_max_correlation` (the lag of best alignment). Cross-checked: the FFT result
+  matches a direct brute-force cross-correlation sum to ~1e-14, a known delay between
+  two series is recovered exactly, identical series peak at lag 0 with coefficient 1,
+  and the normalized values stay within [-1, 1].
+
 ## [2.22.0] - 2026-09-13
 
 ### Documentation

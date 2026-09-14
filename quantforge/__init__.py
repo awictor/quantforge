@@ -577,6 +577,11 @@ from .hilbert import (
     instantaneous_phase,
     instantaneous_frequency,
 )
+from .cross_correlation import (
+    cross_correlation,
+    normalized_cross_correlation,
+    lag_at_max_correlation,
+)
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -967,7 +972,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "2.22.0"
+__version__ = "2.23.0"
 
 __all__ = [
     "OptionType",
@@ -1825,6 +1830,9 @@ __all__ = [
     "envelope",
     "instantaneous_phase",
     "instantaneous_frequency",
+    "cross_correlation",
+    "normalized_cross_correlation",
+    "lag_at_max_correlation",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

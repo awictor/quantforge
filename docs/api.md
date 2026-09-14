@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.22.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.23.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -3104,6 +3104,35 @@ Auto-generated from `quantforge` v2.22.0 by `docs/gen_api.py` — do not edit by
 > such that discounting the *promised* cashflows at ``r + s`` (no explicit
 > default/recovery) gives the same value -- the bond's z-spread-like quote.
 > Solved by bisection (price is monotone decreasing in the spread).
+
+## cross_correlation
+
+### `cross_correlation(x, y, max_lag=None)`  _function_
+
+> Cross-correlation of ``x`` and ``y`` at lags ``-max_lag..max_lag`` via the FFT.
+>
+> Returns ``(lags, values)`` where ``values[i]`` is the raw cross-correlation
+> ``sum_n x[n + lags[i]] y[n]`` at ``lags[i]``. A positive lag slides ``x`` forward
+> relative to ``y``; the peak lag is where the two series line up best. ``max_lag``
+> defaults to ``len - 1``. Both inputs must be the same non-empty length.
+
+### `lag_at_max_correlation(x, y, max_lag=None)`  _function_
+
+> Lag (in samples) at which ``x`` and ``y`` are most positively correlated.
+>
+> The argmax of :func:`normalized_cross_correlation`. A positive result means ``x``
+> *leads* ``y`` by that many samples (shift ``x`` forward to align them); a negative
+> result means ``x`` lags ``y``. Also returns the peak correlation coefficient as
+> ``(lag, coefficient)``.
+
+### `normalized_cross_correlation(x, y, max_lag=None)`  _function_
+
+> Cross-correlation coefficient at each lag: dimensionless, in ``[-1, 1]``.
+>
+> Subtracts each series' mean and divides by ``sqrt(var_x * var_y) * n`` so the value
+> is a correlation coefficient -- ``1`` at the lag of perfect alignment, ``0`` for
+> uncorrelated series -- independent of the signals' amplitudes. Returns
+> ``(lags, values)``.
 
 ## cross_validation
 
