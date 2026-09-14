@@ -7299,6 +7299,28 @@ included), and `count_distinct_substrings` uses `sum(n - sa[r]) - sum(lcp)` — 
 length minus the prefixes already counted. All cross-checked against brute-force references
 (sorting suffixes, naive LCP, the substring set) over thousands of random strings.
 
+To index a whole *set* of strings for prefix lookups — autocomplete, dictionary membership
+— `Trie` stores them in a prefix tree, so every query costs only its own length:
+
+```python
+from quantforge import Trie
+
+t = Trie(["cat", "car", "card", "dog"])
+t.keys_with_prefix("ca")      # ['car', 'card', 'cat']
+t.count_prefix("car")         # 2 — 'car' and 'card'
+t.starts_with("do")           # True
+t.longest_prefix_of("cards")  # 'card' — longest stored key that prefixes the query
+t.contains("ca")              # False — a prefix, not a stored key
+```
+
+`insert`, `contains`, and `delete` manage membership (delete prunes branches that no
+longer lead to a key), while `starts_with`/`count_prefix`/`keys_with_prefix` answer prefix
+questions in time proportional to the prefix — `count_prefix` is `O(len(prefix))` thanks to
+a cached subtree count at each node — regardless of how many keys the trie holds.
+`longest_prefix_of` walks the query one character at a time and remembers the deepest stored
+key seen, the operation behind routing-table and tokenizer lookups. Verified against a plain
+set/list reference over 3000 random word sets with interleaved deletes.
+
 ## Data compression
 
 Two foundational lossless codes, both exact round-trips:

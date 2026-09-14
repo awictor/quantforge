@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.604.0] - 2026-09-14
+
+### Documentation
+- README: documented `Trie` in the String algorithms section after the suffix-array
+  routines -- prefix-tree membership, `starts_with`/`count_prefix`/`keys_with_prefix`, and
+  `longest_prefix_of`. All snippet values verified live.
+
 ## [1.603.0] - 2026-09-14
 
 ### Added
