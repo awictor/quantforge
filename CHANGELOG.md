@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.654.0] - 2026-09-14
+
+### Documentation
+- README: documented `bezier_point`, `bezier_curve`, `bezier_tangent`, and `bernstein` in
+  the Numerical utilities interpolation section (before the Chebyshev block) -- de Casteljau
+  Bezier evaluation and the Bernstein basis. All snippet values verified live.
+
 ## [1.653.0] - 2026-09-14
 
 ### Added

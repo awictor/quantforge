@@ -5660,6 +5660,13 @@ cd = lambda h: (math.sin(1 + h) - math.sin(1 - h)) / (2 * h)
 hs = [0.4, 0.2, 0.1, 0.05]
 neville([h * h for h in hs], [cd(h) for h in hs], 0.0)[0]   # 0.5403023059 ~ cos(1)
 
+# Bezier curves (de Casteljau): parametric curves from control points.
+from quantforge import bezier_point, bezier_curve, bezier_tangent
+bezier_point([0, 1, 0], 0.5)                       # 0.5 — scalar quadratic at t=0.5
+bezier_point([(0, 0), (1, 2), (2, 0)], 0.5)        # (1.0, 1.0) — a 2-D curve
+bezier_tangent([(0, 0), (1, 2), (2, 0)], 0.5)      # (2.0, 0.0) — derivative vector
+bezier_curve([0, 10], 5)                           # [0, 2.5, 5, 7.5, 10] — sample a line
+
 # Chebyshev approximation: spectral accuracy for smooth functions.
 from quantforge import chebyshev_fit, chebyshev_eval, chebyshev_derivative
 import math
@@ -5696,6 +5703,15 @@ algebra — `poly_mul` / `poly_divmod` (long division returning quotient and rem
 `gcd(p, p')` recovers the repeated-root factor. Coefficients are low-degree-first, and
 `poly_mul` is the exact direct product (use the FFT-based `convolve` for long
 polynomials).
+
+`bezier_point` evaluates a Bezier curve of any degree from its control points by de
+Casteljau's repeated-interpolation scheme — numerically stable and working on scalars or
+n-D coordinate tuples alike. `bezier_curve` samples it at evenly spaced parameters,
+`bezier_tangent` returns the derivative vector (the curve's degree-`n-1` control differences
+via `bezier_derivative_control`), and `bezier_subdivide` splits a curve at `t` into two
+exact sub-curves. The curve interpolates its first and last control points and, at
+`t = 0.5` of `[0, 1, 0]`, returns the Bernstein value `0.5`; `bernstein(n, i, t)` exposes the
+basis. Verified against the Bernstein-basis sum over thousands of random curves.
 
 Where `bisection`/`brent`/`newton` solve one scalar equation, `newton_system` and
 `broyden` solve a *system* `F(x) = 0` in several unknowns:
