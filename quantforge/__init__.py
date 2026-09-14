@@ -695,6 +695,7 @@ from .lambert import lambert_w0, lambert_wm1
 from .elliptic import agm, elliptic_k, elliptic_e
 from .bessel import bessel_j0, bessel_j1, bessel_jn, bessel_y0, bessel_y1
 from .fresnel import fresnel_c, fresnel_s, dawson
+from .airy import airy_ai, airy_bi
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1399,7 +1400,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "4.88.0"
+__version__ = "4.89.0"
 
 __all__ = [
     "OptionType",
@@ -2360,6 +2361,8 @@ __all__ = [
     "fresnel_c",
     "fresnel_s",
     "dawson",
+    "airy_ai",
+    "airy_bi",
     "Dual",
     "dual_derivative",
     "dual_gradient",

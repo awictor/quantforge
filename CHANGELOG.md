@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.703.0] - 2026-09-14
+
+### Added
+- `airy.py`: the Airy functions `airy_ai` and `airy_bi`, solving ``y'' = x y`` (the
+  turning-point equation of quantum mechanics and optics). Built from the two entire
+  power-series solutions with the standard constants; ``Ai`` decays for ``x > 0`` and ``Bi``
+  grows. Cross-checked against tabulated values (Ai/Bi at 0, ±1, 2), the defining ODE
+  (finite-difference), the Wronskian ``Ai Bi' - Ai' Bi = 1/pi``, and the first zeros of Ai.
+  Reliable on ``[-15, +inf)``; the series loses accuracy for very large negative ``x`` where
+  its terms cancel (documented).
+
 ## [1.702.0] - 2026-09-14
 
 ### Documentation

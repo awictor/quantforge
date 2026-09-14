@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.88.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.89.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -170,6 +170,16 @@ Auto-generated from `quantforge` v4.88.0 by `docs/gen_api.py` — do not edit by
 > is reported as ``(end_index, pattern)`` where ``end_index`` is the index of the match's
 > last character in the text (so the match is ``text[end_index - len(pattern) + 1 :
 > end_index + 1]``). Duplicate patterns are collapsed; empty patterns are ignored.
+
+## airy
+
+### `airy_ai(x)`  _function_
+
+> Airy function of the first kind ``Ai(x)``, solving ``y'' = x y`` with ``Ai -> 0`` as ``x -> inf``.
+
+### `airy_bi(x)`  _function_
+
+> Airy function of the second kind ``Bi(x)`` (the growing solution).
 
 ## alias_sampler
 
