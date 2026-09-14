@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.598.0] - 2026-09-14
+
+### Documentation
+- README: documented `maximum_bipartite_matching`, `maximum_matching_size`, and
+  `minimum_vertex_cover` in the Graph algorithms section after `max_flow`/`UnionFind` --
+  Hopcroft-Karp matching and the Konig vertex cover. All snippet values verified live.
+
 ## [1.597.0] - 2026-09-14
 
 ### Added
