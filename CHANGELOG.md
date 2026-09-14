@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.613.0] - 2026-09-14
+
+### Added
+- `walsh_hadamard.py`: `fwht`/`ifwht` are the fast Walsh-Hadamard transform (the transform
+  that diagonalizes XOR convolution) on a power-of-two-length sequence, and `xor_convolve`,
+  `and_convolve`, `or_convolve` compute the three bitwise convolutions
+  ``c[k] = sum_{i op j = k} a[i] b[j]`` in ``O(n log n)`` -- XOR via the Walsh-Hadamard
+  transform, AND/OR via the superset/subset zeta (Mobius) transforms. Integer inputs give
+  exact integer output. Cross-checked against brute-force bitwise-index enumeration over
+  4000 random sequence pairs for each of the three operations, plus `ifwht(fwht(a)) == a`
+  round-trips.
+
 ## [1.612.0] - 2026-09-14
 
 ### Documentation

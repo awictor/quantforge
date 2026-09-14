@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.98.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.99.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -17107,6 +17107,34 @@ Auto-generated from `quantforge` v3.98.0 by `docs/gen_api.py` — do not edit by
 > ``vrp`` (realized - implied; usually negative), ``ratio``
 > (realized / implied), and ``vol_premium`` (implied vol - realized vol, the
 > usual positive number quoted in vol points).
+
+## walsh_hadamard
+
+### `and_convolve(a, b)`  _function_
+
+> AND convolution: ``c[k] = sum_{i & j = k} a[i] b[j]`` (via superset zeta transform).
+
+### `fwht(a)`  _function_
+
+> In-place-style fast Walsh-Hadamard transform (unnormalized). Returns a new list.
+>
+> Length must be a power of two. ``ifwht(fwht(a)) == a`` after the ``1/n`` scaling.
+
+### `ifwht(a)`  _function_
+
+> Inverse Walsh-Hadamard transform (applies the ``1/n`` normalization).
+
+### `or_convolve(a, b)`  _function_
+
+> OR convolution: ``c[k] = sum_{i | j = k} a[i] b[j]`` (via subset zeta transform).
+
+### `xor_convolve(a, b)`  _function_
+
+> XOR convolution: ``c[k] = sum_{i ^ j = k} a[i] b[j]``.
+>
+> ``a`` and ``b`` must share a power-of-two length. Integer inputs give exact integer
+> output (the ``1/n`` division is exact because the Walsh transform's inverse sum is
+> divisible by ``n`` for integer data).
 
 ## wasserstein
 

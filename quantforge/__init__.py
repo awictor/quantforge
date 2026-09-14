@@ -583,6 +583,13 @@ from .scheduling import (
     activity_selection,
     min_rooms,
 )
+from .walsh_hadamard import (
+    fwht,
+    ifwht,
+    xor_convolve,
+    and_convolve,
+    or_convolve,
+)
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1287,7 +1294,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "3.98.0"
+__version__ = "3.99.0"
 
 __all__ = [
     "OptionType",
@@ -2113,6 +2120,11 @@ __all__ = [
     "weighted_interval_schedule",
     "activity_selection",
     "min_rooms",
+    "fwht",
+    "ifwht",
+    "xor_convolve",
+    "and_convolve",
+    "or_convolve",
     "Dual",
     "dual_derivative",
     "dual_gradient",
