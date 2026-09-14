@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.24.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.25.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -3898,6 +3898,27 @@ Auto-generated from `quantforge` v4.24.0 by `docs/gen_api.py` — do not edit by
 > ``q``-quantile with relative error at most ``alpha``. ``merge`` / ``+`` combine two
 > sketches built with the same ``alpha``. Memory grows only with the log-ratio of the
 > largest to smallest value seen, not with the number of points.
+
+## debruijn
+
+### `de_bruijn_sequence(alphabet_size, n)`  _function_
+
+> Return a de Bruijn sequence ``B(k, n)`` as a list of symbols (length ``k^n``).
+>
+> Every length-``n`` string over ``{0..k-1}`` occurs exactly once as a cyclic substring.
+> Built by the FKM algorithm: concatenate the Lyndon words whose length divides ``n``, in
+> lexicographic order.
+
+### `is_lyndon(word)`  _function_
+
+> True if ``word`` (a sequence) is a Lyndon word: strictly smaller than all rotations.
+
+### `lyndon_words(alphabet_size, max_len)`  _function_
+
+> Generate all Lyndon words over ``{0..alphabet_size-1}`` of length ``<= max_len``.
+>
+> Returns a list of tuples in lexicographic order (Duval's algorithm). A Lyndon word is a
+> nonempty string strictly smaller than all its proper rotations.
 
 ## decision_stump
 

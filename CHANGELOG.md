@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.639.0] - 2026-09-14
+
+### Added
+- `debruijn.py`: `de_bruijn_sequence(k, n)` builds a cyclic sequence of length ``k^n`` in
+  which every length-``n`` string over a ``k``-symbol alphabet appears exactly once, via the
+  Fredricksen-Kessler-Maiorana construction (Duval's Lyndon-word generation). `lyndon_words`
+  lists all Lyndon words up to a length, and `is_lyndon` tests a single word. Cross-checked:
+  the generated de Bruijn sequence contains every ``n``-tuple exactly once cyclically (all
+  ``k`` in 1..4, ``n`` in 1..5), the Lyndon words match a brute rotation test, and their
+  per-length counts match the necklace-counting formula.
+
 ## [1.638.0] - 2026-09-14
 
 ### Documentation

@@ -629,6 +629,7 @@ from .poly_mod import (
     poly_mul_mod,
     lagrange_interpolate_mod,
 )
+from .debruijn import de_bruijn_sequence, lyndon_words, is_lyndon
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1333,7 +1334,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "4.24.0"
+__version__ = "4.25.0"
 
 __all__ = [
     "OptionType",
@@ -2211,6 +2212,9 @@ __all__ = [
     "poly_add_mod",
     "poly_mul_mod",
     "lagrange_interpolate_mod",
+    "de_bruijn_sequence",
+    "lyndon_words",
+    "is_lyndon",
     "Dual",
     "dual_derivative",
     "dual_gradient",
