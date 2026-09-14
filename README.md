@@ -7089,6 +7089,29 @@ patterns there are. `find_all` returns the list, `find` is a lazy generator, and
 `contains_any` short-circuits at the first hit. Verified against a brute-force per-pattern
 search over 2000 random pattern-set/text cases.
 
+To *index* a single text for repeated substring queries, `suffix_array` sorts all its
+suffixes, and `lcp_array` (Kasai) records how much adjacent sorted suffixes share — the two
+structures behind fast search, longest-repeat, and distinct-substring counting:
+
+```python
+from quantforge import (suffix_array, lcp_array, substring_search,
+                        longest_repeated_substring, count_distinct_substrings)
+
+suffix_array("banana")               # [5, 3, 1, 0, 4, 2]
+lcp_array("banana")                  # [0, 1, 3, 0, 0, 2]
+substring_search("banana", "ana")    # [1, 3] — all occurrences, sorted
+longest_repeated_substring("banana") # 'ana'
+count_distinct_substrings("banana")  # 15
+```
+
+`suffix_array` is built by prefix doubling in `O(n log n)`; `substring_search` then binary-
+searches it for a pattern's occurrence block in `O(m log n)`, returning every start index.
+`longest_repeated_substring` reads off the deepest entry of the LCP array (the longest
+prefix two suffixes share, hence a substring that occurs at least twice, overlaps
+included), and `count_distinct_substrings` uses `sum(n - sa[r]) - sum(lcp)` — total suffix
+length minus the prefixes already counted. All cross-checked against brute-force references
+(sorting suffixes, naive LCP, the substring set) over thousands of random strings.
+
 ## Data compression
 
 Two foundational lossless codes, both exact round-trips:

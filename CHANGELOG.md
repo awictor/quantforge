@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.586.0] - 2026-09-14
+
+### Documentation
+- README: documented `suffix_array`, `lcp_array`, `substring_search`,
+  `longest_repeated_substring`, and `count_distinct_substrings` in the String algorithms
+  section after `AhoCorasick` -- prefix-doubling construction, binary-search occurrence
+  lookup, and the LCP-based repeat/distinct queries. All snippet values verified live on
+  the ``banana`` example.
+
 ## [1.585.0] - 2026-09-14
 
 ### Added
