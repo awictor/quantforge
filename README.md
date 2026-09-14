@@ -7601,6 +7601,27 @@ Edmonds-Karp (BFS-augmenting Ford-Fulkerson) on a `{node: {neighbor: capacity}}`
 reproducing the textbook value of `23`. `UnionFind` is exposed directly for clustering and
 connectivity work, with path compression and union by rank for near-constant operations.
 
+When edges carry a *cost* as well as a capacity, `min_cost_max_flow` finds the maximum flow
+that is cheapest among all maximum flows:
+
+```python
+from quantforge import min_cost_max_flow, MinCostMaxFlow
+
+edges = [(0, 1, 2, 1), (0, 2, 2, 3), (1, 3, 2, 1), (2, 3, 2, 1), (1, 2, 1, 1)]
+min_cost_max_flow(edges, 0, 3)    # (4, 12) — (max flow, minimum cost)
+
+m = MinCostMaxFlow()
+m.add_edge("s", "a", 3, 1).add_edge("a", "t", 3, 2)
+m.solve("s", "t")                 # (3, 9)
+```
+
+Edges are `(u, v, capacity, cost)`. It augments along a *shortest-cost* residual path each
+round (found by Bellman-Ford/SPFA, so negative-cost edges are fine) and pushes the path's
+bottleneck, until the sink is unreachable — returning the total flow and its least cost.
+`MinCostMaxFlow` is the incremental builder; `min_cost_max_flow` the one-shot convenience.
+The plain `max_flow` is the all-equal-cost special case, and the two agree on flow value.
+Cross-checked against brute integer-flow enumeration over thousands of small networks.
+
 Pairing up two sides of a graph — jobs to workers, slots to applicants — is the bipartite
 matching problem, and `maximum_bipartite_matching` solves it optimally:
 

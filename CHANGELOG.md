@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.666.0] - 2026-09-14
+
+### Documentation
+- README: documented `min_cost_max_flow` and `MinCostMaxFlow` in the Graph algorithms
+  section after `max_flow`/`UnionFind` -- least-cost maximum flow via successive
+  shortest-cost augmenting paths. All snippet values verified live.
+
 ## [1.665.0] - 2026-09-14
 
 ### Added
