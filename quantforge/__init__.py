@@ -599,6 +599,7 @@ from .binary_search import (
     ternary_search_int_max,
     ternary_search_int_min,
 )
+from .gf2_linalg import solve_gf2, gf2_rank, gf2_nullspace_basis
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1303,7 +1304,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "4.8.0"
+__version__ = "4.9.0"
 
 __all__ = [
     "OptionType",
@@ -2147,6 +2148,9 @@ __all__ = [
     "last_true",
     "ternary_search_int_max",
     "ternary_search_int_min",
+    "solve_gf2",
+    "gf2_rank",
+    "gf2_nullspace_basis",
     "Dual",
     "dual_derivative",
     "dual_gradient",

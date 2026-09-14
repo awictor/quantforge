@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.8.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.9.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -6650,6 +6650,28 @@ Auto-generated from `quantforge` v4.8.0 by `docs/gen_api.py` — do not edit by 
 > Perpendicular distance from point ``p`` to the *infinite* line through ``a`` and ``b``.
 >
 > Raises if ``a == b`` (no line defined).
+
+## gf2_linalg
+
+### `gf2_nullspace_basis(equations, n_vars)`  _function_
+
+> Return a basis for the nullspace ``{x : A x = 0}`` over GF(2).
+>
+> Each basis vector is a list of ``n_vars`` bits. The number of vectors is
+> ``n_vars - rank``. An empty list means only the zero vector satisfies the system.
+
+### `gf2_rank(rows)`  _function_
+
+> Rank over GF(2) of a matrix given as a list of bit-packed integer rows.
+
+### `solve_gf2(equations, rhs, n_vars)`  _function_
+
+> Solve an XOR linear system over GF(2). Returns one solution list, or ``None``.
+>
+> ``equations[i]`` is a bit-packed integer whose bit ``j`` (value ``1 << j``) marks that
+> variable ``j`` appears in equation ``i``; ``rhs[i]`` is that equation's right-hand side
+> (0 or 1). ``n_vars`` is the number of variables. Returns a list of ``n_vars`` bits
+> (free variables set to 0), or ``None`` if the system is inconsistent.
 
 ## gmm
 

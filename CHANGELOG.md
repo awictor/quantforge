@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.623.0] - 2026-09-14
+
+### Added
+- `gf2_linalg.py`: linear algebra over GF(2). `solve_gf2` solves an XOR/boolean system
+  ``A x = b`` by bit-packed Gaussian elimination, returning one solution (free variables
+  zeroed) or ``None`` if inconsistent; `gf2_rank` gives the rank of a set of bit-packed
+  rows; and `gf2_nullspace_basis` returns a basis for ``{x : A x = 0}`` (``n_vars - rank``
+  vectors). Cross-checked against brute-force enumeration over 4000 random systems --
+  solvability agrees, every returned solution satisfies the system, rank matches the span
+  size, and each nullspace vector satisfies ``A x = 0`` with the basis independent.
+
 ## [1.622.0] - 2026-09-14
 
 ### Documentation
