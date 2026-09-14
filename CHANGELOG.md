@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.63.0] - 2026-09-13
+
+### Added
+- `graph3.py`: graph centrality measures — `pagerank` (power iteration with teleportation
+  and dangling-node handling), `degree_centrality`, `closeness_centrality`, and
+  `betweenness_centrality` (Brandes). Cross-checked: PageRank sums to 1 and is uniform on
+  a symmetric ring, and the centralities match the known star/path structures (the star
+  center dominates degree/closeness/betweenness; the path midpoint has the highest
+  betweenness).
+
 ## [2.62.0] - 2026-09-13
 
 ### Documentation

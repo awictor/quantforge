@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.62.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.63.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -6220,6 +6220,40 @@ Auto-generated from `quantforge` v2.62.0 by `docs/gen_api.py` — do not edit by
 > ``nodes`` is an iterable of vertices; ``edges`` a list of ``(u, v, weight)``. Returns
 > ``(tree_edges, total_weight)`` where ``tree_edges`` is the chosen subset (sorted by
 > weight then endpoints). For a disconnected graph this is the minimum spanning forest.
+
+## graph3
+
+### `betweenness_centrality(graph, normalized=True)`  _function_
+
+> Betweenness centrality by Brandes' algorithm (unweighted, undirected/directed).
+>
+> The fraction of shortest paths (between all pairs) that pass through each node.
+> ``normalized`` divides by the number of pairs so scores are comparable across graph
+> sizes. Returns ``{node: centrality}``.
+
+### `closeness_centrality(graph)`  _function_
+
+> Closeness centrality: inverse of the mean shortest-path distance (unweighted).
+>
+> For each node, ``(reachable) / sum(distances)`` scaled by the fraction reachable
+> (Wasserman-Faust), so isolated or unreachable nodes score low. Uses BFS from every
+> node. Returns ``{node: centrality}``.
+
+### `degree_centrality(graph)`  _function_
+
+> Degree centrality: each node's neighbor count normalized by ``n - 1``.
+>
+> For an undirected graph pass a symmetric adjacency. Returns ``{node: centrality}`` in
+> ``[0, 1]`` (a node linked to all others scores 1).
+
+### `pagerank(graph, damping=0.85, tol=1e-10, max_iter=1000)`  _function_
+
+> PageRank scores by power iteration with teleportation.
+>
+> ``graph`` maps each node to its out-neighbors (list or ``{neighbor: weight}``).
+> ``damping`` is the follow-a-link probability (``1 - damping`` teleports uniformly).
+> Dangling nodes (no out-links) redistribute their mass uniformly. Returns
+> ``{node: score}`` summing to 1; converges when the L1 change drops below ``tol``.
 
 ## greeks2
 
