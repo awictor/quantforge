@@ -555,6 +555,11 @@ from .scc import (
     number_of_sccs,
 )
 from .two_sat import TwoSat
+from .bipartite_matching import (
+    maximum_bipartite_matching,
+    maximum_matching_size,
+    minimum_vertex_cover,
+)
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1259,7 +1264,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "3.82.0"
+__version__ = "3.83.0"
 
 __all__ = [
     "OptionType",
@@ -2061,6 +2066,9 @@ __all__ = [
     "is_strongly_connected",
     "number_of_sccs",
     "TwoSat",
+    "maximum_bipartite_matching",
+    "maximum_matching_size",
+    "minimum_vertex_cover",
     "Dual",
     "dual_derivative",
     "dual_gradient",

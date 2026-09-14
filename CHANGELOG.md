@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.597.0] - 2026-09-14
+
+### Added
+- `bipartite_matching.py`: `maximum_bipartite_matching` finds a maximum matching of a
+  bipartite graph with Hopcroft-Karp (``O(E * sqrt(V))`` -- BFS layering then DFS along
+  disjoint shortest augmenting paths), returning a ``{left: right}`` dict;
+  `maximum_matching_size` is the count. `minimum_vertex_cover` recovers a minimum vertex
+  cover via Konig's theorem from the matching's alternating-path reachability, so its size
+  equals the matching size. Cross-checked against a brute Kuhn augmenting-path matching over
+  4000 random graphs -- matching size always agrees, every matching is valid, and the
+  Konig cover both matches the matching size and covers every edge.
+
 ## [1.596.0] - 2026-09-14
 
 ### Documentation

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.82.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.83.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -853,6 +853,28 @@ Auto-generated from `quantforge` v3.82.0 by `docs/gen_api.py` — do not edit by
 > Args:
 >     steps: number of time steps. Higher = more accurate, O(steps^2) work.
 >     b: cost of carry (defaults to r). Dividend yield q enters as b = r - q.
+
+## bipartite_matching
+
+### `maximum_bipartite_matching(adjacency)`  _function_
+
+> Return a maximum matching as a ``{left: right}`` dict (Hopcroft-Karp).
+>
+> ``adjacency`` maps each left vertex to an iterable of the right vertices it can pair
+> with. Left and right vertex labels live in separate namespaces (they may overlap in
+> value without conflict). Only left vertices present as keys are matched.
+
+### `maximum_matching_size(adjacency)`  _function_
+
+> Size of a maximum bipartite matching.
+
+### `minimum_vertex_cover(adjacency)`  _function_
+
+> Return a minimum vertex cover ``(left_set, right_set)`` via Konig's theorem.
+>
+> Its total size equals the maximum matching size. Computed from the maximum matching by
+> marking left vertices reachable by alternating paths from unmatched left vertices: the
+> cover is the unmarked left vertices plus the marked right vertices.
 
 ## bkm
 
