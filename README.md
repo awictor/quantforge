@@ -5171,6 +5171,26 @@ refines it (and `mu = 0` targets the smallest magnitude). Both return `eigenvalu
 `jacobi_eigen` value to `1e-5`. The Rayleigh quotient `x'Ax / x'x` is the best
 eigenvalue estimate for any vector and is exact on a true eigenvector.
 
+`jacobi_eigen` and power iteration assume a *symmetric* matrix (real spectrum); a general
+real matrix can have complex eigenvalues, which `eigenvalues_general` recovers via the
+characteristic polynomial:
+
+```python
+from quantforge import (characteristic_polynomial, eigenvalues_general,
+                        determinant_from_charpoly)
+
+characteristic_polynomial([[2, 0], [0, 3]])   # [1, -5, 6] = x^2 - 5x + 6
+eigenvalues_general([[4, 1], [2, 3]])          # [2.0, 5.0]
+eigenvalues_general([[0, -1], [1, 0]])         # [-1j, 1j] — a rotation's complex pair
+```
+
+`characteristic_polynomial` uses the Faddeev-LeVerrier recurrence to build `det(xI - A)`
+from traces of matrix powers, and `eigenvalues_general` roots it with Durand-Kerner, so
+complex-conjugate pairs come back correctly (real eigenvalues as `float`, complex ones as
+`complex`). The eigenvalues sum to the trace and multiply to the determinant;
+`determinant_from_charpoly` reads that determinant straight off the constant term, a cheap
+cross-check against the LU value.
+
 SVD-based diagnostics summarize a matrix's conditioning and size:
 
 ```python

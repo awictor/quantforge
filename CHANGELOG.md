@@ -31,6 +31,14 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.82.0] - 2026-09-13
+
+### Documentation
+- README: documented the general eigenvalue solver in the Matrix utilities section, next
+  to power iteration — `characteristic_polynomial`, `eigenvalues_general`, and
+  `determinant_from_charpoly` with worked values including a complex pair. All snippet
+  values verified live.
+
 ## [2.81.0] - 2026-09-13
 
 ### Added
