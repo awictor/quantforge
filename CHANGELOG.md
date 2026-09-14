@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.7.0] - 2026-09-14
+
+### Added
+- `sde.py`: one-dimensional SDE integrators — `euler_maruyama` (strong order 0.5),
+  `milstein` (strong order 1.0, with the `b b'` correction), and a `gbm_paths` convenience
+  wrapper. Cross-checked: zero diffusion reduces to the deterministic ODE, the GBM
+  terminal sample mean approaches the analytic `x0 exp(mu t)`, Milstein's strong error is
+  smaller than Euler's against the exact GBM path on shared increments, and paths are
+  reproducible per seed.
+
 ## [3.6.0] - 2026-09-14
 
 ### Documentation

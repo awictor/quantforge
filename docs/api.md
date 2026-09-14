@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.6.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.7.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -13531,6 +13531,31 @@ Auto-generated from `quantforge` v3.6.0 by `docs/gen_api.py` — do not edit by 
 > 12=annual) until ``maturity_years`` is reached, then applies
 > :func:`adjust_business_day` with ``convention``. Returns the list of adjusted
 > period end dates (the start date itself is not included).
+
+## sde
+
+### `euler_maruyama(drift, diffusion, x0, t, n_steps, seed=1234567)`  _function_
+
+> Euler-Maruyama path of ``dX = drift(X, t) dt + diffusion(X, t) dW``.
+>
+> ``drift`` and ``diffusion`` are callables ``(x, t) -> float``. Returns the path as a
+> list of ``n_steps + 1`` states at times ``0, dt, ..., t``. Strong order 0.5.
+
+### `gbm_paths(mu, sigma, x0, t, n_steps, n_paths, seed=1234567, scheme='milstein')`  _function_
+
+> Simulate geometric Brownian motion paths (``dS = mu S dt + sigma S dW``).
+>
+> Convenience wrapper over :func:`milstein` (default) or :func:`euler_maruyama` with the
+> GBM drift and diffusion. Returns a list of ``n_paths`` state paths. The sample mean of
+> the terminal value approaches the analytic ``x0 exp(mu t)`` as ``n_paths`` grows.
+
+### `milstein(drift, diffusion, diffusion_prime, x0, t, n_steps, seed=1234567)`  _function_
+
+> Milstein path with the ``0.5 b b' (dW^2 - dt)`` correction (strong order 1.0).
+>
+> Adds the derivative of the diffusion ``diffusion_prime(x, t) = d b/d x`` to the
+> Euler-Maruyama step, giving strong order 1.0 for state-dependent diffusions. Same
+> signature otherwise; returns the ``n_steps + 1`` state path.
 
 ## sequence_accel
 
