@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.585.0] - 2026-09-14
+
+### Added
+- `suffix_array.py`: `suffix_array` builds a text's suffix array by prefix doubling
+  (``O(n log n)``), `lcp_array` computes the longest-common-prefix array via Kasai's
+  ``O(n)`` algorithm, and `rank_array` gives the inverse permutation. On top of them,
+  `substring_search` finds all occurrences of a pattern by binary search
+  (``O(m log n)``), `longest_repeated_substring` returns a longest substring occurring at
+  least twice (the deepest LCP), and `count_distinct_substrings` counts distinct
+  non-empty substrings (``sum(n - sa[r]) - sum(lcp)``). Cross-checked against brute-force
+  references over thousands of random strings -- sorted suffixes, naive LCP, exhaustive
+  substring occurrences, overlapping-occurrence repeats, and the substring set -- plus the
+  classic ``banana`` example (SA ``[5,3,1,0,4,2]``, LRS ``ana``, 15 distinct substrings).
+
 ## [1.584.0] - 2026-09-14
 
 ### Documentation

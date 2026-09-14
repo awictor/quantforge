@@ -532,6 +532,14 @@ from .count_min import CountMinSketch, BloomFilter
 from .heavy_hitters import MisraGries, SpaceSaving
 from .ddsketch import DDSketch
 from .aho_corasick import AhoCorasick
+from .suffix_array import (
+    suffix_array,
+    rank_array,
+    lcp_array,
+    substring_search,
+    longest_repeated_substring,
+    count_distinct_substrings,
+)
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1236,7 +1244,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "3.70.0"
+__version__ = "3.71.0"
 
 __all__ = [
     "OptionType",
@@ -2021,6 +2029,12 @@ __all__ = [
     "SpaceSaving",
     "DDSketch",
     "AhoCorasick",
+    "suffix_array",
+    "rank_array",
+    "lcp_array",
+    "substring_search",
+    "longest_repeated_substring",
+    "count_distinct_substrings",
     "Dual",
     "dual_derivative",
     "dual_gradient",

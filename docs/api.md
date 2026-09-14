@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.70.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.71.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -15423,6 +15423,49 @@ Auto-generated from `quantforge` v3.70.0 by `docs/gen_api.py` — do not edit by
 > with ``weights`` (non-negative, summing to one), ``r_squared`` (fraction of fund
 > variance explained by the style mix), and ``tracking_error`` (stdev of the
 > unexplained residual). Solved by projected-gradient descent on the simplex.
+
+## suffix_array
+
+### `count_distinct_substrings(text)`  _function_
+
+> Number of distinct non-empty substrings of ``text``.
+>
+> Equals ``sum(n - sa[r]) - sum(lcp)`` -- total suffix lengths minus the prefixes shared
+> with the previous sorted suffix (which would be double-counted).
+
+### `lcp_array(text, sa=None)`  _function_
+
+> Kasai LCP array: ``lcp[r]`` = longest common prefix of ``sa[r]`` and ``sa[r-1]``.
+>
+> ``lcp[0]`` is 0 by convention. Runs in ``O(n)`` given the suffix array (computed if not
+> supplied), exploiting that adjacent suffixes in text order lose at most one leading
+> character of shared prefix between successive positions.
+
+### `longest_repeated_substring(text)`  _function_
+
+> Return a longest substring occurring at least twice (``""`` if none repeats).
+>
+> The answer is the text slice at the maximum LCP value: the deepest shared prefix
+> between two adjacent sorted suffixes. Ties resolve to the first such position.
+
+### `rank_array(sa)`  _function_
+
+> Inverse of the suffix array: ``rank[i]`` is the sorted position of suffix ``i``.
+
+### `substring_search(text, pattern, sa=None)`  _function_
+
+> Return sorted start indices of every occurrence of ``pattern`` in ``text``.
+>
+> Binary-searches the suffix array for the block of suffixes that start with ``pattern``
+> (``O(m log n)``). An empty pattern matches at every position.
+
+### `suffix_array(text)`  _function_
+
+> Return the suffix array of ``text`` -- suffix start positions in sorted order.
+>
+> ``result[r]`` is the starting index of the ``r``-th smallest suffix. Built by prefix
+> doubling: sort by first character, then repeatedly refine ranks using pairs of ranks a
+> power-of-two apart, so ``O(log n)`` rounds of ``O(n)`` counting each.
 
 ## surface
 
