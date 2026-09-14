@@ -812,6 +812,13 @@ from .combinatorics_rank import (
     combination_unrank,
     combination_rank,
 )
+from .modular2 import (
+    legendre_symbol,
+    jacobi_symbol,
+    tonelli_shanks,
+    multiplicative_order,
+    primitive_root,
+)
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -1202,7 +1209,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "3.48.0"
+__version__ = "3.49.0"
 
 __all__ = [
     "OptionType",
@@ -2287,6 +2294,11 @@ __all__ = [
     "permutation_rank",
     "combination_unrank",
     "combination_rank",
+    "legendre_symbol",
+    "jacobi_symbol",
+    "tonelli_shanks",
+    "multiplicative_order",
+    "primitive_root",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

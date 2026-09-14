@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.48.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.49.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -9893,6 +9893,43 @@ Auto-generated from `quantforge` v3.48.0 by `docs/gen_api.py` — do not edit by
 >
 > A thin, explicit wrapper over fast binary exponentiation; a negative exponent inverts
 > the base first (requires ``gcd(base, mod) == 1``).
+
+## modular2
+
+### `jacobi_symbol(a, n)`  _function_
+
+> Jacobi symbol ``(a/n)`` for an odd positive ``n``: 0, 1, or -1.
+>
+> Generalizes the Legendre symbol to composite (odd) ``n`` by multiplicativity in the
+> denominator. Equals the Legendre symbol when ``n`` is prime.
+
+### `legendre_symbol(a, p)`  _function_
+
+> Legendre symbol ``(a/p)`` for an odd prime ``p``: 0, 1, or -1.
+>
+> ``1`` if ``a`` is a non-zero quadratic residue mod ``p``, ``-1`` if a non-residue,
+> ``0`` if ``a`` is divisible by ``p``. Uses Euler's criterion ``a^((p-1)/2) mod p``.
+
+### `multiplicative_order(a, n)`  _function_
+
+> Multiplicative order of ``a`` modulo ``n``: the least ``k > 0`` with ``a^k == 1``.
+>
+> Requires ``gcd(a, n) == 1``. Computes it from the factorization of Euler's totient of
+> a prime (here ``n`` is required prime for an exact ``phi = n - 1``); raises otherwise.
+
+### `primitive_root(p)`  _function_
+
+> A primitive root modulo the prime ``p`` (a generator of the multiplicative group).
+>
+> Returns the smallest ``g`` whose multiplicative order is ``p - 1``. Every power of a
+> primitive root covers all non-zero residues exactly once.
+
+### `tonelli_shanks(a, p)`  _function_
+
+> A square root of ``a`` modulo an odd prime ``p`` (Tonelli-Shanks).
+>
+> Returns ``r`` with ``r*r == a (mod p)`` (the other root is ``p - r``). Raises if ``a``
+> is a non-residue. ``a`` is reduced mod ``p`` first.
 
 ## moment_premium
 

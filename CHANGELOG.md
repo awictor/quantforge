@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.49.0] - 2026-09-14
+
+### Added
+- `modular2.py`: quadratic residues and multiplicative structure mod a prime —
+  `legendre_symbol`, `jacobi_symbol`, `tonelli_shanks` (modular square root),
+  `multiplicative_order`, and `primitive_root`. Cross-checked: the Legendre symbol matches
+  a brute residue set, Jacobi agrees with Legendre and is multiplicative, Tonelli-Shanks
+  returns a valid square root (and rejects non-residues), orders divide p-1, and a
+  primitive root generates the whole multiplicative group.
+
 ## [3.48.0] - 2026-09-14
 
 ### Documentation
