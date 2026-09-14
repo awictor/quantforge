@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.75.0] - 2026-09-13
+
+### Added
+- `lzw.py`: LZW dictionary compression and integer delta coding — `lzw_compress`,
+  `lzw_decompress`, `delta_encode`, and `delta_decode`. Cross-checked: LZW round-trips
+  exactly (including the code-equals-next-code special case and 500 random strings) and
+  emits fewer codes than characters on repetitive text; delta coding round-trips and
+  turns a slowly-varying series into small differences.
+
 ## [2.74.0] - 2026-09-13
 
 ### Documentation

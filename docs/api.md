@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.74.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.75.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -8748,6 +8748,36 @@ Auto-generated from `quantforge` v2.74.0 by `docs/gen_api.py` — do not edit by
 >
 > Factorizes ``A``, permutes ``b``, then forward- and back-substitutes. Returns the
 > solution vector. Raises on a singular matrix.
+
+## lzw
+
+### `delta_decode(deltas)`  _function_
+
+> Invert :func:`delta_encode`: cumulative sum of the deltas.
+
+### `delta_encode(data)`  _function_
+
+> Delta-encode a numeric sequence: first value, then successive differences.
+>
+> ``[a, b, c, ...] -> [a, b-a, c-b, ...]``. Slowly-varying data becomes small numbers
+> that compress better. Empty input yields an empty list.
+
+### `lzw_compress(data)`  _function_
+
+> LZW-compress a string into a list of integer codes.
+>
+> Starts with a dictionary of the distinct single characters (assigned codes in sorted
+> order) and grows it with each new substring seen, emitting the code of the longest
+> known prefix. Returns ``(codes, alphabet)`` -- the sorted initial alphabet is needed
+> to seed the decoder. Empty input yields ``([], [])``.
+
+### `lzw_decompress(codes, alphabet)`  _function_
+
+> Decompress LZW ``codes`` given the initial ``alphabet`` back to the string.
+>
+> Rebuilds the same dictionary the compressor grew, handling the special case where a
+> code refers to an entry being defined this step. Inverts :func:`lzw_compress`
+> exactly.
 
 ## mack
 
