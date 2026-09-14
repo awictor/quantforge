@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.28.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.29.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -3836,6 +3836,27 @@ Auto-generated from `quantforge` v4.28.0 by `docs/gen_api.py` — do not edit by
 > Parameters mirror :func:`~quantforge.turnbull_wakeman_asian`. Returns the
 > discounted option value; call and put satisfy
 > ``C - P = e^{-rT}(forward - strike)``.
+
+## cycle_detection
+
+### `brent_cycle(f, x0, max_iter=10000000)`  _function_
+
+> Return ``(mu, lam)`` for ``x -> f(x)`` from ``x0`` (Brent's algorithm).
+>
+> Same result as :func:`floyd_cycle` but typically fewer function evaluations: it compares
+> against a checkpoint whose distance doubles each phase to find ``lam`` first, then ``mu``.
+
+### `cycle_elements(f, x0)`  _function_
+
+> Return the list of states forming the cycle reached by iterating ``f`` from ``x0``.
+
+### `floyd_cycle(f, x0, max_iter=10000000)`  _function_
+
+> Return ``(mu, lam)`` for the iteration ``x -> f(x)`` from ``x0`` (Floyd's algorithm).
+>
+> ``mu`` is the index of the first element on the cycle (tail length); ``lam`` is the cycle
+> length. Uses two pointers at speed 1 and 2. Raises if no cycle is found within
+> ``max_iter`` steps (only possible for an unbounded state space).
 
 ## dagostino
 

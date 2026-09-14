@@ -637,6 +637,7 @@ from .stern_brocot import (
     best_rational_bounded,
     farey_sequence,
 )
+from .cycle_detection import floyd_cycle, brent_cycle, cycle_elements
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1341,7 +1342,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "4.28.0"
+__version__ = "4.29.0"
 
 __all__ = [
     "OptionType",
@@ -2227,6 +2228,9 @@ __all__ = [
     "stern_brocot_from_path",
     "best_rational_bounded",
     "farey_sequence",
+    "floyd_cycle",
+    "brent_cycle",
+    "cycle_elements",
     "Dual",
     "dual_derivative",
     "dual_gradient",

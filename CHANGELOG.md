@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.643.0] - 2026-09-14
+
+### Added
+- `cycle_detection.py`: `floyd_cycle` and `brent_cycle` find the ``(mu, lam)`` of an
+  iterated map ``x -> f(x)`` from a start value -- the tail length ``mu`` and cycle length
+  ``lam`` of the rho shape -- in ``O(mu + lam)`` time and ``O(1)`` memory (no visited set),
+  the machinery behind Pollard's rho and PRNG-period analysis. `cycle_elements` returns the
+  actual cycle. Cross-checked against a seen-set walk over 5000 random functional graphs:
+  both algorithms agree with the brute ``(mu, lam)`` and each other, and the returned cycle
+  is closed under ``f``.
+
 ## [1.642.0] - 2026-09-14
 
 ### Documentation
