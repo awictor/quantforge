@@ -4,6 +4,12 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.694.0] - 2026-09-14
+
+### Documentation
+- README: documented `e1`, `ei`, and `en` in the special-functions block after
+  `erfinv` -- the exponential integrals. All snippet values verified live.
+
 ## [1.693.0] - 2026-09-14
 
 ### Added

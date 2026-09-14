@@ -6984,6 +6984,23 @@ gives the Student-t, F and binomial CDFs; `erfinv` gives normal quantiles
 (`erfinv(y) = norm_ppf((1+y)/2) / sqrt(2)`). They satisfy `P + Q = 1`,
 `I_x(a,b) = 1 - I_{1-x}(b,a)`, and `erf(erfinv(y)) = y` to machine precision.
 
+The exponential integrals round out the special functions — `e1`, `ei`, and the generalized
+`en`:
+
+```python
+from quantforge import e1, ei, en
+
+e1(1.0)        # 0.2193839 — E1(x) = integral_x^inf e^-t/t dt
+ei(1.0)        # 1.8951178 — the principal-value Ei(x)
+en(2, 1.0)     # 0.1484955 — the order-2 generalized integral E_2(1)
+```
+
+`e1(x)` (for `x > 0`) uses the convergent power series near zero and a Lentz continued
+fraction for larger `x`; `ei(x)` is the real-line principal value (`ei(-x) = -e1(x)`); and
+`en(n, x)` climbs the recurrence `E_n = (e^-x - x E_{n-1})/(n-1)` from `E_1`. These appear in
+radiative transfer, well-test hydrology, and asymptotic expansions. Verified against
+numerical integration and standard reference values.
+
 The correlated-normal CDFs behind the multi-asset and compound-option models are public
 too:
 
