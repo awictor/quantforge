@@ -4539,6 +4539,28 @@ and a fast cosine, a low-pass keeps the slow one and removes the fast one, leavi
 amplitude near the surviving tone's `1.0`. `fir_bandpass` builds a band-pass as the
 difference of two low-pass filters and `fir_apply` runs the direct convolution.
 
+A FIR filter needs many taps for a sharp cutoff; an *IIR* filter reaches the same
+selectivity with a handful of coefficients by feeding output back — trading linear phase
+for efficiency. The Butterworth response is maximally flat in the passband (no ripple),
+designed here via the bilinear transform as a cascade of second-order sections (biquads)
+for numerical stability:
+
+```python
+from quantforge import butter_lowpass, sosfilt, iir_frequency_response
+
+sos = butter_lowpass(4, 0.1)          # 4th-order low-pass, -3 dB at 0.1 cycles/sample
+y = sosfilt(sos, x)                    # filter the signal
+iir_frequency_response(sos, [0.1])    # -> ~0.7071, the -3 dB point
+```
+
+A 4th-order low-pass comes out as 2 biquads with unit DC gain, exactly `0.7071` (-3 dB)
+at the cutoff, and a monotone rolloff into a deep stopband (a `0.3`-cycle tone comes
+through at amplitude `0.003`). `butter_highpass` is the mirror — zero DC gain, unit gain
+at Nyquist. Higher order rolls off faster, and every section is stable (poles inside the
+unit circle) for both even and odd orders. `sosfilt` runs the cascade in Direct Form II
+transposed and `iir_frequency_response` gives the magnitude response for checking a
+design.
+
 The same low-pass filters drive *sample-rate conversion*, which cannot be done by naively
 dropping or repeating samples — that folds high frequencies back as aliases or leaves
 spectral images. The correct operations filter at the new Nyquist limit:

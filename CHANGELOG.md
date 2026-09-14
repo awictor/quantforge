@@ -31,6 +31,14 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.34.0] - 2026-09-13
+
+### Documentation
+- README: documented the Butterworth IIR filters in the spectral section, between the
+  FIR and sample-rate subsections — the FIR/IIR trade-off, the biquad-cascade design,
+  the -3 dB / stopband landmarks, and the stability note. All snippet values verified
+  live.
+
 ## [2.33.0] - 2026-09-13
 
 ### Added
