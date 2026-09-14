@@ -84,3 +84,40 @@ def needleman_wunsch(a, b, match=1, mismatch=-1, gap=-1):
     if is_str:
         return f[la][lb], "".join(ai), "".join(bj)
     return f[la][lb], ai, bj
+
+
+def smith_waterman(a, b, match=2, mismatch=-1, gap=-1):
+    """Smith-Waterman local alignment: the best-scoring pair of substrings.
+
+    Like Needleman-Wunsch but scores never go below zero (a fresh local alignment can
+    start anywhere), and the traceback runs from the highest-scoring cell back to the
+    first zero. Returns ``(score, aligned_a, aligned_b)`` for the best local region.
+    ``score = 0`` means no positively-scoring common substring.
+    """
+    la, lb = len(a), len(b)
+    f = [[0] * (lb + 1) for _ in range(la + 1)]
+    best = 0
+    bi = bj = 0
+    for i in range(1, la + 1):
+        for j in range(1, lb + 1):
+            s = match if a[i - 1] == b[j - 1] else mismatch
+            f[i][j] = max(0, f[i - 1][j - 1] + s, f[i - 1][j] + gap, f[i][j - 1] + gap)
+            if f[i][j] > best:
+                best = f[i][j]
+                bi, bj = i, j
+    # Traceback from the best cell until a zero.
+    ai, bl = [], []
+    i, j = bi, bj
+    while i > 0 and j > 0 and f[i][j] > 0:
+        s = match if a[i - 1] == b[j - 1] else mismatch
+        if f[i][j] == f[i - 1][j - 1] + s:
+            ai.append(a[i - 1]); bl.append(b[j - 1]); i -= 1; j -= 1
+        elif f[i][j] == f[i - 1][j] + gap:
+            ai.append(a[i - 1]); bl.append("-"); i -= 1
+        else:
+            ai.append("-"); bl.append(b[j - 1]); j -= 1
+    ai.reverse(); bl.reverse()
+    is_str = isinstance(a, str) and isinstance(b, str)
+    if is_str:
+        return best, "".join(ai), "".join(bl)
+    return best, ai, bl

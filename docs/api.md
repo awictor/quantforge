@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.34.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.35.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -178,6 +178,15 @@ Auto-generated from `quantforge` v3.34.0 by `docs/gen_api.py` — do not edit by
 > per inserted gap ``'-'``. Returns the optimal score and the two gapped strings (as
 > ``str`` when the inputs are strings, else lists). Standard ``O(len(a)*len(b))`` DP with
 > traceback.
+
+### `smith_waterman(a, b, match=2, mismatch=-1, gap=-1)`  _function_
+
+> Smith-Waterman local alignment: the best-scoring pair of substrings.
+>
+> Like Needleman-Wunsch but scores never go below zero (a fresh local alignment can
+> start anywhere), and the traceback runs from the highest-scoring cell back to the
+> first zero. Returns ``(score, aligned_a, aligned_b)`` for the best local region.
+> ``score = 0`` means no positively-scoring common substring.
 
 ## american
 

@@ -31,6 +31,14 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.35.0] - 2026-09-14
+
+### Added
+- `alignment.py`: `smith_waterman` local alignment — the best-scoring pair of substrings
+  (scores floored at zero, traceback from the peak cell). Cross-checked: it recovers an
+  embedded common substring, its score always equals the returned alignment, the aligned
+  regions are substrings of the inputs, and no positive common region yields score 0.
+
 ## [3.34.0] - 2026-09-14
 
 ### Documentation
