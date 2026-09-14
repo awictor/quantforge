@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.592.0] - 2026-09-14
+
+### Documentation
+- README: documented `LCA` in the Graph algorithms section after the shortest-path
+  routines -- binary-lifting `query`, `depth`/`distance`/`is_ancestor`, and the iterative
+  build. All snippet values verified live.
+
 ## [1.591.0] - 2026-09-14
 
 ### Added

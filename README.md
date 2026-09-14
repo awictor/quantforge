@@ -7028,6 +7028,29 @@ single-target search with an admissible heuristic — on a 5×5 grid with the Ma
 heuristic it finds the optimal cost-`8` path, the same answer Dijkstra gives but exploring
 fewer nodes, and it reduces exactly to Dijkstra when the heuristic is zero.
 
+On a rooted tree, `LCA` answers lowest-common-ancestor and path-distance queries in
+`O(log n)` after an `O(n log n)` build:
+
+```python
+from quantforge import LCA
+
+#   a — b — {d, e},  a — c — f
+adj = {'a': ['b','c'], 'b': ['a','d','e'], 'c': ['a','f'],
+       'd': ['b'], 'e': ['b'], 'f': ['c']}
+tree = LCA(adj, root='a')
+tree.query('d', 'e')        # 'b' — deepest common ancestor
+tree.query('d', 'f')        # 'a'
+tree.distance('d', 'f')     # 4 edges on the path
+tree.is_ancestor('a', 'f')  # True
+```
+
+`LCA` uses binary lifting: the build precomputes each node's `2^j`-th ancestor, so a query
+lifts the deeper node to its partner's depth then lifts both in powers of two until they
+meet. `depth`, `distance` (edges between any two nodes, via
+`depth(u) + depth(v) - 2·depth(lca)`), and `is_ancestor` follow directly. The tree is built
+with an iterative DFS, so even a chain of thousands of nodes will not overflow recursion.
+Verified against a brute path-to-root reference over 2000 random trees.
+
 ## String algorithms
 
 Sequence comparison and pattern matching — on strings or any lists:
