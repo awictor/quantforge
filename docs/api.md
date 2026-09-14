@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.86.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.87.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -6531,6 +6531,20 @@ Auto-generated from `quantforge` v4.86.0 by `docs/gen_api.py` — do not edit by
 > ``sum_{k=0}^{t} w_k * series[t - k]`` (a growing backward window, so early
 > entries use fewer weights). ``d = 0`` returns the series unchanged and ``d = 1``
 > returns the first difference (with the first entry equal to ``series[0]``).
+
+## fresnel
+
+### `dawson(x)`  _function_
+
+> Dawson function ``D(x) = e^{-x^2} integral_0^x e^{t^2} dt``.
+
+### `fresnel_c(x)`  _function_
+
+> Fresnel cosine integral ``C(x) = integral_0^x cos(pi t^2 / 2) dt``.
+
+### `fresnel_s(x)`  _function_
+
+> Fresnel sine integral ``S(x) = integral_0^x sin(pi t^2 / 2) dt``.
 
 ## futures_convexity
 

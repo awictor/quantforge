@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.701.0] - 2026-09-14
+
+### Added
+- `fresnel.py`: the Fresnel integrals and the Dawson function. `fresnel_c` and `fresnel_s`
+  compute ``C(x)``/``S(x)`` (the Cornu-spiral integrals of ``cos``/``sin`` of ``pi t^2 / 2``)
+  by the convergent power series up to ``|x| = 4`` and the auxiliary-function asymptotics
+  beyond; `dawson` computes ``D(x) = e^{-x^2} integral_0^x e^{t^2} dt`` by series and
+  asymptotic expansion. Cross-checked against numerical integration over hundreds of random
+  arguments (fine-grid fuzz marked slow), odd symmetry, the ``x -> inf`` limits, and the
+  Dawson peak value. Raised the Fresnel series/asymptotic crossover from 1.6 to 4.0 after the
+  integration check exposed a ~1e-3 gap near ``x = 1.7``.
+
 ## [1.700.0] - 2026-09-14
 
 ### Documentation
