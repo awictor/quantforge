@@ -5577,6 +5577,25 @@ of row `i`. `solve_cyclic_tridiagonal` adds the corner couplings of a periodic s
 Sherman-Morrison correction over two Thomas passes. Both agree with a dense Gaussian solve
 to machine precision across thousands of random systems.
 
+A *Toeplitz* system — constant along each diagonal, as arises from an autocorrelation
+sequence — solves in `O(n^2)` with the Levinson recursion, and `levinson_durbin` fits an
+autoregressive model from that autocorrelation:
+
+```python
+from quantforge import solve_toeplitz, levinson_durbin
+
+solve_toeplitz([4, 1, -1], [1, 2, 3])         # [0.4, 0.2, 0.8]
+ar, err, refl = levinson_durbin([1.0, 0.5, 0.3, 0.1])
+ar                                             # [0.4732, 0.1125, -0.0982] — AR coefficients
+```
+
+`solve_toeplitz(r, b)` solves `T x = b` where `T` is the symmetric Toeplitz matrix with
+first row `r` (`r[0]` the diagonal), matching a dense solve but at `O(n^2)`.
+`levinson_durbin(autocorr)` returns the AR coefficients (which solve the Yule-Walker normal
+equations), the prediction-error variance, and the reflection (PARCOR) coefficients — the
+core of linear predictive coding and AR spectral estimation. Verified against a dense
+solve over thousands of random systems.
+
 When only *one* eigenpair is needed, power iteration is far cheaper than the full
 `jacobi_eigen` spectrum: `power_iteration` finds the dominant (largest-magnitude)
 eigenvalue and `inverse_iteration` the one nearest a shift `mu`:

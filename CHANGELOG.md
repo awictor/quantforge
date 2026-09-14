@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.678.0] - 2026-09-14
+
+### Documentation
+- README: documented `solve_toeplitz` and `levinson_durbin` in the Matrix utilities section
+  after the tridiagonal solvers -- O(n^2) Toeplitz solve and AR fitting from an
+  autocorrelation. All snippet values verified live.
+
 ## [1.677.0] - 2026-09-14
 
 ### Added
