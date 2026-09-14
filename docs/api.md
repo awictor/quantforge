@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.16.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.17.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -15093,6 +15093,36 @@ Auto-generated from `quantforge` v2.16.0 by `docs/gen_api.py` — do not edit by
 > absolute values receive average ranks. Returns a dict with ``statistic`` W (the
 > positive-rank sum), the ``z`` normal approximation (continuity-corrected, with the
 > tie correction to the variance) and the two-sided ``p_value``.
+
+## windows
+
+### `apply_window(x, window='hann')`  _function_
+
+> Multiply signal ``x`` by a named window (or a precomputed window list).
+>
+> ``window`` is ``"hann"``, ``"hamming"``, ``"blackman"``, ``"bartlett"``,
+> ``"rectangular"``, or a list of the same length as ``x``. Returns the tapered
+> signal.
+
+### `bartlett(n)`  _function_
+
+> Bartlett (triangular) window, zero at both ends.
+
+### `blackman(n)`  _function_
+
+> Blackman window: three-term cosine, very low sidelobes at a wider main lobe.
+
+### `hamming(n)`  _function_
+
+> Hamming window: ``0.54 - 0.46 cos(2 pi k/(n-1))`` (lower first sidelobe than Hann).
+
+### `hann(n)`  _function_
+
+> Hann (raised-cosine) window of length ``n``: ``0.5(1 - cos(2 pi k/(n-1)))``.
+
+### `rectangular(n)`  _function_
+
+> Rectangular (boxcar) window: all ones -- no tapering.
 
 ## wls
 

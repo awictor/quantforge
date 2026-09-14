@@ -31,6 +31,14 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.17.0] - 2026-09-13
+
+### Added
+- `windows.py`: spectral window functions `hann`, `hamming`, `blackman`, `bartlett`,
+  `rectangular`, and the `apply_window` helper. Cross-checked: correct endpoint/center
+  values, all symmetric, and applying a Hann window before the FFT suppresses the
+  spectral leakage of an off-bin sinusoid by orders of magnitude.
+
 ## [2.16.0] - 2026-09-13
 
 ### Documentation
