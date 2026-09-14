@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.711.0] - 2026-09-14
+
+### Added
+- `jacobi_sn`, `jacobi_cn`, `jacobi_dn`, `jacobi_am`: the Jacobi elliptic functions and the
+  amplitude, evaluated by descending-Landen / AGM iteration (Abramowitz & Stegun 16.4) for
+  parameter ``m = k^2`` in ``[0, 1]``. Cross-checked against the identities
+  ``sn^2+cn^2=1`` and ``dn^2+m sn^2=1``, the trig limit ``m=0`` and hyperbolic limit
+  ``m=1`` (``sn->tanh``, ``cn=dn->sech``), the quarter-period values ``sn(K)=1, cn(K)=0,
+  dn(K)=sqrt(1-m)``, the ``4K`` periodicity, ``sn'=cn*dn``, and numerical inversion of the
+  incomplete integral of the first kind.
+
 ## [1.710.0] - 2026-09-14
 
 ### Documentation

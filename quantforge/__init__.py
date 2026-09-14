@@ -699,6 +699,7 @@ from .airy import airy_ai, airy_bi
 from .zeta import riemann_zeta, dirichlet_eta
 from .hurwitz import hurwitz_zeta, polygamma
 from .polylog import polylog, dilog
+from .jacobi_elliptic import jacobi_sn, jacobi_cn, jacobi_dn, jacobi_am
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1403,7 +1404,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "4.96.0"
+__version__ = "4.97.0"
 
 __all__ = [
     "OptionType",
@@ -2372,6 +2373,10 @@ __all__ = [
     "polygamma",
     "polylog",
     "dilog",
+    "jacobi_sn",
+    "jacobi_cn",
+    "jacobi_dn",
+    "jacobi_am",
     "Dual",
     "dual_derivative",
     "dual_gradient",

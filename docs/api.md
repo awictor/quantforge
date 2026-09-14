@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.96.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.97.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -8824,6 +8824,28 @@ Auto-generated from `quantforge` v4.96.0 by `docs/gen_api.py` — do not edit by
 > sequence closest to ``y`` in weighted least squares. ``weights`` defaults to all
 > ones; ``increasing=False`` fits a non-increasing sequence. The fit is a step
 > function: tied blocks share their common weighted mean.
+
+## jacobi_elliptic
+
+### `jacobi_am(u, m, tol=1e-15, max_iter=64)`  _function_
+
+> Jacobi amplitude ``am(u, m)`` -- the angle ``phi`` with ``u = F(phi | m)``.
+>
+> AGM descent: build the sequence ``a_0 = 1, b_0 = sqrt(1-m), c_0 = sqrt(m)`` down to
+> ``c_n ~ 0``, then climb back, halving the accumulated angle. ``m`` is the parameter
+> ``k^2`` in ``[0, 1]``. Reduces to ``am(u, 0) = u``.
+
+### `jacobi_cn(u, m)`  _function_
+
+> Jacobi elliptic ``cn(u, m) = cos(am(u, m))``. Reduces to ``cos u`` at ``m = 0``.
+
+### `jacobi_dn(u, m)`  _function_
+
+> Jacobi elliptic ``dn(u, m) = sqrt(1 - m sin^2 am(u, m))``. Reduces to ``1`` at ``m = 0``.
+
+### `jacobi_sn(u, m)`  _function_
+
+> Jacobi elliptic ``sn(u, m) = sin(am(u, m))``. Reduces to ``sin u`` at ``m = 0``.
 
 ## jonckheere
 
