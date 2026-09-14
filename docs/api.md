@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.94.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.95.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -6135,6 +6135,38 @@ Auto-generated from `quantforge` v2.94.0 by `docs/gen_api.py` — do not edit by
 > ``sum_i w_i x_i^m = m!`` (the moments of the ``e^{-x}`` density). Exact for
 > polynomials up to degree ``2n - 1``. Nodes are positive and returned in
 > increasing order.
+
+## geo
+
+### `cross_track_distance(lat, lon, lat1, lon1, lat2, lon2, radius=6371.0088)`  _function_
+
+> Signed distance of point ``(lat, lon)`` from the great circle through 1 and 2.
+>
+> Positive when the point lies to the *right* of the path direction (1 -> 2), negative
+> to the left; magnitude is the perpendicular great-circle distance. Useful for "how far
+> off the route am I".
+
+### `destination_point(lat, lon, bearing, distance, radius=6371.0088)`  _function_
+
+> Destination ``(lat, lon)`` reached from a start point on a given bearing/distance.
+>
+> Follows the great circle from ``(lat, lon)`` heading ``bearing`` degrees for
+> ``distance`` (same units as ``radius``). Returns degrees; the inverse of
+> :func:`haversine_distance` / :func:`initial_bearing`.
+
+### `haversine_distance(lat1, lon1, lat2, lon2, radius=6371.0088)`  _function_
+
+> Great-circle distance between two lat/lon points (haversine), in ``radius`` units.
+>
+> Numerically stable for small distances (unlike the spherical law of cosines). Inputs
+> in degrees; returns kilometres by default.
+
+### `initial_bearing(lat1, lon1, lat2, lon2)`  _function_
+
+> Initial (forward) bearing from point 1 to point 2 along the great circle, degrees.
+>
+> The compass bearing to steer at the start of the path, in ``[0, 360)`` clockwise from
+> north. It changes along a great circle, so this is the *initial* heading.
 
 ## geometry
 

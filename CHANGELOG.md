@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.95.0] - 2026-09-13
+
+### Added
+- `geo.py`: great-circle geodesy on a spherical Earth — `haversine_distance`,
+  `initial_bearing`, `destination_point`, and `cross_track_distance`. Cross-checked:
+  known city-pair distances (London-Paris ~344 km, NYC-LA ~3936 km), distance symmetry,
+  a destination/distance/bearing round-trip over 500 random points, cardinal bearings
+  (due north 0, due east 90), and a cross-track distance of ~111 km per degree off a
+  meridian.
+
 ## [2.94.0] - 2026-09-13
 
 ### Documentation
