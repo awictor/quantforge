@@ -31,6 +31,14 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.14.0] - 2026-09-14
+
+### Documentation
+- README: documented the categorical association measures in the hypothesis-testing
+  section, next to the chi-square independence test — `cramers_v`, `phi_coefficient`,
+  `tschuprow_t`, and `contingency_coefficient` with worked values. All snippet values
+  verified live.
+
 ## [3.13.0] - 2026-09-14
 
 ### Added

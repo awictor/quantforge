@@ -3907,6 +3907,24 @@ binomial_test(k=8, n=10, prob=0.5)                        # exact binomial
 the binomial test is exact (no normal approximation), and the discrete p-values
 come from the same gamma/beta identities behind the distribution CDFs.
 
+`chi_square_independence_test` says *whether* two categorical variables are associated;
+the association measures say *how strongly*, on a size-independent `[0, 1]` scale:
+
+```python
+from quantforge import cramers_v, phi_coefficient, contingency_coefficient
+
+cramers_v([[50, 0], [0, 50]])          # 1.0 — perfect association
+phi_coefficient([[10, 20], [20, 40]])  # 0.0 — proportional rows are independent
+cramers_v([[20,5,5],[5,20,5],[5,5,20]])# 0.5 — moderate association on a 3x3 table
+```
+
+`cramers_v` is the general r x c effect size (`sqrt(chi2 / (n * min(r-1, c-1)))`), `0`
+under independence and `1` for a perfect association; `phi_coefficient` is its 2x2 special
+case (equal to Cramer's V there and to the closed-form `(ad-bc)` phi). `tschuprow_t` is an
+alternative normalization equal to V on square tables, and `contingency_coefficient`
+(`sqrt(chi2/(chi2+n))`) is Pearson's, which never quite reaches 1. All are built from the
+same Pearson chi-square as the independence test.
+
 ANOVA assumes equal group variances; `levene_test` and `bartlett_test` check that:
 
 ```python
