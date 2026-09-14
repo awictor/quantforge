@@ -675,6 +675,7 @@ from .rotation import (
     euler_to_matrix,
     matrix_to_euler,
 )
+from .so3 import rodrigues, so3_log, hat, unhat
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1379,7 +1380,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "4.58.0"
+__version__ = "4.59.0"
 
 __all__ = [
     "OptionType",
@@ -2302,6 +2303,10 @@ __all__ = [
     "quat_to_euler",
     "euler_to_matrix",
     "matrix_to_euler",
+    "rodrigues",
+    "so3_log",
+    "hat",
+    "unhat",
     "Dual",
     "dual_derivative",
     "dual_gradient",

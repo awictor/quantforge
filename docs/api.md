@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.58.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.59.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -15125,6 +15125,24 @@ Auto-generated from `quantforge` v4.58.0 by `docs/gen_api.py` — do not edit by
 ### `sliding_window_sum(values, k)`  _function_
 
 > Sum of each length-``k`` window in ``O(n)`` (running sum), ``n - k + 1`` values.
+
+## so3
+
+### `hat(v)`  _function_
+
+> Skew-symmetric matrix of a 3-vector: ``hat(v) w == cross(v, w)``.
+
+### `rodrigues(omega)`  _function_
+
+> Exponential map: rotation vector ``omega`` -> 3x3 rotation matrix (Rodrigues' formula).
+
+### `so3_log(R)`  _function_
+
+> Logarithm map: rotation matrix ``R`` -> rotation vector ``omega`` (axis * angle).
+
+### `unhat(m)`  _function_
+
+> Inverse of :func:`hat`: the 3-vector of a skew-symmetric matrix.
 
 ## sobol
 

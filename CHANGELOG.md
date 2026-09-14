@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.673.0] - 2026-09-14
+
+### Added
+- `so3.py`: the SO(3) exponential/logarithm map. `rodrigues` exponentiates a *rotation
+  vector* (axis * angle) to a 3x3 rotation matrix via Rodrigues' formula, `so3_log` inverts
+  it (with the near-zero and near-pi branches handled), and `hat`/`unhat` convert between a
+  3-vector and its skew-symmetric matrix. Cross-checked over 5000 random rotations that the
+  matrix is orthogonal, agrees with the quaternion path, and `rodrigues(so3_log(R)) == R`,
+  plus `hat(v) w == cross(v, w)` and the small-angle and pi cases.
+
 ## [1.672.0] - 2026-09-14
 
 ### Documentation
