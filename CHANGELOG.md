@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.714.0] - 2026-09-14
+
+### Documentation
+- README: documented the Carlson symmetric integrals `carlson_rf`/`rc`/`rd`/`rj` and the
+  incomplete Legendre integrals `elliptic_f`/`elliptic_e_incomplete`/`elliptic_pi` in the
+  special-functions block after the Jacobi note -- the duplication iteration, the Legendre
+  build-up, and reduction to complete K/E. All snippet values verified live.
+
 ## [1.713.0] - 2026-09-14
 
 ### Added

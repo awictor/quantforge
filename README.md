@@ -7180,6 +7180,31 @@ Landen / AGM iteration (Abramowitz & Stegun 16.4, quadratic convergence); then
 They satisfy `sn**2 + cn**2 = 1`, `dn**2 + m*sn**2 = 1`, `sn' = cn*dn`, and are periodic with
 period `4K(m)`. Cross-checked against all of those plus numerical inversion of `F(phi | m)`.
 
+For the *incomplete* elliptic integrals the library uses Carlson's symmetric forms
+`carlson_rf`, `carlson_rc`, `carlson_rd`, `carlson_rj` -- the numerically stable modern basis --
+and builds the Legendre integrals `elliptic_f`, `elliptic_e_incomplete`, `elliptic_pi` on top:
+
+```python
+from quantforge import (carlson_rf, carlson_rd, carlson_rj,
+                        elliptic_f, elliptic_e_incomplete, elliptic_pi)
+
+carlson_rf(1, 2, 3)                 # 0.7269459354689083
+carlson_rd(1, 2, 3)                 # 0.29046028102899063
+carlson_rj(1, 2, 3, 4)              # 0.23984809974956767
+
+elliptic_f(1.0, 0.5)                # 1.0832167728451687  (first kind,  F(phi|m))
+elliptic_e_incomplete(1.0, 0.5)     # 0.92732988362444    (second kind, E(phi|m))
+elliptic_pi(0.3, 1.0, 0.5)          # 1.1923254369345582  (third kind,  Pi(n;phi|m))
+```
+
+Each `R_x` is evaluated by the duplication-theorem iteration (Carlson 1979 / Numerical Recipes
+6.11), which converges quadratically, then the Legendre forms follow from
+`F(phi|m) = sin(phi) R_F(cos^2, 1 - m sin^2, 1)` and its `R_D`/`R_J` companions. `elliptic_f`
+and `elliptic_e_incomplete` reduce to the complete `elliptic_k`/`elliptic_e` at `phi = pi/2`,
+and `elliptic_pi(0, .)` collapses to `elliptic_f`. Verified against the symmetric-form spot
+values (`R_F(x,x,x)=1/sqrt(x)`, `R_J(x,y,z,z)=R_D`), numerical integration of all three
+Legendre forms, and those complete-integral limits.
+
 The correlated-normal CDFs behind the multi-asset and compound-option models are public
 too:
 
