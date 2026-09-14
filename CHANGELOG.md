@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.4.0] - 2026-09-14
+
+### Documentation
+- README: documented the weighted descriptive statistics in the Numerical utilities
+  section, next to the streaming moments — `weighted_mean`, `weighted_std`,
+  `weighted_median`, and the rest with worked values. All snippet values verified live.
+
 ## [3.3.0] - 2026-09-14
 
 ### Added

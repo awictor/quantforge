@@ -6085,6 +6085,23 @@ splitting a sample across workers and merging their accumulators reproduces the
 single-pass result to ~1e-10 — the associativity that makes it a true parallel
 reduction for large or distributed data.
 
+When each observation carries a weight — reliability, sampling, or scenario probability —
+the weighted summaries apply:
+
+```python
+from quantforge import weighted_mean, weighted_std, weighted_median
+
+weighted_mean([1, 2, 3], [1, 1, 4])       # 2.5 — the heavy third value pulls it up
+weighted_median([1, 2, 3], [1, 1, 10])    # 2.82 — mass concentrated near 3
+weighted_std([1, 2, 3], [1, 1, 4])        # reliability-weight bias-corrected
+```
+
+`weighted_mean`, `weighted_variance`/`weighted_std`, `weighted_quantile`, and
+`weighted_median` normalize the weights internally (they need not sum to 1). Equal weights
+reproduce the ordinary statistics, and integer weights match the statistics of the
+replicated sample exactly; the unbiased variance uses the reliability-weight correction
+`V1 / (V1^2 - V2)`.
+
 Quantiles need sorting — unless you estimate them online. `P2Quantile` tracks a single
 quantile in O(1) memory (no data stored), and `reservoir_sample` draws a uniform sample
 from a stream of unknown length in one pass:
