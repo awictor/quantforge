@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.04.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.05.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -885,6 +885,38 @@ Auto-generated from `quantforge` v5.04.0 by `docs/gen_api.py` — do not edit by
 ### `bessel_y1(x)`  _function_
 
 > Bessel function of the second kind, order 1 (``x > 0``).
+
+## bessel2
+
+### `bessel_in(n, x)`  _function_
+
+> Modified Bessel function of the first kind ``I_n(x)`` for integer ``n >= 0``.
+>
+> ``n = 0, 1`` use the A&S approximations in :mod:`quantforge.von_mises`; higher orders use
+> downward recurrence ``I_{k-1} = I_{k+1} + (2k/x) I_k`` normalized against ``I0``.
+> ``I_n(x) = I_n(-x)`` for even ``n`` and ``-`` for odd; ``I_n(0) = [n == 0]``.
+
+### `bessel_kn(n, x)`  _function_
+
+> Modified Bessel function of the second kind ``K_n(x)`` for integer ``n >= 0``, ``x > 0``.
+>
+> ``K0``/``K1`` use the A&S polynomial approximations; higher orders use the stable upward
+> recurrence ``K_{k+1} = K_{k-1} + (2k/x) K_k``. Singular as ``x -> 0``.
+
+### `spherical_bessel_j(n, x)`  _function_
+
+> Spherical Bessel function of the first kind ``j_n(x)``.
+>
+> ``j_0 = sin(x)/x``, ``j_1 = sin(x)/x^2 - cos(x)/x``, and
+> ``j_{k+1} = (2k+1)/x * j_k - j_{k-1}``. Uses that upward recurrence when ``n <= x`` (stable
+> there) and downward Miller recurrence otherwise. ``j_n(0) = 1`` if ``n == 0`` else ``0``.
+
+### `spherical_bessel_y(n, x)`  _function_
+
+> Spherical Bessel function of the second kind ``y_n(x)`` (a.k.a. spherical Neumann).
+>
+> ``y_0 = -cos(x)/x``, ``y_1 = -cos(x)/x^2 - sin(x)/x``, then stable upward recurrence
+> ``y_{k+1} = (2k+1)/x * y_k - y_{k-1}``. Singular at ``x = 0``.
 
 ## bezier
 

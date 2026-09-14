@@ -717,6 +717,12 @@ from .orthogonal_polys import (
     chebyshev_t,
     chebyshev_u,
 )
+from .bessel2 import (
+    spherical_bessel_j,
+    spherical_bessel_y,
+    bessel_in,
+    bessel_kn,
+)
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1421,7 +1427,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "5.04.0"
+__version__ = "5.05.0"
 
 __all__ = [
     "OptionType",
@@ -2409,6 +2415,10 @@ __all__ = [
     "laguerre_l",
     "chebyshev_t",
     "chebyshev_u",
+    "spherical_bessel_j",
+    "spherical_bessel_y",
+    "bessel_in",
+    "bessel_kn",
     "Dual",
     "dual_derivative",
     "dual_gradient",

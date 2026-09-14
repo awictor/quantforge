@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.719.0] - 2026-09-14
+
+### Added
+- `spherical_bessel_j`, `spherical_bessel_y`, `bessel_in`, `bessel_kn`: spherical Bessel
+  functions ``j_n``/``y_n`` and integer-order modified Bessel functions ``I_n``/``K_n``,
+  extending the cylindrical ``J``/``Y`` in `bessel` and the ``I0``/``I1`` in `von_mises`.
+  ``j_n`` uses upward/downward (Miller) recurrence, ``y_n`` upward, ``I_n`` normalized downward
+  recurrence, ``K_n`` upward from A&S ``K0``/``K1``. Cross-checked against the explicit low-order
+  forms, the series ``I_n = sum (x/2)^{2k+n}/(k!(k+n)!)``, the integral ``K_n = int e^{-x cosh t}
+  cosh(nt) dt``, and both Wronskians (``j_n y_n' - j_n' y_n = 1/x^2``,
+  ``I_n K_n' - I_n' K_n = -1/x``).
+
 ## [1.718.0] - 2026-09-14
 
 ### Documentation
