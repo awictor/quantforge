@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.624.0] - 2026-09-14
+
+### Documentation
+- README: documented `solve_gf2`, `gf2_rank`, and `gf2_nullspace_basis` in the Number theory
+  section after `XorBasis` -- bit-packed Gaussian elimination over GF(2), inconsistency
+  detection, rank, and nullspace basis. All snippet values verified live.
+
 ## [1.623.0] - 2026-09-14
 
 ### Added

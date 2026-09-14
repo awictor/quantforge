@@ -6985,6 +6985,26 @@ against), `can_represent` tests subset-XOR membership, `rank`/`count_distinct` g
 dimension and the `2^rank` reachable values, and `kth_smallest` indexes the sorted reachable
 set. Verified against brute subset-XOR enumeration over 4000 random value sets.
 
+Full linear systems over GF(2) — each equation an XOR of boolean variables equal to 0 or 1
+— are solved by `solve_gf2`, with `gf2_rank` and `gf2_nullspace_basis` for the structure:
+
+```python
+from quantforge import solve_gf2, gf2_rank, gf2_nullspace_basis
+
+# bit j of an equation mask marks variable j; rhs is the 0/1 right-hand side
+solve_gf2([0b011, 0b110, 0b001], [1, 0, 1], 3)   # [1, 0, 0]
+solve_gf2([0b1, 0b1], [0, 1], 1)                 # None — 0 == 1 is inconsistent
+gf2_rank([0b001, 0b010, 0b100])                  # 3
+gf2_nullspace_basis([0b0011, 0b1100], 4)         # [[1,1,0,0], [0,0,1,1]]
+```
+
+`solve_gf2` runs Gaussian elimination with rows bit-packed into integers, so each
+elimination step is a single XOR; it returns one solution (free variables set to 0) or
+`None` when the system is inconsistent. `gf2_rank` counts independent rows, and
+`gf2_nullspace_basis` returns `n_vars - rank` vectors spanning `{x : A x = 0}` — the tools
+behind lights-out puzzles, linear-code decoding, and cycle-space computations. Verified
+against brute-force enumeration over 4000 random systems.
+
 Any linear recurrence advances by a fixed matrix, so `linear_recurrence_nth` reaches the
 `n`-th term in `O(log n)` matrix multiplies — `matrix_power` does the exponentiation, and
 `fibonacci` is the canonical case:
