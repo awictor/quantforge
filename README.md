@@ -5596,6 +5596,25 @@ equations), the prediction-error variance, and the reflection (PARCOR) coefficie
 core of linear predictive coding and AR spectral estimation. Verified against a dense
 solve over thousands of random systems.
 
+To *align* two paired 3-D point sets, `kabsch` finds the rigid transform (rotation +
+translation) minimizing their RMSD:
+
+```python
+from quantforge import kabsch
+
+P = [[1, 0, 0], [0, 2, 0], [0, 0, 3], [1, 1, 1]]
+Q = [[-p[1] + 5, p[0], p[2]] for p in P]   # P rotated 90 deg about z, then shifted +5 in x
+R, t, rmsd = kabsch(P, Q)
+rmsd                                        # ~0 — an exact rigid match
+```
+
+`kabsch(P, Q)` centres both sets, takes the SVD of their cross-covariance, and reads off the
+rotation — with a reflection correction so `R` is always a proper rotation (determinant +1).
+It returns the rotation matrix, the translation, and the residual RMSD; a known
+rotation-plus-translation is recovered to machine precision, and noisy data gives a small
+positive RMSD. This is the workhorse of structure superposition and point-cloud
+registration. Verified over thousands of random rigid transforms.
+
 When only *one* eigenpair is needed, power iteration is far cheaper than the full
 `jacobi_eigen` spectrum: `power_iteration` finds the dominant (largest-magnitude)
 eigenvalue and `inverse_iteration` the one nearest a shift `mu`:
