@@ -6228,6 +6228,29 @@ definiteness. Use `bfgs` for smooth local refinement — often as a fast polish 
 global method (`differential_evolution` or `simulated_annealing`) has located the right
 basin.
 
+`lbfgs` is the limited-memory cousin of `bfgs`: instead of the full `n x n` inverse-Hessian it
+keeps only the last `m` correction pairs and rebuilds the search direction with Nocedal's
+two-loop recursion, so memory is `O(m n)` rather than `O(n^2)`. That is what makes it the
+standard minimizer for large-scale smooth problems (thousands of variables):
+
+```python
+from quantforge import lbfgs, reverse_gradient
+
+lbfgs(lambda v: (v[0] - 3) ** 2 + (v[1] + 1) ** 2, [0.0, 0.0])["x"]   # [3.0, -1.0]
+lbfgs(lambda v: (1 - v[0]) ** 2 + 100 * (v[1] - v[0] ** 2) ** 2,
+      [-1.2, 1.0])["x"]                                               # [1.0, 1.0], 36 iters
+
+# hand it an analytic gradient (e.g. from reverse-mode autodiff) for speed and accuracy
+f = lambda v: (v[0] - 1) ** 2 + (v[1] + 2) ** 2 + 0.5 * v[0] * v[1]
+lbfgs(f, [5.0, 5.0], grad=lambda x: reverse_gradient(f, x))["x"]      # [1.6, -2.4]
+```
+
+The line search enforces the *strong Wolfe* conditions (bracket-and-zoom), which keeps every
+stored `(s, y)` pair positive-definite; a stale direction falls back to steepest descent and
+clears the history. Pass `grad=` to supply an analytic gradient — pairing `lbfgs` with `Var`/
+`reverse_gradient` gives a fully hand-rolled gradient-descent stack — otherwise central
+differences are used. Use `bfgs` for a few tens of variables and `lbfgs` once `n` grows.
+
 `levenberg_marquardt` needs only the model function -- the residual Jacobian is
 taken numerically -- and converges from a poor starting guess, making it the
 general calibration engine (vol surface, curve, or any parametric fit).

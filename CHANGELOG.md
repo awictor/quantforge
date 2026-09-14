@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.724.0] - 2026-09-14
+
+### Documentation
+- README: documented `lbfgs` in the optimization block after `bfgs` -- the two-loop recursion,
+  the strong-Wolfe line search, the `grad=` analytic-gradient hook (pairing with
+  `reverse_gradient`), and when to prefer it over `bfgs`. All snippet values verified live.
+
 ## [1.723.0] - 2026-09-14
 
 ### Added
