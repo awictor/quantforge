@@ -6190,6 +6190,25 @@ uniform on a symmetric ring. `degree_centrality` normalizes neighbor counts,
 (Brandes' algorithm) counts how often a node lies on shortest paths — the hub of a star
 dominates all three, and the middle of a path has the highest betweenness (`0.667`).
 
+Dijkstra assumes non-negative weights and a single source; three more shortest-path
+routines cover the rest:
+
+```python
+from quantforge import bellman_ford, floyd_warshall, a_star
+
+g = {'A': {'B': 4, 'C': 5}, 'B': {'C': -3}, 'C': {'D': 2}, 'D': {}}
+bellman_ford(g, 'A')[0]                    # {'A':0,'B':4,'C':1,'D':3} — negative edge OK
+floyd_warshall(g)['A']['D']                # 3.0, all-pairs distances
+a_star(grid, start, goal, heuristic)       # heuristic-guided point-to-point
+```
+
+`bellman_ford` handles negative edge weights and raises on a reachable negative cycle
+(and agrees with Dijkstra when all weights are non-negative). `floyd_warshall` computes
+every pairwise distance in `O(V³)`, matching per-source Dijkstra. `a_star` speeds up a
+single-target search with an admissible heuristic — on a 5×5 grid with the Manhattan
+heuristic it finds the optimal cost-`8` path, the same answer Dijkstra gives but exploring
+fewer nodes, and it reduces exactly to Dijkstra when the heuristic is zero.
+
 ## Probability distributions
 
 Gamma, chi-square, Poisson, F and binomial distributions built on those special
