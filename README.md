@@ -5518,6 +5518,25 @@ component within the sweep, so it typically converges in about half the iteratio
 `jacobi`. All three return `x`, `residual_norm` and `n_iter`, and agree with the direct
 `lu_solve` to machine precision on a well-conditioned system.
 
+A *tridiagonal* system — nonzero only on the diagonal and its two neighbours, as in cubic
+splines and implicit PDE steps — solves in `O(n)` rather than `O(n^3)` with the Thomas
+algorithm, and `solve_cyclic_tridiagonal` handles the periodic-boundary variant:
+
+```python
+from quantforge import solve_tridiagonal, solve_cyclic_tridiagonal
+
+# lower (sub-diag), diag, upper (super-diag), rhs — all length n
+solve_tridiagonal([0, 1], [2, 2], [1, 0], [3, 3])          # [1.0, 1.0]
+solve_cyclic_tridiagonal([1, 1, 1], [2, 2, 2], [1, 1, 1], [4, 4, 4])  # [1, 1, 1]
+```
+
+`solve_tridiagonal` runs the Thomas algorithm — forward elimination then back-substitution
+in a single ``O(n)`` pass — where `lower[i]`/`upper[i]` are the sub/super-diagonal entries
+of row `i`. `solve_cyclic_tridiagonal` adds the corner couplings of a periodic system
+(`lower[0]` links row 0 to the last column, `upper[n-1]` the reverse) and solves it with a
+Sherman-Morrison correction over two Thomas passes. Both agree with a dense Gaussian solve
+to machine precision across thousands of random systems.
+
 When only *one* eigenpair is needed, power iteration is far cheaper than the full
 `jacobi_eigen` spectrum: `power_iteration` finds the dominant (largest-magnitude)
 eigenvalue and `inverse_iteration` the one nearest a shift `mu`:

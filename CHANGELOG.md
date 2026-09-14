@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.652.0] - 2026-09-14
+
+### Documentation
+- README: documented `solve_tridiagonal` and `solve_cyclic_tridiagonal` in the Matrix
+  utilities section after the iterative solvers -- O(n) Thomas algorithm and the
+  Sherman-Morrison cyclic variant. All snippet values verified live.
+
 ## [1.651.0] - 2026-09-14
 
 ### Added
