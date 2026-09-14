@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.667.0] - 2026-09-14
+
+### Added
+- `fd_weights.py`: `fd_weights` computes Fornberg finite-difference weights -- the
+  coefficients ``c_{k,i}`` such that ``f^(k)(x0) ~ sum_i c_{k,i} f(grid[i])`` -- for all
+  derivative orders up to ``max_deriv`` in a single pass, on an *arbitrary* (possibly
+  non-uniform) grid. This generates any stencil (central, one-sided, staggered) to any
+  order, exact for polynomials up to the grid degree. Cross-checked against the known
+  central/forward/backward stencils and, over 3000 random cases, polynomial exactness on
+  every monomial up to the grid degree, plus real derivatives of ``sin``.
+
 ## [1.666.0] - 2026-09-14
 
 ### Documentation

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.52.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.53.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -6129,6 +6129,16 @@ Auto-generated from `quantforge` v4.52.0 by `docs/gen_api.py` — do not edit by
 > Runs :func:`factor_regression` on each trailing window of length ``window``,
 > returning the list of first-factor betas (one per window end, from index
 > ``window - 1`` onward). Tracks how the factor loading drifts through time.
+
+## fd_weights
+
+### `fd_weights(x0, grid, max_deriv)`  _function_
+
+> Fornberg weights for derivatives ``0..max_deriv`` at ``x0`` on ``grid``.
+>
+> Returns a list ``c`` of length ``max_deriv + 1`` where ``c[k]`` is the weight list (same
+> length as ``grid``) for the ``k``-th derivative: ``f^(k)(x0) ~ sum_i c[k][i] f(grid[i])``.
+> Requires ``len(grid) > max_deriv`` and distinct grid points.
 
 ## fenwick
 

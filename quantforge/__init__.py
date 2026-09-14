@@ -665,6 +665,7 @@ from .sliding_window import (
 )
 from .dag_paths import dag_shortest_path, dag_longest_path, transitive_closure
 from .min_cost_flow import MinCostMaxFlow, min_cost_max_flow
+from .fd_weights import fd_weights
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1369,7 +1370,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "4.52.0"
+__version__ = "4.53.0"
 
 __all__ = [
     "OptionType",
@@ -2284,6 +2285,7 @@ __all__ = [
     "transitive_closure",
     "MinCostMaxFlow",
     "min_cost_max_flow",
+    "fd_weights",
     "Dual",
     "dual_derivative",
     "dual_gradient",
