@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.726.0] - 2026-09-14
+
+### Documentation
+- README: documented `reverse_jacobian` and `reverse_hessian` in the automatic-differentiation
+  block after the reverse-mode note -- one backward pass per Jacobian row, one finite-difference
+  level over the exact gradient for the Hessian, and symmetrization. All snippet values verified
+  live.
+
 ## [1.725.0] - 2026-09-14
 
 ### Added

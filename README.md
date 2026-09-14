@@ -6457,6 +6457,29 @@ node's `.grad`, so shared subexpressions add their contributions correctly (a re
 visited once but receives every path's adjoint). Cross-checked against analytic gradients,
 central finite differences over random multivariate functions, and the forward-mode result.
 
+For whole matrices, `reverse_jacobian` and `reverse_hessian` compose that primitive.
+`reverse_jacobian(f, x)` runs one backward pass per output component to give the exact
+`m x n` Jacobian of a vector function; `reverse_hessian(f, x)` differences the *exact* reverse
+gradient once (central differences) for a symmetric Hessian:
+
+```python
+from quantforge import reverse_jacobian, reverse_hessian
+
+# f: R^3 -> R^3
+reverse_jacobian(lambda v: [v[0] * v[1], v[2].sin() + v[0], (v[0] / v[1]).exp()],
+                 [1.3, 2.1, 0.7])
+# [[2.1, 1.3, 0.0], [1.0, 0.0, 0.7648421872844885], [0.88436..., -0.54746..., 0.0]]
+
+# Hessian of x^2 y + y^3 + x z
+reverse_hessian(lambda v: v[0] * v[0] * v[1] + v[1] ** 3 + v[0] * v[2], [1.5, 2.0, 0.5])
+# [[4.0, 3.0, 1.0], [3.0, 12.0, 0.0], [1.0, 0.0, 0.0]]
+```
+
+Because the gradient inside `reverse_hessian` is exact, only the outer difference carries
+truncation error — much more accurate than second-differencing the value — and the result is
+symmetrized. Both agree with the fully numerical `jacobian`/`hessian` in the numerical-utilities
+block and with hand-computed derivatives.
+
 Slowly-converging sequences and fixed-point iterations can be accelerated with
 `aitken` (delta-squared), `shanks`, and `steffensen`:
 
