@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.43.0] - 2026-09-14
+
+### Added
+- `simplify.py`: `douglas_peucker` polyline simplification within a perpendicular
+  tolerance. Cross-checked: a straight line collapses to its two endpoints, the endpoints
+  are always kept and the result is a subsequence of the input, every dropped point stays
+  within epsilon of its retained chord over 500 random polylines, and the point count
+  decreases monotonically as epsilon grows.
+
 ## [3.42.0] - 2026-09-14
 
 ### Documentation

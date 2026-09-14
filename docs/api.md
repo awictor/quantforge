@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.42.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.43.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -14128,6 +14128,16 @@ Auto-generated from `quantforge` v3.42.0 by `docs/gen_api.py` — do not edit by
 >
 > Near 1 = dense, well-separated clusters; near 0 = overlapping; negative =
 > mostly misassigned. Use it to compare label sets or pick ``k``.
+
+## simplify
+
+### `douglas_peucker(points, epsilon)`  _function_
+
+> Simplify a polyline to a subset of its points within perpendicular tolerance ``epsilon``.
+>
+> Returns a new list containing the retained points (always including the first and
+> last). Larger ``epsilon`` keeps fewer points; ``epsilon = 0`` keeps every point that
+> is not exactly collinear. The result is a subsequence of the input in order.
 
 ## simulated_annealing
 
