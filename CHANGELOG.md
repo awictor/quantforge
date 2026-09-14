@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.48.0] - 2026-09-14
+
+### Documentation
+- README: documented combinatorial ranking in the Number theory section, after numerals —
+  `gray_code`, `permutation_rank`/`unrank`, and `combination_rank`/`unrank` with worked
+  values. All snippet values verified live.
+
 ## [3.47.0] - 2026-09-14
 
 ### Added
