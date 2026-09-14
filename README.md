@@ -127,6 +127,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Matrix utilities](#matrix-utilities)
 - [Numerical utilities](#numerical-utilities)
 - [Range-query structures](#range-query-structures)
+- [Interval arithmetic](#interval-arithmetic)
 - [Number theory](#number-theory)
 - [Computational geometry](#computational-geometry)
 - [Graph algorithms](#graph-algorithms)
@@ -6389,6 +6390,28 @@ tight space. `SegmentTree` generalizes to any associative `combine` — the defa
 and passing `min`/`max` (with the matching `identity`) gives range-minimum/maximum with
 `O(log n)` point updates. Both are verified against a brute-force recompute across random
 arrays with interleaved updates.
+
+## Interval arithmetic
+
+An `Interval` tracks a range of possible values and propagates it through arithmetic so
+the result is *guaranteed* to enclose the true answer — the basis of tolerance analysis
+and worst-case bounds:
+
+```python
+from quantforge import Interval
+
+Interval(1, 2) + Interval(3, 4)          # Interval(4, 6)
+Interval(-2, 3) ** 2                       # Interval(0, 9) — straddles zero, so min is 0
+Interval(2, 8).intersect(Interval(5, 10)) # Interval(5, 8)
+Interval(2, 8).width()                     # 6.0 — the uncertainty
+```
+
+Arithmetic (`+ - * /`), integer powers, and the monotone functions `exp`/`log`/`sqrt`
+all return an interval that contains the true value for every input in the operands —
+verified to enclose the result across thousands of random samples. Division by an interval
+spanning zero raises, and `width`/`midpoint`/`contains`/`intersect` round out the class.
+(It uses ordinary floating point without outward rounding, so the enclosure is
+mathematically correct but not a certified ULP-level bound.)
 
 ## Number theory
 

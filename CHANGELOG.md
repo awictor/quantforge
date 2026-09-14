@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.22.0] - 2026-09-14
+
+### Documentation
+- README: added an "Interval arithmetic" section documenting the `Interval` class — the
+  enclosure guarantee, arithmetic, and helper methods with worked values. TOC
+  regenerated. All snippet values verified live.
+
 ## [3.21.0] - 2026-09-14
 
 ### Added
