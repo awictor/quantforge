@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.74.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.75.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -14730,6 +14730,28 @@ Auto-generated from `quantforge` v3.74.0 by `docs/gen_api.py` — do not edit by
 > :func:`quantforge.parisian_barrier_mc`, which it cross-checks. ``n_steps`` is
 > capped by the Sobol generator's dimension (now 12), so the window is resolved
 > to ``round(window / dt)`` consecutive steps.
+
+## sparse_table
+
+### `SparseTable(values, combine=<built-in function min>)`  _class_
+
+> Static array supporting ``O(1)`` idempotent range queries (min/max/gcd/...).
+>
+> Build from a sequence and an associative *idempotent* ``combine`` (default `min`).
+> ``query(lo, hi)`` returns the combined value over the inclusive index range
+> ``[lo, hi]`` in constant time. The array is fixed after construction.
+
+### `range_gcd_query(values)`  _function_
+
+> Convenience: a `SparseTable` answering range-*gcd* queries.
+
+### `range_max_query(values)`  _function_
+
+> Convenience: a `SparseTable` answering range-*maximum* queries.
+
+### `range_min_query(values)`  _function_
+
+> Convenience: a `SparseTable` answering range-*minimum* queries.
 
 ## special
 

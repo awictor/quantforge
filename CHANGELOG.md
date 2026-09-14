@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.589.0] - 2026-09-14
+
+### Added
+- `sparse_table.py`: `SparseTable` answers *idempotent* range queries (min/max/gcd) on a
+  static array in ``O(1)`` after an ``O(n log n)`` build, by precomputing every
+  power-of-two block and combining the two overlapping blocks that cover a query range --
+  overlap is harmless only for idempotent combiners, so it fits min/max/gcd but not sum.
+  Convenience builders `range_min_query`/`range_max_query`/`range_gcd_query` cover the
+  common cases, and any idempotent `combine` is accepted. Cross-checked against brute-force
+  recomputation over 3000 random arrays (min/max) and 2000 more (gcd), plus exhaustive
+  all-range checks and a custom bitwise-or combiner.
+
 ## [1.588.0] - 2026-09-14
 
 ### Documentation

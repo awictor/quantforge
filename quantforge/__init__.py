@@ -541,6 +541,12 @@ from .suffix_array import (
     count_distinct_substrings,
 )
 from .kdtree import KDTree
+from .sparse_table import (
+    SparseTable,
+    range_min_query,
+    range_max_query,
+    range_gcd_query,
+)
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1245,7 +1251,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "3.74.0"
+__version__ = "3.75.0"
 
 __all__ = [
     "OptionType",
@@ -2037,6 +2043,10 @@ __all__ = [
     "longest_repeated_substring",
     "count_distinct_substrings",
     "KDTree",
+    "SparseTable",
+    "range_min_query",
+    "range_max_query",
+    "range_gcd_query",
     "Dual",
     "dual_derivative",
     "dual_gradient",
