@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.629.0] - 2026-09-14
+
+### Added
+- `inversions.py`: `count_inversions` counts out-of-order pairs (``i < j`` with
+  ``a[i] > a[j]``) in ``O(n log n)`` as a byproduct of a merge sort -- 0 for a sorted
+  sequence, ``n(n-1)/2`` for a reversed one. `kendall_tau_distance` reuses it to count the
+  pairs two rankings order oppositely (the adjacent-swap distance), and `is_sorted` checks
+  monotonicity. Cross-checked against brute ``O(n^2)`` counts over 5000 random sequences and
+  3000 random permutation pairs, plus a 100k-element reversed case that a quadratic count
+  could not handle.
+
 ## [1.628.0] - 2026-09-14
 
 ### Documentation

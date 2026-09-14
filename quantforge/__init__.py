@@ -613,6 +613,7 @@ from .calendar_math import (
     easter_date,
 )
 from .expression import tokenize, shunting_yard, eval_rpn, eval_expression
+from .inversions import count_inversions, kendall_tau_distance, is_sorted
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1317,7 +1318,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "4.14.0"
+__version__ = "4.15.0"
 
 __all__ = [
     "OptionType",
@@ -2178,6 +2179,9 @@ __all__ = [
     "shunting_yard",
     "eval_rpn",
     "eval_expression",
+    "count_inversions",
+    "kendall_tau_distance",
+    "is_sorted",
     "Dual",
     "dual_derivative",
     "dual_gradient",

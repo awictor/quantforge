@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.14.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.15.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -8448,6 +8448,27 @@ Auto-generated from `quantforge` v4.14.0 by `docs/gen_api.py` — do not edit by
 ### `total_covered_length(intervals)`  _function_
 
 > Total length covered by the union of the intervals (overlaps counted once).
+
+## inversions
+
+### `count_inversions(values)`  _function_
+
+> Number of inversions in ``values`` (pairs ``i < j`` with ``values[i] > values[j]``).
+>
+> Uses a merge sort, so ``O(n log n)`` rather than the ``O(n^2)`` brute count. A strictly
+> increasing sequence has 0; a strictly decreasing one has ``n(n-1)/2``.
+
+### `is_sorted(values, strict=False)`  _function_
+
+> True if ``values`` is non-decreasing (or strictly increasing when ``strict``).
+
+### `kendall_tau_distance(rank_a, rank_b)`  _function_
+
+> Kendall-tau distance: number of pairs ordered oppositely in two rankings.
+>
+> ``rank_a`` and ``rank_b`` are sequences of the same items (equal length, same set). The
+> distance is the count of pairs ``(x, y)`` whose relative order differs between the two,
+> i.e. the inversions of ``rank_b`` reindexed by ``rank_a``'s positions.
 
 ## isotonic
 
