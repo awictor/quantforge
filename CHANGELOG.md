@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.36.0] - 2026-09-14
+
+### Documentation
+- README: documented `smith_waterman` local alignment in the String algorithms section,
+  after Needleman-Wunsch — the best-substring-pair framing with the HELLO example. All
+  snippet values verified live.
+
 ## [3.35.0] - 2026-09-14
 
 ### Added

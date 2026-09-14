@@ -6729,6 +6729,11 @@ better since a transposition is one keystroke slip. `needleman_wunsch` maximizes
 match/mismatch/gap score and reconstructs the aligned, gapped strings — the score always
 equals the alignment it returns, and stripping the gaps recovers the inputs.
 
+`smith_waterman` is the *local* counterpart: it floors scores at zero and traces back from
+the highest-scoring cell, so it finds the best-matching *substring* pair rather than
+aligning end to end — `smith_waterman("xxxHELLOyyy", "zzHELLOww")` recovers the shared
+`HELLO` (score 10). No positively-scoring common region gives score 0.
+
 Where edit distance counts *operations*, fuzzy similarity scores return a value in
 `[0, 1]` for approximate matching, deduplication, and record linkage:
 
