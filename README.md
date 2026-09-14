@@ -4347,6 +4347,27 @@ margin, so an aligned tie no longer caps the coefficient below one;
 normal approximation with `Var(S) = n(n-1)(2n+5)/18`, returning a two-sided p-value
 equal to `erfc(|z| / sqrt(2))`.
 
+The *unnormalized* count behind Kendall's tau is the number of discordant pairs — the
+Kendall-tau *distance* between two rankings — and `count_inversions` computes it (and the
+plain out-of-order-pair count of any sequence) in `O(n log n)` via merge sort:
+
+```python
+from quantforge import count_inversions, kendall_tau_distance, is_sorted
+
+count_inversions([3, 1, 4, 1, 5, 9, 2, 6])   # 8 — pairs out of order
+count_inversions([5, 4, 3, 2, 1])            # 10 — fully reversed, n(n-1)/2
+kendall_tau_distance(['a','b','c','d'], ['b','a','d','c'])   # 2 — pairs ordered oppositely
+is_sorted([1, 2, 2, 3])                      # True
+```
+
+`count_inversions` counts pairs `i < j` with `a[i] > a[j]` — 0 when sorted, `n(n-1)/2` when
+reversed — piggybacking on a merge sort so it handles hundreds of thousands of elements a
+quadratic scan could not. `kendall_tau_distance` reindexes one ranking by the other's
+positions and counts the resulting inversions, giving the minimum adjacent swaps to turn
+one ranking into the other. `is_sorted` is the monotonicity check (`strict=True` for
+strictly increasing). Verified against brute pair counts over thousands of sequences and
+permutation pairs.
+
 A raw correlation can be entirely an artifact of a shared driver; `partial_correlation`
 measures the link between two variables *after* regressing out one or more controls:
 

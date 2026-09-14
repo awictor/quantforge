@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.630.0] - 2026-09-14
+
+### Documentation
+- README: documented `count_inversions`, `kendall_tau_distance`, and `is_sorted` in the Rank
+  dependence section after `kendall_tau_b` -- the discordant-pair count behind Kendall's tau
+  and the merge-sort inversion count. All snippet values verified live.
+
 ## [1.629.0] - 2026-09-14
 
 ### Added
