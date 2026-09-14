@@ -6344,6 +6344,29 @@ the data. `reservoir_sample` (Vitter's algorithm R) is deterministic for a fixed
 and returns every stream element with equal probability; if the stream is shorter than
 `k` it returns all of it.
 
+`P2Quantile` tracks *one* preset quantile; when you need to query *any* quantile after the
+fact with a guaranteed error, `DDSketch` keeps a compact histogram of log-spaced buckets
+and answers each quantile within a fixed *relative* error:
+
+```python
+from quantforge import DDSketch
+
+s = DDSketch(alpha=0.01)             # 1% relative-error accuracy
+for i in range(1, 10001):
+    s.add(float(i))
+s.quantile(0.5)                      # ~4965 (true 5000, within 1%)
+s.quantile(0.99)                     # ~9801 (true 9900, within 1%)
+s.num_buckets()                      # 315 — memory grows with the log-range, not n
+```
+
+`DDSketch` (Masson-Rim-Lee) maps each positive value to bucket
+`ceil(log(x) / log(gamma))` with `gamma = (1 + alpha)/(1 - alpha)`, so the reported
+`q`-quantile is always within `alpha` *relative* error of the true value — tight for small
+values, proportionally looser for large ones, which suits latencies and sizes that span
+orders of magnitude. `min`/`max` are tracked exactly, and two sketches built with the same
+`alpha` merge exactly with `+`, so `(a + b).quantile(0.9)` on split halves matches the
+whole-stream estimate. Positive values only.
+
 When elements should be drawn *proportional to a weight* rather than uniformly,
 `weighted_reservoir_sample` selects `k` distinct items in the same single pass, and
 `weighted_sample_with_replacement` draws `k` independent weight-proportional items:

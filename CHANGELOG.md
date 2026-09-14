@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.582.0] - 2026-09-14
+
+### Documentation
+- README: documented `DDSketch` in the streaming-statistics section after `P2Quantile` --
+  the any-quantile relative-error guarantee, the log-spaced bucket mapping, the exact
+  `min`/`max` and `+` merge, and the memory-grows-with-log-range property. All snippet
+  values verified live.
+
 ## [1.581.0] - 2026-09-14
 
 ### Added
