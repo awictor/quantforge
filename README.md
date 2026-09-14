@@ -5983,6 +5983,26 @@ trial division alone could not reach. `euler_totient` counts the integers coprim
 `divisors` lists every divisor (the proper divisors of `28` sum to `28`), and `gcd`/`lcm`
 satisfy `gcd(a,b) * lcm(a,b) == a*b`.
 
+Modular ("clock") arithmetic adds the operations behind RSA-style key math and residue
+computation:
+
+```python
+from quantforge import extended_gcd, mod_inverse, chinese_remainder, mod_pow, discrete_log
+
+extended_gcd(240, 46)                  # (2, -9, 47): 240*-9 + 46*47 == 2 == gcd
+mod_inverse(3, 11)                     # 4, since 3*4 == 12 == 1 (mod 11)
+chinese_remainder([2, 3, 2], [3, 5, 7])# (23, 105): the unique x mod 105
+mod_pow(3, -1, 5)                      # 2 — negative exponents invert first
+discrete_log(3, 13, 17)                # 4, since 3^4 == 13 (mod 17)
+```
+
+`extended_gcd` returns the Bezout coefficients (`a*x + b*y == gcd`), from which
+`mod_inverse` builds the modular inverse (raising when the inputs are not coprime).
+`chinese_remainder` stitches congruences with pairwise-coprime moduli into a single one —
+the classic `x == 2 (mod 3), 3 (mod 5), 2 (mod 7)` gives `23`. `mod_pow` wraps fast
+exponentiation and handles negative exponents through the inverse, and `discrete_log`
+solves `base^x == target` by baby-step giant-step in `O(sqrt(mod))`.
+
 ## Probability distributions
 
 Gamma, chi-square, Poisson, F and binomial distributions built on those special

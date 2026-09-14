@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.46.0] - 2026-09-13
+
+### Documentation
+- README: documented the modular-arithmetic routines in the Number theory section —
+  `extended_gcd`, `mod_inverse`, `chinese_remainder`, `mod_pow`, and `discrete_log` with
+  worked values. All snippet values verified live.
+
 ## [2.45.0] - 2026-09-13
 
 ### Added
