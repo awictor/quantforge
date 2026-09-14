@@ -770,6 +770,7 @@ from .signal_features import (
 from .interval import Interval
 from .bernoulli import bernoulli_number, faulhaber, bernoulli_sequence
 from .numeral import to_base, from_base, to_roman, from_roman
+from .selection import kth_smallest, median, top_k
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -1160,7 +1161,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "3.26.0"
+__version__ = "3.27.0"
 
 __all__ = [
     "OptionType",
@@ -2211,6 +2212,9 @@ __all__ = [
     "from_base",
     "to_roman",
     "from_roman",
+    "kth_smallest",
+    "median",
+    "top_k",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.27.0] - 2026-09-14
+
+### Added
+- `selection.py`: linear-time selection — `kth_smallest` (quickselect with the
+  median-of-medians pivot), `median`, and `top_k`. Cross-checked: the k-th order statistic
+  matches a full sort for every k across hundreds of random arrays (with and without
+  duplicates), the median matches `statistics.median`, and top-k matches the sorted
+  slices.
+
 ## [3.26.0] - 2026-09-14
 
 ### Documentation

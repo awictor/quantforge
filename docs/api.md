@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.26.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.27.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -13725,6 +13725,27 @@ Auto-generated from `quantforge` v3.26.0 by `docs/gen_api.py` — do not edit by
 > Adds the derivative of the diffusion ``diffusion_prime(x, t) = d b/d x`` to the
 > Euler-Maruyama step, giving strong order 1.0 for state-dependent diffusions. Same
 > signature otherwise; returns the ``n_steps + 1`` state path.
+
+## selection
+
+### `kth_smallest(values, k)`  _function_
+
+> The ``k``-th smallest element (0-indexed) via linear-time quickselect.
+>
+> ``k`` in ``[0, len(values) - 1]``; ``k=0`` is the minimum. Uses the median-of-medians
+> pivot for a guaranteed ``O(n)`` worst case. Does not modify the input.
+
+### `median(values)`  _function_
+
+> Median of ``values`` (average of the two middle elements for even length).
+
+### `top_k(values, k, largest=True)`  _function_
+
+> The ``k`` largest (or smallest) elements of ``values``, sorted.
+>
+> ``largest=True`` returns the top ``k`` in descending order; ``largest=False`` the
+> bottom ``k`` ascending. ``k`` is clamped to the list length. Uses quickselect to find
+> the threshold, then sorts only the ``k`` selected elements.
 
 ## sequence_accel
 
