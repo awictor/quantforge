@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.66.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.67.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -14046,6 +14046,43 @@ Auto-generated from `quantforge` v2.66.0 by `docs/gen_api.py` — do not edit by
 > ``stream`` is any iterable. Returns a list of up to ``k`` items, each element of the
 > stream equally likely to be included. One pass, O(k) memory. Deterministic for a
 > fixed ``seed``.
+
+## strings
+
+### `hamming_distance(a, b)`  _function_
+
+> Hamming distance: positions at which equal-length sequences differ.
+>
+> Raises ``ValueError`` if the lengths differ (Hamming distance is undefined then).
+
+### `kmp_search(text, pattern)`  _function_
+
+> All start indices where ``pattern`` occurs in ``text`` (Knuth-Morris-Pratt).
+>
+> Linear-time ``O(len(text)+len(pattern))`` search using the failure function, so it
+> never re-examines text characters. An empty pattern matches at every position
+> ``0..len(text)``. Returns a list of indices.
+
+### `levenshtein(a, b)`  _function_
+
+> Levenshtein edit distance: minimum single-character insert/delete/substitutions.
+>
+> The number of one-character edits to turn ``a`` into ``b``. ``O(len(a)*len(b))`` time
+> with two rolling rows. Symmetric; zero iff the sequences are equal.
+
+### `longest_common_subsequence(a, b)`  _function_
+
+> Longest common subsequence (not necessarily contiguous) as a list/str.
+>
+> Returns a longest sequence appearing in both ``a`` and ``b`` in order. Returns the
+> same type as ``a`` when ``a`` is a ``str``. ``O(len(a)*len(b))``.
+
+### `longest_common_substring(a, b)`  _function_
+
+> Longest contiguous substring common to ``a`` and ``b``.
+>
+> Returns the substring (same type as ``a`` when ``a`` is a ``str``); an empty result
+> if there is no common character. ``O(len(a)*len(b))``.
 
 ## structural_break
 

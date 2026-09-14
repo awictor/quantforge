@@ -656,6 +656,13 @@ from .graph3 import (
     betweenness_centrality,
 )
 from .graph4 import bellman_ford, floyd_warshall, a_star
+from .strings import (
+    levenshtein,
+    hamming_distance,
+    longest_common_subsequence,
+    longest_common_substring,
+    kmp_search,
+)
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -1046,7 +1053,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "2.66.0"
+__version__ = "2.67.0"
 
 __all__ = [
     "OptionType",
@@ -1987,6 +1994,11 @@ __all__ = [
     "bellman_ford",
     "floyd_warshall",
     "a_star",
+    "levenshtein",
+    "hamming_distance",
+    "longest_common_subsequence",
+    "longest_common_substring",
+    "kmp_search",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

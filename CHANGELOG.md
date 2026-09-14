@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.67.0] - 2026-09-13
+
+### Added
+- `strings.py`: string algorithms — `levenshtein`, `hamming_distance`,
+  `longest_common_subsequence`, `longest_common_substring`, and `kmp_search`
+  (Knuth-Morris-Pratt). Cross-checked: the edit distance matches a brute-force recursion
+  and is symmetric, the LCS is a subsequence of both inputs, and KMP matches a naive scan
+  (including overlapping matches) across hundreds of random cases.
+
 ## [2.66.0] - 2026-09-13
 
 ### Documentation
