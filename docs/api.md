@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.78.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.79.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -6003,6 +6003,23 @@ Auto-generated from `quantforge` v4.78.0 by `docs/gen_api.py` — do not edit by
 > :func:`supershare`: ``delta`` (dV/dS), ``gamma`` (d2V/dS2), ``vega``
 > (dV/dsigma), ``theta`` (calendar decay). Returns a dict with ``price`` and
 > those fields.
+
+## expint
+
+### `e1(x)`  _function_
+
+> Exponential integral ``E1(x) = integral_x^inf e^-t / t dt`` for ``x > 0``.
+
+### `ei(x)`  _function_
+
+> Exponential integral ``Ei(x)`` (principal value) for real ``x != 0``.
+
+### `en(n, x)`  _function_
+
+> Generalized exponential integral ``E_n(x) = integral_1^inf e^{-x t} / t^n dt``.
+>
+> ``n >= 0`` integer, ``x >= 0`` (``x > 0`` when ``n <= 1``). Uses ``E_0 = e^-x / x`` and
+> the upward recurrence ``E_{n}(x) = (e^-x - x E_{n-1}(x)) / (n - 1)`` seeded from ``E_1``.
 
 ## expression
 

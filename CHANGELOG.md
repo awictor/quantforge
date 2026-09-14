@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.693.0] - 2026-09-14
+
+### Added
+- `expint.py`: the exponential integrals. `e1` computes ``E1(x) = integral_x^inf e^-t/t dt``
+  (``x > 0``) by the convergent power series for small ``x`` and a Lentz continued fraction
+  for large ``x``; `ei` is the principal-value ``Ei(x)`` on the real line (series then
+  asymptotic); and `en` is the generalized ``E_n(x)`` via the upward recurrence. Cross-checked
+  against known values (``E1(1) ~ 0.21938``, ``Ei(1) ~ 1.89512``), numerical integration for
+  E1 and E_n, the ``Ei(-x) = -E1(x)`` relation, and ``E_n(0) = 1/(n-1)``.
+
 ## [1.692.0] - 2026-09-14
 
 ### Documentation
