@@ -4572,6 +4572,25 @@ spectral_energy(series)                # equals sum(x^2) by Parseval
 A pure sinusoid peaks exactly at its frequency; a constant series has power only
 at zero frequency; white noise spreads its power evenly with no dominant peak.
 
+Compact signal descriptors summarize a series for classification or monitoring — some in
+the time domain, some read off the spectrum:
+
+```python
+from quantforge import (zero_crossing_rate, rms, crest_factor,
+                        spectral_centroid, spectral_bandwidth, spectral_flatness)
+
+rms(sine)                 # 0.707 — 1/sqrt(2) for a unit sine
+crest_factor(sine)        # 1.414 — peak / RMS (~1 for a square wave)
+spectral_centroid(tone)   # ~ the tone's frequency (spectral center of mass)
+spectral_flatness(tone)   # ~0.003 tonal; ~0.55 for white noise
+```
+
+`zero_crossing_rate` (sign changes per sample) is a cheap noisiness/pitch proxy; `rms`
+and `crest_factor` describe amplitude and peakiness. In the frequency domain,
+`spectral_centroid` is the power-weighted mean frequency, `spectral_bandwidth` its spread
+(narrow for a tone, wide for noise), and `spectral_flatness` (Wiener entropy) is near `0`
+for tonal signals and near `1` for flat, noise-like spectra.
+
 The periodogram uses a direct DFT; for the fast transform itself, `fft` / `ifft` give
 the radix-2 Cooley-Tukey pair (power-of-two lengths):
 
