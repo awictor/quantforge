@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.640.0] - 2026-09-14
+
+### Documentation
+- README: documented `de_bruijn_sequence`, `lyndon_words`, and `is_lyndon` in the String
+  algorithms section after the string-periodicity primitives -- minimal all-windows cyclic
+  strings and the Lyndon words behind them. All snippet values verified live.
+
 ## [1.639.0] - 2026-09-14
 
 ### Added
