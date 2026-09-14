@@ -7671,6 +7671,25 @@ returns triangles as index triples into the input, satisfies the empty-circumcir
 the standard input to terrain meshing, finite-element grids, and nearest-neighbour graphs.
 Verified over thousands of random point sets against that empty-circle property.
 
+The Voronoi diagram is the Delaunay dual — the partition into cells nearest each site —
+exposed through `voronoi_vertices`, `delaunay_neighbors`, and `nearest_site`:
+
+```python
+from quantforge import voronoi_vertices, delaunay_neighbors, nearest_site
+
+voronoi_vertices([(0,0),(2,0),(2,2),(0,2)])       # [(1.0, 1.0), (1.0, 1.0)] — cell corners
+delaunay_neighbors([(0,0),(2,0),(2,2),(0,2)])     # {0:{1,2,3}, 1:{0,2}, 2:{0,1,3}, 3:{0,2}}
+nearest_site([(0,0),(5,5),(10,0)], (0.1, 0.1))    # 0 — the query's Voronoi cell
+```
+
+`voronoi_vertices` returns each Delaunay triangle's circumcenter — a Voronoi vertex,
+equidistant from its three sites and closer to them than to any other. `delaunay_neighbors`
+is the site-adjacency graph: two sites share a Voronoi edge exactly when they share a
+Delaunay edge, so it doubles as the natural-neighbour graph. `nearest_site` answers point
+location — which cell a query falls in — the query behind spatial interpolation and facility
+assignment. Verified over thousands of random sites against the empty-circle and
+nearest-site references.
+
 Point-proximity queries — hit-testing, snapping, route distance — come from the
 point-to-line and point-to-segment distances:
 

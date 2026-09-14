@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.688.0] - 2026-09-14
+
+### Documentation
+- README: documented `voronoi_vertices`, `delaunay_neighbors`, and `nearest_site` in the
+  Computational geometry section after `delaunay_triangulation` -- the Voronoi diagram as the
+  Delaunay dual. All snippet values verified live.
+
 ## [1.687.0] - 2026-09-14
 
 ### Added
