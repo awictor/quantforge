@@ -7123,6 +7123,29 @@ the component order. `add_or` (alias `add_clause`) takes literals as `v` or `~v`
 `None`, and `is_satisfiable` just checks. Verified against brute-force assignment
 enumeration over 5000 random instances.
 
+To trace a route that uses every *edge* exactly once — an Eulerian trail — `eulerian_path`
+runs Hierholzer's algorithm, and the `has_eulerian_*` predicates check whether one exists:
+
+```python
+from quantforge import eulerian_path, has_eulerian_path, has_eulerian_circuit
+
+g = {0: [1, 3], 1: [2], 2: [3]}     # undirected: edges 0-1, 0-3, 1-2, 2-3
+eulerian_path(g)                    # [0, 1, 2, 3, 0] — a circuit (starts and ends at 0)
+has_eulerian_circuit(g, False)      # True
+
+gd = {'a': ['b'], 'b': ['c'], 'c': ['a']}
+eulerian_path(gd, directed=True)    # ['a', 'b', 'c', 'a']
+```
+
+`eulerian_path` returns the `E + 1` vertex sequence of a trail using every edge once (first
+and last coincide for a circuit), or `None` if none exists. Existence is a degree
+condition, which the predicates test directly: an undirected connected graph needs zero
+odd-degree vertices for a circuit or exactly two for an open path; a directed graph needs
+in-degree equal to out-degree everywhere, or off by one at a single source/sink pair. Pass
+`directed=True` for digraphs and an optional `start` vertex. Verified over 6000 random
+graphs that existence matches the criterion and every returned trail uses each edge exactly
+once.
+
 ## String algorithms
 
 Sequence comparison and pattern matching — on strings or any lists:

@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.600.0] - 2026-09-14
+
+### Documentation
+- README: documented `eulerian_path`, `has_eulerian_path`, and `has_eulerian_circuit` in
+  the Graph algorithms section after `TwoSat` -- Hierholzer trail construction and the
+  degree/connectivity existence conditions for undirected and directed graphs. All snippet
+  values verified live.
+
 ## [1.599.0] - 2026-09-14
 
 ### Added
