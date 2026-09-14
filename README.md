@@ -6656,6 +6656,21 @@ point_polyline_distance((3, 1), [(0,0),(2,0),(2,2),(4,2)])  # 1.0 — nearest se
 to that endpoint), with `closest_point_on_segment` returning the foot itself; and
 `point_polyline_distance` takes the minimum over a chain of segments.
 
+Thinning a dense polyline — a GPS track, a map contour — while keeping its shape is what
+`douglas_peucker` does:
+
+```python
+from quantforge import douglas_peucker
+
+douglas_peucker([(i, 0) for i in range(10)], 0.01)     # [(0,0), (9,0)] — a straight run
+douglas_peucker([(0,0),(1,0),(2,5),(3,0),(4,0)], 1)    # [(0,0),(2,5),(4,0)] — keeps the peak
+```
+
+It keeps the endpoints, recursively retains the farthest vertex from the current chord
+while its perpendicular distance exceeds `epsilon`, and drops the rest — so the output is
+a subsequence of the input within tolerance of the original. A larger `epsilon` keeps
+fewer points (monotonically), and a collinear run collapses to its two endpoints.
+
 ## Graph algorithms
 
 The core graph routines on a dict adjacency list — shortest paths, traversal, components,

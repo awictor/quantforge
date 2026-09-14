@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.44.0] - 2026-09-14
+
+### Documentation
+- README: documented `douglas_peucker` polyline simplification in the Computational
+  geometry section — the straight-run and keep-the-peak examples. All snippet values
+  verified live.
+
 ## [3.43.0] - 2026-09-14
 
 ### Added
