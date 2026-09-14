@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.22.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.23.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -12227,6 +12227,28 @@ Auto-generated from `quantforge` v4.22.0 by `docs/gen_api.py` — do not edit by
 >     The expanded matrix and, for each column, the tuple of input indices whose
 >     product forms it (``()`` for the bias). With ``degree=1`` and a bias this
 >     is the original matrix with a leading ones column.
+
+## poly_mod
+
+### `lagrange_interpolate_mod(points, mod)`  _function_
+
+> Recover the polynomial through ``points`` = ``[(x_i, y_i)]`` modulo prime ``mod``.
+>
+> Returns coefficients (lowest-degree first) of the unique polynomial of degree ``< n``
+> that passes through all ``n`` points; ``x_i`` must be distinct modulo ``mod``. Builds
+> ``sum_i y_i * prod_{j!=i} (x - x_j)/(x_i - x_j)`` with exact modular inverses.
+
+### `poly_add_mod(a, b, mod)`  _function_
+
+> Sum of two polynomials (lowest-degree-first) modulo ``mod``.
+
+### `poly_eval_mod(coeffs, x, mod)`  _function_
+
+> Evaluate a polynomial (lowest-degree-first) at ``x`` modulo ``mod`` (Horner).
+
+### `poly_mul_mod(a, b, mod)`  _function_
+
+> Product of two polynomials (lowest-degree-first) modulo ``mod``.
 
 ## polyinterp
 

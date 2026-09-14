@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.637.0] - 2026-09-14
+
+### Added
+- `poly_mod.py`: polynomial arithmetic and Lagrange interpolation over a prime field
+  (exact, no floating error). `poly_eval_mod` (Horner), `poly_add_mod`, and `poly_mul_mod`
+  operate on lowest-degree-first coefficient lists modulo a prime, and
+  `lagrange_interpolate_mod` recovers the unique degree-``< n`` polynomial through ``n``
+  points with distinct ``x`` via exact modular inverses -- the core of Shamir secret sharing
+  and Reed-Solomon codes. Cross-checked over 4000 random cases across two primes:
+  interpolation passes through every point and recovers the original polynomial,
+  multiplication matches a brute product, and evaluation is additive; plus a Shamir
+  secret-sharing round-trip.
+
 ## [1.636.0] - 2026-09-14
 
 ### Documentation
