@@ -698,6 +698,7 @@ from .fresnel import fresnel_c, fresnel_s, dawson
 from .airy import airy_ai, airy_bi
 from .zeta import riemann_zeta, dirichlet_eta
 from .hurwitz import hurwitz_zeta, polygamma
+from .polylog import polylog, dilog
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1402,7 +1403,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "4.94.0"
+__version__ = "4.95.0"
 
 __all__ = [
     "OptionType",
@@ -2369,6 +2370,8 @@ __all__ = [
     "dirichlet_eta",
     "hurwitz_zeta",
     "polygamma",
+    "polylog",
+    "dilog",
     "Dual",
     "dual_derivative",
     "dual_gradient",

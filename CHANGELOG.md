@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.709.0] - 2026-09-14
+
+### Added
+- `polylog` and `dilog`: the polylogarithm ``Li_s(z) = sum z^k / k^s`` (direct summation for
+  real ``|z| <= 1``, exact endpoints ``z=1 -> zeta(s)`` and ``z=-1 -> -eta(s)``) and the
+  dilogarithm ``Li_2(x)`` on all ``x <= 1`` via reflection/inversion folding into ``[-1, 1/2]``.
+  Cross-checked against ``Li_2(1)=pi^2/6``, ``Li_2(-1)=-pi^2/12``, ``Li_2(1/2)=pi^2/12-(ln2)^2/2``,
+  ``Li_1(z)=-ln(1-z)``, the zeta/eta endpoints, and numerical integration of the inversion branch.
+
 ## [1.708.0] - 2026-09-14
 
 ### Documentation

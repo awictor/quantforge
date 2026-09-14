@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.94.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.95.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -12692,6 +12692,24 @@ Auto-generated from `quantforge` v4.94.0 by `docs/gen_api.py` — do not edit by
 ### `newton_polynomial(xs, coef, x)`  _function_
 
 > Evaluate the Newton form with divided-difference ``coef`` at ``x`` (Horner).
+
+## polylog
+
+### `dilog(x)`  _function_
+
+> Dilogarithm (Spence's function) ``Li_2(x) = sum_{k>=1} x^k / k^2`` for real ``x <= 1``.
+>
+> Reflection and inversion identities fold ``x`` into ``[-1, 1/2]`` where the series
+> converges quickly. ``Li_2(1) = pi^2/6``, ``Li_2(-1) = -pi^2/12``, and
+> ``Li_2(1/2) = pi^2/12 - (ln 2)^2/2``. Raises for ``x > 1`` (there ``Li_2`` is complex).
+
+### `polylog(s, z, tol=1e-15, max_terms=200000)`  _function_
+
+> Polylogarithm ``Li_s(z) = sum_{k>=1} z^k / k^s`` for real ``s`` and real ``|z| <= 1``.
+>
+> Uses direct summation, which converges geometrically for ``|z| < 1``. The endpoint
+> ``z = 1`` returns ``zeta(s)`` (requires ``s > 1``); ``z = -1`` returns ``-eta(s)``.
+> Convergence slows as ``z -> 1`` with small ``s``; ``max_terms`` bounds the work.
 
 ## polynomial
 
