@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.06.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.07.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -14101,6 +14101,23 @@ Auto-generated from `quantforge` v5.06.0 by `docs/gen_api.py` — do not edit by
 >
 > The capital needed to fund the stream. Rises with the withdrawal, the horizon,
 > and the growth rate; falls with the discount rate.
+
+## reverse_ad
+
+### `Var(value, _parents=(), _backward=None)`  _class_
+
+> A scalar node on the autodiff tape.
+>
+> Wrap each independent input in a ``Var``; build an expression with the arithmetic operators
+> and the elementary methods (``exp``, ``log``, ``sin``, ``cos``, ``tanh``, ``sqrt``, ...).
+> Calling :meth:`backward` on the output populates ``.grad`` on every node reachable from it.
+
+### `reverse_gradient(f, xs)`  _function_
+
+> Gradient of scalar ``f`` at the point ``xs`` (a sequence of floats).
+>
+> ``f`` takes a list of :class:`Var` and returns a single :class:`Var`. Returns the list of
+> partial derivatives ``[df/dx_0, ...]`` via one reverse pass.
 
 ## richardson
 

@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.721.0] - 2026-09-14
+
+### Added
+- `Var` and `reverse_gradient`: reverse-mode automatic differentiation (a backpropagation tape).
+  `Var` records each elementary op (`+ - * / **`, `exp`, `log`, `sin`, `cos`, `tanh`, `sqrt`)
+  and `backward()` walks the tape in reverse topological order to accumulate adjoints, so one
+  pass yields the full gradient. `reverse_gradient(f, xs)` is the convenience wrapper.
+  Complements the forward-mode `Dual`/`HyperDual`. Cross-checked against analytic gradients,
+  central finite differences over random multivariate functions, shared-subexpression chain
+  rule, and per-op elementary derivatives.
+
 ## [1.720.0] - 2026-09-14
 
 ### Documentation
