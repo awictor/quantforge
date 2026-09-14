@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.610.0] - 2026-09-14
+
+### Documentation
+- README: documented `convolve_mod`, `ntt`, `intt`, and `NTT_PRIME` in the Spectral
+  analysis section after the Bluestein transform -- exact finite-field convolution with no
+  floating-point error. All snippet values verified live.
+
 ## [1.609.0] - 2026-09-14
 
 ### Added

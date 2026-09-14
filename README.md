@@ -4673,6 +4673,26 @@ including primes, where `fft` cannot apply. It agrees with `fft` exactly on powe
 lengths and with a direct DFT everywhere. Verified against a direct DFT and round-trip over
 hundreds of arbitrary-length sequences.
 
+When the inputs are integers and you need the *exact* answer with no rounding, `convolve_mod`
+runs the number-theoretic transform — the same FFT butterflies but in a finite field —
+returning the convolution with every coefficient reduced modulo a prime:
+
+```python
+from quantforge import convolve_mod, ntt, intt, NTT_PRIME
+
+convolve_mod([1, 2, 3], [4, 5, 6])         # [4, 13, 28, 27, 18] — exact, no float error
+convolve_mod([1, 1, 1, 1], [1, 1, 1, 1])   # [1, 2, 3, 4, 3, 2, 1]
+intt(ntt([3, 1, 4, 1]))                     # [3, 1, 4, 1] — round-trips exactly
+NTT_PRIME                                   # 998244353 = 119 * 2^23 + 1
+```
+
+`ntt`/`intt` transform a power-of-two-length integer sequence using a primitive root of
+unity modulo `998244353` (primitive root 3), so there is no floating-point error at all —
+every value is an exact residue. `convolve_mod` pads to a power of two, multiplies pointwise
+in the transform domain, and inverts, giving the polynomial product (or big-integer
+convolution) mod the prime in `O(n log n)`. Verified against a direct integer convolution
+over 3000 random sequence pairs.
+
 Two FFT-backed conveniences build on it:
 
 ```python
