@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.669.0] - 2026-09-14
+
+### Added
+- `multistep_ode.py`: `adams_bashforth_moulton` integrates ``y' = f(t, y)`` with the
+  4th-order Adams-Bashforth-Moulton predictor-corrector (PECE) -- one new derivative
+  evaluation per step after the corrector, versus four for RK4, reusing prior derivatives.
+  The first three steps are bootstrapped with RK4; scalar or vector systems are supported.
+  Cross-checked against closed-form solutions (exponential growth/decay, ``y' = t``, the
+  harmonic system) to ``1e-6`` and confirmed to converge at 4th order (error drops ~16x per
+  halving of the step).
+
 ## [1.668.0] - 2026-09-14
 
 ### Documentation

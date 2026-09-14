@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.54.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.55.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -11186,6 +11186,15 @@ Auto-generated from `quantforge` v4.54.0 by `docs/gen_api.py` — do not edit by
 > Sorts ascending, scales the ``k``-th smallest (0-based) by ``m - k``, then takes
 > a running maximum so the sequence is monotone, and unshuffles to the input
 > order. Controls the family-wise error rate and dominates :func:`bonferroni`.
+
+## multistep_ode
+
+### `adams_bashforth_moulton(f, y0, t0, t1, n_steps)`  _function_
+
+> Integrate ``y' = f(t, y)`` from ``t0`` to ``t1`` in ``n_steps`` using ABM4 (PECE).
+>
+> ``y0`` is scalar or a list (vector system). Returns ``(ts, ys)``: the ``n_steps + 1``
+> time points and the solution at each. The first three steps use RK4 to build history.
 
 ## multivariate_normal_cdf
 
