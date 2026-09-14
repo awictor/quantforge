@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.30.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.31.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -13801,6 +13801,31 @@ Auto-generated from `quantforge` v3.30.0 by `docs/gen_api.py` — do not edit by
 > Returns a dict with the ``root`` (the fixed point), ``iterations`` and
 > ``converged``. Raises if a zero denominator stalls the iteration before
 > convergence.
+
+## sequences
+
+### `longest_increasing_subsequence(x, strict=True)`  _function_
+
+> Longest (strictly by default) increasing subsequence of ``x``.
+>
+> Returns an actual longest subsequence as a list (not necessarily contiguous). With
+> ``strict=False`` allows equal consecutive values (non-decreasing). ``O(n log n)`` via
+> patience sorting with predecessor tracking. Empty input yields ``[]``.
+
+### `longest_run(x)`  _function_
+
+> Longest run of a single repeated value: ``(value, length, start_index)``.
+>
+> Scans for the longest maximal streak of equal adjacent elements. Ties break to the
+> earliest run. Raises on empty input.
+
+### `maximum_subarray(x)`  _function_
+
+> Maximum-sum contiguous subarray (Kadane): ``(sum, start, end)`` inclusive.
+>
+> Returns the largest achievable sum of a non-empty contiguous slice and its bounds.
+> Handles all-negative inputs (returns the single largest element). Raises on empty
+> input.
 
 ## serial_correlation
 

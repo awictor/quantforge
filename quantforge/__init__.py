@@ -778,6 +778,11 @@ from .interval_set import (
     intervals_union,
     max_overlap,
 )
+from .sequences import (
+    longest_increasing_subsequence,
+    maximum_subarray,
+    longest_run,
+)
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -1168,7 +1173,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "3.30.0"
+__version__ = "3.31.0"
 
 __all__ = [
     "OptionType",
@@ -2227,6 +2232,9 @@ __all__ = [
     "intervals_intersection",
     "intervals_union",
     "max_overlap",
+    "longest_increasing_subsequence",
+    "maximum_subarray",
+    "longest_run",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

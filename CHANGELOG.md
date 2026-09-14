@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.31.0] - 2026-09-14
+
+### Added
+- `sequences.py`: classic sequence algorithms — `longest_increasing_subsequence`
+  (patience sorting, O(n log n), with reconstruction), `maximum_subarray` (Kadane, with
+  bounds), and `longest_run`. Cross-checked: LIS length matches a brute-force DP over 1000
+  random arrays (both strict and non-strict, result is a valid increasing subsequence),
+  Kadane matches a brute all-slices scan with correct bounds, and the longest run is
+  maximal.
+
 ## [3.30.0] - 2026-09-14
 
 ### Documentation
