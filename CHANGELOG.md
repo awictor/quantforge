@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.71.0] - 2026-09-13
+
+### Added
+- `compression.py`: lossless compression primitives — `huffman_codebook`,
+  `huffman_encode`, `huffman_decode`, `run_length_encode`, and `run_length_decode`.
+  Cross-checked: Huffman round-trips exactly, the codes are prefix-free, the expected
+  code length lands within `[H, H+1)` of the entropy and beats fixed-length coding,
+  frequent symbols get the shortest codes, and RLE round-trips.
+
 ## [2.70.0] - 2026-09-13
 
 ### Documentation

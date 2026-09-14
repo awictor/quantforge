@@ -669,6 +669,13 @@ from .fuzzy_match import (
     dice_coefficient,
     jaccard_similarity,
 )
+from .compression import (
+    huffman_codebook,
+    huffman_encode,
+    huffman_decode,
+    run_length_encode,
+    run_length_decode,
+)
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -1059,7 +1066,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "2.70.0"
+__version__ = "2.71.0"
 
 __all__ = [
     "OptionType",
@@ -2009,6 +2016,11 @@ __all__ = [
     "jaro_winkler",
     "dice_coefficient",
     "jaccard_similarity",
+    "huffman_codebook",
+    "huffman_encode",
+    "huffman_decode",
+    "run_length_encode",
+    "run_length_decode",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

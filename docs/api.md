@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.70.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.71.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -2663,6 +2663,43 @@ Auto-generated from `quantforge` v2.70.0 by `docs/gen_api.py` — do not edit by
 > shifting both expiries together). Returns a dict with ``price`` and those
 > fields. ``kind`` is one of ``call-on-call``/``call-on-put``/``put-on-call``/
 > ``put-on-put``.
+
+## compression
+
+### `huffman_codebook(data)`  _function_
+
+> Optimal Huffman prefix-code table ``{symbol: bitstring}`` for a sequence.
+>
+> Builds the code by repeatedly merging the two least-frequent nodes. A single distinct
+> symbol maps to ``"0"`` (a one-bit code). Raises on empty input. The codes are
+> prefix-free, so no code is a prefix of another.
+
+### `huffman_decode(bits, codebook)`  _function_
+
+> Decode a Huffman ``bits`` string given its ``codebook`` back to the symbol list.
+>
+> Inverts :func:`huffman_encode` exactly. Raises if the bitstring is not a valid
+> concatenation of codes.
+
+### `huffman_encode(data)`  _function_
+
+> Huffman-encode a sequence: return ``(bitstring, codebook)``.
+>
+> ``bitstring`` is a ``str`` of ``'0'``/``'1'``; ``codebook`` maps each symbol to its
+> code (needed to decode). Expected length is minimal among prefix codes.
+
+### `run_length_decode(pairs)`  _function_
+
+> Expand ``(symbol, count)`` pairs back into the original sequence (a list).
+>
+> Inverts :func:`run_length_encode`. Raises on a non-positive count.
+
+### `run_length_encode(data)`  _function_
+
+> Run-length encode a sequence into a list of ``(symbol, count)`` pairs.
+>
+> Consecutive equal symbols collapse into one pair; ``count >= 1``. Empty input yields
+> an empty list.
 
 ## concentration
 
