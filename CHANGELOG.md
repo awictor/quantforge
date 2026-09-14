@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.58.0] - 2026-09-14
+
+### Documentation
+- README: documented the variate samplers in the Quasi-Monte Carlo section, next to the
+  alias sampler — `sample_normal`, `sample_exponential`, `sample_gamma`, and
+  `sample_poisson` with worked moments. All snippet values verified live.
+
 ## [3.57.0] - 2026-09-14
 
 ### Added

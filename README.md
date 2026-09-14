@@ -971,6 +971,24 @@ Walker's alias method builds two tables so each `sample()` is a single table loo
 than an O(n) cumulative search — the right structure when you draw many times from the
 same weights. Weights need not sum to 1, and a fixed `seed` makes the stream reproducible.
 
+For *continuous* distributions, the variate samplers draw from the common families
+directly:
+
+```python
+from quantforge import sample_normal, sample_exponential, sample_gamma, sample_poisson
+
+sample_normal(1000, mu=5, sigma=2)      # Box-Muller normals
+sample_exponential(1000, rate=0.5)      # mean 1/rate = 2
+sample_gamma(1000, shape=2.0, scale=2.0)# mean shape*scale = 4
+sample_poisson(1000, lam=4.0)           # integer counts, mean = variance = lam
+```
+
+`sample_normal` uses Box-Muller, `sample_exponential` the inverse CDF, `sample_gamma`
+Marsaglia-Tsang (with the small-shape boost for `shape < 1`), and `sample_poisson`
+Knuth's algorithm. Each runs on a deterministic seeded stream (reproducible per `seed`),
+and the sample moments match the distribution's — the normal draws recover `(5, 2)`, the
+gamma `(mean 4, var 8)`, and the Poisson `mean = var = 4` over enough samples.
+
 ## Exotic options (closed form)
 
 Analytic prices for binaries, single barriers, and geometric Asians:
