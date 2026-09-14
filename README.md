@@ -7156,6 +7156,30 @@ identities fold every argument into `[-1, 1/2]`, where a handful of terms suffic
 against `Li_2(1)=pi^2/6`, `Li_2(-1)=-pi^2/12`, `Li_2(1/2)=pi^2/12-(ln2)^2/2`, `Li_1(z)=-ln(1-z)`,
 and numerical integration of the inversion branch.
 
+`jacobi_sn`, `jacobi_cn`, `jacobi_dn` and `jacobi_am` are the Jacobi elliptic functions -- the
+doubly-periodic generalization of sine and cosine that inverts the incomplete elliptic
+integral. They govern the exact (large-angle) pendulum, solitons, and rigid-body rotation:
+
+```python
+from quantforge import jacobi_sn, jacobi_cn, jacobi_dn, jacobi_am, elliptic_k
+
+m = 0.5
+jacobi_sn(1.0, m)          # 0.8030018248956439
+jacobi_am(1.0, m)          # 0.9323150798838539  (amplitude phi, sn = sin phi)
+jacobi_sn(1.0, 1.0)        # 0.761594155955765   = tanh(1)  (m=1 limit)
+
+K = elliptic_k(m)          # quarter period
+jacobi_sn(K, m)            # 1.0
+jacobi_dn(K, m)            # 0.7071067811865476  = sqrt(1 - m)
+```
+
+`jacobi_am(u, m)` returns the amplitude `phi` with `u = F(phi | m)`, computed by descending
+Landen / AGM iteration (Abramowitz & Stegun 16.4, quadratic convergence); then
+`sn = sin(am)`, `cn = cos(am)`, `dn = sqrt(1 - m sin^2 am)`. The parameter `m = k**2` runs over
+`[0, 1]`: at `m = 0` they collapse to `sin`/`cos`/`1`, and at `m = 1` to `tanh`/`sech`/`sech`.
+They satisfy `sn**2 + cn**2 = 1`, `dn**2 + m*sn**2 = 1`, `sn' = cn*dn`, and are periodic with
+period `4K(m)`. Cross-checked against all of those plus numerical inversion of `F(phi | m)`.
+
 The correlated-normal CDFs behind the multi-asset and compound-option models are public
 too:
 

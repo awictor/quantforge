@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.712.0] - 2026-09-14
+
+### Documentation
+- README: documented the Jacobi elliptic functions `jacobi_sn`/`jacobi_cn`/`jacobi_dn`/`jacobi_am`
+  in the special-functions block after the polylog note -- the AGM/Landen evaluation, the
+  trig (m=0) and hyperbolic (m=1) limits, the quarter-period values, and the defining
+  identities. All snippet values verified live.
+
 ## [1.711.0] - 2026-09-14
 
 ### Added
