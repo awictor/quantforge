@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.718.0] - 2026-09-14
+
+### Documentation
+- README: documented `hermite_h`/`hermite_he`, `laguerre_l`, and `chebyshev_t`/`chebyshev_u` in
+  the special-functions block after the Legendre note -- the three-term recurrences, the
+  Hermite/Chebyshev identities, and the orthogonality weights. All snippet values verified live.
+
 ## [1.717.0] - 2026-09-14
 
 ### Added

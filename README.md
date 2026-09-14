@@ -7229,6 +7229,29 @@ orthonormal over the sphere. Cross-checked against the explicit `P_0..P_5`, the 
 integral `int P_l P_k = 2/(2l+1) delta`, the closed-form `P_l^m`, and numerical orthonormality
 of the harmonics.
 
+The other classical orthogonal families are `hermite_h`/`hermite_he` (physicists'/probabilists'
+Hermite), `laguerre_l` (generalized Laguerre `L_n^(alpha)`), and `chebyshev_t`/`chebyshev_u`
+(Chebyshev of the first/second kind) -- the eigenfunctions of the quantum oscillator, the radial
+hydrogen problem, and the backbone of minimax approximation:
+
+```python
+from quantforge import hermite_h, hermite_he, laguerre_l, chebyshev_t, chebyshev_u
+
+hermite_h(3, 0.5)          # -5.0    = 8x^3 - 12x
+hermite_he(4, 1.0)         # -2.0    (probabilists')
+laguerre_l(3, 2.0)         # -0.3333333333333333
+laguerre_l(2, 2.0, 1.0)    # -1.0    (generalized, alpha=1)
+chebyshev_t(5, 0.3)        # 0.9988800000000001  = cos(5 * arccos 0.3)
+chebyshev_u(4, 0.3)        # 0.04960000000000009
+```
+
+Each is evaluated by its three-term recurrence (no factorials, no cancellation), so high
+degrees stay accurate. `chebyshev_t(n, cos t) = cos(n t)` and
+`chebyshev_u(n, cos t) = sin((n+1) t)/sin(t)`; the probabilists' and physicists' Hermite are
+linked by `He_n(x) = 2**(-n/2) H_n(x/sqrt 2)`. Cross-checked against the explicit low-order
+polynomials, those identities, and the weighted orthogonality integrals for the Gaussian,
+exponential, and arcsine weights.
+
 The correlated-normal CDFs behind the multi-asset and compound-option models are public
 too:
 
