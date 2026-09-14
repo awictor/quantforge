@@ -6283,6 +6283,28 @@ catastrophic cancellation), and `covariance`/`correlation`/`variance_x`/`varianc
 the current estimate — matching batch formulas. Two accumulators merge exactly with `+`,
 so partial covariances from parallel chunks combine into the whole.
 
+`RunningRegression` carries the same one-pass, mergeable machinery one step further and
+*fits a line*: ordinary least squares of `y` on `x`, reading slope, intercept,
+correlation, R-squared, and predictions at any point:
+
+```python
+from quantforge import RunningRegression
+
+r = RunningRegression([1, 2, 3, 4, 5], [2.1, 3.9, 6.2, 7.8, 10.1])
+r.slope(), r.intercept()             # 1.99, 0.05
+r.r_squared()                        # 0.9973
+r.predict(6)                         # 11.99
+(RunningRegression([1, 2], [2.1, 3.9]) +
+ RunningRegression([3, 4, 5], [6.2, 7.8, 10.1])).slope()   # 1.99 — same as the whole
+```
+
+`update(x, y)` folds one pair via the Welford co-moment recurrence, and `slope`,
+`intercept`, `predict`, `correlation`, and `r_squared` read the current fit — identical to
+`statistics.linear_regression` on the same data, with `r_squared` equal to the squared
+correlation. As with the other accumulators, `+` merges two fits exactly, so chunks
+regressed in parallel combine into the whole-sample fit. A slope needs at least two points
+with spread in `x`; a constant `x` raises rather than dividing by zero.
+
 When each observation carries a weight — reliability, sampling, or scenario probability —
 the weighted summaries apply:
 

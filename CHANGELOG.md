@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.578.0] - 2026-09-14
+
+### Documentation
+- README: documented `RunningRegression` in the streaming-statistics section after
+  `RunningCovariance` -- the one-pass Welford OLS fit, reading slope/intercept/R-squared
+  and `predict`, exact `+` merge matching the whole-sample fit, and the tie to
+  `statistics.linear_regression`. All snippet values verified live.
+
 ## [1.577.0] - 2026-09-14
 
 ### Added
