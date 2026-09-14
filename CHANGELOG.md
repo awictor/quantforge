@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.54.0] - 2026-09-14
+
+### Documentation
+- README: documented the Diophantine tools in the Number theory section, after
+  combinatorial ranking — `linear_diophantine`, `sqrt_continued_fraction`, and
+  `pell_fundamental` with worked values. All snippet values verified live.
+
 ## [3.53.0] - 2026-09-14
 
 ### Added

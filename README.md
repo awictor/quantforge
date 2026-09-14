@@ -6614,6 +6614,23 @@ one bit); `permutation_rank`/`permutation_unrank` use the Lehmer code and
 `combination_rank`/`combination_unrank` the combinatorial number system — both matching
 `itertools`' lexicographic order and round-tripping exactly.
 
+Integer equations close out the section — linear Diophantine, square-root continued
+fractions, and Pell:
+
+```python
+from quantforge import linear_diophantine, sqrt_continued_fraction, pell_fundamental
+
+linear_diophantine(3, 6, 9)     # (3, 0, 2, -1): x0,y0 + k*(dx,dy) solves 3x+6y=9
+sqrt_continued_fraction(7)      # (2, [1,1,1,4]) — sqrt(7) = [2; 1,1,1,4, ...]
+pell_fundamental(61)            # (1766319049, 226153980) — the notorious x^2-61y^2=1
+```
+
+`linear_diophantine` returns a particular solution plus the step generating all others
+(or `None` when `gcd(a,b)` does not divide `c`). `sqrt_continued_fraction` gives the
+eventually-periodic CF of an irrational square root, and `pell_fundamental` reads the
+smallest positive `x^2 - n y^2 = 1` solution off its convergents — matching the classic
+hard cases like `n = 61`.
+
 ## Computational geometry
 
 Planar geometry primitives on lists of `(x, y)` points — the shape of a point cloud, its
