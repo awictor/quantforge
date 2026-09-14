@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.580.0] - 2026-09-14
+
+### Documentation
+- README: documented `MisraGries` and `SpaceSaving` in the sketches section after
+  `CountMinSketch`/`BloomFilter` -- the ``n / (k + 1)`` survival guarantee and no-overcount
+  property of Misra-Gries, and Space-Saving's upper-bound count with `count - error`
+  lower bound via `top`/`guaranteed`. All snippet values verified live.
+
 ## [1.579.0] - 2026-09-14
 
 ### Added

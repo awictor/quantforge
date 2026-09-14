@@ -6431,6 +6431,33 @@ the memory stays fixed. `BloomFilter` sizes its bit array and hash count from th
 non-member tests present only at about the configured false-positive rate. Both are
 deterministic through the shared SHA-1 hashing.
 
+When the question is *which items dominate* rather than how many there are,
+`MisraGries` and `SpaceSaving` track the frequent items in `O(k)` counters — the
+heavy-hitters problem:
+
+```python
+from quantforge import MisraGries, SpaceSaving
+
+mg = MisraGries(3)
+for x in "aaaaaaabbbbbccccdde":     # a=7 b=5 c=4 d=2 e=1, n=19
+    mg.add(x)
+mg.counts()                         # {'a': 4, 'b': 2, 'c': 1} — undercounts, but keeps the leaders
+
+ss = SpaceSaving(3)
+for x in "aaaaaaabbbbbccccdde":
+    ss.add(x)
+ss.top(2)                           # [('a', 7), ('d', 6)] — 'd' overcounts from an evicted slot
+ss.guaranteed(2)                    # [('a', 7), ('d', 2)] — count - error, a true lower bound
+```
+
+`MisraGries` keeps `k` counters and, when a new item arrives with all counters full,
+decrements every counter — so any item occurring more than `n / (k + 1)` times is
+guaranteed to survive, and a stored count never exceeds the true count. `SpaceSaving`
+instead evicts the current minimum slot and lets the new item inherit its count as an
+`error`, so its count is an *upper* bound and `count - error` a guaranteed lower bound;
+`top(m)` ranks the estimates and `guaranteed(m)` returns those lower bounds. On a skewed
+stream Space-Saving recovers the true top items even when their raw counts drift high.
+
 `log(sum(exp(x)))` overflows the instant any `x` is large; `logsumexp` shifts by the
 maximum first, so it stays exact where the naive form returns `inf`, and `softmax` /
 `log_softmax` build the normalized (log-)probability transforms on it:
