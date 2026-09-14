@@ -570,6 +570,13 @@ from .dct import dct, idct
 from .goertzel import goertzel, goertzel_power
 from .windows import hann, hamming, blackman, bartlett, rectangular, apply_window
 from .fir_filter import fir_lowpass, fir_highpass, fir_bandpass, fir_apply
+from .hilbert import (
+    analytic_signal,
+    hilbert_transform,
+    envelope,
+    instantaneous_phase,
+    instantaneous_frequency,
+)
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -960,7 +967,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "2.20.0"
+__version__ = "2.21.0"
 
 __all__ = [
     "OptionType",
@@ -1813,6 +1820,11 @@ __all__ = [
     "fir_highpass",
     "fir_bandpass",
     "fir_apply",
+    "analytic_signal",
+    "hilbert_transform",
+    "envelope",
+    "instantaneous_phase",
+    "instantaneous_frequency",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

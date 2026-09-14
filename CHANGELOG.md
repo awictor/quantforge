@@ -31,6 +31,17 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.21.0] - 2026-09-13
+
+### Added
+- `hilbert.py`: Hilbert transform and the analytic signal via the FFT one-sided
+  construction — `analytic_signal`, `hilbert_transform`, `envelope`,
+  `instantaneous_phase` (unwrapped), and `instantaneous_frequency`. Cross-checked: the
+  analytic real part reproduces the input, the Hilbert transform of a cosine equals the
+  sine to ~1e-14, the envelope of a pure tone is its amplitude and the envelope of an
+  AM signal recovers the modulating waveform exactly, and the instantaneous frequency
+  of a single tone is flat at that tone's frequency.
+
 ## [2.20.0] - 2026-09-13
 
 ### Documentation

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.20.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.21.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -6234,6 +6234,47 @@ Auto-generated from `quantforge` v2.20.0 by `docs/gen_api.py` — do not edit by
 >
 > Returns an :class:`MCResult`. Puts come from simulating the same paths and
 > taking the put payoff (parity holds path-by-path at the terminal spot).
+
+## hilbert
+
+### `analytic_signal(x)`  _function_
+
+> Analytic signal of a real sequence ``x`` (length a power of two).
+>
+> Returns a list of complex values ``z`` with ``z.real == x`` (to floating error)
+> and ``z.imag`` the Hilbert transform of ``x``. The one-sided spectrum is formed by
+> keeping the DC and Nyquist bins, doubling the positive-frequency bins, and zeroing
+> the negative-frequency bins, then inverting the FFT.
+
+### `envelope(x)`  _function_
+
+> Instantaneous-amplitude envelope ``|analytic_signal(x)|``.
+>
+> For an amplitude-modulated carrier this recovers the modulating envelope; for a
+> pure sinusoid it is a constant equal to the amplitude. Length a power of two.
+
+### `hilbert_transform(x)`  _function_
+
+> Discrete Hilbert transform of ``x``: the imaginary part of its analytic signal.
+>
+> A 90-degree phase shift of every frequency component (cosine -> sine). Length must
+> be a power of two.
+
+### `instantaneous_frequency(x, dt=1.0)`  _function_
+
+> Instantaneous frequency (cycles per unit time) from the analytic signal.
+>
+> The derivative of the unwrapped phase, ``d(phase)/dt / (2*pi)``, by central
+> differences on the interior and one-sided differences at the ends. For a pure tone
+> this is flat at the tone's frequency. ``dt`` is the sample spacing; length a power
+> of two.
+
+### `instantaneous_phase(x)`  _function_
+
+> Unwrapped instantaneous phase (radians) of the analytic signal of ``x``.
+>
+> ``atan2(imag, real)`` per sample, unwrapped so it is continuous rather than
+> jumping by ``2*pi``. Length a power of two.
 
 ## hmm
 
