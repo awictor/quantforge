@@ -609,6 +609,13 @@ from .number_theory import (
     divisors,
     euler_totient,
 )
+from .modular import (
+    extended_gcd,
+    mod_inverse,
+    chinese_remainder,
+    mod_pow,
+    discrete_log,
+)
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -999,7 +1006,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "2.44.0"
+__version__ = "2.45.0"
 
 __all__ = [
     "OptionType",
@@ -1895,6 +1902,11 @@ __all__ = [
     "factorize",
     "divisors",
     "euler_totient",
+    "extended_gcd",
+    "mod_inverse",
+    "chinese_remainder",
+    "mod_pow",
+    "discrete_log",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

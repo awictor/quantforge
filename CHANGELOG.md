@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.45.0] - 2026-09-13
+
+### Added
+- `modular.py`: modular arithmetic — `extended_gcd`, `mod_inverse`,
+  `chinese_remainder`, `mod_pow` (negative exponents via inverse), and `discrete_log`
+  (baby-step giant-step). Cross-checked: the extended GCD satisfies Bezout's identity and
+  matches `math.gcd`, the inverse gives `a*inv == 1 (mod m)`, CRT reconstructs a known
+  value (and the classic (2,3,2) mod (3,5,7) = 23), and the discrete log inverts
+  exponentiation on a prime field (3^x = 13 mod 17 -> 4).
+
 ## [2.44.0] - 2026-09-13
 
 ### Documentation

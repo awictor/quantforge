@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.44.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.45.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -8923,6 +8923,43 @@ Auto-generated from `quantforge` v2.44.0 by `docs/gen_api.py` — do not edit by
 > A flat run at ``levels=0`` is plain single-grid Monte Carlo; increasing
 > ``levels`` refines the time discretisation while sharing the cost across
 > coarser levels.
+
+## modular
+
+### `chinese_remainder(remainders, moduli)`  _function_
+
+> Chinese Remainder Theorem: the unique ``x`` in ``[0, M)`` matching all congruences.
+>
+> Given ``x == remainders[i] (mod moduli[i])`` with pairwise-coprime ``moduli``,
+> returns ``(x, M)`` where ``M`` is the product of the moduli. Raises if the moduli are
+> not pairwise coprime.
+
+### `discrete_log(base, target, mod)`  _function_
+
+> Smallest non-negative ``x`` with ``base^x == target (mod mod)``, or ``None``.
+>
+> Baby-step giant-step: ``O(sqrt(mod))`` time and space. Searches exponents in
+> ``[0, mod)``. ``mod`` must be positive; ``target`` is reduced mod ``mod``.
+
+### `extended_gcd(a, b)`  _function_
+
+> Extended Euclidean algorithm: return ``(g, x, y)`` with ``a*x + b*y == g = gcd(a, b)``.
+>
+> The Bezout coefficients ``x, y`` are the basis of the modular inverse and the CRT.
+
+### `mod_inverse(a, m)`  _function_
+
+> Modular inverse ``a^{-1} mod m``: the ``x`` with ``a*x == 1 (mod m)``.
+>
+> Exists iff ``gcd(a, m) == 1``; raises ``ValueError`` otherwise. Result is in
+> ``[0, m)``.
+
+### `mod_pow(base, exp, mod)`  _function_
+
+> Modular exponentiation ``base^exp mod mod`` (supports negative ``exp`` via inverse).
+>
+> A thin, explicit wrapper over fast binary exponentiation; a negative exponent inverts
+> the base first (requires ``gcd(base, mod) == 1``).
 
 ## moment_premium
 
