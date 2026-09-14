@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.41.0] - 2026-09-13
+
+### Added
+- `continued_fraction.py`: continued-fraction expansion and best rational approximation
+  — `cf_expansion`, `convergents`, and `best_rational`. Cross-checked: the expansions of
+  415/93, pi, and sqrt(2) match their known coefficients; pi's convergents are
+  22/7, 333/106, 355/113; each convergent beats every fraction with a smaller
+  denominator; and `best_rational` matches Python's `Fraction.limit_denominator` on 3000
+  random values across denominator bounds.
+
 ## [2.40.0] - 2026-09-13
 
 ### Documentation

@@ -600,6 +600,7 @@ from .matched_filter import (
     find_peaks,
     detect_template,
 )
+from .continued_fraction import cf_expansion, convergents, best_rational
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -990,7 +991,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "2.40.0"
+__version__ = "2.41.0"
 
 __all__ = [
     "OptionType",
@@ -1877,6 +1878,9 @@ __all__ = [
     "normalized_matched_filter",
     "find_peaks",
     "detect_template",
+    "cf_expansion",
+    "convergents",
+    "best_rational",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

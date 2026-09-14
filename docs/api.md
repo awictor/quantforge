@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.40.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.41.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -2638,6 +2638,34 @@ Auto-generated from `quantforge` v2.40.0 by `docs/gen_api.py` — do not edit by
 >
 > Converges for diagonally dominant ``A``; slower than Gauss-Seidel. Returns ``x``,
 > ``residual_norm`` and ``n_iter``.
+
+## continued_fraction
+
+### `best_rational(x, max_denominator=1000000)`  _function_
+
+> Closest fraction ``(p, q)`` to ``x`` with ``q <= max_denominator``.
+>
+> Returns the convergent (or the appropriate *semiconvergent*) with the largest
+> admissible denominator -- the best rational approximation under the bound, matching
+> the classic Stern-Brocot / ``limit_denominator`` result. ``q >= 1`` always.
+
+### `cf_expansion(x, max_terms=64, tol=1e-15)`  _function_
+
+> Continued-fraction coefficients ``[a0, a1, a2, ...]`` of a real ``x``.
+>
+> Repeatedly takes the integer part and inverts the remainder. Stops after
+> ``max_terms`` terms or when the fractional remainder falls below ``tol`` (a rational
+> ``x`` terminates). ``a0`` may be negative or zero; every later term is a positive
+> integer.
+
+### `convergents(terms)`  _function_
+
+> Successive convergents ``[(p0, q0), (p1, q1), ...]`` from CF coefficients.
+>
+> Uses the standard recurrence ``p_k = a_k p_{k-1} + p_{k-2}``,
+> ``q_k = a_k q_{k-1} + q_{k-2}``. Each ``(p, q)`` is the best rational approximation
+> with denominator ``<= q`` -- the fractions converge to the value, alternating above
+> and below it.
 
 ## convertible_lattice
 
