@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.16.0] - 2026-09-14
+
+### Documentation
+- README: documented partial and semi-partial correlation in the rank-dependence section,
+  next to Kendall's tau — `partial_correlation` and `semipartial_correlation` with the
+  spurious-correlation example. All snippet values verified live.
+
 ## [3.15.0] - 2026-09-14
 
 ### Added

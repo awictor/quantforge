@@ -4295,6 +4295,24 @@ margin, so an aligned tie no longer caps the coefficient below one;
 normal approximation with `Var(S) = n(n-1)(2n+5)/18`, returning a two-sided p-value
 equal to `erfc(|z| / sqrt(2))`.
 
+A raw correlation can be entirely an artifact of a shared driver; `partial_correlation`
+measures the link between two variables *after* regressing out one or more controls:
+
+```python
+from quantforge import partial_correlation, semipartial_correlation
+
+# X and Y both driven by a common Z -> raw corr ~0.92, but nothing once Z is removed
+partial_correlation(x, y, z)            # ~0.0 — the association was spurious
+semipartial_correlation(x, y, z)        # control Z out of y only
+```
+
+`partial_correlation` regresses the controls out of *both* variables (OLS) and correlates
+the residuals — matching the textbook three-variable formula and dropping a
+common-cause correlation of `0.92` to essentially zero, while leaving a genuine link
+untouched when the control is irrelevant. `semipartial_correlation` removes the controls
+from only one variable (the unique contribution of `x` to `y`). `controls` is a single
+column or a list of columns.
+
 Kendall and Spearman still only see *monotone* co-movement. **Distance correlation**
 (Székely-Rizzo) sees *any* dependence: it is zero if and only if the two variables
 are independent, so it catches nonlinear structure a rank or linear correlation
