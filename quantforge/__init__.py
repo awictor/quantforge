@@ -759,6 +759,14 @@ from .association import (
 )
 from .partial_corr import partial_correlation, semipartial_correlation
 from .coherence import cross_spectral_density, coherence
+from .signal_features import (
+    zero_crossing_rate,
+    rms,
+    crest_factor,
+    spectral_centroid,
+    spectral_bandwidth,
+    spectral_flatness,
+)
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -1149,7 +1157,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "3.18.0"
+__version__ = "3.19.0"
 
 __all__ = [
     "OptionType",
@@ -2186,6 +2194,12 @@ __all__ = [
     "semipartial_correlation",
     "cross_spectral_density",
     "coherence",
+    "zero_crossing_rate",
+    "rms",
+    "crest_factor",
+    "spectral_centroid",
+    "spectral_bandwidth",
+    "spectral_flatness",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

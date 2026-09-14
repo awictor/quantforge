@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.19.0] - 2026-09-14
+
+### Added
+- `signal_features.py`: time- and frequency-domain signal descriptors —
+  `zero_crossing_rate`, `rms`, `crest_factor`, `spectral_centroid`, `spectral_bandwidth`,
+  and `spectral_flatness`. Cross-checked: a sine's RMS is 1/sqrt(2) and its crest factor
+  sqrt(2), a pure tone's spectral centroid lands at its frequency with a far narrower
+  bandwidth than noise, and spectral flatness is near 0 for a tone and high for
+  white noise.
+
 ## [3.18.0] - 2026-09-14
 
 ### Documentation

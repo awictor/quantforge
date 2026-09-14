@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.18.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.19.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -13804,6 +13804,46 @@ Auto-generated from `quantforge` v3.18.0 by `docs/gen_api.py` — do not edit by
 > For each point, the median of its slopes to all other points; the overall slope is
 > the median of those. 50% breakdown point -- robust to nearly half the data being
 > corrupted. Points sharing an ``x`` value contribute no slope for that pair.
+
+## signal_features
+
+### `crest_factor(x)`  _function_
+
+> Crest factor: peak amplitude divided by RMS.
+>
+> High for impulsive/peaky signals (a lone spike), low for signals that fill their
+> range (~1.41 for a sine, 1.0 for a square wave). Zero-signal raises.
+
+### `rms(x)`  _function_
+
+> Root-mean-square amplitude of a signal.
+
+### `spectral_bandwidth(x)`  _function_
+
+> Spectral bandwidth: the power-weighted standard deviation about the centroid.
+>
+> Measures how spread out the spectrum is (narrow for a pure tone, wide for noise).
+
+### `spectral_centroid(x)`  _function_
+
+> Spectral centroid: the power-weighted mean frequency (cycles/sample).
+>
+> The spectrum's "center of mass" -- higher for brighter/higher-pitched signals. Zero
+> for a DC-only (constant) signal. Computed from the mean-removed periodogram.
+
+### `spectral_flatness(x)`  _function_
+
+> Spectral flatness (Wiener entropy): geometric mean / arithmetic mean of the spectrum.
+>
+> Near ``1`` for white-noise-like flat spectra, near ``0`` for tonal signals with power
+> concentrated in a few bins. Uses the mean-removed positive-frequency power bins.
+
+### `zero_crossing_rate(x)`  _function_
+
+> Fraction of adjacent sample pairs that straddle zero (sign changes / (n-1)).
+>
+> A rough pitch/noisiness proxy: high for noisy or high-frequency signals, low for
+> smooth low-frequency ones. Returns a value in ``[0, 1]``.
 
 ## signals
 
