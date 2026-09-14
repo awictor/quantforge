@@ -6639,6 +6639,23 @@ reduced to `n - 2` triangles whose areas sum to the polygon's own. `signed_area`
 shoelace area — its sign gives the winding, which `is_clockwise` reports — and
 `is_convex_polygon` checks that every turn goes the same way.
 
+Point-proximity queries — hit-testing, snapping, route distance — come from the
+point-to-line and point-to-segment distances:
+
+```python
+from quantforge import (point_to_line_distance, point_segment_distance,
+                        closest_point_on_segment, point_polyline_distance)
+
+point_to_line_distance((0, 3), (0, 0), (1, 0))       # 3.0 — perpendicular to the x-axis
+point_segment_distance((5, 0), (0, 0), (3, 0))       # 2.0 — clamps past the endpoint
+point_polyline_distance((3, 1), [(0,0),(2,0),(2,2),(4,2)])  # 1.0 — nearest segment
+```
+
+`point_to_line_distance` is the perpendicular distance to an *infinite* line;
+`point_segment_distance` clamps to a finite segment (so a point past an endpoint measures
+to that endpoint), with `closest_point_on_segment` returning the foot itself; and
+`point_polyline_distance` takes the minimum over a chain of segments.
+
 ## Graph algorithms
 
 The core graph routines on a dict adjacency list — shortest paths, traversal, components,

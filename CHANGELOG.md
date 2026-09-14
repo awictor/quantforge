@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.42.0] - 2026-09-14
+
+### Documentation
+- README: documented the point-proximity distances in the Computational geometry section
+  — `point_to_line_distance`, `point_segment_distance`, `closest_point_on_segment`, and
+  `point_polyline_distance` with worked values. All snippet values verified live.
+
 ## [3.41.0] - 2026-09-14
 
 ### Added
