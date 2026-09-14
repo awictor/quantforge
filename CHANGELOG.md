@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.591.0] - 2026-09-14
+
+### Added
+- `lca.py`: `LCA` answers lowest-common-ancestor queries on a rooted tree via binary
+  lifting -- an ``O(n log n)`` build precomputes each node's ``2^j``-th ancestor, then
+  `query` lifts the deeper node to its partner's depth and lifts both in powers of two
+  until they meet, ``O(log n)`` per query. `depth`, `distance` (edge count on the path
+  between two nodes), and `is_ancestor` come along for free. Uses an iterative DFS so deep
+  chains do not overflow recursion. Cross-checked against a brute path-to-root ancestry
+  reference over 2000 random trees, plus explicit tree/path/deep-chain cases.
+
 ## [1.590.0] - 2026-09-14
 
 ### Documentation

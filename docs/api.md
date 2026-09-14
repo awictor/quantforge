@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.76.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.77.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -8627,6 +8627,17 @@ Auto-generated from `quantforge` v3.76.0 by `docs/gen_api.py` — do not edit by
 > large ``alpha`` drives all slopes to zero (the fit collapses to the mean of
 > ``y``). Features are standardized internally so the penalty applies evenly; the
 > intercept is never penalized. A slope set to exactly zero has been selected out.
+
+## lca
+
+### `LCA(adjacency, root)`  _class_
+
+> Lowest-common-ancestor index over a rooted tree.
+>
+> Construct from an adjacency map ``{node: [neighbors]}`` (an undirected tree) and a root.
+> ``query(u, v)`` returns their LCA, ``depth(u)`` the edge count from the root, and
+> ``distance(u, v)`` the number of edges on the path between two nodes. Nodes may be any
+> hashable label.
 
 ## ldi
 

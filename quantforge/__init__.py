@@ -547,6 +547,7 @@ from .sparse_table import (
     range_max_query,
     range_gcd_query,
 )
+from .lca import LCA
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1251,7 +1252,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "3.76.0"
+__version__ = "3.77.0"
 
 __all__ = [
     "OptionType",
@@ -2047,6 +2048,7 @@ __all__ = [
     "range_min_query",
     "range_max_query",
     "range_gcd_query",
+    "LCA",
     "Dual",
     "dual_derivative",
     "dual_gradient",
