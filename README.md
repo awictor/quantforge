@@ -6182,6 +6182,23 @@ near machine precision without hand-tuning the step, unlike the fixed-step `grad
 The numerical Black-Scholes delta above landing on the closed-form value is the kind
 of cross-check that catches a sign or scaling slip in a hand-coded Greek.
 
+To *build* a finite-difference stencil rather than apply a fixed one, `fd_weights` gives
+Fornberg's coefficients for any derivative order on an arbitrary grid:
+
+```python
+from quantforge import fd_weights
+
+fd_weights(0, [-1, 0, 1], 2)   # [[0,1,0], [-0.5,0,0.5], [1,-2,1]]
+fd_weights(0, [0, 1, 2], 1)[1] # [-1.5, 2.0, -0.5] — one-sided first derivative
+```
+
+`fd_weights(x0, grid, max_deriv)` returns, for each derivative order `0..max_deriv`, the
+weights `c` with `f^(k)(x0) ~ sum_i c[i] f(grid[i])` — exact for polynomials up to the grid
+degree. The grid need not be uniform or symmetric, so one call produces central, forward,
+backward, or staggered stencils to any order; the classic `[-0.5, 0, 0.5]` and `[1, -2, 1]`
+fall out for `{-1, 0, 1}`. Verified against the textbook stencils and polynomial exactness
+on every monomial up to the grid degree.
+
 When the function can be evaluated on complex inputs, the complex-step method is even
 sharper — it has *no* subtractive cancellation, so the step can be made
 arbitrarily small:

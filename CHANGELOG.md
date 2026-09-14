@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.668.0] - 2026-09-14
+
+### Documentation
+- README: documented `fd_weights` in the Numerical utilities section after the Ridders
+  derivatives -- Fornberg finite-difference stencil weights for any order on an arbitrary
+  grid. All snippet values verified live.
+
 ## [1.667.0] - 2026-09-14
 
 ### Added
