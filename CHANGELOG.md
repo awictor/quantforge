@@ -31,6 +31,14 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.22.0] - 2026-09-13
+
+### Documentation
+- README: documented the Hilbert transform and analytic signal in the spectral
+  section — the phasor interpretation, the FFT one-sided construction, the AM-envelope
+  recovery and flat instantaneous-frequency examples, and the power-of-two constraint.
+  All snippet values verified against a live run.
+
 ## [2.21.0] - 2026-09-13
 
 ### Added

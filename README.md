@@ -4461,6 +4461,29 @@ and a fast cosine, a low-pass keeps the slow one and removes the fast one, leavi
 amplitude near the surviving tone's `1.0`. `fir_bandpass` builds a band-pass as the
 difference of two low-pass filters and `fir_apply` runs the direct convolution.
 
+Filtering keeps and rejects frequencies; the *analytic signal* instead turns a real
+oscillation into a rotating phasor, so you can read off its instantaneous amplitude and
+frequency. The Hilbert transform is the machinery: a 90-degree phase shift of every
+component (cosine becomes sine), computed by zeroing the negative-frequency half of the
+spectrum and doubling the positive half:
+
+```python
+from quantforge import analytic_signal, envelope, instantaneous_frequency
+
+z = analytic_signal(x)            # complex: z.real == x, z.imag == Hilbert(x)
+env = envelope(am_signal)         # instantaneous amplitude — recovers an AM envelope
+freq = instantaneous_frequency(x) # cycles/sample, from the phase derivative
+```
+
+For an amplitude-modulated carrier `(1 + 0.5*cos(2*pi*fm*t)) * cos(2*pi*fc*t)`,
+`envelope` recovers the `1 + 0.5*cos(...)` modulating waveform (the fast carrier drops
+out entirely). For a pure tone at three cycles over 256 samples the real part of the
+analytic signal is the input to floating error, and `instantaneous_frequency` is flat at
+`3/256 ≈ 0.0117` cycles/sample. `hilbert_transform` returns just the imaginary part and
+`instantaneous_phase` the unwrapped phase. Inputs must have a power-of-two length (the
+FFT constraint). This is the standard demodulation and envelope-detection tool for AM/FM
+signals, vibration analysis, and empirical-mode decomposition.
+
 ## Wavelet transform (Haar multiresolution)
 
 Where the Fourier transform asks *what frequencies are present*, the wavelet
