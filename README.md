@@ -4607,6 +4607,26 @@ same `(w, x, y, z)` used above, so `quat_to_matrix(q)` applied to a vector match
 `rotate_vector(q, v)`. Verified over thousands of random rotations that every round-trip
 recovers the input and the matrices stay orthogonal.
 
+A rotation can also be written as a single *rotation vector* (axis scaled by angle) — the
+SO(3) exponential map. `rodrigues` exponentiates it to a matrix and `so3_log` inverts:
+
+```python
+from quantforge import rodrigues, so3_log, hat
+import math
+
+rodrigues([0, 0, math.pi/2])       # the 90-deg-about-z matrix
+so3_log(rodrigues([0.1, 0.2, 0.3]))# [0.1, 0.2, 0.3] — recovers the rotation vector
+hat([1, 2, 3])                     # [[0,-3,2],[3,0,-1],[-2,1,0]] — skew matrix
+```
+
+`rodrigues(omega)` applies Rodrigues' formula `R = I + sin(t) K + (1 - cos t) K^2` where `t`
+is the rotation angle `|omega|` and `K = hat(omega/t)` is the skew-symmetric cross-product
+matrix; `so3_log` takes a matrix back to its rotation vector (with dedicated near-zero and
+near-pi branches). `hat`/`unhat` convert between a 3-vector and its skew matrix, with
+`hat(v) w == cross(v, w)`. This exp/log pair is the natural way to average, interpolate, or
+differentiate rotations on the SO(3) manifold — and it agrees with the quaternion path to
+machine precision.
+
 The everyday vector operations back them up — dot and cross products, norms, angles,
 projection, and reflection:
 

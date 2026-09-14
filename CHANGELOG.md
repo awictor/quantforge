@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.674.0] - 2026-09-14
+
+### Documentation
+- README: documented `rodrigues`, `so3_log`, and `hat` in the Quaternions section after the
+  rotation conversions -- the SO(3) exp/log map via Rodrigues' formula. All snippet values
+  verified live.
+
 ## [1.673.0] - 2026-09-14
 
 ### Added
