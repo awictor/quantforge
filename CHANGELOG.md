@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.15.0] - 2026-09-13
+
+### Added
+- `goertzel.py`: the Goertzel single-frequency DFT — `goertzel` (the complex `X[k]`
+  coefficient in `O(n)`) and `goertzel_power` (`|X[k]|^2` for tone detection).
+  Cross-checked: matches the FFT and direct DFT at every bin, power equals the
+  coefficient magnitude squared, a pure tone peaks at its bin, and the DC bin equals the
+  sum. Caught a phase error in the termination formula (magnitude was right but the
+  complex value was off by `e^{jw}`); fixed to match the FFT coefficient exactly.
+
 ## [2.14.0] - 2026-09-13
 
 ### Documentation

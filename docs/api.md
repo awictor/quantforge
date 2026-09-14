@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.14.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.15.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -5718,6 +5718,23 @@ Auto-generated from `quantforge` v2.14.0 by `docs/gen_api.py` — do not edit by
 > are initialized at spread-out data quantiles (deterministic given ``seed``, which
 > only jitters the initial means). The log-likelihood is non-decreasing across
 > iterations. Requires at least ``k`` distinct points.
+
+## goertzel
+
+### `goertzel(x, k)`  _function_
+
+> DFT coefficient ``X[k]`` of ``x`` at integer bin ``k`` by the Goertzel recurrence.
+>
+> Returns the complex ``X[k] = sum_n x[n] exp(-2 pi i k n / N)`` -- identical to the
+> ``k``-th FFT output, computed with a single ``O(n)`` real recurrence. Integer ``k``
+> in ``[0, N)``.
+
+### `goertzel_power(x, k)`  _function_
+
+> Power ``|X[k]|^2`` at bin ``k`` (the Goertzel magnitude-squared).
+>
+> The efficient tone-detection quantity: large when a frequency near bin ``k`` is
+> present, small otherwise. Avoids the final trig of :func:`goertzel`.
 
 ## gof_tests
 
