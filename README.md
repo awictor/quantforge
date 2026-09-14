@@ -4627,6 +4627,29 @@ near-pi branches). `hat`/`unhat` convert between a 3-vector and its skew matrix,
 differentiate rotations on the SO(3) manifold — and it agrees with the quaternion path to
 machine precision.
 
+Directions themselves live on the unit sphere, where the natural operations are angular.
+`angular_distance` measures the angle between two directions, `slerp_vectors` walks the
+great-circle arc between them, and `spherical_centroid` / `spherical_resultant_length` give
+the mean direction and its concentration:
+
+```python
+from quantforge import (angular_distance, slerp_vectors,
+                        spherical_centroid, spherical_resultant_length)
+
+angular_distance([1, 0, 0], [0, 1, 0])          # 1.5708 = pi/2
+slerp_vectors([1, 0, 0], [0, 1, 0], 0.5)         # [0.707, 0.707, 0] — halfway on the arc
+spherical_centroid([[1, 0, 0], [0, 1, 0]])       # [0.707, 0.707, 0] — mean direction
+spherical_resultant_length([[1,0,0],[0,1,0],[0,0,1]])  # 0.577 — spread of the three axes
+```
+
+`angular_distance` uses `atan2(|u x v|, u . v)`, staying accurate for nearly-parallel and
+nearly-opposite directions alike; `slerp_vectors` interpolates at constant angular speed
+(the vector analogue of quaternion `slerp`); and `spherical_centroid` returns the normalized
+vector sum — the resultant direction of spherical statistics — with
+`spherical_resultant_length` its magnitude `R` in `[0, 1]` (1 when all directions coincide,
+0 when they cancel). Verified against `acos` of the dot product and the slerp arc
+properties over thousands of random directions.
+
 The everyday vector operations back them up — dot and cross products, norms, angles,
 projection, and reflection:
 

@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.682.0] - 2026-09-14
+
+### Documentation
+- README: documented `angular_distance`, `slerp_vectors`, `spherical_centroid`, and
+  `spherical_resultant_length` in the Quaternions section after the SO(3) map -- unit-sphere
+  angular geometry. All snippet values verified live.
+
 ## [1.681.0] - 2026-09-14
 
 ### Added
