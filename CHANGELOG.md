@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.655.0] - 2026-09-14
+
+### Added
+- `catmull_rom.py`: `catmull_rom_point` and `catmull_rom_curve` build a C1 interpolating
+  spline that passes *through* every control point (unlike a Bezier curve), with tangents
+  set from the neighbours. The `alpha` parameter selects the parametrization -- 0 uniform,
+  0.5 centripetal (the cusp-free default), 1 chordal -- and points may be scalars or n-D
+  tuples. Cross-checked over 4000 random point sets: each segment interpolates its
+  endpoints, adjacent segments are C0-continuous, the sampled curve passes through every
+  input point, and coincident points do not divide by zero.
+
 ## [1.654.0] - 2026-09-14
 
 ### Documentation

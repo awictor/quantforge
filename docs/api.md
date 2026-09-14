@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.40.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.41.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -1791,6 +1791,23 @@ Auto-generated from `quantforge` v4.40.0 by `docs/gen_api.py` — do not edit by
 > Sums :func:`carry_return` and :func:`rolldown_return`. The expected holding-
 > period return if the curve is unchanged; the standard relative-value carry-
 > and-roll number.
+
+## catmull_rom
+
+### `catmull_rom_curve(points, samples_per_segment=16, alpha=0.5)`  _function_
+
+> Sample the whole spline. Returns a flat list of points along all segments.
+>
+> Each segment contributes ``samples_per_segment`` points; the shared endpoints appear
+> once (the start of each segment except the first is skipped). The curve passes through
+> every input point.
+
+### `catmull_rom_point(points, seg, t, alpha=0.5)`  _function_
+
+> Evaluate segment ``seg`` (between ``points[seg]`` and ``points[seg+1]``) at ``t`` in [0,1].
+>
+> Needs at least two points; endpoints are handled by duplicating the boundary point as the
+> phantom neighbour. ``alpha``: 0 uniform, 0.5 centripetal, 1 chordal.
 
 ## cdar
 
