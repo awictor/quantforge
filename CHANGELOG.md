@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.39.0] - 2026-09-14
+
+### Added
+- `triangulate.py`: polygon triangulation and orientation tests — `ear_clipping_triangulate`,
+  `signed_area`, `is_clockwise`, and `is_convex_polygon`. Cross-checked: a polygon triangulates
+  into exactly `n - 2` triangles whose areas sum to the polygon's own area (square, concave
+  L-shape, and 300 random convex polygons), and the orientation/convexity tests agree with the
+  shoelace sign.
+
 ## [3.38.0] - 2026-09-14
 
 ### Documentation

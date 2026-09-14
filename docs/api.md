@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.38.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.39.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -15608,6 +15608,28 @@ Auto-generated from `quantforge` v3.38.0 by `docs/gen_api.py` — do not edit by
 > ``(target_{t+1}, target_t, source_t)``. Directional: run it both ways to see
 > which series leads. Non-negative; near zero when the source carries no extra
 > information about the target's future. Aligned series of at least three points.
+
+## triangulate
+
+### `ear_clipping_triangulate(polygon)`  _function_
+
+> Triangulate a simple polygon by ear clipping.
+>
+> Returns a list of ``n - 2`` triangles, each a tuple of three ``(x, y)`` vertices. The
+> polygon must be simple (non-self-intersecting) with vertices in order; both windings
+> are accepted. The triangles' areas sum to the polygon's area.
+
+### `is_clockwise(polygon)`  _function_
+
+> Whether the polygon vertices are ordered clockwise (negative signed area).
+
+### `is_convex_polygon(polygon)`  _function_
+
+> Whether a simple polygon is convex (all turns the same direction).
+
+### `signed_area(polygon)`  _function_
+
+> Signed area of a polygon (shoelace): positive if counter-clockwise, negative if CW.
 
 ## trinomial
 
