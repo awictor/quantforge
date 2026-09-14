@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.689.0] - 2026-09-14
+
+### Added
+- `order_statistic_tree.py`: `OrderStatisticTree` is a dynamic multiset over a fixed value
+  universe backed by a binary indexed tree, answering order queries in ``O(log U)`` --
+  `add`/`remove` copies, `rank`/`count_less` (values below a threshold), `select` (the k-th
+  smallest), `count_range` (values in a half-open interval), and `count` (a value's
+  multiplicity). Cross-checked against a sorted-multiset reference over 3000 random
+  interleaved add/remove/query sequences.
+
 ## [1.688.0] - 2026-09-14
 
 ### Documentation

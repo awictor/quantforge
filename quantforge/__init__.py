@@ -688,6 +688,7 @@ from .sphere import (
 from .min_area_rect import min_area_rectangle
 from .delaunay import delaunay_triangulation
 from .voronoi import voronoi_vertices, delaunay_neighbors, nearest_site
+from .order_statistic_tree import OrderStatisticTree
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1392,7 +1393,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "4.74.0"
+__version__ = "4.75.0"
 
 __all__ = [
     "OptionType",
@@ -2333,6 +2334,7 @@ __all__ = [
     "voronoi_vertices",
     "delaunay_neighbors",
     "nearest_site",
+    "OrderStatisticTree",
     "Dual",
     "dual_derivative",
     "dual_gradient",

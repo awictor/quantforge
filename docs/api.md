@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.74.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.75.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -11630,6 +11630,17 @@ Auto-generated from `quantforge` v4.74.0 by `docs/gen_api.py` — do not edit by
 > A textbook Nelder-Mead: build an initial simplex by perturbing each
 > coordinate, then reflect/expand/contract/shrink until the spread of
 > function values falls below ``tol`` or ``max_iter`` is hit.
+
+## order_statistic_tree
+
+### `OrderStatisticTree(universe)`  _class_
+
+> Dynamic multiset with rank/select over a fixed sorted value universe.
+>
+> Construct with the universe of possible values (deduplicated and sorted internally).
+> ``add``/``remove`` adjust multiplicities; ``rank(x)`` counts stored values ``< x``;
+> ``select(k)`` returns the ``k``-th smallest (0-indexed); ``count_less``/``count_range``
+> answer threshold and interval counts. All queries are ``O(log U)``.
 
 ## ou_fit
 
