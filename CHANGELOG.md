@@ -31,6 +31,18 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.39.0] - 2026-09-13
+
+### Added
+- `matched_filter.py`: matched filtering and peak detection — `matched_filter` (max-SNR
+  detection statistic for a known template), `normalized_matched_filter` (correlation
+  coefficient in [-1, 1]), `find_peaks` (local maxima with height/distance filtering),
+  and `detect_template` (template occurrences above a correlation threshold).
+  Cross-checked: the matched filter peaks at the planted template location in noise, the
+  normalized response is exactly 1 at a scaled match, peak finding respects height and
+  minimum-distance constraints, and a distinctive template is detected at all its planted
+  offsets.
+
 ## [2.38.0] - 2026-09-13
 
 ### Documentation

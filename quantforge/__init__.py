@@ -594,6 +594,12 @@ from .iir_filter import (
 )
 from .median_filter import median_filter, rank_filter, hampel_filter
 from .tv_denoise import tv_denoise, tv_total_variation
+from .matched_filter import (
+    matched_filter,
+    normalized_matched_filter,
+    find_peaks,
+    detect_template,
+)
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -984,7 +990,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "2.38.0"
+__version__ = "2.39.0"
 
 __all__ = [
     "OptionType",
@@ -1867,6 +1873,10 @@ __all__ = [
     "hampel_filter",
     "tv_denoise",
     "tv_total_variation",
+    "matched_filter",
+    "normalized_matched_filter",
+    "find_peaks",
+    "detect_template",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

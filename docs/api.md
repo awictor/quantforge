@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.38.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.39.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -8398,6 +8398,48 @@ Auto-generated from `quantforge` v2.38.0 by `docs/gen_api.py` — do not edit by
 > Iterates a uniform start under ``P`` until convergence. For an irreducible
 > aperiodic chain this is the unique long-run state distribution; the returned
 > vector is non-negative and sums to one.
+
+## matched_filter
+
+### `detect_template(x, template, threshold=0.8, distance=None)`  _function_
+
+> Offsets where ``template`` occurs in ``x`` (normalized correlation above ``threshold``).
+>
+> Runs :func:`normalized_matched_filter` and returns the peak offsets whose correlation
+> exceeds ``threshold`` (a coefficient in ``[-1, 1]``), separated by at least
+> ``distance`` samples (default ``len(template)``, so overlapping detections of the same
+> hit collapse to one). Each returned offset is the start index of a match.
+>
+> Because the correlation is amplitude-normalized, short or featureless templates match
+> many noise windows by shape alone; use a longer, distinctive template (and a higher
+> ``threshold``) when false positives matter.
+
+### `find_peaks(x, height=None, distance=1)`  _function_
+
+> Indices of local maxima in ``x``, optionally filtered by height and spacing.
+>
+> A point is a peak if it is strictly greater than both neighbors. ``height`` drops
+> peaks below that threshold; ``distance`` enforces a minimum gap between reported peaks
+> by keeping the taller peak when two fall within ``distance`` samples. Returns a sorted
+> list of indices.
+
+### `matched_filter(x, template)`  _function_
+
+> Matched-filter response: correlate ``x`` against ``template`` at every offset.
+>
+> Returns a list of length ``len(x) - len(template) + 1`` whose entry ``i`` is the dot
+> product of ``template`` with the window ``x[i:i+len(template)]``. The maximum locates
+> the offset where the template best aligns -- the maximum-SNR detector for a known
+> shape in white noise.
+
+### `normalized_matched_filter(x, template)`  _function_
+
+> Normalized matched filter: the correlation coefficient at each offset, in ``[-1, 1]``.
+>
+> Removes each window's mean and the template mean, then divides by the norms, so the
+> response is a dimensionless correlation independent of signal amplitude and offset --
+> ``1`` where the window is a scaled, shifted copy of the template. Returns a list of
+> length ``len(x) - len(template) + 1``.
 
 ## matrix_exp
 
