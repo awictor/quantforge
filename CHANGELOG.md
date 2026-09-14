@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.622.0] - 2026-09-14
+
+### Documentation
+- README: documented `first_true`, `last_true`, `ternary_search_int_max`, and
+  `ternary_search_int_min` in the Numerical utilities section after `find_all_roots` -- the
+  binary-search-the-answer idiom and integer unimodal optimization. All snippet values
+  verified live.
+
 ## [1.621.0] - 2026-09-14
 
 ### Added

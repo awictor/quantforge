@@ -5694,6 +5694,26 @@ equation (e.g. both roots of `e^x = 3x`) to machine precision. `count_sign_chang
 cheap count-only version. Even-multiplicity roots (no sign change) are missed; increase
 `n` for roots closer than the grid spacing.
 
+When the answer is an *integer* characterized by a monotone or unimodal property — the
+"binary search the answer" pattern — `first_true`/`last_true` and the integer ternary
+searches locate it in `O(log n)`:
+
+```python
+from quantforge import first_true, last_true, ternary_search_int_max, ternary_search_int_min
+
+first_true(0, 100, lambda x: x * x >= 50)          # 8 — smallest x with x^2 >= 50
+last_true(0, 100, lambda x: x * x <= 50)           # 7 — largest x with x^2 <= 50
+ternary_search_int_max(0, 20, lambda x: -(x-7)**2) # 7 — argmax of a unimodal f
+ternary_search_int_min(0, 20, lambda x: (x-13)**2) # 13 — argmin
+```
+
+`first_true` returns the smallest integer in `[lo, hi]` where a monotone predicate first
+holds (`hi + 1` if never), `last_true` the largest where a decreasing predicate still holds
+(`lo - 1` if never) — the workhorses for feasibility questions like "smallest capacity that
+fits the schedule". `ternary_search_int_max`/`_min` optimize a strictly unimodal integer
+function. All four are checked against brute linear scans over thousands of random monotone
+thresholds and unimodal functions.
+
 `neville` evaluates the unique degree-`(n-1)` polynomial through `n` points at one
 `x`, returning `(value, error_estimate)`; `divided_differences` / `newton_polynomial`
 build the Newton form once and evaluate it cheaply at many points. Because Neville
