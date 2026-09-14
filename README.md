@@ -5330,6 +5330,24 @@ broyden(f, [0.5, 0.9])               # same root, quasi-Newton
 root, and raise on a singular Jacobian; on a 3-variable polynomial system they recover
 `(1, 2, 3)` to machine precision.
 
+A single bracketing solve needs a sign change to start; `find_all_roots` sweeps an
+interval for *every* sign-changing root:
+
+```python
+from quantforge import find_all_roots, count_sign_changes
+import math
+
+find_all_roots(lambda x: (x-1)*(x-2)*(x-3), 0, 4)   # [1.0, 2.0, 3.0]
+find_all_roots(math.sin, 0.5, 10)                    # [pi, 2pi, 3pi]
+count_sign_changes(math.cos, 0, 20)                  # 6
+```
+
+`find_all_roots` splits `[a, b]` into `n` subintervals, brackets each sign change, and
+refines it with Brent — so it recovers all simple roots of a polynomial or transcendental
+equation (e.g. both roots of `e^x = 3x`) to machine precision. `count_sign_changes` is the
+cheap count-only version. Even-multiplicity roots (no sign change) are missed; increase
+`n` for roots closer than the grid spacing.
+
 `neville` evaluates the unique degree-`(n-1)` polynomial through `n` points at one
 `x`, returning `(value, error_estimate)`; `divided_differences` / `newton_polynomial`
 build the Newton form once and evaluate it cheaply at many points. Because Neville

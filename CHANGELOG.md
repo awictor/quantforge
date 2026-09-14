@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.88.0] - 2026-09-13
+
+### Documentation
+- README: documented `find_all_roots` and `count_sign_changes` in the Numerical utilities
+  section, next to the nonlinear-system solvers — the grid-scan approach, the cubic/sine
+  examples, and the even-multiplicity caveat. All snippet values verified live.
+
 ## [2.87.0] - 2026-09-13
 
 ### Added
