@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.10.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.11.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -1496,6 +1496,50 @@ Auto-generated from `quantforge` v4.10.0 by `docs/gen_api.py` — do not edit by
 > to the front. Clustered inputs (like BWT output) produce many zeros. ``alphabet`` is
 > the initial ordered symbol list; by default the sorted set of symbols in ``data``.
 > Returns ``(codes, alphabet)`` -- the alphabet is needed to decode.
+
+## calendar_math
+
+### `add_days(year, month, day, n)`  _function_
+
+> Return the date ``n`` days after (or before, if ``n < 0``) the given date.
+
+### `day_of_week(year, month, day)`  _function_
+
+> Weekday index, 0 = Monday .. 6 = Sunday.
+
+### `day_of_week_name(year, month, day)`  _function_
+
+> Weekday name, e.g. ``"Wednesday"``.
+
+### `day_of_year(year, month, day)`  _function_
+
+> Ordinal day within the year (Jan 1 = 1).
+
+### `days_between(date1, date2)`  _function_
+
+> Signed day count ``date2 - date1`` (positive when ``date2`` is later).
+
+### `days_in_month(year, month)`  _function_
+
+> Number of days in ``month`` of ``year`` (1-12).
+
+### `easter_date(year)`  _function_
+
+> Gregorian Easter Sunday of ``year`` as ``(year, month, day)`` (Anonymous Computus).
+
+### `is_leap_year(year)`  _function_
+
+> True if ``year`` is a Gregorian leap year (divisible by 4, not 100 unless 400).
+
+### `jdn_to_date(jdn)`  _function_
+
+> Inverse of :func:`julian_day_number`: the ``(year, month, day)`` for a JDN.
+
+### `julian_day_number(year, month, day)`  _function_
+
+> Julian day number of a proleptic-Gregorian date (Fliegel-Van Flandern).
+>
+> A monotone integer count of days, so ``jdn(b) - jdn(a)`` is the day difference.
 
 ## calibration
 

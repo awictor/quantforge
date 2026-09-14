@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.625.0] - 2026-09-14
+
+### Added
+- `calendar_math.py`: calendar arithmetic from first principles, no `datetime` dependency.
+  `julian_day_number`/`jdn_to_date` are the Fliegel-Van Flandern proleptic-Gregorian
+  conversion (a continuous integer day count), and on top of it `days_between`, `day_of_week`
+  (+`day_of_week_name`), `day_of_year`, `add_days`, `is_leap_year`, `days_in_month`, and the
+  Gregorian `easter_date` (Computus). Cross-checked against Python's `datetime`/`calendar`
+  over 8000 random dates -- weekday, day-of-year, JDN round-trip, leap rules, `add_days`, and
+  `days_between` all match -- plus known Easter dates and JDN reference epochs. Being
+  proleptic, it is not bounded by `datetime`'s year <= 9999.
+
 ## [1.624.0] - 2026-09-14
 
 ### Documentation

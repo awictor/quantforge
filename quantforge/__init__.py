@@ -600,6 +600,18 @@ from .binary_search import (
     ternary_search_int_min,
 )
 from .gf2_linalg import solve_gf2, gf2_rank, gf2_nullspace_basis
+from .calendar_math import (
+    is_leap_year,
+    days_in_month,
+    julian_day_number,
+    jdn_to_date,
+    days_between,
+    day_of_week,
+    day_of_week_name,
+    day_of_year,
+    add_days,
+    easter_date,
+)
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1304,7 +1316,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "4.10.0"
+__version__ = "4.11.0"
 
 __all__ = [
     "OptionType",
@@ -2151,6 +2163,16 @@ __all__ = [
     "solve_gf2",
     "gf2_rank",
     "gf2_nullspace_basis",
+    "is_leap_year",
+    "days_in_month",
+    "julian_day_number",
+    "jdn_to_date",
+    "days_between",
+    "day_of_week",
+    "day_of_week_name",
+    "day_of_year",
+    "add_days",
+    "easter_date",
     "Dual",
     "dual_derivative",
     "dual_gradient",
