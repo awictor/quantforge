@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.19.0] - 2026-09-13
+
+### Added
+- `fir_filter.py`: windowed-sinc FIR filter design — `fir_lowpass`, `fir_highpass`,
+  `fir_bandpass` (Nyquist-normalized cutoffs, windowed) and `fir_apply` (convolution).
+  Cross-checked: the lowpass has unit DC gain and linear-phase symmetry, passbands pass
+  and stopbands block by orders of magnitude, the highpass has zero DC gain, the
+  bandpass passes only its middle band, and a two-tone signal keeps the low tone while
+  the high one is removed.
+
 ## [2.18.0] - 2026-09-13
 
 ### Documentation

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.18.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.19.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -5203,6 +5203,36 @@ Auto-generated from `quantforge` v2.18.0 by `docs/gen_api.py` — do not edit by
 > Inverse FFT: recovers the sequence from its DFT (with the ``1/N`` scaling).
 >
 > ``ifft(fft(x)) == x`` up to floating error. Length must be a power of two.
+
+## fir_filter
+
+### `fir_apply(taps, x)`  _function_
+
+> Apply an FIR filter (tap list) to signal ``x`` by direct convolution.
+>
+> Returns the filtered signal, same length as ``x`` (each output is the tap-weighted
+> sum of the current and preceding samples; the first ``len(taps)-1`` outputs are the
+> transient start-up).
+
+### `fir_bandpass(numtaps, low, high, window='hamming')`  _function_
+
+> Windowed-sinc bandpass FIR taps passing ``[low, high]`` (normalized cutoffs).
+>
+> ``numtaps`` must be odd; the band-pass is the difference of two low-pass filters.
+
+### `fir_highpass(numtaps, cutoff, window='hamming')`  _function_
+
+> Windowed-sinc highpass FIR taps (spectral inversion of a lowpass).
+>
+> ``numtaps`` must be odd. Unit gain at Nyquist, zero at DC.
+
+### `fir_lowpass(numtaps, cutoff, window='hamming')`  _function_
+
+> Windowed-sinc lowpass FIR taps.
+>
+> ``cutoff`` is the normalized cutoff (0 to 1, fraction of Nyquist). ``numtaps`` should
+> be odd for a symmetric (linear-phase, zero-delay-at-center) filter. Returns the tap
+> list, normalized to unit DC gain.
 
 ## fisher_exact
 

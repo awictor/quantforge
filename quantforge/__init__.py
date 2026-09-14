@@ -569,6 +569,7 @@ from .poisson2d import poisson2d
 from .dct import dct, idct
 from .goertzel import goertzel, goertzel_power
 from .windows import hann, hamming, blackman, bartlett, rectangular, apply_window
+from .fir_filter import fir_lowpass, fir_highpass, fir_bandpass, fir_apply
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -959,7 +960,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "2.18.0"
+__version__ = "2.19.0"
 
 __all__ = [
     "OptionType",
@@ -1808,6 +1809,10 @@ __all__ = [
     "bartlett",
     "rectangular",
     "apply_window",
+    "fir_lowpass",
+    "fir_highpass",
+    "fir_bandpass",
+    "fir_apply",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",
