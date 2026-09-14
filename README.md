@@ -7057,6 +7057,22 @@ orders by Miller's stable downward recurrence. They match tabulated values and t
 representation, satisfy the recurrence `J_{n-1}(x) + J_{n+1}(x) = (2n/x) J_n(x)`, and vanish
 at the standard zeros (J0's first at `2.4048`). Y0/Y1 require `x > 0`.
 
+The Fresnel integrals (diffraction, the Cornu spiral) and the Dawson function round out the
+set — `fresnel_c`, `fresnel_s`, `dawson`:
+
+```python
+from quantforge import fresnel_c, fresnel_s, dawson
+
+fresnel_c(1)   # 0.7798934 — C(x) = integral_0^x cos(pi t^2/2) dt
+fresnel_s(1)   # 0.4382591 — S(x) = integral_0^x sin(pi t^2/2) dt
+dawson(1)      # 0.5380795 — D(x) = e^{-x^2} integral_0^x e^{t^2} dt
+```
+
+`fresnel_c`/`fresnel_s` use the convergent power series up to `|x| = 4` and the
+auxiliary-function asymptotics beyond, so both approach `1/2` as `x -> inf` and are odd in
+`x`; `dawson` (the scaled imaginary error function, peaking near `0.5410` at `x ~ 0.924`)
+uses its series and large-`x` asymptotics. All three agree with direct numerical integration.
+
 The correlated-normal CDFs behind the multi-asset and compound-option models are public
 too:
 
