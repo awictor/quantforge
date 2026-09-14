@@ -31,6 +31,17 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.43.0] - 2026-09-13
+
+### Added
+- `number_theory.py`: integer number theory — `gcd`, `lcm`, `is_prime` (deterministic
+  Miller-Rabin, exact past 64-bit), `factorize` (trial division + Pollard's rho),
+  `divisors`, and `euler_totient`. Cross-checked: primality matches brute force for all
+  n < 2001 and handles the Mersenne prime 2^61-1 and the Carmichael number 561;
+  factorization reconstructs the input (including a ~10^18 semiprime) with certified-prime
+  factors; the totient matches a brute-force coprime count; and gcd*lcm == a*b over
+  1000 random pairs.
+
 ## [2.42.0] - 2026-09-13
 
 ### Documentation

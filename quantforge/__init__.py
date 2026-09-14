@@ -601,6 +601,14 @@ from .matched_filter import (
     detect_template,
 )
 from .continued_fraction import cf_expansion, convergents, best_rational
+from .number_theory import (
+    gcd,
+    lcm,
+    is_prime,
+    factorize,
+    divisors,
+    euler_totient,
+)
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -991,7 +999,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "2.42.0"
+__version__ = "2.43.0"
 
 __all__ = [
     "OptionType",
@@ -1881,6 +1889,12 @@ __all__ = [
     "cf_expansion",
     "convergents",
     "best_rational",
+    "gcd",
+    "lcm",
+    "is_prime",
+    "factorize",
+    "divisors",
+    "euler_totient",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.42.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.43.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -9779,6 +9779,43 @@ Auto-generated from `quantforge` v2.42.0 by `docs/gen_api.py` — do not edit by
 > ``A`` is an ``m x n`` matrix (list of rows), ``b`` a length-``m`` vector. Returns a
 > dict with the non-negative solution ``x`` (length ``n``), the ``residual_norm``
 > ``||A x - b||``, and ``n_iter``. Uses the Lawson-Hanson active-set method.
+
+## number_theory
+
+### `divisors(n)`  _function_
+
+> All positive divisors of ``n`` in sorted order (from its factorization).
+
+### `euler_totient(n)`  _function_
+
+> Euler's totient ``phi(n)``: the count of integers in ``[1, n]`` coprime to ``n``.
+>
+> Computed from the factorization as ``n * prod (1 - 1/p)`` over distinct primes ``p``.
+> ``phi(1) = 1``.
+
+### `factorize(n)`  _function_
+
+> Prime factorization of ``n`` as a sorted list of ``(prime, exponent)`` pairs.
+>
+> Combines trial division by small primes with Pollard's rho for large factors and
+> Miller-Rabin to certify primality, so it factors numbers far beyond what naive trial
+> division reaches. ``n`` must be ``>= 1`` (``1`` has an empty factorization).
+
+### `gcd(a, b)`  _function_
+
+> Greatest common divisor of ``a`` and ``b`` (Euclid's algorithm, non-negative).
+
+### `is_prime(n)`  _function_
+
+> Deterministic Miller-Rabin primality test, exact for all ``n < 3.3 * 10^24``.
+>
+> Uses a fixed set of witness bases that is proven to give no false positives below
+> that bound (well past 64-bit), so the answer is exact, not probabilistic, for any
+> integer arising in normal use. ``O(k log^3 n)``.
+
+### `lcm(a, b)`  _function_
+
+> Least common multiple of ``a`` and ``b`` (``0`` if either is zero).
 
 ## numdiff
 
