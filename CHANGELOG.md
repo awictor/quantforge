@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.631.0] - 2026-09-14
+
+### Added
+- `sturm.py`: exact real-root counting and isolation for real polynomials via Sturm
+  sequences. `sturm_sequence` builds the polynomial-remainder chain; `real_root_count`
+  returns the exact number of *distinct* real roots in a half-open interval ``(a, b]`` from
+  the drop in sign changes (Sturm's theorem, no root-finding); and `isolate_real_roots`
+  bisects on that count to return disjoint sub-intervals each bracketing one real root.
+  Coefficients are highest-degree first, matching `polynomial_roots`. Cross-checked against
+  polynomials built from known integer roots over 3000 random cases -- interval counts and
+  isolation both match, repeated roots counted once, complex-only polynomials return zero.
+
 ## [1.630.0] - 2026-09-14
 
 ### Documentation

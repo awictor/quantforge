@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.16.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.17.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -15817,6 +15817,29 @@ Auto-generated from `quantforge` v4.16.0 by `docs/gen_api.py` — do not edit by
 >
 > Returns the ``x`` with ``t_cdf(x, df) = p``. Symmetric: ``t_ppf(1-p) =
 > -t_ppf(p)``.
+
+## sturm
+
+### `isolate_real_roots(coeffs, a, b, max_depth=100)`  _function_
+
+> Return disjoint sub-intervals of ``(a, b]``, each containing exactly one real root.
+>
+> Bisects the interval, using :func:`real_root_count` to decide which halves hold roots,
+> until every returned interval isolates a single distinct real root. Each interval is a
+> ``(lo, hi)`` pair.
+
+### `real_root_count(coeffs, a, b)`  _function_
+
+> Number of *distinct* real roots in the half-open interval ``(a, b]`` (Sturm's theorem).
+>
+> Exact for a square-free polynomial; repeated roots are counted once. ``a < b`` required.
+
+### `sturm_sequence(coeffs)`  _function_
+
+> Return the Sturm sequence of a real polynomial (list of coefficient lists).
+>
+> ``coeffs`` are highest-degree first. The sequence starts with the (square-free-agnostic)
+> polynomial and its derivative; each subsequent term is the negated division remainder.
 
 ## style_analysis
 
