@@ -767,6 +767,7 @@ from .signal_features import (
     spectral_bandwidth,
     spectral_flatness,
 )
+from .interval import Interval
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -1157,7 +1158,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "3.20.0"
+__version__ = "3.21.0"
 
 __all__ = [
     "OptionType",
@@ -2200,6 +2201,7 @@ __all__ = [
     "spectral_centroid",
     "spectral_bandwidth",
     "spectral_flatness",
+    "Interval",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

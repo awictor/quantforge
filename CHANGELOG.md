@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.21.0] - 2026-09-14
+
+### Added
+- `interval.py`: an `Interval` class for interval arithmetic — `+ - * /`, integer powers,
+  `exp`/`log`/`sqrt`, and `width`/`midpoint`/`contains`/`intersect`. Cross-checked: the
+  enclosure property holds for thousands of random samples across every operation (the
+  true value always lands inside the computed interval), the even-power-straddling-zero
+  and sign cases are correct, and division by an interval containing zero raises.
+
 ## [3.20.0] - 2026-09-14
 
 ### Documentation

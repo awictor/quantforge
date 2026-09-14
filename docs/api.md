@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.20.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.21.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -8002,6 +8002,17 @@ Auto-generated from `quantforge` v3.20.0 by `docs/gen_api.py` — do not edit by
 > (natural) end conditions. The returned function evaluates the piecewise cubic
 > and is exact at the knots, C2 in between. Clamps to the end segments outside
 > ``[xs[0], xs[-1]]``.
+
+## interval
+
+### `Interval(lo, hi=None)`  _class_
+
+> A closed interval ``[lo, hi]`` with guaranteed-enclosure arithmetic.
+>
+> Construct from two endpoints (order-normalized) or a single number (a degenerate
+> point interval). Supports ``+ - * /`` with intervals and scalars, ``width``,
+> ``midpoint``, ``contains``, ``intersect``, and monotone functions ``exp``/``log``/
+> ``sqrt``/``__pow__`` (integer powers).
 
 ## isotonic
 
