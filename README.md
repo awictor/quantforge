@@ -4721,6 +4721,23 @@ periodograms — trading some frequency resolution for far less variance, so a
 spectral peak stands out cleanly against a noisy background where the raw
 periodogram would bury it.
 
+Welch averaging also drives the *cross*-spectrum between two signals: `coherence` is the
+frequency-domain squared correlation, `1` where they are perfectly linearly related at a
+frequency and `0` where unrelated:
+
+```python
+from quantforge import coherence, cross_spectral_density
+
+freqs, coh = coherence(x, y, segment_length=256)   # in [0, 1] per frequency
+freqs, csd = cross_spectral_density(x, y)          # complex shared spectrum
+```
+
+Two signals sharing a 0.1-cycle component reach coherence `~1.0` in that band while
+independent noise averages near `0.06` (a nonzero floor set by the segment count — a
+single segment gives a meaningless coherence of 1 everywhere, so averaging is essential).
+`cross_spectral_density` returns the complex cross-spectrum whose magnitude peaks at the
+shared frequency and whose phase gives the frequency-dependent lead/lag.
+
 The periodogram and Welch estimate a spectrum straight from the data; a *parametric*
 estimate instead fits an autoregressive model and reads its spectrum off the
 coefficients, which resolves sharp peaks far better on a short record:
