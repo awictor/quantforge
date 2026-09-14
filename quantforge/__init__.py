@@ -700,6 +700,15 @@ from .zeta import riemann_zeta, dirichlet_eta
 from .hurwitz import hurwitz_zeta, polygamma
 from .polylog import polylog, dilog
 from .jacobi_elliptic import jacobi_sn, jacobi_cn, jacobi_dn, jacobi_am
+from .carlson import (
+    carlson_rf,
+    carlson_rc,
+    carlson_rd,
+    carlson_rj,
+    elliptic_f,
+    elliptic_e_incomplete,
+    elliptic_pi,
+)
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1404,7 +1413,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "4.98.0"
+__version__ = "4.99.0"
 
 __all__ = [
     "OptionType",
@@ -2377,6 +2386,13 @@ __all__ = [
     "jacobi_cn",
     "jacobi_dn",
     "jacobi_am",
+    "carlson_rf",
+    "carlson_rc",
+    "carlson_rd",
+    "carlson_rj",
+    "elliptic_f",
+    "elliptic_e_incomplete",
+    "elliptic_pi",
     "Dual",
     "dual_derivative",
     "dual_gradient",

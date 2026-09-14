@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.713.0] - 2026-09-14
+
+### Added
+- `carlson_rf`, `carlson_rc`, `carlson_rd`, `carlson_rj`: Carlson's symmetric elliptic
+  integrals via the duplication-theorem iteration (Carlson 1979 / Numerical Recipes 6.11), and
+  the incomplete Legendre integrals built on them -- `elliptic_f` (first kind), 
+  `elliptic_e_incomplete` (second kind), `elliptic_pi` (third kind, characteristic ``n < 1``).
+  Cross-checked against ``R_F(x,x,x)=1/sqrt(x)``, ``R_C(0,y)=pi/(2 sqrt y)``, ``R_J(x,y,z,z)=R_D``,
+  numerical integration of all three Legendre forms, and reduction to the complete ``K``/``E``
+  at ``phi = pi/2``.
+
 ## [1.712.0] - 2026-09-14
 
 ### Documentation

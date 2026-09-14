@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.98.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.99.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -1763,6 +1763,57 @@ Auto-generated from `quantforge` v4.98.0 by `docs/gen_api.py` — do not edit by
 >
 > ``PV(CF_1..) / -CF_0`` -- above one for a value-adding project, exactly one at
 > the :func:`irr`. Requires a negative time-0 outlay.
+
+## carlson
+
+### `carlson_rc(x, y, tol=1e-12)`  _function_
+
+> Carlson's degenerate ``R_C(x, y) = R_F(x, y, y)``.
+>
+> ``R_C(x, x) = 1/sqrt(x)``; equals ``arctan``/``arctanh``-type elementary functions.
+
+### `carlson_rd(x, y, z, tol=1e-12)`  _function_
+
+> Carlson's ``R_D(x, y, z) = R_J(x, y, z, z)``, symmetric in ``x, y`` only.
+>
+> ``= 3/2 integral_0^inf dt / [(t+z) sqrt((t+x)(t+y)(t+z))]``. ``z`` must be positive; ``x, y``
+> non-negative with at most one zero. Homogeneous of degree ``-3/2``.
+
+### `carlson_rf(x, y, z, tol=1e-12)`  _function_
+
+> Carlson's ``R_F(x, y, z) = 1/2 integral_0^inf dt / sqrt((t+x)(t+y)(t+z))``.
+>
+> Symmetric and homogeneous of degree ``-1/2``. At most one argument may be zero; all must be
+> non-negative. ``R_F(x, x, x) = 1/sqrt(x)``.
+
+### `carlson_rj(x, y, z, p, tol=1e-12)`  _function_
+
+> Carlson's ``R_J(x, y, z, p) = 3/2 integral_0^inf dt / [(t+p) sqrt((t+x)(t+y)(t+z))]``.
+>
+> Symmetric in ``x, y, z``; all non-negative with at most one zero, and ``p != 0``. This
+> implementation covers ``p > 0``.
+
+### `elliptic_e_incomplete(phi, m, tol=1e-12)`  _function_
+
+> Incomplete elliptic integral of the second kind ``E(phi | m)`` via ``R_F`` and ``R_D``.
+>
+> ``E(phi | m) = sin(phi) R_F(c, 1-m s^2, 1) - (m/3) sin^3(phi) R_D(c, 1-m s^2, 1)``.
+> Reduces to the complete ``E(m)`` at ``phi = pi/2``.
+
+### `elliptic_f(phi, m, tol=1e-12)`  _function_
+
+> Incomplete elliptic integral of the first kind ``F(phi | m)`` via ``R_F``.
+>
+> ``F(phi | m) = integral_0^phi dtheta / sqrt(1 - m sin^2 theta) = sin(phi) R_F(c, 1 - m s^2, 1)``
+> with ``s = sin phi``, ``c = cos^2 phi``. ``m = k^2``; reduces to ``F(pi/2, m) = K(m)``.
+
+### `elliptic_pi(n, phi, m, tol=1e-12)`  _function_
+
+> Incomplete elliptic integral of the third kind ``Pi(n; phi | m)`` via ``R_F`` and ``R_J``.
+>
+> ``Pi(n; phi | m) = integral_0^phi dtheta / [(1 - n sin^2 theta) sqrt(1 - m sin^2 theta)]``,
+> ``= sin(phi) R_F(c, 1-m s^2, 1) + (n/3) sin^3(phi) R_J(c, 1-m s^2, 1, 1 - n s^2)``.
+> Implemented for ``n < 1`` (so the ``R_J`` fourth argument stays positive).
 
 ## carrmadan
 
