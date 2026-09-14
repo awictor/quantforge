@@ -6313,6 +6313,24 @@ and inverts exactly. `delta_encode` replaces a numeric sequence by its first val
 successive differences — a slowly-varying series becomes small numbers a following
 entropy coder packs tightly — and `delta_decode` is the cumulative sum back.
 
+The same byte streams need integrity checks; three standard non-cryptographic hashes cover
+that:
+
+```python
+from quantforge import crc32, adler32, fnv1a_32
+
+crc32("hello")        # 907060870 — matches zlib.crc32
+adler32("Wikipedia")  # 300286872
+fnv1a_32("foobar")    # 3214735720 — table/bloom-filter mixer
+```
+
+`crc32` implements the IEEE 802.3 reflected polynomial (the checksum in Ethernet, gzip,
+and PNG) and matches `zlib.crc32` bit for bit; `adler32` is the cheaper Zlib checksum,
+also matching `zlib.adler32`; and `fnv1a_32` is a fast, well-dispersed hash for hash
+tables and bloom filters, reproducing the published FNV test vectors. All accept a `str`
+(UTF-8 encoded) or raw bytes and return a 32-bit unsigned integer — none are
+cryptographic.
+
 ## Probability distributions
 
 Gamma, chi-square, Poisson, F and binomial distributions built on those special
