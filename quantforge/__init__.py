@@ -783,6 +783,7 @@ from .sequences import (
     maximum_subarray,
     longest_run,
 )
+from .alignment import damerau_levenshtein, needleman_wunsch
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -1173,7 +1174,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "3.32.0"
+__version__ = "3.33.0"
 
 __all__ = [
     "OptionType",
@@ -2235,6 +2236,8 @@ __all__ = [
     "longest_increasing_subsequence",
     "maximum_subarray",
     "longest_run",
+    "damerau_levenshtein",
+    "needleman_wunsch",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

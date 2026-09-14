@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.32.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.33.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -159,6 +159,25 @@ Auto-generated from `quantforge` v3.32.0 by `docs/gen_api.py` — do not edit by
 > size)``. Cluster ids ``0..n-1`` are the singletons; merge ``m`` creates the new
 > id ``n + m``. Merge distances are non-decreasing for single/complete/average
 > linkage.
+
+## alignment
+
+### `damerau_levenshtein(a, b)`  _function_
+
+> True (unrestricted) Damerau-Levenshtein distance between two sequences.
+>
+> Counts insertions, deletions, substitutions, and transpositions of adjacent elements,
+> each as a single edit -- so ``"ca" -> "ac"`` is distance 1, not 2. Uses the full
+> dynamic-programming table with a last-seen index (unlike the restricted OSA variant).
+
+### `needleman_wunsch(a, b, match=1, mismatch=-1, gap=-1)`  _function_
+
+> Needleman-Wunsch global alignment: ``(score, aligned_a, aligned_b)``.
+>
+> Maximizes the total score with ``match``/``mismatch`` for aligned pairs and ``gap``
+> per inserted gap ``'-'``. Returns the optimal score and the two gapped strings (as
+> ``str`` when the inputs are strings, else lists). Standard ``O(len(a)*len(b))`` DP with
+> traceback.
 
 ## american
 

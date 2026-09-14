@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.33.0] - 2026-09-14
+
+### Added
+- `alignment.py`: `damerau_levenshtein` (true unrestricted distance, adjacent
+  transpositions count as one edit) and `needleman_wunsch` (global alignment score with
+  traceback). Cross-checked: a transposition is a single edit (Levenshtein would charge
+  two), the DL distance never exceeds Levenshtein and matches a brute-force BFS over edit
+  operations, and the Needleman-Wunsch score equals the scored alignment while the gapped
+  strings reconstruct the inputs.
+
 ## [3.32.0] - 2026-09-14
 
 ### Documentation
