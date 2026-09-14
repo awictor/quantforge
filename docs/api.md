@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.8.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.9.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -6632,6 +6632,25 @@ Auto-generated from `quantforge` v3.8.0 by `docs/gen_api.py` — do not edit by 
 ### `zomma(S, K, t, r, sigma, b=None) -> float`  _function_
 
 > d(gamma)/d(sigma). Same for calls and puts.
+
+## grid_interp
+
+### `bilinear_interp(xs, ys, z, x, y)`  _function_
+
+> Bilinear interpolation of grid ``z`` at ``(x, y)``.
+>
+> ``xs`` are the column coordinates (length ``ncols``), ``ys`` the row coordinates
+> (length ``nrows``), and ``z`` an ``nrows x ncols`` value table (``z[row][col]``). Both
+> axes must be strictly increasing. Out-of-range queries clamp to the nearest edge.
+> Exact at grid nodes; reduces to linear interpolation along a grid line.
+
+### `nearest_interp(xs, ys, z, x, y)`  _function_
+
+> Nearest-neighbour lookup on the grid: the value at the closest node to ``(x, y)``.
+>
+> Snaps to the nearest grid coordinate on each axis (clamping out-of-range). Piecewise
+> constant, so it preserves the exact sampled values -- useful for categorical or
+> quantized grids.
 
 ## hac
 

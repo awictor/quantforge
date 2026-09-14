@@ -749,6 +749,7 @@ from .weighted_stats import (
 )
 from .fenwick import FenwickTree, SegmentTree
 from .sde import euler_maruyama, milstein, gbm_paths
+from .grid_interp import bilinear_interp, nearest_interp
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -1139,7 +1140,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "3.8.0"
+__version__ = "3.9.0"
 
 __all__ = [
     "OptionType",
@@ -2163,6 +2164,8 @@ __all__ = [
     "euler_maruyama",
     "milstein",
     "gbm_paths",
+    "bilinear_interp",
+    "nearest_interp",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

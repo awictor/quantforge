@@ -31,6 +31,14 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.9.0] - 2026-09-14
+
+### Added
+- `grid_interp.py`: 2-D regular-grid interpolation — `bilinear_interp` and
+  `nearest_interp`, both clamping out-of-range queries to the grid edge. Cross-checked:
+  bilinear is exact at grid nodes, reproduces a planar field everywhere, gives the
+  four-corner mean at a cell center, and nearest-neighbour snaps to the closest node.
+
 ## [3.8.0] - 2026-09-14
 
 ### Documentation
