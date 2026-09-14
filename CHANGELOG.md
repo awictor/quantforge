@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.653.0] - 2026-09-14
+
+### Added
+- `bezier.py`: Bezier curves and Bernstein polynomials. `bezier_point` evaluates a curve of
+  any degree at ``t`` by de Casteljau's stable repeated-interpolation scheme (scalar or
+  n-D control points), `bezier_curve` samples it, `bezier_tangent`/`bezier_derivative_control`
+  give the degree ``n-1`` derivative, `bezier_subdivide` splits the curve exactly at ``t``,
+  and `bernstein` is the basis polynomial. Cross-checked over 4000 random curves against the
+  Bernstein-basis sum, with endpoint interpolation, finite-difference tangents, subdivision
+  continuity/reparametrization, and Bernstein partition-of-unity all verified.
+
 ## [1.652.0] - 2026-09-14
 
 ### Documentation

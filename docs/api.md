@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.38.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.39.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -850,6 +850,41 @@ Auto-generated from `quantforge` v4.38.0 by `docs/gen_api.py` — do not edit by
 >
 > Evaluates ``(1/(p+1)) sum_{j=0}^{p} C(p+1, j) B_j m^{p+1-j}`` with ``B_1 = +1/2``.
 > Returns an ``int`` (the sum is always an integer). Handles ``p = 0`` (returns ``m``).
+
+## bezier
+
+### `bernstein(n, i, t)`  _function_
+
+> Bernstein basis polynomial ``b_{i,n}(t) = C(n, i) t^i (1-t)^(n-i)``.
+
+### `bezier_curve(control, samples)`  _function_
+
+> Sample the Bezier curve at ``samples`` equally spaced ``t`` in ``[0, 1]`` (inclusive).
+
+### `bezier_derivative_control(control)`  _function_
+
+> Control points of the curve's derivative: a degree ``n-1`` Bezier.
+>
+> The derivative of a degree-``n`` Bezier is degree ``n-1`` with control points
+> ``n (P_{i+1} - P_i)``. Returns those points (empty for a single control point).
+
+### `bezier_point(control, t)`  _function_
+
+> Evaluate the Bezier curve with the given ``control`` points at parameter ``t``.
+>
+> Uses de Casteljau's repeated-interpolation scheme. Control points may be scalars or
+> coordinate tuples (all the same length).
+
+### `bezier_subdivide(control, t)`  _function_
+
+> Split the curve at ``t`` into two control-point lists (left, right).
+>
+> The de Casteljau intermediate points give both halves exactly: the left curve uses the
+> first point of each interpolation level, the right curve the last.
+
+### `bezier_tangent(control, t)`  _function_
+
+> The tangent vector (derivative) of the curve at ``t``.
 
 ## bfgs
 
