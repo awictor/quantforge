@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.708.0] - 2026-09-14
+
+### Documentation
+- README: documented `hurwitz_zeta` and `polygamma` in the special-functions block after the
+  zeta/eta note -- the shifted Euler-Maclaurin evaluation and the polygamma identity
+  ``psi^(m)(x) = (-1)^(m+1) m! zeta(m+1, x)``. All snippet values verified live.
+
 ## [1.707.0] - 2026-09-14
 
 ### Added

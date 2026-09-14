@@ -7113,6 +7113,27 @@ analytically-continued value, not the divergent series. `dirichlet_eta`, the alt
 alternation converges only conditionally. Cross-checked against the closed forms above, the
 eta/zeta identity, and direct summation.
 
+`hurwitz_zeta` and `polygamma` extend that machinery. The Hurwitz zeta
+`zeta(s, a) = sum (n + a)**-s` is the Riemann zeta shifted off the integers, and the polygamma
+functions -- the derivatives of the digamma -- fall straight out of it:
+
+```python
+from quantforge import hurwitz_zeta, polygamma
+
+hurwitz_zeta(2, 0.5)   # 4.934802200544678  = (2**2 - 1) * zeta(2) = pi**2 / 2
+hurwitz_zeta(2, 2.0)   # 0.6449340668482263 = zeta(2) - 1
+polygamma(1, 1.0)      # 1.6449340668482264 = pi**2 / 6   (trigamma at 1)
+polygamma(1, 0.5)      # 4.934802200544678  = pi**2 / 2
+polygamma(2, 1.0)      # -2.404113806319188 = -2 * zeta(3)
+```
+
+`hurwitz_zeta(s, a)` reuses the Euler-Maclaurin scheme (`a = 1` recovers `riemann_zeta`). The
+polygamma `psi^(m)(x)` comes from the identity `psi^(m)(x) = (-1)**(m+1) * m! * zeta(m+1, x)`
+for `m >= 1`, with `m = 0` delegating to `digamma`; so `polygamma(1, .)` is the trigamma,
+`polygamma(2, .)` the tetragamma, and so on. Cross-checked against the shift identities
+`zeta(s,1)=zeta(s)` and `zeta(s,1/2)=(2**s-1)zeta(s)`, the closed forms above, and
+finite-difference derivatives of `digamma`.
+
 The correlated-normal CDFs behind the multi-asset and compound-option models are public
 too:
 
