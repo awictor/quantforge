@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.34.0] - 2026-09-14
+
+### Documentation
+- README: documented Damerau-Levenshtein and Needleman-Wunsch in the String algorithms
+  section, next to the edit-distance functions — with the transposition and alignment
+  examples. All snippet values verified live.
+
 ## [3.33.0] - 2026-09-14
 
 ### Added

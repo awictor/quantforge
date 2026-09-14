@@ -6712,6 +6712,23 @@ contiguous match, while `longest_common_substring` requires contiguity.  `kmp_se
 returns every start index of a pattern in linear time via the Knuth-Morris-Pratt failure
 function, catching overlapping occurrences that a stride-by-length scan would miss.
 
+Plain edit distance charges two edits for a swapped pair; `damerau_levenshtein` counts an
+adjacent transposition as one, and `needleman_wunsch` gives the classic global alignment:
+
+```python
+from quantforge import damerau_levenshtein, needleman_wunsch
+
+damerau_levenshtein("ca", "ac")            # 1 (Levenshtein would say 2)
+damerau_levenshtein("kitten", "sitting")   # 3
+needleman_wunsch("GATTACA", "GCATGCU")     # (score, 'G-ATTACA', 'GCA-TGCU')
+```
+
+`damerau_levenshtein` is the true unrestricted distance (verified never to exceed
+Levenshtein and to match a brute-force BFS over edit operations), which models real typos
+better since a transposition is one keystroke slip. `needleman_wunsch` maximizes a
+match/mismatch/gap score and reconstructs the aligned, gapped strings — the score always
+equals the alignment it returns, and stripping the gaps recovers the inputs.
+
 Where edit distance counts *operations*, fuzzy similarity scores return a value in
 `[0, 1]` for approximate matching, deduplication, and record linkage:
 
