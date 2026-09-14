@@ -4388,6 +4388,21 @@ into the first few coefficients (a smooth curve puts >95% in its first four) —
 compaction property behind JPEG and MP3 — so it doubles as a compression and
 denoising basis. Unlike the FFT it needs no power-of-two length.
 
+When you only need *one* frequency's strength — tone detection, a known harmonic — the
+Goertzel algorithm computes a single DFT bin in `O(n)` without a full transform:
+
+```python
+from quantforge import goertzel, goertzel_power
+
+goertzel(signal, k)          # complex X[k], identical to the k-th FFT output
+goertzel_power(signal, k)    # |X[k]|^2 — large iff a frequency near bin k is present
+```
+
+`goertzel` matches the FFT coefficient exactly (both magnitude and phase) with a single
+`O(n)` real recurrence — far cheaper than an FFT when you care about a handful of bins.
+On a pure tone at bin 8 the power spikes there (`1024` for a 64-sample cosine) and is
+essentially zero elsewhere, which is exactly how DTMF and pilot-tone detectors work.
+
 The raw periodogram is noisy; `welch_psd` averages windowed segment periodograms for
 a much lower-variance spectral-density estimate:
 

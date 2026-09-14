@@ -31,6 +31,12 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.16.0] - 2026-09-13
+
+### Documentation
+- README: documented `goertzel` and `goertzel_power` in the spectral-analysis section.
+  Every snippet value verified.
+
 ## [2.15.0] - 2026-09-13
 
 ### Added
