@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.81.0] - 2026-09-13
+
+### Added
+- `eigen_general.py`: general (non-symmetric) eigenvalues via Faddeev-LeVerrier —
+  `characteristic_polynomial`, `eigenvalues_general` (roots the char-poly, so complex
+  conjugate pairs come back correctly), and `determinant_from_charpoly`. Cross-checked:
+  the char-poly matches known cases, a rotation matrix yields the pair ±i, eigenvalues
+  agree with `jacobi_eigen` on symmetric matrices, their sum equals the trace and their
+  product equals the determinant, and the char-poly determinant matches the LU one.
+
 ## [2.80.0] - 2026-09-13
 
 ### Documentation

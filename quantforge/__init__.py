@@ -685,6 +685,11 @@ from .bwt import (
 from .lzw import lzw_compress, lzw_decompress, delta_encode, delta_decode
 from .checksums import crc32, adler32, fnv1a_32
 from .newton_system import newton_system, broyden
+from .eigen_general import (
+    characteristic_polynomial,
+    eigenvalues_general,
+    determinant_from_charpoly,
+)
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -1075,7 +1080,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "2.80.0"
+__version__ = "2.81.0"
 
 __all__ = [
     "OptionType",
@@ -2043,6 +2048,9 @@ __all__ = [
     "fnv1a_32",
     "newton_system",
     "broyden",
+    "characteristic_polynomial",
+    "eigenvalues_general",
+    "determinant_from_charpoly",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

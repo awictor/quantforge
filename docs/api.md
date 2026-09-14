@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.80.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.81.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -4215,6 +4215,32 @@ Auto-generated from `quantforge` v2.80.0 by `docs/gen_api.py` — do not edit by
 > ``method`` selects the interpolation on the order statistics: ``"linear"`` (the
 > NumPy default, ``(n-1)p`` position), ``"lower"``, ``"higher"``, or ``"nearest"``.
 > ``p`` may be a scalar or iterable. Matches the standard percentile conventions.
+
+## eigen_general
+
+### `characteristic_polynomial(A)`  _function_
+
+> Coefficients of ``det(xI - A)`` (monic, highest degree first) by Faddeev-LeVerrier.
+>
+> Returns ``[1, c_{n-1}, ..., c_0]`` -- the characteristic polynomial with leading
+> coefficient 1. Also the input to :func:`polynomial_roots` for the eigenvalues. ``A``
+> must be square.
+
+### `determinant_from_charpoly(A)`  _function_
+
+> Determinant of ``A`` from its characteristic polynomial's constant term.
+>
+> ``det(A) = (-1)^n * c_0`` where ``c_0`` is the constant term of ``det(xI - A)``. A
+> cheap exact-by-construction cross-check against the LU determinant.
+
+### `eigenvalues_general(A, tol=1e-10)`  _function_
+
+> All eigenvalues of a general real (or complex) square matrix.
+>
+> Builds the characteristic polynomial via Faddeev-LeVerrier and finds its roots with
+> Durand-Kerner, so complex-conjugate eigenvalue pairs are returned correctly. Real
+> eigenvalues come back as Python ``float``; genuinely complex ones as ``complex``.
+> Sorted by real part then imaginary part.
 
 ## encoding
 
