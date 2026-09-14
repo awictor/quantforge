@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.97.0] - 2026-09-13
+
+### Added
+- `quaternion.py`: unit quaternions for 3-D rotation — `quat_multiply`, `quat_normalize`,
+  `quat_conjugate`, `axis_angle_to_quat`, `quat_to_axis_angle`, `rotate_vector`, and
+  `slerp`. Cross-checked: known rotations (90 deg about z maps x to y), rotation preserves
+  vector length, axis-angle round-trips, composition equals the Hamilton product, and
+  slerp hits its endpoints, the 45-degree midpoint, and stays unit-norm throughout.
+
 ## [2.96.0] - 2026-09-13
 
 ### Documentation

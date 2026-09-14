@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.96.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.97.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -12022,6 +12022,48 @@ Auto-generated from `quantforge` v2.96.0 by `docs/gen_api.py` — do not edit by
 > ``corr_vega`` (dV/drho) are central finite differences of the closed form.
 > Returns a dict with ``price``, ``delta``, ``gamma``, ``vega``, ``fx_vega``,
 > ``corr_vega``.
+
+## quaternion
+
+### `axis_angle_to_quat(axis, angle)`  _function_
+
+> Unit quaternion for a rotation of ``angle`` radians about ``axis`` (a 3-vector).
+>
+> The axis is normalized internally. ``angle = 0`` gives the identity ``(1, 0, 0, 0)``.
+
+### `quat_conjugate(q)`  _function_
+
+> Conjugate ``(w, -x, -y, -z)`` -- the inverse rotation for a unit quaternion.
+
+### `quat_multiply(a, b)`  _function_
+
+> Hamilton product ``a * b`` of two quaternions ``(w, x, y, z)``.
+>
+> Composition of rotations: ``quat_multiply(a, b)`` applies ``b`` then ``a``. Not
+> commutative.
+
+### `quat_normalize(q)`  _function_
+
+> Return ``q`` scaled to unit norm; raises on the zero quaternion.
+
+### `quat_to_axis_angle(q)`  _function_
+
+> Recover ``(axis, angle)`` from a unit quaternion; ``angle`` in ``[0, pi]``.
+>
+> Returns a unit ``axis`` and the rotation angle in radians. For the identity the axis
+> is arbitrary; ``(1, 0, 0)`` is returned.
+
+### `rotate_vector(q, v)`  _function_
+
+> Rotate a 3-vector ``v`` by unit quaternion ``q`` (``q v q*``).
+
+### `slerp(a, b, t)`  _function_
+
+> Spherical linear interpolation between unit quaternions ``a`` and ``b`` at ``t``.
+>
+> ``t = 0`` returns ``a``, ``t = 1`` returns ``b``, and intermediate ``t`` traces the
+> shortest constant-speed arc on the unit sphere -- the standard smooth rotation blend.
+> Chooses the shorter path (negates ``b`` if the dot product is negative).
 
 ## rainbow_n
 
