@@ -31,6 +31,14 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.40.0] - 2026-09-13
+
+### Documentation
+- README: documented matched filtering and peak detection in the spectral section, after
+  cross-correlation — the optimal-detector framing, the peak-finding filters, the
+  multi-detection example, and the short-template caveat. All snippet values verified
+  live.
+
 ## [2.39.0] - 2026-09-13
 
 ### Added

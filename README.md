@@ -4390,6 +4390,28 @@ divides out the amplitudes to give a correlation coefficient in `[-1, 1]`; and
 peak lands at lag `5` with coefficient `≈0.90`; a positive lag means `x` leads `y`.
 Identical series peak at lag `0` with coefficient `1`.
 
+When the pattern you are hunting for is a *known* waveform rather than another series, the
+matched filter is the optimal detector — it correlates the data against the template and
+peaks where the two best align, maximizing signal-to-noise ratio in white noise:
+
+```python
+from quantforge import matched_filter, find_peaks, detect_template
+
+mf = matched_filter(x, template)             # detection statistic at each offset
+find_peaks(mf, height=10, distance=20)       # local maxima, filtered by height/spacing
+detect_template(x, template, threshold=0.9)  # start offsets of normalized matches
+```
+
+Plant a template in noise and `matched_filter`'s peak lands exactly at its offset;
+`normalized_matched_filter` scales the response to a correlation coefficient that hits `1`
+at a perfectly scaled match. `find_peaks` returns strict local maxima, dropping any below
+a `height` and keeping the taller of two within `distance` samples. `detect_template`
+combines them to report every offset where the template recurs — planting a distinctive
+16-sample waveform at offsets `[50, 160, 300]` in noise recovers exactly those three.
+Because the correlation is amplitude-normalized, short or featureless templates match many
+noise windows by shape alone, so use a longer, distinctive template when false positives
+matter.
+
 The real-valued cousin of the FFT, the discrete cosine transform, is `dct` (DCT-II) with
 inverse `idct` (DCT-III):
 
