@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.681.0] - 2026-09-14
+
+### Added
+- `sphere.py`: unit-sphere geometry. `angular_distance` is the angle between two 3-vectors
+  (via ``atan2(|u x v|, u.v)``, accurate near 0 and pi), `slerp_vectors` interpolates along
+  the great-circle arc at constant angular speed, `spherical_centroid` gives the mean
+  direction (normalized vector sum), and `spherical_resultant_length` its concentration
+  ``R`` in ``[0, 1]``. Cross-checked over 5000 random cases against `acos` of the dot
+  product, slerp endpoint/on-sphere/constant-speed properties, and coincident/opposite
+  direction limits. (`spherical_resultant_length` is named to avoid clashing with the
+  circular-statistics `resultant_length`.)
+
 ## [1.680.0] - 2026-09-14
 
 ### Documentation

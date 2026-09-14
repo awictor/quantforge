@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.66.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.67.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -15533,6 +15533,38 @@ Auto-generated from `quantforge` v4.66.0 by `docs/gen_api.py` — do not edit by
 > spectral estimate than the raw periodogram. ``overlap`` is the fractional segment
 > overlap in ``[0, 1)``. Returns ``(freqs, power)`` with one-sided normalized
 > frequencies in ``[0, 0.5]``.
+
+## sphere
+
+### `angular_distance(u, v)`  _function_
+
+> Angle in radians between two 3-vectors (their directions), in ``[0, pi]``.
+>
+> Uses ``atan2(|u x v|, u . v)``, which stays accurate for both nearly-parallel and
+> nearly-opposite directions (unlike ``acos`` of the dot product).
+
+### `slerp_vectors(u, v, t)`  _function_
+
+> Spherical-linear interpolation between unit directions ``u`` and ``v`` at ``t`` in [0,1].
+>
+> Returns a unit vector on the great-circle arc from ``u`` (``t=0``) to ``v`` (``t=1``),
+> at constant angular speed. Falls back to normalized linear interpolation when the two
+> directions are nearly identical.
+
+### `spherical_centroid(vectors)`  _function_
+
+> Mean direction of a set of 3-vectors: the normalized vector sum.
+>
+> Returns the unit vector minimizing the sum of squared chord distances (the resultant
+> direction of directional statistics). Raises if the vectors sum to zero (no mean
+> direction).
+
+### `spherical_resultant_length(vectors)`  _function_
+
+> Mean resultant length ``R`` in ``[0, 1]``: concentration of a set of directions.
+>
+> ``R = |sum unit(v)| / n``. ``R = 1`` means all directions coincide; ``R = 0`` means they
+> are perfectly spread. The dispersion measure of spherical statistics.
 
 ## spline
 

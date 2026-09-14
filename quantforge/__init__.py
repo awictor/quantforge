@@ -679,6 +679,12 @@ from .so3 import rodrigues, so3_log, hat, unhat
 from .halley import halley, secant
 from .levinson import solve_toeplitz, levinson_durbin
 from .kabsch import kabsch
+from .sphere import (
+    angular_distance,
+    slerp_vectors,
+    spherical_centroid,
+    spherical_resultant_length,
+)
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1383,7 +1389,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "4.66.0"
+__version__ = "4.67.0"
 
 __all__ = [
     "OptionType",
@@ -2315,6 +2321,10 @@ __all__ = [
     "solve_toeplitz",
     "levinson_durbin",
     "kabsch",
+    "angular_distance",
+    "slerp_vectors",
+    "spherical_centroid",
+    "spherical_resultant_length",
     "Dual",
     "dual_derivative",
     "dual_gradient",
