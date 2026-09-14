@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.576.0] - 2026-09-14
+
+### Documentation
+- README: documented `weighted_reservoir_sample` and `weighted_sample_with_replacement`
+  alongside the uniform `reservoir_sample` in the streaming-statistics section -- the
+  A-Res key rule, the empirical `k=1` inclusion probabilities matching `w_i / sum(w)`,
+  zero-weight exclusion, and with-replacement frequency convergence. All snippet values
+  verified live.
+
 ## [1.575.0] - 2026-09-14
 
 ### Added

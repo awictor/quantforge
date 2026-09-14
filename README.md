@@ -6322,6 +6322,27 @@ the data. `reservoir_sample` (Vitter's algorithm R) is deterministic for a fixed
 and returns every stream element with equal probability; if the stream is shorter than
 `k` it returns all of it.
 
+When elements should be drawn *proportional to a weight* rather than uniformly,
+`weighted_reservoir_sample` selects `k` distinct items in the same single pass, and
+`weighted_sample_with_replacement` draws `k` independent weight-proportional items:
+
+```python
+from quantforge import weighted_reservoir_sample, weighted_sample_with_replacement
+
+weighted_reservoir_sample(['a', 'b', 'c', 'd'], [1, 2, 3, 4], k=2, seed=1)   # ['c', 'd']
+weighted_sample_with_replacement(['a', 'b', 'c'], [1, 1, 8], k=10, seed=2)   # mostly 'c'
+```
+
+`weighted_reservoir_sample` is the Efraimidis-Spirakis A-Res algorithm: it assigns each
+item the key `u^(1/w)` for a uniform `u` and keeps the `k` largest keys in a size-`k`
+min-heap, so it runs in `O(n log k)` time and `O(k)` memory over a stream of unknown
+length. For `k = 1` this reduces to a weighted choice — across 30,000 seeds the four
+weights `1, 2, 3, 4` are picked about `0.10, 0.20, 0.30, 0.40` of the time, matching the
+closed-form `w_i / sum(w)`. Zero-weight items are never selected, and `k` past the number
+of positive-weight items returns all of them. `weighted_sample_with_replacement` uses
+cumulative-weight bisection, so an item can repeat and its frequency converges to its
+weight fraction. Both are deterministic for a fixed `seed`.
+
 When recent data should count more than old — a drifting mean or a changing volatility
 — `EWMAStats` keeps an exponentially-weighted mean and variance online (the RiskMetrics
 recursion), with no fixed window:
