@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.23.0] - 2026-09-14
+
+### Added
+- `bernoulli.py`: exact Bernoulli numbers and Faulhaber's sum-of-powers formula —
+  `bernoulli_number`, `bernoulli_sequence`, and `faulhaber` (all via `fractions`).
+  Cross-checked: the Bernoulli numbers match known values (B_1 = +1/2, odd > 1 vanish),
+  Faulhaber's closed form equals the direct power sum for every degree up to 7, and it
+  reproduces the classic sum-of-k / k^2 / k^3 identities.
+
 ## [3.22.0] - 2026-09-14
 
 ### Documentation

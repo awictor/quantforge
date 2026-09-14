@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.22.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.23.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -763,6 +763,26 @@ Auto-generated from `quantforge` v3.22.0 by `docs/gen_api.py` — do not edit by
 >     DV01 sign convention (positive for a payer).
 >
 > A fixed ``seed`` is required for the CRN differences to be meaningful.
+
+## bernoulli
+
+### `bernoulli_number(n)`  _function_
+
+> The ``n``-th Bernoulli number ``B_n`` as an exact :class:`fractions.Fraction`.
+>
+> Uses the convention ``B_1 = +1/2``. Computed by the recurrence
+> ``sum_{k=0}^{n} C(n+1, k) B_k = 0`` and cached. ``B_n = 0`` for odd ``n > 1``.
+
+### `bernoulli_sequence(n)`  _function_
+
+> The Bernoulli numbers ``B_0 .. B_n`` as a list of :class:`Fraction`.
+
+### `faulhaber(m, p)`  _function_
+
+> Sum ``1^p + 2^p + ... + m^p`` in closed form (Faulhaber), exact.
+>
+> Evaluates ``(1/(p+1)) sum_{j=0}^{p} C(p+1, j) B_j m^{p+1-j}`` with ``B_1 = +1/2``.
+> Returns an ``int`` (the sum is always an integer). Handles ``p = 0`` (returns ``m``).
 
 ## bfgs
 
