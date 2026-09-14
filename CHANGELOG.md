@@ -31,6 +31,14 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.24.0] - 2026-09-13
+
+### Documentation
+- README: documented the cross-correlation / lead-lag tools in the spectral section,
+  next to convolution and autocorrelation — the raw and normalized forms, the
+  peak-lag detector, and the known-delay recovery example. All snippet values verified
+  against a live run.
+
 ## [2.23.0] - 2026-09-13
 
 ### Added

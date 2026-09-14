@@ -4372,6 +4372,24 @@ fft_autocorrelation(series, max_lag=20)   # autocorrelation, acf[0] = 1
 direct convolution), and `fft_autocorrelation` computes the whole autocorrelation via
 Wiener-Khinchin — far faster than the direct lag-by-lag sum on long series.
 
+Where autocorrelation slides a series against *itself*, cross-correlation slides *two*
+series past each other and its peak locates the lag at which they line up — the standard
+way to estimate a time delay or a lead-lag relationship:
+
+```python
+from quantforge import cross_correlation, lag_at_max_correlation
+
+lags, values = cross_correlation(x, y, max_lag=20)   # raw, over -20..+20
+lag, coef = lag_at_max_correlation(x, y)             # lag of best alignment, in [-1,1]
+```
+
+`cross_correlation` returns the raw overlap at every lag (matching a direct sum to
+floating error, computed via one FFT conjugate-multiply); `normalized_cross_correlation`
+divides out the amplitudes to give a correlation coefficient in `[-1, 1]`; and
+`lag_at_max_correlation` reports the peak. If `y` is `x` delayed by five samples, the
+peak lands at lag `5` with coefficient `≈0.90`; a positive lag means `x` leads `y`.
+Identical series peak at lag `0` with coefficient `1`.
+
 The real-valued cousin of the FFT, the discrete cosine transform, is `dct` (DCT-II) with
 inverse `idct` (DCT-III):
 
