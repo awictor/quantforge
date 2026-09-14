@@ -6003,6 +6003,28 @@ the classic `x == 2 (mod 3), 3 (mod 5), 2 (mod 7)` gives `23`. `mod_pow` wraps f
 exponentiation and handles negative exponents through the inverse, and `discrete_log`
 solves `base^x == target` by baby-step giant-step in `O(sqrt(mod))`.
 
+Exact counting functions round out the section — all on big integers, so a coefficient
+with thirty digits is exact rather than a float approximation:
+
+```python
+from quantforge import (binomial, multinomial, stirling_second,
+                        bell, catalan, partition_count, derangements)
+
+binomial(10, 3)                    # 120
+multinomial([1, 4, 4, 2])          # 34650 — arrangements of "mississippi"
+stirling_second(4, 2)              # 7 — partitions of 4 items into 2 blocks
+[catalan(n) for n in range(7)]     # [1, 1, 2, 5, 14, 42, 132]
+partition_count(8)                 # 22 — integer partitions of 8
+derangements(4)                    # 9 — permutations with no fixed point
+```
+
+`binomial` and `multinomial` count subsets and multiset arrangements; `stirling_second`
+counts set partitions into a fixed number of non-empty blocks, and `bell(n)` sums that
+row over all block counts (`bell(5) == 52`). `catalan` gives the ubiquitous
+`1, 1, 2, 5, 14, 42, ...`, `partition_count` the number of ways to write `n` as an
+unordered sum, and `derangements(n)` the fixed-point-free permutations — equal to
+`round(n!/e)` for every `n`.
+
 ## Probability distributions
 
 Gamma, chi-square, Poisson, F and binomial distributions built on those special

@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.48.0] - 2026-09-13
+
+### Documentation
+- README: documented the combinatorics functions in the Number theory section —
+  `binomial`, `multinomial`, `stirling_second`, `bell`, `catalan`, `partition_count`,
+  and `derangements` with worked values. All snippet values verified live.
+
 ## [2.47.0] - 2026-09-13
 
 ### Added
