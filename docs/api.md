@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.12.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.13.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -5812,6 +5812,24 @@ Auto-generated from `quantforge` v4.12.0 by `docs/gen_api.py` — do not edit by
 > :func:`supershare`: ``delta`` (dV/dS), ``gamma`` (d2V/dS2), ``vega``
 > (dV/dsigma), ``theta`` (calendar decay). Returns a dict with ``price`` and
 > those fields.
+
+## expression
+
+### `eval_expression(expr)`  _function_
+
+> Evaluate an infix arithmetic string safely (no Python ``eval``).
+
+### `eval_rpn(rpn)`  _function_
+
+> Evaluate a postfix (RPN) token list to a number.
+
+### `shunting_yard(tokens)`  _function_
+
+> Convert an infix token list to a postfix (RPN) list (Dijkstra's shunting-yard).
+
+### `tokenize(expr)`  _function_
+
+> Split ``expr`` into a token list of numbers (float), operators, parens, and names.
 
 ## extendible
 

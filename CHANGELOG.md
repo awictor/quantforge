@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.627.0] - 2026-09-14
+
+### Added
+- `expression.py`: a safe arithmetic evaluator (no Python `eval`). `tokenize` splits a
+  string, `shunting_yard` converts infix to Reverse Polish honouring precedence and
+  associativity, `eval_rpn` folds postfix to a number, and `eval_expression` chains them.
+  Supports ``+ - * / // % ^`` (power right-associative, binding tighter than unary minus),
+  unary minus, parentheses, the functions ``sin/cos/tan/exp/log/sqrt/abs``, and the
+  constants ``pi``/``e``. Cross-checked against Python's `eval` over ~8000 random
+  expressions. Two parser bugs were caught and fixed before shipping: unary-minus precedence
+  (so ``-2^2`` is ``-4``, not a complex ``(-2)^2``) and unary minus incorrectly popping
+  lower-precedence operators (which broke ``2^-1``).
+
 ## [1.626.0] - 2026-09-14
 
 ### Documentation
