@@ -692,6 +692,7 @@ from .eigen_general import (
 )
 from .linprog import linprog
 from .assignment import hungarian, knapsack_01
+from .root_scan import find_all_roots, count_sign_changes
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -1082,7 +1083,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "2.86.0"
+__version__ = "2.87.0"
 
 __all__ = [
     "OptionType",
@@ -2056,6 +2057,8 @@ __all__ = [
     "linprog",
     "hungarian",
     "knapsack_01",
+    "find_all_roots",
+    "count_sign_changes",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

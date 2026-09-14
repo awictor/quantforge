@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.87.0] - 2026-09-13
+
+### Added
+- `root_scan.py`: find all sign-changing roots of a function on an interval —
+  `find_all_roots` (grid scan for sign changes, then Brent refinement) and
+  `count_sign_changes`. Cross-checked: recovers a cubic's three roots, the multiples of
+  pi where sine vanishes, cosine's six roots on [0, 20], and two transcendental roots of
+  e^x = 3x, all to residuals near machine precision.
+
 ## [2.86.0] - 2026-09-13
 
 ### Documentation

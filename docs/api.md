@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.86.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.87.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -12910,6 +12910,24 @@ Auto-generated from `quantforge` v2.86.0 by `docs/gen_api.py` — do not edit by
 > Returns a new list with values below the lower quantile raised to it and
 > values above the upper quantile lowered to it -- bounding the influence of
 > extremes without discarding observations. ``limit`` must be in ``[0, 0.5)``.
+
+## root_scan
+
+### `count_sign_changes(f, a, b, n=1000)`  _function_
+
+> Number of sign changes of ``f`` on ``[a, b]`` over an ``n``-point grid.
+>
+> A quick lower bound on the number of simple roots (each sign change brackets at least
+> one). Cheaper than :func:`find_all_roots` when only the count is needed.
+
+### `find_all_roots(f, a, b, n=1000, tol=1e-12)`  _function_
+
+> All sign-changing roots of ``f`` on ``[a, b]`` via a grid scan plus Brent refinement.
+>
+> Splits ``[a, b]`` into ``n`` subintervals, and wherever ``f`` changes sign (or hits
+> exactly zero at a node) brackets and refines a root with Brent's method. Returns the
+> roots in increasing order, de-duplicated. Increase ``n`` to catch roots closer than
+> the grid spacing.
 
 ## rootfind
 
