@@ -627,6 +627,13 @@ from .combinatorics import (
 )
 from .lhs import latin_hypercube, maximin_lhs, l2_star_discrepancy
 from .bareiss import bareiss_determinant, rational_solve, rational_inverse
+from .geometry import (
+    convex_hull,
+    polygon_area,
+    polygon_centroid,
+    point_in_polygon,
+    closest_pair,
+)
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -1017,7 +1024,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "2.52.0"
+__version__ = "2.53.0"
 
 __all__ = [
     "OptionType",
@@ -1931,6 +1938,11 @@ __all__ = [
     "bareiss_determinant",
     "rational_solve",
     "rational_inverse",
+    "convex_hull",
+    "polygon_area",
+    "polygon_centroid",
+    "point_in_polygon",
+    "closest_pair",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

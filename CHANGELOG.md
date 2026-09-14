@@ -31,6 +31,17 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.53.0] - 2026-09-13
+
+### Added
+- `geometry.py`: planar computational geometry — `convex_hull` (Andrew's monotone
+  chain), `polygon_area` and `polygon_centroid` (shoelace), `point_in_polygon`
+  (ray casting), and `closest_pair` (divide-and-conquer). Cross-checked: the hull of a
+  square plus interior points is its four corners and every point of a random cloud lies
+  inside its own hull; areas and centroids match known values orientation-independently;
+  point-in-polygon handles a concave L-shape and on-edge points; and closest_pair matches
+  a brute-force search.
+
 ## [2.52.0] - 2026-09-13
 
 ### Documentation

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.52.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.53.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -5925,6 +5925,45 @@ Auto-generated from `quantforge` v2.52.0 by `docs/gen_api.py` — do not edit by
 > ``sum_i w_i x_i^m = m!`` (the moments of the ``e^{-x}`` density). Exact for
 > polynomials up to degree ``2n - 1``. Nodes are positive and returned in
 > increasing order.
+
+## geometry
+
+### `closest_pair(points)`  _function_
+
+> Closest pair of points and their distance: ``(p, q, distance)``.
+>
+> Divide-and-conquer in ``O(n log n)``. Needs at least two points; ties break to the
+> first pair found.
+
+### `convex_hull(points)`  _function_
+
+> Convex hull of a set of 2-D points (Andrew's monotone chain).
+>
+> Returns the hull vertices in counter-clockwise order, starting from the lowest-then-
+> leftmost point, without repeating the first point. Collinear interior points are
+> dropped. Needs at least one point; duplicates are ignored.
+
+### `point_in_polygon(point, polygon)`  _function_
+
+> Whether ``point`` lies inside a simple ``polygon`` (ray-casting, odd-crossing rule).
+>
+> Casts a ray to the right and counts edge crossings; an odd count means inside. Points
+> exactly on an edge are reported as inside. ``polygon`` is an ordered ``(x, y)`` vertex
+> list.
+
+### `polygon_area(polygon)`  _function_
+
+> Area of a simple polygon by the shoelace formula (unsigned).
+>
+> ``polygon`` is a list of ``(x, y)`` vertices in order (open ring; the last vertex is
+> joined back to the first). Returns the absolute area. Needs at least three vertices.
+
+### `polygon_centroid(polygon)`  _function_
+
+> Centroid ``(cx, cy)`` of a simple polygon (area-weighted, shoelace form).
+>
+> Falls back to the vertex average for a degenerate (zero-area) polygon. ``polygon`` is
+> an ordered ``(x, y)`` vertex list.
 
 ## gmm
 
