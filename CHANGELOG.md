@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.715.0] - 2026-09-14
+
+### Added
+- `legendre_p`, `assoc_legendre`, `spherical_harmonic_real`: Legendre polynomials (three-term
+  recurrence), associated Legendre functions ``P_l^m`` (stable upward recurrence with
+  Condon-Shortley phase, Numerical Recipes 6.7), and the orthonormal real (tesseral) spherical
+  harmonics ``Y_l^m(theta, phi)``. Cross-checked against the explicit ``P_0..P_5``, the
+  endpoints ``P_l(1)=1``/``P_l(-1)=(-1)^l``, the orthogonality ``int P_l P_k = 2/(2l+1) delta``,
+  explicit ``P_l^m`` forms, and numerical orthonormality of ``Y_l^m`` over the sphere.
+
 ## [1.714.0] - 2026-09-14
 
 ### Documentation

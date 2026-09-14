@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.00.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.01.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -9361,6 +9361,34 @@ Auto-generated from `quantforge` v5.00.0 by `docs/gen_api.py` — do not edit by
 >
 > A duration-matched but convexity-mismatched book still moves at second order;
 > matching both leaves the surplus (nearly) unchanged.
+
+## legendre_harmonics
+
+### `assoc_legendre(l, m, x)`  _function_
+
+> Associated Legendre function ``P_l^m(x)`` for ``0 <= m <= l`` and ``|x| <= 1``.
+>
+> Uses the Condon-Shortley phase ``(-1)^m``. Seeds ``P_m^m = (-1)^m (2m-1)!! (1-x^2)^{m/2}``
+> then climbs in ``l`` with ``(l-m) P_l^m = x (2l-1) P_{l-1}^m - (l+m-1) P_{l-2}^m``.
+> ``assoc_legendre(l, 0, x) == legendre_p(l, x)``.
+
+### `legendre_p(l, x)`  _function_
+
+> Legendre polynomial ``P_l(x)`` via the three-term recurrence.
+>
+> ``P_0 = 1``, ``P_1 = x``, ``(l+1) P_{l+1} = (2l+1) x P_l - l P_{l-1}``. Valid for any real
+> ``x`` (orthogonal on ``[-1, 1]``). ``P_l(1) = 1`` and ``P_l(-1) = (-1)^l``.
+
+### `spherical_harmonic_real(l, m, theta, phi)`  _function_
+
+> Real spherical harmonic ``Y_l^m(theta, phi)`` (orthonormal, ``-l <= m <= l``).
+>
+> ``theta`` is the polar (colatitude) angle in ``[0, pi]``, ``phi`` the azimuth. The real
+> (tesseral) convention:
+> ``m > 0``: ``sqrt(2) N_l^m P_l^m(cos theta) cos(m phi)``;
+> ``m = 0``: ``N_l^0 P_l^0(cos theta)``;
+> ``m < 0``: ``sqrt(2) N_l^|m| P_l^|m|(cos theta) sin(|m| phi)``,
+> with ``N_l^m = sqrt((2l+1)/(4 pi) (l-m)!/(l+m)!)``. These are orthonormal over the sphere.
 
 ## leisen_reimer
 
