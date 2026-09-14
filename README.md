@@ -6427,6 +6427,27 @@ tables and bloom filters, reproducing the published FNV test vectors. All accept
 (UTF-8 encoded) or raw bytes and return a 32-bit unsigned integer — none are
 cryptographic.
 
+Checksums only *detect* corruption; error-correcting codes fix it. The Hamming(7,4) code
+adds three parity bits so any single-bit flip is corrected, and the Luhn algorithm guards
+account/card numbers with a check digit:
+
+```python
+from quantforge import hamming74_encode, hamming74_decode, luhn_checksum, luhn_check_digit
+
+code = hamming74_encode([1, 0, 1, 1])     # 7-bit codeword
+code[4] ^= 1                               # flip a bit in transit
+hamming74_decode(code)                     # ([1, 0, 1, 1], 5) — data recovered, flip at pos 5
+
+luhn_checksum("79927398713")               # 0 -> valid
+luhn_check_digit("7992739871")             # 3 -> the digit that validates it
+```
+
+`hamming74_decode` computes the 3-bit syndrome, corrects the flagged bit, and returns the
+data plus the 1-indexed error position (`0` if clean) — verified to correct a flip at every
+one of the seven positions for all sixteen data words. `luhn_checksum` returns `0` for a
+valid number (it validates real card numbers) and `luhn_check_digit` produces the digit
+that makes any payload valid.
+
 ## Probability distributions
 
 Gamma, chi-square, Poisson, F and binomial distributions built on those special
