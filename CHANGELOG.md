@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.579.0] - 2026-09-14
+
+### Added
+- `heavy_hitters.py`: `MisraGries` and `SpaceSaving` find a stream's frequent items in one
+  pass and ``O(k)`` memory. `MisraGries` keeps `k` bounded counters -- any item occurring
+  more than ``n / (k + 1)`` times is guaranteed to survive, and stored counts never exceed
+  the truth (undercount bounded by ``n / (k + 1)``). `SpaceSaving` (Metwally-Agarwal-Abbadi)
+  keeps `k` (item, count, error) slots, evicting the minimum on overflow, so ``count`` is
+  an upper bound and ``count - error`` a guaranteed lower bound; `top`/`guaranteed` read the
+  ranked estimate. Cross-checked against an exact `Counter` on a skewed stream: Misra-Gries
+  never overcounts and retains every true heavy hitter, Space-Saving brackets each true
+  frequency between its lower and upper bound and recovers the exact top-3.
+
 ## [1.578.0] - 2026-09-14
 
 ### Documentation

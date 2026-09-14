@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.64.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.65.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -7020,6 +7020,27 @@ Auto-generated from `quantforge` v3.64.0 by `docs/gen_api.py` — do not edit by
 > space/time steps, ``alpha`` the diffusivity. ``left``/``right`` fix the Dirichlet
 > boundary values (default: hold the initial endpoints). Returns the profile after
 > ``n_steps`` steps. Unconditionally stable, second-order in space and time.
+
+## heavy_hitters
+
+### `MisraGries(k)`  _class_
+
+> Misra-Gries frequent-items summary with ``k`` counters.
+>
+> ``add(item)`` folds one occurrence; ``counts()`` returns the surviving item -> count
+> map. Any item with true frequency greater than ``n / (k + 1)`` is guaranteed present,
+> and stored counts never exceed the true count (they may undercount by up to the number
+> of decrement rounds).
+
+### `SpaceSaving(k)`  _class_
+
+> Space-Saving top-k summary (Metwally-Agarwal-Abbadi) with ``k`` counters.
+>
+> ``add(item)`` folds one occurrence; ``top(m)`` returns the ``m`` highest
+> ``(item, count)`` pairs. Each slot tracks an ``error`` -- the maximum it may overcount
+> -- so ``count - error`` is a guaranteed lower bound on the true frequency. When a new
+> item arrives and every slot is used, the slot with the smallest count is evicted and
+> its count becomes the new item's starting error.
 
 ## hedgesim
 
