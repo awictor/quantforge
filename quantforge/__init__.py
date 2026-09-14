@@ -590,6 +590,7 @@ from .walsh_hadamard import (
     and_convolve,
     or_convolve,
 )
+from .prefix_sum import PrefixSum1D, PrefixSum2D, DifferenceArray
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1294,7 +1295,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "4.0.0"
+__version__ = "4.1.0"
 
 __all__ = [
     "OptionType",
@@ -2125,6 +2126,9 @@ __all__ = [
     "xor_convolve",
     "and_convolve",
     "or_convolve",
+    "PrefixSum1D",
+    "PrefixSum2D",
+    "DifferenceArray",
     "Dual",
     "dual_derivative",
     "dual_gradient",

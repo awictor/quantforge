@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.615.0] - 2026-09-14
+
+### Added
+- `prefix_sum.py`: constant-time range-sum structures. `PrefixSum1D` answers `range_sum`
+  over a fixed array in ``O(1)`` after an ``O(n)`` build; `PrefixSum2D` is the summed-area
+  table (integral image) giving any axis-aligned rectangle sum by four-corner
+  inclusion-exclusion; and `DifferenceArray` is the dual for the offline "many range-adds
+  then one read" pattern -- each `add(lo, hi, delta)` is ``O(1)`` and `result()`
+  materializes the final array in ``O(n)``. Cross-checked against brute-force sums over
+  8000 random 1-D, 2-D, and range-update instances.
+
 ## [1.614.0] - 2026-09-14
 
 ### Documentation

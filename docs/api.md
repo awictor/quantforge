@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.0.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.1.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -12368,6 +12368,30 @@ Auto-generated from `quantforge` v4.0.0 by `docs/gen_api.py` — do not edit by 
 ### `rayleigh_quotient(A, x)`  _function_
 
 > Rayleigh quotient ``x' A x / x' x`` -- the least-squares eigenvalue for ``x``.
+
+## prefix_sum
+
+### `DifferenceArray(n_or_values)`  _class_
+
+> Offline range-add / final-read via a difference array.
+>
+> ``add(lo, hi, delta)`` adds ``delta`` to every index in ``[lo, hi)`` in ``O(1)``; after
+> all updates, ``result()`` materializes the final array in ``O(n)``. Ideal when many
+> range updates precede a single read.
+
+### `PrefixSum1D(values)`  _class_
+
+> Constant-time range sums over a fixed 1-D array.
+>
+> ``range_sum(lo, hi)`` returns the sum of ``values[lo:hi]`` (half-open) in ``O(1)`` after
+> an ``O(n)`` build. ``prefix(i)`` gives the sum of the first ``i`` elements.
+
+### `PrefixSum2D(grid)`  _class_
+
+> Summed-area table for constant-time rectangle sums over a fixed 2-D grid.
+>
+> Build from a list of equal-length rows. ``range_sum(r0, c0, r1, c1)`` returns the sum
+> over rows ``[r0, r1)`` and columns ``[c0, c1)`` (half-open) in ``O(1)``.
 
 ## prob_forecast
 
