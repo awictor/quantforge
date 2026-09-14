@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.706.0] - 2026-09-14
+
+### Documentation
+- README: documented `riemann_zeta` and `dirichlet_eta` in the special-functions block after
+  the Airy functions -- the Euler-Maclaurin evaluation, the eta-relation continuation on the
+  critical strip, and Cohen-Villegas-Zagier acceleration. All snippet values verified live.
+
 ## [1.705.0] - 2026-09-14
 
 ### Added

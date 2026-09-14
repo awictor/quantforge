@@ -7090,6 +7090,29 @@ Wronskian `Ai·Bi' - Ai'·Bi = 1/pi`, and vanish at the tabulated zeros (Ai's fi
 `-2.3381`). The series is reliable on `[-15, +inf)`; far into the negative oscillatory region
 its terms cancel and accuracy degrades.
 
+`riemann_zeta` and `dirichlet_eta` evaluate the two central Dirichlet series of analytic
+number theory:
+
+```python
+from quantforge import riemann_zeta, dirichlet_eta
+
+riemann_zeta(2)     # 1.6449340668482266  = pi**2 / 6
+riemann_zeta(3)     # 1.2020569031595942  (Apery's constant)
+riemann_zeta(4)     # 1.0823232337111384  = pi**4 / 90
+riemann_zeta(0.5)   # -1.4603545088095866 (critical-line value)
+dirichlet_eta(1)    # 0.6931471805599452  = ln 2
+dirichlet_eta(2)    # 0.8224670334241133  = pi**2 / 12
+```
+
+`riemann_zeta(s) = sum n**-s` uses Euler-Maclaurin summation: the first terms are added
+exactly, the tail is replaced by its integral, and Bernoulli-number corrections recover the
+rest -- accurate for any real `s > 1`. On the critical strip `0 < s < 1` it continues via the
+eta relation `zeta(s) = eta(s) / (1 - 2**(1-s))`, so `riemann_zeta(0.5)` returns the true
+analytically-continued value, not the divergent series. `dirichlet_eta`, the alternating
+`sum (-1)**(n-1) n**-s`, switches to Cohen-Villegas-Zagier acceleration near `s -> 0` where the
+alternation converges only conditionally. Cross-checked against the closed forms above, the
+eta/zeta identity, and direct summation.
+
 The correlated-normal CDFs behind the multi-asset and compound-option models are public
 too:
 
