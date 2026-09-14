@@ -31,6 +31,17 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.29.0] - 2026-09-13
+
+### Added
+- `ar_spectrum.py`: parametric (autoregressive) power-spectral-density estimation —
+  `burg` (Burg's forward-backward method, best for short records), `ar_psd` (PSD from
+  AR coefficients), and `ar_spectrum` (fit + evaluate, Burg or Yule-Walker).
+  Cross-checked: Burg recovers a known AR(2) process's coefficients, the reflection
+  coefficients stay stable (|k| < 1), the spectrum of two sinusoids in noise peaks at
+  both frequencies, and a positive/negative AR(1) coefficient gives a low-pass/high-pass
+  shape.
+
 ## [2.28.0] - 2026-09-13
 
 ### Documentation

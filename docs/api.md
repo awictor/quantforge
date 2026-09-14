@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.28.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.29.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -342,6 +342,33 @@ Auto-generated from `quantforge` v2.28.0 by `docs/gen_api.py` — do not edit by
 > (best_order, scores) : (int, list[tuple])
 >     The selected order and a list of ``(order, aic, bic)`` for every candidate.
 >     BIC tends to pick an order no larger than AIC.
+
+## ar_spectrum
+
+### `ar_psd(coeffs, noise_variance, freqs)`  _function_
+
+> AR power spectral density ``sigma^2 / |1 - sum phi_k e^{-i 2 pi f k}|^2``.
+>
+> ``freqs`` are normalized frequencies in cycles/sample (``0`` to ``0.5`` is DC to
+> Nyquist). ``coeffs`` are the AR coefficients ``phi_1..phi_p`` and
+> ``noise_variance`` the innovation variance. Returns the PSD at each frequency.
+
+### `ar_spectrum(x, order, freqs, method='burg')`  _function_
+
+> Parametric PSD of ``x`` from an AR(``order``) fit, evaluated at ``freqs``.
+>
+> ``method`` is ``"burg"`` (default, best for short records) or ``"yule_walker"``.
+> Returns the PSD at each normalized frequency in ``freqs``.
+
+### `burg(x, order)`  _function_
+
+> Fit AR coefficients by Burg's method (minimizes forward+backward error).
+>
+> Returns ``{"coefficients": [phi_1..phi_p], "noise_variance": sigma2,
+> "reflection": [k_1..k_p]}``. Burg estimates the reflection coefficients directly
+> from the data (never forming autocovariances), which gives sharper, more stable
+> spectra than Yule-Walker on short records. ``order`` must be ``>= 1`` and less than
+> ``len(x)``.
 
 ## arch_test
 
