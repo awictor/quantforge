@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.700.0] - 2026-09-14
+
+### Documentation
+- README: documented `bessel_j0`, `bessel_j1`, `bessel_jn`, `bessel_y0`, and `bessel_y1` in
+  the special-functions block after the elliptic integrals -- Bessel functions of the first
+  and second kind. All snippet values verified live.
+
 ## [1.699.0] - 2026-09-14
 
 ### Added

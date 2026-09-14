@@ -7038,6 +7038,25 @@ convergent limit; `elliptic_k(m)` is then just ``pi / (2 AGM(1, sqrt(1-m)))``, a
 `m = k^2` runs in `[0, 1)` for K and `[0, 1]` for E. They satisfy the Legendre relation
 `E(m)K(1-m) + E(1-m)K(m) - K(m)K(1-m) = pi/2` and agree with direct numerical integration.
 
+The Bessel functions — vibrating membranes, waveguides, cylindrical heat flow — are here as
+`bessel_j0`/`bessel_j1`/`bessel_jn` (first kind, finite at 0) and `bessel_y0`/`bessel_y1`
+(second kind):
+
+```python
+from quantforge import bessel_j0, bessel_j1, bessel_jn, bessel_y0
+
+bessel_j0(1)                       # 0.7651977
+bessel_j0(2.404825557695773)       # ~1e-9 — the first zero of J0
+bessel_jn(2, 1)                    # 0.1149035
+bessel_y0(1)                       # 0.088257
+```
+
+J0/J1/Y0/Y1 use the Abramowitz-Stegun rational approximations near the origin and the
+amplitude-phase asymptotic form for large argument; `bessel_jn(n, x)` climbs to higher
+orders by Miller's stable downward recurrence. They match tabulated values and the integral
+representation, satisfy the recurrence `J_{n-1}(x) + J_{n+1}(x) = (2n/x) J_n(x)`, and vanish
+at the standard zeros (J0's first at `2.4048`). Y0/Y1 require `x > 0`.
+
 The correlated-normal CDFs behind the multi-asset and compound-option models are public
 too:
 
