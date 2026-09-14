@@ -7109,6 +7109,27 @@ millions. `matrix_power` is exponentiation-by-squaring on an integer or real squ
 and every routine takes an optional `mod` for exact modular arithmetic. Verified against
 direct iteration over thousands of random recurrences and known Fibonacci/tribonacci values.
 
+Where `linear_recurrence_nth` advances a *known* recurrence, `berlekamp_massey` runs the
+other way: given a sequence's terms modulo a prime, it *finds* the shortest recurrence they
+obey, and `berlekamp_massey_next` extrapolates from it:
+
+```python
+from quantforge import berlekamp_massey, berlekamp_massey_next
+
+MOD = 998244353
+berlekamp_massey([0, 1, 1, 2, 3, 5, 8, 13], MOD)   # [1, 1] — the Fibonacci rule
+berlekamp_massey([1, 2, 4, 8, 16], MOD)            # [2]    — doubling
+berlekamp_massey_next([1, 1, 2, 3, 5, 8, 13], MOD, 3)   # [21, 34, 55]
+```
+
+`berlekamp_massey` returns the coefficients of the shortest linear recurrence
+`s_i = sum_j c_j s_{i-1-j} (mod p)` reproducing the input — the minimal LFSR — in `O(n^2)`;
+given at least `2L` terms of a length-`L` recurrence it recovers it exactly. It is the tool
+for guessing a closed form from a computed prefix or decoding a linear sequence.
+`berlekamp_massey_next` rolls the discovered recurrence forward to predict further terms.
+Verified over thousands of random modular recurrences that the recovered rule reproduces the
+sequence, is minimal, and predicts the true continuation.
+
 Dates reduce to integer arithmetic once mapped to a Julian day number, so `calendar_math`
 answers weekday, day-count, leap-year, and Easter questions with no `datetime` dependency:
 

@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.636.0] - 2026-09-14
+
+### Documentation
+- README: documented `berlekamp_massey` and `berlekamp_massey_next` in the Number theory
+  section after the linear-recurrence tools -- discovering the shortest recurrence a modular
+  sequence obeys and extrapolating from it. All snippet values verified live.
+
 ## [1.635.0] - 2026-09-14
 
 ### Added
