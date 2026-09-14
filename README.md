@@ -5291,6 +5291,25 @@ algebra — `poly_mul` / `poly_divmod` (long division returning quotient and rem
 `poly_mul` is the exact direct product (use the FFT-based `convolve` for long
 polynomials).
 
+Where `bisection`/`brent`/`newton` solve one scalar equation, `newton_system` and
+`broyden` solve a *system* `F(x) = 0` in several unknowns:
+
+```python
+from quantforge import newton_system, broyden
+
+# circle x^2 + y^2 = 1 intersected with the line x = y
+f = lambda v: [v[0]**2 + v[1]**2 - 1, v[0] - v[1]]
+newton_system(f, [0.5, 0.9])         # ([0.7071, 0.7071], iters) -> 1/sqrt(2)
+broyden(f, [0.5, 0.9])               # same root, quasi-Newton
+```
+
+`newton_system` forms the finite-difference Jacobian and solves `J dx = -F(x)` each step
+(quadratic convergence, `n` extra evaluations per iteration for the Jacobian), while
+`broyden` keeps a rank-1-updated inverse-Jacobian estimate that avoids re-differentiating
+— cheaper when `F` is expensive. Both return `(solution, iterations)`, agree on the same
+root, and raise on a singular Jacobian; on a 3-variable polynomial system they recover
+`(1, 2, 3)` to machine precision.
+
 `neville` evaluates the unique degree-`(n-1)` polynomial through `n` points at one
 `x`, returning `(value, error_estimate)`; `divided_differences` / `newton_polynomial`
 build the Newton form once and evaluate it cheaply at many points. Because Neville

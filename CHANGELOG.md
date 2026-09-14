@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.80.0] - 2026-09-13
+
+### Documentation
+- README: documented the nonlinear-system solvers in the Numerical utilities section —
+  `newton_system` and `broyden` with the circle-line example, next to the scalar root
+  finders. All snippet values verified live.
+
 ## [2.79.0] - 2026-09-13
 
 ### Added
