@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.59.0] - 2026-09-13
+
+### Added
+- `graph.py`: graph algorithms — `dijkstra` and `shortest_path` (non-negative weights),
+  `bfs` (unweighted hop distances), `connected_components` (undirected), and
+  `topological_sort` (Kahn's algorithm with cycle detection). Cross-checked: Dijkstra
+  matches Bellman-Ford on 100 random weighted graphs, path reconstruction and BFS hops
+  are correct, components partition an undirected graph, the topological order respects
+  every edge, and cycles / negative weights / bad sources raise.
+
 ## [2.58.0] - 2026-09-13
 
 ### Documentation

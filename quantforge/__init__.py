@@ -641,6 +641,13 @@ from .geometry2 import (
     clip_polygon,
 )
 from .geometry3 import bounding_box, polygon_diameter, min_enclosing_circle
+from .graph import (
+    dijkstra,
+    shortest_path,
+    bfs,
+    connected_components,
+    topological_sort,
+)
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -1031,7 +1038,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "2.58.0"
+__version__ = "2.59.0"
 
 __all__ = [
     "OptionType",
@@ -1957,6 +1964,11 @@ __all__ = [
     "bounding_box",
     "polygon_diameter",
     "min_enclosing_circle",
+    "dijkstra",
+    "shortest_path",
+    "bfs",
+    "connected_components",
+    "topological_sort",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.58.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.59.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -6154,6 +6154,46 @@ Auto-generated from `quantforge` v2.58.0 by `docs/gen_api.py` — do not edit by
 ### `realized_skewness(returns: Sequence[float]) -> float`  _function_
 
 > Sample skewness of a return series (bias-corrected denominator n).
+
+## graph
+
+### `bfs(graph, source)`  _function_
+
+> Breadth-first hop distances from ``source`` (unweighted).
+>
+> ``graph`` maps each node to an iterable of neighbors. Returns ``{node: hops}`` for
+> every node reachable from ``source`` (``0`` at the source), in increasing hop order.
+
+### `connected_components(graph)`  _function_
+
+> Connected components of an undirected graph as a list of node sets.
+>
+> ``graph`` maps each node to its neighbors; edges are treated as undirected (a node
+> listed as a neighbor is joined even if the reverse edge is absent). Returns the
+> components as a list of sorted lists.
+
+### `dijkstra(graph, source)`  _function_
+
+> Shortest-path distances from ``source`` over non-negative edge weights.
+>
+> ``graph`` is ``{node: {neighbor: weight}}`` with weights ``>= 0``. Returns
+> ``(distances, predecessors)``: ``distances[node]`` is the shortest total weight from
+> ``source`` (``inf`` if unreachable) and ``predecessors[node]`` the previous node on a
+> shortest path (``None`` at the source or if unreachable). Raises on a negative weight.
+
+### `shortest_path(graph, source, target)`  _function_
+
+> Shortest path ``[source, ..., target]`` and its total weight, via Dijkstra.
+>
+> Returns ``(path, distance)``; ``(None, inf)`` if ``target`` is unreachable.
+
+### `topological_sort(graph)`  _function_
+
+> Topological ordering of a DAG (Kahn's algorithm); raises if the graph has a cycle.
+>
+> ``graph`` is ``{node: [successors]}`` (or ``{node: {succ: weight}}``). Returns a list
+> of nodes such that every edge points forward. Raises ``ValueError`` if a cycle makes
+> a valid ordering impossible.
 
 ## greeks2
 
