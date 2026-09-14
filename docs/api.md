@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.56.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.57.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -14159,6 +14159,32 @@ Auto-generated from `quantforge` v4.56.0 by `docs/gen_api.py` — do not edit by
 > Steps ``x -= f(x)/f'(x)``; if ``lo``/``hi`` bounds are given, a step leaving
 > the bracket (or a zero derivative) falls back to a bisection step. Converges
 > quadratically near a simple root when the derivative is well-behaved.
+
+## rotation
+
+### `euler_to_matrix(yaw, pitch, roll)`  _function_
+
+> Z-Y-X Euler angles directly to a 3x3 rotation matrix.
+
+### `euler_to_quat(yaw, pitch, roll)`  _function_
+
+> Z-Y-X intrinsic Euler angles (yaw, pitch, roll, radians) to a quaternion ``(w,x,y,z)``.
+
+### `matrix_to_euler(m)`  _function_
+
+> 3x3 rotation matrix to Z-Y-X Euler angles ``(yaw, pitch, roll)``.
+
+### `matrix_to_quat(m)`  _function_
+
+> Convert a 3x3 rotation matrix to a unit quaternion ``(w, x, y, z)`` (Shepperd's method).
+
+### `quat_to_euler(q)`  _function_
+
+> Quaternion ``(w, x, y, z)`` to Z-Y-X Euler angles ``(yaw, pitch, roll)`` in radians.
+
+### `quat_to_matrix(q)`  _function_
+
+> Convert a unit quaternion ``(w, x, y, z)`` to a 3x3 rotation matrix (row lists).
 
 ## rough_heston
 

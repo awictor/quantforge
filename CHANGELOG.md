@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.671.0] - 2026-09-14
+
+### Added
+- `rotation.py`: conversions among the three 3-D rotation representations -- `quat_to_matrix`
+  / `matrix_to_quat` (Shepperd's method), `euler_to_quat` / `quat_to_euler`, and the
+  `euler_to_matrix` / `matrix_to_euler` shortcuts. Euler angles use the aerospace Z-Y-X
+  (yaw, pitch, roll) intrinsic convention; quaternions are ``(w, x, y, z)`` matching
+  `quantforge.quaternion`. Cross-checked over 5000 random rotations: matrices are orthogonal,
+  all round-trips recover the input, and `quat_to_matrix @ v` matches
+  `quaternion.rotate_vector`.
+
 ## [1.670.0] - 2026-09-14
 
 ### Documentation
