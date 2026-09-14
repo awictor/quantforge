@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.11.0] - 2026-09-14
+
+### Added
+- `robust_scale.py`: high-breakdown scale estimators — `qn_scale` and `sn_scale`
+  (Rousseeuw-Croux, 50% breakdown) and `biweight_midvariance`. Cross-checked: all are
+  consistent with the true sigma on clean Gaussian data, stay near the clean scale when
+  20% gross outliers destroy the standard deviation, and Sn matches robustbase's
+  asymptotic value on 1..10. (The heaviest O(n^2) Gaussian-consistency checks are marked
+  slow.)
+
 ## [3.10.0] - 2026-09-14
 
 ### Documentation

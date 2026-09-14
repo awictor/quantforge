@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.10.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.11.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -13086,6 +13086,34 @@ Auto-generated from `quantforge` v3.10.0 by `docs/gen_api.py` — do not edit by
 > True if the smile term structure has no calendar arbitrage on the grid.
 >
 > Convenience wrapper: ``not calendar_arbitrage_violations(...)``.
+
+## robust_scale
+
+### `biweight_midvariance(x, c=9.0)`  _function_
+
+> Biweight midvariance: a robust variance that smoothly downweights outliers.
+>
+> Returns the square root (a robust standard deviation). Points more than ``c`` MADs
+> from the median get zero weight; the tuning constant ``c=9`` gives ~87% efficiency at
+> the normal. Reduces to a near-standard-deviation on clean Gaussian data.
+
+### `qn_scale(x)`  _function_
+
+> Rousseeuw-Croux Qn scale estimator (50% breakdown, location-free).
+>
+> The (roughly) first quartile of the pairwise distances ``|x_i - x_j|`` (``i < j``),
+> scaled by ``2.2219`` for asymptotic consistency with the normal standard deviation.
+> Needs at least two points; robust to up to half the data being outliers. No
+> finite-sample correction is applied, so small-sample values differ slightly from
+> implementations that include one.
+
+### `sn_scale(x)`  _function_
+
+> Rousseeuw-Croux Sn scale estimator (50% breakdown, no location needed).
+>
+> ``1.1926 * median_i( median_j |x_i - x_j| )`` -- the outer/inner medians give a robust
+> spread that, unlike the MAD, does not assume a symmetric distribution. Needs at least
+> two points.
 
 ## robust_stats
 
