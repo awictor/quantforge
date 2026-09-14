@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.85.0] - 2026-09-13
+
+### Added
+- `assignment.py`: combinatorial optimization — `hungarian` (minimum-cost assignment,
+  O(n^3) Kuhn-Munkres) and `knapsack_01` (0/1 knapsack DP with a chosen-item trace).
+  Cross-checked: Hungarian matches a brute-force permutation search over 300 random
+  matrices and returns a valid permutation, and the knapsack value and item trace match a
+  brute-force subset search over 500 random instances.
+
 ## [2.84.0] - 2026-09-13
 
 ### Documentation

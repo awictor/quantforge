@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.84.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.85.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -381,6 +381,25 @@ Auto-generated from `quantforge` v2.84.0 by `docs/gen_api.py` — do not edit by
 > referenced to a chi-square with ``lags`` degrees of freedom. A small p-value
 > rejects "no ARCH effect", i.e. detects volatility clustering. Subtracts the mean
 > first, so it works on returns directly. Requires ``len > 2 * lags + 1``.
+
+## assignment
+
+### `hungarian(cost)`  _function_
+
+> Minimum-cost assignment of ``n`` rows to ``n`` columns (Hungarian algorithm).
+>
+> ``cost`` is an ``n x n`` matrix. Returns ``(assignment, total_cost)`` where
+> ``assignment[i]`` is the column assigned to row ``i`` and each column is used once.
+> Uses the ``O(n^3)`` potentials (Kuhn-Munkres) formulation. For ``maximize``, negate
+> the costs before calling.
+
+### `knapsack_01(weights, values, capacity)`  _function_
+
+> 0/1 knapsack: maximize total value with total weight ``<= capacity``.
+>
+> Each item (``weights[i]``, ``values[i]``) is taken at most once. Returns
+> ``(best_value, chosen_indices)`` via the standard ``O(n * capacity)`` DP. ``capacity``
+> and all weights must be non-negative integers.
 
 ## attribution
 
