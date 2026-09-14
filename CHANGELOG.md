@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.57.0] - 2026-09-13
+
+### Added
+- `geometry3.py`: extremal measures of a point set — `bounding_box`, `polygon_diameter`
+  (farthest pair, via the convex hull), and `min_enclosing_circle` (Welzl's algorithm).
+  Cross-checked: the diameter matches a brute-force farthest-pair scan, the minimum
+  enclosing circle contains every point yet cannot be shrunk 1% without excluding one,
+  and it reproduces the known circle for two points and the square's circumcircle.
+
 ## [2.56.0] - 2026-09-13
 
 ### Documentation

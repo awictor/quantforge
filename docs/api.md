@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.56.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.57.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -5994,6 +5994,28 @@ Auto-generated from `quantforge` v2.56.0 by `docs/gen_api.py` — do not edit by
 >
 > Uses the standard four-orientation test with collinear-overlap handling. Returns a
 > bool.
+
+## geometry3
+
+### `bounding_box(points)`  _function_
+
+> Axis-aligned bounding box of a point set as ``(min_x, min_y, max_x, max_y)``.
+
+### `min_enclosing_circle(points, seed=1234567)`  _function_
+
+> Smallest circle containing all ``points`` as ``(center_x, center_y, radius)``.
+>
+> Welzl's algorithm with a deterministic shuffle (an LCG seeded by ``seed``), running in
+> expected linear time. Every input point lies inside or on the returned circle, and the
+> circle is the unique smallest such -- no smaller circle contains them all.
+
+### `polygon_diameter(points)`  _function_
+
+> Diameter of a point set: the farthest-apart pair and their distance.
+>
+> Returns ``(p, q, distance)``. Restricts the search to the convex-hull vertices (the
+> diameter is always realized by two hull points), then does an all-pairs scan over the
+> hull -- exact, and cheap once the hull has few vertices.
 
 ## gmm
 

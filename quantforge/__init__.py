@@ -640,6 +640,7 @@ from .geometry2 import (
     polygon_perimeter,
     clip_polygon,
 )
+from .geometry3 import bounding_box, polygon_diameter, min_enclosing_circle
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -1030,7 +1031,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "2.56.0"
+__version__ = "2.57.0"
 
 __all__ = [
     "OptionType",
@@ -1953,6 +1954,9 @@ __all__ = [
     "segment_intersection",
     "polygon_perimeter",
     "clip_polygon",
+    "bounding_box",
+    "polygon_diameter",
+    "min_enclosing_circle",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",
