@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.62.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.63.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -9233,6 +9233,24 @@ Auto-generated from `quantforge` v4.62.0 by `docs/gen_api.py` — do not edit by
 > shortfall versus naive ``leverage`` times the underlying's log return, from the
 > daily-rebalancing compounding. Zero at ``leverage`` 0 or 1; positive (a drag)
 > for ``leverage > 1`` or ``leverage < 0``.
+
+## levinson
+
+### `levinson_durbin(autocorr)`  _function_
+
+> Fit an AR model from an autocorrelation sequence ``[r_0, r_1, ..., r_p]``.
+>
+> Returns ``(ar_coeffs, error, reflection)``: the ``p`` AR coefficients ``a_1..a_p`` such
+> that the model predicts ``x_n = sum_k a_k x_{n-k}``, the final prediction error variance,
+> and the ``p`` reflection (PARCOR) coefficients. ``O(p^2)``.
+
+### `solve_toeplitz(r, b)`  _function_
+
+> Solve ``T x = b`` where ``T`` is the symmetric Toeplitz matrix with first row ``r``.
+>
+> ``r[0]`` is the diagonal, ``r[k]`` the ``k``-th off-diagonal (both directions, symmetric).
+> ``len(r) == len(b) == n``. ``O(n^2)`` via the Levinson recursion. Raises if a leading
+> principal minor is singular (``r[0] == 0`` or a zero prediction error).
 
 ## levy_basket
 

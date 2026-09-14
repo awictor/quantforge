@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.677.0] - 2026-09-14
+
+### Added
+- `levinson.py`: the Levinson-Durbin recursion. `solve_toeplitz` solves a symmetric Toeplitz
+  system (constant along each diagonal) in ``O(n^2)`` instead of the ``O(n^3)`` of a general
+  solve, and `levinson_durbin` fits an autoregressive model from an autocorrelation
+  sequence, returning the AR coefficients, the prediction-error variance, and the reflection
+  (PARCOR) coefficients. Cross-checked against a dense Gaussian solve over 3000 random
+  Toeplitz systems, with the AR coefficients matching the Yule-Walker normal equations, exact
+  AR(1) recovery, and white-noise giving zero reflection coefficients.
+
 ## [1.676.0] - 2026-09-14
 
 ### Documentation
