@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.725.0] - 2026-09-14
+
+### Added
+- `reverse_jacobian`, `reverse_hessian`, `reverse_gradient_vector`: matrix derivatives built on
+  reverse-mode autodiff. `reverse_jacobian` gives the exact ``m x n`` Jacobian of a vector
+  function (one backward pass per output); `reverse_hessian` differences the *exact* reverse
+  gradient once (central differences) for a symmetric Hessian far more accurate than
+  second-differencing the value. Cross-checked against `numdiff`'s finite-difference
+  `jacobian`/`hessian` and against analytic derivatives. (A cross-output stale-gradient bug --
+  inputs not feeding a given output kept a prior pass's grad -- was caught by the analytic
+  zero-entries and fixed by zeroing input grads before each backward pass.)
+
 ## [1.724.0] - 2026-09-14
 
 ### Documentation

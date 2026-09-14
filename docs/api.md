@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.10.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.11.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -14129,6 +14129,31 @@ Auto-generated from `quantforge` v5.10.0 by `docs/gen_api.py` — do not edit by
 >
 > ``f`` takes a list of :class:`Var` and returns a single :class:`Var`. Returns the list of
 > partial derivatives ``[df/dx_0, ...]`` via one reverse pass.
+
+## reverse_jacobian
+
+### `reverse_gradient_vector(f, x)`  _function_
+
+> Exact gradient of scalar ``f`` at ``x`` (thin wrapper returning a plain list).
+>
+> ``f`` takes a list of :class:`Var` and returns a single :class:`Var`.
+
+### `reverse_hessian(f, x, h=1e-05)`  _function_
+
+> Hessian of scalar ``f: R^n -> R`` at ``x`` by differencing the exact reverse gradient.
+>
+> ``f`` takes a list of :class:`Var` and returns a single :class:`Var`. Each column is a
+> central difference of the (exact) gradient, ``(grad f(x + h e_j) - grad f(x - h e_j)) /
+> (2 h)``; the result is symmetrized. Only the outer difference carries truncation error, so
+> accuracy is far better than second-differencing ``f`` itself.
+
+### `reverse_jacobian(f, x)`  _function_
+
+> Exact Jacobian of ``f: R^n -> R^m`` at ``x`` via reverse-mode autodiff.
+>
+> ``f`` takes a list of :class:`Var` and returns a list of :class:`Var` (length ``m``).
+> Returns the ``m x n`` Jacobian as a list of rows; row ``i`` is ``grad f_i``. Each output
+> component is differentiated by its own backward pass.
 
 ## richardson
 
