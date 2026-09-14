@@ -663,6 +663,7 @@ from .sliding_window import (
     sliding_window_max,
     sliding_window_sum,
 )
+from .dag_paths import dag_shortest_path, dag_longest_path, transitive_closure
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1367,7 +1368,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "4.48.0"
+__version__ = "4.49.0"
 
 __all__ = [
     "OptionType",
@@ -2277,6 +2278,9 @@ __all__ = [
     "sliding_window_min",
     "sliding_window_max",
     "sliding_window_sum",
+    "dag_shortest_path",
+    "dag_longest_path",
+    "transitive_closure",
     "Dual",
     "dual_derivative",
     "dual_gradient",

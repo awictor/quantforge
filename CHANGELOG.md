@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.663.0] - 2026-09-14
+
+### Added
+- `dag_paths.py`: `dag_shortest_path` and `dag_longest_path` compute single-source path
+  distances on a DAG in ``O(V + E)`` via a topological sweep -- handling negative edge
+  weights (unlike Dijkstra) with no relaxation rounds (unlike Bellman-Ford); the longest
+  path is the critical path behind CPM scheduling. Both optionally reconstruct the path to a
+  target. `transitive_closure` gives all-pairs reachability (cycles allowed). Cross-checked
+  against exhaustive path enumeration over 3000 random DAGs (short/long and reconstruction)
+  and a BFS reference over 2000 reachability cases, with cycle detection.
+
 ## [1.662.0] - 2026-09-14
 
 ### Documentation

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.48.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.49.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -3937,6 +3937,30 @@ Auto-generated from `quantforge` v4.48.0 by `docs/gen_api.py` — do not edit by
 > ``mu`` is the index of the first element on the cycle (tail length); ``lam`` is the cycle
 > length. Uses two pointers at speed 1 and 2. Raises if no cycle is found within
 > ``max_iter`` steps (only possible for an unbounded state space).
+
+## dag_paths
+
+### `dag_longest_path(graph, source, target=None)`  _function_
+
+> Longest-path distances from ``source`` on a DAG (the critical path).
+>
+> Same arguments as :func:`dag_shortest_path`. Unreachable nodes have distance
+> ``-inf``.
+
+### `dag_shortest_path(graph, source, target=None)`  _function_
+
+> Shortest-path distances from ``source`` on a DAG (negative weights allowed).
+>
+> ``graph`` is ``{node: [(neighbor, weight), ...]}``. Returns the distance dict; if
+> ``target`` is given, returns ``(distance, path)`` for that target instead
+> (``distance`` is ``inf`` and ``path`` empty if unreachable).
+
+### `transitive_closure(graph)`  _function_
+
+> Return ``{node: set(reachable nodes)}`` (excluding the node itself unless it loops).
+>
+> ``graph`` may be ``{node: [(neighbor, weight), ...]}`` or ``{node: [neighbor, ...]}``.
+> Computed by a DFS from each node; works on any directed graph (cycles allowed).
 
 ## dagostino
 
