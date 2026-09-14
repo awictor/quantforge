@@ -5674,6 +5674,11 @@ f = monotone_cubic([0, 1, 2, 3], [0, 0, 0, 1])   # no overshoot
 curve = SplineZeroCurve([0.5, 1, 2, 5, 10], [0.02, 0.025, 0.03, 0.035, 0.04])
 brent(lambda x: x * x - 2, 0, 2)                  # sqrt(2)
 
+# Higher-order (Halley, cubic) and derivative-free (secant, superlinear) root finders.
+from quantforge import halley, secant
+halley(lambda x: x*x - 2, lambda x: 2*x, lambda x: 2, 1.0)   # sqrt(2), ~cubic convergence
+secant(lambda x: x*x - 2, 1, 2)                              # sqrt(2), no derivative needed
+
 # All roots of a polynomial at once (real and complex) by Durand-Kerner.
 from quantforge import polynomial_roots
 polynomial_roots([1, -6, 11, -6])   # (x-1)(x-2)(x-3) -> roots near 1, 2, 3
@@ -5797,6 +5802,13 @@ the Bezier curve; a degree-1 spline is the piecewise-linear interpolant; and int
 add local, low-degree control that Bezier's global blend lacks. `bspline_basis` is a
 partition of unity, and `bspline_curve` samples the whole curve. Verified over thousands of
 random cases against partition-of-unity, endpoint interpolation, and Bezier equivalence.
+
+`halley` and `secant` extend the scalar root finders past Newton: `halley` folds in the
+second derivative for cubic convergence (roughly tripling the correct digits per step), and
+`secant` needs no derivative at all, converging superlinearly (order ~1.618) from two
+guesses. Both reject a step that stalls away from an actual root, so a bad start raises
+rather than returning a non-root. Verified against known roots and, over thousands of random
+cubics, agreement with a bracketed `brent`.
 
 Where `bisection`/`brent`/`newton` solve one scalar equation, `newton_system` and
 `broyden` solve a *system* `F(x) = 0` in several unknowns:

@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.676.0] - 2026-09-14
+
+### Documentation
+- README: documented `halley` and `secant` in the Numerical utilities root-finder block --
+  cubic-convergent Halley and derivative-free secant, complementing bisection/brent/newton.
+  All snippet values verified live.
+
 ## [1.675.0] - 2026-09-14
 
 ### Added
