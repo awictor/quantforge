@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.30.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.31.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -8896,6 +8896,16 @@ Auto-generated from `quantforge` v4.30.0 by `docs/gen_api.py` — do not edit by
 > large ``alpha`` drives all slopes to zero (the fit collapses to the mean of
 > ``y``). Features are standardized internally so the penalty applies evenly; the
 > intercept is never penalized. A slope set to exactly zero has been selected out.
+
+## lazy_segtree
+
+### `LazySegmentTree(values, mode='sum')`  _class_
+
+> Segment tree with range-add updates and a range aggregate query.
+>
+> ``mode`` is ``"sum"``, ``"min"``, or ``"max"``. Build from an initial list; then
+> ``update(lo, hi, delta)`` adds ``delta`` to every index in ``[lo, hi)`` and
+> ``query(lo, hi)`` returns the aggregate over ``[lo, hi)`` -- both ``O(log n)``.
 
 ## lca
 

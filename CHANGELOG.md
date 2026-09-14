@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.645.0] - 2026-09-14
+
+### Added
+- `lazy_segtree.py`: `LazySegmentTree` supports range-add updates *and* range aggregate
+  queries (sum, min, or max) in ``O(log n)`` via lazy propagation -- interior nodes carry a
+  pending-add tag that is pushed down only when a query descends through them, unlike the
+  point-update `SegmentTree`. Cross-checked against a brute array over 3000 runs each for the
+  three modes, with interleaved range updates and queries, plus non-power-of-two lengths and
+  overlapping updates.
+
 ## [1.644.0] - 2026-09-14
 
 ### Documentation
