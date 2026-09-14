@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.4.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.5.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -5582,6 +5582,24 @@ Auto-generated from `quantforge` v3.4.0 by `docs/gen_api.py` — do not edit by 
 > Runs :func:`factor_regression` on each trailing window of length ``window``,
 > returning the list of first-factor betas (one per window end, from index
 > ``window - 1`` onward). Tracks how the factor loading drifts through time.
+
+## fenwick
+
+### `FenwickTree(size_or_values)`  _class_
+
+> Binary indexed tree for point updates and prefix/range sums (``O(log n)`` each).
+>
+> Construct from a size (all zeros) or an initial list. ``update(i, delta)`` adds to
+> element ``i``; ``prefix_sum(i)`` is the sum of elements ``0..i``; ``range_sum(lo, hi)``
+> the inclusive sum over ``[lo, hi]``. Zero-indexed.
+
+### `SegmentTree(values, combine=None, identity=0.0)`  _class_
+
+> Segment tree for range queries under an associative ``combine`` with point updates.
+>
+> ``combine`` defaults to ``+`` (range sum); pass ``min``/``max`` (with the matching
+> ``identity``) for range-minimum/maximum. ``update(i, value)`` sets element ``i``;
+> ``query(lo, hi)`` folds ``combine`` over ``[lo, hi]`` inclusive. ``O(log n)`` each.
 
 ## fft
 

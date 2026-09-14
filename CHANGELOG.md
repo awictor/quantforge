@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.5.0] - 2026-09-14
+
+### Added
+- `fenwick.py`: `FenwickTree` (binary indexed tree — O(log n) point update and
+  prefix/range sums) and `SegmentTree` (generic associative range query with point
+  update; sum by default, min/max via `combine`). Cross-checked: both match a brute-force
+  recompute over 200 random arrays with interleaved updates, for sum, minimum, and maximum
+  queries.
+
 ## [3.4.0] - 2026-09-14
 
 ### Documentation
