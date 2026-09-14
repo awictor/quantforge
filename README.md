@@ -7073,6 +7073,23 @@ auxiliary-function asymptotics beyond, so both approach `1/2` as `x -> inf` and 
 `x`; `dawson` (the scaled imaginary error function, peaking near `0.5410` at `x ~ 0.924`)
 uses its series and large-`x` asymptotics. All three agree with direct numerical integration.
 
+The Airy functions `airy_ai` and `airy_bi` solve the turning-point equation `y'' = x y` of
+quantum mechanics and optics:
+
+```python
+from quantforge import airy_ai, airy_bi
+
+airy_ai(0), airy_bi(0)   # (0.3550281, 0.6149266)
+airy_ai(1), airy_bi(1)   # (0.1352924, 1.2074236)
+airy_ai(-1)              # 0.5355609
+```
+
+`airy_ai` is the solution that decays for `x > 0`; `airy_bi` the one that grows. Both are
+built from the two entire power-series solutions of the ODE, so they satisfy `y'' = x y`, the
+Wronskian `Ai·Bi' - Ai'·Bi = 1/pi`, and vanish at the tabulated zeros (Ai's first at
+`-2.3381`). The series is reliable on `[-15, +inf)`; far into the negative oscillatory region
+its terms cancel and accuracy degrades.
+
 The correlated-normal CDFs behind the multi-asset and compound-option models are public
 too:
 
