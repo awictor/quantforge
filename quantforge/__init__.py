@@ -593,6 +593,12 @@ from .walsh_hadamard import (
 from .prefix_sum import PrefixSum1D, PrefixSum2D, DifferenceArray
 from .coin_change import min_coins, count_change, subset_sum
 from .linear_recurrence import matrix_power, linear_recurrence_nth, fibonacci
+from .binary_search import (
+    first_true,
+    last_true,
+    ternary_search_int_max,
+    ternary_search_int_min,
+)
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1297,7 +1303,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "4.6.0"
+__version__ = "4.7.0"
 
 __all__ = [
     "OptionType",
@@ -2137,6 +2143,10 @@ __all__ = [
     "matrix_power",
     "linear_recurrence_nth",
     "fibonacci",
+    "first_true",
+    "last_true",
+    "ternary_search_int_max",
+    "ternary_search_int_min",
     "Dual",
     "dual_derivative",
     "dual_gradient",

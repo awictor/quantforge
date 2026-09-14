@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.621.0] - 2026-09-14
+
+### Added
+- `binary_search.py`: search primitives over integer ranges. `first_true`/`last_true`
+  locate the boundary of a monotone predicate in ``O(log n)`` -- the "binary search the
+  answer" idiom -- returning ``hi + 1`` / ``lo - 1`` when the predicate never / always holds.
+  `ternary_search_int_max`/`ternary_search_int_min` find the integer optimizing a strictly
+  unimodal function. Cross-checked against brute linear scans over 5000 random monotone
+  thresholds and 5000 unimodal functions each, plus a call-count check confirming the
+  logarithmic query.
+
 ## [1.620.0] - 2026-09-14
 
 ### Documentation

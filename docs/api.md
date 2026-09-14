@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.6.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.7.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -843,6 +843,31 @@ Auto-generated from `quantforge` v4.6.0 by `docs/gen_api.py` — do not edit by 
 > central differences. Returns a dict with ``x`` (minimizer), ``fun`` (its value),
 > ``n_iter``, ``converged`` (gradient norm below ``tol``) and ``grad_norm``. Best for
 > smooth objectives; use a global method first if the landscape is multimodal.
+
+## binary_search
+
+### `first_true(lo, hi, predicate)`  _function_
+
+> Smallest integer ``x`` in ``[lo, hi]`` with ``predicate(x)`` true, or ``hi + 1`` if none.
+>
+> ``predicate`` must be monotone: once true it stays true. ``O(log(hi - lo))`` calls.
+
+### `last_true(lo, hi, predicate)`  _function_
+
+> Largest integer ``x`` in ``[lo, hi]`` with ``predicate(x)`` true, or ``lo - 1`` if none.
+>
+> ``predicate`` must be monotone-decreasing: once false it stays false.
+
+### `ternary_search_int_max(lo, hi, f)`  _function_
+
+> Integer in ``[lo, hi]`` maximizing a strictly unimodal ``f`` (increasing then decreasing).
+>
+> Narrows the range by thirds until three or fewer candidates remain, then takes the best.
+> ``O(log(hi - lo))`` evaluations.
+
+### `ternary_search_int_min(lo, hi, f)`  _function_
+
+> Integer in ``[lo, hi]`` minimizing a strictly unimodal ``f`` (decreasing then increasing).
 
 ## binomial
 
