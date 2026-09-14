@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.35.0] - 2026-09-13
+
+### Added
+- `median_filter.py`: nonlinear order-statistic filters — `median_filter` (sliding
+  median), `rank_filter` (any percentile, incl. min/max), and `hampel_filter` (MAD-based
+  outlier replacement). Cross-checked: the median filter removes an impulsive spike,
+  preserves a step edge that a moving average would smear, and matches a brute-force
+  centered median in the interior; the rank filter gives correct min/median/max; and the
+  Hampel filter flags only the injected outlier while leaving clean data untouched.
+
 ## [2.34.0] - 2026-09-13
 
 ### Documentation

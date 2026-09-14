@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.34.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.35.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -8661,6 +8661,34 @@ Auto-generated from `quantforge` v2.34.0 by `docs/gen_api.py` — do not edit by
 > smoothing bias, a narrower one reduces the bias (converging to the true
 > digital delta as ``eps_rel -> 0``) but the ``1/eps`` ramp raises the variance.
 > A single-pass, model-agnostic alternative to the likelihood-ratio estimator.
+
+## median_filter
+
+### `hampel_filter(x, window=7, n_sigmas=3.0)`  _function_
+
+> Hampel outlier filter: replace points far from the local median with that median.
+>
+> In each centered window of length ``2*window+1`` it computes the median and the
+> median absolute deviation (MAD), scales the MAD to a robust standard deviation
+> (``1.4826 * MAD``), and replaces the center point only if it lies more than
+> ``n_sigmas`` robust deviations away. Clean data passes through untouched. Returns
+> ``(filtered, outlier_indices)``.
+
+### `median_filter(x, window)`  _function_
+
+> Sliding-window median of ``x`` with an odd ``window`` length.
+>
+> Replaces each point by the median of the ``window`` samples centered on it (the
+> window is clipped at the ends). Removes impulsive spikes while keeping step edges
+> sharp, unlike a moving average. Returns a list the same length as ``x``.
+
+### `rank_filter(x, window, percentile)`  _function_
+
+> Sliding-window order-statistic filter at a given ``percentile`` (0-100).
+>
+> ``percentile=50`` is the median; ``0`` a min filter, ``100`` a max filter. Picks the
+> order statistic nearest that percentile in each centered window. Returns a list the
+> same length as ``x``.
 
 ## meixner
 
