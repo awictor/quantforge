@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.54.0] - 2026-09-13
+
+### Documentation
+- README: added a "Computational geometry" section documenting `convex_hull`,
+  `polygon_area`, `polygon_centroid`, `point_in_polygon`, and `closest_pair` with worked
+  values. TOC regenerated. All snippet values verified live.
+
 ## [2.53.0] - 2026-09-13
 
 ### Added

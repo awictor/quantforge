@@ -123,6 +123,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Matrix utilities](#matrix-utilities)
 - [Numerical utilities](#numerical-utilities)
 - [Number theory](#number-theory)
+- [Computational geometry](#computational-geometry)
 - [Probability distributions](#probability-distributions)
 - [Nelson-Siegel / Svensson curves](#nelson-siegel--svensson-curves)
 - [Sample risk measures](#sample-risk-measures)
@@ -6062,6 +6063,29 @@ row over all block counts (`bell(5) == 52`). `catalan` gives the ubiquitous
 `1, 1, 2, 5, 14, 42, ...`, `partition_count` the number of ways to write `n` as an
 unordered sum, and `derangements(n)` the fixed-point-free permutations — equal to
 `round(n!/e)` for every `n`.
+
+## Computational geometry
+
+Planar geometry primitives on lists of `(x, y)` points — the shape of a point cloud, its
+area, and spatial queries:
+
+```python
+from quantforge import (convex_hull, polygon_area, polygon_centroid,
+                        point_in_polygon, closest_pair)
+
+convex_hull([(0,0), (1,0), (1,1), (0,1), (0.5,0.5)])  # [(0,0),(1,0),(1,1),(0,1)]
+polygon_area([(0,0), (4,0), (0,3)])                    # 6.0 (shoelace)
+polygon_centroid([(0,0), (6,0), (0,3)])                # (2.0, 1.0)
+point_in_polygon((2,2), [(0,0),(4,0),(4,4),(0,4)])     # True
+closest_pair([(0,0), (5,5), (1,1), (9,9)])             # ((0,0), (1,1), 1.414...)
+```
+
+`convex_hull` uses Andrew's monotone chain to return the counter-clockwise hull (interior
+and collinear points dropped) — so the hull of a square plus interior points is just its
+four corners. `polygon_area` and `polygon_centroid` apply the shoelace formula and are
+orientation-independent. `point_in_polygon` ray-casts with the odd-crossing rule and
+handles concave shapes and on-edge points, and `closest_pair` finds the nearest two points
+in `O(n log n)`, matching a brute-force search exactly.
 
 ## Probability distributions
 
