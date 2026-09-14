@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.575.0] - 2026-09-14
+
+### Added
+- `weighted_reservoir.py`: `weighted_reservoir_sample` selects `k` distinct items with
+  probability proportional to weight in a single streaming pass -- the
+  Efraimidis-Spirakis A-Res algorithm, which assigns each item the key ``u^(1/w)`` and
+  keeps the ``k`` largest via a size-``k`` min-heap (``O(n log k)`` time, ``O(k)``
+  memory) -- plus `weighted_sample_with_replacement` for independent weight-proportional
+  draws via cumulative-weight bisection. Cross-checked: the ``k=1`` inclusion probability
+  matches the closed form ``w_i / sum(w)`` empirically, ``k`` results are distinct,
+  ``k`` past the positive-weight count returns all such items, zero-weight items are
+  never selected, and the with-replacement frequencies converge to the weight fractions.
+
 ## [1.574.0] - 2026-09-12
 
 ### Added

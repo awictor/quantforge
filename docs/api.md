@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.60.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.61.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -16988,6 +16988,23 @@ Auto-generated from `quantforge` v3.60.0 by `docs/gen_api.py` — do not edit by
 > Zero at ``horizon = 0``, rising monotonically to the stationary variance
 > ``sigma^2 / (2 kappa)`` as ``horizon -> inf`` (same form as the Schwartz
 > commodity model). ``sigma`` is the daily temperature volatility.
+
+## weighted_reservoir
+
+### `weighted_reservoir_sample(items, weights, k, seed=1234567)`  _function_
+
+> Sample ``k`` distinct items with weight-proportional probability (Efraimidis-Spirakis).
+>
+> Assigns each item the key ``u^(1/w)`` for a uniform ``u`` and keeps the ``k`` largest
+> keys -- one pass, ``O(n log k)`` memory ``O(k)``. Returns a list of the chosen items
+> (order not significant). ``k`` is clamped to the number of positive-weight items.
+
+### `weighted_sample_with_replacement(items, weights, k, seed=1234567)`  _function_
+
+> Sample ``k`` items *with* replacement, weight-proportional (cumulative search).
+>
+> Each of the ``k`` draws is independent, so an item can appear multiple times. Returns
+> a list of length ``k``. Weights must be non-negative and not all zero.
 
 ## weighted_stats
 

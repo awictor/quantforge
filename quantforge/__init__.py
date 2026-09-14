@@ -838,6 +838,10 @@ from .samplers import (
     sample_poisson,
 )
 from .pcg import PCG32, Xorshift128Plus
+from .weighted_reservoir import (
+    weighted_reservoir_sample,
+    weighted_sample_with_replacement,
+)
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -1228,7 +1232,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "3.60.0"
+__version__ = "3.61.0"
 
 __all__ = [
     "OptionType",
@@ -2332,6 +2336,8 @@ __all__ = [
     "sample_poisson",
     "PCG32",
     "Xorshift128Plus",
+    "weighted_reservoir_sample",
+    "weighted_sample_with_replacement",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",
