@@ -6391,6 +6391,22 @@ and passing `min`/`max` (with the matching `identity`) gives range-minimum/maxim
 `O(log n)` point updates. Both are verified against a brute-force recompute across random
 arrays with interleaved updates.
 
+Finding a k-th order statistic or the top-k does not need a full sort — quickselect does
+it in linear time:
+
+```python
+from quantforge import kth_smallest, median, top_k
+
+kth_smallest([5, 2, 8, 1, 9], 1)      # 2 — the 2nd smallest (0-indexed)
+median([1, 2, 3, 4])                   # 2.5
+top_k([5, 2, 8, 1, 9, 3], 3)          # [9, 8, 5] — the three largest, sorted
+```
+
+`kth_smallest` uses quickselect with the median-of-medians pivot for a guaranteed `O(n)`
+worst case (matching a full sort for every k, with or without duplicates), `median` is its
+even-length-averaging wrapper, and `top_k` selects the threshold then sorts only the
+chosen elements (`largest=False` for the bottom k).
+
 ## Interval arithmetic
 
 An `Interval` tracks a range of possible values and propagates it through arithmetic so

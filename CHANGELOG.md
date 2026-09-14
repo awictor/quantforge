@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.28.0] - 2026-09-14
+
+### Documentation
+- README: documented the linear-time selection routines in the Range-query structures
+  section — `kth_smallest`, `median`, and `top_k` with worked values. All snippet values
+  verified live.
+
 ## [3.27.0] - 2026-09-14
 
 ### Added
