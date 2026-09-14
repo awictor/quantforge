@@ -676,6 +676,12 @@ from .compression import (
     run_length_encode,
     run_length_decode,
 )
+from .bwt import (
+    bwt_transform,
+    bwt_inverse,
+    move_to_front_encode,
+    move_to_front_decode,
+)
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -1066,7 +1072,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "2.72.0"
+__version__ = "2.73.0"
 
 __all__ = [
     "OptionType",
@@ -2021,6 +2027,10 @@ __all__ = [
     "huffman_decode",
     "run_length_encode",
     "run_length_decode",
+    "bwt_transform",
+    "bwt_inverse",
+    "move_to_front_encode",
+    "move_to_front_decode",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

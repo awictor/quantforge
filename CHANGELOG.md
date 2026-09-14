@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.73.0] - 2026-09-13
+
+### Added
+- `bwt.py`: Burrows-Wheeler transform and move-to-front coding (bzip2 building blocks) —
+  `bwt_transform`, `bwt_inverse`, `move_to_front_encode`, and `move_to_front_decode`.
+  Cross-checked: the BWT round-trips exactly (known and 500 random strings, `banana` ->
+  `nnbaaa`), move-to-front round-trips and turns clustered input into mostly zeros, and
+  the full BWT+MTF pipeline inverts back to the original.
+
 ## [2.72.0] - 2026-09-13
 
 ### Documentation

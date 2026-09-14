@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.72.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.73.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -1282,6 +1282,41 @@ Auto-generated from `quantforge` v2.72.0 by `docs/gen_api.py` — do not edit by
 > ``y'(a)`` (the terminal residual must change sign across them). Returns a dict with
 > the found initial ``slope``, and the solution ``ts`` / ``ys`` (state = ``[y, y']``)
 > from the accepted RK45 steps.
+
+## bwt
+
+### `bwt_inverse(transformed, primary_index)`  _function_
+
+> Invert the Burrows-Wheeler transform back to the original sequence.
+>
+> ``transformed`` is the last column and ``primary_index`` the row of the original
+> string (both from :func:`bwt_transform`). Reconstructs via the standard LF-mapping.
+> Returns the same type as ``transformed``.
+
+### `bwt_transform(data)`  _function_
+
+> Burrows-Wheeler transform of a sequence: ``(transformed, primary_index)``.
+>
+> Builds the sorted matrix of all rotations and returns the last column plus the index
+> of the original string among the sorted rotations (needed to invert). ``data`` is a
+> string or list; the transformed output has the same type. Empty input returns
+> ``("" or [], 0)``.
+
+### `move_to_front_decode(codes, alphabet)`  _function_
+
+> Invert move-to-front coding given the ``codes`` and the initial ``alphabet``.
+>
+> Returns the reconstructed sequence: a ``str`` if the alphabet symbols are all
+> single characters, else a list.
+
+### `move_to_front_encode(data, alphabet=None)`  _function_
+
+> Move-to-front encode a sequence into a list of integer ranks.
+>
+> Each symbol is replaced by its current index in a running alphabet list, then moved
+> to the front. Clustered inputs (like BWT output) produce many zeros. ``alphabet`` is
+> the initial ordered symbol list; by default the sorted set of symbols in ``data``.
+> Returns ``(codes, alphabet)`` -- the alphabet is needed to decode.
 
 ## calibration
 
