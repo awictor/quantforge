@@ -31,6 +31,14 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.20.0] - 2026-09-13
+
+### Documentation
+- README: documented the windowed-sinc FIR filters in the spectral section —
+  Nyquist-normalized cutoffs, linear-phase symmetry, unit DC gain, the low/high/band
+  design, and the two-tone separation example. All snippet values verified against a
+  live run.
+
 ## [2.19.0] - 2026-09-13
 
 ### Added

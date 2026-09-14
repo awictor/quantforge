@@ -4435,6 +4435,32 @@ periodograms — trading some frequency resolution for far less variance, so a
 spectral peak stands out cleanly against a noisy background where the raw
 periodogram would bury it.
 
+Where windows shape a *measurement* of the spectrum, a FIR filter reshapes the
+*signal* — keeping some frequencies and rejecting others. The windowed-sinc design
+takes the ideal brick-wall impulse response and tapers it with one of the same
+windows to get a finite, well-behaved filter:
+
+```python
+from quantforge import fir_lowpass, fir_highpass, fir_bandpass, fir_apply
+
+taps = fir_lowpass(51, 0.2)      # 51-tap low-pass, cutoff 0.2 x Nyquist
+sum(taps)                         # 1.0 — unit DC gain
+filtered = fir_apply(taps, x)     # convolve with the signal
+
+fir_highpass(51, 0.2)             # complementary high-pass (zero DC gain)
+fir_bandpass(101, 0.15, 0.35)     # passes only the band between the two cutoffs
+```
+
+Cutoffs are normalized to the Nyquist frequency, so `0.2` means one fifth of the way
+to half the sample rate. The low-pass has unit DC gain (`sum(taps) == 1.0`) and is
+symmetric, so it is linear-phase — it delays every frequency equally rather than
+smearing the waveform. It passes what is below the cutoff (gain `0.996` at `0.025`)
+and crushes what is above it (`0.0008` at `0.2`); the high-pass is the mirror image,
+with zero DC gain and near-unit gain in its passband. Fed a two-tone signal of a slow
+and a fast cosine, a low-pass keeps the slow one and removes the fast one, leaving an
+amplitude near the surviving tone's `1.0`. `fir_bandpass` builds a band-pass as the
+difference of two low-pass filters and `fir_apply` runs the direct convolution.
+
 ## Wavelet transform (Haar multiresolution)
 
 Where the Fourier transform asks *what frequencies are present*, the wavelet
