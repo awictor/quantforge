@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.30.0] - 2026-09-14
+
+### Documentation
+- README: documented the interval-set operations in the Range-query structures section —
+  `merge_intervals`, `total_covered_length`, `intervals_intersection`, and `max_overlap`
+  with worked values. All snippet values verified live.
+
 ## [3.29.0] - 2026-09-14
 
 ### Added

@@ -6407,6 +6407,24 @@ worst case (matching a full sort for every k, with or without duplicates), `medi
 even-length-averaging wrapper, and `top_k` selects the threshold then sorts only the
 chosen elements (`largest=False` for the bottom k).
 
+Collections of `(start, end)` ranges have their own set operations for scheduling and
+coverage analysis:
+
+```python
+from quantforge import (merge_intervals, total_covered_length,
+                        intervals_intersection, max_overlap)
+
+merge_intervals([(1, 3), (2, 6), (8, 10)])           # [(1, 6), (8, 10)]
+total_covered_length([(1, 4), (2, 6), (8, 10)])      # 7 (overlaps counted once)
+intervals_intersection([(1, 5), (8, 10)], [(3, 9)])  # [(3, 5), (8, 9)]
+max_overlap([(1, 5), (2, 6), (4, 8), (10, 12)])      # 3 — peak simultaneous overlap
+```
+
+`merge_intervals` collapses overlapping and touching ranges into a minimal cover;
+`intervals_union`/`intervals_intersection` combine two collections (verified against an
+integer point-set); `total_covered_length` sums the merged cover; and `max_overlap` sweeps
+the endpoints for the most intervals active at once (matching a brute-force point scan).
+
 ## Interval arithmetic
 
 An `Interval` tracks a range of possible values and propagates it through arithmetic so
