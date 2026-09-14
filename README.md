@@ -6751,6 +6751,27 @@ and passing `min`/`max` (with the matching `identity`) gives range-minimum/maxim
 `O(log n)` point updates. Both are verified against a brute-force recompute across random
 arrays with interleaved updates.
 
+`SegmentTree` updates one index at a time; `LazySegmentTree` updates a whole *range* at once
+— add a value to every element of `[lo, hi)` and query the sum/min/max over any range, each
+in `O(log n)`, via lazy propagation:
+
+```python
+from quantforge import LazySegmentTree
+
+st = LazySegmentTree([1, 2, 3, 4, 5], "sum")
+st.query(0, 5)              # 15
+st.update(1, 4, 10)         # add 10 to indices 1..3 -> [1, 12, 13, 14, 5]
+st.query(0, 5), st.query(1, 4)   # (45, 39)
+
+LazySegmentTree([5, 3, 8, 1, 9], "min").query(0, 5)   # 1
+```
+
+A range update tags the interior nodes it fully covers and defers the work; the tag is only
+pushed down when a later query descends through it, so both operations stay `O(log n)` no
+matter how large the range. `mode` selects the aggregate (`"sum"`, `"min"`, `"max"`), ranges
+are half-open, and non-power-of-two lengths are handled. Verified against a brute array over
+thousands of interleaved update/query sequences for all three modes.
+
 When the array never changes, a `SparseTable` answers *idempotent* range queries
 (minimum, maximum, gcd) in `O(1)` — faster per query than a segment tree, at the cost of
 being read-only:
