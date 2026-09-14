@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.70.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.71.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -4094,6 +4094,16 @@ Auto-generated from `quantforge` v4.70.0 by `docs/gen_api.py` — do not edit by
 ### `tree_depth(tree)`  _function_
 
 > Depth of a fitted tree (a single leaf has depth 0).
+
+## delaunay
+
+### `delaunay_triangulation(points)`  _function_
+
+> Return the Delaunay triangulation of ``points`` as a list of index triples.
+>
+> Each triple ``(i, j, k)`` indexes into ``points``. Needs at least three
+> non-collinear points. Duplicate points are ignored for the triangulation but indices
+> refer to the original list.
 
 ## deming
 

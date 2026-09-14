@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.685.0] - 2026-09-14
+
+### Added
+- `delaunay.py`: `delaunay_triangulation` builds the Delaunay triangulation of a 2-D point
+  set with the incremental Bowyer-Watson algorithm -- each point deletes the triangles whose
+  circumcircle contains it and re-triangulates the resulting hole. Returns triangles as index
+  triples into the input. The Delaunay triangulation maximizes the minimum angle (no slivers)
+  and is the Voronoi dual. Cross-checked over 1500 random point sets that the empty-
+  circumcircle property holds (no point strictly inside any triangle's circumcircle) and all
+  triangles are non-degenerate, plus the exact triangle count on structured cases.
+
 ## [1.684.0] - 2026-09-14
 
 ### Documentation
