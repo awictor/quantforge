@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.79.0] - 2026-09-13
+
+### Added
+- `newton_system.py`: root finding for nonlinear systems — `newton_system`
+  (finite-difference Jacobian + linear solve each step) and `broyden` (rank-1
+  quasi-Newton inverse-Jacobian updates). Cross-checked: both solve a circle-line
+  intersection, a transcendental system, and a 3-variable polynomial system to residuals
+  near machine precision, Newton and Broyden agree, an at-root input returns in zero
+  iterations, and a singular Jacobian raises.
+
 ## [2.78.0] - 2026-09-13
 
 ### Documentation

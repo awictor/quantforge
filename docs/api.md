@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.78.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.79.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -10253,6 +10253,26 @@ Auto-generated from `quantforge` v2.78.0 by `docs/gen_api.py` — do not edit by
 > Adds ``beta3 ((1 - e^{-t/tau2})/(t/tau2) - e^{-t/tau2})`` with its own decay
 > ``tau2`` for a second hump. Reduces to :func:`nelson_siegel_zero` when
 > ``beta3 = 0``.
+
+## newton_system
+
+### `broyden(f, x0, tol=1e-10, max_iter=200, rel_step=1e-06)`  _function_
+
+> Solve ``f(x) = 0`` by Broyden's (good) quasi-Newton method.
+>
+> Seeds the inverse-Jacobian estimate from one finite-difference Jacobian, then updates
+> it rank-1 from each step's secant equation -- avoiding a fresh Jacobian per iteration.
+> Returns ``(solution, iterations)``. Raises if the seed Jacobian is singular or it
+> fails to converge.
+
+### `newton_system(f, x0, tol=1e-10, max_iter=100, rel_step=1e-06)`  _function_
+
+> Solve ``f(x) = 0`` for a vector function by Newton's method.
+>
+> ``f`` maps a length-``n`` list to a length-``n`` list; ``x0`` is the initial guess.
+> Each step solves ``J dx = -f(x)`` with the central-difference Jacobian ``J`` and
+> updates ``x += dx``. Returns ``(solution, iterations)``. Raises if the Jacobian is
+> singular or convergence is not reached within ``max_iter``.
 
 ## nig
 
