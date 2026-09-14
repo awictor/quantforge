@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.56.0] - 2026-09-13
+
+### Documentation
+- README: documented segment intersection and polygon clipping in the Computational
+  geometry section — the crossing/boolean tests, perimeter, and Sutherland-Hodgman
+  window clipping. All snippet values verified live.
+
 ## [2.55.0] - 2026-09-13
 
 ### Added

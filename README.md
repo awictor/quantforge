@@ -6087,6 +6087,26 @@ orientation-independent. `point_in_polygon` ray-casts with the odd-crossing rule
 handles concave shapes and on-edge points, and `closest_pair` finds the nearest two points
 in `O(n log n)`, matching a brute-force search exactly.
 
+Segment intersection and window clipping round out the toolkit — the primitives behind
+collision tests and viewport clipping:
+
+```python
+from quantforge import (segments_intersect, segment_intersection,
+                        polygon_perimeter, clip_polygon)
+
+segment_intersection((0,0),(1,1),(0,1),(1,0))         # (0.5, 0.5)
+segments_intersect((0,0),(1,0),(2,2),(3,3))           # False (disjoint)
+polygon_perimeter([(0,0),(4,0),(0,3)])                # 12.0 (3-4-5 triangle)
+clip_polygon([(0,0),(4,0),(4,4),(0,4)], [(1,1),(3,1),(3,3),(1,3)])  # the 2x2 window
+```
+
+`segment_intersection` returns the single crossing point (or `None` for parallel,
+collinear, or disjoint segments), while `segments_intersect` is the boolean test and also
+catches shared endpoints and T-junctions. `polygon_perimeter` sums the edge lengths, and
+`clip_polygon` is Sutherland-Hodgman clipping of a subject polygon against a convex
+window — clipping the `[0,4]²` square by the `[1,3]²` window leaves exactly the `2×2`
+interior (area `4`).
+
 ## Probability distributions
 
 Gamma, chi-square, Poisson, F and binomial distributions built on those special
