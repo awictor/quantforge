@@ -7134,6 +7134,28 @@ for `m >= 1`, with `m = 0` delegating to `digamma`; so `polygamma(1, .)` is the 
 `zeta(s,1)=zeta(s)` and `zeta(s,1/2)=(2**s-1)zeta(s)`, the closed forms above, and
 finite-difference derivatives of `digamma`.
 
+`polylog` and `dilog` close the loop back to zeta. The polylogarithm
+`Li_s(z) = sum z**k / k**s` interpolates the family -- `Li_1(z) = -ln(1-z)`, `Li_2` is the
+dilogarithm, and at `z = 1` every `Li_s` becomes `zeta(s)`:
+
+```python
+from quantforge import polylog, dilog
+
+dilog(1.0)        # 1.6449340668482264 = pi**2 / 6
+dilog(0.5)        # 0.5822405264650125 = pi**2/12 - (ln 2)**2 / 2
+dilog(-1.0)       # -0.822467033374095 = -pi**2 / 12
+dilog(-2.0)       # -1.4367463668836808 (inversion branch)
+polylog(2, 0.5)   # 0.582240526465012  = dilog(0.5)
+polylog(1, 0.5)   # 0.6931471805599445 = -ln(1 - 0.5) = ln 2
+```
+
+`polylog(s, z)` sums the series directly for real `|z| <= 1`, converging geometrically inside
+the disk, with the exact endpoints `z = 1 -> zeta(s)` and `z = -1 -> -eta(s)`. `dilog(x)`
+covers the whole real half-line `x <= 1`: reflection (`x > 1/2`) and inversion (`x < -1`)
+identities fold every argument into `[-1, 1/2]`, where a handful of terms suffice. Verified
+against `Li_2(1)=pi^2/6`, `Li_2(-1)=-pi^2/12`, `Li_2(1/2)=pi^2/12-(ln2)^2/2`, `Li_1(z)=-ln(1-z)`,
+and numerical integration of the inversion branch.
+
 The correlated-normal CDFs behind the multi-asset and compound-option models are public
 too:
 

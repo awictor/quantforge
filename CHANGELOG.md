@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.710.0] - 2026-09-14
+
+### Documentation
+- README: documented `polylog` and `dilog` in the special-functions block after the
+  Hurwitz/polygamma note -- the direct-series polylog, the zeta/eta endpoints, and the
+  reflection/inversion folding used by the dilogarithm. All snippet values verified live.
+
 ## [1.709.0] - 2026-09-14
 
 ### Added
