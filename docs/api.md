@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.86.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.87.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -17325,6 +17325,17 @@ Auto-generated from `quantforge` v3.86.0 by `docs/gen_api.py` — do not edit by
 > ``weights`` is a length-``n`` list of non-negative weights (larger = more trusted).
 > Returns a dict with ``coefficients``, ``std_errors`` (using the weighted residual
 > variance), ``residuals`` and ``r_squared`` (weighted). Equal weights reproduce OLS.
+
+## xor_basis
+
+### `XorBasis(values=None)`  _class_
+
+> A GF(2) linear basis maintained by leading bit.
+>
+> ``insert(x)`` adds an integer to the span (reducing it against the current basis);
+> ``max_xor``/``min_xor`` return the extremal subset-XOR, ``can_represent`` tests
+> membership, ``rank`` is the basis size, ``count_distinct`` is ``2^rank``, and
+> ``kth_smallest`` indexes the sorted reachable values. Non-negative integers only.
 
 ## xva
 

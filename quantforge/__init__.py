@@ -565,6 +565,7 @@ from .eulerian import (
     has_eulerian_path,
     has_eulerian_circuit,
 )
+from .xor_basis import XorBasis
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1269,7 +1270,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "3.86.0"
+__version__ = "3.87.0"
 
 __all__ = [
     "OptionType",
@@ -2077,6 +2078,7 @@ __all__ = [
     "eulerian_path",
     "has_eulerian_path",
     "has_eulerian_circuit",
+    "XorBasis",
     "Dual",
     "dual_derivative",
     "dual_gradient",

@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.601.0] - 2026-09-14
+
+### Added
+- `xor_basis.py`: `XorBasis` maintains a GF(2) linear basis of the space integers span
+  under XOR, by Gaussian elimination keeping one vector per leading bit. `insert` reduces a
+  value against the basis (returning whether it was independent); `max_xor`/`min_xor` give
+  the extremal subset-XOR (with an optional start), `can_represent` tests membership,
+  `rank`/`count_distinct` report the dimension and ``2^rank`` reachable values, and
+  `kth_smallest` indexes the sorted reachable set from a canonicalized basis. Cross-checked
+  against brute subset-XOR enumeration over 4000 random value sets -- max/min, membership,
+  distinct count, and every k-th value all match, including XOR-with-a-start offsets.
+
 ## [1.600.0] - 2026-09-14
 
 ### Documentation
