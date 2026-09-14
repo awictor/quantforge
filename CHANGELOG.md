@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.13.0] - 2026-09-14
+
+### Added
+- `association.py`: association strength for categorical contingency tables — `cramers_v`,
+  `phi_coefficient`, `tschuprow_t`, and `contingency_coefficient`, all built from the
+  Pearson chi-square. Cross-checked: independence gives 0 and perfect association 1, phi
+  equals Cramer's V and the closed-form 2x2 phi, the chi-square matches the existing
+  independence test, and V equals Tschuprow's T on a square table.
+
 ## [3.12.0] - 2026-09-14
 
 ### Documentation

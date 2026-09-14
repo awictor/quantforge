@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.12.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.13.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -400,6 +400,35 @@ Auto-generated from `quantforge` v3.12.0 by `docs/gen_api.py` — do not edit by
 > Each item (``weights[i]``, ``values[i]``) is taken at most once. Returns
 > ``(best_value, chosen_indices)`` via the standard ``O(n * capacity)`` DP. ``capacity``
 > and all weights must be non-negative integers.
+
+## association
+
+### `contingency_coefficient(table)`  _function_
+
+> Pearson's contingency coefficient ``sqrt(chi2 / (chi2 + n))`` in ``[0, 1)``.
+>
+> Always below 1 (it cannot reach it), which is its known limitation; ``0`` under
+> independence. Provided for completeness alongside Cramer's V.
+
+### `cramers_v(table)`  _function_
+
+> Cramer's V association strength in ``[0, 1]`` for an r x c contingency table.
+>
+> ``sqrt(chi2 / (n * min(r-1, c-1)))``. ``0`` for independent variables, ``1`` for a
+> perfect association. The general-purpose categorical effect size.
+
+### `phi_coefficient(table)`  _function_
+
+> Phi coefficient for a 2x2 table: ``sqrt(chi2 / n)`` (equals Cramer's V here).
+>
+> Ranges ``[0, 1]`` in magnitude; the signed Pearson-correlation form of a 2x2 table.
+> Raises unless the table is 2x2.
+
+### `tschuprow_t(table)`  _function_
+
+> Tschuprow's T association measure: ``sqrt(chi2 / (n * sqrt((r-1)(c-1))))``.
+>
+> Like Cramer's V but reaches ``1`` only for square tables; ``0`` under independence.
 
 ## attribution
 
