@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.60.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.61.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -6194,6 +6194,32 @@ Auto-generated from `quantforge` v2.60.0 by `docs/gen_api.py` — do not edit by
 > ``graph`` is ``{node: [successors]}`` (or ``{node: {succ: weight}}``). Returns a list
 > of nodes such that every edge points forward. Raises ``ValueError`` if a cycle makes
 > a valid ordering impossible.
+
+## graph2
+
+### `UnionFind()`  _class_
+
+> Disjoint-set forest with path compression and union by rank.
+>
+> ``find(x)`` returns the representative of ``x``'s set; ``union(a, b)`` merges two
+> sets and returns whether they were previously disjoint; ``connected(a, b)`` tests
+> membership. Elements are created on first reference. Near-constant amortized cost.
+
+### `max_flow(graph, source, sink)`  _function_
+
+> Maximum flow from ``source`` to ``sink`` (Edmonds-Karp).
+>
+> ``graph`` is ``{node: {neighbor: capacity}}`` with capacities ``>= 0``. Returns the
+> maximum total flow value. Uses BFS to find shortest augmenting paths in the residual
+> network, so it runs in ``O(V E^2)`` and terminates on rational capacities.
+
+### `minimum_spanning_tree(nodes, edges)`  _function_
+
+> Minimum spanning tree (or forest) by Kruskal's algorithm.
+>
+> ``nodes`` is an iterable of vertices; ``edges`` a list of ``(u, v, weight)``. Returns
+> ``(tree_edges, total_weight)`` where ``tree_edges`` is the chosen subset (sorted by
+> weight then endpoints). For a disconnected graph this is the minimum spanning forest.
 
 ## greeks2
 

@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.61.0] - 2026-09-13
+
+### Added
+- `graph2.py`: weighted-graph structure algorithms — `UnionFind` (path compression +
+  union by rank), `minimum_spanning_tree` (Kruskal), and `max_flow` (Edmonds-Karp).
+  Cross-checked: the MST weight matches a brute-force minimum over all spanning trees and
+  the tree is spanning and acyclic, and the maximum flow reproduces the CLRS classic
+  network (23) plus series-bottleneck and parallel-path cases.
+
 ## [2.60.0] - 2026-09-13
 
 ### Documentation
