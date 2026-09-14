@@ -4403,6 +4403,24 @@ goertzel_power(signal, k)    # |X[k]|^2 — large iff a frequency near bin k is 
 On a pure tone at bin 8 the power spikes there (`1024` for a 64-sample cosine) and is
 essentially zero elsewhere, which is exactly how DTMF and pilot-tone detectors work.
 
+Cutting a finite segment out of a signal leaks energy across the spectrum; tapering it
+first with a window function cuts that leakage. The common windows and an `apply_window`
+helper are provided:
+
+```python
+from quantforge import hann, apply_window, fft
+
+windowed = apply_window(segment, "hann")   # taper before the FFT
+X = fft(windowed)                            # far lower sidelobes than the raw segment
+hann(256)                                    # the window itself, if you want it
+```
+
+`hann`, `hamming`, `blackman`, `bartlett` and `rectangular` return length-`n` window
+vectors (all symmetric, tapering to near zero at the edges except the boxcar);
+`apply_window` multiplies a signal by a named window or a custom list. On an off-bin
+sinusoid a Hann taper drops a distant sidelobe from ~1.0 to ~0.0003 — the standard
+pre-processing before a periodogram, and what `welch_psd` applies internally.
+
 The raw periodogram is noisy; `welch_psd` averages windowed segment periodograms for
 a much lower-variance spectral-density estimate:
 

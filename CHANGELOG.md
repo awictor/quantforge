@@ -31,6 +31,12 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.18.0] - 2026-09-13
+
+### Documentation
+- README: documented the window functions (`hann`/`hamming`/`blackman`/`bartlett`/
+  `rectangular`) and `apply_window` in the spectral-analysis section.
+
 ## [2.17.0] - 2026-09-13
 
 ### Added
