@@ -6628,6 +6628,31 @@ but sum does not (use `FenwickTree` for sums). The convenience builders cover th
 cases, and any idempotent `combine` is accepted (e.g. bitwise-or). Verified against
 brute-force recomputation over thousands of random arrays and every possible range.
 
+For plain *sums* over a static array — where a Fenwick tree's update support is unnecessary
+— a prefix-sum table answers any range in `O(1)` after one linear pass, in 1-D or 2-D, and
+a difference array does the mirror image (many range-adds, one read):
+
+```python
+from quantforge import PrefixSum1D, PrefixSum2D, DifferenceArray
+
+PrefixSum1D([1, 2, 3, 4, 5]).range_sum(1, 4)          # 9 — sum of [2, 3, 4]
+
+grid = PrefixSum2D([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+grid.range_sum(1, 1, 3, 3)                            # 28 — the bottom-right 2x2 block
+
+da = DifferenceArray(5)
+da.add(1, 4, 10); da.add(0, 2, 1)
+da.result()                                           # [1, 11, 10, 10, 0]
+```
+
+`PrefixSum1D.range_sum(lo, hi)` subtracts two cumulative entries; `PrefixSum2D` is the
+summed-area table (integral image) that answers any axis-aligned rectangle by
+inclusion-exclusion of four corners — the trick behind box filters and Haar features. Both
+use half-open ranges. `DifferenceArray` inverts the pattern: each `add(lo, hi, delta)` marks
+only the two endpoints in `O(1)`, and one `result()` pass accumulates them into the final
+array — ideal when a batch of range updates precedes a single read. All three checked
+against brute-force sums over thousands of random instances.
+
 Finding a k-th order statistic or the top-k does not need a full sort — quickselect does
 it in linear time:
 

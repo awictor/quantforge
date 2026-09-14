@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.616.0] - 2026-09-14
+
+### Documentation
+- README: documented `PrefixSum1D`, `PrefixSum2D`, and `DifferenceArray` in the Range-query
+  structures section after `SparseTable` -- O(1) range sums, the 2-D summed-area table, and
+  the range-add difference array. All snippet values verified live.
+
 ## [1.615.0] - 2026-09-14
 
 ### Added
