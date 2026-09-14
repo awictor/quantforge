@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.617.0] - 2026-09-14
+
+### Added
+- `coin_change.py`: three classic DP routines. `min_coins` finds the fewest coins (unlimited
+  supply) summing to a target and one witnessing multiset (``-1`` if impossible);
+  `count_change` counts the distinct order-independent multisets that sum to the target; and
+  `subset_sum` decides whether a subset of a list (each item used once) hits the target,
+  returning one witnessing subset. All run in ``O(target * n)``. Cross-checked against
+  brute-force references (BFS min, recursive multiset count, `itertools.combinations` subset
+  search) over 3000 random instances each, with every returned multiset/subset verified to
+  sum correctly and be drawn from the inputs.
+
 ## [1.616.0] - 2026-09-14
 
 ### Documentation

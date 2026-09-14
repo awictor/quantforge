@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.2.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.3.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -2399,6 +2399,30 @@ Auto-generated from `quantforge` v4.2.0 by `docs/gen_api.py` — do not edit by 
 > Returns ``(freqs, cross)`` where ``cross[k]`` is the complex averaged cross-spectrum
 > at one-sided normalized frequency ``freqs[k]`` in ``[0, 0.5]``. Its magnitude shows
 > shared power; its phase, the frequency-dependent lead/lag.
+
+## coin_change
+
+### `count_change(coins, target)`  _function_
+
+> Number of distinct multisets of ``coins`` (unlimited supply) summing to ``target``.
+>
+> Order does not matter (``1 + 2`` and ``2 + 1`` count once). ``target == 0`` returns 1
+> (the empty multiset).
+
+### `min_coins(coins, target)`  _function_
+
+> Fewest coins summing to ``target`` with unlimited supply. Returns ``(count, multiset)``.
+>
+> ``coins`` are positive integer denominations. Returns ``(-1, [])`` if the target cannot
+> be made. ``target == 0`` returns ``(0, [])``. The multiset is sorted ascending.
+
+### `subset_sum(values, target)`  _function_
+
+> Whether a subset of ``values`` (each used once) sums to ``target``. Returns ``(bool, subset)``.
+>
+> ``values`` are non-negative integers. On success the second element is one witnessing
+> subset (as a list of the chosen values); on failure it is ``[]``. ``target == 0`` is
+> always reachable by the empty subset.
 
 ## cointegration
 
