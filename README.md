@@ -6170,6 +6170,26 @@ Edmonds-Karp (BFS-augmenting Ford-Fulkerson) on a `{node: {neighbor: capacity}}`
 reproducing the textbook value of `23`. `UnionFind` is exposed directly for clustering and
 connectivity work, with path compression and union by rank for near-constant operations.
 
+Centrality measures score how "important" each node is — by link structure, degree, or
+position on shortest paths:
+
+```python
+from quantforge import (pagerank, degree_centrality,
+                        closeness_centrality, betweenness_centrality)
+
+pagerank({'A': ['B','C'], 'B': ['C'], 'C': ['A']})   # {'A':0.388,'B':0.215,'C':0.397}
+star = {0: [1,2,3,4], 1: [0], 2: [0], 3: [0], 4: [0]}
+degree_centrality(star)[0]                            # 1.0 — the hub touches everyone
+betweenness_centrality({0:[1],1:[0,2],2:[1,3],3:[2,4],4:[3]})  # midpoint node 2 peaks
+```
+
+`pagerank` is the random-surfer stationary distribution (power iteration with
+teleportation), summing to 1 and handling dangling nodes by redistributing their mass —
+uniform on a symmetric ring. `degree_centrality` normalizes neighbor counts,
+`closeness_centrality` rewards short distances to everyone, and `betweenness_centrality`
+(Brandes' algorithm) counts how often a node lies on shortest paths — the hub of a star
+dominates all three, and the middle of a path has the highest betweenness (`0.667`).
+
 ## Probability distributions
 
 Gamma, chi-square, Poisson, F and binomial distributions built on those special

@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.64.0] - 2026-09-13
+
+### Documentation
+- README: documented the centrality measures in the Graph algorithms section —
+  `pagerank`, `degree_centrality`, `closeness_centrality`, and `betweenness_centrality`
+  with worked star/path values. All snippet values verified live.
+
 ## [2.63.0] - 2026-09-13
 
 ### Added
