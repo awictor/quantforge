@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.0.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.1.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -2255,6 +2255,34 @@ Auto-generated from `quantforge` v3.0.0 by `docs/gen_api.py` — do not edit by 
 > dict
 >     ``{"hedge_ratio", "intercept", "adf", "cointegrated_5pct"}`` where ``adf``
 >     is the residual ADF result and ``cointegrated_5pct`` is its 5% rejection.
+
+## color
+
+### `hex_to_rgb(code)`  _function_
+
+> Convert a ``"#rrggbb"`` (or ``"rrggbb"``) hex string to RGB floats in ``[0, 1]``.
+
+### `hsl_to_rgb(h, s, l)`  _function_
+
+> Convert ``(hue_deg, saturation, lightness)`` to RGB (each in ``[0, 1]``).
+
+### `hsv_to_rgb(h, s, v)`  _function_
+
+> Convert ``(hue_deg, saturation, value)`` to RGB (each in ``[0, 1]``).
+
+### `rgb_to_hex(r, g, b)`  _function_
+
+> Convert RGB (each in ``[0, 1]``) to a ``"#rrggbb"`` hex string (rounded, clamped).
+
+### `rgb_to_hsl(r, g, b)`  _function_
+
+> Convert RGB (each in ``[0, 1]``) to ``(hue_deg, saturation, lightness)``.
+
+### `rgb_to_hsv(r, g, b)`  _function_
+
+> Convert RGB (each in ``[0, 1]``) to ``(hue_deg, saturation, value)``.
+>
+> Hue in ``[0, 360)`` (0 for gray), saturation and value in ``[0, 1]``.
 
 ## combinatorics
 

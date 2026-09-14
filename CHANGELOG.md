@@ -31,6 +31,14 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.1.0] - 2026-09-13
+
+### Added
+- `color.py`: color-space conversions — `rgb_to_hsv`, `hsv_to_rgb`, `rgb_to_hsl`,
+  `hsl_to_rgb`, `rgb_to_hex`, and `hex_to_rgb`. Cross-checked: the HSV and HSL conversions
+  match Python's `colorsys` over 2000 random colors each, all conversions round-trip, the
+  primary colors give their known values, and hex round-trips exactly over 500 codes.
+
 ## [3.0.0] - 2026-09-13
 
 ### Documentation
