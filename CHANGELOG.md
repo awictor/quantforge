@@ -31,6 +31,14 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.44.0] - 2026-09-13
+
+### Documentation
+- README: added a "Number theory" section documenting `is_prime`, `factorize`,
+  `euler_totient`, `divisors`, `gcd`, and `lcm` — the deterministic-primality guarantee,
+  the Mersenne/Carmichael/semiprime examples, and the derived identities. TOC regenerated.
+  All snippet values verified live.
+
 ## [2.43.0] - 2026-09-13
 
 ### Added

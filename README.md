@@ -122,6 +122,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Market stress (turbulence / absorption ratio)](#market-stress-turbulence--absorption-ratio)
 - [Matrix utilities](#matrix-utilities)
 - [Numerical utilities](#numerical-utilities)
+- [Number theory](#number-theory)
 - [Probability distributions](#probability-distributions)
 - [Nelson-Siegel / Svensson curves](#nelson-siegel--svensson-curves)
 - [Sample risk measures](#sample-risk-measures)
@@ -5956,6 +5957,31 @@ trivariate_normal_cdf(0.0, 0.0, 0.0, 0.3, 0.3, 0.3) # 0.19775
 variable to a one-dimensional integral of the bivariate CDF (Genz). Both reduce to the
 product of marginals at zero correlation and are monotone in each correlation — the
 ingredients for spread, exchange, and two-factor compound-option pricing.
+
+## Number theory
+
+Exact integer primitives — primality, factorization, and the derived quantities — built
+on Python's arbitrary-precision integers, so there is no overflow:
+
+```python
+from quantforge import is_prime, factorize, euler_totient, divisors, gcd, lcm
+
+is_prime(2**61 - 1)                    # True — a Mersenne prime, far past 64-bit
+is_prime(561)                          # False — a Carmichael number (fools weak tests)
+factorize(60)                          # [(2, 2), (3, 1), (5, 1)]
+factorize(1000000007 * 1000000009)     # [(1000000007, 1), (1000000009, 1)]
+euler_totient(36)                      # 12
+divisors(28)                           # [1, 2, 4, 7, 14, 28] — 28 is perfect
+```
+
+`is_prime` is a deterministic Miller-Rabin test with a fixed witness set that is exact
+for every integer below `3.3e24` (well past 64-bit), so the answer is a proof, not a
+probability — it correctly certifies the Mersenne prime `2^61-1` and rejects the
+Carmichael number `561` that fools naive tests. `factorize` combines trial division with
+Pollard's rho and certifies each factor prime, so it splits a `~10^18` semiprime that
+trial division alone could not reach. `euler_totient` counts the integers coprime to `n`,
+`divisors` lists every divisor (the proper divisors of `28` sum to `28`), and `gcd`/`lcm`
+satisfy `gcd(a,b) * lcm(a,b) == a*b`.
 
 ## Probability distributions
 
