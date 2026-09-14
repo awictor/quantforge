@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.4.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.5.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -9012,6 +9012,30 @@ Auto-generated from `quantforge` v4.4.0 by `docs/gen_api.py` — do not edit by 
 > onto the unit-diagonal set, iterating to convergence. Returns a symmetric PSD
 > matrix with unit diagonal; a matrix that is already a valid correlation is
 > returned essentially unchanged.
+
+## linear_recurrence
+
+### `fibonacci(n, mod=None)`  _function_
+
+> The ``n``-th Fibonacci number (``F_0 = 0, F_1 = 1``) via matrix power.
+>
+> Optional modular reduction. ``O(log n)`` matrix multiplies.
+
+### `linear_recurrence_nth(coeffs, initial, n, mod=None)`  _function_
+
+> The ``n``-th term (0-indexed) of ``x_i = sum_j coeffs[j] * x_{i-1-j}``.
+>
+> ``coeffs`` are the ``k`` recurrence coefficients (``coeffs[0]`` multiplies the most
+> recent term); ``initial`` are the first ``k`` terms ``x_0 .. x_{k-1}``. For ``n < k`` the
+> initial term is returned directly. With ``mod`` set, the result is reduced modulo it.
+> ``O(k^3 log n)``.
+
+### `matrix_power(matrix, power, mod=None)`  _function_
+
+> Raise a square ``matrix`` to a non-negative integer ``power`` by squaring.
+>
+> ``power == 0`` returns the identity. With ``mod`` set, every entry is reduced modulo it
+> (integer matrices only). ``O(k^3 log power)``.
 
 ## linprog
 

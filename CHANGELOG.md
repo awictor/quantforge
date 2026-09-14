@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.619.0] - 2026-09-14
+
+### Added
+- `linear_recurrence.py`: `matrix_power` raises a square matrix to an integer power by
+  exponentiation-by-squaring (``O(k^3 log n)``, optional modular reduction), and
+  `linear_recurrence_nth` uses it to get the ``n``-th term of any order-``k`` linear
+  recurrence ``x_i = sum_j coeffs[j] x_{i-1-j}`` via its companion matrix -- logarithmic in
+  ``n`` rather than linear. `fibonacci(n, mod=...)` is the canonical wrapper. Cross-checked
+  against direct iteration over 2000 random recurrences (with and without a modulus) and
+  against repeated multiplication for 1000 random matrix powers, plus known Fibonacci and
+  tribonacci values including ``F_100``.
+
 ## [1.618.0] - 2026-09-14
 
 ### Documentation
