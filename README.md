@@ -6954,6 +6954,29 @@ row over all block counts (`bell(5) == 52`). `catalan` gives the ubiquitous
 unordered sum, and `derangements(n)` the fixed-point-free permutations — equal to
 `round(n!/e)` for every `n`.
 
+Symmetric functions relate a multiset of values to the polynomial with those roots.
+`elementary_symmetric`, `power_sums`, and `poly_from_roots` compute the three descriptions,
+and Newton's identities convert between them exactly:
+
+```python
+from quantforge import (elementary_symmetric, power_sums, poly_from_roots,
+                        power_to_elementary, elementary_to_power)
+
+elementary_symmetric([1, 2, 3])   # [1, 6, 11, 6] — e_0..e_3
+power_sums([1, 2, 3], 3)          # [3, 6, 14, 36] — p_0..p_3
+poly_from_roots([1, 2, 3])        # [1, -6, 11, -6] — (t-1)(t-2)(t-3)
+power_to_elementary([6, 14, 36])  # [1, 6, 11, 6] as exact Fractions
+elementary_to_power([1, 6, 11, 6])# [6, 14, 36]
+```
+
+`elementary_symmetric` returns `e_k`, the sum of all products of `k` distinct values (an
+`O(n^2)` DP), and `poly_from_roots` reads the monic coefficients off them via Vieta
+(`(-1)^k e_k`, highest-degree first, matching `polynomial_roots`). `power_sums` gives
+`p_k = sum x_i^k`. `power_to_elementary` and `elementary_to_power` are Newton's identities
+in exact `Fraction` arithmetic, so the two representations round-trip without rounding —
+the bridge between a polynomial's coefficients and the moments of its roots. Verified
+against combination-expansion references over thousands of multisets.
+
 Bernoulli numbers and Faulhaber's formula give the exact closed form for sums of powers:
 
 ```python

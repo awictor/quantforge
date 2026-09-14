@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.634.0] - 2026-09-14
+
+### Documentation
+- README: documented `elementary_symmetric`, `power_sums`, `poly_from_roots`,
+  `power_to_elementary`, and `elementary_to_power` in the Number theory section after the
+  combinatorics block -- symmetric functions and Newton's identities. All snippet values
+  verified live.
+
 ## [1.633.0] - 2026-09-14
 
 ### Added
