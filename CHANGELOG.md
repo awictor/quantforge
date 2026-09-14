@@ -31,6 +31,14 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.59.0] - 2026-09-14
+
+### Added
+- `pcg.py`: statistically strong PRNGs — `PCG32` (O'Neill's PCG-XSH-RR, with unbiased
+  `randint`) and `Xorshift128Plus`. Cross-checked: PCG32 reproduces O'Neill's canonical
+  reference output vector exactly, both are uniform (mean ~0.5, variance ~1/12), `randint`
+  is bias-free over a small range, and both streams are reproducible per seed.
+
 ## [3.58.0] - 2026-09-14
 
 ### Documentation

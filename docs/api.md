@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.58.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.59.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -11294,6 +11294,20 @@ Auto-generated from `quantforge` v3.58.0 by `docs/gen_api.py` — do not edit by
 > components. With all components it reproduces the original covariance exactly
 > (spectral decomposition); with ``k`` below the rank it is the best rank-``k``
 > approximation.
+
+## pcg
+
+### `PCG32(seed=1234567, seq=54)`  _class_
+
+> PCG-XSH-RR 32-bit generator (O'Neill). Strong, small, reproducible.
+>
+> ``next_uint32()`` yields a 32-bit output; ``random()`` a float in ``[0, 1)``;
+> ``randint(lo, hi)`` an integer in ``[lo, hi]`` (inclusive) without modulo bias.
+> Seeded by ``seed`` and an optional stream ``seq``.
+
+### `Xorshift128Plus(seed=1234567)`  _class_
+
+> xorshift128+ generator (Vigna). 64-bit output, long period, reproducible.
 
 ## pcr
 
