@@ -7001,6 +7001,25 @@ fraction for larger `x`; `ei(x)` is the real-line principal value (`ei(-x) = -e1
 radiative transfer, well-test hydrology, and asymptotic expansions. Verified against
 numerical integration and standard reference values.
 
+The Lambert W function inverts `w e^w`, untangling equations where the unknown sits inside
+and outside an exponential; `lambert_w0` and `lambert_wm1` are its two real branches:
+
+```python
+from quantforge import lambert_w0, lambert_wm1
+import math
+
+lambert_w0(math.e)     # 1.0 — since 1 * e^1 = e
+lambert_w0(1)          # 0.5671432904 — the omega constant
+lambert_wm1(-0.2)      # -2.542641 — the lower branch on [-1/e, 0)
+```
+
+`lambert_w0` is the principal branch (`w >= -1`, defined for `x >= -1/e`) and `lambert_wm1`
+the secondary branch (`w <= -1`, for `-1/e <= x < 0`); each refines a branch-specific guess
+with Halley's cubic iteration, so `w e^w = x` holds to machine precision. It solves
+compound-growth, delay, and enzyme-kinetics equations that have no elementary closed form.
+Verified across both branches against that defining identity over tens of thousands of
+arguments.
+
 The correlated-normal CDFs behind the multi-asset and compound-option models are public
 too:
 

@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.696.0] - 2026-09-14
+
+### Documentation
+- README: documented `lambert_w0` and `lambert_wm1` in the special-functions block after the
+  exponential integrals -- the two real branches of the Lambert W function. All snippet
+  values verified live.
+
 ## [1.695.0] - 2026-09-14
 
 ### Added
