@@ -6215,6 +6215,23 @@ splitting a sample across workers and merging their accumulators reproduces the
 single-pass result to ~1e-10 — the associativity that makes it a true parallel
 reduction for large or distributed data.
 
+`RunningCovariance` extends the same one-pass, mergeable idea to *pairs*, tracking
+covariance and Pearson correlation of a stream of `(x, y)`:
+
+```python
+from quantforge import RunningCovariance
+
+rc = RunningCovariance([1, 2, 3, 4, 5], [2, 4, 6, 8, 10])
+rc.correlation()                     # 1.0 — perfectly linear
+rc.covariance()                      # 5.0 (sample, ddof=1)
+(RunningCovariance([1,2],[2,4]) + RunningCovariance([3,4,5],[6,8,10])).correlation()  # 1.0
+```
+
+`update(x, y)` folds in one pair via the Welford co-moment recurrence (stable, no
+catastrophic cancellation), and `covariance`/`correlation`/`variance_x`/`variance_y` read
+the current estimate — matching batch formulas. Two accumulators merge exactly with `+`,
+so partial covariances from parallel chunks combine into the whole.
+
 When each observation carries a weight — reliability, sampling, or scenario probability —
 the weighted summaries apply:
 
