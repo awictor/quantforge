@@ -31,6 +31,14 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.25.0] - 2026-09-14
+
+### Added
+- `numeral.py`: numeral-system conversions — `to_base`/`from_base` (any base 2..36) and
+  `to_roman`/`from_roman`. Cross-checked: base conversion round-trips and matches Python's
+  `int(s, base)` over 5000 random values, and Roman numerals round-trip for every integer
+  1..3999 plus the classic subtractive cases.
+
 ## [3.24.0] - 2026-09-14
 
 ### Documentation

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.24.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.25.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -10680,6 +10680,31 @@ Auto-generated from `quantforge` v3.24.0 by `docs/gen_api.py` — do not edit by
 > Central-difference Jacobian of a vector function ``f: R^n -> R^m``.
 >
 > Returns an ``m x n`` list of lists ``df_k/dx_i``.
+
+## numeral
+
+### `from_base(s, base)`  _function_
+
+> Parse a digit string ``s`` in ``base`` (2..36) back to a non-negative integer.
+>
+> Case-insensitive; raises on a digit that is out of range for the base.
+
+### `from_roman(s)`  _function_
+
+> Convert a Roman-numeral string to an integer (subtractive notation).
+>
+> Case-insensitive. Raises on characters that are not Roman digits.
+
+### `to_base(n, base)`  _function_
+
+> Represent a non-negative integer ``n`` in ``base`` (2..36) as a digit string.
+>
+> Digits above 9 use lowercase letters (``a`` = 10 .. ``z`` = 35). ``to_base(0, b)`` is
+> ``"0"``.
+
+### `to_roman(n)`  _function_
+
+> Convert an integer in ``1..3999`` to its Roman-numeral string (subtractive form).
 
 ## ode
 
