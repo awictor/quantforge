@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.25.0] - 2026-09-13
+
+### Added
+- `cepstrum.py`: real cepstrum, power cepstrum, and quefrency analysis for echo and
+  pitch detection — `real_cepstrum`, `power_cepstrum`, and `fundamental_quefrency`.
+  Cross-checked: a signal with an echo delayed by D samples produces a cepstral peak
+  exactly at quefrency D, a periodic impulse train (the voiced-speech model) peaks at
+  its period, the power cepstrum is non-negative, and the quefrency search band is
+  respected.
+
 ## [2.24.0] - 2026-09-13
 
 ### Documentation

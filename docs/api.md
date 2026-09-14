@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.24.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.25.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -1450,6 +1450,35 @@ Auto-generated from `quantforge` v2.24.0 by `docs/gen_api.py` — do not edit by
 > The drawdown depth that is exceeded only ``1 - confidence`` of the time. A larger
 > confidence gives a deeper (more conservative) threshold. Uses the upper-tail
 > order statistic of the drawdown series.
+
+## cepstrum
+
+### `fundamental_quefrency(x, min_quefrency=1, max_quefrency=None)`  _function_
+
+> Quefrency (in samples) of the largest real-cepstrum peak in a search band.
+>
+> For a voiced/pitched or echoed signal this is the fundamental period (or echo
+> delay) in samples: divide the sample rate by it to get the pitch in Hz. The search
+> ignores the low-quefrency region below ``min_quefrency`` (the spectral envelope) and
+> is capped at ``max_quefrency`` (default: half the cepstrum length, the useful range
+> of a real cepstrum). Returns ``(quefrency, peak_value)``.
+
+### `power_cepstrum(x)`  _function_
+
+> Power cepstrum of ``x``: ``|ifft(log|fft(x)|^2)|^2``.
+>
+> Squares the log-magnitude spectrum before inverting, then takes the squared
+> magnitude -- emphasizing quefrency peaks. Same length convention as
+> :func:`real_cepstrum`.
+
+### `real_cepstrum(x)`  _function_
+
+> Real cepstrum of ``x``: ``ifft(log|fft(x)|)``, real part.
+>
+> The inverse FFT of the log-magnitude spectrum. Returned length equals the padded
+> power-of-two length used internally (``>= len(x)``). The independent variable is
+> *quefrency* -- an index in samples, read like a lag. A tiny floor is added inside
+> the log to keep spectral nulls finite.
 
 ## cev
 
