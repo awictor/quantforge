@@ -6489,6 +6489,22 @@ trial division alone could not reach. `euler_totient` counts the integers coprim
 `divisors` lists every divisor (the proper divisors of `28` sum to `28`), and `gcd`/`lcm`
 satisfy `gcd(a,b) * lcm(a,b) == a*b`.
 
+When you need *many* primes rather than one test, the sieve is far faster:
+
+```python
+from quantforge import primes_up_to, prime_count, nth_prime, smallest_prime_factors
+
+primes_up_to(20)         # [2, 3, 5, 7, 11, 13, 17, 19]
+prime_count(100)         # 25 — pi(100)
+nth_prime(1000)          # 7919
+smallest_prime_factors(30)[12]   # 2 — least prime dividing 12
+```
+
+`primes_up_to` is the Sieve of Eratosthenes; `prime_count` is the prime-counting function
+pi(n); `nth_prime` grows the sieve bound by the prime-number-theorem estimate until it has
+enough primes; and `smallest_prime_factors` returns a table that factorizes any number in
+range in `O(log n)` — matching `factorize` and `is_prime` exactly.
+
 Modular ("clock") arithmetic adds the operations behind RSA-style key math and residue
 computation:
 
