@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.8.0] - 2026-09-14
+
+### Documentation
+- README: documented the SDE integrators in the Monte Carlo section — `euler_maruyama`,
+  `milstein`, and `gbm_paths` with the general-diffusion framing and the strong-order
+  contrast. All snippet values verified live.
+
 ## [3.7.0] - 2026-09-14
 
 ### Added
