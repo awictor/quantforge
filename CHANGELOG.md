@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.89.0] - 2026-09-13
+
+### Added
+- `hamming_code.py`: error-detecting/correcting codes — `hamming74_encode`,
+  `hamming74_decode` (single-bit correction), `luhn_checksum`, and `luhn_check_digit`.
+  Cross-checked: all 16 Hamming(7,4) words round-trip and a flip at every one of the 7
+  positions is both corrected and located; the Luhn checksum validates known card numbers
+  and the computed check digit makes any payload valid over 1000 random cases.
+
 ## [2.88.0] - 2026-09-13
 
 ### Documentation

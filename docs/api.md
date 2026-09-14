@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.88.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.89.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -6556,6 +6556,40 @@ Auto-generated from `quantforge` v2.88.0 by `docs/gen_api.py` — do not edit by
 > float
 >     The long-run variance estimate. Always non-negative thanks to the Bartlett
 >     weights.
+
+## hamming_code
+
+### `hamming74_decode(code)`  _function_
+
+> Decode a 7-bit Hamming(7,4) codeword, correcting any single-bit error.
+>
+> Computes the 3-bit syndrome; if non-zero it gives the 1-indexed position of the
+> flipped bit, which is corrected before extracting the data. Returns
+> ``(data_bits, error_position)`` where ``error_position`` is ``0`` if no error was
+> found or the 1-indexed position that was corrected.
+
+### `hamming74_encode(bits)`  _function_
+
+> Encode 4 data bits into a 7-bit Hamming(7,4) codeword.
+>
+> ``bits`` is a length-4 sequence of 0/1 (``d1 d2 d3 d4``). Returns a length-7 list
+> ``[p1, p2, d1, p3, d2, d3, d4]`` where the parity bits ``p1, p2, p3`` cover the
+> standard bit-position groups. Any single bit flip in the result is later correctable.
+
+### `luhn_check_digit(digits)`  _function_
+
+> Compute the Luhn check digit to append to a payload ``digits`` (without one).
+>
+> Returns the single digit ``0-9`` that makes ``digits + [check]`` a valid Luhn number
+> (checksum zero).
+
+### `luhn_checksum(digits)`  _function_
+
+> Luhn checksum of a digit sequence: ``0`` iff the number is valid.
+>
+> ``digits`` is a string or list of decimal digits *including* the trailing check digit.
+> Doubles every second digit from the right, sums the digits of the results, and returns
+> the total modulo 10. A valid Luhn number gives ``0``.
 
 ## hawkes
 
