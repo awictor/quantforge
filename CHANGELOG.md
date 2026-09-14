@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.46.0] - 2026-09-14
+
+### Documentation
+- README: documented the circle-geometry routines in the Computational geometry section —
+  `circle_from_3points`, `circle_line_intersection`, `circle_circle_intersection`, and
+  `point_in_circle` with worked values. All snippet values verified live.
+
 ## [3.45.0] - 2026-09-14
 
 ### Added

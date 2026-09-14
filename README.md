@@ -6671,6 +6671,22 @@ while its perpendicular distance exceeds `epsilon`, and drops the rest — so th
 a subsequence of the input within tolerance of the original. A larger `epsilon` keeps
 fewer points (monotonically), and a collinear run collapses to its two endpoints.
 
+Circle constructions and intersections round out the geometry set:
+
+```python
+from quantforge import (circle_from_3points, circle_line_intersection,
+                        circle_circle_intersection, point_in_circle)
+
+circle_from_3points((1,0), (0,1), (-1,0))           # (0.0, 0.0, 1.0) — the circumcircle
+circle_line_intersection((0,0,5), (-10,0), (10,0))  # [(5,0), (-5,0)]
+circle_circle_intersection((0,0,5), (8,0,5))        # [(4,3), (4,-3)]
+```
+
+`circle_from_3points` returns the circle `(cx, cy, r)` through three non-collinear points
+(collinear input raises). `circle_line_intersection` and `circle_circle_intersection`
+return 0, 1 (tangent), or 2 points — every one lying on the circle(s) — and
+`point_in_circle` is the inside test.
+
 ## Graph algorithms
 
 The core graph routines on a dict adjacency list — shortest paths, traversal, components,
