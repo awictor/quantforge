@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.26.0] - 2026-09-13
+
+### Documentation
+- README: documented the cepstrum and quefrency analysis in the spectral section —
+  the log-spectrum-inverse interpretation, the echo-delay and impulse-train pitch
+  examples, and the role of `min_quefrency`. All snippet values verified live.
+
 ## [2.25.0] - 2026-09-13
 
 ### Added

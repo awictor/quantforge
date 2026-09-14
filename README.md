@@ -4406,6 +4406,25 @@ into the first few coefficients (a smooth curve puts >95% in its first four) —
 compaction property behind JPEG and MP3 — so it doubles as a compression and
 denoising basis. Unlike the FFT it needs no power-of-two length.
 
+The *cepstrum* is the inverse transform of the log-magnitude spectrum. It turns
+periodicity *in the spectrum* — the evenly spaced harmonics of a pitched sound, or the
+ripple a single echo adds — into a peak at one "quefrency" (a time, in samples):
+
+```python
+from quantforge import real_cepstrum, fundamental_quefrency
+
+real_cepstrum(signal)                                   # ifft(log|fft|), read like a lag
+q, peak = fundamental_quefrency(signal, min_quefrency=10)  # dominant quefrency
+```
+
+A signal with an echo delayed by 50 samples produces a cepstral peak exactly at
+quefrency `50`, and a periodic impulse train (the voiced-speech model) peaks at its
+period — divide the sample rate by that quefrency to get pitch in Hz. `power_cepstrum`
+squares the log-spectrum before inverting to emphasize those peaks. `min_quefrency`
+skips the low-quefrency spectral envelope so the search finds the pitch/echo peak, not
+the DC hump. This is the classic tool for fundamental-frequency estimation and echo
+detection.
+
 When you only need *one* frequency's strength — tone detection, a known harmonic — the
 Goertzel algorithm computes a single DFT bin in `O(n)` without a full transform:
 
