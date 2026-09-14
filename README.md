@@ -110,6 +110,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Directional statistics](#directional-statistics)
 - [Geodesy](#geodesy)
 - [Quaternions](#quaternions)
+- [Color spaces](#color-spaces)
 - [Spectral analysis](#spectral-analysis)
 - [Wavelet transform (Haar multiresolution)](#wavelet-transform-haar-multiresolution)
 - [Structural breaks (CUSUM / Chow)](#structural-breaks-cusum--chow)
@@ -4458,6 +4459,25 @@ any dimension; `cross` is 3-D (anticommutative and perpendicular to both inputs)
 back to the original), and `reflect` mirrors a vector through the plane with a given
 normal, preserving its length. The projection helpers are prefixed `vector_` to avoid
 clashing with the PCA `project`.
+
+## Color spaces
+
+Conversions between the common color representations — RGB, the cylindrical HSV/HSL
+models, and hex:
+
+```python
+from quantforge import rgb_to_hsv, rgb_to_hsl, rgb_to_hex, hex_to_rgb
+
+rgb_to_hsv(1, 0, 0)          # (0.0, 1.0, 1.0) — pure red
+rgb_to_hsl(0, 0, 1)          # (240.0, 1.0, 0.5) — pure blue
+rgb_to_hex(1, 0, 0)          # "#ff0000"
+hex_to_rgb("#ff8800")        # (1.0, 0.533, 0.0)
+```
+
+RGB channels are floats in `[0, 1]`; HSV/HSL hue is in degrees `[0, 360)` with the other
+channels in `[0, 1]`. `rgb_to_hsv`/`rgb_to_hsl` (and their inverses `hsv_to_rgb`/
+`hsl_to_rgb`) match Python's `colorsys` and round-trip exactly, and `rgb_to_hex`/
+`hex_to_rgb` convert to and from the `"#rrggbb"` web form.
 
 ## Spectral analysis
 

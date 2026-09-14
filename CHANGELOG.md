@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.2.0] - 2026-09-13
+
+### Documentation
+- README: added a "Color spaces" section documenting `rgb_to_hsv`, `rgb_to_hsl`,
+  `rgb_to_hex`, `hex_to_rgb`, and their inverses with worked values. TOC regenerated. All
+  snippet values verified live.
+
 ## [3.1.0] - 2026-09-13
 
 ### Added
