@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.596.0] - 2026-09-14
+
+### Documentation
+- README: documented `TwoSat` in the Graph algorithms section after the SCC routines --
+  the implication-graph reduction, the SCC-based satisfiability criterion, and
+  `add_or`/`add_implication`/`force_true`/`solve`. All snippet values verified live.
+
 ## [1.595.0] - 2026-09-14
 
 ### Added
