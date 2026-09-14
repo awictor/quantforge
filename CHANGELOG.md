@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.716.0] - 2026-09-14
+
+### Documentation
+- README: documented `legendre_p`, `assoc_legendre`, and `spherical_harmonic_real` in the
+  special-functions block after the Carlson note -- the recurrences, the Condon-Shortley phase,
+  and the real tesseral-harmonic convention. All snippet values verified live.
+
 ## [1.715.0] - 2026-09-14
 
 ### Added

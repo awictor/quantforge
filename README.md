@@ -7205,6 +7205,30 @@ and `elliptic_pi(0, .)` collapses to `elliptic_f`. Verified against the symmetri
 values (`R_F(x,x,x)=1/sqrt(x)`, `R_J(x,y,z,z)=R_D`), numerical integration of all three
 Legendre forms, and those complete-integral limits.
 
+`legendre_p`, `assoc_legendre` and `spherical_harmonic_real` cover the angular-momentum basis:
+the Legendre polynomials, their associated functions `P_l^m`, and the orthonormal real
+spherical harmonics that appear in the hydrogen atom, geopotential models, and graphics
+lighting:
+
+```python
+from quantforge import legendre_p, assoc_legendre, spherical_harmonic_real
+
+legendre_p(3, 0.5)                    # -0.4375   = (5x^3 - 3x)/2
+assoc_legendre(2, 1, 0.5)             # -1.299038105676658 = -3x sqrt(1-x^2)
+assoc_legendre(2, 2, 0.5)             # 2.25      = 3(1-x^2)
+spherical_harmonic_real(0, 0, 1.0, 2.0)   # 0.28209479177387814 = 1/sqrt(4 pi)
+spherical_harmonic_real(1, 0, 0.7, 0.0)   # 0.3737038139165246  = sqrt(3/4pi) cos(theta)
+```
+
+`legendre_p(l, x)` uses the three-term recurrence (`P_l(1)=1`, `P_l(-1)=(-1)**l`);
+`assoc_legendre(l, m, x)` climbs the stable upward recurrence from `P_m^m` with the
+Condon-Shortley phase (`m = 0` recovers `legendre_p`). `spherical_harmonic_real(l, m, theta, phi)`
+takes the polar angle `theta` and azimuth `phi` and returns the real tesseral harmonic --
+`cos(m phi)` for `m > 0`, `sin(|m| phi)` for `m < 0` -- normalized so the `Y_l^m` are
+orthonormal over the sphere. Cross-checked against the explicit `P_0..P_5`, the orthogonality
+integral `int P_l P_k = 2/(2l+1) delta`, the closed-form `P_l^m`, and numerical orthonormality
+of the harmonics.
+
 The correlated-normal CDFs behind the multi-asset and compound-option models are public
 too:
 
