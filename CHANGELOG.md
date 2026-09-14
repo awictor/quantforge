@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.10.0] - 2026-09-14
+
+### Documentation
+- README: documented the 2-D grid interpolators in the Numerical utilities section, next
+  to the 1-D interpolation methods — `bilinear_interp` and `nearest_interp` with worked
+  values. All snippet values verified live.
+
 ## [3.9.0] - 2026-09-14
 
 ### Added

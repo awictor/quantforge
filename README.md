@@ -5531,6 +5531,24 @@ Chebyshev-Lobatto points and `chebyshev_barycentric_weights` their closed-form
 weights; interpolating a smooth function like `exp` on 25 Chebyshev nodes is accurate
 to machine precision, where 21 equispaced nodes on the Runge function are off by ~59.
 
+The 1-D interpolators above have a 2-D cousin for lookup tables — vol surfaces, response
+grids, heightmaps — sampled on a rectilinear grid:
+
+```python
+from quantforge import bilinear_interp, nearest_interp
+
+xs, ys = [0, 1, 2, 3], [0, 1, 2]
+z = [[2*x + 3*y + 1 for x in xs] for y in ys]   # a planar field on the grid
+bilinear_interp(xs, ys, z, 1.5, 0.5)             # 5.5 — exact for a planar field
+nearest_interp(xs, ys, z, 0.6, 0.6)              # snaps to the closest node
+```
+
+`bilinear_interp` blends the four surrounding grid values — exact at the nodes, exact for
+any planar field, and equal to the four-corner mean at a cell center — while
+`nearest_interp` snaps to the closest node (piecewise constant, preserving the sampled
+values). Both clamp out-of-range queries to the grid edge; `z` is indexed `z[row][col]`
+with strictly increasing axes.
+
 All of the above fit a *polynomial*. When the data has poles or a flattening tail,
 Thiele's method fits a *rational* function (a ratio of polynomials) as a continued
 fraction and still passes through every node:
