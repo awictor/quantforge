@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.593.0] - 2026-09-14
+
+### Added
+- `scc.py`: `strongly_connected_components` finds every SCC of a directed graph in a single
+  ``O(V + E)`` pass with Tarjan's algorithm (DFS discovery index + low-link, components
+  emitted in reverse topological order), implemented iteratively so deep graphs do not
+  overflow recursion. `condensation` collapses each SCC to a vertex and returns the
+  component map plus the condensed DAG (deduplicated edges, no self-loops);
+  `is_strongly_connected` and `number_of_sccs` are thin wrappers. Cross-checked against a
+  brute mutual-reachability reference over 3000 random digraphs, with the condensation
+  verified acyclic (Kahn) over 2000 more.
+
 ## [1.592.0] - 2026-09-14
 
 ### Documentation

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.78.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.79.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -13997,6 +13997,32 @@ Auto-generated from `quantforge` v3.78.0 by `docs/gen_api.py` — do not edit by
 ### `scale_transform(params, X)`  _function_
 
 > Apply a fitted scaler: ``(x - center) / scale`` column-wise.
+
+## scc
+
+### `condensation(graph)`  _function_
+
+> Collapse each SCC to a node, returning ``(component_of, dag)``.
+>
+> ``component_of`` maps each original node to its component id (``0..k-1``); ``dag`` is the
+> condensed graph ``{comp_id: [successor_comp_ids]}`` with no duplicate edges and no
+> self-loops. The condensation is always acyclic.
+
+### `is_strongly_connected(graph)`  _function_
+
+> True if the whole graph is a single strongly connected component.
+
+### `number_of_sccs(graph)`  _function_
+
+> Count the strongly connected components of ``graph``.
+
+### `strongly_connected_components(graph)`  _function_
+
+> Return the SCCs of a directed ``graph`` as a list of node lists.
+>
+> ``graph`` is ``{node: [successors]}``; every node must appear as a key. Components are
+> returned in reverse topological order of the condensation (a component appears before
+> the components it can reach), which is the natural output order of Tarjan's algorithm.
 
 ## scenario
 
