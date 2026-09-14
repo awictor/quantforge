@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.47.0] - 2026-09-13
+
+### Added
+- `combinatorics.py`: exact integer combinatorics — `binomial`, `multinomial`,
+  `stirling_second`, `bell`, `catalan`, `partition_count`, and `derangements`.
+  Cross-checked: the binomial row sums to 2^n, the multinomial gives 34650 for
+  "mississippi", Bell numbers equal the summed Stirling row, the Catalan and
+  integer-partition sequences match their known values, and derangements equal
+  round(n!/e).
+
 ## [2.46.0] - 2026-09-13
 
 ### Documentation

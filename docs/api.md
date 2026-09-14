@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.46.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.47.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -2115,6 +2115,56 @@ Auto-generated from `quantforge` v2.46.0 by `docs/gen_api.py` — do not edit by
 > dict
 >     ``{"hedge_ratio", "intercept", "adf", "cointegrated_5pct"}`` where ``adf``
 >     is the residual ADF result and ``cointegrated_5pct`` is its 5% rejection.
+
+## combinatorics
+
+### `bell(n)`  _function_
+
+> Bell number ``B(n)``: the total number of partitions of an ``n``-element set.
+>
+> Computed by summing Stirling numbers of the second kind, ``B(n) = sum_k S(n, k)``,
+> via the Bell triangle. ``B(0) = 1``.
+
+### `binomial(n, k)`  _function_
+
+> Binomial coefficient ``C(n, k)`` -- the number of ``k``-subsets of ``n`` items.
+>
+> Zero when ``k < 0`` or ``k > n``. Exact for all non-negative ``n`` (big integers).
+
+### `catalan(n)`  _function_
+
+> Catalan number ``C_n = binomial(2n, n) / (n + 1)``.
+>
+> Counts balanced-parenthesis strings, binary trees, monotone lattice paths, and many
+> other structures. Exact.
+
+### `derangements(n)`  _function_
+
+> Number of derangements ``D(n)`` -- permutations of ``n`` items with no fixed point.
+>
+> Uses the recurrence ``D(n) = (n-1) * (D(n-1) + D(n-2))`` with ``D(0) = 1``,
+> ``D(1) = 0``. Exact.
+
+### `multinomial(counts)`  _function_
+
+> Multinomial coefficient ``(sum counts)! / prod(counts!)``.
+>
+> The number of distinct arrangements of a multiset with the given group ``counts``
+> (e.g. ``multinomial([1, 4, 4]) == 630`` for the letters of "mississippi" is built
+> from these). All counts must be non-negative.
+
+### `partition_count(n)`  _function_
+
+> Number of integer partitions of ``n`` (unordered sums of positive integers).
+>
+> ``p(0) = 1``; ``p(4) = 5`` (4, 3+1, 2+2, 2+1+1, 1+1+1+1). Uses the standard
+> coin-change DP over parts ``1..n``, so it is exact and ``O(n^2)``.
+
+### `stirling_second(n, k)`  _function_
+
+> Stirling number of the second kind ``S(n, k)``: partitions of ``n`` items into ``k`` non-empty blocks.
+>
+> Uses the recurrence ``S(n, k) = k*S(n-1, k) + S(n-1, k-1)``. ``S(0, 0) = 1``.
 
 ## commodity
 
