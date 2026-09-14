@@ -5990,6 +5990,26 @@ precedence and associativity, and `eval_rpn` folds the postfix stream to a numbe
 the functions `sin/cos/tan/exp/log/sqrt/abs`, and the constants `pi`/`e`. Checked against
 Python's `eval` over thousands of random expressions.
 
+CORDIC computes the trig and vector functions with shift-and-add only — no multiplies —
+the way fixed-point hardware does; `cordic_sincos`, `cordic_atan2`, and `cordic_hypot` are
+readable references:
+
+```python
+from quantforge import cordic_sincos, cordic_atan2, cordic_hypot
+import math
+
+cordic_sincos(math.pi / 3)   # (0.5, 0.866025) = (cos, sin)
+cordic_atan2(1, 1)           # 0.785398 = pi/4
+cordic_hypot(3, 4)           # 5.0
+```
+
+`cordic_sincos` rotates a unit vector through the fixed angle sequence `atan(2^-i)` (rotation
+mode) to reach the target angle, reducing the argument into the convergence range first;
+`cordic_atan2`/`cordic_hypot` drive the y-component to zero (vectoring mode) to read off the
+angle and magnitude. With 40 iterations they match `math.cos`/`sin`/`atan2`/`hypot` to about
+`1e-9` across the full range and all quadrants — verified over tens of thousands of random
+arguments, along with the Pythagorean identity.
+
 `neville` evaluates the unique degree-`(n-1)` polynomial through `n` points at one
 `x`, returning `(value, error_estimate)`; `divided_differences` / `newton_polynomial`
 build the Newton form once and evaluate it cheaply at many points. Because Neville

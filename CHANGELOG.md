@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.692.0] - 2026-09-14
+
+### Documentation
+- README: documented `cordic_sincos`, `cordic_atan2`, and `cordic_hypot` in the Numerical
+  utilities section after the expression evaluator -- shift-and-add trig and vector
+  functions. All snippet values verified live.
+
 ## [1.691.0] - 2026-09-14
 
 ### Added
