@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.29.0] - 2026-09-14
+
+### Added
+- `interval_set.py`: operations on sets of 1-D intervals — `merge_intervals`,
+  `total_covered_length`, `intervals_intersection`, `intervals_union`, and `max_overlap`.
+  Cross-checked: the union and intersection match an integer point-set computation over
+  500 random collections, merging collapses overlapping and touching ranges, and the
+  maximum-overlap sweep matches a brute-force point scan.
+
 ## [3.28.0] - 2026-09-14
 
 ### Documentation

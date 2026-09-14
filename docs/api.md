@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.28.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.29.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -8033,6 +8033,37 @@ Auto-generated from `quantforge` v3.28.0 by `docs/gen_api.py` — do not edit by
 > point interval). Supports ``+ - * /`` with intervals and scalars, ``width``,
 > ``midpoint``, ``contains``, ``intersect``, and monotone functions ``exp``/``log``/
 > ``sqrt``/``__pow__`` (integer powers).
+
+## interval_set
+
+### `intervals_intersection(a, b)`  _function_
+
+> Intersection of two interval collections: the ranges covered by *both*.
+>
+> Merges each side first, then sweeps for overlaps. Returns a sorted
+> non-overlapping list.
+
+### `intervals_union(a, b)`  _function_
+
+> Union of two interval collections as a merged non-overlapping list.
+
+### `max_overlap(intervals)`  _function_
+
+> Maximum number of intervals overlapping at any single point.
+>
+> Sweeps the endpoints (starts before ends at the same coordinate, so touching
+> intervals count as overlapping). Returns the peak count; ``0`` for no intervals.
+
+### `merge_intervals(intervals)`  _function_
+
+> Merge overlapping/adjacent intervals into a minimal sorted non-overlapping cover.
+>
+> ``[(1,3),(2,6),(8,10)] -> [(1,6),(8,10)]``. Touching intervals (``(1,2),(2,3)``) merge
+> into ``(1,3)``. Returns a new sorted list; empty input yields ``[]``.
+
+### `total_covered_length(intervals)`  _function_
+
+> Total length covered by the union of the intervals (overlaps counted once).
 
 ## isotonic
 
