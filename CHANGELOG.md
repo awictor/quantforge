@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.45.0] - 2026-09-14
+
+### Added
+- `circle.py`: circle geometry — `circle_from_3points` (circumcircle), `point_in_circle`,
+  `circle_line_intersection`, and `circle_circle_intersection`. Cross-checked: the
+  circumcircle passes through all three points (collinear input raises), every line/circle
+  intersection lies on both the circle and the line, and the tangent/miss/separate cases
+  return the right point counts.
+
 ## [3.44.0] - 2026-09-14
 
 ### Documentation

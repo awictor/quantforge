@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.44.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.45.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -2138,6 +2138,32 @@ Auto-generated from `quantforge` v3.44.0 by `docs/gen_api.py` — do not edit by
 ### `cir_zero_coupon_yield(r0, t, kappa, theta, sigma)`  _function_
 
 > Continuously-compounded yield of the CIR zero-coupon bond to ``t``.
+
+## circle
+
+### `circle_circle_intersection(c1, c2)`  _function_
+
+> Intersection points of two circles ``(cx, cy, r)``.
+>
+> Returns a list of 0, 1 (tangent), or 2 ``(x, y)`` points. Coincident circles raise
+> (infinitely many intersections).
+
+### `circle_from_3points(a, b, c)`  _function_
+
+> Circle ``(cx, cy, r)`` through three non-collinear points.
+>
+> Raises ``ValueError`` if the points are collinear (no finite circle).
+
+### `circle_line_intersection(circle, a, b)`  _function_
+
+> Intersection points of a circle with the *infinite* line through ``a`` and ``b``.
+>
+> Returns a list of 0, 1 (tangent), or 2 ``(x, y)`` points. ``a`` and ``b`` must be
+> distinct.
+
+### `point_in_circle(p, circle)`  _function_
+
+> Whether point ``p`` lies inside or on the circle ``(cx, cy, r)``.
 
 ## circular_stats
 

@@ -798,6 +798,12 @@ from .geometry_dist import (
     point_polyline_distance,
 )
 from .simplify import douglas_peucker
+from .circle import (
+    circle_from_3points,
+    point_in_circle,
+    circle_line_intersection,
+    circle_circle_intersection,
+)
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -1188,7 +1194,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "3.44.0"
+__version__ = "3.45.0"
 
 __all__ = [
     "OptionType",
@@ -2263,6 +2269,10 @@ __all__ = [
     "point_segment_distance",
     "point_polyline_distance",
     "douglas_peucker",
+    "circle_from_3points",
+    "point_in_circle",
+    "circle_line_intersection",
+    "circle_circle_intersection",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",
