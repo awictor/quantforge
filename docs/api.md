@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.82.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.83.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -4863,6 +4863,29 @@ Auto-generated from `quantforge` v4.82.0 by `docs/gen_api.py` — do not edit by
 > Durand-Kerner, so complex-conjugate eigenvalue pairs are returned correctly. Real
 > eigenvalues come back as Python ``float``; genuinely complex ones as ``complex``.
 > Sorted by real part then imaginary part.
+
+## elliptic
+
+### `agm(a, b, tol=1e-15, max_iter=100)`  _function_
+
+> Arithmetic-geometric mean of ``a, b >= 0``: the common limit of the AM/GM iteration.
+>
+> Each step replaces ``(a, b)`` with ``((a+b)/2, sqrt(a b))``; the two converge
+> quadratically. ``agm(a, b) == agm(b, a)`` and ``agm(a, a) == a``.
+
+### `elliptic_e(m)`  _function_
+
+> Complete elliptic integral of the second kind ``E(m)``, ``0 <= m <= 1``.
+>
+> ``E(0) = pi/2`` and ``E(1) = 1``. Uses the AGM descent, accumulating the geometric-step
+> corrections that give ``E`` from the same iteration.
+
+### `elliptic_k(m)`  _function_
+
+> Complete elliptic integral of the first kind ``K(m)``, ``0 <= m < 1``.
+>
+> ``K(0) = pi/2`` and ``K(m) -> inf`` as ``m -> 1``. Computed as
+> ``pi / (2 AGM(1, sqrt(1 - m)))``.
 
 ## encoding
 

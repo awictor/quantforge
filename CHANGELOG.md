@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.697.0] - 2026-09-14
+
+### Added
+- `elliptic.py`: the complete elliptic integrals and the arithmetic-geometric mean. `agm`
+  is the quadratically-convergent AM/GM iteration; `elliptic_k` is the first-kind ``K(m)``
+  (``pi / (2 AGM(1, sqrt(1-m)))``) and `elliptic_e` the second-kind ``E(m)`` accumulated from
+  the same descent. Parameter ``m = k^2``. Cross-checked against numerical integration,
+  known values (``K(0)=E(0)=pi/2``, ``E(1)=1``), the Legendre relation
+  ``E(m)K(1-m)+E(1-m)K(m)-K(m)K(1-m)=pi/2``, and the AM/GM bounds. Caught an E-series
+  weighting bug before shipping (the integration cross-check flagged it).
+
 ## [1.696.0] - 2026-09-14
 
 ### Documentation
