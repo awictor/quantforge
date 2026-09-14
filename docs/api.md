@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.92.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.93.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -936,6 +936,21 @@ Auto-generated from `quantforge` v3.92.0 by `docs/gen_api.py` — do not edit by
 > for any departure from the line of identity ``y = x``. Lies in ``[-1, 1]``: 1 only
 > when the points fall exactly on ``y = x``, and it drops below the Pearson value
 > whenever there is a systematic offset or scale difference.
+
+## bluestein
+
+### `dft_any(x)`  _function_
+
+> Forward DFT of a sequence of *any* length ``n`` (Bluestein), returning complex output.
+>
+> ``X_k = sum_n x_n exp(-2 pi i k n / N)``. Matches :func:`quantforge.fft.fft` on
+> power-of-two lengths and a direct DFT everywhere, in ``O(n log n)``.
+
+### `idft_any(x)`  _function_
+
+> Inverse DFT of any length (Bluestein), with the ``1/N`` scaling.
+>
+> ``idft(dft(x)) == x`` up to floating error.
 
 ## bond_future
 

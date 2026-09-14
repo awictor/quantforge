@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.607.0] - 2026-09-14
+
+### Added
+- `bluestein.py`: `dft`/`idft` (exported as `dft_any`/`idft_any`) compute the DFT of a
+  sequence of *any* length in ``O(n log n)`` via Bluestein's chirp-Z algorithm, lifting the
+  power-of-two restriction of the radix-2 `fft`. Each output is rewritten as a chirp
+  multiply, a convolution (padded to a power of two and done with the existing radix-2 FFT),
+  and a final chirp multiply. Cross-checked against a direct DFT and round-trip over 800
+  random sequences of arbitrary length, exact agreement with the radix-2 `fft` on
+  power-of-two lengths, and prime-length cases where radix-2 cannot apply.
+
 ## [1.606.0] - 2026-09-14
 
 ### Documentation
