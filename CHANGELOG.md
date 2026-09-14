@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.76.0] - 2026-09-13
+
+### Documentation
+- README: documented LZW compression and delta coding in the Data compression section —
+  the on-the-fly dictionary, the repetitive-text ratio, and the slowly-varying delta
+  example. All snippet values verified live.
+
 ## [2.75.0] - 2026-09-13
 
 ### Added

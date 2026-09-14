@@ -6294,6 +6294,25 @@ rank in a running alphabet and moves it to the front — emits long runs of zero
 following RLE + Huffman pass compresses well. `move_to_front_decode` and `bwt_inverse`
 chain back to the original losslessly.
 
+LZW takes the opposite approach — it builds its dictionary of repeated substrings on the
+fly, so nothing extra is transmitted, and delta coding shrinks slowly-varying numeric
+series:
+
+```python
+from quantforge import lzw_compress, lzw_decompress, delta_encode, delta_decode
+
+codes, alphabet = lzw_compress("abcabcabcabc")   # 7 codes for 12 characters
+lzw_decompress(codes, alphabet)                   # 'abcabcabcabc'
+delta_encode([100, 101, 102, 103, 104])           # [100, 1, 1, 1, 1]
+```
+
+`lzw_compress` emits the code of the longest known prefix and adds each new substring to
+the table as it goes, so repetitive text needs far fewer codes than characters;
+`lzw_decompress` rebuilds the same table (handling the code-equals-next-entry edge case)
+and inverts exactly. `delta_encode` replaces a numeric sequence by its first value and
+successive differences — a slowly-varying series becomes small numbers a following
+entropy coder packs tightly — and `delta_decode` is the cumulative sum back.
+
 ## Probability distributions
 
 Gamma, chi-square, Poisson, F and binomial distributions built on those special
