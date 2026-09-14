@@ -6149,6 +6149,27 @@ algorithm) orders a DAG so every edge points forward — raising if a cycle make
 impossible. Graphs are plain dicts: `{node: {neighbor: weight}}` for weighted routines,
 `{node: [neighbors]}` for the unweighted ones.
 
+Structure problems on weighted graphs — spanning trees and network capacity — round out
+the toolkit:
+
+```python
+from quantforge import UnionFind, minimum_spanning_tree, max_flow
+
+edges = [('A','B',1), ('A','C',4), ('B','C',2), ('B','D',5), ('C','D',1)]
+minimum_spanning_tree(['A','B','C','D'], edges)   # (tree_edges, 4.0)
+
+g = {'s': {'v1':16,'v2':13}, 'v1': {'v2':10,'v3':12}, 'v2': {'v1':4,'v4':14},
+     'v3': {'v2':9,'t':20}, 'v4': {'v3':7,'t':4}, 't': {}}
+max_flow(g, 's', 't')                             # 23 (the CLRS classic)
+```
+
+`minimum_spanning_tree` runs Kruskal's algorithm on a `UnionFind` disjoint-set forest and
+returns the chosen edges plus total weight (verified against a brute-force minimum over
+all spanning trees) — a minimum spanning forest for a disconnected graph. `max_flow` is
+Edmonds-Karp (BFS-augmenting Ford-Fulkerson) on a `{node: {neighbor: capacity}}` network,
+reproducing the textbook value of `23`. `UnionFind` is exposed directly for clustering and
+connectivity work, with path compression and union by rank for near-constant operations.
+
 ## Probability distributions
 
 Gamma, chi-square, Poisson, F and binomial distributions built on those special
