@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.68.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.69.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -10409,6 +10409,17 @@ Auto-generated from `quantforge` v4.68.0 by `docs/gen_api.py` — do not edit by
 > imbalance. In ``[0, 1]``: near zero when buys and sells balance, near one when
 > trading is one-sided (a proxy for informed order flow / toxicity). Aligned
 > non-negative series with at least one bucket.
+
+## min_area_rect
+
+### `min_area_rectangle(points)`  _function_
+
+> Return the minimum-area enclosing rectangle of ``points``.
+>
+> Result is a dict with ``area``, ``width``, ``height`` (the two side lengths, width the
+> longer), ``angle`` (edge direction in radians), and ``corners`` (four ``(x, y)`` points
+> in order). Needs at least one point; a degenerate (collinear) set gives a zero-area
+> rectangle.
 
 ## min_cost_flow
 

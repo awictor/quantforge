@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.683.0] - 2026-09-14
+
+### Added
+- `min_area_rect.py`: `min_area_rectangle` finds the minimum-area enclosing rectangle of a
+  2-D point set by rotating calipers -- testing the rectangle aligned to each convex-hull
+  edge (one must be flush with a hull edge) and keeping the smallest, ``O(h^2)`` for ``h``
+  hull vertices. Returns the area, side lengths, orientation angle, and corners.
+  Cross-checked over 2000 random sets: the area never exceeds a fine brute-force angle sweep,
+  every input point lies inside the returned rectangle, and axis-aligned / rotated / collinear
+  cases give the expected result.
+
 ## [1.682.0] - 2026-09-14
 
 ### Documentation

@@ -685,6 +685,7 @@ from .sphere import (
     spherical_centroid,
     spherical_resultant_length,
 )
+from .min_area_rect import min_area_rectangle
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1389,7 +1390,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "4.68.0"
+__version__ = "4.69.0"
 
 __all__ = [
     "OptionType",
@@ -2325,6 +2326,7 @@ __all__ = [
     "slerp_vectors",
     "spherical_centroid",
     "spherical_resultant_length",
+    "min_area_rectangle",
     "Dual",
     "dual_derivative",
     "dual_gradient",
