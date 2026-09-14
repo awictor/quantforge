@@ -585,6 +585,7 @@ from .cross_correlation import (
 from .cepstrum import real_cepstrum, power_cepstrum, fundamental_quefrency
 from .stft import stft, spectrogram, istft
 from .ar_spectrum import ar_psd, burg, ar_spectrum
+from .sample_rate import sinc_interp, upsample, downsample, resample_rational
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -975,7 +976,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "2.30.0"
+__version__ = "2.31.0"
 
 __all__ = [
     "OptionType",
@@ -1845,6 +1846,10 @@ __all__ = [
     "ar_psd",
     "burg",
     "ar_spectrum",
+    "sinc_interp",
+    "upsample",
+    "downsample",
+    "resample_rational",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

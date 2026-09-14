@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.30.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.31.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -12419,6 +12419,40 @@ Auto-generated from `quantforge` v2.30.0 by `docs/gen_api.py` — do not edit by
 >
 > Uses the standard expansion with the ATM limit handled separately to avoid
 > the removable 0/0 singularity at ``F == K``.
+
+## sample_rate
+
+### `downsample(x, factor, numtaps=65)`  _function_
+
+> Downsample ``x`` by an integer ``factor`` with an anti-alias low-pass filter.
+>
+> Low-pass filters at the new Nyquist (cutoff ``1/factor``) to prevent aliasing, then
+> keeps every ``factor``-th sample. Returns a signal ``ceil(len(x)/factor)`` long.
+> ``numtaps`` sizes the anti-alias filter (odd).
+
+### `resample_rational(x, up, down, numtaps=65)`  _function_
+
+> Resample ``x`` by the rational ratio ``up/down`` (upsample then downsample).
+>
+> Interpolates by ``up`` and decimates by ``down`` through a single anti-alias/anti-
+> imaging low-pass at cutoff ``1/max(up, down)``, so both imaging and aliasing are
+> suppressed. Returns a signal about ``len(x) * up / down`` long.
+
+### `sinc_interp(x, positions)`  _function_
+
+> Whittaker-Shannon reconstruction of a band-limited signal at arbitrary ``positions``.
+>
+> Treats ``x`` as samples at integer indices ``0..len(x)-1`` of a signal band-limited
+> to the Nyquist frequency and evaluates ``sum_n x[n] sinc(t - n)`` at each ``t`` in
+> ``positions``. Exact at integer positions; the ideal interpolation between them.
+
+### `upsample(x, factor, numtaps=65)`  _function_
+
+> Upsample ``x`` by an integer ``factor`` with an anti-imaging low-pass filter.
+>
+> Inserts ``factor - 1`` zeros between samples and low-pass filters at the original
+> Nyquist (cutoff ``1/factor``), scaling by ``factor`` to preserve amplitude. Returns a
+> signal ``factor`` times as long. ``numtaps`` sizes the interpolation filter (odd).
 
 ## savgol
 

@@ -31,6 +31,17 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.31.0] - 2026-09-13
+
+### Added
+- `sample_rate.py`: sample-rate conversion — `sinc_interp` (Whittaker-Shannon
+  reconstruction at arbitrary points), `upsample` and `downsample` (integer factors with
+  anti-imaging / anti-alias FIR filters), and `resample_rational` (rational `up/down`
+  ratio). Cross-checked: sinc interpolation is exact at integer positions and
+  reconstructs a band-limited tone between them, up/downsampling preserve a low tone
+  (accounting for the filter's group delay), and downsampling a tone above the new
+  Nyquist suppresses it (rms 0.001) instead of aliasing it back.
+
 ## [2.30.0] - 2026-09-13
 
 ### Documentation
