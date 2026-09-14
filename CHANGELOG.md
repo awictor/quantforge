@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.590.0] - 2026-09-14
+
+### Documentation
+- README: documented `SparseTable` in the Range-query structures section after
+  `FenwickTree`/`SegmentTree` -- `O(1)` idempotent range min/max/gcd on a static array, the
+  power-of-two block precomputation, and why overlap restricts it to idempotent combiners.
+  All snippet values verified live.
+
 ## [1.589.0] - 2026-09-14
 
 ### Added

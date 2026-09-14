@@ -6552,6 +6552,26 @@ and passing `min`/`max` (with the matching `identity`) gives range-minimum/maxim
 `O(log n)` point updates. Both are verified against a brute-force recompute across random
 arrays with interleaved updates.
 
+When the array never changes, a `SparseTable` answers *idempotent* range queries
+(minimum, maximum, gcd) in `O(1)` — faster per query than a segment tree, at the cost of
+being read-only:
+
+```python
+from quantforge import range_min_query, range_max_query, range_gcd_query
+
+a = [3, 1, 4, 1, 5, 9, 2, 6]
+range_min_query(a).query(1, 4)          # 1 — min over indices 1..4 inclusive
+range_max_query(a).query(2, 5)          # 9
+range_gcd_query([12, 18, 24, 6]).query(0, 2)   # 6 — gcd(12, 18, 24)
+```
+
+`SparseTable` precomputes the answer for every power-of-two block in `O(n log n)`, then a
+query combines the two (possibly overlapping) blocks that cover `[lo, hi]`. That overlap is
+harmless only for *idempotent* combiners — where `f(x, x) = x` — so min, max, and gcd work
+but sum does not (use `FenwickTree` for sums). The convenience builders cover the common
+cases, and any idempotent `combine` is accepted (e.g. bitwise-or). Verified against
+brute-force recomputation over thousands of random arrays and every possible range.
+
 Finding a k-th order statistic or the top-k does not need a full sort — quickselect does
 it in linear time:
 
