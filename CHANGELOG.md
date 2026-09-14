@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.594.0] - 2026-09-14
+
+### Documentation
+- README: documented `strongly_connected_components`, `condensation`, and
+  `is_strongly_connected` in the Graph algorithms section after `LCA` -- Tarjan's
+  single-pass algorithm, the reverse-topological component order, and the always-acyclic
+  condensation. All snippet values verified live.
+
 ## [1.593.0] - 2026-09-14
 
 ### Added

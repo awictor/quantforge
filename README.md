@@ -7051,6 +7051,30 @@ meet. `depth`, `distance` (edges between any two nodes, via
 with an iterative DFS, so even a chain of thousands of nodes will not overflow recursion.
 Verified against a brute path-to-root reference over 2000 random trees.
 
+On a *directed* graph, `strongly_connected_components` groups nodes that are mutually
+reachable, and `condensation` collapses each group to a single vertex to expose the DAG
+underneath:
+
+```python
+from quantforge import (strongly_connected_components, condensation,
+                        is_strongly_connected)
+
+g = {'a': ['b'], 'b': ['c'], 'c': ['a'], 'd': ['a']}   # cycle a->b->c->a, plus d->a
+strongly_connected_components(g)   # [['c', 'b', 'a'], ['d']]
+is_strongly_connected(g)           # False
+component_of, dag = condensation(g)
+dag                                # {0: [], 1: [0]} — d's component points at the cycle
+```
+
+`strongly_connected_components` is Tarjan's algorithm — one `O(V + E)` DFS tracking each
+node's discovery index and the lowest index reachable from its subtree, emitting a
+component whenever a node's low-link equals its own index. Components come out in reverse
+topological order of the condensation (each before the ones it can reach). `condensation`
+returns a `component_of` map and the condensed graph, which is always acyclic, with
+duplicate edges and self-loops removed; `is_strongly_connected` and `number_of_sccs` are
+shortcuts. The DFS is iterative, so large graphs will not overflow recursion. Verified
+against a brute mutual-reachability reference over 3000 random digraphs.
+
 ## String algorithms
 
 Sequence comparison and pattern matching — on strings or any lists:
