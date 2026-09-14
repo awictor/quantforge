@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.68.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.69.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -159,6 +159,17 @@ Auto-generated from `quantforge` v3.68.0 by `docs/gen_api.py` — do not edit by
 > size)``. Cluster ids ``0..n-1`` are the singletons; merge ``m`` creates the new
 > id ``n + m``. Merge distances are non-decreasing for single/complete/average
 > linkage.
+
+## aho_corasick
+
+### `AhoCorasick(patterns=None)`  _class_
+
+> Aho-Corasick automaton over a set of patterns.
+>
+> Build once with the patterns, then call :meth:`find` on any number of texts. Each match
+> is reported as ``(end_index, pattern)`` where ``end_index`` is the index of the match's
+> last character in the text (so the match is ``text[end_index - len(pattern) + 1 :
+> end_index + 1]``). Duplicate patterns are collapsed; empty patterns are ignored.
 
 ## alias_sampler
 

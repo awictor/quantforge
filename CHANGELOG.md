@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.583.0] - 2026-09-14
+
+### Added
+- `aho_corasick.py`: `AhoCorasick` finds every occurrence of *many* patterns in a text in
+  a single pass -- ``O(len(text) + total_pattern_length + matches)`` -- by building a trie
+  of the patterns augmented with failure links (longest proper suffix that is also a trie
+  prefix) and output links (so a longer match also reports every shorter pattern ending at
+  the same position). Exposes `find`/`find_all` (yielding ``(end_index, pattern)``),
+  `contains_any`, and `count_matches`. Cross-checked against a brute-force per-pattern
+  search over 2000 random pattern-set/text fuzz cases, the classic ``ushers`` example, and
+  overlapping-repeat and nested-suffix cases.
+
 ## [1.582.0] - 2026-09-14
 
 ### Documentation

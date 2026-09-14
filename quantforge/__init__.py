@@ -531,6 +531,7 @@ from .hyperloglog import HyperLogLog
 from .count_min import CountMinSketch, BloomFilter
 from .heavy_hitters import MisraGries, SpaceSaving
 from .ddsketch import DDSketch
+from .aho_corasick import AhoCorasick
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1235,7 +1236,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "3.68.0"
+__version__ = "3.69.0"
 
 __all__ = [
     "OptionType",
@@ -2019,6 +2020,7 @@ __all__ = [
     "MisraGries",
     "SpaceSaving",
     "DDSketch",
+    "AhoCorasick",
     "Dual",
     "dual_derivative",
     "dual_gradient",
