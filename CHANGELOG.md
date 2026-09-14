@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.52.0] - 2026-09-13
+
+### Documentation
+- README: documented the exact integer/rational linear algebra in the Matrix utilities
+  section, next to LU — the fraction-free determinant, exact solve/inverse, and the
+  Hilbert-matrix contrast with floating solvers. All snippet values verified live.
+
 ## [2.51.0] - 2026-09-13
 
 ### Added

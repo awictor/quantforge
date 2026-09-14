@@ -5108,6 +5108,24 @@ determinant([[6, 1, 1], [4, -2, 5], [2, 8, 7]])   # -306, signed product of pivo
 `lu_decomposition` returns `P A = L U`; `lu_solve` forward/back-substitutes, and
 `determinant` is the signed product of the U pivots (zero for a singular matrix).
 
+Those solvers use floating point; for an integer or rational matrix the answer can be
+computed with *no round-off at all*. Bareiss's fraction-free elimination keeps every
+intermediate an exact integer, and exact `Fraction` arithmetic then solves and inverts:
+
+```python
+from quantforge import bareiss_determinant, rational_solve, rational_inverse
+
+bareiss_determinant([[1, 2], [3, 4]])     # -2, exact (no float error)
+rational_solve([[2, 1], [1, 3]], [3, 5])  # [Fraction(4,5), Fraction(7,5)]
+rational_inverse([[2, 1, 1], [1, 3, 2], [1, 0, 0]])  # exact Fraction inverse
+```
+
+`bareiss_determinant` returns an exact integer for integer input — each division in the
+elimination is provably exact, so nothing rounds. `rational_solve` and `rational_inverse`
+return `Fraction` results whose residual `A x - b` (or `A A⁻¹ - I`) is *exactly* zero. On
+a Hilbert matrix — the textbook ill-conditioned case where a float solve loses most of its
+digits — the exact solver recovers the true answer (all ones) precisely.
+
 Direct solves cost `O(n³)`; for large or structured systems the iterative solvers only
 need matrix-vector products. `conjugate_gradient` is the method of choice for a
 symmetric positive-definite `A`, and `gauss_seidel` / `jacobi` handle diagonally
