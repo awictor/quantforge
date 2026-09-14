@@ -5713,6 +5713,28 @@ exact sub-curves. The curve interpolates its first and last control points and, 
 `t = 0.5` of `[0, 1, 0]`, returns the Bernstein value `0.5`; `bernstein(n, i, t)` exposes the
 basis. Verified against the Bernstein-basis sum over thousands of random curves.
 
+Where a Bezier curve only touches its endpoints, a Catmull-Rom spline passes *through* every
+control point, so `catmull_rom_point`/`catmull_rom_curve` interpolate a set of waypoints
+smoothly:
+
+```python
+from quantforge import catmull_rom_point, catmull_rom_curve
+
+pts = [(0, 0), (1, 1), (2, 0), (3, 1)]
+catmull_rom_point(pts, 1, 0.0)   # (1.0, 1.0) — start of segment 1 == pts[1]
+catmull_rom_point(pts, 1, 1.0)   # (2.0, 0.0) — end == pts[2]
+catmull_rom_point(pts, 1, 0.5)   # (1.5, 0.5)
+catmull_rom_curve(pts, samples_per_segment=5)   # 13 points along the whole spline
+```
+
+`catmull_rom_point(points, seg, t)` evaluates segment `seg` (between `points[seg]` and
+`points[seg+1]`) at `t` in `[0, 1]`, with each segment's tangents derived from the
+neighbouring points — giving a C1 curve that interpolates every input. The `alpha` argument
+picks the parametrization: `0` uniform, `0.5` centripetal (the default, free of cusps and
+self-intersections), `1` chordal. `catmull_rom_curve` samples the entire spline; points may
+be scalars or n-D tuples. Verified over thousands of random point sets that each segment
+interpolates its endpoints and adjacent segments join continuously.
+
 Where `bisection`/`brent`/`newton` solve one scalar equation, `newton_system` and
 `broyden` solve a *system* `F(x) = 0` in several unknowns:
 

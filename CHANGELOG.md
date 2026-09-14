@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.656.0] - 2026-09-14
+
+### Documentation
+- README: documented `catmull_rom_point` and `catmull_rom_curve` in the Numerical utilities
+  section after the Bezier note -- the C1 interpolating spline that passes through every
+  control point. All snippet values verified live.
+
 ## [1.655.0] - 2026-09-14
 
 ### Added
