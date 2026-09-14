@@ -107,6 +107,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Forecast accuracy](#forecast-accuracy)
 - [Rank dependence (Kendall / Spearman)](#rank-dependence-kendall--spearman)
 - [Gaussian-copula sampling](#gaussian-copula-sampling)
+- [Directional statistics](#directional-statistics)
 - [Spectral analysis](#spectral-analysis)
 - [Wavelet transform (Haar multiresolution)](#wavelet-transform-haar-multiresolution)
 - [Structural breaks (CUSUM / Chow)](#structural-breaks-cusum--chow)
@@ -4351,6 +4352,28 @@ student_t_copula_sample(R, df=100, n=5000)   # ~ Gaussian copula
 
 A lower `df` makes joint extremes markedly more likely at the same correlation; as
 `df` grows the sampler converges to the Gaussian copula.
+
+## Directional statistics
+
+Angles need their own statistics — the ordinary mean of 350° and 10° is a meaningless
+180°, not 0°. These work with the unit-vector sum instead:
+
+```python
+import math
+from quantforge import circular_mean, resultant_length, circular_std, rayleigh_test
+
+circular_mean([math.radians(350), math.radians(10)])   # 0.0 rad — wraps correctly
+resultant_length([1.0, 1.0, 1.0])                       # 1.0 — perfectly concentrated
+rayleigh_test(angles)                                   # (R, p_value) for non-uniformity
+```
+
+`circular_mean` averages the `(cos, sin)` vectors and takes their `atan2`, so it wraps
+across the `2*pi` boundary (and raises when the vectors cancel to no mean direction).
+`resultant_length` is the concentration `R` in `[0, 1]` — `1` for identical angles, `~0`
+for a uniform spread — and `circular_variance` (`1 - R`) and `circular_std`
+(`sqrt(-2 ln R)`) follow from it. `rayleigh_test` tests whether the angles have a preferred
+direction at all: on a tight cluster it returns `R ≈ 0.98` with `p ≈ 0` (reject
+uniformity), and on uniform data `p > 0.9`. Angles are in radians.
 
 ## Spectral analysis
 
