@@ -5736,6 +5736,28 @@ bracketing a single root, ready for a Brent refine. `sturm_sequence` exposes the
 chain. Coefficients are highest-degree first, as with `polynomial_roots`. Verified against
 polynomials built from known roots over thousands of cases.
 
+Iterating any map `x -> f(x)` eventually repeats, and `floyd_cycle`/`brent_cycle` find the
+tail length and cycle length of that "rho" in `O(1)` memory — no set of visited states:
+
+```python
+from quantforge import floyd_cycle, brent_cycle, cycle_elements
+
+nxt = [1, 2, 3, 4, 2]        # 0->1->2->3->4->2: tail 0,1 then cycle 2,3,4
+f = lambda x: nxt[x]
+floyd_cycle(f, 0)            # (2, 3) — (mu tail length, lam cycle length)
+cycle_elements(f, 0)        # [2, 3, 4]
+
+lcg = lambda x: (13 * x + 7) % 1000
+floyd_cycle(lcg, 0)         # (0, 200) — the LCG's period from 0
+```
+
+Both return `(mu, lam)`: `mu` is how many steps before the sequence enters its cycle and
+`lam` is the cycle length. `floyd_cycle` is the classic tortoise-and-hare; `brent_cycle`
+finds the same answer with typically fewer function calls. `cycle_elements` lists the cycle
+itself. Because they use constant memory, they scale to enormous state spaces — the reason
+Pollard's rho factoring and PRNG-period analysis rely on them. Cross-checked against a
+seen-set walk over thousands of random functional graphs.
+
 When the answer is an *integer* characterized by a monotone or unimodal property — the
 "binary search the answer" pattern — `first_true`/`last_true` and the integer ternary
 searches locate it in `O(log n)`:

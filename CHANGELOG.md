@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.644.0] - 2026-09-14
+
+### Documentation
+- README: documented `floyd_cycle`, `brent_cycle`, and `cycle_elements` in the Numerical
+  utilities section after the Sturm block -- constant-memory cycle detection for iterated
+  maps. All snippet values verified live.
+
 ## [1.643.0] - 2026-09-14
 
 ### Added
