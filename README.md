@@ -6977,6 +6977,31 @@ in exact `Fraction` arithmetic, so the two representations round-trip without ro
 the bridge between a polynomial's coefficients and the moments of its roots. Verified
 against combination-expansion references over thousands of multisets.
 
+Polynomials over a prime field are exact — the basis of secret sharing and error-correcting
+codes. `lagrange_interpolate_mod` recovers the polynomial through a set of points, and
+`poly_eval_mod`/`poly_add_mod`/`poly_mul_mod` are the field arithmetic:
+
+```python
+from quantforge import lagrange_interpolate_mod, poly_eval_mod, poly_mul_mod
+
+lagrange_interpolate_mod([(0, 1), (1, 3), (2, 7)], 997)   # [1, 1, 1] — x^2 + x + 1
+poly_eval_mod([1, 2, 3], 2, 997)                          # 17 — 1 + 2*2 + 3*4 (Horner)
+poly_mul_mod([1, 1], [1, 1], 997)                         # [1, 2, 1]
+
+# Shamir secret sharing: the secret is the constant term; any t shares recover it
+mod = 998244353
+shares = [(x, poly_eval_mod([123456, 111, 222], x, mod)) for x in (1, 2, 3)]
+lagrange_interpolate_mod(shares, mod)[0]                  # 123456
+```
+
+Coefficients are lowest-degree first (`c[0]` is the constant term).
+`lagrange_interpolate_mod` builds the unique degree-`< n` polynomial through `n` points with
+distinct `x`, using exact modular inverses — so splitting a secret into shares and
+reconstructing it from any threshold subset round-trips exactly, and Reed-Solomon
+encode/decode falls out the same way. `poly_mul_mod` is the schoolbook product mod the prime
+(pair it with `convolve_mod` for the NTT-accelerated version). Verified over thousands of
+random cases across two primes.
+
 Bernoulli numbers and Faulhaber's formula give the exact closed form for sums of powers:
 
 ```python

@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.638.0] - 2026-09-14
+
+### Documentation
+- README: documented `lagrange_interpolate_mod`, `poly_eval_mod`, `poly_add_mod`, and
+  `poly_mul_mod` in the Number theory section after the symmetric-functions block -- exact
+  prime-field polynomial arithmetic and a Shamir secret-sharing example. All snippet values
+  verified live.
+
 ## [1.637.0] - 2026-09-14
 
 ### Added
