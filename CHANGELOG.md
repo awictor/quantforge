@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.38.0] - 2026-09-13
+
+### Documentation
+- README: documented total-variation denoising in the spectral section, after the
+  order-statistic filters — the objective, the `lam` behavior, the noisy-step recovery
+  numbers, and the exact-minimizer note. All snippet values verified live.
+
 ## [2.37.0] - 2026-09-13
 
 ### Added

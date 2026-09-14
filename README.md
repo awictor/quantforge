@@ -4604,6 +4604,24 @@ standard deviation from the MAD, and replaces *only* the points more than `n_sig
 spike into otherwise clean data and it flags exactly that index, leaving everything else
 byte-for-byte unchanged.
 
+For a step-like signal buried in noise, *total-variation denoising* recovers the
+piecewise-constant shape by minimizing `(1/2)*sum((x-y)^2) + lam*sum|x_{k+1}-x_k|` — the
+L1 penalty flattens noise into constant runs while leaving jumps intact:
+
+```python
+from quantforge import tv_denoise, tv_total_variation
+
+clean = tv_denoise(noisy, lam=3.0)   # exact minimizer, O(n) (Condat's method)
+tv_total_variation(clean)            # sum |x_{k+1} - x_k|, the penalized quantity
+```
+
+`lam=0` returns the input; a large `lam` collapses everything to the mean. On a noisy
+0-to-10 step it recovers plateaus at `0.01` and `9.75` and cuts the total variation from
+`46.7` to `9.7` while keeping the edge sharp. Condat's algorithm returns the *exact*
+minimizer in a single O(n) pass — verified against a brute-force optimality check and an
+independent subgradient solver — so unlike an iterative smoother there is nothing to tune
+but `lam`.
+
 Filtering keeps and rejects frequencies; the *analytic signal* instead turns a real
 oscillation into a rotating phasor, so you can read off its instantaneous amplitude and
 frequency. The Hilbert transform is the machinery: a 90-degree phase shift of every
