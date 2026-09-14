@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.657.0] - 2026-09-14
+
+### Added
+- `bspline.py`: B-spline basis functions and curves. `bspline_basis` evaluates the Cox-de
+  Boor basis, `open_uniform_knots` builds a clamped knot vector (so the curve interpolates
+  its endpoints), `bspline_point` evaluates the curve, and `bspline_curve` samples it.
+  Points may be scalars or n-D tuples. Cross-checked over 5000 random cases: the basis is a
+  partition of unity, clamped endpoints are interpolated, a degree-1 spline reproduces the
+  piecewise-linear interpolant, and a single-span spline matches the equivalent Bezier
+  curve.
+
 ## [1.656.0] - 2026-09-14
 
 ### Documentation

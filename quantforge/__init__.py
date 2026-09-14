@@ -651,6 +651,12 @@ from .bezier import (
     bezier_subdivide,
 )
 from .catmull_rom import catmull_rom_point, catmull_rom_curve
+from .bspline import (
+    bspline_basis,
+    bspline_point,
+    bspline_curve,
+    open_uniform_knots,
+)
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1355,7 +1361,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "4.42.0"
+__version__ = "4.43.0"
 
 __all__ = [
     "OptionType",
@@ -2257,6 +2263,10 @@ __all__ = [
     "bezier_subdivide",
     "catmull_rom_point",
     "catmull_rom_curve",
+    "bspline_basis",
+    "bspline_point",
+    "bspline_curve",
+    "open_uniform_knots",
     "Dual",
     "dual_derivative",
     "dual_gradient",

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.42.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.43.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -1503,6 +1503,34 @@ Auto-generated from `quantforge` v4.42.0 by `docs/gen_api.py` — do not edit by
 ### `vega(S, K, t, r, sigma, b=None) -> float`  _function_
 
 > dPrice/dSigma, per 1.0 change in vol (divide by 100 for per-vol-point).
+
+## bspline
+
+### `bspline_basis(i, p, knots, t)`  _function_
+
+> Cox-de Boor basis function ``N_{i,p}(t)`` for knot vector ``knots``.
+>
+> ``i`` is the basis index, ``p`` the degree. Uses the standard recursion with the
+> ``0/0 = 0`` convention for repeated knots.
+
+### `bspline_curve(control, degree, samples, knots=None)`  _function_
+
+> Sample the B-spline at ``samples`` equally spaced parameters over its knot range.
+
+### `bspline_point(control, degree, t, knots=None)`  _function_
+
+> Evaluate the B-spline curve at parameter ``t`` (basis-weighted control points).
+>
+> ``degree`` is the polynomial degree ``p``; ``knots`` defaults to a clamped open-uniform
+> vector (so the curve interpolates the endpoints). ``t`` runs over the knot range
+> ``[knots[p], knots[-p-1]]`` (``[0, 1]`` for the default knots).
+
+### `open_uniform_knots(n_control, degree)`  _function_
+
+> Clamped (open-uniform) knot vector for ``n_control`` points of the given ``degree``.
+>
+> Length ``n_control + degree + 1``: the first and last ``degree + 1`` knots are repeated
+> (0 and 1), the interior knots equally spaced -- so the curve interpolates its endpoints.
 
 ## bvp
 
