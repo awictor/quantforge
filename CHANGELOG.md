@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.699.0] - 2026-09-14
+
+### Added
+- `bessel.py`: Bessel functions of the first and second kind. `bessel_j0`/`bessel_j1` and
+  `bessel_y0`/`bessel_y1` use the Abramowitz-Stegun rational approximations with the
+  amplitude-phase asymptotic form for large argument, and `bessel_jn` computes higher orders
+  by Miller's stable downward recurrence. Cross-checked against tabulated values, the first
+  positive zeros of J0/J1, the recurrence ``J_{n-1}+J_{n+1} = (2n/x) J_n`` over 3000 random
+  cases, and the integral representation. Two `bessel_jn` bugs (a recurrence parity toggle
+  and too-low a Miller starting order) were caught by those cross-checks and fixed.
+
 ## [1.698.0] - 2026-09-14
 
 ### Documentation

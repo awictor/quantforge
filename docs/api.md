@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.84.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.85.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -850,6 +850,31 @@ Auto-generated from `quantforge` v4.84.0 by `docs/gen_api.py` — do not edit by
 >
 > Evaluates ``(1/(p+1)) sum_{j=0}^{p} C(p+1, j) B_j m^{p+1-j}`` with ``B_1 = +1/2``.
 > Returns an ``int`` (the sum is always an integer). Handles ``p = 0`` (returns ``m``).
+
+## bessel
+
+### `bessel_j0(x)`  _function_
+
+> Bessel function of the first kind, order 0.
+
+### `bessel_j1(x)`  _function_
+
+> Bessel function of the first kind, order 1.
+
+### `bessel_jn(n, x)`  _function_
+
+> Bessel function of the first kind, integer order ``n`` (``n >= 0``).
+>
+> ``n = 0, 1`` dispatch to the direct approximations; higher orders use Miller's stable
+> downward recurrence, normalized by ``J0`` (or the ``sum`` identity).
+
+### `bessel_y0(x)`  _function_
+
+> Bessel function of the second kind, order 0 (``x > 0``).
+
+### `bessel_y1(x)`  _function_
+
+> Bessel function of the second kind, order 1 (``x > 0``).
 
 ## bezier
 
