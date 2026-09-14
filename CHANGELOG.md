@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.690.0] - 2026-09-14
+
+### Documentation
+- README: documented `OrderStatisticTree` in the Range-query structures section after the
+  sliding-window routines -- a dynamic multiset with O(log n) rank/select. All snippet values
+  verified live.
+
 ## [1.689.0] - 2026-09-14
 
 ### Added

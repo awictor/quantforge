@@ -7150,6 +7150,28 @@ element is pushed and popped once, giving `O(n)` overall instead of the `O(n·k)
 every window. `sliding_window_sum` slides a running sum. All return `n - k + 1` results and
 are verified against a brute per-window scan over thousands of random cases.
 
+For a *dynamic* multiset that answers order queries as it changes, `OrderStatisticTree`
+keeps rank and select in `O(log n)` over a fixed value universe:
+
+```python
+from quantforge import OrderStatisticTree
+
+ost = OrderStatisticTree(range(10))
+for v in [3, 1, 4, 1, 5, 9, 2, 6]:
+    ost.add(v)
+ost.rank(5)               # 5 — how many stored values are < 5
+ost.select(0), ost.select(7)   # (1, 9) — smallest and largest
+ost.count_range(2, 6)     # 4 — values in [2, 6): 2, 3, 4, 5
+ost.count(1)              # 2 — multiplicity of 1
+```
+
+Backed by a binary indexed tree over the universe supplied at construction, `add`/`remove`
+adjust multiplicities and `rank`/`count_less`, `select` (k-th smallest), `count_range`
+(half-open interval), and `count` all run in `O(log n)`. Unlike `top_k` or a sorted list, it
+supports insertion and deletion between queries — the structure behind running percentiles,
+live leaderboards, and inversion counting on a known key range. Verified against a
+sorted-multiset reference over thousands of interleaved operations.
+
 Collections of `(start, end)` ranges have their own set operations for scheduling and
 coverage analysis:
 
