@@ -4375,6 +4375,23 @@ for a uniform spread — and `circular_variance` (`1 - R`) and `circular_std`
 direction at all: on a tight cluster it returns `R ≈ 0.98` with `p ≈ 0` (reject
 uniformity), and on uniform data `p > 0.9`. Angles are in radians.
 
+The von Mises distribution is the circular analogue of the normal — the bell curve on a
+circle:
+
+```python
+from quantforge import von_mises_pdf, von_mises_fit, bessel_i0
+
+von_mises_pdf(0, mu=0, kappa=2)      # 0.51589 — density at the mean
+mu_hat, kappa_hat = von_mises_fit(angles)   # MLE mean direction + concentration
+```
+
+`von_mises_pdf(theta, mu, kappa)` is `exp(kappa cos(theta - mu)) / (2 pi I0(kappa))` — it
+integrates to 1 over the circle, peaks at `mu`, and flattens to the uniform density at
+`kappa = 0`. `von_mises_fit` returns the maximum-likelihood mean (the sample circular
+mean) and concentration (solving `I1(kappa)/I0(kappa) = R` by Newton's method); on a
+simulated `(mu=0.5, kappa=4)` sample it recovers `(0.51, 4.15)`. `bessel_i0` and
+`bessel_i1` (the modified Bessel functions the normalizer needs) are exposed too.
+
 ## Spectral analysis
 
 Find cyclical structure — a seasonal pattern, a dominant trading cycle — with the

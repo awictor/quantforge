@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.94.0] - 2026-09-13
+
+### Documentation
+- README: documented the von Mises distribution in the Directional statistics section —
+  `von_mises_pdf`, `von_mises_fit`, and the Bessel functions with worked values. All
+  snippet values verified live.
+
 ## [2.93.0] - 2026-09-13
 
 ### Added
