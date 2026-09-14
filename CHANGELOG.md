@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.609.0] - 2026-09-14
+
+### Added
+- `ntt.py`: the number-theoretic transform -- the FFT carried out in a finite field, with
+  *no floating-point error*. `ntt`/`intt` transform a power-of-two-length integer sequence
+  modulo ``998244353 = 119 * 2^23 + 1`` (primitive root 3), and `convolve_mod` gives the
+  exact integer convolution (polynomial product) of two sequences with every coefficient
+  reduced mod the prime, in ``O(n log n)``. Cross-checked against a direct integer
+  convolution over 3000 random sequence pairs and `intt(ntt(x)) == x` round-trips, plus
+  explicit polynomial products and modular-wrap cases.
+
 ## [1.608.0] - 2026-09-14
 
 ### Documentation

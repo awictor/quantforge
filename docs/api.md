@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.94.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.95.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -10960,6 +10960,23 @@ Auto-generated from `quantforge` v3.94.0 by `docs/gen_api.py` — do not edit by
 > ``A`` is an ``m x n`` matrix (list of rows), ``b`` a length-``m`` vector. Returns a
 > dict with the non-negative solution ``x`` (length ``n``), the ``residual_norm``
 > ``||A x - b||``, and ``n_iter``. Uses the Lawson-Hanson active-set method.
+
+## ntt
+
+### `convolve_mod(a, b, mod=998244353)`  _function_
+
+> Exact convolution (polynomial product) of integer sequences ``a`` and ``b`` mod ``mod``.
+>
+> Returns the ``len(a) + len(b) - 1`` coefficients of the product, each reduced mod
+> ``mod`` -- no floating-point error. Empty inputs give an empty result.
+
+### `intt(a, mod=998244353)`  _function_
+
+> Inverse number-theoretic transform (with the ``1/n`` field scaling).
+
+### `ntt(a, mod=998244353)`  _function_
+
+> Forward number-theoretic transform of ``a`` (length must be a power of two).
 
 ## number_theory
 

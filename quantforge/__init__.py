@@ -577,6 +577,7 @@ from .string_periodicity import (
     manacher_longest_palindrome,
 )
 from .bluestein import dft as dft_any, idft as idft_any
+from .ntt import ntt, intt, convolve_mod, NTT_PRIME
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1281,7 +1282,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "3.94.0"
+__version__ = "3.95.0"
 
 __all__ = [
     "OptionType",
@@ -2100,6 +2101,10 @@ __all__ = [
     "manacher_longest_palindrome",
     "dft_any",
     "idft_any",
+    "ntt",
+    "intt",
+    "convolve_mod",
+    "NTT_PRIME",
     "Dual",
     "dual_derivative",
     "dual_gradient",
