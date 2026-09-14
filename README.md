@@ -6982,6 +6982,24 @@ worst case (matching a full sort for every k, with or without duplicates), `medi
 even-length-averaging wrapper, and `top_k` selects the threshold then sorts only the
 chosen elements (`largest=False` for the bottom k).
 
+The extremum of every length-`k` window of a sequence comes in linear time — no per-window
+rescan — from `sliding_window_min`/`sliding_window_max` (and `sliding_window_sum`):
+
+```python
+from quantforge import sliding_window_min, sliding_window_max, sliding_window_sum
+
+v = [1, 3, -1, -3, 5, 3, 6, 7]
+sliding_window_max(v, 3)          # [3, 3, 5, 5, 6, 7]
+sliding_window_min(v, 3)          # [-1, -3, -3, -3, 3, 3]
+sliding_window_sum([1, 2, 3, 4], 2)   # [3, 5, 7]
+```
+
+`sliding_window_max`/`min` keep a monotonic deque of candidate indices — discarding any that
+a newer, better value dominates and dropping those that fall out of the window — so each
+element is pushed and popped once, giving `O(n)` overall instead of the `O(n·k)` of scanning
+every window. `sliding_window_sum` slides a running sum. All return `n - k + 1` results and
+are verified against a brute per-window scan over thousands of random cases.
+
 Collections of `(start, end)` ranges have their own set operations for scheduling and
 coverage analysis:
 

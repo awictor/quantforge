@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.662.0] - 2026-09-14
+
+### Documentation
+- README: documented `sliding_window_min`, `sliding_window_max`, and `sliding_window_sum` in
+  the Range-query structures section after the selection routines -- O(n) rolling extrema via
+  a monotonic deque. All snippet values verified live.
+
 ## [1.661.0] - 2026-09-14
 
 ### Added
