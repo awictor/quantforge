@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.581.0] - 2026-09-14
+
+### Added
+- `ddsketch.py`: `DDSketch` (Masson-Rim-Lee 2019) is a mergeable quantile sketch with a
+  *relative*-error guarantee -- for accuracy `alpha`, the reported `q`-quantile is within
+  `alpha` relative error of the true value. It maps each positive value to a
+  logarithmically-spaced bucket ``ceil(log(x) / log(gamma))`` with
+  ``gamma = (1 + alpha)/(1 - alpha)`` and counts bucket populations, so memory grows only
+  with the log-ratio of largest to smallest value, not the sample size. Sketches over the
+  same `alpha` merge exactly with `+`/`merge`. Cross-checked against exact sorted order
+  statistics on lognormal data spanning several orders of magnitude: every quantile lands
+  within `alpha`, `min`/`max` are exact, the merged sketch matches the whole-sample sketch,
+  and bucket count stays far below the sample size.
+
 ## [1.580.0] - 2026-09-14
 
 ### Documentation

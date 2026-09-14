@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.66.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.67.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -3728,6 +3728,17 @@ Auto-generated from `quantforge` v3.66.0 by `docs/gen_api.py` — do not edit by
 >
 > ``x[n] = sum_k s(k) X[k] cos(pi (2n+1) k / (2N))`` with the same orthonormal scaling.
 > Recovers the original sequence to machine precision.
+
+## ddsketch
+
+### `DDSketch(alpha=0.01)`  _class_
+
+> Relative-error quantile sketch over positive values.
+>
+> ``add(x)`` folds one positive value; ``quantile(q)`` returns the estimated
+> ``q``-quantile with relative error at most ``alpha``. ``merge`` / ``+`` combine two
+> sketches built with the same ``alpha``. Memory grows only with the log-ratio of the
+> largest to smallest value seen, not with the number of points.
 
 ## decision_stump
 
