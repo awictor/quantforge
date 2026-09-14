@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.687.0] - 2026-09-14
+
+### Added
+- `voronoi.py`: the Voronoi diagram from the Delaunay dual. `voronoi_vertices` returns each
+  Delaunay triangle's circumcenter (a Voronoi vertex, equidistant from its three sites),
+  `delaunay_neighbors` gives the site-adjacency graph (two sites are neighbours iff their
+  Voronoi cells share an edge), and `nearest_site` answers point-location (which cell a
+  query falls in). Cross-checked over 1500 random sets that each vertex is equidistant from
+  its sites and no closer to any other (empty circle) with a symmetric adjacency, and
+  `nearest_site` matches a brute nearest search over 3000 queries.
+
 ## [1.686.0] - 2026-09-14
 
 ### Documentation

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.72.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.73.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -17816,6 +17816,26 @@ Auto-generated from `quantforge` v4.72.0 by `docs/gen_api.py` — do not edit by
 >
 > ``exp(kappa cos(theta - mu)) / (2 pi I0(kappa))``. ``kappa >= 0``; ``kappa = 0`` gives
 > the uniform density ``1 / (2 pi)``. Integrates to 1 over any ``2*pi`` interval.
+
+## voronoi
+
+### `delaunay_neighbors(points)`  _function_
+
+> Return the site-adjacency graph ``{i: set(neighbor indices)}`` (Delaunay edges).
+>
+> Two sites are neighbours iff they share a Delaunay edge -- equivalently, iff their
+> Voronoi cells share an edge. The relation is symmetric.
+
+### `nearest_site(points, query)`  _function_
+
+> Return the index of the site nearest to ``query`` (the Voronoi cell it falls in).
+
+### `voronoi_vertices(points)`  _function_
+
+> Return the Voronoi vertices: the circumcenter of each Delaunay triangle.
+>
+> Each vertex is equidistant from the three sites of its triangle. Returns a list of
+> ``(x, y)`` points (one per Delaunay triangle).
 
 ## vrp
 
