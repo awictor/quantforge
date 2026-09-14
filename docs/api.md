@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.90.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.91.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -15236,6 +15236,46 @@ Auto-generated from `quantforge` v3.90.0 by `docs/gen_api.py` — do not edit by
 > ``stream`` is any iterable. Returns a list of up to ``k`` items, each element of the
 > stream equally likely to be included. One pass, O(k) memory. Deterministic for a
 > fixed ``seed``.
+
+## string_periodicity
+
+### `borders(s)`  _function_
+
+> Return the lengths of all borders of ``s`` (proper prefix == suffix), ascending.
+
+### `count_occurrences(text, pattern)`  _function_
+
+> Return the start indices of every occurrence of ``pattern`` in ``text`` (Z-function).
+
+### `is_periodic(s)`  _function_
+
+> True if ``s`` is a whole number (>= 2) of copies of a shorter block.
+
+### `manacher_longest_palindrome(s)`  _function_
+
+> Return a longest palindromic substring of ``s`` (Manacher's algorithm, ``O(n)``).
+>
+> Ties resolve to the earliest-starting longest palindrome. The empty string returns
+> ``""``.
+
+### `prefix_function(s)`  _function_
+
+> Return the KMP prefix function ``pi``: the longest proper prefix = suffix length.
+
+### `smallest_period(s)`  _function_
+
+> Return the length of the smallest period ``p`` such that ``s`` repeats ``s[:p]``.
+>
+> A period ``p`` means ``s[i] == s[i - p]`` for all ``i >= p`` (the last block may be
+> partial). For a string that is a whole number of copies this is the repeating unit; a
+> string with no shorter period returns its own length. Empty string returns ``0``.
+
+### `z_function(s)`  _function_
+
+> Return the Z-array: ``z[i]`` = length of the longest common prefix of ``s`` and ``s[i:]``.
+>
+> ``z[0]`` is conventionally ``0``. Computed in ``O(n)`` by maintaining the rightmost
+> matching segment ``[l, r]`` seen so far.
 
 ## strings
 

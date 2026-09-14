@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.605.0] - 2026-09-14
+
+### Added
+- `string_periodicity.py`: three linear-time string primitives and their applications.
+  `z_function` (longest prefix match starting at each index) and `prefix_function` (KMP
+  border lengths) drive `count_occurrences` (all matches of a pattern), `smallest_period`
+  and `is_periodic` (shortest repeating unit), and `borders` (all prefix==suffix lengths).
+  `manacher_longest_palindrome` finds the longest palindromic substring in ``O(n)``.
+  Cross-checked against brute-force references over 4000 random strings each -- Z/prefix
+  arrays, smallest period, pattern occurrences, and palindrome length all match.
+
 ## [1.604.0] - 2026-09-14
 
 ### Documentation

@@ -567,6 +567,15 @@ from .eulerian import (
 )
 from .xor_basis import XorBasis
 from .trie import Trie
+from .string_periodicity import (
+    z_function,
+    prefix_function,
+    smallest_period,
+    is_periodic,
+    borders,
+    count_occurrences,
+    manacher_longest_palindrome,
+)
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1271,7 +1280,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "3.90.0"
+__version__ = "3.91.0"
 
 __all__ = [
     "OptionType",
@@ -2081,6 +2090,13 @@ __all__ = [
     "has_eulerian_circuit",
     "XorBasis",
     "Trie",
+    "z_function",
+    "prefix_function",
+    "smallest_period",
+    "is_periodic",
+    "borders",
+    "count_occurrences",
+    "manacher_longest_palindrome",
     "Dual",
     "dual_derivative",
     "dual_gradient",
