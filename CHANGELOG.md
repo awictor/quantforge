@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.717.0] - 2026-09-14
+
+### Added
+- `hermite_h`, `hermite_he`, `laguerre_l`, `chebyshev_t`, `chebyshev_u`: the classical
+  orthogonal polynomials via their three-term recurrences -- physicists' and probabilists'
+  Hermite, generalized Laguerre ``L_n^{(alpha)}``, and Chebyshev of the first and second kind.
+  Cross-checked against the explicit low-order forms, the relation ``He_n(x)=2^{-n/2}H_n(x/sqrt2)``,
+  the Chebyshev trig identities ``T_n(cos t)=cos n t`` / ``U_n(cos t)=sin((n+1)t)/sin t``, and the
+  weighted orthogonality integrals for all three families.
+
 ## [1.716.0] - 2026-09-14
 
 ### Documentation

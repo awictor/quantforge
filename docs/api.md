@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.02.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.03.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -11875,6 +11875,43 @@ Auto-generated from `quantforge` v5.02.0 by `docs/gen_api.py` — do not edit by
 > ``add``/``remove`` adjust multiplicities; ``rank(x)`` counts stored values ``< x``;
 > ``select(k)`` returns the ``k``-th smallest (0-indexed); ``count_less``/``count_range``
 > answer threshold and interval counts. All queries are ``O(log U)``.
+
+## orthogonal_polys
+
+### `chebyshev_t(n, x)`  _function_
+
+> Chebyshev polynomial of the first kind ``T_n(x)`` (weight ``1/sqrt(1-x^2)``).
+>
+> ``T_0 = 1``, ``T_1 = x``, ``T_{k+1} = 2x T_k - T_{k-1}``. On ``[-1, 1]``,
+> ``T_n(cos theta) = cos(n theta)``, so ``|T_n| <= 1`` there.
+
+### `chebyshev_u(n, x)`  _function_
+
+> Chebyshev polynomial of the second kind ``U_n(x)`` (weight ``sqrt(1-x^2)``).
+>
+> ``U_0 = 1``, ``U_1 = 2x``, ``U_{k+1} = 2x U_k - U_{k-1}``. On ``[-1, 1]``,
+> ``U_n(cos theta) = sin((n+1) theta) / sin(theta)``.
+
+### `hermite_h(n, x)`  _function_
+
+> Physicists' Hermite polynomial ``H_n(x)`` (weight ``e^{-x^2}`` on the real line).
+>
+> ``H_0 = 1``, ``H_1 = 2x``, ``H_{k+1} = 2x H_k - 2k H_{k-1}``. ``H_2 = 4x^2 - 2``.
+
+### `hermite_he(n, x)`  _function_
+
+> Probabilists' Hermite polynomial ``He_n(x)`` (weight ``e^{-x^2/2}``).
+>
+> ``He_0 = 1``, ``He_1 = x``, ``He_{k+1} = x He_k - k He_{k-1}``. Related to the physicists'
+> form by ``He_n(x) = 2^{-n/2} H_n(x / sqrt 2)``.
+
+### `laguerre_l(n, x, alpha=0.0)`  _function_
+
+> Generalized Laguerre polynomial ``L_n^{(alpha)}(x)`` (weight ``x^alpha e^{-x}``).
+>
+> ``L_0 = 1``, ``L_1 = 1 + alpha - x``, and
+> ``(k+1) L_{k+1} = (2k+1+alpha-x) L_k - (k+alpha) L_{k-1}``. Default ``alpha = 0`` gives the
+> ordinary Laguerre polynomials.
 
 ## ou_fit
 
