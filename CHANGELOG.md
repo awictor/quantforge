@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.32.0] - 2026-09-14
+
+### Documentation
+- README: documented the classic sequence algorithms in the String algorithms section —
+  `longest_increasing_subsequence`, `maximum_subarray`, and `longest_run` with worked
+  values. All snippet values verified live.
+
 ## [3.31.0] - 2026-09-14
 
 ### Added

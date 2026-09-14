@@ -6732,6 +6732,23 @@ set-overlap ratio over whitespace tokens by default, or any granularity via a `t
 callable (`list` for characters). All are `1` for identical inputs and `0` for wholly
 dissimilar ones.
 
+A few classic sequence algorithms round out the section — on numbers or any comparable
+list:
+
+```python
+from quantforge import longest_increasing_subsequence, maximum_subarray, longest_run
+
+longest_increasing_subsequence([10, 9, 2, 5, 3, 7, 101, 18])  # [2, 3, 7, 18]
+maximum_subarray([-2, 1, -3, 4, -1, 2, 1, -5, 4])             # (6, 3, 6) sum, start, end
+longest_run([1, 1, 2, 3, 3, 3, 1])                             # (3, 3, 3) value, len, start
+```
+
+`longest_increasing_subsequence` uses patience sorting (`O(n log n)`) and reconstructs an
+actual subsequence (`strict=False` for non-decreasing); `maximum_subarray` is Kadane's
+algorithm returning the best contiguous sum and its bounds (correct even for all-negative
+input); and `longest_run` finds the longest streak of a repeated value. Verified against
+brute-force references over thousands of random arrays.
+
 ## Data compression
 
 Two foundational lossless codes, both exact round-trips:
