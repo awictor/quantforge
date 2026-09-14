@@ -5573,6 +5573,26 @@ rows, and Bland's rule prevents cycling; the result matches a brute-force vertex
 enumeration on small problems. Unbounded and infeasible programs raise rather than
 returning a wrong vertex.
 
+Two classic *discrete* optimizers round out the section — matching agents to tasks and
+filling a budget:
+
+```python
+from quantforge import hungarian, knapsack_01
+
+# minimum-cost assignment of 3 rows to 3 columns
+hungarian([[4, 1, 3], [2, 0, 5], [3, 2, 2]])   # ([1, 0, 2], 5)
+
+# maximize value with total weight <= 5
+knapsack_01([2, 3, 4, 5], [3, 4, 5, 6], 5)     # (7, [0, 1])
+```
+
+`hungarian` solves the assignment problem (minimum-cost perfect matching) in `O(n^3)` via
+the Kuhn-Munkres potentials, returning the column chosen for each row plus the total cost
+— matching a brute-force permutation search. Negate the cost matrix to maximize.
+`knapsack_01` is the 0/1 knapsack dynamic program: it maximizes total value under a weight
+budget with each item taken at most once, returning the value and the chosen item indices
+(both verified against a brute-force subset search).
+
 `ridders_derivative` / `ridders_second_derivative` return `(value, error_estimate)`:
 they evaluate a central difference at a shrinking step sequence and Richardson-
 extrapolate across it, stopping when round-off starts to dominate — so they reach
