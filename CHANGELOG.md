@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.670.0] - 2026-09-14
+
+### Documentation
+- README: documented `adams_bashforth_moulton` in the ODE section after `rk4`/`rk45` -- the
+  4th-order Adams-Bashforth-Moulton predictor-corrector reusing past derivatives. All
+  snippet values verified live.
+
 ## [1.669.0] - 2026-09-14
 
 ### Added

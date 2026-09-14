@@ -6359,6 +6359,26 @@ error estimate to resize the step, taking small steps only where the solution mo
 fast, and returns the accepted (non-uniform) points. Pass a vector `y0` for a system —
 the harmonic oscillator above integrates `[y, y']` back to `[1, 0]` over a full period.
 
+Where RK4 evaluates the derivative four times per step, `adams_bashforth_moulton` reuses
+past derivatives — a 4th-order predictor-corrector (PECE) with just one new evaluation per
+step after the corrector:
+
+```python
+from quantforge import adams_bashforth_moulton
+import math
+
+ts, ys = adams_bashforth_moulton(lambda t, y: y, 1.0, 0, 1, 100)
+ys[-1]                              # 2.71828183 ~ e
+adams_bashforth_moulton(lambda t, y: [y[1], -y[0]], [0.0, 1.0], 0, math.pi, 200)[1][-1]
+                                    # [~0, -1.0] — sin/cos system at t = pi
+```
+
+It bootstraps the first three steps with RK4 to build the derivative history, then predicts
+with the 4-step Adams-Bashforth formula and corrects with Adams-Moulton — cheaper per step
+than RK4 when the derivative is expensive, at the same `O(h^4)` accuracy. Fixed step over
+`n_steps`; scalar or vector `y0`. Verified against closed-form solutions and confirmed to
+converge at 4th order.
+
 When the solution is pinned at *both* ends instead of given an initial slope,
 `shooting_bvp` solves the two-point boundary-value problem `y'' = f(t, y, y')`:
 
