@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.70.0] - 2026-09-13
+
+### Documentation
+- README: documented the fuzzy string-similarity scores in the String algorithms
+  section — `jaro`, `jaro_winkler`, `dice_coefficient`, and `jaccard_similarity` with
+  worked values. All snippet values verified live.
+
 ## [2.69.0] - 2026-09-13
 
 ### Added

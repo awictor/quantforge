@@ -6232,6 +6232,26 @@ contiguous match, while `longest_common_substring` requires contiguity.  `kmp_se
 returns every start index of a pattern in linear time via the Knuth-Morris-Pratt failure
 function, catching overlapping occurrences that a stride-by-length scan would miss.
 
+Where edit distance counts *operations*, fuzzy similarity scores return a value in
+`[0, 1]` for approximate matching, deduplication, and record linkage:
+
+```python
+from quantforge import jaro, jaro_winkler, dice_coefficient, jaccard_similarity
+
+jaro("MARTHA", "MARHTA")                       # 0.944
+jaro_winkler("MARTHA", "MARHTA")               # 0.961 — shared-prefix boost
+dice_coefficient("night", "nacht")             # 0.25 — bigram overlap
+jaccard_similarity("the cat sat", "the dog sat")  # 0.5 — word-set overlap
+```
+
+`jaro` matches characters within a sliding window and penalizes transpositions —
+reproducing Winkler's published reference values — and `jaro_winkler` rewards a shared
+prefix, both tuned for short strings like names. `dice_coefficient` compares character
+bigram multisets (robust to small edits and word order), and `jaccard_similarity` is the
+set-overlap ratio over whitespace tokens by default, or any granularity via a `tokenize`
+callable (`list` for characters). All are `1` for identical inputs and `0` for wholly
+dissimilar ones.
+
 ## Probability distributions
 
 Gamma, chi-square, Poisson, F and binomial distributions built on those special
