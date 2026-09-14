@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.20.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.21.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -779,6 +779,24 @@ Auto-generated from `quantforge` v4.20.0 by `docs/gen_api.py` — do not edit by
 >
 > Returns ``(counts, proportions)``, each a list of length 9 for digits ``1..9``.
 > Zero values are skipped. Requires at least one non-zero value.
+
+## berlekamp_massey
+
+### `berlekamp_massey(sequence, mod)`  _function_
+
+> Return the coefficients of the shortest recurrence for ``sequence`` modulo ``mod``.
+>
+> ``mod`` must be prime. The returned list ``c`` has length ``L`` (the recurrence order)
+> and satisfies ``sequence[i] == sum_j c[j] * sequence[i-1-j] (mod mod)`` for all
+> ``i >= L``. An all-zero sequence returns ``[]`` (order 0).
+
+### `berlekamp_massey_next(sequence, mod, count=1)`  _function_
+
+> Extend ``sequence`` by ``count`` terms using its shortest recurrence (mod ``mod``).
+>
+> Runs Berlekamp-Massey, then rolls the recurrence forward. Returns the list of the next
+> ``count`` terms. Raises if the sequence is too short to determine any recurrence and a
+> prediction is requested.
 
 ## bermudan_swaption
 

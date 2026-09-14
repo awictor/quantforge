@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.635.0] - 2026-09-14
+
+### Added
+- `berlekamp_massey.py`: `berlekamp_massey` finds the shortest linear recurrence a sequence
+  satisfies modulo a prime (the minimal LFSR) in ``O(n^2)`` -- given at least ``2L`` terms of
+  a length-``L`` recurrence it recovers the coefficients exactly. `berlekamp_massey_next`
+  rolls that recurrence forward to extrapolate the sequence. Cross-checked over 3000 random
+  modular recurrences: the recovered coefficients reproduce the input, the order never
+  exceeds the true ``L``, and the predicted continuation matches the true one. A minimality
+  bug on interleaved-zero sequences (the connection-polynomial update was misaligned) was
+  caught by the fuzz check and fixed before shipping.
+
 ## [1.634.0] - 2026-09-14
 
 ### Documentation

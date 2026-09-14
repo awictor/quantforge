@@ -622,6 +622,7 @@ from .symmetric import (
     elementary_to_power,
     poly_from_roots,
 )
+from .berlekamp_massey import berlekamp_massey, berlekamp_massey_next
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1326,7 +1327,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "4.20.0"
+__version__ = "4.21.0"
 
 __all__ = [
     "OptionType",
@@ -2198,6 +2199,8 @@ __all__ = [
     "power_to_elementary",
     "elementary_to_power",
     "poly_from_roots",
+    "berlekamp_massey",
+    "berlekamp_massey_next",
     "Dual",
     "dual_derivative",
     "dual_gradient",
