@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.648.0] - 2026-09-14
+
+### Documentation
+- README: documented `LiChaoTree` in the Range-query structures section after
+  `LazySegmentTree` -- the lower/upper line envelope and its use accelerating
+  ``dp[i] = min_j (m_j x_i + b_j)``. All snippet values verified live.
+
 ## [1.647.0] - 2026-09-14
 
 ### Added

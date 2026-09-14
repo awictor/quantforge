@@ -6772,6 +6772,32 @@ matter how large the range. `mode` selects the aggregate (`"sum"`, `"min"`, `"ma
 are half-open, and non-power-of-two lengths are handled. Verified against a brute array over
 thousands of interleaved update/query sequences for all three modes.
 
+When the "elements" are *lines* rather than array cells, `LiChaoTree` keeps their lower (or
+upper) envelope, answering "smallest `y = m x + b` at this `x`" in `O(log n)` with lines
+added in any order:
+
+```python
+from quantforge import LiChaoTree
+
+t = LiChaoTree([0, 1, 2, 3, 4])
+t.add_line(0, 5)      # y = 5
+t.add_line(2, -1)     # y = 2x - 1
+t.add_line(-2, 8)     # y = -2x + 8
+t.query(0), t.query(4)   # (-1, 0) — the minimum over all three lines
+
+hi = LiChaoTree([0, 1, 2, 3, 4], maximize=True)
+for m, b in [(0, 5), (2, -1), (-2, 8)]:
+    hi.add_line(m, b)
+hi.query(0), hi.query(4) # (8, 7) — the upper envelope
+```
+
+Construct with the `x` values you will query; then `add_line(m, b)` inserts a line and
+`query(x)` returns the minimum (or maximum, with `maximize=True`) over all inserted lines.
+Unlike the convex-hull trick, lines may arrive in any slope order. This is the standard
+accelerator for the DP recurrence `dp[i] = min_j (m_j x_i + b_j)` — turning an `O(n^2)` scan
+into `O(n log n)`. Verified against a brute minimum/maximum over all lines across thousands
+of random cases, insertion order included.
+
 When the array never changes, a `SparseTable` answers *idempotent* range queries
 (minimum, maximum, gcd) in `O(1)` — faster per query than a segment tree, at the cost of
 being read-only:
