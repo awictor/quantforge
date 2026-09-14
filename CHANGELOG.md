@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.24.0] - 2026-09-14
+
+### Documentation
+- README: documented the Bernoulli numbers and Faulhaber's formula in the Number theory
+  section, after combinatorics — `bernoulli_number`, `faulhaber`, and `bernoulli_sequence`
+  with worked values. All snippet values verified live.
+
 ## [3.23.0] - 2026-09-14
 
 ### Added

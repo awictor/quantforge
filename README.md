@@ -6480,6 +6480,22 @@ row over all block counts (`bell(5) == 52`). `catalan` gives the ubiquitous
 unordered sum, and `derangements(n)` the fixed-point-free permutations — equal to
 `round(n!/e)` for every `n`.
 
+Bernoulli numbers and Faulhaber's formula give the exact closed form for sums of powers:
+
+```python
+from quantforge import bernoulli_number, faulhaber
+
+bernoulli_number(2)          # Fraction(1, 6)  (B_1 = +1/2; odd B_n > 1 vanish)
+faulhaber(10, 2)             # 385   = 1^2 + 2^2 + ... + 10^2
+faulhaber(100, 3)            # 25502500 = (100*101/2)^2
+```
+
+`bernoulli_number` returns exact `Fraction` values (via the standard recurrence,
+`B_1 = +1/2`), and `faulhaber(m, p)` evaluates `1^p + ... + m^p` in closed form — matching
+the direct sum for every degree and reproducing the classic `m(m+1)/2`,
+`m(m+1)(2m+1)/6`, and `(m(m+1)/2)^2` identities. `bernoulli_sequence(n)` returns
+`B_0 .. B_n`.
+
 ## Computational geometry
 
 Planar geometry primitives on lists of `(x, y)` points — the shape of a point cloud, its
