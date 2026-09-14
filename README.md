@@ -4693,6 +4693,26 @@ in the transform domain, and inverts, giving the polynomial product (or big-inte
 convolution) mod the prime in `O(n log n)`. Verified against a direct integer convolution
 over 3000 random sequence pairs.
 
+The FFT diagonalizes *cyclic* convolution; the Walsh-Hadamard transform does the same for
+*XOR* convolution, and companion transforms handle AND and OR. `fwht`/`ifwht` and the three
+`*_convolve` helpers cover all of it:
+
+```python
+from quantforge import fwht, xor_convolve, and_convolve, or_convolve
+
+fwht([1, 0, 0, 0])                          # [1, 1, 1, 1] — impulse transforms to flat
+xor_convolve([1, 2, 3, 4], [5, 6, 7, 8])    # [70, 68, 62, 60]  (sum over i^j == k)
+and_convolve([1, 2, 3, 4], [5, 6, 7, 8])    # [103, 52, 73, 32] (sum over i&j == k)
+or_convolve([1, 2, 3, 4], [5, 6, 7, 8])     # [5, 28, 43, 184]  (sum over i|j == k)
+```
+
+`xor_convolve` computes `c[k] = sum_{i ^ j = k} a[i] b[j]` by transforming both inputs with
+the Walsh-Hadamard transform, multiplying pointwise, and inverting — `O(n log n)` for a
+power-of-two length, and exact for integer inputs. `and_convolve` and `or_convolve` use the
+superset and subset zeta (Mobius) transforms for the AND and OR index rules — the tools
+behind subset-sum DP and bitmask counting. Verified against brute-force bitwise-index
+enumeration over 4000 random sequence pairs for each operation.
+
 Two FFT-backed conveniences build on it:
 
 ```python

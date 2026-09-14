@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.614.0] - 2026-09-14
+
+### Documentation
+- README: documented `fwht`/`ifwht` and `xor_convolve`/`and_convolve`/`or_convolve` in the
+  Spectral analysis section after the number-theoretic transform -- the Walsh-Hadamard
+  transform for XOR convolution and the zeta transforms for AND/OR. All snippet values
+  verified live. (Package `__version__` crosses 4.0.0 at this loop.)
+
 ## [1.613.0] - 2026-09-14
 
 ### Added
