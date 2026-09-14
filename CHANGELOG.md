@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.587.0] - 2026-09-14
+
+### Added
+- `kdtree.py`: `KDTree` indexes k-dimensional points for spatial queries -- `nearest` and
+  `k_nearest` (k closest points), `within_radius` (all points inside a Euclidean ball),
+  and `range_search` (points in an axis-aligned box). It recursively partitions on
+  alternating axes and prunes subtrees whose bounding slab cannot hold a closer point, so
+  queries are typically ``O(log n)`` versus a brute-force ``O(n)`` scan; queries return
+  original point indices. Cross-checked against brute-force distance computation over 1500
+  random cases spanning 1-4 dimensions: nearest/k-nearest distance multisets, radius
+  membership, and box membership all match.
+
 ## [1.586.0] - 2026-09-14
 
 ### Documentation

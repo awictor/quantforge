@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.72.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.73.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -8419,6 +8419,16 @@ Auto-generated from `quantforge` v3.72.0 by `docs/gen_api.py` — do not edit by
 >
 > ``h = 0.9 * min(std, IQR/1.34) * n^{-1/5}`` -- robust to mild non-normality via the
 > IQR term. The standard default for a unimodal, roughly-Gaussian sample.
+
+## kdtree
+
+### `KDTree(points)`  _class_
+
+> Static k-d tree over a fixed set of points for spatial queries.
+>
+> Build once from a list of equal-length coordinate tuples; then run `nearest`,
+> `k_nearest`, `within_radius`, and `range_search`. Query methods return the original
+> point *indices* (in build order), so callers can map back to their own payloads.
 
 ## kendall_test
 
