@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.55.0] - 2026-09-13
+
+### Added
+- `geometry2.py`: segment intersection and convex polygon clipping — `segments_intersect`,
+  `segment_intersection`, `polygon_perimeter`, and `clip_polygon` (Sutherland-Hodgman).
+  Cross-checked: crossing segments meet at the expected point, parallel/disjoint return
+  no intersection, shared-endpoint and T-junctions are detected, the perimeter matches
+  known polygons, and clipping a square by a smaller window (or by a diagonal
+  half-plane, or a partial overlap) yields the correct clipped area.
+
 ## [2.54.0] - 2026-09-13
 
 ### Documentation

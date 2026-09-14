@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.54.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.55.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -5964,6 +5964,36 @@ Auto-generated from `quantforge` v2.54.0 by `docs/gen_api.py` — do not edit by
 >
 > Falls back to the vertex average for a degenerate (zero-area) polygon. ``polygon`` is
 > an ordered ``(x, y)`` vertex list.
+
+## geometry2
+
+### `clip_polygon(subject, clip)`  _function_
+
+> Clip ``subject`` polygon against a convex ``clip`` polygon (Sutherland-Hodgman).
+>
+> Both are ordered ``(x, y)`` vertex lists; ``clip`` must be convex and given
+> counter-clockwise. Returns the clipped polygon (possibly empty) as a vertex list --
+> the intersection of the subject with the clip window. The classic viewport/window
+> clipping algorithm.
+
+### `polygon_perimeter(polygon)`  _function_
+
+> Perimeter of a polygon: the sum of its edge lengths (closed ring).
+
+### `segment_intersection(p1, p2, p3, p4)`  _function_
+
+> Intersection point of two segments, or ``None`` if they do not cross at a single point.
+>
+> Returns the ``(x, y)`` crossing for segments that meet at exactly one point; returns
+> ``None`` if they are parallel, collinear, or disjoint. Endpoints count as
+> intersections.
+
+### `segments_intersect(p1, p2, p3, p4)`  _function_
+
+> Whether segment ``p1-p2`` intersects segment ``p3-p4`` (including endpoints/collinear).
+>
+> Uses the standard four-orientation test with collinear-overlap handling. Returns a
+> bool.
 
 ## gmm
 

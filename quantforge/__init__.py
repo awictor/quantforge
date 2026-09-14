@@ -634,6 +634,12 @@ from .geometry import (
     point_in_polygon,
     closest_pair,
 )
+from .geometry2 import (
+    segments_intersect,
+    segment_intersection,
+    polygon_perimeter,
+    clip_polygon,
+)
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -1024,7 +1030,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "2.54.0"
+__version__ = "2.55.0"
 
 __all__ = [
     "OptionType",
@@ -1943,6 +1949,10 @@ __all__ = [
     "polygon_centroid",
     "point_in_polygon",
     "closest_pair",
+    "segments_intersect",
+    "segment_intersection",
+    "polygon_perimeter",
+    "clip_polygon",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",
