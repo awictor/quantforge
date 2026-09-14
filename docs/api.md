@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.16.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.17.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -2249,6 +2249,24 @@ Auto-generated from `quantforge` v3.16.0 by `docs/gen_api.py` — do not edit by
 > ``|i - j| / (k - 1)`` and ``"quadratic"`` uses ``(i - j)^2 / (k - 1)^2``. The
 > labels must be sortable into their ordinal order. Quadratic weighting is the common
 > choice and, for a square table, coincides with an ICC-style measure.
+
+## coherence
+
+### `coherence(x, y, segment_length=None, overlap=0.5)`  _function_
+
+> Magnitude-squared coherence ``|Pxy|^2 / (Pxx Pyy)`` in ``[0, 1]`` per frequency.
+>
+> The frequency-domain squared correlation: ``1`` where the signals are perfectly
+> linearly related at that frequency, ``0`` where unrelated. Returns ``(freqs, coh)``.
+> Must average several segments (default ``segment_length = n // 8``) to be meaningful.
+
+### `cross_spectral_density(x, y, segment_length=None, overlap=0.5)`  _function_
+
+> Welch cross-spectral density of two equal-length signals.
+>
+> Returns ``(freqs, cross)`` where ``cross[k]`` is the complex averaged cross-spectrum
+> at one-sided normalized frequency ``freqs[k]`` in ``[0, 0.5]``. Its magnitude shows
+> shared power; its phase, the frequency-dependent lead/lag.
 
 ## cointegration
 

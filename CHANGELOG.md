@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.17.0] - 2026-09-14
+
+### Added
+- `coherence.py`: Welch cross-spectral density and magnitude-squared coherence —
+  `cross_spectral_density` and `coherence`. Cross-checked: identical signals have
+  coherence 1 at every frequency, independent noise averages near zero, two linearly
+  related signals reach ~1 in their shared band with the cross-spectrum peaking there, and
+  all coherence values stay in [0, 1].
+
 ## [3.16.0] - 2026-09-14
 
 ### Documentation
