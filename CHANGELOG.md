@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.65.0] - 2026-09-13
+
+### Added
+- `graph4.py`: shortest paths beyond Dijkstra — `bellman_ford` (negative edges + negative
+  cycle detection), `floyd_warshall` (all-pairs), and `a_star` (heuristic point-to-point
+  search). Cross-checked: Bellman-Ford handles a negative edge, detects a negative cycle,
+  and agrees with Dijkstra on non-negative graphs; Floyd-Warshall matches per-source
+  Dijkstra over all pairs; and A* finds the optimal grid path (matching Dijkstra) and
+  reduces to Dijkstra with a zero heuristic.
+
 ## [2.64.0] - 2026-09-13
 
 ### Documentation

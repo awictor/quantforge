@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.64.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.65.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -6254,6 +6254,34 @@ Auto-generated from `quantforge` v2.64.0 by `docs/gen_api.py` — do not edit by
 > ``damping`` is the follow-a-link probability (``1 - damping`` teleports uniformly).
 > Dangling nodes (no out-links) redistribute their mass uniformly. Returns
 > ``{node: score}`` summing to 1; converges when the L1 change drops below ``tol``.
+
+## graph4
+
+### `a_star(graph, source, target, heuristic)`  _function_
+
+> Point-to-point shortest path by A* search with an admissible ``heuristic``.
+>
+> ``graph`` is ``{node: {neighbor: weight}}`` with non-negative weights. ``heuristic``
+> is a callable ``h(node)`` estimating the remaining cost to ``target``; it must never
+> overestimate (admissible) for the result to be optimal. Returns ``(path, cost)``, or
+> ``(None, inf)`` if ``target`` is unreachable.
+
+### `bellman_ford(graph, source)`  _function_
+
+> Single-source shortest paths allowing negative edge weights (Bellman-Ford).
+>
+> ``graph`` is ``{node: {neighbor: weight}}``; weights may be negative. Returns
+> ``(distances, predecessors)`` after ``V - 1`` relaxation rounds. Raises
+> ``ValueError`` if a negative-weight cycle is reachable (no finite shortest path).
+
+### `floyd_warshall(graph)`  _function_
+
+> All-pairs shortest distances by Floyd-Warshall (``O(V^3)``).
+>
+> ``graph`` is ``{node: {neighbor: weight}}`` (negative edges allowed, no negative
+> cycles). Returns a nested dict ``dist[u][v]`` of shortest path weights (``inf`` if
+> unreachable, ``0`` on the diagonal). Raises if a negative cycle is present (a
+> diagonal entry goes negative).
 
 ## greeks2
 
