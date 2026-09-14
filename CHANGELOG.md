@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.603.0] - 2026-09-14
+
+### Added
+- `trie.py`: `Trie` stores string keys in a prefix tree so prefix queries run in time
+  proportional to the query, independent of the number of keys. `insert`/`contains`/
+  `delete` manage membership (delete prunes now-empty branches); `starts_with`,
+  `count_prefix` (``O(len(prefix))`` via cached subtree counts), and `keys_with_prefix`
+  answer prefix questions; `longest_prefix_of` finds the longest stored key prefixing a
+  query. Cross-checked against a plain set/list reference over 3000 random word sets with
+  interleaved deletes -- membership, prefix counts, key listings, and longest-prefix all
+  match.
+
 ## [1.602.0] - 2026-09-14
 
 ### Documentation

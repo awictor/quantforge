@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.88.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.89.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -16070,6 +16070,16 @@ Auto-generated from `quantforge` v3.88.0 by `docs/gen_api.py` — do not edit by
 ### `signed_area(polygon)`  _function_
 
 > Signed area of a polygon (shoelace): positive if counter-clockwise, negative if CW.
+
+## trie
+
+### `Trie(words=None)`  _class_
+
+> A prefix tree over string keys (a multiplicity-free set with prefix queries).
+>
+> `insert`, `contains`, and `delete` manage membership; `starts_with` tests whether any
+> key has a given prefix; `count_prefix` counts keys under it; `keys_with_prefix` lists
+> them; and `longest_prefix_of` finds the longest stored key that prefixes a query string.
 
 ## trinomial
 
