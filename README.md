@@ -108,6 +108,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Rank dependence (Kendall / Spearman)](#rank-dependence-kendall--spearman)
 - [Gaussian-copula sampling](#gaussian-copula-sampling)
 - [Directional statistics](#directional-statistics)
+- [Geodesy](#geodesy)
 - [Spectral analysis](#spectral-analysis)
 - [Wavelet transform (Haar multiresolution)](#wavelet-transform-haar-multiresolution)
 - [Structural breaks (CUSUM / Chow)](#structural-breaks-cusum--chow)
@@ -4391,6 +4392,28 @@ integrates to 1 over the circle, peaks at `mu`, and flattens to the uniform dens
 mean) and concentration (solving `I1(kappa)/I0(kappa) = R` by Newton's method); on a
 simulated `(mu=0.5, kappa=4)` sample it recovers `(0.51, 4.15)`. `bessel_i0` and
 `bessel_i1` (the modified Bessel functions the normalizer needs) are exposed too.
+
+## Geodesy
+
+Great-circle distances and bearings between latitude/longitude points on a spherical
+Earth:
+
+```python
+from quantforge import (haversine_distance, initial_bearing,
+                        destination_point, cross_track_distance)
+
+haversine_distance(51.5074, -0.1278, 48.8566, 2.3522)   # 343.6 km (London -> Paris)
+initial_bearing(0, 0, 0, 10)                             # 90.0 — due east
+destination_point(51.5, 0, bearing=90, distance=111)     # ~ (51.49, 1.60)
+```
+
+`haversine_distance` is the numerically stable great-circle distance (kilometres on the
+IUGG mean radius by default), matching known city pairs (NYC-LA ~3936 km).
+`initial_bearing` gives the forward compass heading in `[0, 360)`, `destination_point`
+follows a bearing and distance to the arrival point (the exact inverse — a round-trip
+recovers the input distance and bearing), and `cross_track_distance` is the signed
+perpendicular offset of a point from a route (positive to the right of the path), for
+"how far off course am I". All angles in degrees.
 
 ## Spectral analysis
 
