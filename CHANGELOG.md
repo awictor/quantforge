@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.99.0] - 2026-09-13
+
+### Added
+- `vector3.py`: vector algebra — `dot`, `cross`, `norm`, `normalize`, `angle_between`,
+  `vector_project`, `vector_reject`, and `reflect` (the projection helpers are prefixed to
+  avoid clashing with the existing PCA `project`). Cross-checked: the cross product is anticommutative
+  and perpendicular to both inputs, angles come out at 90/0/180 degrees for the obvious
+  cases, projection plus rejection reconstruct the original vector (rejection perpendicular
+  to the target), and reflection flips the normal component while preserving length.
+
 ## [2.98.0] - 2026-09-13
 
 ### Documentation

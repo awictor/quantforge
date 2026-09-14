@@ -722,6 +722,16 @@ from .quaternion import (
     rotate_vector,
     slerp,
 )
+from .vector3 import (
+    dot,
+    cross,
+    norm,
+    normalize,
+    angle_between,
+    vector_project,
+    vector_reject,
+    reflect,
+)
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -1112,7 +1122,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "2.98.0"
+__version__ = "2.99.0"
 
 __all__ = [
     "OptionType",
@@ -2112,6 +2122,14 @@ __all__ = [
     "quat_to_axis_angle",
     "rotate_vector",
     "slerp",
+    "dot",
+    "cross",
+    "norm",
+    "normalize",
+    "angle_between",
+    "vector_project",
+    "vector_reject",
+    "reflect",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

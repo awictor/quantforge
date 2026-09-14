@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.98.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.99.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -15706,6 +15706,46 @@ Auto-generated from `quantforge` v2.98.0 by `docs/gen_api.py` — do not edit by
 ### `zero_coupon_yield(r0, t, kappa, theta, sigma)`  _function_
 
 > Continuously-compounded yield of the Vasicek zero-coupon bond to ``t``.
+
+## vector3
+
+### `angle_between(a, b)`  _function_
+
+> Angle between two non-zero vectors in radians, in ``[0, pi]``.
+>
+> Uses the numerically stable ``atan2(|a x b|, a . b)`` form in 3-D and the clamped
+> ``acos`` of the normalized dot product otherwise.
+
+### `cross(a, b)`  _function_
+
+> Cross product of two 3-vectors: a vector perpendicular to both.
+
+### `dot(a, b)`  _function_
+
+> Dot product of two equal-length vectors.
+
+### `norm(a)`  _function_
+
+> Euclidean (L2) norm of a vector.
+
+### `normalize(a)`  _function_
+
+> Unit vector in the direction of ``a``; raises on the zero vector.
+
+### `reflect(a, normal)`  _function_
+
+> Reflect vector ``a`` about the plane with unit-normalizable ``normal``.
+>
+> ``a - 2 (a . n_hat) n_hat`` where ``n_hat`` is the normalized normal -- the standard
+> mirror reflection (e.g. a ray bouncing off a surface).
+
+### `vector_project(a, b)`  _function_
+
+> Vector projection of ``a`` onto ``b`` (the component of ``a`` along ``b``).
+
+### `vector_reject(a, b)`  _function_
+
+> Vector rejection of ``a`` from ``b``: the component of ``a`` perpendicular to ``b``.
 
 ## vectorized
 
