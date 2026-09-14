@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.50.0] - 2026-09-13
+
+### Documentation
+- README: documented Latin hypercube sampling in the Quasi-Monte Carlo section — the
+  stratification, the discrepancy comparison against random sampling, and the maximin
+  variant. All snippet values verified live.
+
 ## [2.49.0] - 2026-09-13
 
 ### Added

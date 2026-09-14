@@ -906,6 +906,26 @@ european_qmc(S=100, K=100, t=1.0, r=0.05, sigma=0.2, n_points=8192)
 halton(index=0, dim=2)   # a low-discrepancy point in the unit square
 ```
 
+Where Halton and Sobol generate a *sequence*, Latin hypercube sampling designs a *fixed*
+set of `n` points that stratifies every axis — each coordinate is split into `n` bins
+with exactly one sample per bin, so no dimension clusters or leaves gaps:
+
+```python
+from quantforge import latin_hypercube, maximin_lhs, l2_star_discrepancy
+
+design = latin_hypercube(30, dim=2)          # 30 stratified points in the unit square
+l2_star_discrepancy(design)                  # uniformity score — smaller is better
+maximin_lhs(15, dim=2, tries=30)             # most space-filling of 30 candidate designs
+```
+
+Averaged over many seeds a Latin hypercube's L2 star discrepancy (`~0.032` for 30 points
+in 2-D) is about half that of plain random sampling (`~0.068`), so it fills space more
+evenly with the same point count — the standard design for Monte-Carlo experiments and
+sensitivity analysis. `maximin_lhs` picks the design whose closest pair is farthest apart
+(raising the minimum inter-point distance from `~0.10` to `~0.15` here), and
+`l2_star_discrepancy` (Warnock's formula) scores any point set, so you can compare an LHS,
+Sobol, or Halton design head to head.
+
 ## Exotic options (closed form)
 
 Analytic prices for binaries, single barriers, and geometric Asians:
