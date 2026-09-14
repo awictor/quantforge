@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.28.0] - 2026-09-13
+
+### Documentation
+- README: documented the STFT and spectrogram in the spectral section, next to Welch —
+  the time-frequency contrast, the frame-count/hop relationship, the tone and chirp
+  behavior, and the overlap-add reconstruction. All snippet values verified live.
+
 ## [2.27.0] - 2026-09-13
 
 ### Added

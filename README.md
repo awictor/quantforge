@@ -4472,6 +4472,27 @@ periodograms — trading some frequency resolution for far less variance, so a
 spectral peak stands out cleanly against a noisy background where the raw
 periodogram would bury it.
 
+Welch *averages away* time to get a cleaner spectrum; the short-time Fourier transform
+*keeps* it, taking an FFT of each overlapping windowed frame to show how the spectrum
+evolves. Its squared magnitude is the spectrogram — the standard time-frequency view of
+speech, music, or any signal whose content shifts:
+
+```python
+from quantforge import stft, spectrogram, istft
+
+frames = stft(x, 256, hop=64)            # per-frame complex spectra
+S = spectrogram(x, 256, hop=128)         # |STFT|^2, each frame DC..Nyquist
+xr = istft(frames, 256, hop=64)          # overlap-add reconstruction
+```
+
+`stft` slides a `frame_size` window (a power of two) in steps of `hop` (default 50%
+overlap), so a 2048-sample signal gives 8 frames at `hop=256` and 16 at `hop=128`.
+`spectrogram` returns `frame_size//2 + 1` power bins per frame (a pure tone lands
+entirely in its own bin; a rising chirp's peak bin climbs frame by frame). `istft`
+inverts by weighted overlap-add, dividing out the summed squared window, so
+`istft(stft(x))` reconstructs the interior to ~1e-14 regardless of the overlap — which
+means you can filter in the time-frequency plane and reconstruct.
+
 Where windows shape a *measurement* of the spectrum, a FIR filter reshapes the
 *signal* — keeping some frequencies and rejecting others. The windowed-sinc design
 takes the ideal brick-wall impulse response and tapers it with one of the same
