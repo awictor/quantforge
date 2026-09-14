@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.57.0] - 2026-09-14
+
+### Added
+- `samplers.py`: random variate samplers — `sample_normal` (Box-Muller),
+  `sample_exponential` (inverse CDF), `sample_gamma` (Marsaglia-Tsang with small-shape
+  boost), and `sample_poisson` (Knuth), all on a deterministic seeded stream.
+  Cross-checked: the sample mean and variance match each distribution's over 100k draws
+  (including gamma shapes below and above 1), and every sampler is reproducible per seed.
+
 ## [3.56.0] - 2026-09-14
 
 ### Documentation

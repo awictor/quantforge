@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.56.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.57.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -13823,6 +13823,27 @@ Auto-generated from `quantforge` v3.56.0 by `docs/gen_api.py` — do not edit by
 > Inserts ``factor - 1`` zeros between samples and low-pass filters at the original
 > Nyquist (cutoff ``1/factor``), scaling by ``factor`` to preserve amplitude. Returns a
 > signal ``factor`` times as long. ``numtaps`` sizes the interpolation filter (odd).
+
+## samplers
+
+### `sample_exponential(n, rate=1.0, seed=1234567)`  _function_
+
+> ``n`` exponential draws with the given ``rate`` (mean ``1/rate``), inverse-CDF method.
+
+### `sample_gamma(n, shape, scale=1.0, seed=1234567)`  _function_
+
+> ``n`` gamma draws with the given ``shape`` (``k``) and ``scale`` (``theta``).
+>
+> Mean ``shape*scale``, variance ``shape*scale^2``. Uses Marsaglia-Tsang (with the
+> small-shape boost). ``shape`` and ``scale`` must be positive.
+
+### `sample_normal(n, mu=0.0, sigma=1.0, seed=1234567)`  _function_
+
+> ``n`` normal draws with mean ``mu`` and standard deviation ``sigma`` (Box-Muller).
+
+### `sample_poisson(n, lam, seed=1234567)`  _function_
+
+> ``n`` Poisson draws with mean ``lam`` (Knuth's algorithm).
 
 ## savgol
 
