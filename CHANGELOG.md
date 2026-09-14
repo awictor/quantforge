@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.632.0] - 2026-09-14
+
+### Documentation
+- README: documented `real_root_count`, `isolate_real_roots`, and `sturm_sequence` in the
+  Numerical utilities section after `find_all_roots` -- exact Sturm-theorem real-root
+  counting and isolation. All snippet values verified live.
+
 ## [1.631.0] - 2026-09-14
 
 ### Added

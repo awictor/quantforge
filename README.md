@@ -5715,6 +5715,27 @@ equation (e.g. both roots of `e^x = 3x`) to machine precision. `count_sign_chang
 cheap count-only version. Even-multiplicity roots (no sign change) are missed; increase
 `n` for roots closer than the grid spacing.
 
+For a *polynomial* with real coefficients, Sturm sequences count and isolate the real roots
+*exactly* — no root-finding, no missed roots — from the sign changes of a remainder chain:
+
+```python
+from quantforge import real_root_count, isolate_real_roots
+
+p = [1, -6, 11, -6]                 # (x-1)(x-2)(x-3), highest-degree first
+real_root_count(p, 0, 4)            # 3 — distinct real roots in (0, 4]
+real_root_count(p, 1.5, 2.5)        # 1
+isolate_real_roots(p, 0, 4)         # [(0, 1.0), (1.0, 2.0), (2.0, 4)] — one root each
+real_root_count([1, 0, 1], -10, 10) # 0 — x^2 + 1 has no real roots
+```
+
+`real_root_count(coeffs, a, b)` returns the exact number of distinct real roots in the
+half-open interval `(a, b]` — Sturm's theorem: the drop in sign changes of the Sturm
+sequence between the endpoints — counting a repeated root once and needing no floating
+root-finder. `isolate_real_roots` bisects on that count to hand back disjoint intervals each
+bracketing a single root, ready for a Brent refine. `sturm_sequence` exposes the underlying
+chain. Coefficients are highest-degree first, as with `polynomial_roots`. Verified against
+polynomials built from known roots over thousands of cases.
+
 When the answer is an *integer* characterized by a monotone or unimodal property — the
 "binary search the answer" pattern — `first_true`/`last_true` and the integer ternary
 searches locate it in `O(log n)`:
