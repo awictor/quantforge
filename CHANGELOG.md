@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.47.0] - 2026-09-14
+
+### Added
+- `combinatorics_rank.py`: combinatorial ranking bijections — `gray_code`/`gray_decode`,
+  `permutation_rank`/`permutation_unrank` (Lehmer code), and
+  `combination_rank`/`combination_unrank` (combinatorial number system). Cross-checked:
+  consecutive Gray codes differ in one bit and round-trip, and the permutation and
+  combination rank/unrank pairs match `itertools`' lexicographic order exactly.
+
 ## [3.46.0] - 2026-09-14
 
 ### Documentation

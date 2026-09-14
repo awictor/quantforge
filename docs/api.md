@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.46.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.47.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -2454,6 +2454,45 @@ Auto-generated from `quantforge` v3.46.0 by `docs/gen_api.py` — do not edit by
 > Stirling number of the second kind ``S(n, k)``: partitions of ``n`` items into ``k`` non-empty blocks.
 >
 > Uses the recurrence ``S(n, k) = k*S(n-1, k) + S(n-1, k-1)``. ``S(0, 0) = 1``.
+
+## combinatorics_rank
+
+### `combination_rank(combo, n)`  _function_
+
+> Lexicographic rank of a ``k``-subset of ``[0, n)`` (inverse of :func:`combination_unrank`).
+>
+> ``combo`` is a sorted (or sortable) iterable of distinct indices in ``[0, n)``. Returns
+> an integer in ``[0, C(n, k))``.
+
+### `combination_unrank(rank, n, k)`  _function_
+
+> The ``rank``-th ``k``-subset of ``[0, n)`` in lexicographic order.
+>
+> Uses the combinatorial number system. ``rank`` in ``[0, C(n, k))``. Returns a sorted
+> list of ``k`` indices.
+
+### `gray_code(n)`  _function_
+
+> Reflected binary Gray code of a non-negative integer ``n`` (``n XOR (n >> 1)``).
+>
+> Consecutive Gray codes differ in exactly one bit. The inverse is
+> :func:`gray_decode`.
+
+### `gray_decode(g)`  _function_
+
+> Inverse of :func:`gray_code`: recover the integer from its Gray code.
+
+### `permutation_rank(perm)`  _function_
+
+> Lexicographic rank of a permutation of ``[0, n)`` (inverse of :func:`permutation_unrank`).
+>
+> ``perm`` must be a permutation of ``0..n-1``. Returns an integer in ``[0, n!)``.
+
+### `permutation_unrank(rank, n)`  _function_
+
+> The ``rank``-th permutation of ``[0, n)`` in lexicographic order (Lehmer code).
+>
+> ``rank`` in ``[0, n!)``. Returns a list. ``permutation_unrank(0, n)`` is the identity.
 
 ## commodity
 

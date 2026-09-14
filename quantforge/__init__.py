@@ -804,6 +804,14 @@ from .circle import (
     circle_line_intersection,
     circle_circle_intersection,
 )
+from .combinatorics_rank import (
+    gray_code,
+    gray_decode,
+    permutation_unrank,
+    permutation_rank,
+    combination_unrank,
+    combination_rank,
+)
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -1194,7 +1202,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "3.46.0"
+__version__ = "3.47.0"
 
 __all__ = [
     "OptionType",
@@ -2273,6 +2281,12 @@ __all__ = [
     "point_in_circle",
     "circle_line_intersection",
     "circle_circle_intersection",
+    "gray_code",
+    "gray_decode",
+    "permutation_unrank",
+    "permutation_rank",
+    "combination_unrank",
+    "combination_rank",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",
