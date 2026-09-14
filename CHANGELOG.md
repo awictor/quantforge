@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.60.0] - 2026-09-13
+
+### Documentation
+- README: added a "Graph algorithms" section documenting `dijkstra`, `shortest_path`,
+  `bfs`, `connected_components`, and `topological_sort` with worked values and the
+  adjacency-dict conventions. TOC regenerated. All snippet values verified live.
+
 ## [2.59.0] - 2026-09-13
 
 ### Added

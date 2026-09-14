@@ -124,6 +124,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Numerical utilities](#numerical-utilities)
 - [Number theory](#number-theory)
 - [Computational geometry](#computational-geometry)
+- [Graph algorithms](#graph-algorithms)
 - [Probability distributions](#probability-distributions)
 - [Nelson-Siegel / Svensson curves](#nelson-siegel--svensson-curves)
 - [Sample risk measures](#sample-risk-measures)
@@ -6122,6 +6123,31 @@ pair (searching only the convex-hull vertices, where the diameter always lives);
 `min_enclosing_circle` is Welzl's expected-linear algorithm for the smallest circle
 covering every point — for the unit square it is centered at `(1,1)` with radius `√2`, and
 it cannot be shrunk without leaving a point outside.
+
+## Graph algorithms
+
+The core graph routines on a dict adjacency list — shortest paths, traversal, components,
+and dependency ordering:
+
+```python
+from quantforge import (dijkstra, shortest_path, bfs,
+                        connected_components, topological_sort)
+
+g = {'A': {'B': 1, 'C': 4}, 'B': {'C': 2, 'D': 5}, 'C': {'D': 1}, 'D': {}}
+shortest_path(g, 'A', 'D')                       # (['A','B','C','D'], 4.0)
+bfs({'A': ['B','C'], 'B': ['D'], 'C': ['D'], 'D': []}, 'A')  # {'A':0,'B':1,'C':1,'D':2}
+connected_components({1: [2], 2: [1], 3: [4], 4: [], 5: []}) # [[1,2],[3,4],[5]]
+topological_sort({'shirt': ['tie','belt'], 'tie': ['jacket'],
+                 'belt': ['jacket'], 'jacket': []})          # a valid dress order
+```
+
+`dijkstra` returns the shortest-path distances and predecessors from a source over
+non-negative weights (verified against Bellman-Ford on random graphs), and `shortest_path`
+reconstructs the actual route and its length. `bfs` gives unweighted hop distances,
+`connected_components` partitions an undirected graph, and `topological_sort` (Kahn's
+algorithm) orders a DAG so every edge points forward — raising if a cycle makes that
+impossible. Graphs are plain dicts: `{node: {neighbor: weight}}` for weighted routines,
+`{node: [neighbors]}` for the unweighted ones.
 
 ## Probability distributions
 
