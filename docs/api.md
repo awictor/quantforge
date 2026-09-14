@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.84.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.85.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -4876,6 +4876,24 @@ Auto-generated from `quantforge` v3.84.0 by `docs/gen_api.py` — do not edit by
 > Linear in realized vol (in vol points). Unlike the variance swap it has no
 > convexity, so it prices below a variance swap struck at the same vol (the
 > convexity value / vol-of-vol adjustment).
+
+## eulerian
+
+### `eulerian_path(graph, directed=False, start=None)`  _function_
+
+> Return a list of vertices tracing an Eulerian path, or ``None`` if none exists.
+>
+> The returned list has ``E + 1`` entries (each consecutive pair is a traversed edge).
+> For a circuit the first and last vertices coincide. ``graph`` is ``{u: [v, ...]}``; for
+> an undirected graph list each edge once (both directions are inferred).
+
+### `has_eulerian_circuit(graph, directed=False)`  _function_
+
+> True if ``graph`` has an Eulerian circuit (closed Eulerian path).
+
+### `has_eulerian_path(graph, directed=False)`  _function_
+
+> True if ``graph`` has an Eulerian path (trail using every edge once).
 
 ## evt
 

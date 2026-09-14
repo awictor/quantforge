@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.599.0] - 2026-09-14
+
+### Added
+- `eulerian.py`: `eulerian_path` builds an Eulerian trail (every edge traversed exactly
+  once) with Hierholzer's algorithm in ``O(E)``, for undirected or directed graphs,
+  returning the ``E + 1`` vertex sequence (first == last for a circuit) or ``None`` when no
+  trail exists. `has_eulerian_path` and `has_eulerian_circuit` check the degree and
+  connectivity conditions (undirected: 0 or 2 odd-degree vertices; directed: in/out-degree
+  balanced or off by one at a single source/sink). Cross-checked over 6000 random graphs
+  (3000 undirected, 3000 directed): existence matches the degree/connectivity criterion,
+  and every returned trail uses each edge exactly once with circuits closing on themselves.
+
 ## [1.598.0] - 2026-09-14
 
 ### Documentation

@@ -560,6 +560,11 @@ from .bipartite_matching import (
     maximum_matching_size,
     minimum_vertex_cover,
 )
+from .eulerian import (
+    eulerian_path,
+    has_eulerian_path,
+    has_eulerian_circuit,
+)
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1264,7 +1269,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "3.84.0"
+__version__ = "3.85.0"
 
 __all__ = [
     "OptionType",
@@ -2069,6 +2074,9 @@ __all__ = [
     "maximum_bipartite_matching",
     "maximum_matching_size",
     "minimum_vertex_cover",
+    "eulerian_path",
+    "has_eulerian_path",
+    "has_eulerian_circuit",
     "Dual",
     "dual_derivative",
     "dual_gradient",
