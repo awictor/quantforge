@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.82.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.83.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -8420,6 +8420,18 @@ Auto-generated from `quantforge` v2.82.0 by `docs/gen_api.py` — do not edit by
 > onto the unit-diagonal set, iterating to convergence. Returns a symmetric PSD
 > matrix with unit diagonal; a matrix that is already a valid correlation is
 > returned essentially unchanged.
+
+## linprog
+
+### `linprog(c, constraints, maximize=True, tol=1e-09, max_iter=10000)`  _function_
+
+> Solve a linear program by two-phase simplex.
+>
+> ``c`` is the objective coefficient vector (length ``n``). ``constraints`` is a list of
+> ``(coeffs, op, rhs)`` with ``op`` one of ``"<="``, ``">="``, ``"="``. Variables are
+> assumed ``>= 0``. Set ``maximize=False`` to minimize. Returns
+> ``{"x": [...], "objective": value, "status": "optimal"}``. Raises ``ValueError`` if
+> the program is infeasible or unbounded.
 
 ## liquidity
 

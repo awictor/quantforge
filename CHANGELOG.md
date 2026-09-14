@@ -31,6 +31,14 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.83.0] - 2026-09-13
+
+### Added
+- `linprog.py`: linear programming by two-phase simplex — `linprog` handles `<=`, `>=`,
+  and `=` constraints (with a phase-1 artificial-variable stage) and Bland's anti-cycling
+  rule. Cross-checked against known optima and a brute-force vertex enumeration; a diet-
+  style minimum satisfies every constraint; and unbounded / infeasible programs raise.
+
 ## [2.82.0] - 2026-09-13
 
 ### Documentation
