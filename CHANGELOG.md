@@ -31,6 +31,14 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.36.0] - 2026-09-13
+
+### Documentation
+- README: documented the nonlinear order-statistic filters in the spectral section,
+  after the sample-rate subsection — the spike-removal / edge-preservation contrast with
+  linear filters, the rank generalization, and the surgical Hampel behavior. All snippet
+  values verified live.
+
 ## [2.35.0] - 2026-09-13
 
 ### Added

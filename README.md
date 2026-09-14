@@ -4583,6 +4583,27 @@ rate, comes out with rms `0.001` — suppressed, not aliased back to a false low
 as naive decimation would. Each operation carries the FIR filter's linear-phase group
 delay of `(numtaps-1)/2` samples.
 
+Linear filters smear sharp features and get dragged by outliers; *order-statistic*
+filters sort a sliding window and pick one sample by rank, rejecting impulsive spikes
+while keeping edges sharp:
+
+```python
+from quantforge import median_filter, rank_filter, hampel_filter
+
+median_filter(x, 3)                       # sliding median — de-spikes, keeps edges
+rank_filter(x, 5, percentile=100)         # sliding max (0 = min, 50 = median)
+clean, outliers = hampel_filter(x, window=5)   # MAD-based outlier replacement
+```
+
+A single spike in `[1, 1, 1, 50, 1, 1, 1]` vanishes under `median_filter(x, 3)` while a
+`[0,0,0,0,0,10,10,10,10,10]` step stays perfectly sharp — a moving average would round
+both off. `rank_filter` generalizes to any percentile (min, max, or a quantile envelope).
+`hampel_filter` is the surgical option: it computes the local median and a robust
+standard deviation from the MAD, and replaces *only* the points more than `n_sigmas`
+(default 3) away, returning both the cleaned signal and the outlier indices — inject one
+spike into otherwise clean data and it flags exactly that index, leaving everything else
+byte-for-byte unchanged.
+
 Filtering keeps and rejects frequencies; the *analytic signal* instead turns a real
 oscillation into a rotating phasor, so you can read off its instantaneous amplitude and
 frequency. The Hilbert transform is the machinery: a 90-degree phase shift of every
