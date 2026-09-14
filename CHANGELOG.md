@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.84.0] - 2026-09-13
+
+### Documentation
+- README: documented the `linprog` two-phase simplex solver in the optimization section,
+  next to `nnls` — the constraint format, the max/min examples, and the phase-1 / Bland's
+  rule notes. All snippet values verified live.
+
 ## [2.83.0] - 2026-09-13
 
 ### Added

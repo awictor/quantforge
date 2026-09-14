@@ -5554,6 +5554,25 @@ the Karush-Kuhn-Tucker conditions — the objective gradient is zero along the a
 (positive) coefficients and non-positive along the zeroed ones — so it is the global
 constrained optimum, not a heuristic.
 
+For a *linear* objective under linear constraints, `linprog` solves the LP exactly by
+two-phase simplex:
+
+```python
+from quantforge import linprog
+
+# maximize 3x + 2y  s.t.  x + y <= 4,  x + 3y <= 6,  x, y >= 0
+linprog([3, 2], [([1, 1], "<=", 4), ([1, 3], "<=", 6)])   # x=[4,0], objective 12
+
+# minimize 2x + 3y  s.t.  x + y >= 10
+linprog([2, 3], [([1, 1], ">=", 10)], maximize=False)     # objective 20
+```
+
+Constraints are `(coeffs, op, rhs)` with `op` in `"<="`, `">="`, `"="`, and variables are
+`>= 0`. A phase-1 artificial-variable stage finds an initial feasible basis for `>=`/`=`
+rows, and Bland's rule prevents cycling; the result matches a brute-force vertex
+enumeration on small problems. Unbounded and infeasible programs raise rather than
+returning a wrong vertex.
+
 `ridders_derivative` / `ridders_second_derivative` return `(value, error_estimate)`:
 they evaluate a central difference at a shrinking step sequence and Richardson-
 extrapolate across it, stopping when round-off starts to dominate — so they reach
