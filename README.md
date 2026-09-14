@@ -6843,6 +6843,29 @@ only the two endpoints in `O(1)`, and one `result()` pass accumulates them into 
 array — ideal when a batch of range updates precedes a single read. All three checked
 against brute-force sums over thousands of random instances.
 
+When the 2-D grid *changes* — a running heatmap, a collision counter — `FenwickTree2D` keeps
+`PrefixSum2D`'s rectangle-sum queries while also allowing point updates, each in
+`O(log R · log C)`:
+
+```python
+from quantforge import FenwickTree2D
+
+ft = FenwickTree2D(3, 3)
+for i in range(3):
+    for j in range(3):
+        ft.add(i, j, i * 3 + j + 1)   # fill with 1..9
+ft.range_sum(0, 0, 3, 3), ft.range_sum(1, 1, 3, 3)   # (45, 28)
+ft.add(1, 1, 100)
+ft.range_sum(1, 1, 2, 2)              # 105 — reflects the update immediately
+```
+
+`add(r, c, delta)` adjusts a cell and `range_sum(r0, c0, r1, c1)` sums a half-open rectangle
+by four-corner inclusion-exclusion — the 2-D binary indexed tree, nesting the `i & -i`
+traversal in both axes. Build from a shape or an initial grid. Where `PrefixSum2D` is fixed
+after construction, `FenwickTree2D` trades its `O(1)` query for `O(log R · log C)` in
+exchange for updates. Verified against a brute grid over thousands of interleaved
+update/query sequences.
+
 Finding a k-th order statistic or the top-k does not need a full sort — quickselect does
 it in linear time:
 

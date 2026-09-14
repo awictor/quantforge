@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.650.0] - 2026-09-14
+
+### Documentation
+- README: documented `FenwickTree2D` in the Range-query structures section after
+  `PrefixSum2D` -- dynamic point-add updates with rectangle-sum queries, the updatable
+  counterpart to the static summed-area table. All snippet values verified live.
+
 ## [1.649.0] - 2026-09-14
 
 ### Added
