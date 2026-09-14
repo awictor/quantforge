@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.620.0] - 2026-09-14
+
+### Documentation
+- README: documented `linear_recurrence_nth`, `matrix_power`, and `fibonacci` in the Number
+  theory section after `XorBasis` -- companion-matrix exponentiation for the ``n``-th term
+  of a linear recurrence in ``O(log n)``. All snippet values verified live.
+
 ## [1.619.0] - 2026-09-14
 
 ### Added

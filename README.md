@@ -6965,6 +6965,26 @@ against), `can_represent` tests subset-XOR membership, `rank`/`count_distinct` g
 dimension and the `2^rank` reachable values, and `kth_smallest` indexes the sorted reachable
 set. Verified against brute subset-XOR enumeration over 4000 random value sets.
 
+Any linear recurrence advances by a fixed matrix, so `linear_recurrence_nth` reaches the
+`n`-th term in `O(log n)` matrix multiplies — `matrix_power` does the exponentiation, and
+`fibonacci` is the canonical case:
+
+```python
+from quantforge import fibonacci, linear_recurrence_nth, matrix_power
+
+fibonacci(100)                              # 354224848179261915075
+fibonacci(1_000_000, mod=1_000_000_007)     # 918091266 — huge index, still instant
+linear_recurrence_nth([1, 1, 1], [0, 0, 1], 10)   # 81 — tribonacci
+matrix_power([[1, 1], [1, 0]], 5)           # [[8, 5], [5, 3]]
+```
+
+`linear_recurrence_nth(coeffs, initial, n)` evaluates `x_i = sum_j coeffs[j] * x_{i-1-j}`
+by raising the recurrence's companion matrix to the `n`-th power, so the cost grows with
+`log n` rather than `n` — the difference between instant and hopeless for indices in the
+millions. `matrix_power` is exponentiation-by-squaring on an integer or real square matrix,
+and every routine takes an optional `mod` for exact modular arithmetic. Verified against
+direct iteration over thousands of random recurrences and known Fibonacci/tribonacci values.
+
 ## Computational geometry
 
 Planar geometry primitives on lists of `(x, y)` points — the shape of a point cloud, its
