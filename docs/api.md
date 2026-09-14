@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.90.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.91.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -18479,3 +18479,19 @@ Auto-generated from `quantforge` v4.90.0 by `docs/gen_api.py` — do not edit by
 > higher-exposure buckets (wrong-way), raising the CVA above the independent
 > ``alpha = 0`` case; ``alpha < 0`` is right-way risk. Reduces to :func:`cva`
 > at ``alpha = 0``.
+
+## zeta
+
+### `dirichlet_eta(s)`  _function_
+
+> Dirichlet eta ``eta(s) = sum (-1)^{n-1} n^-s = (1 - 2^{1-s}) zeta(s)`` for ``s > 0``.
+>
+> Converges (conditionally) for all ``s > 0``; accelerated here by van Wijngaarden /
+> alternating-series transformation for robustness near ``s -> 0``.
+
+### `riemann_zeta(s, terms=20, corrections=10)`  _function_
+
+> Riemann zeta ``zeta(s)`` for real ``s > 0``, ``s != 1`` (Euler-Maclaurin).
+>
+> For ``s > 1`` uses Euler-Maclaurin directly; for ``0 < s < 1`` uses the Dirichlet-eta
+> relation ``zeta(s) = eta(s) / (1 - 2^{1-s})``. Raises at the pole ``s = 1``.

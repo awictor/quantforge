@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.705.0] - 2026-09-14
+
+### Added
+- `riemann_zeta` and `dirichlet_eta`: the Riemann zeta and Dirichlet eta functions via
+  Euler-Maclaurin summation (with Bernoulli-number tail corrections). `riemann_zeta` covers
+  real ``s > 0, s != 1`` -- direct for ``s > 1`` and via the eta relation on ``(0, 1)``;
+  `dirichlet_eta` uses Cohen-Villegas-Zagier alternating acceleration near ``s -> 0``.
+  Cross-checked against ``zeta(2)=pi^2/6``, ``zeta(4)=pi^4/90``, ``zeta(6)=pi^6/945``,
+  Apery's ``zeta(3)``, ``eta(1)=ln 2``, the eta/zeta identity, and direct summation.
+
 ## [1.704.0] - 2026-09-14
 
 ### Documentation
