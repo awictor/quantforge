@@ -4,6 +4,20 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.641.0] - 2026-09-14
+
+### Added
+- `stern_brocot.py`: the Stern-Brocot tree and Farey sequences. `stern_brocot_path` returns
+  the unique L/R path from ``1/1`` to a positive rational (and `stern_brocot_from_path`
+  inverts it), `best_rational_bounded` finds the closest fraction to a real with a
+  denominator bound by descending the tree, `mediant` inserts the mediant of two fractions,
+  and `farey_sequence` lists every reduced fraction in ``[0, 1]`` of order ``n`` via the
+  ``O(1)``-per-term neighbour recurrence. Exact integer/`Fraction` arithmetic throughout.
+  Cross-checked: paths round-trip over 5000 random rationals, bounded approximations match a
+  brute nearest-fraction search (``pi -> 355/113`` at denominator 113), and Farey sequences
+  match a brute reduced-fraction enumeration. A double-append bug in the Farey recurrence was
+  caught by that comparison and fixed.
+
 ## [1.640.0] - 2026-09-14
 
 ### Documentation

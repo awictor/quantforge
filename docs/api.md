@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.26.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.27.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -15379,6 +15379,40 @@ Auto-generated from `quantforge` v4.26.0 by `docs/gen_api.py` — do not edit by
 ### `ssvi_vix(params: quantforge.ssvi.SSVIParams, t, S0, r, q=0.0, n_strikes=201, width=6.0)`  _function_
 
 > VIX-style index (``~= 100 * sigma``) of an SSVI slice at fitted expiry ``t``.
+
+## stern_brocot
+
+### `best_rational_bounded(x, max_denominator)`  _function_
+
+> Closest fraction to ``x`` with denominator ``<= max_denominator`` (Stern-Brocot descent).
+>
+> Walks the tree toward ``x``, stopping when the next mediant would exceed the denominator
+> bound, and returns the nearer of the two current boundaries. ``x`` may be any real.
+
+### `farey_sequence(n)`  _function_
+
+> Return the Farey sequence of order ``n``: reduced fractions in ``[0, 1]``, ascending.
+>
+> Uses the ``O(1)``-per-term neighbour recurrence, so no gcd or sorting is needed.
+
+### `mediant(a, b)`  _function_
+
+> Mediant of two fractions ``a = p/q`` and ``b = r/s``: ``(p + r)/(q + s)``.
+>
+> ``a`` and ``b`` may be `Fraction` or ``(num, den)`` pairs. The mediant lies strictly
+> between them and is the fraction the Stern-Brocot / Farey construction inserts.
+
+### `stern_brocot_from_path(path)`  _function_
+
+> Return the fraction at a given L/R ``path`` from ``1/1``.
+
+### `stern_brocot_path(target, max_steps=10000)`  _function_
+
+> Return the L/R path from ``1/1`` to a positive rational ``target`` in the tree.
+>
+> ``target`` is a `Fraction` (or something `Fraction` accepts). Returns a string of ``'L'``
+> and ``'R'`` steps; the empty string means ``target == 1``. Raises for non-positive
+> targets or if ``max_steps`` is exceeded (non-terminating only for irrationals).
 
 ## stft
 
