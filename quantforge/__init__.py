@@ -641,6 +641,7 @@ from .cycle_detection import floyd_cycle, brent_cycle, cycle_elements
 from .lazy_segtree import LazySegmentTree
 from .li_chao import LiChaoTree
 from .fenwick2d import FenwickTree2D
+from .tridiagonal import solve_tridiagonal, solve_cyclic_tridiagonal
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1345,7 +1346,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "4.36.0"
+__version__ = "4.37.0"
 
 __all__ = [
     "OptionType",
@@ -2237,6 +2238,8 @@ __all__ = [
     "LazySegmentTree",
     "LiChaoTree",
     "FenwickTree2D",
+    "solve_tridiagonal",
+    "solve_cyclic_tridiagonal",
     "Dual",
     "dual_derivative",
     "dual_gradient",

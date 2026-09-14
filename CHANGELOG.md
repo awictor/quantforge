@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.651.0] - 2026-09-14
+
+### Added
+- `tridiagonal.py`: `solve_tridiagonal` solves a tridiagonal linear system by the Thomas
+  algorithm in ``O(n)`` (the pattern behind cubic splines and implicit PDE steps), and
+  `solve_cyclic_tridiagonal` handles the periodic-boundary variant (corner couplings) via a
+  Sherman-Morrison correction over two Thomas solves. Both were previously only available as
+  private helpers inside the PDE modules; this exposes them as verified public functions.
+  Cross-checked against a dense Gaussian solve over 6000 random systems (3000 each), with the
+  solution also verified to satisfy the original system directly.
+
 ## [1.650.0] - 2026-09-14
 
 ### Documentation

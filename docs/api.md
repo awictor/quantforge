@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.36.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.37.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -16571,6 +16571,25 @@ Auto-generated from `quantforge` v4.36.0 by `docs/gen_api.py` — do not edit by
 ### `signed_area(polygon)`  _function_
 
 > Signed area of a polygon (shoelace): positive if counter-clockwise, negative if CW.
+
+## tridiagonal
+
+### `solve_cyclic_tridiagonal(lower, diag, upper, rhs)`  _function_
+
+> Solve a *cyclic* tridiagonal system (periodic boundary) via Sherman-Morrison.
+>
+> Same layout as :func:`solve_tridiagonal`, but ``lower[0]`` is the corner entry coupling
+> row 0 to column ``n-1``, and ``upper[n-1]`` couples row ``n-1`` to column 0. Uses two
+> Thomas solves plus a rank-1 correction. Needs ``n >= 3``.
+
+### `solve_tridiagonal(lower, diag, upper, rhs)`  _function_
+
+> Solve a tridiagonal system by the Thomas algorithm; returns the solution list.
+>
+> ``diag`` is the main diagonal (length ``n``); ``lower[i]`` is the sub-diagonal entry in
+> row ``i`` (``lower[0]`` unused); ``upper[i]`` the super-diagonal entry in row ``i``
+> (``upper[n-1]`` unused). All four lists have length ``n``. Raises on a zero pivot (the
+> matrix is singular or not diagonally dominant enough for plain elimination).
 
 ## trie
 
