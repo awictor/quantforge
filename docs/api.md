@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.50.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.51.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -14102,6 +14102,32 @@ Auto-generated from `quantforge` v3.50.0 by `docs/gen_api.py` — do not edit by
 > For each point, the median of its slopes to all other points; the overall slope is
 > the median of those. 50% breakdown point -- robust to nearly half the data being
 > corrupted. Points sharing an ``x`` value contribute no slope for that pair.
+
+## sieve
+
+### `nth_prime(n)`  _function_
+
+> The ``n``-th prime (1-indexed): ``nth_prime(1) == 2``.
+>
+> Grows the sieve bound with the prime-number-theorem estimate ``n(ln n + ln ln n)``
+> until enough primes are found. ``n >= 1``.
+
+### `prime_count(limit)`  _function_
+
+> Number of primes ``<= limit`` (the prime-counting function ``pi(limit)``).
+
+### `primes_up_to(limit)`  _function_
+
+> All primes ``<= limit`` by the Sieve of Eratosthenes (a sorted list).
+>
+> ``limit < 2`` yields an empty list. Marks multiples starting from each prime's square.
+
+### `smallest_prime_factors(limit)`  _function_
+
+> Smallest-prime-factor table for ``0..limit`` (a list; ``spf[k]`` = least prime dividing ``k``).
+>
+> ``spf[0] = spf[1] = 0``. With it, any ``k <= limit`` factorizes in ``O(log k)`` by
+> repeatedly dividing by ``spf[k]``. Built by a linear-ish sieve.
 
 ## signal_features
 

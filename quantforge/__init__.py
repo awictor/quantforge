@@ -819,6 +819,12 @@ from .modular2 import (
     multiplicative_order,
     primitive_root,
 )
+from .sieve import (
+    primes_up_to,
+    prime_count,
+    nth_prime,
+    smallest_prime_factors,
+)
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -1209,7 +1215,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "3.50.0"
+__version__ = "3.51.0"
 
 __all__ = [
     "OptionType",
@@ -2299,6 +2305,10 @@ __all__ = [
     "tonelli_shanks",
     "multiplicative_order",
     "primitive_root",
+    "primes_up_to",
+    "prime_count",
+    "nth_prime",
+    "smallest_prime_factors",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

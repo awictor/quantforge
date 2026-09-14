@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.51.0] - 2026-09-14
+
+### Added
+- `sieve.py`: prime sieves — `primes_up_to` (Sieve of Eratosthenes), `prime_count`,
+  `nth_prime`, and `smallest_prime_factors`. Cross-checked: the sieve agrees with
+  `is_prime`, the counts hit pi(10)=4 / pi(100)=25 / pi(1000)=168, the n-th prime matches
+  known values (10000th = 104729), and the smallest-prime-factor table factors 2000 random
+  numbers identically to `factorize`.
+
 ## [3.50.0] - 2026-09-14
 
 ### Documentation
