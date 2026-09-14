@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.69.0] - 2026-09-13
+
+### Added
+- `fuzzy_match.py`: fuzzy string similarity — `jaro`, `jaro_winkler`,
+  `dice_coefficient` (character bigrams), and `jaccard_similarity` (token/character
+  sets). Cross-checked: Jaro and Jaro-Winkler reproduce Winkler's published reference
+  values (MARTHA/MARHTA, DWAYNE/DUANE, DIXON/DICKSONX), Jaro is symmetric and bounded in
+  [0, 1] over random pairs, the Winkler prefix boost never lowers the score, and Dice /
+  Jaccard match known values.
+
 ## [2.68.0] - 2026-09-13
 
 ### Documentation

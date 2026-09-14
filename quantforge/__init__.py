@@ -663,6 +663,12 @@ from .strings import (
     longest_common_substring,
     kmp_search,
 )
+from .fuzzy_match import (
+    jaro,
+    jaro_winkler,
+    dice_coefficient,
+    jaccard_similarity,
+)
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -1053,7 +1059,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "2.68.0"
+__version__ = "2.69.0"
 
 __all__ = [
     "OptionType",
@@ -1999,6 +2005,10 @@ __all__ = [
     "longest_common_subsequence",
     "longest_common_substring",
     "kmp_search",
+    "jaro",
+    "jaro_winkler",
+    "dice_coefficient",
+    "jaccard_similarity",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

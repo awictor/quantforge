@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.68.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.69.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -5706,6 +5706,39 @@ Auto-generated from `quantforge` v2.68.0 by `docs/gen_api.py` — do not edit by
 > forward rates over ``[t1, t2]``. Chains ``DF(t2) = DF(t1) / (1 + f * (t2 -
 > t1))`` starting from ``df0`` at the first ``t1``. Returns ``[(t2, DF(t2)),
 > ...]``; discount factors are decreasing for positive rates.
+
+## fuzzy_match
+
+### `dice_coefficient(a, b)`  _function_
+
+> Sørensen-Dice coefficient over character bigrams: ``2|A∩B| / (|A|+|B|)``.
+>
+> A multiset overlap of adjacent character pairs -- robust to word-order and small
+> edits. Identical strings score ``1``; strings sharing no bigram score ``0``. Strings
+> shorter than two characters fall back to exact equality.
+
+### `jaccard_similarity(a, b, tokenize=None)`  _function_
+
+> Jaccard similarity ``|A∩B| / |A∪B|`` over token (or character) sets.
+>
+> By default splits on whitespace into a word set; pass ``tokenize`` (a callable
+> returning an iterable of tokens, e.g. ``list`` for characters) to change the
+> granularity. Two empty token sets score ``1``.
+
+### `jaro(a, b)`  _function_
+
+> Jaro similarity of two strings in ``[0, 1]`` (1 = identical).
+>
+> Counts matching characters within a sliding window and penalizes transpositions,
+> the classic short-string metric. Empty-vs-empty is ``1``; empty-vs-nonempty is ``0``.
+
+### `jaro_winkler(a, b, prefix_weight=0.1, max_prefix=4)`  _function_
+
+> Jaro-Winkler similarity: Jaro boosted for a shared prefix.
+>
+> Adds ``prefix_weight * L * (1 - jaro)`` where ``L`` is the common prefix length (up
+> to ``max_prefix``), rewarding strings that agree at the start -- the standard tweak
+> for names. ``prefix_weight`` must satisfy ``prefix_weight * max_prefix <= 1``.
 
 ## fxdelta
 
