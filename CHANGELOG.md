@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.606.0] - 2026-09-14
+
+### Documentation
+- README: documented the `string_periodicity` primitives in the String algorithms section
+  after `Trie` -- `z_function`/`prefix_function`, `smallest_period`/`is_periodic`/`borders`,
+  `count_occurrences`, and `manacher_longest_palindrome`. All snippet values verified live.
+
 ## [1.605.0] - 2026-09-14
 
 ### Added

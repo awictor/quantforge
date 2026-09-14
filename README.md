@@ -7321,6 +7321,31 @@ a cached subtree count at each node — regardless of how many keys the trie hol
 key seen, the operation behind routing-table and tokenizer lookups. Verified against a plain
 set/list reference over 3000 random word sets with interleaved deletes.
 
+Three linear-time primitives cover pattern search, periodicity, and palindromes. The
+`z_function` and `prefix_function` (the KMP border array) are the workhorses; on top of them
+sit `count_occurrences`, `smallest_period`/`is_periodic`, `borders`, and the standalone
+`manacher_longest_palindrome`:
+
+```python
+from quantforge import (z_function, prefix_function, smallest_period,
+                        borders, count_occurrences, manacher_longest_palindrome)
+
+prefix_function("abcabcd")             # [0, 0, 0, 1, 2, 3, 0]
+smallest_period("abcabcabc")           # 3 — repeats the unit "abc"
+borders("abacaba")                     # [1, 3] — "a" and "aba" are prefix == suffix
+count_occurrences("ababab", "ab")      # [0, 2, 4] — overlaps included
+manacher_longest_palindrome("babad")   # 'bab'
+```
+
+`z_function` gives, at each index, the length of the longest substring there that matches a
+prefix; `prefix_function` gives the longest proper prefix that is also a suffix. From the
+prefix function, `smallest_period` reads `n - pi[-1]` (the shortest block the string
+repeats, whole or partial), `is_periodic` checks whether that block tiles it exactly, and
+`borders` walks the failure links to list every prefix==suffix length. `count_occurrences`
+finds all matches of a pattern (including overlaps) in linear time via the Z-function over
+`pattern\0text`, and `manacher_longest_palindrome` returns a longest palindromic substring.
+All cross-checked against brute-force references over 4000 random strings each.
+
 ## Data compression
 
 Two foundational lossless codes, both exact round-trips:
