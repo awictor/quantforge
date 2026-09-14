@@ -626,6 +626,7 @@ from .combinatorics import (
     derangements,
 )
 from .lhs import latin_hypercube, maximin_lhs, l2_star_discrepancy
+from .bareiss import bareiss_determinant, rational_solve, rational_inverse
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -1016,7 +1017,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "2.50.0"
+__version__ = "2.51.0"
 
 __all__ = [
     "OptionType",
@@ -1927,6 +1928,9 @@ __all__ = [
     "latin_hypercube",
     "maximin_lhs",
     "l2_star_discrepancy",
+    "bareiss_determinant",
+    "rational_solve",
+    "rational_inverse",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

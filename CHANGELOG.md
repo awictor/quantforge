@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.51.0] - 2026-09-13
+
+### Added
+- `bareiss.py`: exact integer/rational linear algebra — `bareiss_determinant`
+  (fraction-free elimination, exact integer determinant), `rational_solve`, and
+  `rational_inverse` (exact `Fraction` results). Cross-checked: the determinant matches a
+  cofactor expansion over 200 random matrices, the solver's residual `A x - b` is exactly
+  zero, an inverse times its matrix is the exact identity, a Hilbert system (which floats
+  botch) solves to exact ones, and singular matrices raise.
+
 ## [2.50.0] - 2026-09-13
 
 ### Documentation

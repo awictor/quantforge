@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.50.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.51.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -485,6 +485,32 @@ Auto-generated from `quantforge` v2.50.0 by `docs/gen_api.py` — do not edit by
 ### `bachelier_vega(F, K, t, r, sigma) -> float`  _function_
 
 > dPrice/dsigma_N (per unit of normal vol). Same for calls and puts.
+
+## bareiss
+
+### `bareiss_determinant(matrix)`  _function_
+
+> Exact determinant of a square integer (or rational) matrix by Bareiss elimination.
+>
+> Fraction-free Gaussian elimination: each step divides by the previous pivot and the
+> division is always exact, so with integer input the result is an exact integer (no
+> round-off, no overflow on Python big integers). Returns an ``int`` for integer input.
+
+### `rational_inverse(A)`  _function_
+
+> Exact inverse of a square integer/rational matrix as a matrix of ``Fraction``.
+>
+> Solves ``A X = I`` column by column with :func:`rational_solve`. Raises if ``A`` is
+> singular. Multiplying the result by ``A`` returns the exact identity.
+
+### `rational_solve(A, b)`  _function_
+
+> Exact solution ``x`` of ``A x = b`` over the rationals (Gaussian elimination).
+>
+> ``A`` is a square integer/rational matrix and ``b`` a right-hand-side vector. Returns
+> the exact solution as a list of :class:`fractions.Fraction`. Raises if ``A`` is
+> singular. No round-off: an ill-conditioned system that a float solver botches comes
+> out exact.
 
 ## barycentric
 
