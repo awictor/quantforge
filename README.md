@@ -5760,6 +5760,24 @@ where the raw Taylor series has no hope. `lentz_continued_fraction` takes callab
 for the partial numerators `a(k)` and denominators `b(k)` and is the same
 numerically-stable engine behind the library's incomplete-gamma and beta functions.
 
+Where Padé approximates a *function*, a continued fraction also gives the best rational
+approximation of a single *number*. Every real has an expansion whose truncations — the
+convergents — are closer than any fraction with a smaller denominator:
+
+```python
+from quantforge import cf_expansion, convergents, best_rational
+
+cf_expansion(math.pi, max_terms=5)   # [3, 7, 15, 1, 292]
+convergents(cf_expansion(math.pi, 6))# [(3,1), (22,7), (333,106), (355,113)]
+best_rational(math.pi, 1000)         # (355, 113) — closest with denominator <= 1000
+```
+
+The convergents of pi are the familiar `22/7`, `333/106`, `355/113`; `sqrt(2)` expands to
+the repeating `[1; 2, 2, 2, ...]`. `best_rational` returns the closest fraction whose
+denominator stays under a bound (`355/113` for pi at 1000, `22/7` at 50), agreeing with
+Python's `Fraction.limit_denominator` across thousands of random values — useful for
+recovering a simple fraction from a noisy decimal or designing a ratio to a tolerance.
+
 Long or badly-scaled sums lose low-order bits; the compensated routines recover them.
 `neumaier_sum` (and `kahan_sum`) carry a running correction, `accurate_dot` does the
 same for a dot product, and `welford` computes a one-pass mean and variance that stays

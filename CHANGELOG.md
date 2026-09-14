@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.42.0] - 2026-09-13
+
+### Documentation
+- README: documented continued-fraction expansion and best rational approximation next
+  to Padé — the number-vs-function contrast, pi/sqrt(2) expansions and convergents, and
+  the `best_rational` bounds. All snippet values verified live.
+
 ## [2.41.0] - 2026-09-13
 
 ### Added
