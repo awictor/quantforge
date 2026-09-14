@@ -5735,6 +5735,29 @@ self-intersections), `1` chordal. `catmull_rom_curve` samples the entire spline;
 be scalars or n-D tuples. Verified over thousands of random point sets that each segment
 interpolates its endpoints and adjacent segments join continuously.
 
+Both Bezier and Catmull-Rom are special cases of the *B-spline*, whose knot vector gives
+*local* control — moving one control point changes only a few spans. `bspline_point` /
+`bspline_curve` evaluate it, `bspline_basis` is the Cox-de Boor basis, and
+`open_uniform_knots` builds a clamped knot vector so the curve touches its endpoints:
+
+```python
+from quantforge import bspline_point, bspline_curve, open_uniform_knots
+
+c = [(0, 0), (1, 2), (3, 3), (4, 0)]
+bspline_point(c, 3, 0.0)              # (0.0, 0.0) — clamped, interpolates the first point
+bspline_point(c, 3, 1.0)              # (4.0, 0.0) — and the last
+bspline_point(c, 3, 0.5)              # (2.0, 1.875)
+open_uniform_knots(4, 3)              # [0,0,0,0, 1,1,1,1] — no interior knots -> a Bezier
+```
+
+`bspline_point(control, degree, t)` blends the control points by the degree-`p` Cox-de Boor
+basis over a knot vector (a clamped open-uniform one by default, so the endpoints are
+interpolated). With `n = degree + 1` control points and no interior knots the B-spline *is*
+the Bezier curve; a degree-1 spline is the piecewise-linear interpolant; and interior knots
+add local, low-degree control that Bezier's global blend lacks. `bspline_basis` is a
+partition of unity, and `bspline_curve` samples the whole curve. Verified over thousands of
+random cases against partition-of-unity, endpoint interpolation, and Bezier equivalence.
+
 Where `bisection`/`brent`/`newton` solve one scalar equation, `newton_system` and
 `broyden` solve a *system* `F(x) = 0` in several unknowns:
 

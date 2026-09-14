@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.658.0] - 2026-09-14
+
+### Documentation
+- README: documented `bspline_point`, `bspline_curve`, `bspline_basis`, and
+  `open_uniform_knots` in the Numerical utilities section after Catmull-Rom -- the Cox-de
+  Boor B-spline with local control and its Bezier/piecewise-linear special cases. All
+  snippet values verified live.
+
 ## [1.657.0] - 2026-09-14
 
 ### Added
