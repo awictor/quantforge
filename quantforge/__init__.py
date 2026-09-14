@@ -578,6 +578,11 @@ from .string_periodicity import (
 )
 from .bluestein import dft as dft_any, idft as idft_any
 from .ntt import ntt, intt, convolve_mod, NTT_PRIME
+from .scheduling import (
+    weighted_interval_schedule,
+    activity_selection,
+    min_rooms,
+)
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1282,7 +1287,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "3.96.0"
+__version__ = "3.97.0"
 
 __all__ = [
     "OptionType",
@@ -2105,6 +2110,9 @@ __all__ = [
     "intt",
     "convolve_mod",
     "NTT_PRIME",
+    "weighted_interval_schedule",
+    "activity_selection",
+    "min_rooms",
     "Dual",
     "dual_derivative",
     "dual_gradient",

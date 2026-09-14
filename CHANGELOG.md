@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.611.0] - 2026-09-14
+
+### Added
+- `scheduling.py`: three interval-scheduling routines over half-open ``(start, end)``
+  intervals. `weighted_interval_schedule` picks a non-overlapping subset of maximum total
+  weight by DP after sorting on end time with a binary search for the last compatible
+  interval (``O(n log n)``), returning the total and the chosen intervals.
+  `activity_selection` gives the maximum *count* of non-overlapping intervals via the
+  earliest-finish greedy, and `min_rooms` returns the peak simultaneous count (fewest
+  resources) by an endpoint sweep. Cross-checked against brute-force subset enumeration
+  over 3000 random instances each -- optimal weight/count/rooms all match, and the returned
+  weighted subset is non-overlapping and sums to the reported total.
+
 ## [1.610.0] - 2026-09-14
 
 ### Documentation

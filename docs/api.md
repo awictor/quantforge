@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.96.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.97.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -14140,6 +14140,29 @@ Auto-generated from `quantforge` v3.96.0 by `docs/gen_api.py` — do not edit by
 > 12=annual) until ``maturity_years`` is reached, then applies
 > :func:`adjust_business_day` with ``convention``. Returns the list of adjusted
 > period end dates (the start date itself is not included).
+
+## scheduling
+
+### `activity_selection(intervals)`  _function_
+
+> Maximum number of mutually non-overlapping intervals (earliest-finish greedy).
+>
+> Returns the chosen ``(start, end)`` list in order. Ignores weights; half-open overlap.
+
+### `min_rooms(intervals)`  _function_
+
+> Minimum resources to run every interval, i.e. the peak simultaneous count.
+>
+> An interval ending exactly when another begins does not need a separate room
+> (half-open). Returns an integer.
+
+### `weighted_interval_schedule(intervals)`  _function_
+
+> Maximum-weight non-overlapping subset. Returns ``(total_weight, chosen)``.
+>
+> ``intervals`` is a list of ``(start, end, weight)`` with ``start < end`` and
+> ``weight >= 0``. ``chosen`` is the selected intervals in start order. Half-open
+> intervals: one ending exactly when another starts do not conflict.
 
 ## sde
 
