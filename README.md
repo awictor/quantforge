@@ -125,6 +125,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Number theory](#number-theory)
 - [Computational geometry](#computational-geometry)
 - [Graph algorithms](#graph-algorithms)
+- [String algorithms](#string-algorithms)
 - [Probability distributions](#probability-distributions)
 - [Nelson-Siegel / Svensson curves](#nelson-siegel--svensson-curves)
 - [Sample risk measures](#sample-risk-measures)
@@ -6208,6 +6209,28 @@ every pairwise distance in `O(V³)`, matching per-source Dijkstra. `a_star` spee
 single-target search with an admissible heuristic — on a 5×5 grid with the Manhattan
 heuristic it finds the optimal cost-`8` path, the same answer Dijkstra gives but exploring
 fewer nodes, and it reduces exactly to Dijkstra when the heuristic is zero.
+
+## String algorithms
+
+Sequence comparison and pattern matching — on strings or any lists:
+
+```python
+from quantforge import (levenshtein, hamming_distance,
+                        longest_common_subsequence, longest_common_substring, kmp_search)
+
+levenshtein("kitten", "sitting")                 # 3 edits
+longest_common_subsequence("ABCBDAB", "BDCAB")   # "BCAB" (not contiguous)
+longest_common_substring("abcdxyz", "xyzabcd")   # "abcd" (contiguous)
+kmp_search("abababab", "abab")                   # [0, 2, 4] — overlapping matches
+hamming_distance("karolin", "kathrin")           # 3
+```
+
+`levenshtein` is the minimum insert/delete/substitute edit distance (symmetric, verified
+against a brute-force recursion), and `hamming_distance` its equal-length special case.
+`longest_common_subsequence` finds the longest order-preserving but not necessarily
+contiguous match, while `longest_common_substring` requires contiguity.  `kmp_search`
+returns every start index of a pattern in linear time via the Knuth-Morris-Pratt failure
+function, catching overlapping occurrences that a stride-by-length scan would miss.
 
 ## Probability distributions
 

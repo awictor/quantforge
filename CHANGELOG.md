@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.68.0] - 2026-09-13
+
+### Documentation
+- README: added a "String algorithms" section documenting `levenshtein`,
+  `hamming_distance`, `longest_common_subsequence`, `longest_common_substring`, and
+  `kmp_search` with worked values. TOC regenerated. All snippet values verified live.
+
 ## [2.67.0] - 2026-09-13
 
 ### Added
