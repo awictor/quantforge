@@ -6107,6 +6107,22 @@ catches shared endpoints and T-junctions. `polygon_perimeter` sums the edge leng
 window — clipping the `[0,4]²` square by the `[1,3]²` window leaves exactly the `2×2`
 interior (area `4`).
 
+Extremal measures answer "how big is this cloud" — its span, box, and tightest circle:
+
+```python
+from quantforge import bounding_box, polygon_diameter, min_enclosing_circle
+
+bounding_box([(1,2), (3,-1), (0,5), (4,4)])   # (0, -1, 4, 5)
+polygon_diameter([(0,0), (1,0), (1,1), (0,1)])# ((0,0), (1,1), 1.414...) farthest pair
+min_enclosing_circle([(0,0),(2,0),(2,2),(0,2)])# (1.0, 1.0, 1.414...) center + radius
+```
+
+`bounding_box` is the axis-aligned extent; `polygon_diameter` returns the farthest-apart
+pair (searching only the convex-hull vertices, where the diameter always lives); and
+`min_enclosing_circle` is Welzl's expected-linear algorithm for the smallest circle
+covering every point — for the unit square it is centered at `(1,1)` with radius `√2`, and
+it cannot be shrunk without leaving a point outside.
+
 ## Probability distributions
 
 Gamma, chi-square, Poisson, F and binomial distributions built on those special
