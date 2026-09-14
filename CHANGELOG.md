@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.684.0] - 2026-09-14
+
+### Documentation
+- README: documented `min_area_rectangle` in the Computational geometry section after
+  `min_enclosing_circle` -- the minimum-area enclosing rectangle via rotating calipers. All
+  snippet values verified live.
+
 ## [1.683.0] - 2026-09-14
 
 ### Added

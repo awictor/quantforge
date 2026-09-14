@@ -7619,6 +7619,24 @@ pair (searching only the convex-hull vertices, where the diameter always lives);
 covering every point — for the unit square it is centered at `(1,1)` with radius `√2`, and
 it cannot be shrunk without leaving a point outside.
 
+For the smallest enclosing *rectangle* (any orientation, not axis-aligned),
+`min_area_rectangle` runs rotating calipers over the convex hull:
+
+```python
+from quantforge import min_area_rectangle
+
+r = min_area_rectangle([(0, 0), (4, 0), (4, 1), (0, 1)])
+r["area"], r["width"], r["height"]         # (4.0, 4.0, 1.0)
+min_area_rectangle([(1, 0), (2, 1), (1, 2), (0, 1)])["area"]   # 2.0 — the rotated diamond
+```
+
+The minimum-area rectangle always has one side flush with a hull edge, so
+`min_area_rectangle` tests the rectangle aligned to each edge and keeps the smallest,
+returning its `area`, `width`/`height` (longer side first), orientation `angle`, and four
+`corners`. It handles rotated inputs — a tilted 6x2 rectangle still reports area 12 — and
+degenerate (collinear or single-point) sets give a zero-area result. Verified over thousands
+of random sets against a fine brute-force angle sweep, with every point confirmed inside.
+
 Any simple polygon can be cut into triangles for area, rendering, or meshing —
 `ear_clipping_triangulate` does it, alongside orientation and convexity tests:
 
