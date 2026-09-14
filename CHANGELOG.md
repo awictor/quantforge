@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.3.0] - 2026-09-14
+
+### Added
+- `weighted_stats.py`: weighted descriptive statistics — `weighted_mean`,
+  `weighted_variance`, `weighted_std` (reliability-weight bias correction),
+  `weighted_quantile`, and `weighted_median`. Cross-checked: equal weights reproduce the
+  ordinary mean/variance/std, integer weights equal the statistics of the replicated
+  sample, and a known weighted mean and skewed median come out right.
+
 ## [3.2.0] - 2026-09-13
 
 ### Documentation

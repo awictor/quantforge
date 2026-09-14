@@ -740,6 +740,13 @@ from .color import (
     rgb_to_hex,
     hex_to_rgb,
 )
+from .weighted_stats import (
+    weighted_mean,
+    weighted_variance,
+    weighted_std,
+    weighted_quantile,
+    weighted_median,
+)
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -1130,7 +1137,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "3.2.0"
+__version__ = "3.3.0"
 
 __all__ = [
     "OptionType",
@@ -2144,6 +2151,11 @@ __all__ = [
     "hsl_to_rgb",
     "rgb_to_hex",
     "hex_to_rgb",
+    "weighted_mean",
+    "weighted_variance",
+    "weighted_std",
+    "weighted_quantile",
+    "weighted_median",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.2.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.3.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -16366,6 +16366,39 @@ Auto-generated from `quantforge` v3.2.0 by `docs/gen_api.py` — do not edit by 
 > Zero at ``horizon = 0``, rising monotonically to the stationary variance
 > ``sigma^2 / (2 kappa)`` as ``horizon -> inf`` (same form as the Schwartz
 > commodity model). ``sigma`` is the daily temperature volatility.
+
+## weighted_stats
+
+### `weighted_mean(values, weights)`  _function_
+
+> Weighted arithmetic mean ``sum(w x) / sum(w)``.
+>
+> ``weights`` must be non-negative and not all zero; they need not sum to 1.
+
+### `weighted_median(values, weights)`  _function_
+
+> Weighted median: the weighted 0.5-quantile.
+
+### `weighted_quantile(values, weights, q)`  _function_
+
+> Weighted ``q``-quantile (``q`` in ``[0, 1]``) by the cumulative-weight method.
+>
+> Sorts by value, forms the normalized cumulative weight at each point (midpoint
+> convention), and linearly interpolates to the target ``q``. ``q=0.5`` is the weighted
+> median. Reduces to the ordinary quantile when weights are equal.
+
+### `weighted_std(values, weights, unbiased=True)`  _function_
+
+> Weighted standard deviation: square root of :func:`weighted_variance`.
+
+### `weighted_variance(values, weights, unbiased=True)`  _function_
+
+> Weighted variance about the weighted mean.
+>
+> With ``unbiased=True`` applies the reliability-weight correction
+> ``V1 / (V1^2 - V2)`` where ``V1 = sum(w)`` and ``V2 = sum(w^2)`` (reduces to the
+> ``1/(n-1)`` factor for equal weights); with ``unbiased=False`` divides by ``V1``
+> (the population form). ``weights`` non-negative, not all zero.
 
 ## wilcoxon
 
