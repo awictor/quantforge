@@ -956,6 +956,21 @@ sensitivity analysis. `maximin_lhs` picks the design whose closest pair is farth
 `l2_star_discrepancy` (Warnock's formula) scores any point set, so you can compare an LHS,
 Sobol, or Halton design head to head.
 
+For repeatedly drawing from a fixed *discrete* distribution — scenario selection, weighted
+resampling — `AliasSampler` makes each draw O(1) after an O(n) setup:
+
+```python
+from quantforge import AliasSampler
+
+sampler = AliasSampler([0.1, 0.2, 0.3, 0.4], seed=42)
+sampler.sample()             # one index in [0, 3], drawn with those probabilities
+sampler.sample_many(100000)  # empirical frequencies converge to [0.1, 0.2, 0.3, 0.4]
+```
+
+Walker's alias method builds two tables so each `sample()` is a single table lookup rather
+than an O(n) cumulative search — the right structure when you draw many times from the
+same weights. Weights need not sum to 1, and a fixed `seed` makes the stream reproducible.
+
 ## Exotic options (closed form)
 
 Analytic prices for binaries, single barriers, and geometric Asians:
