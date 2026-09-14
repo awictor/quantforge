@@ -842,6 +842,7 @@ from .weighted_reservoir import (
     weighted_reservoir_sample,
     weighted_sample_with_replacement,
 )
+from .online_regression import RunningRegression
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -1232,7 +1233,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "3.62.0"
+__version__ = "3.63.0"
 
 __all__ = [
     "OptionType",
@@ -2338,6 +2339,7 @@ __all__ = [
     "Xorshift128Plus",
     "weighted_reservoir_sample",
     "weighted_sample_with_replacement",
+    "RunningRegression",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

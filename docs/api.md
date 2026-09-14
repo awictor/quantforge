@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.62.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.63.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -10998,6 +10998,18 @@ Auto-generated from `quantforge` v3.62.0 by `docs/gen_api.py` — do not edit by
 > ``update(x, y)`` folds in one pair; ``covariance()`` and ``correlation()`` read the
 > current estimate at any time. Sample (``ddof=1``) covariance by default. Two
 > accumulators combine with ``+`` using the parallel-merge formula.
+
+## online_regression
+
+### `RunningRegression(xs=None, ys=None)`  _class_
+
+> Streaming OLS fit of ``y`` on ``x`` (Welford co-moment, constant memory).
+>
+> ``update(x, y)`` folds in one pair; ``slope()``, ``intercept()``, ``correlation()``,
+> ``r_squared()``, and ``predict(x)`` read the current fit at any time. Needs at least
+> two points with variation in ``x`` before a slope is defined. Two accumulators combine
+> with ``+`` via the parallel-merge formula, giving the exact same fit as folding every
+> pair into one.
 
 ## optimize
 

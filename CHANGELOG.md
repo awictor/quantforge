@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.577.0] - 2026-09-14
+
+### Added
+- `online_regression.py`: `RunningRegression` fits ``y = slope * x + intercept`` by
+  ordinary least squares over a stream of ``(x, y)`` pairs in one pass and constant
+  memory, using the numerically stable Welford co-moment recursion. Reads `slope`,
+  `intercept`, `correlation`, `r_squared`, and `predict` at any point, and two
+  accumulators merge exactly with ``+`` (parallel-merge), matching the whole-sample fit.
+  Cross-checked: slope and intercept match `statistics.linear_regression` to 1e-9,
+  `r_squared` equals the squared `statistics.correlation`, a perfect line is recovered
+  exactly, incremental and merged fits equal the batch fit, and degenerate cases (fewer
+  than two points, zero-variance ``x``) raise.
+
 ## [1.576.0] - 2026-09-14
 
 ### Documentation
