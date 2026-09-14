@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.0.0] - 2026-09-13
+
+### Documentation
+- README: documented the vector-algebra helpers in the Quaternions section —
+  `cross`, `angle_between`, `vector_project`, `reflect`, and the rest with worked values
+  and the naming-collision note. All snippet values verified live. Version rolls to 3.0.0.
+
 ## [2.99.0] - 2026-09-13
 
 ### Added

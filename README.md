@@ -4438,6 +4438,27 @@ and `quat_to_axis_angle` inverts the construction. `slerp` interpolates along th
 constant-speed arc between two orientations, staying unit-norm, so its midpoint is exactly
 the half-angle rotation. `quat_normalize` and `quat_conjugate` round out the set.
 
+The everyday vector operations back them up — dot and cross products, norms, angles,
+projection, and reflection:
+
+```python
+from quantforge import cross, angle_between, vector_project, reflect
+import math
+
+cross((1, 0, 0), (0, 1, 0))                    # (0, 0, 1)
+math.degrees(angle_between((1, 0, 0), (0, 1, 0)))   # 90.0
+vector_project((3, 3, 0), (1, 0, 0))           # (3.0, 0.0, 0.0) — component along x
+reflect((1, 2, 3), (0, 0, 1))                  # (1, 2, -3) — mirror through the xy-plane
+```
+
+`dot`, `norm`, `normalize`, `angle_between`, `vector_project`, and `vector_reject` work in
+any dimension; `cross` is 3-D (anticommutative and perpendicular to both inputs).
+`angle_between` uses the stable `atan2(|a×b|, a·b)` form in 3-D. `vector_project` and
+`vector_reject` split a vector into components along and perpendicular to another (they sum
+back to the original), and `reflect` mirrors a vector through the plane with a given
+normal, preserving its length. The projection helpers are prefixed `vector_` to avoid
+clashing with the PCA `project`.
+
 ## Spectral analysis
 
 Find cyclical structure — a seasonal pattern, a dominant trading cycle — with the
