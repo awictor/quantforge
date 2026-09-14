@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.41.0] - 2026-09-14
+
+### Added
+- `geometry_dist.py`: point distances — `point_to_line_distance` (perpendicular to an
+  infinite line), `closest_point_on_segment`, `point_segment_distance` (clamped), and
+  `point_polyline_distance`. Cross-checked: perpendicular distances match known cases,
+  the segment distance clamps to endpoints, and the closest point beats a 1000-step
+  brute-force scan of the segment over 2000 random cases.
+
 ## [3.40.0] - 2026-09-14
 
 ### Documentation

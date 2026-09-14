@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.40.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.41.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -6399,6 +6399,31 @@ Auto-generated from `quantforge` v3.40.0 by `docs/gen_api.py` — do not edit by
 > Returns ``(p, q, distance)``. Restricts the search to the convex-hull vertices (the
 > diameter is always realized by two hull points), then does an all-pairs scan over the
 > hull -- exact, and cheap once the hull has few vertices.
+
+## geometry_dist
+
+### `closest_point_on_segment(p, a, b)`  _function_
+
+> Closest point on the finite segment ``a-b`` to ``p`` (clamped to the endpoints).
+
+### `point_polyline_distance(p, polyline)`  _function_
+
+> Minimum distance from ``p`` to a polyline (a list of ``>= 2`` vertices).
+>
+> Takes the smallest :func:`point_segment_distance` over consecutive segments.
+
+### `point_segment_distance(p, a, b)`  _function_
+
+> Distance from ``p`` to the nearest point of the finite segment ``a-b``.
+>
+> Equals the perpendicular distance when the foot of the perpendicular lands on the
+> segment, otherwise the distance to the nearer endpoint.
+
+### `point_to_line_distance(p, a, b)`  _function_
+
+> Perpendicular distance from point ``p`` to the *infinite* line through ``a`` and ``b``.
+>
+> Raises if ``a == b`` (no line defined).
 
 ## gmm
 

@@ -791,6 +791,12 @@ from .triangulate import (
     is_clockwise,
     is_convex_polygon,
 )
+from .geometry_dist import (
+    point_to_line_distance,
+    closest_point_on_segment,
+    point_segment_distance,
+    point_polyline_distance,
+)
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -1181,7 +1187,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "3.40.0"
+__version__ = "3.41.0"
 
 __all__ = [
     "OptionType",
@@ -2251,6 +2257,10 @@ __all__ = [
     "signed_area",
     "is_clockwise",
     "is_convex_polygon",
+    "point_to_line_distance",
+    "closest_point_on_segment",
+    "point_segment_distance",
+    "point_polyline_distance",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",
