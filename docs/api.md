@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.76.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.77.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -1811,6 +1811,29 @@ Auto-generated from `quantforge` v2.76.0 by `docs/gen_api.py` — do not edit by
 > cosine transform. Returns the coefficient list ``[c_0, ..., c_degree]`` (the
 > ``c_0`` term is the mean level, used at half weight by :func:`chebyshev_eval`).
 > Exact for polynomials of degree ``<= degree``.
+
+## checksums
+
+### `adler32(data)`  _function_
+
+> Adler-32 checksum (as in zlib), matching :func:`zlib.adler32`.
+>
+> Two running sums modulo 65521 combined into a 32-bit value. Cheaper than CRC-32 but
+> weaker on short inputs. Returns a 32-bit unsigned integer.
+
+### `crc32(data)`  _function_
+
+> CRC-32 checksum (IEEE 802.3 reflected polynomial), matching :func:`zlib.crc32`.
+>
+> Table-driven byte-at-a-time computation over the bytes of ``data`` (a ``str`` is
+> UTF-8 encoded). Returns a 32-bit unsigned integer.
+
+### `fnv1a_32(data)`  _function_
+
+> 32-bit FNV-1a hash: XOR then multiply per byte.
+>
+> A fast, well-dispersed non-cryptographic hash for tables and bloom filters. Returns a
+> 32-bit unsigned integer; ``fnv1a_32("")`` is the FNV offset basis ``2166136261``.
 
 ## cheyette
 

@@ -31,6 +31,14 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.77.0] - 2026-09-13
+
+### Added
+- `checksums.py`: checksums and non-cryptographic hashes — `crc32` (IEEE 802.3),
+  `adler32`, and `fnv1a_32`. Cross-checked: CRC-32 and Adler-32 match Python's `zlib`
+  over 1000 random inputs each, FNV-1a reproduces its published test vectors, and str and
+  bytes inputs hash identically.
+
 ## [2.76.0] - 2026-09-13
 
 ### Documentation

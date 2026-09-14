@@ -683,6 +683,7 @@ from .bwt import (
     move_to_front_decode,
 )
 from .lzw import lzw_compress, lzw_decompress, delta_encode, delta_decode
+from .checksums import crc32, adler32, fnv1a_32
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -1073,7 +1074,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "2.76.0"
+__version__ = "2.77.0"
 
 __all__ = [
     "OptionType",
@@ -2036,6 +2037,9 @@ __all__ = [
     "lzw_decompress",
     "delta_encode",
     "delta_decode",
+    "crc32",
+    "adler32",
+    "fnv1a_32",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",
