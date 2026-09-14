@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.64.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.65.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -8722,6 +8722,16 @@ Auto-generated from `quantforge` v4.64.0 by `docs/gen_api.py` — do not edit by
 > ``mu_{4/3} = 2^{2/3} Gamma(7/6) / Gamma(1/2)``. Robust to jumps (each enters only
 > one triple), it estimates ``integral sigma^4`` and sets the scale of the jump
 > test. Requires at least three returns.
+
+## kabsch
+
+### `kabsch(P, Q)`  _function_
+
+> Optimal rotation/translation mapping points ``P`` onto ``Q`` (least-squares).
+>
+> ``P`` and ``Q`` are equal-length lists of 3-D points (paired). Returns
+> ``(R, t, rmsd)``: the 3x3 rotation matrix and translation ``t`` such that
+> ``R @ (p - centroid_P) + centroid_Q`` best matches ``q``, and the residual RMSD.
 
 ## kalman
 

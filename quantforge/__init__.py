@@ -678,6 +678,7 @@ from .rotation import (
 from .so3 import rodrigues, so3_log, hat, unhat
 from .halley import halley, secant
 from .levinson import solve_toeplitz, levinson_durbin
+from .kabsch import kabsch
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1382,7 +1383,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "4.64.0"
+__version__ = "4.65.0"
 
 __all__ = [
     "OptionType",
@@ -2313,6 +2314,7 @@ __all__ = [
     "secant",
     "solve_toeplitz",
     "levinson_durbin",
+    "kabsch",
     "Dual",
     "dual_derivative",
     "dual_gradient",

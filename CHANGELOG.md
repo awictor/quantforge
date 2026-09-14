@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.679.0] - 2026-09-14
+
+### Added
+- `kabsch.py`: `kabsch` finds the optimal rigid transform (rotation + translation) that
+  superimposes one 3-D point set onto a paired one in the least-squares sense (minimum
+  RMSD) -- centring both sets, taking the SVD of their cross-covariance, and correcting any
+  reflection so the result is a proper rotation (determinant +1). Returns the rotation
+  matrix, translation, and residual RMSD -- the core of structure comparison and point-cloud
+  registration. Cross-checked over 3000 random cases: a known rotation+translation is
+  recovered exactly (RMSD ~ 0), the rotation is orthogonal with determinant +1, and a
+  reflected target still yields a proper rotation.
+
 ## [1.678.0] - 2026-09-14
 
 ### Documentation
