@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.60.0] - 2026-09-14
+
+### Documentation
+- README: documented the strong PRNGs in the Quasi-Monte Carlo section, next to the
+  variate samplers — `PCG32` and `Xorshift128Plus` with the reference-vector and
+  bias-free-randint notes. All snippet values verified live.
+
 ## [3.59.0] - 2026-09-14
 
 ### Added

@@ -989,6 +989,24 @@ Knuth's algorithm. Each runs on a deterministic seeded stream (reproducible per 
 and the sample moments match the distribution's — the normal draws recover `(5, 2)`, the
 gamma `(mean 4, var 8)`, and the Poisson `mean = var = 4` over enough samples.
 
+The samplers above run on a simple LCG; when the low-bit quality matters, `PCG32` and
+`Xorshift128Plus` are statistically strong drop-ins:
+
+```python
+from quantforge import PCG32, Xorshift128Plus
+
+rng = PCG32(seed=42, seq=54)
+rng.next_uint32()            # 0xa15c02b7 — matches O'Neill's reference stream
+rng.random()                 # uniform [0, 1)
+rng.randint(0, 5)            # bias-free integer in [0, 5]
+```
+
+`PCG32` is O'Neill's permuted congruential generator (its output reproduces the canonical
+reference vector bit for bit), with a rejection-sampled `randint` that has no modulo bias.
+`Xorshift128Plus` is Vigna's fast 64-bit generator seeded through a splitmix64 warm-up.
+Both are uniform (mean ~0.5, variance ~1/12) and reproducible per seed, and pass the
+empirical tests a bare LCG fails.
+
 ## Exotic options (closed form)
 
 Analytic prices for binaries, single barriers, and geometric Asians:
