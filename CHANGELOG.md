@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.675.0] - 2026-09-14
+
+### Added
+- `halley.py`: two more scalar root finders. `halley` uses the second derivative for *cubic*
+  convergence (``x - 2 f f' / (2 f'^2 - f f'')``), and `secant` is derivative-free with
+  superlinear (~1.618) convergence from two guesses -- complementing the quadratic `newton`.
+  Both reject a step that stalls away from an actual root. Cross-checked against known roots
+  (sqrt, cbrt, the Dottie number, ``exp(x)=3x``) and, over 3000 random cubics, agreement
+  with a bracketed `brent` root; the no-real-root and flat-pair cases raise.
+
 ## [1.674.0] - 2026-09-14
 
 ### Documentation

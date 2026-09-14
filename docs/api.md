@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.60.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.61.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -7304,6 +7304,23 @@ Auto-generated from `quantforge` v4.60.0 by `docs/gen_api.py` — do not edit by
 > float
 >     The long-run variance estimate. Always non-negative thanks to the Bartlett
 >     weights.
+
+## halley
+
+### `halley(f, fprime, fdoubleprime, x0, tol=1e-14, max_iter=100)`  _function_
+
+> Halley's method: cubically-convergent root of ``f`` from ``x0``.
+>
+> Needs ``f``, its first derivative ``fprime``, and second derivative ``fdoubleprime``.
+> The update is ``x - 2 f f' / (2 f'^2 - f f'')``. Raises if the denominator vanishes or
+> it fails to converge in ``max_iter`` steps.
+
+### `secant(f, x0, x1, tol=1e-14, max_iter=200)`  _function_
+
+> Secant method: derivative-free root of ``f`` from two initial guesses ``x0``, ``x1``.
+>
+> Approximates the derivative by the last two points; converges superlinearly
+> (order ~1.618). Raises if the points coincide or it fails to converge.
 
 ## hamming_code
 
