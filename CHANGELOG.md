@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.602.0] - 2026-09-14
+
+### Documentation
+- README: documented `XorBasis` in the Number theory section after the Diophantine/Pell
+  routines -- the GF(2) span, `max_xor`/`min_xor`/`can_represent`/`rank`/`count_distinct`/
+  `kth_smallest`. All snippet values verified live.
+
 ## [1.601.0] - 2026-09-14
 
 ### Added

@@ -6819,6 +6819,31 @@ eventually-periodic CF of an irrational square root, and `pell_fundamental` read
 smallest positive `x^2 - n y^2 = 1` solution off its convergents — matching the classic
 hard cases like `n = 61`.
 
+Integers form a vector space over GF(2) under XOR, and `XorBasis` maintains a basis of the
+span of a set of numbers — answering the maximum-subset-XOR and related questions in time
+linear in the bit width:
+
+```python
+from quantforge import XorBasis
+
+xb = XorBasis([1, 2, 4])
+xb.max_xor()             # 7 — the largest XOR of any subset
+xb.rank()                # 3 independent vectors
+xb.count_distinct()      # 8 reachable values (2^rank)
+[xb.kth_smallest(k) for k in range(4)]   # [0, 1, 2, 3]
+
+xb2 = XorBasis([5, 3, 6])
+xb2.rank()               # 2 — 6 == 5 ^ 3, so it adds nothing
+xb2.can_represent(6)     # True
+```
+
+`insert` reduces each number against the current basis by leading bit (Gaussian
+elimination over GF(2)) and reports whether it was independent. `max_xor`/`min_xor` greedily
+pick basis vectors that raise or lower the running value (with an optional `start` to XOR
+against), `can_represent` tests subset-XOR membership, `rank`/`count_distinct` give the
+dimension and the `2^rank` reachable values, and `kth_smallest` indexes the sorted reachable
+set. Verified against brute subset-XOR enumeration over 4000 random value sets.
+
 ## Computational geometry
 
 Planar geometry primitives on lists of `(x, y)` points — the shape of a point cloud, its
