@@ -6642,6 +6642,29 @@ max_overlap([(1, 5), (2, 6), (4, 8), (10, 12)])      # 3 — peak simultaneous o
 integer point-set); `total_covered_length` sums the merged cover; and `max_overlap` sweeps
 the endpoints for the most intervals active at once (matching a brute-force point scan).
 
+*Choosing* among overlapping intervals is the scheduling problem, and three routines solve
+its standard variants:
+
+```python
+from quantforge import weighted_interval_schedule, activity_selection, min_rooms
+
+jobs = [(1, 3, 5), (2, 5, 6), (4, 6, 5), (6, 7, 4)]   # (start, end, weight)
+weighted_interval_schedule(jobs)   # (14.0, [(1,3,5), (4,6,5), (6,7,4)]) — max total weight
+
+activity_selection([(1, 4), (3, 5), (0, 6), (5, 7), (8, 11), (12, 16)])
+                                   # [(1,4), (5,7), (8,11), (12,16)] — most non-overlapping
+min_rooms([(0, 30), (5, 10), (15, 20)])   # 2 — fewest resources to run all at once
+```
+
+`weighted_interval_schedule` picks the non-overlapping subset of maximum total weight — DP
+over intervals sorted by end time, each looking back (by binary search) to the last one it
+does not overlap, `O(n log n)` — and returns both the total and the chosen intervals.
+`activity_selection` is the unweighted version: the most intervals you can fit, by the
+earliest-finish-time greedy. `min_rooms` sweeps the endpoints for the peak number active
+simultaneously — the fewest rooms, machines, or tracks needed. Intervals are half-open, so
+one ending exactly as another starts do not clash. All three are checked against
+brute-force subset enumeration over thousands of random instances.
+
 For points in space rather than on a line, `KDTree` indexes a fixed set of
 k-dimensional coordinates and answers nearest-neighbour, radius, and box queries without
 scanning every point:
