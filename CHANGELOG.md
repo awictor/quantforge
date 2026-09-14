@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.37.0] - 2026-09-13
+
+### Added
+- `tv_denoise.py`: total-variation denoising via Condat's exact O(n) 1-D algorithm —
+  `tv_denoise` and `tv_total_variation`. Cross-checked: `lam=0` returns the input, a
+  large `lam` collapses to the mean, a noisy step is recovered with sharp edges and much
+  lower total variation, the output is the true minimizer (no coordinate perturbation
+  lowers the objective across thousands of trials), and it matches an independent
+  subgradient-descent solver.
+
 ## [2.36.0] - 2026-09-13
 
 ### Documentation

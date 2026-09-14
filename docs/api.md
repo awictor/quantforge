@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.36.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.37.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -14359,6 +14359,24 @@ Auto-generated from `quantforge` v2.36.0 by `docs/gen_api.py` — do not edit by
 > If ``mean``/``cov`` are omitted they are estimated in-sample from ``returns``.
 > Returns one turbulence value per period; the average is close to the number of
 > assets when the data is multivariate normal.
+
+## tv_denoise
+
+### `tv_denoise(y, lam)`  _function_
+
+> Total-variation denoise ``y`` with regularization weight ``lam`` (Condat's method).
+>
+> Returns the exact minimizer of ``(1/2) sum (x - y)^2 + lam * sum |x_{k+1} - x_k|``.
+> Larger ``lam`` produces flatter output with fewer, larger jumps; ``lam = 0`` returns
+> ``y`` unchanged. The result is piecewise constant. ``O(n)`` time, ``O(1)`` extra
+> state beyond the output.
+
+### `tv_total_variation(x)`  _function_
+
+> Total variation ``sum |x_{k+1} - x_k|`` of a sequence.
+>
+> The quantity the L1 penalty in :func:`tv_denoise` shrinks. Useful for confirming a
+> denoised signal is flatter (lower total variation) than its noisy input.
 
 ## two_scale_rv
 
