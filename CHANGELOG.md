@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.686.0] - 2026-09-14
+
+### Documentation
+- README: documented `delaunay_triangulation` in the Computational geometry section after
+  the ear-clipping triangulator -- Bowyer-Watson point-set triangulation with the
+  empty-circumcircle property. All snippet values verified live.
+
 ## [1.685.0] - 2026-09-14
 
 ### Added

@@ -7654,6 +7654,23 @@ reduced to `n - 2` triangles whose areas sum to the polygon's own. `signed_area`
 shoelace area — its sign gives the winding, which `is_clockwise` reports — and
 `is_convex_polygon` checks that every turn goes the same way.
 
+Where ear-clipping triangulates a *polygon*, `delaunay_triangulation` triangulates a *point
+set* — into the triangulation that maximizes the minimum angle (no thin slivers):
+
+```python
+from quantforge import delaunay_triangulation
+
+delaunay_triangulation([(0,0), (1,0), (1,1), (0,1)])   # [(0,1,2), (0,2,3)] — index triples
+len(delaunay_triangulation([(0,0),(4,0),(4,4),(0,4),(2,2)]))   # 4
+```
+
+`delaunay_triangulation` runs the incremental Bowyer-Watson algorithm: each new point
+deletes the triangles whose circumcircle contains it and re-triangulates the hole. It
+returns triangles as index triples into the input, satisfies the empty-circumcircle property
+(no point sits inside any triangle's circumcircle), and is the dual of the Voronoi diagram —
+the standard input to terrain meshing, finite-element grids, and nearest-neighbour graphs.
+Verified over thousands of random point sets against that empty-circle property.
+
 Point-proximity queries — hit-testing, snapping, route distance — come from the
 point-to-line and point-to-segment distances:
 
