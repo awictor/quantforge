@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.720.0] - 2026-09-14
+
+### Documentation
+- README: documented `spherical_bessel_j`/`spherical_bessel_y` and `bessel_in`/`bessel_kn` in
+  the special-functions block after the orthogonal-polynomial note -- the recurrence strategy
+  per function and the series/integral/Wronskian cross-checks. All snippet values verified live.
+
 ## [1.719.0] - 2026-09-14
 
 ### Added

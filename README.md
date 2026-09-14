@@ -7252,6 +7252,31 @@ linked by `He_n(x) = 2**(-n/2) H_n(x/sqrt 2)`. Cross-checked against the explici
 polynomials, those identities, and the weighted orthogonality integrals for the Gaussian,
 exponential, and arcsine weights.
 
+`spherical_bessel_j`/`spherical_bessel_y` and `bessel_in`/`bessel_kn` round out the Bessel
+family (the cylindrical `bessel_j0`/`bessel_jn`/`bessel_y0` live in the numerical-utilities
+block). The spherical `j_n`/`y_n` are the radial solutions of the Helmholtz equation; the
+modified `I_n`/`K_n` solve the modified equation for heat flow and the skin effect:
+
+```python
+from quantforge import (spherical_bessel_j, spherical_bessel_y,
+                        bessel_in, bessel_kn)
+
+spherical_bessel_j(0, 1.0)   # 0.8414709848078965 = sin(1)/1
+spherical_bessel_j(2, 3.0)   # 0.2986374970757335
+spherical_bessel_y(0, 1.0)   # -0.5403023058681398 = -cos(1)/1
+bessel_in(0, 2.0)            # 2.279585307296026   (I_0)
+bessel_in(3, 2.0)            # 0.2127399597027357  (I_3)
+bessel_kn(0, 1.0)            # 0.421024421083418   (K_0)
+bessel_kn(2, 1.0)            # 1.6248388844172295  (K_2)
+```
+
+`j_n` uses upward recurrence when `n <= x` and downward (Miller) recurrence otherwise; `y_n`
+climbs upward from `y_0 = -cos(x)/x`; `I_n` uses normalized downward recurrence (with overflow
+rescaling); `K_n` climbs upward from the Abramowitz-Stegun `K_0`/`K_1`. Cross-checked against
+the explicit low-order forms, the series `I_n = sum (x/2)**(2k+n)/(k!(k+n)!)`, the integral
+`K_n = int e**(-x cosh t) cosh(n t) dt`, and both Wronskians
+(`j_n y_n' - j_n' y_n = 1/x**2`, `I_n K_n' - I_n' K_n = -1/x`).
+
 The correlated-normal CDFs behind the multi-asset and compound-option models are public
 too:
 
