@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.665.0] - 2026-09-14
+
+### Added
+- `min_cost_flow.py`: `MinCostMaxFlow` / `min_cost_max_flow` find a maximum flow that, among
+  all maximum flows, has the least total cost -- by augmenting along a shortest-cost
+  residual path each round (Bellman-Ford/SPFA, so negative-cost edges are allowed). Returns
+  ``(max_flow, min_cost)``; the plain maximum flow is the equal-cost special case.
+  Cross-checked against brute integer-flow enumeration over 1500 small networks (flow value
+  *and* min cost) and against the Edmonds-Karp `max_flow` value over 1000 more (fuzz tests
+  marked slow).
+
 ## [1.664.0] - 2026-09-14
 
 ### Documentation

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.50.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.51.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -10354,6 +10354,22 @@ Auto-generated from `quantforge` v4.50.0 by `docs/gen_api.py` — do not edit by
 > imbalance. In ``[0, 1]``: near zero when buys and sells balance, near one when
 > trading is one-sided (a proxy for informed order flow / toxicity). Aligned
 > non-negative series with at least one bucket.
+
+## min_cost_flow
+
+### `MinCostMaxFlow()`  _class_
+
+> Min-cost max-flow on an integer-capacity network built edge by edge.
+>
+> ``add_edge(u, v, capacity, cost)`` adds a directed edge (and its residual). ``solve(s,
+> t)`` returns ``(max_flow, min_cost)``: the maximum flow value and the least total cost
+> achieving it. Nodes are any hashable labels.
+
+### `min_cost_max_flow(edges, source, sink)`  _function_
+
+> Convenience: build the network from ``edges`` = ``[(u, v, capacity, cost), ...]``.
+>
+> Returns ``(max_flow, min_cost)``.
 
 ## minimize1d
 
