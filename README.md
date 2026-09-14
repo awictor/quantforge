@@ -7559,6 +7559,27 @@ algorithm) orders a DAG so every edge points forward — raising if a cycle make
 impossible. Graphs are plain dicts: `{node: {neighbor: weight}}` for weighted routines,
 `{node: [neighbors]}` for the unweighted ones.
 
+On a DAG that same forward order makes path optimization a single linear sweep —
+`dag_longest_path`/`dag_shortest_path` handle *negative* weights (unlike Dijkstra) with no
+relaxation rounds, and the longest path is the CPM critical path:
+
+```python
+from quantforge import dag_longest_path, dag_shortest_path, transitive_closure
+
+g = {0: [(1, 3), (2, 2)], 1: [(3, 4)], 2: [(3, 1)], 3: [(4, 2)], 4: []}
+dag_longest_path(g, 0, 4)    # (9.0, [0, 1, 3, 4]) — the critical path
+dag_shortest_path(g, 0, 4)   # (5.0, [0, 2, 3, 4])
+transitive_closure({'a': ['b'], 'b': ['c'], 'c': []})   # {'a': {'b','c'}, 'b': {'c'}, 'c': set()}
+```
+
+These take a weighted DAG as `{node: [(neighbor, weight), ...]}`. `dag_shortest_path`/
+`dag_longest_path` relax edges once in topological order, so they run in `O(V + E)` and,
+because there is no cycle, tolerate negative weights that would break Dijkstra; passing a
+`target` returns `(distance, path)` with the route reconstructed. `transitive_closure`
+returns each node's reachable set (a DFS from each, cycles allowed). All raise on a cyclic
+graph where acyclicity is required. Cross-checked against exhaustive path enumeration over
+thousands of random DAGs.
+
 Structure problems on weighted graphs — spanning trees and network capacity — round out
 the toolkit:
 

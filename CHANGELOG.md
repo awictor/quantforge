@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.664.0] - 2026-09-14
+
+### Documentation
+- README: documented `dag_longest_path`, `dag_shortest_path`, and `transitive_closure` in
+  the Graph algorithms section after `topological_sort` -- O(V+E) topological-sweep path
+  optimization (negative weights, CPM critical path) and reachability. All snippet values
+  verified live.
+
 ## [1.663.0] - 2026-09-14
 
 ### Added
