@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.32.0] - 2026-09-13
+
+### Documentation
+- README: documented sample-rate conversion in the spectral section, next to the FIR
+  filters — the aliasing pitfall, sinc reconstruction, up/downsampling, the anti-alias
+  suppression example, and the group-delay note. All snippet values verified live.
+
 ## [2.31.0] - 2026-09-13
 
 ### Added

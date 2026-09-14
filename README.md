@@ -4539,6 +4539,28 @@ and a fast cosine, a low-pass keeps the slow one and removes the fast one, leavi
 amplitude near the surviving tone's `1.0`. `fir_bandpass` builds a band-pass as the
 difference of two low-pass filters and `fir_apply` runs the direct convolution.
 
+The same low-pass filters drive *sample-rate conversion*, which cannot be done by naively
+dropping or repeating samples — that folds high frequencies back as aliases or leaves
+spectral images. The correct operations filter at the new Nyquist limit:
+
+```python
+from quantforge import sinc_interp, upsample, downsample, resample_rational
+
+sinc_interp(x, [t + 0.5 for t in range(len(x) - 1)])  # band-limited reconstruction
+upsample(x, 4)                                         # 4x rate, anti-imaging filter
+downsample(x, 2)                                       # 1/2 rate, anti-alias filter
+resample_rational(x, 3, 2)                             # rational 3/2 ratio
+```
+
+`sinc_interp` is the ideal Whittaker-Shannon reconstruction — exact at integer positions
+and the band-limited interpolation between them. `upsample` inserts zeros and filters
+(output `factor` times as long); `downsample` filters then keeps every `factor`-th sample
+(so a length-256 signal downsampled by 2 has 128 samples). The anti-alias filter is the
+point: a tone at `0.32` cycles/sample, above the new Nyquist of `0.25` after halving the
+rate, comes out with rms `0.001` — suppressed, not aliased back to a false low frequency
+as naive decimation would. Each operation carries the FIR filter's linear-phase group
+delay of `(numtaps-1)/2` samples.
+
 Filtering keeps and rejects frequencies; the *analytic signal* instead turns a real
 oscillation into a rotating phasor, so you can read off its instantaneous amplitude and
 frequency. The Hilbert transform is the machinery: a 90-degree phase shift of every
