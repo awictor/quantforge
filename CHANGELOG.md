@@ -31,6 +31,14 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.30.0] - 2026-09-13
+
+### Documentation
+- README: documented the parametric AR spectral estimator in the spectral section,
+  next to Welch — the contrast with the periodogram, the AR(2) recovery and short-record
+  two-sinusoid resolution, and the Burg/Yule-Walker options. All snippet values verified
+  live.
+
 ## [2.29.0] - 2026-09-13
 
 ### Added

@@ -4472,6 +4472,26 @@ periodograms — trading some frequency resolution for far less variance, so a
 spectral peak stands out cleanly against a noisy background where the raw
 periodogram would bury it.
 
+The periodogram and Welch estimate a spectrum straight from the data; a *parametric*
+estimate instead fits an autoregressive model and reads its spectrum off the
+coefficients, which resolves sharp peaks far better on a short record:
+
+```python
+from quantforge import burg, ar_spectrum
+
+model = burg(series, order=2)                    # forward-backward AR fit
+freqs = [i / 500 for i in range(251)]            # 0..0.5 cycles/sample
+psd = ar_spectrum(series, order=20, freqs=freqs) # parametric PSD (Burg by default)
+```
+
+`burg` estimates the AR coefficients directly from the data (never forming
+autocovariances), so on 2000 samples of a known AR(2) process it recovers the
+coefficients to within a few percent, and its reflection coefficients stay inside the
+unit circle (a stable model). Fed just 128 samples of two sinusoids in noise,
+`ar_spectrum` puts clean peaks exactly at both frequencies where a periodogram of the
+same length would smear them together. `ar_psd` evaluates the spectrum from coefficients
+you already have, and `method="yule_walker"` selects the autocovariance route instead.
+
 Welch *averages away* time to get a cleaner spectrum; the short-time Fourier transform
 *keeps* it, taking an FFT of each overlapping windowed frame to show how the spectrum
 evolves. Its squared magnitude is the spectrogram — the standard time-frequency view of
