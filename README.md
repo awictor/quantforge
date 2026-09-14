@@ -5975,6 +5975,23 @@ the Kuhn-Munkres potentials, returning the column chosen for each row plus the t
 budget with each item taken at most once, returning the value and the chosen item indices
 (both verified against a brute-force subset search).
 
+Three more small dynamic programs cover coin change and subset sum:
+
+```python
+from quantforge import min_coins, count_change, subset_sum
+
+min_coins([1, 3, 4], 6)              # (2, [3, 3]) — fewest coins (greedy would misfire)
+count_change([1, 2, 5], 5)           # 4 — distinct multisets summing to 5
+subset_sum([3, 34, 4, 12, 5, 2], 9)  # (True, [4, 5]) — a subset that hits the target
+```
+
+`min_coins` returns the fewest coins summing to a target (unlimited supply of each) with
+one witnessing multiset, `-1` if impossible — the `[1, 3, 4]` case shows why a greedy pick
+fails where the DP does not. `count_change` counts the distinct *order-independent*
+multisets that reach the target, and `subset_sum` decides whether a subset of a list (each
+item used once) sums to the target, returning one such subset. Each runs in
+`O(target · n)` and is checked against brute-force references over thousands of instances.
+
 `ridders_derivative` / `ridders_second_derivative` return `(value, error_estimate)`:
 they evaluate a central difference at a shrinking step sequence and Richardson-
 extrapolate across it, stopping when round-off starts to dominate — so they reach

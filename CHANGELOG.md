@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.618.0] - 2026-09-14
+
+### Documentation
+- README: documented `min_coins`, `count_change`, and `subset_sum` alongside
+  `knapsack_01`/`hungarian` -- fewest-coins DP, multiset counting, and subset reachability.
+  All snippet values verified live.
+
 ## [1.617.0] - 2026-09-14
 
 ### Added
