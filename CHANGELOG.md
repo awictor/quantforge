@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.647.0] - 2026-09-14
+
+### Added
+- `li_chao.py`: `LiChaoTree` maintains the lower (or upper, with `maximize=True`) envelope of
+  a set of lines ``y = m x + b`` over a fixed set of query abscissae, answering "best ``y``
+  at this ``x``" in ``O(log n)`` with lines inserted in any order -- unlike the convex-hull
+  trick, which needs sorted slopes. It is the standard accelerator for the DP-optimization
+  pattern ``dp[i] = min_j (m_j x_i + b_j)``. Cross-checked against a brute min/max over all
+  inserted lines over 6000 random cases (both envelopes), with insertion-order independence
+  verified.
+
 ## [1.646.0] - 2026-09-14
 
 ### Documentation

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.32.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.33.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -9172,6 +9172,17 @@ Auto-generated from `quantforge` v4.32.0 by `docs/gen_api.py` — do not edit by
 > Generates ``tries`` Latin hypercubes (distinct seeds) and returns the one whose
 > closest pair is farthest apart -- a more space-filling design than a single random
 > LHS, at ``tries`` times the cost. Returns the chosen point list.
+
+## li_chao
+
+### `LiChaoTree(xs, maximize=False)`  _class_
+
+> Lower/upper envelope of lines over a fixed sorted list of query points.
+>
+> Construct with the ``xs`` at which queries will be made (any reals, deduplicated and
+> sorted internally). ``add_line(m, b)`` inserts ``y = m x + b``; ``query(x)`` returns the
+> minimum (or maximum, if ``maximize``) ``y`` over all inserted lines at that ``x``.
+> ``x`` must be one of the construction points.
 
 ## linalg
 
