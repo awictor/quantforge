@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.80.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.81.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -16096,6 +16096,16 @@ Auto-generated from `quantforge` v3.80.0 by `docs/gen_api.py` — do not edit by
 >
 > The quantity the L1 penalty in :func:`tv_denoise` shrinks. Useful for confirming a
 > denoised signal is flatter (lower total variation) than its noisy input.
+
+## two_sat
+
+### `TwoSat(n)`  _class_
+
+> A 2-SAT instance over ``n`` boolean variables ``0 .. n-1``.
+>
+> Add clauses with `add_clause` (each literal is a variable index for the positive form or
+> its bitwise complement ``~v`` for the negation) or the readable `add_or`. `solve` returns
+> a satisfying list of booleans, or ``None`` if the formula is unsatisfiable.
 
 ## two_scale_rv
 

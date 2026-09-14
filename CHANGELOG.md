@@ -4,6 +4,19 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.595.0] - 2026-09-14
+
+### Added
+- `two_sat.py`: `TwoSat` solves 2-satisfiability in linear time by reducing each clause
+  ``(a OR b)`` to the implications ``NOT a -> b`` and ``NOT b -> a`` on an implication graph
+  over the ``2n`` literals, then running Tarjan SCC (`scc.py`): the formula is satisfiable
+  iff no variable shares a component with its negation, and a satisfying assignment reads
+  off the component order. Clauses go in via `add_or`/`add_clause` (literals ``v`` or ``~v``),
+  with `add_implication` and `force_true` helpers; `solve` returns a boolean assignment or
+  ``None``. Cross-checked against brute-force assignment enumeration over 5000 random
+  instances -- satisfiability always agrees, and every returned assignment satisfies all
+  clauses.
+
 ## [1.594.0] - 2026-09-14
 
 ### Documentation
