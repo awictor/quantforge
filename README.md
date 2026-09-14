@@ -4587,6 +4587,26 @@ and `quat_to_axis_angle` inverts the construction. `slerp` interpolates along th
 constant-speed arc between two orientations, staying unit-norm, so its midpoint is exactly
 the half-angle rotation. `quat_normalize` and `quat_conjugate` round out the set.
 
+A rotation also has matrix and Euler-angle forms, and the `rotation` conversions move
+between all three:
+
+```python
+from quantforge import quat_to_matrix, euler_to_quat, quat_to_euler
+import math
+
+quat_to_matrix((math.cos(math.pi/4), 0, 0, math.sin(math.pi/4)))
+                                # the 90-deg-about-z matrix ([0,-1,0],[1,0,0],[0,0,1])
+euler_to_quat(math.pi/2, 0, 0)  # (0.7071, 0, 0, 0.7071) — yaw 90 deg
+quat_to_euler((0.7071, 0, 0, 0.7071))   # (1.5708, 0, 0) = (yaw, pitch, roll)
+```
+
+`quat_to_matrix`/`matrix_to_quat` (Shepperd's method) convert to and from a 3x3 rotation
+matrix; `euler_to_quat`/`quat_to_euler` use the aerospace Z-Y-X (yaw, pitch, roll) intrinsic
+convention; and `euler_to_matrix`/`matrix_to_euler` compose the two. Quaternions are the
+same `(w, x, y, z)` used above, so `quat_to_matrix(q)` applied to a vector matches
+`rotate_vector(q, v)`. Verified over thousands of random rotations that every round-trip
+recovers the input and the matrices stay orthogonal.
+
 The everyday vector operations back them up — dot and cross products, norms, angles,
 projection, and reflection:
 

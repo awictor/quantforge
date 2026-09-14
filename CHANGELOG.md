@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.672.0] - 2026-09-14
+
+### Documentation
+- README: documented `quat_to_matrix`/`matrix_to_quat`/`euler_to_quat`/`quat_to_euler` (and
+  the matrix/Euler shortcuts) in the Quaternions section -- conversions among quaternion,
+  rotation matrix, and Z-Y-X Euler angles. All snippet values verified live.
+
 ## [1.671.0] - 2026-09-14
 
 ### Added
