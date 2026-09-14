@@ -3516,6 +3516,24 @@ difference `y_j - x_i` — the robust shift estimate that inverts the Wilcoxon r
 test. On a pure `+5` translation it returns exactly `5`, and it stays near zero when
 the two samples share a distribution.
 
+The MAD needs a symmetric distribution and a location estimate; the Rousseeuw-Croux `Qn`
+and `Sn` estimators need neither and share the MAD's 50% breakdown:
+
+```python
+from quantforge import qn_scale, sn_scale, biweight_midvariance
+
+sn_scale(list(range(1, 11)))          # 3.5778 — location-free spread
+qn_scale([1, 2, 1.5, 2.5, 1.8, 1000]) # ~1.56 — the gross outlier barely moves it
+biweight_midvariance(data)             # smoothly downweighted robust sigma
+```
+
+`qn_scale` is a scaled quantile of the pairwise distances and `sn_scale` a median of
+per-point medians — both estimate the normal sigma on clean data yet tolerate up to half
+the sample being outliers, and neither assumes symmetry (unlike the MAD). Each carries its
+normal-consistency constant. `biweight_midvariance` smoothly zero-weights points beyond a
+few MADs for ~87% efficiency at the normal. (`qn_scale` omits the finite-sample correction
+some libraries apply, so small-sample values differ slightly.)
+
 To see a sample's *shape* without a histogram's arbitrary bin edges, `kde` builds a
 smooth Gaussian kernel density estimate:
 
