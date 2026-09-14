@@ -109,6 +109,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Gaussian-copula sampling](#gaussian-copula-sampling)
 - [Directional statistics](#directional-statistics)
 - [Geodesy](#geodesy)
+- [Quaternions](#quaternions)
 - [Spectral analysis](#spectral-analysis)
 - [Wavelet transform (Haar multiresolution)](#wavelet-transform-haar-multiresolution)
 - [Structural breaks (CUSUM / Chow)](#structural-breaks-cusum--chow)
@@ -4414,6 +4415,28 @@ follows a bearing and distance to the arrival point (the exact inverse — a rou
 recovers the input distance and bearing), and `cross_track_distance` is the signed
 perpendicular offset of a point from a route (positive to the right of the path), for
 "how far off course am I". All angles in degrees.
+
+## Quaternions
+
+Unit quaternions represent 3-D rotations without gimbal lock and interpolate smoothly
+where matrices cannot:
+
+```python
+import math
+from quantforge import axis_angle_to_quat, rotate_vector, slerp, quat_multiply
+
+q = axis_angle_to_quat([0, 0, 1], math.pi / 2)   # 90 deg about z
+rotate_vector(q, (1, 0, 0))                        # (0, 1, 0) — x rotates to y
+mid = slerp(axis_angle_to_quat([0,0,1], 0), q, 0.5)
+rotate_vector(mid, (1, 0, 0))                      # (0.707, 0.707, 0) — halfway (45 deg)
+```
+
+A quaternion is `(w, x, y, z)`; `axis_angle_to_quat` builds one from an axis and angle,
+and `rotate_vector` applies it as `q v q*` (length-preserving). `quat_multiply` composes
+rotations — `quat_multiply(a, b)` applies `b` then `a`, matching the sequential rotation —
+and `quat_to_axis_angle` inverts the construction. `slerp` interpolates along the shortest
+constant-speed arc between two orientations, staying unit-norm, so its midpoint is exactly
+the half-angle rotation. `quat_normalize` and `quat_conjugate` round out the set.
 
 ## Spectral analysis
 

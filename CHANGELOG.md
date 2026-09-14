@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.98.0] - 2026-09-13
+
+### Documentation
+- README: added a "Quaternions" section documenting `axis_angle_to_quat`,
+  `rotate_vector`, `slerp`, `quat_multiply`, and the rest with worked values. TOC
+  regenerated. All snippet values verified live.
+
 ## [2.97.0] - 2026-09-13
 
 ### Added
