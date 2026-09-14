@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.642.0] - 2026-09-14
+
+### Documentation
+- README: documented `stern_brocot_path`, `best_rational_bounded`, `farey_sequence`, and
+  `mediant` next to `best_rational`/the continued-fraction block -- the Stern-Brocot tree
+  and Farey enumeration of the rationals. All snippet values verified live.
+
 ## [1.641.0] - 2026-09-14
 
 ### Added
