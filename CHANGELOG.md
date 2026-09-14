@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.723.0] - 2026-09-14
+
+### Added
+- `lbfgs`: limited-memory BFGS minimizer using Nocedal's two-loop recursion (``O(m n)`` memory
+  vs BFGS's ``O(n^2)``) with a strong-Wolfe (bracket + zoom) line search. Accepts an optional
+  analytic gradient, otherwise central differences. Cross-checked against a quadratic bowl,
+  the Rosenbrock function converging to ``(1, 1)``, agreement with `bfgs`, an analytic-gradient
+  path (via `reverse_gradient`), and a 100-dimensional quadratic.
+
 ## [1.722.0] - 2026-09-14
 
 ### Documentation

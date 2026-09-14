@@ -724,6 +724,7 @@ from .bessel2 import (
     bessel_kn,
 )
 from .reverse_ad import Var, reverse_gradient
+from .lbfgs import lbfgs
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1428,7 +1429,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "5.08.0"
+__version__ = "5.09.0"
 
 __all__ = [
     "OptionType",
@@ -2422,6 +2423,7 @@ __all__ = [
     "bessel_kn",
     "Var",
     "reverse_gradient",
+    "lbfgs",
     "Dual",
     "dual_derivative",
     "dual_gradient",

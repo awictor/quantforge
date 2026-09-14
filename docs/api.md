@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.08.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.09.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -9305,6 +9305,17 @@ Auto-generated from `quantforge` v5.08.0 by `docs/gen_api.py` — do not edit by
 > ``mode`` is ``"sum"``, ``"min"``, or ``"max"``. Build from an initial list; then
 > ``update(lo, hi, delta)`` adds ``delta`` to every index in ``[lo, hi)`` and
 > ``query(lo, hi)`` returns the aggregate over ``[lo, hi)`` -- both ``O(log n)``.
+
+## lbfgs
+
+### `lbfgs(func, x0, grad=None, m=10, tol=1e-08, max_iter=500)`  _function_
+
+> Minimize ``func`` from ``x0`` by L-BFGS with a strong-Wolfe line search.
+>
+> ``func`` maps a length-``n`` list to a scalar. ``grad`` is an optional gradient function
+> (same signature, returning a length-``n`` list); if omitted, central differences are used.
+> ``m`` is the history size. Returns a dict with ``x`` (minimizer), ``fun``, ``n_iter``,
+> ``converged`` (gradient norm below ``tol``) and ``grad_norm``.
 
 ## lca
 
