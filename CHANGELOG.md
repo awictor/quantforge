@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.93.0] - 2026-09-13
+
+### Added
+- `von_mises.py`: the von Mises distribution (circular normal) — `bessel_i0`, `bessel_i1`,
+  `von_mises_pdf`, and `von_mises_fit` (maximum-likelihood mean and concentration).
+  Cross-checked: the Bessel functions match published values, the density integrates to 1
+  for every concentration and reduces to uniform at kappa=0 with its mode at the mean, and
+  the fit recovers the parameters of a simulated sample (its kappa satisfies I1/I0 = R).
+
 ## [2.92.0] - 2026-09-13
 
 ### Documentation

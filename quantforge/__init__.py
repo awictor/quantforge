@@ -706,6 +706,7 @@ from .circular_stats import (
     circular_std,
     rayleigh_test,
 )
+from .von_mises import bessel_i0, bessel_i1, von_mises_pdf, von_mises_fit
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -1096,7 +1097,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "2.92.0"
+__version__ = "2.93.0"
 
 __all__ = [
     "OptionType",
@@ -2081,6 +2082,10 @@ __all__ = [
     "circular_variance",
     "circular_std",
     "rayleigh_test",
+    "bessel_i0",
+    "bessel_i1",
+    "von_mises_pdf",
+    "von_mises_fit",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

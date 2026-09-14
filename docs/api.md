@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.92.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.93.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -15972,6 +15972,34 @@ Auto-generated from `quantforge` v2.92.0 by `docs/gen_api.py` — do not edit by
 ### `VolCube(expiries, tenors, node_params, forwards)`  _class_
 
 > A SABR-per-node swaption vol cube with variance interpolation.
+
+## von_mises
+
+### `bessel_i0(x)`  _function_
+
+> Modified Bessel function of the first kind, order 0, ``I0(x)``.
+>
+> Uses the Abramowitz & Stegun polynomial approximations (accurate to ~1e-7), the same
+> ones used for the von Mises normalizing constant.
+
+### `bessel_i1(x)`  _function_
+
+> Modified Bessel function of the first kind, order 1, ``I1(x)`` (A&S approximation).
+
+### `von_mises_fit(angles, tol=1e-10, max_iter=100)`  _function_
+
+> Maximum-likelihood fit of a von Mises distribution to ``angles`` (radians).
+>
+> The MLE mean direction is the sample :func:`circular_mean`; the concentration
+> ``kappa`` solves ``I1(kappa)/I0(kappa) = R`` (the mean resultant length), found here by
+> Newton's method with a standard closed-form seed. Returns ``(mu, kappa)``.
+
+### `von_mises_pdf(theta, mu, kappa)`  _function_
+
+> Von Mises density at angle ``theta`` with mean ``mu`` and concentration ``kappa``.
+>
+> ``exp(kappa cos(theta - mu)) / (2 pi I0(kappa))``. ``kappa >= 0``; ``kappa = 0`` gives
+> the uniform density ``1 / (2 pi)``. Integrates to 1 over any ``2*pi`` interval.
 
 ## vrp
 
