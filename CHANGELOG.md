@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.53.0] - 2026-09-14
+
+### Added
+- `diophantine.py`: integer-equation tools — `linear_diophantine` (all solutions of
+  `ax + by = c`), `sqrt_continued_fraction` (periodic CF of an irrational square root),
+  and `pell_fundamental` (smallest solution of `x^2 - n y^2 = 1`). Cross-checked: linear
+  solutions satisfy the equation and the homogeneous step preserves it, the sqrt CFs match
+  known expansions (and their convergents converge to the root), and the Pell fundamentals
+  match published values including the famous n=61 case.
+
 ## [3.52.0] - 2026-09-14
 
 ### Documentation

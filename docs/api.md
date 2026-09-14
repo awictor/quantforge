@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.52.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.53.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -3908,6 +3908,31 @@ Auto-generated from `quantforge` v3.52.0 by `docs/gen_api.py` — do not edit by
 > differential weight, ``cr`` the crossover rate. Returns a dict with ``x`` (best
 > vector), ``fun`` (its objective), ``n_iter`` and ``converged`` (population spread
 > below ``tol``). Deterministic for a fixed ``seed``.
+
+## diophantine
+
+### `linear_diophantine(a, b, c)`  _function_
+
+> Solve ``a x + b y = c`` in integers, or return ``None`` if unsolvable.
+>
+> Returns ``(x0, y0, dx, dy)``: one particular solution ``(x0, y0)`` and the step
+> ``(dx, dy)`` so that ``(x0 + k*dx, y0 + k*dy)`` is a solution for every integer ``k``.
+> Solvable iff ``gcd(a, b)`` divides ``c``. ``a`` and ``b`` must not both be zero.
+
+### `pell_fundamental(n)`  _function_
+
+> Smallest positive ``(x, y)`` solving Pell's equation ``x^2 - n y^2 = 1``.
+>
+> Built from the convergents of ``sqrt(n)``'s continued fraction. ``n`` must be a
+> non-square positive integer.
+
+### `sqrt_continued_fraction(n)`  _function_
+
+> Continued-fraction expansion of ``sqrt(n)`` for a non-square ``n``: ``(a0, period)``.
+>
+> ``sqrt(n) = [a0; a1, a2, ...]`` is eventually periodic; returns the integer part
+> ``a0`` and the repeating block ``period`` (a list). Raises if ``n`` is a perfect
+> square or negative.
 
 ## discount_curve
 
