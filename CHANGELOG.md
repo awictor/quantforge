@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.15.0] - 2026-09-14
+
+### Added
+- `partial_corr.py`: `partial_correlation` and `semipartial_correlation` — the
+  correlation of two variables after regressing out one or more controls (OLS residuals).
+  Cross-checked: a spurious correlation driven by a common cause drops from 0.92 to ~0
+  when that cause is controlled, the result matches the textbook three-variable partial
+  formula, an uncorrelated control leaves the correlation unchanged, and multiple controls
+  work.
+
 ## [3.14.0] - 2026-09-14
 
 ### Documentation

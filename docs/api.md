@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.14.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.15.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -10914,6 +10914,25 @@ Auto-generated from `quantforge` v3.14.0 by `docs/gen_api.py` — do not edit by
 > float
 >     The annualized par coupon rate. On a flat curve it equals the flat rate;
 >     a bond bearing this coupon prices to exactly par.
+
+## partial_corr
+
+### `partial_correlation(x, y, controls)`  _function_
+
+> Partial correlation of ``x`` and ``y`` controlling for ``controls``.
+>
+> ``controls`` is a single control column (list) or a list of control columns. Removes
+> the linear effect of the controls from both ``x`` and ``y`` (OLS) and correlates the
+> residuals. Returns a coefficient in ``[-1, 1]``; a correlation that is purely due to
+> the controls drops toward 0.
+
+### `semipartial_correlation(x, y, controls)`  _function_
+
+> Semi-partial (part) correlation: control the ``controls`` out of ``y`` only.
+>
+> Correlates raw ``x`` with the residual of ``y`` after regressing out the controls --
+> the unique contribution of ``x`` to ``y`` beyond the controls. Returns a coefficient
+> in ``[-1, 1]``.
 
 ## passing_bablok
 
