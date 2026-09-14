@@ -6623,6 +6623,26 @@ the data. `reservoir_sample` (Vitter's algorithm R) is deterministic for a fixed
 and returns every stream element with equal probability; if the stream is shorter than
 `k` it returns all of it.
 
+`P2Quantile` is an *estimate* in constant memory; when the *exact* running median is needed,
+`RunningMedian` keeps it with two heaps:
+
+```python
+from quantforge import RunningMedian
+
+rm = RunningMedian()
+for x in (10, 20, 30):
+    rm.push(x)
+rm.median()                     # 20.0
+RunningMedian([1, 2, 3, 4]).median()   # 2.5 — averages the two middle values
+```
+
+`RunningMedian` splits the values into a max-heap of the lower half and a min-heap of the
+upper half, rebalanced after each `push` so their sizes differ by at most one — so `push` is
+`O(log n)`, `median` is `O(1)`, and the answer is exact (the two middle values are averaged
+on an even count). Unlike `P2Quantile` it stores every value, so use it when correctness
+matters more than the constant memory. Verified against `statistics.median` after each push
+over thousands of random streams.
+
 `P2Quantile` tracks *one* preset quantile; when you need to query *any* quantile after the
 fact with a guaranteed error, `DDSketch` keeps a compact histogram of log-spaced buckets
 and answers each quantile within a fixed *relative* error:
