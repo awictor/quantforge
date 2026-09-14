@@ -6274,6 +6274,26 @@ entropy and never exceeds fixed-width coding; frequent symbols get the shortest 
 of a repeated symbol into `(symbol, count)` pairs — ideal for sparse or blocky data — and
 `run_length_decode` expands them back. Both invert losslessly.
 
+The Burrows-Wheeler transform and move-to-front coding are the front of the bzip2
+pipeline — a reversible permutation that clusters repeats, then a code that turns those
+clusters into mostly-zero runs:
+
+```python
+from quantforge import bwt_transform, bwt_inverse, move_to_front_encode
+
+bwt_transform("banana")                        # ('nnbaaa', 3)
+bwt_inverse("nnbaaa", 3)                        # 'banana'
+move_to_front_encode("aaaabbbbcccc")[0]         # [0,0,0,0,1,0,0,0,2,0,0,0]
+```
+
+`bwt_transform` returns the last column of the sorted-rotations matrix plus the primary
+index needed to invert; `bwt_inverse` reconstructs the original exactly via the
+LF-mapping (verified round-trip on hundreds of random strings). The transform makes runs
+of a character adjacent, so `move_to_front_encode` — which replaces each symbol by its
+rank in a running alphabet and moves it to the front — emits long runs of zeros that a
+following RLE + Huffman pass compresses well. `move_to_front_decode` and `bwt_inverse`
+chain back to the original losslessly.
+
 ## Probability distributions
 
 Gamma, chi-square, Poisson, F and binomial distributions built on those special

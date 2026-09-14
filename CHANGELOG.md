@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.74.0] - 2026-09-13
+
+### Documentation
+- README: documented the Burrows-Wheeler transform and move-to-front coding in the Data
+  compression section — the bzip2-pipeline framing, the `banana` example, and the
+  clustering-to-zeros behavior. All snippet values verified live.
+
 ## [2.73.0] - 2026-09-13
 
 ### Added
