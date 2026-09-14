@@ -126,6 +126,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Computational geometry](#computational-geometry)
 - [Graph algorithms](#graph-algorithms)
 - [String algorithms](#string-algorithms)
+- [Data compression](#data-compression)
 - [Probability distributions](#probability-distributions)
 - [Nelson-Siegel / Svensson curves](#nelson-siegel--svensson-curves)
 - [Sample risk measures](#sample-risk-measures)
@@ -6251,6 +6252,27 @@ bigram multisets (robust to small edits and word order), and `jaccard_similarity
 set-overlap ratio over whitespace tokens by default, or any granularity via a `tokenize`
 callable (`list` for characters). All are `1` for identical inputs and `0` for wholly
 dissimilar ones.
+
+## Data compression
+
+Two foundational lossless codes, both exact round-trips:
+
+```python
+from quantforge import (huffman_encode, huffman_decode,
+                        run_length_encode, run_length_decode)
+
+bits, codebook = huffman_encode("mississippi")   # 21 bits (vs 22 fixed-width)
+huffman_decode(bits, codebook)                    # back to the original symbols
+run_length_encode("aaabbc")                       # [('a',3), ('b',2), ('c',1)]
+```
+
+`huffman_encode` builds the optimal prefix code for the symbol distribution — the
+shortest expected code length of any prefix code — and returns the bitstring plus the
+codebook needed to decode. Its expected length lands within one bit of the Shannon
+entropy and never exceeds fixed-width coding; frequent symbols get the shortest codes
+(`s` and `i` in "mississippi" get 1- and 2-bit codes). `run_length_encode` collapses runs
+of a repeated symbol into `(symbol, count)` pairs — ideal for sparse or blocky data — and
+`run_length_decode` expands them back. Both invert losslessly.
 
 ## Probability distributions
 
