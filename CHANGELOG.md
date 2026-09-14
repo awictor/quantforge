@@ -4,6 +4,18 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.633.0] - 2026-09-14
+
+### Added
+- `symmetric.py`: symmetric functions and Newton's identities. `elementary_symmetric`
+  returns ``[e_0..e_n]`` (sums of products of ``k`` distinct values) by an ``O(n^2)`` DP,
+  `power_sums` returns ``[p_0..p_kmax]``, and `poly_from_roots` gives the monic
+  coefficients ``(-1)^k e_k`` (highest-degree first, matching `polynomial_roots`).
+  `power_to_elementary` and `elementary_to_power` convert between power sums and elementary
+  symmetric polynomials via Newton's identities in exact `Fraction` arithmetic.
+  Cross-checked against `itertools.combinations` expansion and root-product expansion over
+  4000 random multisets, with both Newton conversions verified to round-trip.
+
 ## [1.632.0] - 2026-09-14
 
 ### Documentation

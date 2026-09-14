@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.18.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.19.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -16212,6 +16212,40 @@ Auto-generated from `quantforge` v4.18.0 by `docs/gen_api.py` — do not edit by
 > A payer pays ``fixed_rate`` and receives float; its value is the float-leg PV
 > (``P(start) - P(end)``) minus the fixed-leg PV (``fixed_rate * annuity``),
 > times ``notional``. A receiver is the negative. Zero at the par swap rate.
+
+## symmetric
+
+### `elementary_symmetric(values)`  _function_
+
+> Return ``[e_0, e_1, ..., e_n]`` for ``values`` (``e_0 = 1``).
+>
+> ``e_k`` is the sum of all products of ``k`` distinct entries. Built by the standard
+> ``O(n^2)`` DP that multiplies in one value at a time.
+
+### `elementary_to_power(e, kmax=None)`  _function_
+
+> Convert ``[e_0, ..., e_n]`` to power sums ``[p_1, ..., p_kmax]`` (Newton's identities).
+>
+> ``p_k = sum_{i=1}^{k-1} (-1)^(i-1) e_i p_{k-i} + (-1)^(k-1) k e_k`` (with ``e_k = 0``
+> for ``k > n``). Defaults ``kmax`` to ``n``.
+
+### `poly_from_roots(roots)`  _function_
+
+> Monic polynomial coefficients (highest-degree first) of ``prod (t - r)``.
+>
+> ``coeffs[k] = (-1)^k e_k``. Matches the coefficient order of
+> :func:`quantforge.polyroots.polynomial_roots`.
+
+### `power_sums(values, kmax)`  _function_
+
+> Return ``[p_0, p_1, ..., p_kmax]`` where ``p_k = sum x_i^k`` (``p_0 = n``).
+
+### `power_to_elementary(p)`  _function_
+
+> Convert power sums ``[p_1, ..., p_n]`` to ``[e_0, ..., e_n]`` (Newton's identities).
+>
+> ``k e_k = sum_{i=1}^{k} (-1)^(i-1) e_{k-i} p_i``. Uses exact `Fraction` arithmetic so the
+> division by ``k`` is exact for integer power sums.
 
 ## symplectic
 
