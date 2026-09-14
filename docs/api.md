@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.80.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.81.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -9057,6 +9057,16 @@ Auto-generated from `quantforge` v4.80.0 by `docs/gen_api.py` — do not edit by
 > tie-corrected ``statistic`` H, the ``df`` (``k - 1``) and the chi-square upper-tail
 > ``p_value``. A small p-value rejects the null of equal distributions (specifically,
 > equal medians for similarly-shaped groups).
+
+## lambert
+
+### `lambert_w0(x)`  _function_
+
+> Principal branch ``W0(x)`` solving ``w e^w = x`` with ``w >= -1``. Defined for ``x >= -1/e``.
+
+### `lambert_wm1(x)`  _function_
+
+> Secondary branch ``W_{-1}(x)`` with ``w <= -1``. Defined for ``-1/e <= x < 0``.
 
 ## laplace_inversion
 

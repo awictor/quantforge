@@ -691,6 +691,7 @@ from .voronoi import voronoi_vertices, delaunay_neighbors, nearest_site
 from .order_statistic_tree import OrderStatisticTree
 from .cordic import cordic_sincos, cordic_atan2, cordic_hypot
 from .expint import e1, ei, en
+from .lambert import lambert_w0, lambert_wm1
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1395,7 +1396,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "4.80.0"
+__version__ = "4.81.0"
 
 __all__ = [
     "OptionType",
@@ -2343,6 +2344,8 @@ __all__ = [
     "e1",
     "ei",
     "en",
+    "lambert_w0",
+    "lambert_wm1",
     "Dual",
     "dual_derivative",
     "dual_gradient",

@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.695.0] - 2026-09-14
+
+### Added
+- `lambert.py`: the Lambert W function, inverse of ``w -> w e^w``. `lambert_w0` is the
+  principal branch (``w >= -1``, defined for ``x >= -1/e``) and `lambert_wm1` the secondary
+  branch (``w <= -1``, for ``-1/e <= x < 0``); both refine a branch-specific initial guess
+  with Halley's cubic iteration. Cross-checked against the defining identity
+  ``w e^w = x`` over 20000 random arguments across both branches, known values (``W0(e)=1``,
+  ``W0(1)=Omega``, branch points ``-1``), and large-``x`` behaviour.
+
 ## [1.694.0] - 2026-09-14
 
 ### Documentation
