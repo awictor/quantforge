@@ -31,6 +31,14 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.50.0] - 2026-09-14
+
+### Documentation
+- README: documented the quadratic-residue / multiplicative-group tools in the Number
+  theory modular subsection — `legendre_symbol`, `tonelli_shanks`,
+  `multiplicative_order`, and `primitive_root` with worked values. All snippet values
+  verified live.
+
 ## [3.49.0] - 2026-09-14
 
 ### Added

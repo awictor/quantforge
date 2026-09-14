@@ -6509,6 +6509,23 @@ the classic `x == 2 (mod 3), 3 (mod 5), 2 (mod 7)` gives `23`. `mod_pow` wraps f
 exponentiation and handles negative exponents through the inverse, and `discrete_log`
 solves `base^x == target` by baby-step giant-step in `O(sqrt(mod))`.
 
+The quadratic-residue and multiplicative-group tools go deeper into prime arithmetic:
+
+```python
+from quantforge import (legendre_symbol, tonelli_shanks,
+                        multiplicative_order, primitive_root)
+
+legendre_symbol(2, 7)         # 1 — 2 is a quadratic residue mod 7
+tonelli_shanks(2, 7)          # 4 — a square root (4^2 = 16 = 2 mod 7)
+multiplicative_order(2, 7)    # 3 — 2^3 = 1 mod 7
+primitive_root(7)             # 3 — a generator of the group mod 7
+```
+
+`legendre_symbol` (and its composite generalization `jacobi_symbol`) tells whether `a` is
+a square mod `p`; `tonelli_shanks` computes the square root when it is (raising on a
+non-residue); `multiplicative_order` is the least exponent giving 1; and `primitive_root`
+returns a generator whose powers cover every non-zero residue.
+
 Exact counting functions round out the section — all on big integers, so a coefficient
 with thirty digits is exact rather than a float approximation:
 
