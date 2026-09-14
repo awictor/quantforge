@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.707.0] - 2026-09-14
+
+### Added
+- `hurwitz_zeta` and `polygamma`: the Hurwitz zeta ``zeta(s, a) = sum (n+a)^-s`` (Euler-Maclaurin
+  with Bernoulli corrections, real ``s > 1``, ``a > 0``) and the polygamma functions via
+  ``psi^(m)(x) = (-1)^(m+1) m! zeta(m+1, x)`` (``m = 0`` delegates to `digamma`). Cross-checked
+  against ``zeta(s,1)=zeta(s)``, ``zeta(s,1/2)=(2^s-1)zeta(s)``, ``trigamma(1)=pi^2/6``,
+  ``psi''(1)=-2 zeta(3)``, and finite-difference derivatives of the digamma.
+
 ## [1.706.0] - 2026-09-14
 
 ### Documentation

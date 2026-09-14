@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.92.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.93.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -8145,6 +8145,23 @@ Auto-generated from `quantforge` v4.92.0 by `docs/gen_api.py` — do not edit by
 >
 > ``R`` is the range of the cumulative demeaned series; ``S`` is the window's
 > population standard deviation. Returns 0 when the window is constant.
+
+## hurwitz
+
+### `hurwitz_zeta(s, a, terms=20, corrections=10)`  _function_
+
+> Hurwitz zeta ``zeta(s, a) = sum_{n>=0} (n + a)^-s`` for real ``s > 1``, ``a > 0``.
+>
+> Euler-Maclaurin summation: the first ``terms`` shifted terms are summed exactly, the tail
+> is replaced by its integral, and ``corrections`` Bernoulli terms recover the remainder.
+> With ``a = 1`` this reduces to the Riemann zeta.
+
+### `polygamma(m, x)`  _function_
+
+> Polygamma ``psi^(m)(x)``, the ``m``-th derivative of the digamma, for ``x > 0``.
+>
+> ``m = 0`` returns the digamma :func:`quantforge.special.digamma`. For ``m >= 1`` uses
+> ``psi^(m)(x) = (-1)^(m+1) m! * hurwitz_zeta(m+1, x)``. ``polygamma(1, .)`` is the trigamma.
 
 ## hyperdual
 
