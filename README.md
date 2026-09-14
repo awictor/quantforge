@@ -7020,6 +7020,24 @@ compound-growth, delay, and enzyme-kinetics equations that have no elementary cl
 Verified across both branches against that defining identity over tens of thousands of
 arguments.
 
+The complete elliptic integrals — pendulum periods, ellipse arc length — come from the
+arithmetic-geometric mean: `agm`, `elliptic_k`, `elliptic_e`:
+
+```python
+from quantforge import agm, elliptic_k, elliptic_e
+
+elliptic_k(0.5)   # 1.8540747 — K(m), first kind (m = k^2)
+elliptic_e(0.5)   # 1.3506439 — E(m), second kind
+elliptic_e(1)     # 1.0  (and K(0) = E(0) = pi/2)
+agm(1, 2)         # 1.456791 — the arithmetic-geometric mean
+```
+
+`agm(a, b)` iterates ``(a, b) -> ((a+b)/2, sqrt(ab))`` to their common quadratically-
+convergent limit; `elliptic_k(m)` is then just ``pi / (2 AGM(1, sqrt(1-m)))``, and
+`elliptic_e(m)` accumulates the geometric-step corrections of the same descent. Parameter
+`m = k^2` runs in `[0, 1)` for K and `[0, 1]` for E. They satisfy the Legendre relation
+`E(m)K(1-m) + E(1-m)K(m) - K(m)K(1-m) = pi/2` and agree with direct numerical integration.
+
 The correlated-normal CDFs behind the multi-asset and compound-option models are public
 too:
 

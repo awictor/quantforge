@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.698.0] - 2026-09-14
+
+### Documentation
+- README: documented `agm`, `elliptic_k`, and `elliptic_e` in the special-functions block
+  after the Lambert W function -- the AGM and complete elliptic integrals. All snippet values
+  verified live.
+
 ## [1.697.0] - 2026-09-14
 
 ### Added
