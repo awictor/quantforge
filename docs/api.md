@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.44.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.45.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -14172,6 +14172,16 @@ Auto-generated from `quantforge` v4.44.0 by `docs/gen_api.py` — do not edit by
 > fraction in ``(0, 1)``. Decreasing in the drift-to-variance ratio: a stronger
 > edge makes a given loss less likely. Returns 1 for a non-positive drift (a
 > driftless or losing account eventually hits any loss level almost surely).
+
+## running_median
+
+### `RunningMedian(values=None)`  _class_
+
+> Maintains the exact median of all values inserted so far.
+>
+> ``push(x)`` adds a value in ``O(log n)``; ``median()`` returns the current median in
+> ``O(1)``. ``lower`` is a max-heap (stored as negated values) of the smaller half; ``upper``
+> a min-heap of the larger half.
 
 ## running_moments
 

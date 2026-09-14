@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.659.0] - 2026-09-14
+
+### Added
+- `running_median.py`: `RunningMedian` maintains the *exact* median of a growing stream with
+  the two-heap method -- a max-heap of the lower half and a min-heap of the upper half, kept
+  balanced -- so `push` is ``O(log n)`` and `median` is ``O(1)``. Unlike the constant-memory
+  `P2Quantile` estimate, this is exact (at the cost of storing every value). Cross-checked
+  against `statistics.median` after each push over 5000 random streams, including
+  duplicate-heavy integer streams.
+
 ## [1.658.0] - 2026-09-14
 
 ### Documentation
