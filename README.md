@@ -126,6 +126,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Market stress (turbulence / absorption ratio)](#market-stress-turbulence--absorption-ratio)
 - [Matrix utilities](#matrix-utilities)
 - [Numerical utilities](#numerical-utilities)
+- [Range-query structures](#range-query-structures)
 - [Number theory](#number-theory)
 - [Computational geometry](#computational-geometry)
 - [Graph algorithms](#graph-algorithms)
@@ -6239,6 +6240,27 @@ trivariate_normal_cdf(0.0, 0.0, 0.0, 0.3, 0.3, 0.3) # 0.19775
 variable to a one-dimensional integral of the bivariate CDF (Genz). Both reduce to the
 product of marginals at zero correlation and are monotone in each correlation — the
 ingredients for spread, exchange, and two-factor compound-option pricing.
+
+## Range-query structures
+
+Fast prefix/range queries with updates, for cumulative-frequency and running-total work:
+
+```python
+from quantforge import FenwickTree, SegmentTree
+
+ft = FenwickTree([1, 2, 3, 4, 5])
+ft.range_sum(1, 3)                    # 9 — sum of elements 1..3
+ft.update(0, 10)                       # add 10 to element 0, O(log n)
+
+st = SegmentTree([1, 2, 3, 4, 5], combine=max, identity=float("-inf"))
+st.query(0, 2)                         # 3 — range maximum over [0, 2]
+```
+
+`FenwickTree` (binary indexed tree) does `O(log n)` point updates and prefix/range sums in
+tight space. `SegmentTree` generalizes to any associative `combine` — the default is sum,
+and passing `min`/`max` (with the matching `identity`) gives range-minimum/maximum with
+`O(log n)` point updates. Both are verified against a brute-force recompute across random
+arrays with interleaved updates.
 
 ## Number theory
 
