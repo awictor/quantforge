@@ -7065,6 +7065,30 @@ algorithm returning the best contiguous sum and its bounds (correct even for all
 input); and `longest_run` finds the longest streak of a repeated value. Verified against
 brute-force references over thousands of random arrays.
 
+`kmp_search` finds one pattern; when you need to match *many* patterns at once,
+`AhoCorasick` builds an automaton over the whole set and locates every occurrence in a
+single pass over the text:
+
+```python
+from quantforge import AhoCorasick
+
+ac = AhoCorasick(["he", "she", "his", "hers"])
+sorted(ac.find_all("ushers"))          # [(3, 'he'), (3, 'she'), (5, 'hers')]
+
+ac = AhoCorasick(["cat", "dog"])
+ac.count_matches("catdogcat")          # 3
+ac.contains_any("the dog ran")         # True
+```
+
+Each match is `(end_index, pattern)` — the index of the match's last character. The
+automaton is a trie of the patterns with *failure links* (the longest proper suffix that
+is also a trie prefix) and *output links*, so a longer match also reports every shorter
+pattern ending at the same spot (`"she"` at index 3 also yields `"he"`), and the whole
+scan runs in `O(len(text) + total_pattern_length + matches)` regardless of how many
+patterns there are. `find_all` returns the list, `find` is a lazy generator, and
+`contains_any` short-circuits at the first hit. Verified against a brute-force per-pattern
+search over 2000 random pattern-set/text cases.
+
 ## Data compression
 
 Two foundational lossless codes, both exact round-trips:

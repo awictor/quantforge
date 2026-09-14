@@ -4,6 +4,14 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.584.0] - 2026-09-14
+
+### Documentation
+- README: documented `AhoCorasick` in the String algorithms section after the
+  single-pattern searches -- the single-pass multi-pattern scan, the failure/output-link
+  structure that reports nested-suffix matches, and `find`/`find_all`/`contains_any`/
+  `count_matches`. All snippet values verified live.
+
 ## [1.583.0] - 2026-09-14
 
 ### Added
