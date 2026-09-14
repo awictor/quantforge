@@ -6409,6 +6409,31 @@ hyperdual second derivatives have no truncation error and agree with
 `ridders_second_derivative` to machine precision — the exact way to get gamma-style
 convexities when you control the pricing function's source.
 
+Forward-mode (`Dual`/`HyperDual`) is cheap when there is one input and many outputs. When
+it is the other way round — many inputs, one scalar output, as in fitting or calibration —
+*reverse* mode wins: one backward pass over a recorded tape yields the whole gradient. `Var`
+records each operation and `backward()` propagates adjoints through it:
+
+```python
+from quantforge import Var, reverse_gradient
+
+x = Var(3.0)
+y = Var(4.0)
+z = (x * y + x.sin()).exp()
+z.backward()
+x.grad, y.grad           # (564142.7377859486, 562267.1077883985)
+
+# or the convenience wrapper, f: list[Var] -> Var
+reverse_gradient(lambda v: (v[0] * v[1]).exp() + v[0].sin(), [2.0, 0.5])
+# [0.9429940776823802, 5.43656365691809]
+```
+
+`Var` supports `+ - * / **` and the elementary methods `exp`, `log`, `sin`, `cos`, `tanh`,
+`sqrt`. `backward()` topologically orders the tape and accumulates `d(output)/d(node)` into each
+node's `.grad`, so shared subexpressions add their contributions correctly (a reused node is
+visited once but receives every path's adjoint). Cross-checked against analytic gradients,
+central finite differences over random multivariate functions, and the forward-mode result.
+
 Slowly-converging sequences and fixed-point iterations can be accelerated with
 `aitken` (delta-squared), `shanks`, and `steffensen`:
 

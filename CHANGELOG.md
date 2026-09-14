@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.722.0] - 2026-09-14
+
+### Documentation
+- README: documented reverse-mode autodiff (`Var`, `reverse_gradient`) in the automatic-
+  differentiation block after the hyperdual note -- the tape, the backward pass, and when
+  reverse mode beats forward. All snippet values verified live.
+
 ## [1.721.0] - 2026-09-14
 
 ### Added
