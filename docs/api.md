@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.90.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.91.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -2061,6 +2061,43 @@ Auto-generated from `quantforge` v2.90.0 by `docs/gen_api.py` — do not edit by
 ### `cir_zero_coupon_yield(r0, t, kappa, theta, sigma)`  _function_
 
 > Continuously-compounded yield of the CIR zero-coupon bond to ``t``.
+
+## circular_stats
+
+### `circular_mean(angles)`  _function_
+
+> Mean direction of a set of angles (radians), in ``(-pi, pi]``.
+>
+> Averages the unit vectors ``(cos, sin)`` and takes the atan2 of the result, so it
+> wraps correctly across the ``2*pi`` boundary. Undefined (raises) when the vectors
+> cancel to the origin (no mean direction).
+
+### `circular_std(angles)`  _function_
+
+> Circular standard deviation ``sqrt(-2 ln R)`` (radians).
+>
+> Grows without bound as the angles spread (``R -> 0``); ``0`` when all identical.
+
+### `circular_variance(angles)`  _function_
+
+> Circular variance ``1 - R`` in ``[0, 1]`` (0 = concentrated, 1 = dispersed).
+
+### `rayleigh_test(angles)`  _function_
+
+> Rayleigh test for a uniform circular distribution: returns ``(R, p_value)``.
+>
+> Tests the null hypothesis that the angles are uniformly spread around the circle
+> against the alternative of a single preferred direction. A small ``p_value`` rejects
+> uniformity. Uses the standard ``Z = n R^2`` statistic with the Zar small-sample
+> correction. Needs at least two angles.
+
+### `resultant_length(angles)`  _function_
+
+> Mean resultant length ``R`` in ``[0, 1]``: how concentrated the angles are.
+>
+> ``R = |sum e^{i theta}| / n``. ``1`` means all angles identical; ``0`` means they are
+> spread so the unit vectors cancel. The basis for circular variance and the Rayleigh
+> test.
 
 ## classification_metrics
 

@@ -699,6 +699,13 @@ from .hamming_code import (
     luhn_checksum,
     luhn_check_digit,
 )
+from .circular_stats import (
+    circular_mean,
+    resultant_length,
+    circular_variance,
+    circular_std,
+    rayleigh_test,
+)
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -1089,7 +1096,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "2.90.0"
+__version__ = "2.91.0"
 
 __all__ = [
     "OptionType",
@@ -2069,6 +2076,11 @@ __all__ = [
     "hamming74_decode",
     "luhn_checksum",
     "luhn_check_digit",
+    "circular_mean",
+    "resultant_length",
+    "circular_variance",
+    "circular_std",
+    "rayleigh_test",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

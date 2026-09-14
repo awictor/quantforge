@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.91.0] - 2026-09-13
+
+### Added
+- `circular_stats.py`: directional statistics for angles — `circular_mean`,
+  `resultant_length`, `circular_variance`, `circular_std`, and `rayleigh_test`.
+  Cross-checked: the mean wraps correctly (350 deg & 10 deg -> 0), the resultant length is
+  1 for identical angles and ~0 for a uniform spread, cancelling vectors raise, and the
+  Rayleigh test rejects a concentrated sample (p ~ 0) while accepting a uniform one.
+
 ## [2.90.0] - 2026-09-13
 
 ### Documentation
