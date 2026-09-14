@@ -31,6 +31,14 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.55.0] - 2026-09-14
+
+### Added
+- `alias_sampler.py`: `AliasSampler` — Walker's alias method for O(1)-per-draw categorical
+  sampling after O(n) setup, with a deterministic seeded stream. Cross-checked: empirical
+  draw frequencies match the (normalized) weights over 200k samples for skewed, uniform,
+  and degenerate distributions, and results are reproducible per seed.
+
 ## [3.54.0] - 2026-09-14
 
 ### Documentation

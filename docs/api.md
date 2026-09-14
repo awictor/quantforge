@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.54.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.55.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -159,6 +159,16 @@ Auto-generated from `quantforge` v3.54.0 by `docs/gen_api.py` — do not edit by
 > size)``. Cluster ids ``0..n-1`` are the singletons; merge ``m`` creates the new
 > id ``n + m``. Merge distances are non-decreasing for single/complete/average
 > linkage.
+
+## alias_sampler
+
+### `AliasSampler(weights, seed=1234567)`  _class_
+
+> O(1)-per-draw sampler for a fixed categorical distribution (Walker's alias method).
+>
+> Construct from a list of non-negative ``weights`` (need not sum to 1; normalized
+> internally). ``sample()`` returns one index; ``sample_many(k)`` returns ``k`` indices.
+> A ``seed`` fixes the deterministic random stream for reproducibility.
 
 ## alignment
 

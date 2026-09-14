@@ -830,6 +830,7 @@ from .diophantine import (
     sqrt_continued_fraction,
     pell_fundamental,
 )
+from .alias_sampler import AliasSampler
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -1220,7 +1221,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "3.54.0"
+__version__ = "3.55.0"
 
 __all__ = [
     "OptionType",
@@ -2317,6 +2318,7 @@ __all__ = [
     "linear_diophantine",
     "sqrt_continued_fraction",
     "pell_fundamental",
+    "AliasSampler",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",
