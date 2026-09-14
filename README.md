@@ -4657,6 +4657,22 @@ ifft(X)                # recovers the signal (1/N scaled)
 `ifft(fft(x))` round-trips. Handy for fast convolution and any spectral transform
 where the length is a power of two.
 
+When the length is *not* a power of two, `dft_any`/`idft_any` still run in `O(n log n)` via
+Bluestein's chirp-Z algorithm:
+
+```python
+from quantforge import dft_any, idft_any
+
+dft_any([1, 2, 3, 4, 5])           # length-5 DFT: [15, -2.5+3.44j, -2.5+0.81j, ...]
+idft_any(dft_any([1, 2, 3, 4, 5])) # recovers [1, 2, 3, 4, 5]
+```
+
+Bluestein rewrites each DFT output as a chirp multiply, a convolution (padded up to a power
+of two and run through the radix-2 `fft`), and a final chirp multiply — so any length works,
+including primes, where `fft` cannot apply. It agrees with `fft` exactly on power-of-two
+lengths and with a direct DFT everywhere. Verified against a direct DFT and round-trip over
+hundreds of arbitrary-length sequences.
+
 Two FFT-backed conveniences build on it:
 
 ```python

@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.608.0] - 2026-09-14
+
+### Documentation
+- README: documented `dft_any`/`idft_any` in the Spectral analysis section after the
+  radix-2 `fft`/`ifft` -- the arbitrary-length Bluestein chirp-Z transform and its
+  agreement with `fft` on power-of-two lengths. All snippet values verified live.
+
 ## [1.607.0] - 2026-09-14
 
 ### Added
