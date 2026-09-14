@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.691.0] - 2026-09-14
+
+### Added
+- `cordic.py`: the CORDIC algorithm -- trigonometric and vector functions from shift-and-add
+  only, no multiplies. `cordic_sincos` returns ``(cos, sin)`` by rotation mode (with argument
+  reduction into the convergence range), and `cordic_atan2` / `cordic_hypot` return the angle
+  and magnitude of a vector by vectoring mode. Cross-checked against `math.cos`/`sin`/`atan2`
+  over 10000 random arguments each (full range, all quadrants) to ~1e-9, plus the
+  Pythagorean identity and landmark angles.
+
 ## [1.690.0] - 2026-09-14
 
 ### Documentation

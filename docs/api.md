@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.76.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.77.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -3560,6 +3560,23 @@ Auto-generated from `quantforge` v4.76.0 by `docs/gen_api.py` — do not edit by
 >
 > Invariant to any monotone transform of either margin; +1/-1 for a perfectly
 > monotone relationship, ~0 under independence.
+
+## cordic
+
+### `cordic_atan2(y, x)`  _function_
+
+> Return ``atan2(y, x)`` in ``(-pi, pi]`` by CORDIC vectoring mode.
+
+### `cordic_hypot(x, y)`  _function_
+
+> Return ``sqrt(x^2 + y^2)`` by CORDIC vectoring mode (no square root).
+
+### `cordic_sincos(theta)`  _function_
+
+> Return ``(cos(theta), sin(theta))`` by CORDIC rotation mode.
+>
+> ``theta`` is reduced into ``[-pi/2, pi/2]`` (the algorithm's convergence range) using the
+> identities for the outer quadrants. Accurate to ~1e-10 with 40 iterations.
 
 ## correlation
 
