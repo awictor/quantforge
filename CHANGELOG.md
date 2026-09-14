@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.40.0] - 2026-09-14
+
+### Documentation
+- README: documented polygon triangulation in the Computational geometry section —
+  `ear_clipping_triangulate`, `signed_area`, `is_clockwise`, and `is_convex_polygon` with
+  worked values. All snippet values verified live.
+
 ## [3.39.0] - 2026-09-14
 
 ### Added

@@ -6622,6 +6622,23 @@ pair (searching only the convex-hull vertices, where the diameter always lives);
 covering every point — for the unit square it is centered at `(1,1)` with radius `√2`, and
 it cannot be shrunk without leaving a point outside.
 
+Any simple polygon can be cut into triangles for area, rendering, or meshing —
+`ear_clipping_triangulate` does it, alongside orientation and convexity tests:
+
+```python
+from quantforge import ear_clipping_triangulate, signed_area, is_convex_polygon
+
+L = [(0,0), (4,0), (4,2), (2,2), (2,4), (0,4)]   # concave L-shape
+ear_clipping_triangulate(L)          # 4 triangles (n - 2)
+signed_area([(0,0),(4,0),(4,4),(0,4)])# 16.0 (positive = counter-clockwise)
+is_convex_polygon(L)                 # False
+```
+
+`ear_clipping_triangulate` snips off "ears" until a simple polygon (either winding) is
+reduced to `n - 2` triangles whose areas sum to the polygon's own. `signed_area` is the
+shoelace area — its sign gives the winding, which `is_clockwise` reports — and
+`is_convex_polygon` checks that every turn goes the same way.
+
 ## Graph algorithms
 
 The core graph routines on a dict adjacency list — shortest paths, traversal, components,
