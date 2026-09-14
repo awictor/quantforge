@@ -586,6 +586,12 @@ from .cepstrum import real_cepstrum, power_cepstrum, fundamental_quefrency
 from .stft import stft, spectrogram, istft
 from .ar_spectrum import ar_psd, burg, ar_spectrum
 from .sample_rate import sinc_interp, upsample, downsample, resample_rational
+from .iir_filter import (
+    butter_lowpass,
+    butter_highpass,
+    sosfilt,
+    iir_frequency_response,
+)
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -976,7 +982,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "2.32.0"
+__version__ = "2.33.0"
 
 __all__ = [
     "OptionType",
@@ -1850,6 +1856,10 @@ __all__ = [
     "upsample",
     "downsample",
     "resample_rational",
+    "butter_lowpass",
+    "butter_highpass",
+    "sosfilt",
+    "iir_frequency_response",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

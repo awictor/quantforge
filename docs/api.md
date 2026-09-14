@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.32.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.33.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -6825,6 +6825,37 @@ Auto-generated from `quantforge` v2.32.0 by `docs/gen_api.py` — do not edit by
 > ``k`` raters' scores (a balanced subjects x raters table). Returns a dict with
 > ``icc1``, ``icc2_1``, ``icc2_k``, ``icc3_1`` and ``icc3_k``. Requires at least two
 > subjects and two raters.
+
+## iir_filter
+
+### `butter_highpass(order, cutoff)`  _function_
+
+> Design a Butterworth high-pass as a cascade of biquad sections.
+>
+> ``cutoff`` is the -3 dB frequency in cycles/sample, in ``(0, 0.5)``. Returns a list
+> of ``(b, a)`` second-order sections with the Nyquist gain normalized to 1.
+
+### `butter_lowpass(order, cutoff)`  _function_
+
+> Design a Butterworth low-pass as a cascade of biquad sections.
+>
+> ``cutoff`` is the -3 dB frequency in cycles/sample, in ``(0, 0.5)``. Returns a list
+> of ``(b, a)`` second-order sections (each a length-3 numerator and denominator with
+> ``a[0] == 1``), with the overall DC gain normalized to 1.
+
+### `iir_frequency_response(sections, freqs)`  _function_
+
+> Magnitude response ``|H(f)|`` of a biquad cascade at normalized ``freqs``.
+>
+> ``freqs`` in cycles/sample (``0`` to ``0.5``). Returns the product of the section
+> magnitudes at each frequency -- useful for verifying a design's passband/stopband.
+
+### `sosfilt(sections, x)`  _function_
+
+> Filter ``x`` through a cascade of biquad ``(b, a)`` sections (Direct Form II transposed).
+>
+> Runs the signal through each second-order section in turn. Returns a list the same
+> length as ``x``.
 
 ## implied
 

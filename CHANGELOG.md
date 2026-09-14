@@ -31,6 +31,17 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.33.0] - 2026-09-13
+
+### Added
+- `iir_filter.py`: Butterworth IIR filter design via the bilinear transform as a biquad
+  cascade — `butter_lowpass`, `butter_highpass`, `sosfilt` (Direct Form II transposed
+  cascade), and `iir_frequency_response`. Cross-checked: the low-pass has unit DC gain,
+  exactly -3 dB (0.7071) at the cutoff, a monotone maximally-flat rolloff, and a deep
+  stopband; the high-pass is its mirror; higher order rolls off faster; every section is
+  stable (poles inside the unit circle) for both even and odd orders; and in the time
+  domain the filter cleanly separates a two-tone signal.
+
 ## [2.32.0] - 2026-09-13
 
 ### Documentation
