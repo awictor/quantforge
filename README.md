@@ -6586,6 +6586,30 @@ max_overlap([(1, 5), (2, 6), (4, 8), (10, 12)])      # 3 — peak simultaneous o
 integer point-set); `total_covered_length` sums the merged cover; and `max_overlap` sweeps
 the endpoints for the most intervals active at once (matching a brute-force point scan).
 
+For points in space rather than on a line, `KDTree` indexes a fixed set of
+k-dimensional coordinates and answers nearest-neighbour, radius, and box queries without
+scanning every point:
+
+```python
+from quantforge import KDTree
+
+pts = [(2, 3), (5, 4), (9, 6), (4, 7), (8, 1), (7, 2)]
+tree = KDTree(pts)
+tree.nearest((9, 2))              # (4, 1.414...) — index 4 is point (8, 1)
+tree.k_nearest((9, 2), 2)         # [(4, 1.414...), (5, 2.0)]
+tree.within_radius((5, 5), 3.0)   # [(1, 1.0), (3, 2.236...)] — indices + distances
+tree.range_search((4, 1), (8, 4)) # [1, 4, 5] — indices inside the box
+```
+
+The tree partitions on alternating axes and, on each query, skips any subtree whose
+bounding slab is already farther than the current best — so a nearest-neighbour lookup is
+typically `O(log n)` rather than the `O(n)` of a full scan. Queries return the original
+point *indices* (in build order), so you can map results back to your own records:
+`nearest`/`k_nearest` give `(index, distance)` sorted by distance, `within_radius` lists
+every point inside a Euclidean ball, and `range_search` lists those inside an axis-aligned
+box. All four are verified against brute-force distance computation over random point sets
+in one to four dimensions.
+
 ## Interval arithmetic
 
 An `Interval` tracks a range of possible values and propagates it through arithmetic so
