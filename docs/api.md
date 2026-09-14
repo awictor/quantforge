@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.12.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.13.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -11647,6 +11647,17 @@ Auto-generated from `quantforge` v5.12.0 by `docs/gen_api.py` — do not edit by
 > Adds ``beta3 ((1 - e^{-t/tau2})/(t/tau2) - e^{-t/tau2})`` with its own decay
 > ``tau2`` for a second hump. Reduces to :func:`nelson_siegel_zero` when
 > ``beta3 = 0``.
+
+## newton_min
+
+### `newton_min(func, x0, tol=1e-09, max_iter=100, h=1e-05)`  _function_
+
+> Minimize ``func`` from ``x0`` by damped Newton with exact autodiff derivatives.
+>
+> ``func`` takes a list of :class:`quantforge.reverse_ad.Var` and returns a single ``Var``.
+> The gradient is exact (reverse mode); the Hessian is the reverse gradient differenced once
+> (:func:`quantforge.reverse_jacobian.reverse_hessian`). Returns a dict with ``x``, ``fun``,
+> ``n_iter``, ``converged`` (gradient norm below ``tol``) and ``grad_norm``.
 
 ## newton_system
 

@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.727.0] - 2026-09-14
+
+### Added
+- `newton_min`: damped Newton minimizer using the exact autodiff gradient and Hessian
+  (`reverse_gradient_vector` + `reverse_hessian`). Solves ``(H + lambda I) p = -g`` with
+  Levenberg-style diagonal damping grown until the step is a descent direction, plus Armijo
+  backtracking for global robustness. Cross-checked against a quadratic (converges in ~2 steps),
+  Rosenbrock reaching ``(1, 1)``, agreement with `lbfgs`, recovery from a near-indefinite start
+  (``x^3 - 3x + y^2`` from ``x = 0``), and a quartic bowl.
+
 ## [1.726.0] - 2026-09-14
 
 ### Documentation
