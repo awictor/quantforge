@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.49.0] - 2026-09-13
+
+### Added
+- `lhs.py`: Latin hypercube sampling and uniformity diagnostics — `latin_hypercube`
+  (stratified, with a centered variant), `maximin_lhs` (most-spread over several tries),
+  and `l2_star_discrepancy` (Warnock's formula). Cross-checked: every axis has exactly
+  one sample per bin, centered points sit at bin centers, an LHS design has lower L2 star
+  discrepancy than plain random sampling on average, and the maximin search improves the
+  minimum inter-point distance.
+
 ## [2.48.0] - 2026-09-13
 
 ### Documentation

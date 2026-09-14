@@ -625,6 +625,7 @@ from .combinatorics import (
     partition_count,
     derangements,
 )
+from .lhs import latin_hypercube, maximin_lhs, l2_star_discrepancy
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -1015,7 +1016,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "2.48.0"
+__version__ = "2.49.0"
 
 __all__ = [
     "OptionType",
@@ -1923,6 +1924,9 @@ __all__ = [
     "catalan",
     "partition_count",
     "derangements",
+    "latin_hypercube",
+    "maximin_lhs",
+    "l2_star_discrepancy",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",
