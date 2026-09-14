@@ -4,6 +4,16 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.649.0] - 2026-09-14
+
+### Added
+- `fenwick2d.py`: `FenwickTree2D` is a 2-D binary indexed tree supporting dynamic point-add
+  updates and axis-aligned rectangle sums, each in ``O(log R * log C)`` -- the updatable
+  counterpart to the static `PrefixSum2D`. Build from a shape or an initial grid, then
+  `add(r, c, delta)` and `range_sum(r0, c0, r1, c1)` (half-open, four-corner
+  inclusion-exclusion). Cross-checked against a brute grid over 4000 random cases with
+  interleaved updates and queries and grid-initialization.
+
 ## [1.648.0] - 2026-09-14
 
 ### Documentation

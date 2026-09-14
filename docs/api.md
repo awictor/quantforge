@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.34.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.35.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -6043,6 +6043,16 @@ Auto-generated from `quantforge` v4.34.0 by `docs/gen_api.py` — do not edit by
 > ``combine`` defaults to ``+`` (range sum); pass ``min``/``max`` (with the matching
 > ``identity``) for range-minimum/maximum. ``update(i, value)`` sets element ``i``;
 > ``query(lo, hi)`` folds ``combine`` over ``[lo, hi]`` inclusive. ``O(log n)`` each.
+
+## fenwick2d
+
+### `FenwickTree2D(rows=None, cols=None, grid=None)`  _class_
+
+> Dynamic 2-D prefix sums: point-add and rectangle-sum in ``O(log R * log C)``.
+>
+> Construct with the grid shape ``(rows, cols)`` (optionally an initial grid). ``add(r, c,
+> delta)`` adds to a cell; ``prefix_sum(r, c)`` sums the rectangle ``[0, r) x [0, c)``; and
+> ``range_sum(r0, c0, r1, c1)`` sums ``[r0, r1) x [c0, c1)`` by inclusion-exclusion.
 
 ## fft
 
