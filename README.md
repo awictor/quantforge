@@ -5714,6 +5714,25 @@ fits the schedule". `ternary_search_int_max`/`_min` optimize a strictly unimodal
 function. All four are checked against brute linear scans over thousands of random monotone
 thresholds and unimodal functions.
 
+To evaluate an arithmetic string *without* Python's `eval` — so untrusted input is safe —
+`eval_expression` runs the shunting-yard algorithm:
+
+```python
+from quantforge import eval_expression
+
+eval_expression("2 + 3 * 4")        # 14.0 — precedence respected
+eval_expression("2^3^2")            # 512.0 — power is right-associative
+eval_expression("-2^2")             # -4.0 — power binds tighter than unary minus
+eval_expression("sqrt(3^2 + 4^2)")  # 5.0
+eval_expression("2 * pi")           # 6.283185...
+```
+
+`tokenize` splits the string, `shunting_yard` converts it to Reverse Polish honouring
+precedence and associativity, and `eval_rpn` folds the postfix stream to a number;
+`eval_expression` chains all three. It supports `+ - * / // % ^`, unary minus, parentheses,
+the functions `sin/cos/tan/exp/log/sqrt/abs`, and the constants `pi`/`e`. Checked against
+Python's `eval` over thousands of random expressions.
+
 `neville` evaluates the unique degree-`(n-1)` polynomial through `n` points at one
 `x`, returning `(value, error_estimate)`; `divided_differences` / `newton_polynomial`
 build the Newton form once and evaluate it cheaply at many points. Because Neville

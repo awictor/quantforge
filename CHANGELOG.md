@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.628.0] - 2026-09-14
+
+### Documentation
+- README: documented `eval_expression` (and `tokenize`/`shunting_yard`/`eval_rpn`) in the
+  Numerical utilities section after the binary-search primitives -- safe arithmetic
+  evaluation via shunting-yard. All snippet values verified live.
+
 ## [1.627.0] - 2026-09-14
 
 ### Added
