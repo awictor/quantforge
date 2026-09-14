@@ -6496,6 +6496,22 @@ the direct sum for every degree and reproducing the classic `m(m+1)/2`,
 `m(m+1)(2m+1)/6`, and `(m(m+1)/2)^2` identities. `bernoulli_sequence(n)` returns
 `B_0 .. B_n`.
 
+Numeral-system conversions round out the section — any base and Roman numerals:
+
+```python
+from quantforge import to_base, from_base, to_roman, from_roman
+
+to_base(255, 16)          # "ff"
+from_base("1010", 2)      # 10
+to_roman(1994)            # "MCMXCIV"
+from_roman("MMXXIV")      # 2024
+```
+
+`to_base`/`from_base` convert non-negative integers to and from any base `2..36` (digits
+`0-9a-z`, case-insensitive), round-tripping and matching Python's `int(s, base)`.
+`to_roman`/`from_roman` handle `1..3999` in subtractive notation and round-trip for every
+value in range.
+
 ## Computational geometry
 
 Planar geometry primitives on lists of `(x, y)` points — the shape of a point cloud, its

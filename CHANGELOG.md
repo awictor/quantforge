@@ -31,6 +31,13 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.26.0] - 2026-09-14
+
+### Documentation
+- README: documented the numeral-system conversions in the Number theory section —
+  `to_base`, `from_base`, `to_roman`, and `from_roman` with worked values. All snippet
+  values verified live.
+
 ## [3.25.0] - 2026-09-14
 
 ### Added
