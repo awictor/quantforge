@@ -7025,6 +7025,28 @@ millions. `matrix_power` is exponentiation-by-squaring on an integer or real squ
 and every routine takes an optional `mod` for exact modular arithmetic. Verified against
 direct iteration over thousands of random recurrences and known Fibonacci/tribonacci values.
 
+Dates reduce to integer arithmetic once mapped to a Julian day number, so `calendar_math`
+answers weekday, day-count, leap-year, and Easter questions with no `datetime` dependency:
+
+```python
+from quantforge import (julian_day_number, day_of_week_name, days_between,
+                        easter_date, add_days, is_leap_year)
+
+julian_day_number(2000, 1, 1)          # 2451545 — the standard reference epoch
+day_of_week_name(2026, 9, 9)           # 'Wednesday'
+days_between((2024, 1, 1), (2024, 12, 31))   # 365
+easter_date(2025)                      # (2025, 4, 20)
+add_days(2024, 2, 28, 2)               # (2024, 3, 1) — leap-year aware
+is_leap_year(2000), is_leap_year(1900) # (True, False)
+```
+
+`julian_day_number`/`jdn_to_date` are the Fliegel-Van Flandern proleptic-Gregorian
+conversion — a continuous integer day count, so `days_between` is one subtraction and
+`day_of_week` is `jdn % 7`. `add_days` shifts a date by any offset, `day_of_year` and
+`days_in_month` round out the arithmetic, and `easter_date` is the Gregorian Computus. All
+verified against Python's `datetime`/`calendar` over 8000 random dates; being proleptic, the
+routines are not bounded by `datetime`'s year ≤ 9999.
+
 ## Computational geometry
 
 Planar geometry primitives on lists of `(x, y)` points — the shape of a point cloud, its

@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.626.0] - 2026-09-14
+
+### Documentation
+- README: documented the `calendar_math` routines in the Number theory section after the
+  linear-recurrence tools -- Julian day numbers, weekday/day-count/leap queries, `add_days`,
+  and `easter_date`. All snippet values verified live.
+
 ## [1.625.0] - 2026-09-14
 
 ### Added
