@@ -31,6 +31,16 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [2.27.0] - 2026-09-13
+
+### Added
+- `stft.py`: short-time Fourier transform, spectrogram, and inverse STFT for
+  time-frequency analysis — `stft` (per-frame windowed FFTs), `spectrogram`
+  (`|STFT|^2` over the non-redundant half), and `istft` (weighted overlap-add
+  reconstruction). Cross-checked: `istft(stft(x))` reconstructs the signal to ~1e-14 in
+  the interior, a pure tone concentrates in its own frequency bin, a rising chirp's
+  spectrogram peak climbs from early to late frames, and the frame count follows the hop.
+
 ## [2.26.0] - 2026-09-13
 
 ### Documentation

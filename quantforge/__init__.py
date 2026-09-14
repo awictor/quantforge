@@ -583,6 +583,7 @@ from .cross_correlation import (
     lag_at_max_correlation,
 )
 from .cepstrum import real_cepstrum, power_cepstrum, fundamental_quefrency
+from .stft import stft, spectrogram, istft
 from .levenberg import levenberg_marquardt
 from .ewma_cov import ewma_covariance_matrix, ewma_correlation_matrix
 from .vol_convert import black_to_normal_vol, normal_to_black_vol
@@ -973,7 +974,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "2.26.0"
+__version__ = "2.27.0"
 
 __all__ = [
     "OptionType",
@@ -1837,6 +1838,9 @@ __all__ = [
     "real_cepstrum",
     "power_cepstrum",
     "fundamental_quefrency",
+    "stft",
+    "spectrogram",
+    "istft",
     "levenberg_marquardt",
     "ewma_covariance_matrix",
     "ewma_correlation_matrix",

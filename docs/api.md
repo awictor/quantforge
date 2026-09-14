@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v2.26.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v2.27.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -13284,6 +13284,35 @@ Auto-generated from `quantforge` v2.26.0 by `docs/gen_api.py` — do not edit by
 ### `ssvi_vix(params: quantforge.ssvi.SSVIParams, t, S0, r, q=0.0, n_strikes=201, width=6.0)`  _function_
 
 > VIX-style index (``~= 100 * sigma``) of an SSVI slice at fitted expiry ``t``.
+
+## stft
+
+### `istft(frames, frame_size, hop=None, window='hann', length=None)`  _function_
+
+> Invert an :func:`stft` back to the time domain by weighted overlap-add.
+>
+> Applies the synthesis window to each inverse-FFT frame and overlap-adds, dividing by
+> the overlap-added squared window so the reconstruction is exact wherever the window
+> coverage is non-zero (independent of the constant-overlap-add condition). ``length``
+> truncates the output; by default it keeps the full overlap-added span.
+
+### `spectrogram(x, frame_size, hop=None, window='hann')`  _function_
+
+> Spectrogram: per-frame power ``|STFT|^2`` over the lower (non-redundant) half.
+>
+> Returns a list of frames, each a list of ``frame_size // 2 + 1`` power values (DC up
+> to Nyquist -- the rest of a real signal's spectrum is a mirror image). Each frame is
+> a column in time; each entry a frequency bin.
+
+### `stft(x, frame_size, hop=None, window='hann')`  _function_
+
+> Short-time Fourier transform: a list of per-frame complex FFT spectra.
+>
+> Slides a ``frame_size`` window along ``x`` in steps of ``hop`` (default
+> ``frame_size // 2``, i.e. 50% overlap), applies the ``window`` taper, and FFTs each
+> frame. Returns a list of frames, each a length-``frame_size`` complex spectrum.
+> ``frame_size`` must be a power of two (FFT constraint). Frames that run past the end
+> are zero-padded.
 
 ## strategy
 
