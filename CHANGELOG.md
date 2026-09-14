@@ -4,6 +4,15 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.661.0] - 2026-09-14
+
+### Added
+- `sliding_window.py`: `sliding_window_min` and `sliding_window_max` return the extremum of
+  every length-``k`` window in ``O(n)`` via a monotonic deque (dominated candidates are
+  discarded), versus the ``O(n k)`` per-window scan; `sliding_window_sum` uses a running sum.
+  Cross-checked against a brute per-window reference over 5000 random cases, plus monotone,
+  duplicate, and boundary window sizes.
+
 ## [1.660.0] - 2026-09-14
 
 ### Documentation

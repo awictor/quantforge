@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v4.46.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v4.47.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -15026,6 +15026,20 @@ Auto-generated from `quantforge` v4.46.0 by `docs/gen_api.py` — do not edit by
 ### `vega_neutral_quantity(book: quantforge.portfolio.Book, S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, multiplier=1.0) -> float`  _function_
 
 > Units of a hedge option that zero the book's net vega.
+
+## sliding_window
+
+### `sliding_window_max(values, k)`  _function_
+
+> Maximum of each length-``k`` window; returns ``n - k + 1`` values.
+
+### `sliding_window_min(values, k)`  _function_
+
+> Minimum of each length-``k`` window; returns ``n - k + 1`` values.
+
+### `sliding_window_sum(values, k)`  _function_
+
+> Sum of each length-``k`` window in ``O(n)`` (running sum), ``n - k + 1`` values.
 
 ## sobol
 
