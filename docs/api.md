@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v3.36.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v3.37.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -10826,6 +10826,16 @@ Auto-generated from `quantforge` v3.36.0 by `docs/gen_api.py` — do not edit by
 >
 > Returns a dict with ``coefficients``, robust ``std_errors``, ``t_stats`` and the
 > full ``cov`` matrix. Valid when errors are heteroskedastic but not autocorrelated.
+
+## online_cov
+
+### `RunningCovariance(xs=None, ys=None)`  _class_
+
+> Streaming covariance/correlation of paired observations (Welford co-moment).
+>
+> ``update(x, y)`` folds in one pair; ``covariance()`` and ``correlation()`` read the
+> current estimate at any time. Sample (``ddof=1``) covariance by default. Two
+> accumulators combine with ``+`` using the parallel-merge formula.
 
 ## optimize
 

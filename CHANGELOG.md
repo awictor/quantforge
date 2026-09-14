@@ -31,6 +31,15 @@ All notable changes to QuantForge are documented here. The format follows
   documenting `kaplan_meier`, `nelson_aalen` and `survival_at` with a worked
   right-censored example. TOC regenerated.
 
+## [3.37.0] - 2026-09-14
+
+### Added
+- `online_cov.py`: `RunningCovariance` — single-pass covariance and Pearson correlation
+  via the Welford co-moment update, with exact `+` merge for chunked/parallel data.
+  Cross-checked: it matches batch covariance/correlation/variance over 500 random paired
+  samples, returns +/-1 for perfectly linear data, and two merged accumulators reproduce
+  the full-sample result.
+
 ## [3.36.0] - 2026-09-14
 
 ### Documentation
