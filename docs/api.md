@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.46.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.47.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -14252,6 +14252,16 @@ Auto-generated from `quantforge` v5.46.0 by `docs/gen_api.py` — do not edit by
 ### `predict_regression_tree(tree, X_query)`  _function_
 
 > Predict targets for rows ``X_query`` with a fitted regression tree.
+
+## remez
+
+### `remez(f, a, b, degree, iterations=100, tol=1e-12, grid=2000)`  _function_
+
+> Minimax degree-``degree`` polynomial approximation of ``f`` on ``[a, b]``.
+>
+> Returns a dict with ``coeffs`` (highest-degree first, length ``degree + 1``), ``error`` (the
+> minimax error ``max |f - p|``), and ``n_iter``. Uses the Remez exchange with a dense grid to
+> locate error extrema.
 
 ## resample
 

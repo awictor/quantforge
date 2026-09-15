@@ -766,6 +766,7 @@ from .bayes_opt import expected_improvement, bayesian_optimize
 from .tdigest import TDigest
 from .kll import KLL
 from .gk_quantile import GKQuantile
+from .remez import remez
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1470,7 +1471,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "5.46.0"
+__version__ = "5.47.0"
 
 __all__ = [
     "OptionType",
@@ -2502,6 +2503,7 @@ __all__ = [
     "TDigest",
     "KLL",
     "GKQuantile",
+    "remez",
     "Dual",
     "dual_derivative",
     "dual_gradient",

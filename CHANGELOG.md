@@ -15,6 +15,17 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.761.0] - 2026-09-14
+
+### Added
+- `remez`: the Remez exchange algorithm for the best (minimax) polynomial approximation of a
+  function on an interval -- minimizing the worst-case error rather than the least-squares error
+  of `chebyshev_fit`. Iterates the equioscillation reference set: solve for equal-alternating
+  error at the references, move them to the error curve's extrema, repeat. Returns the
+  coefficients and the achieved minimax error. Cross-checked against exact recovery of a linear
+  function, the known degree-3 minimax error of ``exp`` on ``[-1, 1]`` (~0.0055), a smaller
+  max-error than the Chebyshev least-squares fit, and the equioscillation property.
+
 ## [1.760.0] - 2026-09-14
 
 ### Documentation
