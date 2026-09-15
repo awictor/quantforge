@@ -771,6 +771,7 @@ from .floater_hormann import floater_hormann_weights, floater_hormann_interpolat
 from .aaa import aaa
 from .prony import prony, prony_reconstruct
 from .matrix_pencil import matrix_pencil
+from .music import music_pseudospectrum, music_frequencies
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1475,7 +1476,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "5.56.0"
+__version__ = "5.57.0"
 
 __all__ = [
     "OptionType",
@@ -2514,6 +2515,8 @@ __all__ = [
     "prony",
     "prony_reconstruct",
     "matrix_pencil",
+    "music_pseudospectrum",
+    "music_frequencies",
     "Dual",
     "dual_derivative",
     "dual_gradient",

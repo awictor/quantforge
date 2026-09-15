@@ -15,6 +15,17 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.771.0] - 2026-09-14
+
+### Added
+- `music_pseudospectrum` and `music_frequencies`: the MUSIC (MUltiple SIgnal Classification)
+  frequency estimator. Splits the Hankel data matrix's subspace into signal and noise parts via
+  SVD; a sinusoid's steering vector is orthogonal to the noise subspace, so the pseudospectrum
+  ``1 / ||E_n^H a(omega)||^2`` spikes at the tone frequencies -- resolving tones far below the
+  Fourier ``1/N`` limit. Cross-checked against single- and two-tone recovery, a closely-spaced
+  pair separated by 0.06 (below the 0.098 Fourier limit at ``N = 64``), a noisy tone, and peak
+  location.
+
 ## [1.770.0] - 2026-09-14
 
 ### Documentation

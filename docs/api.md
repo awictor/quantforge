@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.56.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.57.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## aaa
 
@@ -11819,6 +11819,23 @@ Auto-generated from `quantforge` v5.56.0 by `docs/gen_api.py` — do not edit by
 > Uses the reduction ``P3 = P(X3<=c) * ...`` via a 1-D integral over the third
 > variable of a conditional bivariate CDF (Genz). ``n`` sets the quadrature panels.
 > Falls back to the product/independent forms when correlations vanish.
+
+## music
+
+### `music_frequencies(y, p, L=None, grid=4000)`  _function_
+
+> Estimate the ``p`` dominant frequencies of ``y`` as the pseudospectrum peaks.
+>
+> Scans ``[0, pi]`` on ``grid`` points and returns the frequencies of the ``ceil(p/2)`` largest
+> local maxima (each real tone shows one peak in ``[0, pi]``). Sorted ascending.
+
+### `music_pseudospectrum(y, p, freqs, L=None)`  _function_
+
+> MUSIC pseudospectrum of ``y`` at each angular frequency in ``freqs`` (radians/sample).
+>
+> ``p`` is the number of (real) sinusoids -- use ``2 * (number of tones)`` since each real tone
+> is a conjugate pair. ``L`` is the Hankel window length (default ``len(y)//2``). Returns a list
+> of pseudospectrum values ``1 / ||E_n^H a(omega)||^2``; peaks sit at the tone frequencies.
 
 ## mvn
 
