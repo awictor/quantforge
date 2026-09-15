@@ -785,6 +785,7 @@ from .laplacian_eigenmaps import laplacian_eigenmaps, heat_knn_affinity
 from .lanczos import lanczos, lanczos_eigenvalues
 from .gmres import gmres
 from .bicgstab import bicgstab
+from .lsqr import lsqr
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1489,7 +1490,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "5.84.0"
+__version__ = "5.85.0"
 
 __all__ = [
     "OptionType",
@@ -2551,6 +2552,7 @@ __all__ = [
     "lanczos_eigenvalues",
     "gmres",
     "bicgstab",
+    "lsqr",
     "Dual",
     "dual_derivative",
     "dual_gradient",

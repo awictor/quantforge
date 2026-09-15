@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.84.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.85.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## aaa
 
@@ -10341,6 +10341,16 @@ Auto-generated from `quantforge` v5.84.0 by `docs/gen_api.py` — do not edit by
 > and the short-leg delta negative; the LSM regression is re-fit at each bump.
 > Deltas are reliable; the gammas (second differences over a re-fit regression)
 > are indicative and need many paths.
+
+## lsqr
+
+### `lsqr(A, b, tol=1e-10, max_iter=None)`  _function_
+
+> Least-squares solution of ``min ||A x - b||`` by LSQR for an ``m x n`` matrix ``A``.
+>
+> Handles overdetermined (``m > n``) and square systems. Returns a dict with ``x`` (length
+> ``n``), ``residual`` (``||A x - b||``), ``n_iter`` and ``converged`` (relative normal-equation
+> residual ``||A^T r|| / (||A|| ||r||)`` below ``tol``).
 
 ## lsv
 

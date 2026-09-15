@@ -15,6 +15,17 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.799.0] - 2026-09-14
+
+### Added
+- `lsqr`: the Paige-Saunders LSQR Krylov least-squares solver for rectangular systems --
+  ``min ||A x - b||`` for a general ``m x n`` matrix, including overdetermined (fitting) systems.
+  Analytically equivalent to conjugate gradient on the normal equations but numerically stable
+  because it never forms ``A^T A``; works through the Golub-Kahan bidiagonalization. Cross-checked
+  against the pseudo-inverse solution on an overdetermined system, `lu_solve` on a square one, a
+  consistent system's zero residual, polynomial regression matching the normal-equation solve,
+  and the minimality condition ``A^T r ~ 0``.
+
 ## [1.798.0] - 2026-09-14
 
 ### Documentation
