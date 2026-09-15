@@ -15,6 +15,16 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.783.0] - 2026-09-14
+
+### Added
+- `tucker_hosvd` and `tucker_reconstruct`: the Tucker decomposition of a 3-way tensor via the
+  higher-order SVD (De Lathauwer et al.) -- factors ``X ~ G x_1 U x_2 V x_3 W`` with orthonormal
+  mode factors ``U``/``V``/``W`` (leading left singular vectors of each unfolding) and a core
+  tensor ``G``. Full ranks reconstruct exactly; truncated ranks give a compressed approximation.
+  Cross-checked against exact full-rank reconstruction, orthonormal factors, exact recovery of a
+  low-multilinear-rank tensor by truncation, and dominant-energy capture on a structured tensor.
+
 ## [1.782.0] - 2026-09-14
 
 ### Documentation

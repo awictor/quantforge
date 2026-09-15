@@ -777,6 +777,7 @@ from .nmf import nmf
 from .dmd import dmd
 from .cur import cur, column_leverage_scores
 from .cp_decomp import cp_als, cp_reconstruct
+from .tucker import tucker_hosvd, tucker_reconstruct
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1481,7 +1482,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "5.68.0"
+__version__ = "5.69.0"
 
 __all__ = [
     "OptionType",
@@ -2529,6 +2530,8 @@ __all__ = [
     "column_leverage_scores",
     "cp_als",
     "cp_reconstruct",
+    "tucker_hosvd",
+    "tucker_reconstruct",
     "Dual",
     "dual_derivative",
     "dual_gradient",

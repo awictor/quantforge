@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.68.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.69.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## aaa
 
@@ -17753,6 +17753,20 @@ Auto-generated from `quantforge` v5.68.0 by `docs/gen_api.py` — do not edit by
 >     american: if True, allow early exercise at every node; if False, price
 >         the European payoff (useful as a convergence cross-check).
 >     b: cost of carry (defaults to r). Dividend yield q enters as b = r - q.
+
+## tucker
+
+### `tucker_hosvd(X, ranks=None)`  _function_
+
+> Higher-order SVD (Tucker) of a 3-way tensor ``X``.
+>
+> ``ranks`` is a triple ``(r1, r2, r3)`` of truncation ranks per mode (default: full ranks).
+> Returns a dict with factor matrices ``U``, ``V``, ``W`` (orthonormal columns) and the core
+> tensor ``core`` such that ``X ~ core x_1 U x_2 V x_3 W``.
+
+### `tucker_reconstruct(U, V, W, core)`  _function_
+
+> Reconstruct ``X = core x_1 U x_2 V x_3 W`` from Tucker factors and core.
 
 ## turbulence
 
