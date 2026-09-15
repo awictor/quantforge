@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.20.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.21.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -12222,6 +12222,29 @@ Auto-generated from `quantforge` v5.20.0 by `docs/gen_api.py` — do not edit by
 > Correlates raw ``x`` with the residual of ``y`` after regressing out the controls --
 > the unique contribution of ``x`` to ``y`` beyond the controls. Returns a coefficient
 > in ``[-1, 1]``.
+
+## particle_filter
+
+### `particle_filter(observations, transition, log_likelihood, init_sampler, n_particles=1000, seed=12345, resample_threshold=0.5)`  _function_
+
+> Bootstrap particle filter over ``observations``.
+>
+> Callbacks (all receive the PCG32 ``rng`` where randomness is needed):
+>
+> * ``init_sampler(rng)`` -> an initial state (any object the other callbacks understand).
+> * ``transition(state, rng)`` -> the next state, sampled from the process model.
+> * ``log_likelihood(observation, state)`` -> log ``p(obs | state)``.
+>
+> Returns a dict with ``means`` (the weighted-mean state estimate at each step; states must
+> support scalar or per-component averaging -- floats or equal-length lists), ``ess`` (the
+> effective sample size at each step), and ``n_resample`` (how many steps resampled).
+
+### `pcg_gaussian(rng, mu=0.0, sigma=1.0)`  _function_
+
+> Draw a normal sample from a PCG32 stream via the Box-Muller transform.
+>
+> Convenience for writing ``transition``/``init_sampler`` callbacks without pulling in another
+> RNG. Uses two uniforms; returns a single normal deviate.
 
 ## passing_bablok
 

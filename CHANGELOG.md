@@ -15,6 +15,18 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.735.0] - 2026-09-14
+
+### Added
+- `particle_filter` and `pcg_gaussian`: a bootstrap particle filter (sequential importance
+  resampling, Gordon-Salmond-Smith 1993) for non-Gaussian / multimodal state estimation. It
+  represents the posterior by a weighted particle cloud, propagates each through a user
+  transition sampler, reweights by a user log-likelihood, and does systematic (low-variance)
+  resampling when the effective sample size drops below half. Uses a seeded `PCG32` stream for
+  reproducibility; `pcg_gaussian` is a Box-Muller helper for the callbacks. Cross-checked
+  against the Kalman filter on a linear-Gaussian model (means agree within Monte-Carlo error),
+  seed reproducibility, ESS bounds, and a 2-D position/velocity model.
+
 ## [1.734.0] - 2026-09-14
 
 ### Documentation
