@@ -15,6 +15,16 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.779.0] - 2026-09-14
+
+### Added
+- `cur` and `column_leverage_scores`: CUR decomposition (Mahoney-Drineas) -- an interpretable
+  low-rank factorization ``A ~ C U R`` from *actual* columns ``C`` and rows ``R`` of the data,
+  selected by leverage scores (squared norms of the top-``k`` singular vectors), with linking
+  matrix ``U = C^+ A R^+``. Seeded selection. Cross-checked against leverage scores summing to 1,
+  ``C``/``R`` being genuine columns/rows, near-exact reconstruction of a low-rank matrix, error
+  decreasing with more selected columns, and reproducibility.
+
 ## [1.778.0] - 2026-09-14
 
 ### Documentation

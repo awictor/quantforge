@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.64.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.65.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## aaa
 
@@ -4128,6 +4128,24 @@ Auto-generated from `quantforge` v5.64.0 by `docs/gen_api.py` — do not edit by
 >
 > Returns ``(train_indices, test_indices)``. The test set gets
 > ``round(n * test_fraction)`` indices (at least 1, at most ``n-1``).
+
+## cur
+
+### `column_leverage_scores(A, k)`  _function_
+
+> Column leverage scores of ``A`` from its top-``k`` right singular vectors.
+>
+> ``score_j = (1/k) sum_{t<k} V[j][t]^2`` -- the normalized contribution of column ``j`` to the
+> rank-``k`` dominant subspace. Scores sum to 1 and highlight the most influential columns.
+
+### `cur(A, c, r, k=None, seed=12345)`  _function_
+
+> CUR decomposition ``A ~ C U R`` selecting ``c`` columns and ``r`` rows by leverage scores.
+>
+> ``k`` (default ``min(c, r)``) sets the rank used for the leverage scores. Columns and rows are
+> sampled without replacement with probability proportional to their leverage. Returns a dict
+> with ``C`` (m x c), ``U`` (c x r), ``R`` (r x n), the selected ``col_indices``/``row_indices``,
+> and the reconstruction ``error`` (``||A - C U R||_F``).
 
 ## curran_asian
 
