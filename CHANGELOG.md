@@ -15,6 +15,16 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.733.0] - 2026-09-14
+
+### Added
+- `unscented_kalman_filter`: the derivative-free nonlinear Kalman filter. It propagates van der
+  Merwe scaled sigma points (matrix square root from `cholesky`) through the true ``f``/``h``
+  and reconstructs the transformed mean/covariance, capturing the mean to second order without
+  any Jacobian. Complements the Jacobian-based `extended_kalman_filter`. Cross-checked against
+  the linear `kalman_filter` (exact agreement), a logistic-growth state model, a nonlinear
+  ``h(x) = x^2`` measurement, and agreement with the EKF on a mildly nonlinear 2-D system.
+
 ## [1.732.0] - 2026-09-14
 
 ### Documentation

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.18.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.19.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -17438,6 +17438,18 @@ Auto-generated from `quantforge` v5.18.0 by `docs/gen_api.py` — do not edit by
 >     Bias-corrected estimate of the integrated variance. On noise-free data it
 >     essentially reproduces the realized variance; under noise it is far less
 >     biased than :func:`realized_variance_naive`.
+
+## ukf
+
+### `unscented_kalman_filter(observations, f, h, Q, R, x0, P0, alpha=0.001, beta=2.0, kappa=0.0)`  _function_
+
+> Unscented Kalman filter over ``observations`` for nonlinear ``f`` and ``h``.
+>
+> ``f`` maps a length-``n`` state list to a length-``n`` list (transition); ``h`` maps the
+> state to a length-``m`` list (measurement). Both take and return plain floats -- no autodiff
+> or Jacobians. ``Q`` (n x n), ``R`` (m x m) covariances; ``x0`` (n), ``P0`` (n x n) initial
+> mean/covariance. ``alpha``/``beta``/``kappa`` are the van der Merwe scaling parameters.
+> Returns a dict with ``filtered_means`` and ``filtered_covariances``.
 
 ## valuation
 

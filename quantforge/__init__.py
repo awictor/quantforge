@@ -729,6 +729,7 @@ from .reverse_jacobian import reverse_jacobian, reverse_hessian, reverse_gradien
 from .newton_min import newton_min
 from .gauss_newton import gauss_newton
 from .ekf import extended_kalman_filter
+from .ukf import unscented_kalman_filter
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1433,7 +1434,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "5.18.0"
+__version__ = "5.19.0"
 
 __all__ = [
     "OptionType",
@@ -2434,6 +2435,7 @@ __all__ = [
     "newton_min",
     "gauss_newton",
     "extended_kalman_filter",
+    "unscented_kalman_filter",
     "Dual",
     "dual_derivative",
     "dual_gradient",
