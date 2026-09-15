@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.40.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.41.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -17427,6 +17427,16 @@ Auto-generated from `quantforge` v5.40.0 by `docs/gen_api.py` — do not edit by
 > ``y`` rank exceeds ``q``, the fraction whose ``x`` rank also exceeds ``q``.
 > Near 1 means the two crash/spike together; near ``1 - q``-scaled independence
 > means they do not. Returns 0 when no point exceeds the threshold in ``y``.
+
+## tdigest
+
+### `TDigest(compression=100.0)`  _class_
+
+> A t-digest accumulating a stream of values for approximate quantile queries.
+>
+> ``compression`` (delta) trades accuracy for size: larger keeps more centroids and is more
+> accurate. Feed values with :meth:`add` (or :meth:`add_all`), read quantiles with
+> :meth:`quantile` / :meth:`cdf`, and combine digests with :meth:`merge`.
 
 ## theil_sen
 

@@ -15,6 +15,16 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.755.0] - 2026-09-14
+
+### Added
+- `TDigest`: the Dunning-Ertl t-digest for mergeable streaming quantiles with high accuracy in
+  the tails. Summarizes a stream by centroids whose sizes obey the ``k1`` scale function (tiny
+  near ``q = 0`` and ``q = 1``), so extreme quantiles stay sharp while the middle is compressed.
+  `add`/`add_all`, `quantile`, `cdf`, and exact order-independent `merge`. Cross-checked against
+  exact sorted quantiles of a Gaussian (median, p99, p999), the uniform ``quantile(q) ~ q``, the
+  CDF, and merge equalling the combined stream.
+
 ## [1.754.0] - 2026-09-14
 
 ### Documentation
