@@ -15,6 +15,13 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.762.0] - 2026-09-14
+
+### Documentation
+- README: documented `remez` in the numerical-utilities section after the Chebyshev/quadrature
+  block -- the minimax objective, the equioscillation exchange, and the contrast with the
+  least-squares `chebyshev_fit`. All snippet values verified live.
+
 ## [1.761.0] - 2026-09-14
 
 ### Added

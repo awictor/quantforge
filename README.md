@@ -6121,6 +6121,26 @@ at an endpoint — `1/sqrt(x)`, `ln x`, `sqrt(1-x^2)` at `x = ±1` — where Sim
 Gauss-Legendre lose accuracy; it evaluates strictly inside the interval and
 converges on the singular cases to machine precision.
 
+`chebyshev_fit` minimizes the *average* squared error; when you care about the *worst-case*
+error instead — the guarantee a function-approximation library or a fixed-point kernel needs —
+`remez` computes the true minimax polynomial:
+
+```python
+from quantforge import remez
+
+r = remez(math.exp, -1, 1, degree=3)
+r["coeffs"]      # [0.179533, 0.542973, 0.995668, 0.994579]  (highest degree first)
+r["error"]      # 0.005528  -- the minimax error; a degree-3 Chebyshev fit is ~2x worse
+remez(math.exp, -1, 1, degree=4)["error"]    # 0.000547
+```
+
+The Remez exchange iterates toward Chebyshev's equioscillation optimum: solve for the polynomial
+whose error is equal and sign-alternating at `degree + 2` reference points, move each reference to
+a local extremum of the resulting error curve, and repeat until the extrema equalize. The result
+has the smallest possible maximum error of any polynomial of that degree — strictly below the
+least-squares `chebyshev_fit` in max norm (verified across `exp`, `sin`, and `1/(1+x)`), with the
+characteristic equioscillating error curve.
+
 `polynomial_roots` finds every root at once; the `poly_*` helpers are the surrounding
 algebra — `poly_mul` / `poly_divmod` (long division returning quotient and remainder),
 `poly_derivative` / `poly_integral`, `poly_eval` (Horner), and `poly_gcd`, whose
