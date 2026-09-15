@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.76.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.77.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## aaa
 
@@ -9506,6 +9506,23 @@ Auto-generated from `quantforge` v5.76.0 by `docs/gen_api.py` — do not edit by
 > ``F`` is a callable of a single real argument ``s > 0``. ``N`` (even, default 12) is
 > the number of terms. Returns the estimated ``f(t)``. Best for smooth,
 > non-oscillatory functions; oscillatory or discontinuous ``f`` invert poorly.
+
+## laplacian_eigenmaps
+
+### `heat_knn_affinity(X, n_neighbors, t=1.0)`  _function_
+
+> Symmetric k-NN affinity with heat-kernel weights ``exp(-||x_i - x_j||^2 / t)``.
+>
+> An edge ``(i, j)`` is kept if either point is among the other's ``n_neighbors`` nearest;
+> its weight is the heat kernel of the squared distance. Returns an ``n x n`` matrix.
+
+### `laplacian_eigenmaps(X, k=2, n_neighbors=5, t=1.0)`  _function_
+
+> Laplacian-eigenmap embedding of points ``X`` into ``k`` dimensions.
+>
+> Builds the heat-kernel k-NN affinity, forms the symmetric normalized Laplacian, and returns
+> the ``k`` smallest *non-trivial* eigenvectors (dropping the constant eigenvector) as the
+> embedding. Returns a dict with ``coords`` (``n x k``) and ``eigenvalues`` (the used ones).
 
 ## lasso
 

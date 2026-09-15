@@ -15,6 +15,16 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.791.0] - 2026-09-14
+
+### Added
+- `laplacian_eigenmaps` and `heat_knn_affinity`: Laplacian-eigenmap nonlinear dimensionality
+  reduction (Belkin & Niyogi). Builds a heat-kernel k-NN graph, forms the symmetric normalized
+  Laplacian, and uses its smallest *non-trivial* eigenvectors as the embedding -- preserving
+  *local* neighbourhood structure (vs Isomap's global geodesics). Cross-checked against a line and
+  an arc whose embeddings order along the manifold (Spearman > 0.95), two clusters that separate
+  in the embedding, and heat-kernel affinity properties.
+
 ## [1.790.0] - 2026-09-14
 
 ### Documentation
