@@ -15,6 +15,13 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.740.0] - 2026-09-14
+
+### Documentation
+- README: documented `sliced_wasserstein` in the Wasserstein section after the Sinkhorn note --
+  the random-projection scheme, the cost advantage, the translation closed form, and
+  Sinkhorn-vs-sliced guidance. All snippet values verified live.
+
 ## [1.739.0] - 2026-09-14
 
 ### Added

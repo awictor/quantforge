@@ -3867,6 +3867,26 @@ small `eps` where the raw `exp(-C/eps)` kernel would underflow. On equal-weight 
 cost matches `wasserstein_distance`; it also handles vector-valued support and returns zero for
 identical distributions.
 
+For large multivariate point clouds, `sliced_wasserstein` is cheaper still. Instead of solving a
+transport problem it projects both clouds onto many random 1-D directions, takes the exact 1-D
+Wasserstein distance along each (a sort), and averages — `O(L n log n)` for `L` projections,
+against Sinkhorn's quadratic cost:
+
+```python
+from quantforge import sliced_wasserstein
+
+# two 3-D clouds differing by a translation t = (2, -1, 0.5)
+sliced_wasserstein(base_cloud, shifted_cloud, n_projections=2000, p=2, seed=3)
+# 1.3208  ~ ||t|| / sqrt(d) = 1.3229   (the exact sliced-W2 of a pure shift)
+sliced_wasserstein(base_cloud, base_cloud)          # 0.0
+```
+
+It keeps the metric properties of the true Wasserstein distance (symmetry, triangle inequality,
+zero iff equal) and reduces exactly to `wasserstein_distance` in one dimension. Seeded `PCG32`
+projections make it reproducible. Reach for `sinkhorn` when you need the actual transport *plan*
+or an arbitrary cost; reach for `sliced_wasserstein` when you only need a *distance* between
+large clouds and want it fast.
+
 ## Variance-ratio test
 
 The Lo-MacKinlay variance ratio tests the random-walk null: under it the variance
