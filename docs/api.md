@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.16.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.17.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -4981,6 +4981,21 @@ Auto-generated from `quantforge` v5.16.0 by `docs/gen_api.py` — do not edit by
 > Durand-Kerner, so complex-conjugate eigenvalue pairs are returned correctly. Real
 > eigenvalues come back as Python ``float``; genuinely complex ones as ``complex``.
 > Sorted by real part then imaginary part.
+
+## ekf
+
+### `extended_kalman_filter(observations, f, h, Q, R, x0, P0)`  _function_
+
+> Extended Kalman filter over ``observations`` for nonlinear ``f`` and ``h``.
+>
+> ``f`` maps a length-``n`` list of :class:`Var` (the state) to a length-``n`` list -- the
+> deterministic state transition. ``h`` maps the state to a length-``m`` list -- the
+> measurement model. ``Q`` (n x n), ``R`` (m x m) are the process and observation covariances,
+> ``x0`` (n) and ``P0`` (n x n) the initial mean and covariance. Returns a dict with
+> ``filtered_means`` and ``filtered_covariances``.
+>
+> The transition/observation Jacobians are computed exactly at each step by reverse-mode
+> autodiff, so no analytic linearization is required.
 
 ## elliptic
 

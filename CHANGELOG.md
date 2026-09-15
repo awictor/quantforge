@@ -4,6 +4,28 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.731.0] - 2026-09-14
+
+### Added
+- `kalman_filter` and `rts_smoother`: the general multivariate linear-Gaussian state-space
+  filter (vector state, ``F``/``H``/``Q``/``R`` matrices, Joseph-form covariance update) and the
+  Rauch-Tung-Striebel fixed-interval smoother, generalizing the scalar `kalman` module. Small
+  matrix inverses reuse `lu_solve`. Cross-checked against the existing scalar local-level filter
+  (exact agreement), a constant-velocity tracking model (recovers the speed), the smoother's
+  variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
+  the filter follows the observations.
+
+## [1.731.0] - 2026-09-14
+
+### Added
+- `extended_kalman_filter`: the extended Kalman filter for nonlinear state-space models
+  ``x_t = f(x_{t-1})``, ``y_t = h(x_t)``. The transition and observation Jacobians are computed
+  *exactly* by reverse-mode autodiff (`reverse_jacobian`) at each step -- ``f`` and ``h`` are
+  written once with `Var` arithmetic, no hand-coded linearization. Uses a Joseph-form covariance
+  update. Cross-checked against the linear `kalman_filter` (exact agreement when ``f, h`` are
+  linear), a nonlinear logistic-growth state model, and a nonlinear ``h(x) = x^2`` measurement
+  model that recovers the hidden state.
+
 ## [1.730.0] - 2026-09-14
 
 ### Documentation
