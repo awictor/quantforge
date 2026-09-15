@@ -3605,6 +3605,26 @@ fast error poles makes the estimate `x_hat` converge quickly to the true state â
 deterministic counterpart to the Kalman filter, and the estimation half of an LQG controller
 (LQR gain applied to the observer's state).
 
+To *see* how a designed system behaves, simulate it. `lti_simulate` propagates any input through
+`x_{k+1}=Ax+Bu, y=Cx+Du`, and `lti_step_response` / `lti_impulse_response` / `dc_gain` give the
+standard characterizations:
+
+```python
+from quantforge import lti_step_response, lti_impulse_response, dc_gain
+
+A, B, C, D = [[0.5]], [[1.0]], [[1.0]], [[0.0]]   # first-order lag
+[r[0] for r in lti_step_response(A, B, C, D, 5)]  # [0.0, 1.0, 1.5, 1.75, 1.875] -> 2.0
+dc_gain(A, B, C, D)[0][0]                          # 2.0  = C(I - A)^-1 B + D
+[r[0] for r in lti_impulse_response(A, B, C, D, 5)]  # [0.0, 1.0, 0.5, 0.25, 0.125]
+```
+
+`lti_step_response` applies a unit step and shows the transient settling to the DC gain;
+`lti_impulse_response` returns the system's *Markov parameters* (`h_0 = D`, `h_k = C A^{k-1} B`),
+whose running sum is the step response. `dc_gain` is the exact steady-state output. Feed a
+closed-loop `A - B K` (from `ackermann`/`lqr`) to verify the controller you designed actually
+settles the way you intended, or an observer's error dynamics to check convergence. SISO or
+multivariable via the matrix sizes.
+
 ## Newey-West HAC variance
 
 The sample variance understates the variance of a mean when observations are

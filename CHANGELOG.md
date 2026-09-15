@@ -15,6 +15,14 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.820.0] - 2026-09-15
+
+### Documentation
+- README: documented `lti_simulate`, `lti_step_response`, `lti_impulse_response`, and `dc_gain`
+  in the LQR section after the observer note -- the step/impulse/DC characterizations, the Markov
+  parameters, and using it to verify a designed controller/observer. All snippet values verified
+  live.
+
 ## [1.819.0] - 2026-09-15
 
 ### Added
