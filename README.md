@@ -1172,6 +1172,29 @@ the calibrated uncertainty is the whole point. `gp_log_marginal_likelihood` is t
 choosing `length_scale`/`variance`/`noise`: maximize it (e.g. with `lbfgs` or a grid) to fit the
 kernel. Inputs may be scalars or coordinate lists, so it handles multi-dimensional regression.
 
+When each evaluation of the objective is *expensive*, `bayesian_optimize` uses that GP as a
+surrogate to find the minimum in as few evaluations as possible. It fits the GP to the points
+seen so far and picks the next candidate by `expected_improvement`, which trades off low
+predicted value against high uncertainty:
+
+```python
+from quantforge import bayesian_optimize, expected_improvement
+
+candidates = [i * 0.1 for i in range(-50, 51)]        # 101 points on [-5, 5]
+res = bayesian_optimize(lambda x: (x - 2.0) ** 2, candidates, n_init=3, n_iter=20)
+res["best_x"], res["best_y"], res["n_eval"]           # (2.0, 0.0, 23) -- 23 evals, not 101
+
+expected_improvement(mean=1.0, var=1.0, best=2.0)     # 1.0749
+```
+
+`expected_improvement` is the closed-form EI acquisition for a minimization problem:
+`(best - mean) Phi(z) + sigma phi(z)`, zero where the surrogate is certain and largest where a
+low mean meets high variance. `bayesian_optimize` seeds a few evenly-spread points, then for each
+round fits the GP and evaluates the unevaluated candidate with the highest EI — reaching the
+minimum of a quadratic in 23 evaluations instead of all 101, finding the global optimum of a
+multimodal function, and recovering a 2-D bowl's optimum. Use it when the black box is costly and
+you have a discrete (or discretized) search space.
+
 ## Exotic options (closed form)
 
 Analytic prices for binaries, single barriers, and geometric Asians:

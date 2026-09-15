@@ -15,6 +15,13 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.754.0] - 2026-09-14
+
+### Documentation
+- README: documented `bayesian_optimize` and `expected_improvement` in the Gaussian process
+  regression section -- the GP-surrogate loop, the EI acquisition, and the evaluation savings.
+  All snippet values verified live.
+
 ## [1.753.0] - 2026-09-14
 
 ### Added
