@@ -15,6 +15,13 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.774.0] - 2026-09-14
+
+### Documentation
+- README: documented `randomized_svd` in the Matrix utilities section after the full `svd` --
+  the Gaussian-sketch scheme, the power-iteration/oversample knobs, and when to prefer it over
+  the full decomposition. All snippet values verified live.
+
 ## [1.773.0] - 2026-09-14
 
 ### Added

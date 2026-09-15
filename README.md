@@ -5923,6 +5923,25 @@ The singular values are the square roots of the eigenvalues of `A'A`; ranking th
 exposes the numerical rank, and `pseudo_inverse` drops the near-zero ones so the
 solve stays stable even when `A` is rank-deficient.
 
+When only the top few singular triplets of a large, approximately low-rank matrix are needed,
+`randomized_svd` computes them far faster than the full decomposition:
+
+```python
+from quantforge import randomized_svd
+
+U, s, V = randomized_svd(A, k=3, seed=1)   # A ~ U diag(s) V^T, leading 3 triplets
+sorted(s, reverse=True)                     # [26.0338, 19.9291, 10.3394]
+# reconstruction error at the true rank ~ 4e-15
+```
+
+The randomized SVD (Halko-Martinsson-Tropp) sketches the range of `A` with a random Gaussian
+projection, orthonormalizes it, and takes an exact SVD of the small projected matrix — so it
+touches `A` only through a handful of matrix products. `n_power` power iterations sharpen the
+sketch when the spectrum decays slowly; `n_oversample` extra probe columns improve accuracy. At
+the true rank it reconstructs `A` to machine precision and its singular values match the full
+`svd`'s top-`k`; use it for large-scale PCA, compression, or any leading-subspace computation
+where the full `O(mn min(m,n))` SVD is overkill.
+
 For a square system, LU with partial pivoting gives the solve and the determinant:
 
 ```python
