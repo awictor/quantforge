@@ -34,6 +34,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Two-asset options](#two-asset-options)
 - [Forward-start and cliquet options](#forward-start-and-cliquet-options)
 - [Quasi-Monte Carlo](#quasi-monte-carlo)
+- [Markov chain Monte Carlo](#markov-chain-monte-carlo)
 - [Exotic options (closed form)](#exotic-options-closed-form)
 - [Shout and ladder options](#shout-and-ladder-options)
 - [Installment options](#installment-options)
@@ -1006,6 +1007,38 @@ reference vector bit for bit), with a rejection-sampled `randint` that has no mo
 `Xorshift128Plus` is Vigna's fast 64-bit generator seeded through a splitmix64 warm-up.
 Both are uniform (mean ~0.5, variance ~1/12) and reproducible per seed, and pass the
 empirical tests a bare LCG fails.
+
+## Markov chain Monte Carlo
+
+To sample from a posterior known only up to a constant, `metropolis_hastings` and
+`hamiltonian_monte_carlo` build a Markov chain whose stationary distribution is the target.
+Random-walk Metropolis takes a plain log-density of floats; HMC takes one written with `Var`
+and uses its autodiff gradient to make long, low-rejection moves:
+
+```python
+from quantforge import (metropolis_hastings, hamiltonian_monte_carlo,
+                        sample_mean, sample_cov)
+
+# target: N(mu=2, sigma=1.5), unnormalized log-density
+logp = lambda x: -0.5 * ((x[0] - 2.0) / 1.5) ** 2
+
+mh = metropolis_hastings(logp, [0.0], 20000, step=2.0, seed=1, burn_in=2000)
+sample_mean(mh["samples"])[0]        # ~2.04       (true mean 2)
+sample_cov(mh["samples"])[0][0]      # ~2.28       (true variance 2.25)
+mh["accept_rate"]                    # ~0.63
+
+hmc = hamiltonian_monte_carlo(logp, [0.0], 5000, step=0.3, n_leapfrog=15, seed=2, burn_in=500)
+sample_mean(hmc["samples"])[0]       # ~2.0,  acceptance ~1.0
+```
+
+`metropolis_hastings` proposes an isotropic Gaussian step and accepts by the Metropolis ratio —
+robust but slow-mixing in high dimensions. `hamiltonian_monte_carlo` introduces a momentum
+variable and simulates Hamiltonian dynamics with leapfrog steps, using `reverse_gradient` on the
+log-density so that a single trajectory moves far across the distribution with a high acceptance
+rate. Both are reproducible per `seed` (via `PCG32`) and expose `sample_mean`/`sample_cov` for
+summarizing the chain; verified by recovering the mean and covariance of 1-D and correlated 2-D
+Gaussians. Use MH for a quick, derivative-free chain and HMC when the target is smooth and
+higher-dimensional.
 
 ## Exotic options (closed form)
 

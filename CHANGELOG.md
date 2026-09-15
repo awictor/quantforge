@@ -15,6 +15,14 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.742.0] - 2026-09-14
+
+### Documentation
+- README: new "Markov chain Monte Carlo" section documenting `metropolis_hastings` and
+  `hamiltonian_monte_carlo` (with `sample_mean`/`sample_cov`) -- the two samplers, the autodiff
+  gradient behind HMC, and MH-vs-HMC guidance. Table of contents regenerated. All snippet values
+  verified live.
+
 ## [1.741.0] - 2026-09-14
 
 ### Added
