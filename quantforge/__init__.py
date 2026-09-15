@@ -739,6 +739,11 @@ from .mcmc import (
     sample_mean,
     sample_cov,
 )
+from .mcmc_diagnostics import (
+    gelman_rubin,
+    integrated_autocorrelation_time,
+    effective_sample_size,
+)
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1443,7 +1448,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "5.28.0"
+__version__ = "5.29.0"
 
 __all__ = [
     "OptionType",
@@ -2454,6 +2459,9 @@ __all__ = [
     "hamiltonian_monte_carlo",
     "sample_mean",
     "sample_cov",
+    "gelman_rubin",
+    "integrated_autocorrelation_time",
+    "effective_sample_size",
     "Dual",
     "dual_derivative",
     "dual_gradient",

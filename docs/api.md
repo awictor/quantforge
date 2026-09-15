@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.28.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.29.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -10587,6 +10587,31 @@ Auto-generated from `quantforge` v5.28.0 by `docs/gen_api.py` — do not edit by
 ### `sample_mean(samples)`  _function_
 
 > Component-wise mean of a list of sample vectors.
+
+## mcmc_diagnostics
+
+### `effective_sample_size(x, max_lag=None)`  _function_
+
+> Effective sample size ``n / tau`` -- independent-draw equivalent of a correlated chain.
+>
+> Uses :func:`integrated_autocorrelation_time`. Equals ``n`` for white noise and shrinks as
+> the chain's autocorrelation grows. Never exceeds ``n``.
+
+### `gelman_rubin(chains)`  _function_
+
+> Gelman-Rubin potential-scale-reduction ``R-hat`` for a list of scalar chains.
+>
+> ``chains`` is a list of ``m >= 2`` equal-length sequences (one per independent run). Returns
+> ``R-hat = sqrt(V_hat / W)`` where ``W`` is the mean within-chain variance and ``V_hat`` the
+> variance estimate mixing in the between-chain spread. ``-> 1`` at convergence.
+
+### `integrated_autocorrelation_time(x, max_lag=None)`  _function_
+
+> Integrated autocorrelation time ``tau = 1 + 2 sum_k rho_k`` (Geyer initial positive seq).
+>
+> Sums the autocorrelations, truncating at the first lag where consecutive-pair sums turn
+> negative (Geyer's rule), which keeps the estimate stable. ``tau >= 1``; larger means more
+> correlated samples. Returns ``1.0`` for a zero-variance series.
 
 ## median_filter
 

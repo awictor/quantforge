@@ -15,6 +15,17 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.743.0] - 2026-09-14
+
+### Added
+- `gelman_rubin`, `integrated_autocorrelation_time`, `effective_sample_size`: MCMC convergence
+  diagnostics for the `mcmc` samplers. R-hat compares between- and within-chain variance across
+  independent runs (``-> 1`` at convergence); the integrated autocorrelation time uses Geyer's
+  initial-positive-sequence truncation (autocovariances computed lazily so it stops after a few
+  lags rather than materializing all ``n-1``); ESS is ``n / tau``. Cross-checked against white
+  noise (``tau ~ 1``, ``ESS ~ n``), AR(1) chains (``tau = (1+phi)/(1-phi)``), and convergent vs
+  divergent multi-chain R-hat.
+
 ## [1.742.0] - 2026-09-14
 
 ### Documentation
