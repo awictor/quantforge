@@ -15,6 +15,16 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.817.0] - 2026-09-15
+
+### Added
+- `observability_matrix`, `is_observable`, `observer_gain`: observability analysis and Luenberger
+  observer design -- the dual of controllability/control. `is_observable` tests the rank of
+  ``[C; CA; ...; CA^{n-1}]``; `observer_gain` places the estimator error poles of ``A - L C`` by
+  Ackermann on the transposed system (single output). Cross-checked against the
+  observability-equals-dual-controllability identity, exact error-pole placement, an unobservable
+  pair, a scalar system, and a 3-state observer.
+
 ## [1.816.0] - 2026-09-15
 
 ### Documentation

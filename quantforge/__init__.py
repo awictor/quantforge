@@ -809,6 +809,7 @@ from .lyapunov import (
     controllability_gramian,
 )
 from .pole_placement import ackermann
+from .observability import observability_matrix, is_observable, observer_gain
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1513,7 +1514,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "6.02.0"
+__version__ = "6.03.0"
 
 __all__ = [
     "OptionType",
@@ -2597,6 +2598,9 @@ __all__ = [
     "solve_continuous_lyapunov",
     "controllability_gramian",
     "ackermann",
+    "observability_matrix",
+    "is_observable",
+    "observer_gain",
     "Dual",
     "dual_derivative",
     "dual_gradient",

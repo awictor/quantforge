@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v6.02.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v6.03.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## aaa
 
@@ -12314,6 +12314,24 @@ Auto-generated from `quantforge` v6.02.0 by `docs/gen_api.py` — do not edit by
 ### `to_roman(n)`  _function_
 
 > Convert an integer in ``1..3999`` to its Roman-numeral string (subtractive form).
+
+## observability
+
+### `is_observable(A, C, tol=1e-09)`  _function_
+
+> True if ``(A, C)`` is observable (observability matrix has full column rank ``n``).
+
+### `observability_matrix(A, C)`  _function_
+
+> Observability matrix ``[C; CA; CA^2; ...; CA^{n-1}]`` (stacked vertically, ``n*p x n``).
+
+### `observer_gain(A, C, desired_poles)`  _function_
+
+> Luenberger observer gain ``L`` placing the estimator error poles at ``desired_poles``.
+>
+> Single-output systems (``C`` is ``1 x n``). By duality ``(A - L C)`` and ``(A^T - C^T K^T)``
+> share eigenvalues, so ``L = K^T`` where ``K`` places the poles of the transposed system.
+> Returns ``L`` as an ``n x 1`` column. Requires ``(A, C)`` observable.
 
 ## ode
 
