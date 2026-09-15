@@ -5338,6 +5338,30 @@ truncation is exactly why it beats Prony on measured data: on a noisy signal its
 is several times smaller. Use `prony` for clean or minimal-sample data, `matrix_pencil` when
 noise is present.
 
+`music_frequencies` estimates only the *frequencies* of sinusoids in noise, but resolves tones
+far closer together than any Fourier method — the classic super-resolution estimator:
+
+```python
+from quantforge import music_frequencies, music_pseudospectrum
+import math
+
+# two well-separated tones
+y = [math.cos(0.5 * k) + 0.8 * math.cos(1.5 * k) for k in range(64)]
+music_frequencies(y, p=4)                # [0.5003, 1.5001]   (p = 2 tones * 2)
+
+# two tones separated by 0.06, below the Fourier limit 2*pi/64 ~ 0.098
+y2 = [math.cos(0.60 * k) + math.cos(0.66 * k) for k in range(64)]
+music_frequencies(y2, p=4, grid=8000)    # [0.6, 0.6601] -- still resolved
+```
+
+MUSIC (Schmidt) splits the data's subspace into a `p`-dimensional signal subspace and its
+orthogonal noise complement via an SVD of the Hankel matrix. A tone's steering vector
+`a(omega) = [e^{-i omega k}]` is orthogonal to the noise subspace, so the pseudospectrum
+`1/||E_n^H a(omega)||^2` (from `music_pseudospectrum`) spikes sharply at each true frequency —
+sharp enough to separate tones a periodogram of the same length would merge. Pass `p = 2 * tones`
+for real signals (each cosine is a conjugate pair). It gives frequencies only, not amplitudes or
+damping — reach for `prony`/`matrix_pencil` when you need the full modal parameters.
+
 Welch *averages away* time to get a cleaner spectrum; the short-time Fourier transform
 *keeps* it, taking an FFT of each overlapping windowed frame to show how the spectrum
 evolves. Its squared magnitude is the spectrogram — the standard time-frequency view of

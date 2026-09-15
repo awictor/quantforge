@@ -15,6 +15,13 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.772.0] - 2026-09-14
+
+### Documentation
+- README: documented `music_frequencies` and `music_pseudospectrum` in the spectral-analysis
+  section after the matrix-pencil note -- the signal/noise-subspace split, the super-resolution
+  below the Fourier limit, and the frequencies-only scope. All snippet values verified live.
+
 ## [1.771.0] - 2026-09-14
 
 ### Added
