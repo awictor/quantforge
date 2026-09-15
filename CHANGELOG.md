@@ -15,6 +15,13 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.732.0] - 2026-09-14
+
+### Documentation
+- README: documented `extended_kalman_filter` in the Kalman-filter section after the linear
+  multivariate filter/smoother -- the autodiff-Jacobian linearization, the Joseph-form update,
+  and reduction to the linear filter. All snippet values verified live.
+
 ## [1.731.0] - 2026-09-14
 
 ### Added

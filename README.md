@@ -3246,6 +3246,32 @@ Gaussian data log-likelihood (for parameter tuning). The smoother conditions on 
 whole series, so its covariances never exceed the filter's. With 1x1 matrices it
 reduces exactly to `kalman_local_level`.
 
+When the dynamics are *nonlinear* — `x_t = f(x_{t-1})`, `y_t = h(x_t)` — the linear filter no
+longer applies. `extended_kalman_filter` linearizes `f` and `h` at each step and runs the same
+predict/update recursion. The linearization Jacobians are computed *exactly* by reverse-mode
+autodiff, so you write `f` and `h` once with `Var` arithmetic and never hand-derive anything:
+
+```python
+from quantforge import extended_kalman_filter
+
+# hidden state follows logistic growth; we observe it directly with noise
+r, K = 0.3, 10.0
+f = lambda x: [x[0] + r * x[0] * (1 - x[0] / K)]     # nonlinear transition
+h = lambda x: [x[0]]
+ekf = extended_kalman_filter(observations, f, h,
+                             Q=[[1e-4]], R=[[0.1]], x0=[0.4], P0=[[1.0]])
+ekf["filtered_means"]        # tracks the growth curve through the noise
+
+# a nonlinear measurement h(x) = x^2 still recovers the state
+extended_kalman_filter(z_sq, lambda x: [x[0]], lambda x: [x[0] * x[0]],
+                       Q=[[1e-5]], R=[[0.25]], x0=[2.5], P0=[[1.0]])["filtered_means"][-1]
+# ~[3.0]  from observations centred on 9
+```
+
+It uses a Joseph-form covariance update (numerically positive-definite) and reduces to the
+linear `kalman_filter` exactly when `f` and `h` are linear — verified against it, plus a
+logistic-growth state model and the `h(x) = x^2` example above.
+
 ## Newey-West HAC variance
 
 The sample variance understates the variance of a mean when observations are
