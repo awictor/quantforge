@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.42.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.43.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -9274,6 +9274,15 @@ Auto-generated from `quantforge` v5.42.0 by `docs/gen_api.py` — do not edit by
 > premium evaluation. Delta and gamma come from central differences in ``S``
 > on that fixed boundary; theta from a maturity bump (which does re-solve the
 > boundary). Returns ``{price, delta, gamma, theta}``.
+
+## kll
+
+### `KLL(k=200, c=0.6666666666666666, seed=12345)`  _class_
+
+> A KLL quantile sketch. Larger ``k`` -> smaller rank error (``~ c / k``) and more memory.
+>
+> Feed values with :meth:`add`/:meth:`add_all`, query with :meth:`rank`, :meth:`quantile`,
+> :meth:`cdf`; combine sketches with :meth:`merge`.
 
 ## kmeans
 

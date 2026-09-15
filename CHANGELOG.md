@@ -15,6 +15,17 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.757.0] - 2026-09-14
+
+### Added
+- `KLL`: the Karnin-Lang-Liberty quantile sketch -- streaming quantiles with a provable additive
+  rank-error bound (``~ epsilon * n``) in near-optimal space. A hierarchy of compactors halves
+  each full level by keeping every other sorted element (random offset via a seeded `PCG32`),
+  doubling the weight per level. `add`/`add_all`, `rank`, `quantile`, `cdf`, `merge`.
+  Cross-checked against exact ranks of a 200k Gaussian sample (max rank error ~1.2% at ``k=200``),
+  rank-consistent tail quantiles, the CDF, merge equalling the combined stream, and a compact
+  footprint (~300 retained items for 200k values).
+
 ## [1.756.0] - 2026-09-14
 
 ### Documentation
