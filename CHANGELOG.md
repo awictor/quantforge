@@ -15,6 +15,13 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.768.0] - 2026-09-14
+
+### Documentation
+- README: documented `prony` and `prony_reconstruct` in the spectral-analysis section after the
+  Burg/AR note -- the exponential-sum model, the linear-prediction / polynomial-root recovery,
+  and the contrast with parametric spectral density. All snippet values verified live.
+
 ## [1.767.0] - 2026-09-14
 
 ### Added

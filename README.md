@@ -5287,6 +5287,31 @@ unit circle (a stable model). Fed just 128 samples of two sinusoids in noise,
 same length would smear them together. `ar_psd` evaluates the spectrum from coefficients
 you already have, and `method="yule_walker"` selects the autocovariance route instead.
 
+Where `ar_spectrum` gives a *spectral density*, `prony` recovers the *exact parameters* of a
+signal modelled as a sum of complex exponentials — the modal frequencies, damping, and
+amplitudes of a ring-down:
+
+```python
+from quantforge import prony, prony_reconstruct
+
+# y_k = 3*(0.9)^k + 2*(0.5)^k -- two decaying modes
+y = [3 * 0.9 ** k + 2 * 0.5 ** k for k in range(20)]
+modes, amps = prony(y, 2)
+[z.real for z in modes], [a.real for a in amps]   # [0.9, 0.5], [3.0, 2.0]
+
+# a damped sinusoid e^{-0.1 k} cos(0.5 k): |mode| is the decay, its angle the frequency
+import math
+m, _ = prony([math.exp(-0.1 * k) * math.cos(0.5 * k) for k in range(30)], 2)
+abs(m[0]), abs(math.atan2(m[0].imag, m[0].real))  # (0.9048, 0.5) = (e^-0.1, omega)
+```
+
+Prony's method fits `y_k = sum a_i z_i^k` by exploiting that such a sum obeys a linear
+recurrence: it solves the linear-prediction system for the recurrence coefficients, roots the
+characteristic polynomial (via `polynomial_roots`) for the modes `z_i`, then a least-squares for
+the amplitudes. It is *exact* when the data truly is a sum of `p` exponentials and needs only
+`2p` samples — so it resolves closely-spaced or heavily-damped modes that a Fourier method of the
+same length cannot. `prony_reconstruct` regenerates the samples from the fitted parameters.
+
 Welch *averages away* time to get a cleaner spectrum; the short-time Fourier transform
 *keeps* it, taking an FFT of each overlapping windowed frame to show how the spectrum
 evolves. Its squared magnitude is the spectrogram — the standard time-frequency view of
