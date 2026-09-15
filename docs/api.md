@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.82.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.83.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## aaa
 
@@ -1014,6 +1014,16 @@ Auto-generated from `quantforge` v5.82.0 by `docs/gen_api.py` — do not edit by
 > central differences. Returns a dict with ``x`` (minimizer), ``fun`` (its value),
 > ``n_iter``, ``converged`` (gradient norm below ``tol``) and ``grad_norm``. Best for
 > smooth objectives; use a global method first if the landscape is multimodal.
+
+## bicgstab
+
+### `bicgstab(A, b, x0=None, tol=1e-10, max_iter=None)`  _function_
+
+> Solve ``A x = b`` by BiCGSTAB for a general non-singular operator ``A``.
+>
+> ``A`` is a matrix or a callable ``v -> A@v``. Returns a dict with ``x``, ``residuals`` (the
+> relative residual norm each iteration), ``converged`` and ``n_iter``. Constant memory: it
+> keeps only a handful of length-``n`` vectors regardless of iteration count.
 
 ## binary_search
 

@@ -15,6 +15,16 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.797.0] - 2026-09-14
+
+### Added
+- `bicgstab`: the BiCGSTAB (van der Vorst) short-recurrence Krylov solver for general
+  nonsymmetric ``A x = b``. Unlike GMRES it uses a fixed handful of vectors per step (constant
+  memory, no growing basis) by combining the bi-conjugate-gradient recurrence with a stabilizing
+  GMRES(1) step; matrix-free (matrix or matvec callable). Cross-checked against `lu_solve` and
+  `gmres` on nonsymmetric systems, the matvec-callable form, an SPD system, the identity, and a
+  40-dimensional diagonally-dominant system solved in a few iterations.
+
 ## [1.796.0] - 2026-09-14
 
 ### Documentation
