@@ -15,6 +15,16 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.801.0] - 2026-09-14
+
+### Added
+- `jacobi_preconditioner`, `incomplete_cholesky`, `ic_apply`, `preconditioned_cg`:
+  preconditioning for iterative SPD solves. Jacobi (diagonal) preconditioning and IC(0)
+  incomplete Cholesky (a Cholesky factor with ``A``'s sparsity pattern, no fill-in), plus a
+  preconditioned conjugate gradient that applies ``M^{-1}`` each step. Cross-checked against
+  `lu_solve`, an exact IC0 factor on a dense SPD matrix, sparsity preservation on a tridiagonal
+  matrix, and IC(0) cutting the iteration count on an ill-conditioned system from 40 to 2.
+
 ## [1.800.0] - 2026-09-14
 
 ### Documentation

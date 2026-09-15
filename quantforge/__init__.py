@@ -786,6 +786,12 @@ from .lanczos import lanczos, lanczos_eigenvalues
 from .gmres import gmres
 from .bicgstab import bicgstab
 from .lsqr import lsqr
+from .preconditioners import (
+    jacobi_preconditioner,
+    incomplete_cholesky,
+    ic_apply,
+    preconditioned_cg,
+)
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1490,7 +1496,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "5.86.0"
+__version__ = "5.87.0"
 
 __all__ = [
     "OptionType",
@@ -2553,6 +2559,10 @@ __all__ = [
     "gmres",
     "bicgstab",
     "lsqr",
+    "jacobi_preconditioner",
+    "incomplete_cholesky",
+    "ic_apply",
+    "preconditioned_cg",
     "Dual",
     "dual_derivative",
     "dual_gradient",

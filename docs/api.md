@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.86.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.87.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## aaa
 
@@ -13672,6 +13672,32 @@ Auto-generated from `quantforge` v5.86.0 by `docs/gen_api.py` — do not edit by
 ### `rayleigh_quotient(A, x)`  _function_
 
 > Rayleigh quotient ``x' A x / x' x`` -- the least-squares eigenvalue for ``x``.
+
+## preconditioners
+
+### `ic_apply(L, r)`  _function_
+
+> Apply the IC preconditioner: solve ``L L^T z = r`` by forward/back substitution.
+
+### `incomplete_cholesky(A)`  _function_
+
+> IC(0) incomplete-Cholesky factor ``L`` of an SPD matrix ``A`` (same sparsity, no fill-in).
+>
+> Returns the lower-triangular ``L`` with ``L L^T ~ A`` on the nonzero pattern of ``A``. Entries
+> where ``A[i][j] == 0`` are kept zero (the "no fill" rule). Use with :func:`ic_apply` /
+> :func:`preconditioned_cg`.
+
+### `jacobi_preconditioner(A)`  _function_
+
+> Diagonal (Jacobi) preconditioner: returns ``apply(r) = r / diag(A)`` as a callable.
+
+### `preconditioned_cg(A, b, apply_minv=None, x0=None, tol=1e-10, max_iter=None)`  _function_
+
+> Preconditioned conjugate gradient for a symmetric positive-definite ``A``.
+>
+> ``apply_minv`` is a callable ``r -> M^{-1} r`` (default: identity = plain CG). Returns a dict
+> with ``x``, ``residual_norm``, ``n_iter`` and ``converged``. With a good preconditioner it
+> converges in far fewer iterations than unpreconditioned CG.
 
 ## prefix_sum
 
