@@ -803,6 +803,11 @@ from .reordering import (
 from .stiff_ode import backward_euler, trapezoidal
 from .bdf import bdf2
 from .lqr import lqr, dare, controllability_matrix, is_controllable
+from .lyapunov import (
+    solve_discrete_lyapunov,
+    solve_continuous_lyapunov,
+    controllability_gramian,
+)
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1507,7 +1512,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "5.98.0"
+__version__ = "5.99.0"
 
 __all__ = [
     "OptionType",
@@ -2587,6 +2592,9 @@ __all__ = [
     "dare",
     "controllability_matrix",
     "is_controllable",
+    "solve_discrete_lyapunov",
+    "solve_continuous_lyapunov",
+    "controllability_gramian",
     "Dual",
     "dual_derivative",
     "dual_gradient",

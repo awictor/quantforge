@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.98.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.99.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## aaa
 
@@ -10427,6 +10427,30 @@ Auto-generated from `quantforge` v5.98.0 by `docs/gen_api.py` — do not edit by
 >
 > Factorizes ``A``, permutes ``b``, then forward- and back-substitutes. Returns the
 > solution vector. Raises on a singular matrix.
+
+## lyapunov
+
+### `controllability_gramian(A, B, discrete=True)`  _function_
+
+> Controllability Gramian: Lyapunov solution with ``Q = B B^T``.
+>
+> Discrete: solves ``A W A^T - W + B B^T = 0``; continuous: ``A W + W A^T + B B^T = 0``. The
+> Gramian ``W`` is positive-definite iff the system is controllable, and its eigen-directions
+> rank how easily each mode is driven.
+
+### `solve_continuous_lyapunov(A, Q)`  _function_
+
+> Solve the continuous Lyapunov equation ``A P + P A^T + Q = 0`` for symmetric ``P``.
+>
+> Uses ``vec(A P + P A^T) = (I (x) A + A (x) I) vec(P)``. Requires ``A`` Hurwitz (eigenvalue real
+> parts < 0) for a unique solution. Returns the symmetric ``P``.
+
+### `solve_discrete_lyapunov(A, Q)`  _function_
+
+> Solve the discrete Lyapunov equation ``A P A^T - P + Q = 0`` for symmetric ``P``.
+>
+> Uses ``vec(A P A^T) = (A (x) A) vec(P)``, so ``(A (x) A - I) vec(P) = -vec(Q)``. Requires ``A``
+> stable (spectral radius < 1) for a unique solution. Returns the symmetric ``P``.
 
 ## lzw
 

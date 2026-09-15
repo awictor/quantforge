@@ -15,6 +15,16 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.813.0] - 2026-09-14
+
+### Added
+- `solve_discrete_lyapunov`, `solve_continuous_lyapunov`, `controllability_gramian`: Lyapunov
+  equation solvers. Discrete ``A P A^T - P + Q = 0`` and continuous ``A P + P A^T + Q = 0`` are
+  vectorized via the Kronecker product into an ``n^2 x n^2`` linear system and solved with
+  `lu_solve`, then symmetrized; the controllability Gramian is the solution with ``Q = B B^T``.
+  Cross-checked against the residual equations, the discrete series ``sum A^k Q (A^k)^T``, scalar
+  closed forms, and a positive-definite Gramian for a controllable system.
+
 ## [1.812.0] - 2026-09-14
 
 ### Documentation
