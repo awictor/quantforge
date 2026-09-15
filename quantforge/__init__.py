@@ -793,6 +793,13 @@ from .preconditioners import (
     preconditioned_cg,
 )
 from .sparse import CSRMatrix
+from .reordering import (
+    matrix_bandwidth,
+    reverse_cuthill_mckee,
+    apply_permutation,
+    permute_vector,
+    inverse_permutation,
+)
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1497,7 +1504,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "5.90.0"
+__version__ = "5.91.0"
 
 __all__ = [
     "OptionType",
@@ -2565,6 +2572,11 @@ __all__ = [
     "ic_apply",
     "preconditioned_cg",
     "CSRMatrix",
+    "matrix_bandwidth",
+    "reverse_cuthill_mckee",
+    "apply_permutation",
+    "permute_vector",
+    "inverse_permutation",
     "Dual",
     "dual_derivative",
     "dual_gradient",

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.90.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.91.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## aaa
 
@@ -14517,6 +14517,32 @@ Auto-generated from `quantforge` v5.90.0 by `docs/gen_api.py` — do not edit by
 > Returns a dict with ``coeffs`` (highest-degree first, length ``degree + 1``), ``error`` (the
 > minimax error ``max |f - p|``), and ``n_iter``. Uses the Remez exchange with a dense grid to
 > locate error extrema.
+
+## reordering
+
+### `apply_permutation(A, perm)`  _function_
+
+> Symmetrically permute ``A`` by ``perm``: ``B[i][j] = A[perm[i]][perm[j]]``.
+
+### `inverse_permutation(perm)`  _function_
+
+> Inverse of a permutation, for mapping a permuted solution back to the original order.
+
+### `matrix_bandwidth(A, tol=0.0)`  _function_
+
+> Bandwidth of ``A``: the largest ``|i - j|`` among entries with ``|A[i][j]| > tol``.
+
+### `permute_vector(v, perm)`  _function_
+
+> Permute a vector: ``w[i] = v[perm[i]]`` (apply the same reordering to a RHS).
+
+### `reverse_cuthill_mckee(A, tol=0.0)`  _function_
+
+> Reverse Cuthill-McKee ordering of the symmetric structure of ``A``.
+>
+> Returns a permutation ``perm`` (a list of the original indices in their new order) that,
+> applied symmetrically, reduces the bandwidth. Handles disconnected structures by restarting
+> from the lowest-degree unvisited node.
 
 ## resample
 

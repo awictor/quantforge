@@ -15,6 +15,16 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.805.0] - 2026-09-14
+
+### Added
+- `reverse_cuthill_mckee`, `matrix_bandwidth`, `apply_permutation`, `permute_vector`,
+  `inverse_permutation`: sparse-matrix reordering to reduce bandwidth. RCM does a degree-ordered
+  BFS of the adjacency graph and reverses it, dramatically shrinking the bandwidth of a
+  poorly-ordered symmetric matrix (cheaper banded factorizations). Cross-checked against a
+  shuffled path graph (bandwidth 17 -> 1), permutation validity, solve consistency (permute ->
+  solve -> unpermute matches the original), the inverse permutation, and a 2-D grid.
+
 ## [1.804.0] - 2026-09-14
 
 ### Documentation
