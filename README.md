@@ -6170,6 +6170,24 @@ component within the sweep, so it typically converges in about half the iteratio
 `jacobi`. All three return `x`, `residual_norm` and `n_iter`, and agree with the direct
 `lu_solve` to machine precision on a well-conditioned system.
 
+`conjugate_gradient` needs a symmetric positive-definite `A`; when `A` is *nonsymmetric* — the
+usual case for discretized PDEs and Newton steps — `gmres` is the Krylov solver to reach for:
+
+```python
+from quantforge import gmres
+
+res = gmres(A, b, tol=1e-10)      # A: any non-singular matrix, or a v -> A@v callable
+res["x"], res["converged"], res["n_iter"]
+```
+
+GMRES builds an orthonormal Krylov basis by Arnoldi iteration and, at each step, picks the
+subspace vector minimizing the residual `||b - A x||` — solved incrementally by Givens-rotation
+QR of the small Hessenberg matrix, so the residual decreases monotonically. In exact arithmetic
+it terminates in at most `n` steps; `restart=m` caps the subspace (and memory) at `m` before
+restarting for large problems. Like CG it touches `A` only through matrix-vector products, so a
+matvec callable works for large sparse or matrix-free operators. Use `conjugate_gradient` for
+symmetric-PD systems and `gmres` for everything else.
+
 A *tridiagonal* system — nonzero only on the diagonal and its two neighbours, as in cubic
 splines and implicit PDE steps — solves in `O(n)` rather than `O(n^3)` with the Thomas
 algorithm, and `solve_cyclic_tridiagonal` handles the periodic-boundary variant:

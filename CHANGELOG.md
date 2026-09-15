@@ -15,6 +15,13 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.796.0] - 2026-09-14
+
+### Documentation
+- README: documented `gmres` in the iterative-solvers section after `conjugate_gradient` -- the
+  Arnoldi/residual-minimizing scheme, the restart and matvec-callable options, and when to prefer
+  it over CG. All snippet values verified live.
+
 ## [1.795.0] - 2026-09-14
 
 ### Added
