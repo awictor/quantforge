@@ -3625,6 +3625,25 @@ closed-loop `A - B K` (from `ackermann`/`lqr`) to verify the controller you desi
 settles the way you intended, or an observer's error dynamics to check convergence. SISO or
 multivariable via the matrix sizes.
 
+When a model has more states than its input-output behaviour needs, `balanced_truncation` shrinks
+it while keeping the dynamics. `hankel_singular_values` reveal which states matter:
+
+```python
+from quantforge import hankel_singular_values, balanced_truncation
+
+hankel_singular_values(A, B, C)          # [1.5408, 0.0093, 2e-05] -- one dominant state
+Ar, Br, Cr, Dr = balanced_truncation(A, B, C, D, r=2)   # drop the negligible third HSV
+# dc_gain unchanged: 2.3452 (full) == 2.3452 (reduced)
+```
+
+The Hankel singular values are `sqrt(eig(Wc Wo))` from the controllability and observability
+Gramians — each measures a state's combined input-output energy and is invariant under
+state-coordinate change. `balanced_truncation` balances the realization so both Gramians equal
+`diag(HSV)`, then keeps the `r` states with the largest values, discarding modes that are both
+weakly driven and weakly seen. Here the third HSV (2e-5) is negligible, so the order-2 model
+reproduces the DC gain and step response almost exactly. This is the principled way to reduce
+model order with a hard error bound, used in controller synthesis and simulation speed-up.
+
 ## Newey-West HAC variance
 
 The sample variance understates the variance of a mean when observations are

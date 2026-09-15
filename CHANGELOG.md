@@ -15,6 +15,13 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.822.0] - 2026-09-15
+
+### Documentation
+- README: documented `hankel_singular_values` and `balanced_truncation` in the LQR section after
+  the state-space simulation note -- the HSV energy interpretation, the balancing/truncation, and
+  the near-exact order reduction. All snippet values verified live.
+
 ## [1.821.0] - 2026-09-15
 
 ### Added
