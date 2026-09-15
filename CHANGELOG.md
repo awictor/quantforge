@@ -15,6 +15,13 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.810.0] - 2026-09-14
+
+### Documentation
+- README: documented `bdf2` in the ODE section after the backward-Euler/trapezoidal note -- the
+  quadratic-fit formula, the second-order-plus-A(alpha)-stability combination, and the choice
+  among backward_euler / trapezoidal / bdf2 for stiff problems. All snippet values verified live.
+
 ## [1.809.0] - 2026-09-14
 
 ### Added
