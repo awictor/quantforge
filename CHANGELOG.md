@@ -15,6 +15,14 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.812.0] - 2026-09-14
+
+### Documentation
+- README: new "Optimal control (LQR)" section documenting `lqr`, `dare`,
+  `controllability_matrix`, and `is_controllable` -- the state-feedback gain, the Riccati
+  solution, the controllability test, and the closed-loop stability. Table of contents
+  regenerated. All snippet values verified live.
+
 ## [1.811.0] - 2026-09-14
 
 ### Added

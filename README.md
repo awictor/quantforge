@@ -94,6 +94,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Bootstrap and jackknife](#bootstrap-and-jackknife)
 - [Hodrick-Prescott filter](#hodrick-prescott-filter)
 - [Kalman filter (local level)](#kalman-filter-local-level)
+- [Optimal control (LQR)](#optimal-control-lqr)
 - [Newey-West HAC variance](#newey-west-hac-variance)
 - [Theil-Sen robust regression](#theil-sen-robust-regression)
 - [Isotonic regression (monotone fit)](#isotonic-regression-monotone-fit)
@@ -3518,6 +3519,30 @@ effective sample size drops below half the particle count. On a linear-Gaussian 
 matches the Kalman filter to Monte-Carlo error; the states can be scalars or vectors (a
 position/velocity example tracks through noise). Use it as the fallback when the distribution
 simply is not Gaussian.
+
+## Optimal control (LQR)
+
+Where the Kalman filter *estimates* a linear system's state, the linear-quadratic regulator
+*controls* it. For `x_{k+1} = A x_k + B u_k` with quadratic cost `sum x'Qx + u'Ru`, `lqr` returns
+the optimal state-feedback gain `K` — the control is `u = -K x`:
+
+```python
+from quantforge import lqr, is_controllable
+
+A = [[1.0, 1.0], [0.0, 1.0]]      # double integrator (position, velocity)
+B = [[0.0], [1.0]]
+res = lqr(A, B, Q=[[1.0, 0.0], [0.0, 1.0]], R=[[1.0]])
+res["K"]                           # [[0.4221, 1.2439]] -- feedback gain
+is_controllable(A, B)              # True
+```
+
+The gain comes from the stabilizing solution `P` of the discrete algebraic Riccati equation,
+which `dare` finds by fixed-point iteration; `lqr` then forms `K = (R + B'PB)^{-1} B'PA`. When the
+pair `(A, B)` is controllable — testable via `is_controllable` (the rank of the
+`controllability_matrix` `[B, AB, ..., A^{n-1}B]`) — the closed-loop system `A - B K` is stable:
+for the double integrator above both closed-loop eigenvalues sit at 0.42, inside the unit circle.
+LQR is the foundation of optimal regulator design and the control half of the LQG controller
+(LQR gain + Kalman estimator).
 
 ## Newey-West HAC variance
 
