@@ -15,6 +15,13 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.794.0] - 2026-09-14
+
+### Documentation
+- README: documented `lanczos_eigenvalues` in the matrix-eigen section after `power_iteration` --
+  the Krylov/Ritz-value scheme, the matrix-free callable form, and the choice among
+  power_iteration / lanczos / jacobi_eigen. All snippet values verified live.
+
 ## [1.793.0] - 2026-09-14
 
 ### Added

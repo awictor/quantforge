@@ -6247,6 +6247,27 @@ refines it (and `mu = 0` targets the smallest magnitude). Both return `eigenvalu
 `jacobi_eigen` value to `1e-5`. The Rayleigh quotient `x'Ax / x'x` is the best
 eigenvalue estimate for any vector and is exact on a true eigenvector.
 
+Power iteration finds *one* extreme eigenvalue; `lanczos_eigenvalues` gets *several* at once, and
+works matrix-free. It projects a symmetric `A` onto a small tridiagonal Krylov matrix whose
+eigenvalues (Ritz values) converge to `A`'s extremal eigenvalues after `m << n` steps:
+
+```python
+from quantforge import lanczos_eigenvalues
+
+rv = sorted(lanczos_eigenvalues(A, n=30, m=20))   # A: 30x30 symmetric, 20 Lanczos steps
+rv[0], rv[-1]        # (-9.7031, 11.2193) -- match jacobi_eigen's min/max exactly
+lanczos_eigenvalues(matvec, n=30, m=20)            # A given only as a v -> A@v callable
+```
+
+The Lanczos iteration builds an orthonormal basis of the Krylov subspace `{v, Av, A^2 v, ...}`
+(with full reorthogonalization here for stability) and expresses `A` on it as a tridiagonal
+matrix `T`; `T`'s eigenvalues approximate `A`'s, the *extreme* ones converging first. Because `A`
+enters only through matrix-vector products, you can pass a callable instead of a dense matrix —
+the way to get the top/bottom eigenvalues of a large sparse operator without ever forming it.
+Taking `m = n` recovers the full spectrum. Use `power_iteration` for the single dominant
+eigenpair, `lanczos_eigenvalues` for a few extremal eigenvalues of a large symmetric operator,
+and `jacobi_eigen` for the full dense decomposition.
+
 `jacobi_eigen` and power iteration assume a *symmetric* matrix (real spectrum); a general
 real matrix can have complex eigenvalues, which `eigenvalues_general` recovers via the
 characteristic polynomial:
