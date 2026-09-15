@@ -15,6 +15,13 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.818.0] - 2026-09-15
+
+### Documentation
+- README: documented `is_observable` and `observer_gain` in the LQR section after the
+  pole-placement note -- the observability duality, the Luenberger error-pole placement, and the
+  Kalman/LQG connection. All snippet values verified live.
+
 ## [1.817.0] - 2026-09-15
 
 ### Added

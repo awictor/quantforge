@@ -3583,6 +3583,28 @@ transient response (settling speed, damping) precisely, and stabilizes an unstab
 moving its poles inside the unit circle. Requires `(A, B)` controllable and a single input; reach
 for `lqr` instead when you would rather specify a cost than exact poles.
 
+Feedback control needs the full state, but you only *measure* `y = C x`. An *observer*
+reconstructs the state from the output, and whether it can is governed by *observability* — the
+exact dual of controllability. `is_observable` tests it, and `observer_gain` designs the
+Luenberger estimator:
+
+```python
+from quantforge import is_observable, observer_gain
+
+A = [[1.0, 1.0], [0.0, 1.0]]
+C = [[1.0, 0.0]]                   # measure only the first state
+is_observable(A, C)                # True
+L = observer_gain(A, C, [0.2, 0.4])   # [[1.4], [0.48]] -- error poles at 0.2, 0.4
+```
+
+`is_observable` checks the rank of the observability matrix `[C; CA; ...; CA^{n-1}]`, and by
+duality `(A, C)` is observable iff `(A^T, C^T)` is controllable. `observer_gain` exploits the same
+duality: the estimator error `A - L C` and `A^T - C^T K^T` share eigenvalues, so it places the
+error poles by running `ackermann` on the transposed system and transposing the result. Choosing
+fast error poles makes the estimate `x_hat` converge quickly to the true state — the
+deterministic counterpart to the Kalman filter, and the estimation half of an LQG controller
+(LQR gain applied to the observer's state).
+
 ## Newey-West HAC variance
 
 The sample variance understates the variance of a mean when observations are
