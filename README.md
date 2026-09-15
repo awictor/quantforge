@@ -7317,6 +7317,26 @@ seeded `PCG32` drives the compaction coin flips for reproducibility. KLL bounds 
 (so a queried quantile lands at close to the right rank); in sparse tails that can still be a wide
 *value* gap, which is the price of the guarantee.
 
+`GKQuantile` gives the same worst-case rank bound *deterministically* — no coin flips, so the
+result depends only on the data, not a seed:
+
+```python
+from quantforge import GKQuantile
+
+gk = GKQuantile(epsilon=0.01).add_all(samples)   # samples ~ N(0, 1), 100k of them
+gk.quantile(0.5)      # ~-0.02
+gk.quantile(0.99)     # ~2.23
+len(gk._tuples)       # ~75 stored tuples for 100k values
+```
+
+The Greenwald-Khanna summary keeps tuples `(value, g, delta)` where `g` is the rank gap since the
+previous stored value and `delta` bounds the uncertainty in its rank; periodic band-based
+compression keeps `g + delta` below `2 epsilon n`, which guarantees every query lands within
+`epsilon * n` in rank, in `O((1/epsilon) log(epsilon n))` space. Pick `KLL` for the optimal
+randomized bound on large streams, `GKQuantile` for a deterministic guarantee with no seed
+dependence, `TDigest` for the best practical tail accuracy, and `DDSketch` for relative error on
+positive data.
+
 When elements should be drawn *proportional to a weight* rather than uniformly,
 `weighted_reservoir_sample` selects `k` distinct items in the same single pass, and
 `weighted_sample_with_replacement` draws `k` independent weight-proportional items:
