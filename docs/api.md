@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.72.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.73.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## aaa
 
@@ -10814,6 +10814,21 @@ Auto-generated from `quantforge` v5.72.0 by `docs/gen_api.py` — do not edit by
 > Sums the autocorrelations, truncating at the first lag where consecutive-pair sums turn
 > negative (Geyer's rule), which keeps the estimate stable. ``tau >= 1``; larger means more
 > correlated samples. Returns ``1.0`` for a zero-variance series.
+
+## mds
+
+### `classical_mds(distances, k=2)`  _function_
+
+> Classical (Torgerson) MDS: embed ``n`` objects in ``k`` dimensions from a distance matrix.
+>
+> ``distances`` is an ``n x n`` symmetric matrix of pairwise distances (zero diagonal). Returns
+> a dict with ``coords`` (``n x k`` embedded points) and ``eigenvalues`` (the top ``k``, whose
+> magnitudes measure how much each dimension explains). The configuration reproduces the input
+> distances up to rotation/reflection/translation.
+
+### `embedded_distances(coords)`  _function_
+
+> Pairwise Euclidean distance matrix of an ``n x k`` coordinate list (for validation).
 
 ## median_filter
 

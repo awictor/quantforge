@@ -15,6 +15,16 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.787.0] - 2026-09-14
+
+### Added
+- `classical_mds` and `embedded_distances`: classical (Torgerson) multidimensional scaling --
+  embed ``n`` objects in ``k`` dimensions from a pairwise distance matrix by double-centering the
+  squared distances into a Gram matrix and taking its top-``k`` eigenvectors scaled by
+  ``sqrt(eigenvalue)``. Reproduces the input distances up to rotation/reflection. Cross-checked
+  against exact distance recovery of 2-D and 3-D configurations, the rank-2 spectrum of planar
+  data, collinear points collapsing to 1-D, and an equilateral triangle.
+
 ## [1.786.0] - 2026-09-14
 
 ### Documentation
