@@ -6404,6 +6404,31 @@ plain polynomial diverges (0.0028 vs 59 on the Runge function above). `d = 0` is
 interpolant; larger `d` raises the order. Reach for it when the nodes are fixed and equispaced;
 prefer Chebyshev-node polynomial interpolation when you control the sampling.
 
+Floater-Hormann fixes `d` and the nodes; `aaa` instead *discovers* the best rational fit
+adaptively — the right approach when the function has poles or steep features and you do not know
+the degree in advance:
+
+```python
+from quantforge import aaa
+
+f = lambda x: (x + 2) / (x * x + 1)               # a genuine rational
+xs = [-3 + 6 * i / 100 for i in range(101)]
+r = aaa(xs, [f(x) for x in xs], tol=1e-12)
+len(r.support_x), r(0.5)                           # (3, 2.0) -- recovered in 3 support points
+
+# a function with a pole just outside the sample range
+g = lambda x: 1 / (1.05 - x)
+rg = aaa([-1 + 2 * i / 300 for i in range(301)], [g(x) for x in ...], tol=1e-10)
+rg(1.04)                                           # ~100 -- AAA captures the pole
+```
+
+The AAA algorithm (Nakatsukasa-Sete-Trefethen) greedily adds the sample where the current
+approximant is worst, then solves the SVD of a Loewner matrix for the barycentric weights that
+best fit the rest — stopping once the residual is below `tol`. It recovers a true rational
+exactly in as many support points as its degree (3 for the example above), approximates smooth
+functions to near machine precision, and unlike any polynomial method it reproduces poles and
+branch-like behaviour. The returned callable exposes `support_x`/`support_y`/`weights`.
+
 The 1-D interpolators above have a 2-D cousin for lookup tables — vol surfaces, response
 grids, heightmaps — sampled on a rectilinear grid:
 
