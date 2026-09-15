@@ -15,6 +15,18 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.737.0] - 2026-09-14
+
+### Added
+- `sinkhorn` and `cost_matrix`: entropic optimal transport by the Sinkhorn-Knopp algorithm --
+  the multivariate generalization of the 1-D `wasserstein_distance`. Given marginals and a cost
+  matrix it returns the regularized transport plan and cost; ``eps -> 0`` approaches the exact
+  optimal-transport cost. Runs in the log-domain so it stays stable for small ``eps`` where the
+  raw ``exp(-C/eps)`` kernel would underflow. `cost_matrix` builds the ground-cost matrix for
+  scalar or vector support points. Cross-checked against a hand-computed transport, the 1-D
+  Wasserstein distance on equal-weight samples, zero cost for identical distributions, and
+  transpose symmetry.
+
 ## [1.736.0] - 2026-09-14
 
 ### Documentation

@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.22.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.23.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -15546,6 +15546,28 @@ Auto-generated from `quantforge` v5.22.0 by `docs/gen_api.py` — do not edit by
 > the initial temperature, ``cooling`` the per-iteration geometric decay, ``step`` the
 > proposal scale (shrinks with temperature). Returns a dict with ``x`` (best point),
 > ``fun`` (its value), ``n_iter`` and ``final_temp``. Deterministic for a fixed seed.
+
+## sinkhorn
+
+### `cost_matrix(xs, ys, p=2)`  _function_
+
+> Ground-cost matrix ``C[i][j] = |xs[i] - ys[j]|^p`` for scalar or vector support points.
+>
+> ``xs`` and ``ys`` are lists of points (each a float or an equal-length coordinate list);
+> ``p`` is the exponent of the Euclidean distance (``p = 2`` gives squared distance, the
+> 2-Wasserstein ground cost). Returns the ``len(xs) x len(ys)`` matrix.
+
+### `sinkhorn(a, b, C, eps=0.05, max_iter=2000, tol=1e-09)`  _function_
+
+> Entropic-regularized optimal transport plan between marginals ``a`` and ``b``.
+>
+> ``a`` (length ``n``) and ``b`` (length ``m``) are non-negative weight vectors with equal
+> total mass; ``C`` is the ``n x m`` cost matrix; ``eps`` the entropic regularization strength.
+> Returns a dict with ``plan`` (the ``n x m`` transport matrix), ``cost`` (``sum P*C``) and
+> ``n_iter``. As ``eps -> 0`` the cost approaches the exact optimal-transport cost.
+>
+> Runs in the log-domain (stabilized potentials ``f, g``) so it stays accurate for small
+> ``eps`` where the raw ``exp(-C/eps)`` kernel would underflow to zero.
 
 ## sizing
 
