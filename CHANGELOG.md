@@ -15,6 +15,13 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.824.0] - 2026-09-15
+
+### Documentation
+- README: documented `tf_to_ss`, `tf_dcgain`, and `tf_frequency_response` in the LQR section after
+  balanced truncation -- the transfer-function / state-space equivalence, the controllable
+  canonical realization, and when to use each form. All snippet values verified live.
+
 ## [1.823.0] - 2026-09-15
 
 ### Added

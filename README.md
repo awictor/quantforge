@@ -3644,6 +3644,27 @@ weakly driven and weakly seen. Here the third HSV (2e-5) is negligible, so the o
 reproduces the DC gain and step response almost exactly. This is the principled way to reduce
 model order with a hard error bound, used in controller synthesis and simulation speed-up.
 
+A system has two equivalent descriptions — the *transfer function* `H(z) = num(z)/den(z)` for
+frequency-domain design and the *state space* `(A, B, C, D)` for the tools above. `tf_to_ss`
+converts between them, and `tf_evaluate` / `tf_dcgain` / `tf_frequency_response` work directly on
+the polynomials:
+
+```python
+from quantforge import tf_to_ss, tf_dcgain, tf_frequency_response
+
+# H(z) = (z + 0.3) / (z^2 - 0.9 z + 0.2)
+A, B, C, D = tf_to_ss([1.0, 0.3], [1.0, -0.9, 0.2])   # controllable canonical form
+tf_dcgain([1.0, 0.3], [1.0, -0.9, 0.2])                # 4.3333 = H(1)
+```
+
+`tf_to_ss` builds the controllable canonical realization; its companion `A` has the denominator
+roots as eigenvalues (the system poles), so the resulting state space reproduces the transfer
+function exactly — verified by `H(z) = C(zI - A)^{-1}B + D` at complex points and by matching
+impulse/step responses. `tf_evaluate` gives `H(z)` anywhere, `tf_dcgain` the steady-state `H(1)`,
+and `tf_frequency_response` samples `H(e^{jw})` for a Bode/Nyquist view. Convert to state space to
+run the LQR/observer/simulation tools; stay in transfer-function form for classical pole/zero
+design.
+
 ## Newey-West HAC variance
 
 The sample variance understates the variance of a mean when observations are
