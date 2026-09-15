@@ -6205,6 +6205,27 @@ precision and takes a matvec callable too. Prefer `gmres` when you need a guaran
 residual and can afford the memory; `bicgstab` when memory is tight or the system is large and
 reasonably conditioned.
 
+All three above solve *square* systems; `lsqr` handles *rectangular* least-squares
+`min ||A x - b||` — the Krylov method for overdetermined fitting problems too big for a direct
+normal-equation solve:
+
+```python
+from quantforge import lsqr
+
+# degree-2 polynomial fit: 20 noisy points, 3 unknowns (overdetermined)
+V = [[1.0, x, x * x] for x in xs]
+res = lsqr(V, ys, tol=1e-12)
+res["x"]          # [1.9748, -1.4956, 0.3005] -- matches the pseudo-inverse solution
+res["residual"]   # ||A x - b|| at the least-squares optimum
+```
+
+LSQR (Paige & Saunders) is analytically equivalent to conjugate gradient on the normal equations
+`A^T A x = A^T b`, but it never forms `A^T A` — whose condition number is the *square* of `A`'s —
+so it stays accurate on ill-conditioned fits where the direct normal-equation solve loses digits.
+It works through the Golub-Kahan bidiagonalization, needing only products with `A` and `A^T`, and
+converges to the minimum-`||A^T r||` least-squares solution. Use `lsqr` for large or
+ill-conditioned regression/inverse problems; the direct `pseudo_inverse` for small dense ones.
+
 A *tridiagonal* system — nonzero only on the diagonal and its two neighbours, as in cubic
 splines and implicit PDE steps — solves in `O(n)` rather than `O(n^3)` with the Thomas
 algorithm, and `solve_cyclic_tridiagonal` handles the periodic-boundary variant:

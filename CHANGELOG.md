@@ -15,6 +15,13 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.800.0] - 2026-09-14
+
+### Documentation
+- README: documented `lsqr` in the iterative-solvers section after `bicgstab` -- the rectangular
+  least-squares scope, the never-form-``A^T A`` stability advantage, and when to prefer it over
+  the direct pseudo-inverse. All snippet values verified live.
+
 ## [1.799.0] - 2026-09-14
 
 ### Added
