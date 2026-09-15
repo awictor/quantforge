@@ -35,6 +35,7 @@ notebooks, trading bots) without compiling NumPy or SciPy.
 - [Forward-start and cliquet options](#forward-start-and-cliquet-options)
 - [Quasi-Monte Carlo](#quasi-monte-carlo)
 - [Markov chain Monte Carlo](#markov-chain-monte-carlo)
+- [Gaussian process regression](#gaussian-process-regression)
 - [Exotic options (closed form)](#exotic-options-closed-form)
 - [Shout and ladder options](#shout-and-ladder-options)
 - [Installment options](#installment-options)
@@ -1142,6 +1143,34 @@ The Laplace approximation is exact when the log-joint is Gaussian (verified agai
 analytic evidence in 1-D and 2-D) and accurate for smooth, well-peaked posteriors otherwise.
 `posterior_model_probabilities` combines evidences with optional model priors using a
 log-sum-exp normalization, so it never overflows.
+
+## Gaussian process regression
+
+A Gaussian process is a prior over functions: it interpolates observed points *and* reports how
+uncertain it is everywhere else. `gp_predict` returns the posterior mean and variance at any test
+inputs, and `gp_log_marginal_likelihood` scores kernel hyperparameters:
+
+```python
+import math
+from quantforge import gp_predict, gp_log_marginal_likelihood
+
+X = [0.0, 1.0, 2.0, 3.0, 4.0]
+y = [math.sin(x) for x in X]
+
+p = gp_predict(X, y, [1.0, 2.5, 10.0], length_scale=1.0, noise=1e-6)
+p["mean"]     # [0.8415, 0.6044, -0.0]   exact at x=1, interpolated at 2.5, prior mean far out
+p["var"]      # [0.0, 0.0081, 1.0]       ~0 on data, grows away, -> prior variance at x=10
+
+gp_log_marginal_likelihood(X, y, length_scale=1.0, noise=0.01)   # -4.4692
+```
+
+The posterior comes from a single Cholesky factorization of the kernel matrix (`rbf_kernel` by
+default, `matern32_kernel` also available), plus `noise` on the diagonal for observation error
+and numerical stability. The mean reproduces the data at the training points (variance -> 0 in
+the noise-free limit) and reverts to the zero prior mean with prior variance far from any data —
+the calibrated uncertainty is the whole point. `gp_log_marginal_likelihood` is the objective for
+choosing `length_scale`/`variance`/`noise`: maximize it (e.g. with `lbfgs` or a grid) to fit the
+kernel. Inputs may be scalars or coordinate lists, so it handles multi-dimensional regression.
 
 ## Exotic options (closed form)
 

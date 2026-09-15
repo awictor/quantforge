@@ -15,6 +15,14 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.752.0] - 2026-09-14
+
+### Documentation
+- README: new "Gaussian process regression" section documenting `gp_predict`,
+  `gp_log_marginal_likelihood`, and the RBF/Matern kernels -- the posterior mean/variance, the
+  calibrated uncertainty, and hyperparameter tuning by the marginal likelihood. Table of
+  contents regenerated. All snippet values verified live.
+
 ## [1.751.0] - 2026-09-14
 
 ### Added
