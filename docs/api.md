@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.88.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.89.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## aaa
 
@@ -16392,6 +16392,15 @@ Auto-generated from `quantforge` v5.88.0 by `docs/gen_api.py` — do not edit by
 > :func:`quantforge.parisian_barrier_mc`, which it cross-checks. ``n_steps`` is
 > capped by the Sobol generator's dimension (now 12), so the window is resolved
 > to ``round(window / dt)`` consecutive steps.
+
+## sparse
+
+### `CSRMatrix(data, indices, indptr, shape)`  _class_
+
+> A matrix in compressed-sparse-row form.
+>
+> Construct with :meth:`from_dense` or :meth:`from_triplets`. ``matvec`` is ``O(nnz)`` and is
+> directly usable as the operator argument to the Krylov solvers.
 
 ## sparse_table
 

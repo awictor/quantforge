@@ -15,6 +15,16 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.803.0] - 2026-09-14
+
+### Added
+- `CSRMatrix`: compressed-sparse-row matrix storage with ``O(nnz)`` matrix-vector product,
+  transpose, and dense conversion. Builds from a dense matrix or ``(row, col, value)`` triplets
+  (duplicates summed). Its `matvec` plugs straight into the matrix-free Krylov solvers
+  (`gmres`/`bicgstab`/`lanczos`), making them usable on genuinely large sparse systems.
+  Cross-checked against dense matvec, dense roundtrip, transpose (and transpose-matvec), triplet
+  construction, a GMRES solve of a CSR tridiagonal system, and the ``O(nnz)`` storage advantage.
+
 ## [1.802.0] - 2026-09-14
 
 ### Documentation
