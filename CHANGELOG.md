@@ -15,6 +15,13 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.804.0] - 2026-09-14
+
+### Documentation
+- README: documented `CSRMatrix` in the iterative-solvers section after the preconditioners --
+  the three-array storage, the O(nnz) matvec that plugs into the Krylov solvers, and dense/triplet
+  construction. All snippet values verified live.
+
 ## [1.803.0] - 2026-09-14
 
 ### Added

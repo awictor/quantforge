@@ -6246,6 +6246,26 @@ substitution. On an ill-conditioned system the IC(0)-preconditioned CG above con
 iterations where plain CG takes 40. Pass any `apply_minv` callable to `preconditioned_cg` to use
 a custom preconditioner.
 
+The iterative solvers only ever touch `A` through matrix-vector products, so a large *sparse* `A`
+should never be stored densely. `CSRMatrix` keeps only the nonzeros and does the matvec in
+`O(nnz)`:
+
+```python
+from quantforge import CSRMatrix
+
+S = CSRMatrix.from_dense(tridiagonal_15x15)   # or CSRMatrix.from_triplets(triplets, shape)
+S.nnz, S.shape                                 # (43, (15, 15))  -- 43 stored vs 225 dense
+
+gmres(S.matvec, b, tol=1e-12)["x"]             # feed S.matvec straight to any Krylov solver
+```
+
+CSR (compressed sparse row) stores the matrix as three arrays — the nonzero `data`, their column
+`indices`, and the per-row `indptr` — giving `O(nnz)` memory and matvec instead of `O(n^2)`.
+Build it from a dense matrix (near-zeros dropped) or from `(row, col, value)` triplets (duplicates
+summed), and use `.matvec` (or the `@` operator) as the operator for `gmres`, `bicgstab`,
+`lanczos`, or `lsqr` — which is how those matrix-free solvers scale to large sparse systems.
+`.transpose()` and `.to_dense()` round-trip the structure.
+
 A *tridiagonal* system — nonzero only on the diagonal and its two neighbours, as in cubic
 splines and implicit PDE steps — solves in `O(n)` rather than `O(n^3)` with the Thomas
 algorithm, and `solve_cyclic_tridiagonal` handles the periodic-boundary variant:
