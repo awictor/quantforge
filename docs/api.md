@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.38.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.39.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -749,6 +749,26 @@ Auto-generated from `quantforge` v5.38.0 by `docs/gen_api.py` — do not edit by
 > for ``S >= S*`` and a put for ``S <= S*``. Returns ``None`` when early
 > exercise is never optimal (an American call with ``b >= r`` equals its
 > European value, so there is no finite boundary).
+
+## bayes_opt
+
+### `bayesian_optimize(f, candidates, n_init=3, n_iter=15, length_scale=1.0, variance=1.0, noise=1e-06, xi=0.01, seed=12345)`  _function_
+
+> Minimize ``f`` over a discrete ``candidates`` set by GP-based Bayesian optimization.
+>
+> Evaluates ``n_init`` seed points (evenly spread across the candidate list, deterministic),
+> then for ``n_iter`` rounds fits a GP to all evaluations and picks the unevaluated candidate
+> with the highest :func:`expected_improvement`. ``candidates`` is a list of inputs (scalars or
+> coordinate lists) accepted by ``f`` and the GP. Returns a dict with ``best_x``, ``best_y``,
+> the full ``X``/``y`` history, and ``n_eval``.
+
+### `expected_improvement(mean, var, best, xi=0.01)`  _function_
+
+> Expected improvement of a candidate for a *minimization* problem.
+>
+> ``mean``/``var`` are the GP posterior at the candidate, ``best`` the lowest observed value,
+> ``xi`` an exploration margin. ``EI = (best - mean - xi) Phi(z) + sigma phi(z)`` with
+> ``z = (best - mean - xi) / sigma``; zero when the posterior is certain (``var = 0``).
 
 ## bayesian_regression
 

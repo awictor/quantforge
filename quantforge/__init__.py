@@ -762,6 +762,7 @@ from .gaussian_process import (
     rbf_kernel,
     matern32_kernel,
 )
+from .bayes_opt import expected_improvement, bayesian_optimize
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1466,7 +1467,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "5.38.0"
+__version__ = "5.39.0"
 
 __all__ = [
     "OptionType",
@@ -2493,6 +2494,8 @@ __all__ = [
     "gp_log_marginal_likelihood",
     "rbf_kernel",
     "matern32_kernel",
+    "expected_improvement",
+    "bayesian_optimize",
     "Dual",
     "dual_derivative",
     "dual_gradient",

@@ -15,6 +15,16 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.753.0] - 2026-09-14
+
+### Added
+- `expected_improvement` and `bayesian_optimize`: Bayesian optimization of an expensive black box
+  over a discrete candidate set, using a GP surrogate (`gp_predict`) and the expected-improvement
+  acquisition (closed form via `norm_cdf`). Each round fits the GP to all evaluations and picks
+  the unevaluated candidate with the highest EI. Cross-checked against the EI closed-form
+  properties and by minimizing a quadratic (23 evals vs 101 candidates), a multimodal 1-D
+  function (finds the global minimum), and a 2-D bowl (recovers the optimum).
+
 ## [1.752.0] - 2026-09-14
 
 ### Documentation
