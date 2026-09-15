@@ -5920,6 +5920,25 @@ length `pi*r`, its true arc length, rather than the Euclidean chord. Tune `n_nei
 sampling density: too small disconnects the graph (raises), too large short-circuits the manifold
 with off-surface edges. `knn_graph` exposes the neighbourhood graph directly.
 
+`laplacian_eigenmaps` is the third manifold method: where Isomap preserves *global* geodesic
+distances, it preserves *local* neighbourhoods — points adjacent on the manifold stay adjacent in
+the embedding:
+
+```python
+from quantforge import laplacian_eigenmaps
+
+res = laplacian_eigenmaps(arc_points, k=1, n_neighbors=4, t=10.0)
+# the 1-D coordinate orders the points along the arc (rank-correlation ~0.97 with arc position)
+```
+
+It builds a heat-kernel k-NN graph (weight `exp(-||x_i - x_j||^2 / t)`), forms the symmetric
+normalized Laplacian, and takes its smallest *non-trivial* eigenvectors — the coordinates that
+minimize `sum_ij W_ij ||y_i - y_j||^2`, i.e. keep neighbours close. The constant (zero-eigenvalue)
+eigenvector is dropped; the next `k` are the embedding. It shares the Laplacian machinery with
+`spectral_clustering` (clustering is this embedding followed by k-means). Use `laplacian_eigenmaps`
+for locality-preserving embeddings, `isomap` when global geodesic distances matter, and
+`classical_mds` for the linear/distance-preserving case.
+
 ## Market stress (turbulence / absorption ratio)
 
 Two Kritzman-Li systemic-risk gauges. `turbulence` is the Mahalanobis distance of a

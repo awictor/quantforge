@@ -15,6 +15,14 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.792.0] - 2026-09-14
+
+### Documentation
+- README: documented `laplacian_eigenmaps` in the PCA section after `isomap` -- the local-
+  neighbourhood-preserving embedding, the drop-the-constant-eigenvector detail, the shared
+  Laplacian machinery with spectral clustering, and a decision guide across the three manifold
+  methods. All snippet values verified live.
+
 ## [1.791.0] - 2026-09-14
 
 ### Added
