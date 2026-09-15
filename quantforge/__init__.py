@@ -751,6 +751,11 @@ from .conjugate import (
     normal_normal_posterior,
     hpd_interval,
 )
+from .model_evidence import (
+    laplace_log_evidence,
+    bayes_factor,
+    posterior_model_probabilities,
+)
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1455,7 +1460,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "5.34.0"
+__version__ = "5.35.0"
 
 __all__ = [
     "OptionType",
@@ -2475,6 +2480,9 @@ __all__ = [
     "gamma_poisson_posterior",
     "normal_normal_posterior",
     "hpd_interval",
+    "laplace_log_evidence",
+    "bayes_factor",
+    "posterior_model_probabilities",
     "Dual",
     "dual_derivative",
     "dual_gradient",

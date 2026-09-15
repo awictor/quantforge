@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.34.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.35.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -10886,6 +10886,32 @@ Auto-generated from `quantforge` v5.34.0 by `docs/gen_api.py` — do not edit by
 > A flat run at ``levels=0`` is plain single-grid Monte Carlo; increasing
 > ``levels`` refines the time discretisation while sharing the cost across
 > coarser levels.
+
+## model_evidence
+
+### `bayes_factor(log_evidence_1, log_evidence_2)`  _function_
+
+> Bayes factor ``B_12 = Z_1 / Z_2 = exp(log_evidence_1 - log_evidence_2)``.
+>
+> ``> 1`` favours model 1, ``< 1`` favours model 2. Computed from log-evidences to avoid
+> overflow.
+
+### `laplace_log_evidence(log_joint, theta0, h=1e-05)`  _function_
+
+> Laplace approximation to ``log Z = log integral exp(log_joint(theta)) dtheta``.
+>
+> ``log_joint`` maps a length-``d`` list of :class:`Var` to the (unnormalized) log-joint
+> ``log p(data | theta) + log p(theta)`` as a single ``Var``. Finds the posterior mode by
+> Newton minimization of ``-log_joint``, evaluates the Hessian of ``-log_joint`` there by
+> autodiff, and returns ``log_joint(mode) + (d/2) log(2 pi) - (1/2) log det H`` together with
+> the ``mode``.
+
+### `posterior_model_probabilities(log_evidences, priors=None)`  _function_
+
+> Posterior model probabilities from a list of log-evidences (equal priors by default).
+>
+> Combines ``log p(M_k) + log Z_k`` and normalizes stably via the log-sum-exp trick. Returns a
+> list of probabilities summing to 1.
 
 ## modular
 

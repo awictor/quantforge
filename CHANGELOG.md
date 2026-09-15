@@ -15,6 +15,17 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.749.0] - 2026-09-14
+
+### Added
+- `laplace_log_evidence`, `bayes_factor`, `posterior_model_probabilities`: Bayesian model
+  comparison via the Laplace approximation to the marginal likelihood. The log-joint is written
+  with `Var`; `laplace_log_evidence` finds the posterior mode with `newton_min`, takes the
+  Hessian by autodiff, and returns ``log_joint(mode) + (d/2) log(2 pi) - (1/2) log det H``.
+  `bayes_factor` and `posterior_model_probabilities` (log-sum-exp stable) combine evidences.
+  Cross-checked against the exact evidence for Gaussian log-joints (1-D and 2-D), Bayes-factor
+  and probability arithmetic, and a model-selection example preferring the prior near the data.
+
 ## [1.748.0] - 2026-09-14
 
 ### Documentation
