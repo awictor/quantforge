@@ -7294,6 +7294,29 @@ percentiles across shards. Choose `DDSketch` for relative error on positive data
 tail-accurate arbitrary quantiles, and `P2Quantile` when one preset quantile in O(1) memory is
 enough.
 
+`KLL` gives the same any-quantile query but with a *provable* worst-case bound: its rank error
+stays within about `epsilon * n` in near-optimal space, where t-digest only promises accuracy in
+practice. Use it when you need a guarantee.
+
+```python
+from quantforge import KLL
+
+kll = KLL(k=200, seed=1).add_all(samples)    # samples ~ N(0, 1), 200k of them
+kll.quantile(0.5)     # ~-0.01
+kll.quantile(0.99)    # ~2.28
+kll.n                 # 200000
+sum(len(level) for level in kll._levels)     # ~309 retained items, not 200000
+```
+
+The KLL sketch (Karnin, Lang & Liberty) keeps a hierarchy of *compactors* — sorted buffers, one
+per level. When a level fills it sorts, keeps every other element (a random even/odd offset), and
+promotes them one level up where each carries double the weight; so the whole stream collapses to
+a few hundred weighted items whose ranks approximate the true ranks to within `~c/k`. Larger `k`
+tightens the bound. `rank`, `quantile`, `cdf`, and `merge` all work off the weighted items, and a
+seeded `PCG32` drives the compaction coin flips for reproducibility. KLL bounds the *rank* error
+(so a queried quantile lands at close to the right rank); in sparse tails that can still be a wide
+*value* gap, which is the price of the guarantee.
+
 When elements should be drawn *proportional to a weight* rather than uniformly,
 `weighted_reservoir_sample` selects `k` distinct items in the same single pass, and
 `weighted_sample_with_replacement` draws `k` independent weight-proportional items:

@@ -15,6 +15,13 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.758.0] - 2026-09-14
+
+### Documentation
+- README: documented `KLL` in the streaming-statistics section after `TDigest` -- the compactor
+  hierarchy, the provable rank-error bound, and the rank-vs-value-error distinction. All snippet
+  values verified live.
+
 ## [1.757.0] - 2026-09-14
 
 ### Added
