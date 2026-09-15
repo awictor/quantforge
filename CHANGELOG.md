@@ -15,6 +15,17 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.793.0] - 2026-09-14
+
+### Added
+- `lanczos` and `lanczos_eigenvalues`: the Lanczos iteration for the extremal eigenvalues of a
+  large symmetric operator. Builds an orthonormal Krylov basis (full reorthogonalization) and
+  projects ``A`` onto a small tridiagonal matrix whose eigenvalues (Ritz values) converge to
+  ``A``'s extremal eigenvalues, using ``A`` only through matrix-vector products (matrix or
+  callable). Cross-checked against a diagonal matrix, extremal Ritz values matching the full
+  spectrum's extremes, full-spectrum recovery at ``m = n``, the matvec-callable form, and an SPD
+  matrix's largest eigenvalue.
+
 ## [1.792.0] - 2026-09-14
 
 ### Documentation

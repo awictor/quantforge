@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.78.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.79.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## aaa
 
@@ -9496,6 +9496,23 @@ Auto-generated from `quantforge` v5.78.0 by `docs/gen_api.py` — do not edit by
 ### `lambert_wm1(x)`  _function_
 
 > Secondary branch ``W_{-1}(x)`` with ``w <= -1``. Defined for ``-1/e <= x < 0``.
+
+## lanczos
+
+### `lanczos(A, n, m, v0=None)`  _function_
+
+> Lanczos tridiagonalization of a symmetric operator ``A`` (dimension ``n``, ``m`` steps).
+>
+> ``A`` is an ``n x n`` symmetric matrix or a callable computing ``A @ v``. Returns
+> ``(alpha, beta)`` -- the diagonal (length ``m``) and off-diagonal (length ``m-1``) of the
+> tridiagonal projection ``T`` -- using full reorthogonalization against the stored basis.
+
+### `lanczos_eigenvalues(A, n, m, v0=None)`  _function_
+
+> Ritz eigenvalue estimates of symmetric ``A`` from ``m`` Lanczos steps (ascending).
+>
+> The extreme Ritz values (smallest and largest) converge fastest to the extremal eigenvalues
+> of ``A``. Returns the sorted list of Ritz values (length up to ``m``).
 
 ## laplace_inversion
 
