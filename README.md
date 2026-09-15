@@ -6002,6 +6002,26 @@ columns and rows (actual assets, genes, documents), the decomposition is directl
 at the true rank it reconstructs `A` essentially exactly. Use `cur` when you need to *name* the
 components; `randomized_svd`/`nmf`/`dmd` when a mathematical basis or dynamics is enough.
 
+All of the above factor a *matrix*; `cp_als` extends the idea to a *3-way tensor*, decomposing
+`X[i,j,k]` into a sum of rank-one terms:
+
+```python
+from quantforge import cp_als, cp_reconstruct
+
+# X[i,j,k] ~ sum_r A[i,r] B[j,r] C[k,r], a rank-2 tensor
+res = cp_als(X, rank=2, seed=1)
+res["error"]                          # ~ relative 6e-4 -- factors recovered
+Xhat = cp_reconstruct(res["A"], res["B"], res["C"])
+```
+
+The CP (CANDECOMP/PARAFAC) decomposition is the tensor analogue of the SVD: `cp_als` fits it by
+alternating least squares — holding two of the three factor matrices fixed and solving the third
+via the Khatri-Rao product and the small `R x R` normal equations, cycling until the fit stops
+improving. Unlike the matrix SVD, the CP decomposition is *generically unique* (up to scaling and
+permutation of the `R` components), which is what makes its factors interpretable latent modes in
+chemometrics, neuroimaging, and multi-way data mining. `cp_reconstruct` rebuilds the tensor from
+the factors.
+
 For a square system, LU with partial pivoting gives the solve and the determinant:
 
 ```python
