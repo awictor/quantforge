@@ -15,6 +15,13 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.790.0] - 2026-09-14
+
+### Documentation
+- README: documented `isomap` and `knn_graph` in the PCA section after `classical_mds` -- the
+  geodesic-distance approach to curved manifolds, the arc-unrolling behaviour, and the
+  `n_neighbors` tradeoff. All snippet values verified live.
+
 ## [1.789.0] - 2026-09-14
 
 ### Added

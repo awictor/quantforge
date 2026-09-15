@@ -5900,6 +5900,26 @@ embedding reproduces the input distances up to rotation, reflection, and transla
 two non-zero eigenvalues). `embedded_distances` computes the pairwise distances of any coordinate
 set, for building inputs or checking the fit.
 
+Classical MDS uses straight-line distances, so it flattens a *curved* manifold. `isomap` fixes
+that by measuring distance *along* the manifold:
+
+```python
+from quantforge import isomap
+
+# 30 points along a half-circle arc of radius 5, living in 2-D
+res = isomap(arc_points, k=1, n_neighbors=3)
+coords = [c[0] for c in res["coords"]]
+abs(coords[0] - coords[-1])          # 15.68 = arc length (pi*5), not the 10.0 chord
+```
+
+Isomap builds a k-nearest-neighbour graph, approximates the geodesic distance between every pair
+as the shortest path through it (`floyd_warshall`), and runs classical MDS on those geodesic
+distances — so it *unrolls* a Swiss roll or an arc, laying out points by along-surface distance
+where PCA and classical MDS would collapse the fold. The half-circle above embeds to a line of
+length `pi*r`, its true arc length, rather than the Euclidean chord. Tune `n_neighbors` to the
+sampling density: too small disconnects the graph (raises), too large short-circuits the manifold
+with off-surface edges. `knn_graph` exposes the neighbourhood graph directly.
+
 ## Market stress (turbulence / absorption ratio)
 
 Two Kritzman-Li systemic-risk gauges. `turbulence` is the Mahalanobis distance of a
