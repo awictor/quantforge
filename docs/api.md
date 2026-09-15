@@ -1,6 +1,18 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.50.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.51.0 by `docs/gen_api.py` — do not edit by hand.
+
+## aaa
+
+### `aaa(xs, ys, tol=1e-13, max_terms=100)`  _function_
+
+> Rational approximation of data ``(xs, ys)`` by the AAA algorithm.
+>
+> ``xs``/``ys`` are the sample abscissae and values. Greedily selects support points until the
+> max residual falls below ``tol`` (relative to ``max|ys|``) or ``max_terms`` is reached.
+> Returns a callable ``r(x)`` -- the barycentric rational approximant -- together with the
+> chosen support points, values and weights as attributes ``r.support_x``, ``r.support_y``,
+> ``r.weights``.
 
 ## acf
 

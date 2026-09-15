@@ -768,6 +768,7 @@ from .kll import KLL
 from .gk_quantile import GKQuantile
 from .remez import remez
 from .floater_hormann import floater_hormann_weights, floater_hormann_interpolate
+from .aaa import aaa
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1472,7 +1473,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "5.50.0"
+__version__ = "5.51.0"
 
 __all__ = [
     "OptionType",
@@ -2507,6 +2508,7 @@ __all__ = [
     "remez",
     "floater_hormann_weights",
     "floater_hormann_interpolate",
+    "aaa",
     "Dual",
     "dual_derivative",
     "dual_gradient",

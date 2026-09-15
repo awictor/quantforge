@@ -15,6 +15,16 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.765.0] - 2026-09-14
+
+### Added
+- `aaa`: the AAA adaptive rational approximation algorithm (Nakatsukasa-Sete-Trefethen 2018).
+  Greedily selects support points (adding the worst-residual sample each step) and solves a
+  Loewner-matrix SVD for the barycentric weights, returning a callable rational approximant that
+  handles poles and steep features polynomials cannot. Cross-checked against exact recovery of a
+  true rational (3 terms, ~1e-15), support-point interpolation, ``exp``/``log`` to ~1e-10, and a
+  near-pole function whose pole location it captures.
+
 ## [1.764.0] - 2026-09-14
 
 ### Documentation
