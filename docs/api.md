@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.62.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.63.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## aaa
 
@@ -4725,6 +4725,18 @@ Auto-generated from `quantforge` v5.62.0 by `docs/gen_api.py` — do not edit by
 ### `total_variation_distance(p, q)`  _function_
 
 > Total-variation distance ``(1/2) sum |p_i - q_i|`` in ``[0, 1]``.
+
+## dmd
+
+### `dmd(snapshots, rank=None, dt=1.0)`  _function_
+
+> Dynamic mode decomposition of a time-ordered list of state vectors ``snapshots``.
+>
+> ``snapshots[t]`` is the state at step ``t`` (a length-``d`` list). Builds ``X`` (columns
+> ``0..m-1``) and ``X'`` (columns ``1..m``), SVD-reduces to ``rank`` (default: full numerical
+> rank), and returns a dict with ``eigenvalues`` (the discrete-time DMD eigenvalues, possibly
+> complex), ``growth_rates`` (``|lambda|``), ``frequencies`` (``arg(lambda)/dt``), and the
+> reduced operator ``atilde``.
 
 ## double_barrier
 

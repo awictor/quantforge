@@ -15,6 +15,16 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.777.0] - 2026-09-14
+
+### Added
+- `dmd`: dynamic mode decomposition (exact-DMD variant). From time-ordered snapshots it finds the
+  best-fit linear operator ``X' ~ A X``, SVD-reduces it, and returns the discrete-time
+  eigenvalues, per-mode growth rates ``|lambda|`` and frequencies ``arg(lambda)/dt`` -- the
+  data-driven core of Koopman analysis and reduced-order modelling. Cross-checked against a known
+  linear system (recovers ``eig(A)``), a rotation-with-decay (``|lambda| = 0.95``, frequency
+  ``0.3``), and a diagonalizable 3-mode system.
+
 ## [1.776.0] - 2026-09-14
 
 ### Documentation
