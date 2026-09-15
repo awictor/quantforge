@@ -15,6 +15,17 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.767.0] - 2026-09-14
+
+### Added
+- `prony` and `prony_reconstruct`: Prony's method for fitting a sum of ``p`` complex
+  exponentials ``y_k = sum a_i z_i^k`` to uniformly-sampled data. Solves the linear-prediction
+  system for the recurrence coefficients, roots the characteristic polynomial for the modes
+  ``z_i`` (via `polynomial_roots`), and a complex least-squares for the amplitudes. Recovers
+  decaying/oscillating modal parameters from a ring-down. Cross-checked against exact recovery of
+  2- and 3-exponential sums, a damped sinusoid (``|z| = e^{-0.1}``, angle ``0.5``), an undamped
+  oscillation on the unit circle, and reconstruction of the samples.
+
 ## [1.766.0] - 2026-09-14
 
 ### Documentation

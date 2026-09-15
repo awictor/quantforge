@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.52.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.53.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## aaa
 
@@ -13554,6 +13554,19 @@ Auto-generated from `quantforge` v5.52.0 by `docs/gen_api.py` — do not edit by
 >             (1 - tau)(q - a)  otherwise )``.
 > Minimized in expectation when ``quantile_forecast`` is the true ``tau``-quantile
 > of the target. Aligned series; ``tau`` in ``(0, 1)``.
+
+## prony
+
+### `prony(y, p)`  _function_
+
+> Fit ``p`` complex exponentials to the sample sequence ``y`` by Prony's method.
+>
+> Requires ``len(y) >= 2 p``. Returns ``(modes, amplitudes)`` where ``y_k ~ sum amplitudes[i] *
+> modes[i]**k``. Modes and amplitudes are complex; a real signal yields conjugate pairs.
+
+### `prony_reconstruct(modes, amps, n)`  _function_
+
+> Reconstruct ``n`` samples ``y_k = sum amps[i] * modes[i]**k`` from Prony parameters.
 
 ## proportion_ci
 
