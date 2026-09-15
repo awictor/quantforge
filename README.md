@@ -6188,6 +6188,23 @@ restarting for large problems. Like CG it touches `A` only through matrix-vector
 matvec callable works for large sparse or matrix-free operators. Use `conjugate_gradient` for
 symmetric-PD systems and `gmres` for everything else.
 
+GMRES's memory grows with the iteration count (hence `restart`); `bicgstab` solves the same
+nonsymmetric systems in *constant* memory — a fixed handful of vectors per step:
+
+```python
+from quantforge import bicgstab
+
+res = bicgstab(A, b, tol=1e-10)   # n=40 diagonally-dominant -> converges in ~5 iterations
+res["converged"], res["n_iter"]
+```
+
+BiCGSTAB (van der Vorst) combines the bi-conjugate-gradient recurrence with a stabilizing
+GMRES(1) step, so it keeps GMRES-like convergence on well-conditioned nonsymmetric systems
+without storing a growing Krylov basis. It agrees with `gmres` and `lu_solve` to machine
+precision and takes a matvec callable too. Prefer `gmres` when you need a guaranteed monotone
+residual and can afford the memory; `bicgstab` when memory is tight or the system is large and
+reasonably conditioned.
+
 A *tridiagonal* system — nonzero only on the diagonal and its two neighbours, as in cubic
 splines and implicit PDE steps — solves in `O(n)` rather than `O(n^3)` with the Thomas
 algorithm, and `solve_cyclic_tridiagonal` handles the periodic-boundary variant:

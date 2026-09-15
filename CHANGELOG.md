@@ -15,6 +15,13 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.798.0] - 2026-09-14
+
+### Documentation
+- README: documented `bicgstab` in the iterative-solvers section after `gmres` -- the
+  constant-memory short recurrence, the GMRES-like convergence, and the GMRES-vs-BiCGSTAB choice.
+  All snippet values verified live.
+
 ## [1.797.0] - 2026-09-14
 
 ### Added
