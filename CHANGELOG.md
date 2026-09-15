@@ -15,6 +15,16 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.789.0] - 2026-09-14
+
+### Added
+- `isomap` and `knn_graph`: Isomap nonlinear dimensionality reduction (Tenenbaum et al.). Builds
+  a symmetric k-nearest-neighbour graph, approximates geodesic (along-manifold) distances as
+  shortest paths through it (`floyd_warshall`), and runs classical MDS on those -- unrolling
+  curved manifolds that linear methods flatten. Cross-checked against a flat plane in 3-D
+  (distances preserved), a half-circle arc that unrolls monotonically, the geodesic exceeding the
+  Euclidean chord, k-NN graph symmetry, and a disconnected-graph error.
+
 ## [1.788.0] - 2026-09-14
 
 ### Documentation

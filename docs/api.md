@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.74.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.75.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## aaa
 
@@ -9095,6 +9095,23 @@ Auto-generated from `quantforge` v5.74.0 by `docs/gen_api.py` — do not edit by
 > ``rank_a`` and ``rank_b`` are sequences of the same items (equal length, same set). The
 > distance is the count of pairs ``(x, y)`` whose relative order differs between the two,
 > i.e. the inversions of ``rank_b`` reindexed by ``rank_a``'s positions.
+
+## isomap
+
+### `isomap(X, k=2, n_neighbors=5)`  _function_
+
+> Isomap embedding of points ``X`` into ``k`` dimensions.
+>
+> Builds the ``n_neighbors``-NN graph, computes all-pairs geodesic (shortest-path) distances,
+> and runs classical MDS on them. Returns a dict with ``coords`` (``n x k``) and ``eigenvalues``.
+> Raises if the neighbourhood graph is disconnected (some geodesic distance is infinite).
+
+### `knn_graph(X, n_neighbors)`  _function_
+
+> Symmetric k-nearest-neighbour graph of points ``X`` with Euclidean edge weights.
+>
+> Returns ``{i: {j: dist}}``; the graph is symmetrized (an edge is kept if either endpoint has
+> the other among its ``n_neighbors`` nearest). Used as the connectivity for geodesic distances.
 
 ## isotonic
 
