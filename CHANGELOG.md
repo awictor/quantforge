@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.730.0] - 2026-09-14
+
+### Documentation
+- README: documented `gauss_newton` in the optimization block after `levenberg_marquardt` --
+  the exact autodiff Jacobian, the damped normal equations, and when to prefer it over the
+  finite-difference `levenberg_marquardt`. All snippet values verified live.
+
 ## [1.729.0] - 2026-09-14
 
 ### Added

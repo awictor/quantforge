@@ -6277,6 +6277,31 @@ enough to solve directly and you want the fewest iterations; use `lbfgs` when `n
 taken numerically -- and converges from a poor starting guess, making it the
 general calibration engine (vol surface, curve, or any parametric fit).
 
+`gauss_newton` is the same Levenberg-Marquardt idea but with an *exact* residual Jacobian from
+reverse-mode autodiff: write the residual vector once with `Var` arithmetic and it
+differentiates itself, no finite differences:
+
+```python
+import math
+from quantforge import gauss_newton
+
+# fit y = A exp(-k t) to data generated with A=3, k=0.8
+ts = [i * 0.25 for i in range(30)]
+ys = [3.0 * math.exp(-0.8 * t) for t in ts]
+gauss_newton(lambda p: [p[0] * (-(p[1] * ts[i])).exp() - ys[i] for i in range(len(ts))],
+             [1.0, 0.1])["p"]                    # [3.0, 0.8], cost ~1e-29
+
+# Rosenbrock as two residuals r = [1 - x, 10(y - x^2)]
+gauss_newton(lambda p: [1 - p[0], 10 * (p[1] - p[0] ** 2)], [-1.2, 1.0])["p"]   # [1.0, 1.0]
+```
+
+It approximates the Hessian by `J^T J` and solves the damped normal equations
+`(J^T J + lambda diag) delta = -J^T r`, growing `lambda` when a trial step fails and shrinking
+it when it succeeds — Gauss-Newton speed near a good fit, gradient-descent safety far from it.
+Cross-checked against the closed-form OLS on a linear model and against exact fits above. Use
+`levenberg_marquardt` when the model is a plain Python function of floats; use `gauss_newton`
+when you can express the residual with `Var` and want the exact Jacobian.
+
 When the coefficients must be non-negative -- weights, proportions, spectral mixing --
 `nnls` solves `min ||A x - b||²` subject to `x >= 0` exactly by the Lawson-Hanson
 active-set method:
