@@ -15,6 +15,13 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.770.0] - 2026-09-14
+
+### Documentation
+- README: documented `matrix_pencil` in the spectral-analysis section after the Prony note --
+  the Hankel-shift SVD estimator, the noise-subspace rejection, and when to prefer it over
+  `prony`. All snippet values verified live.
+
 ## [1.769.0] - 2026-09-14
 
 ### Added

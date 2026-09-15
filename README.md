@@ -5312,6 +5312,32 @@ the amplitudes. It is *exact* when the data truly is a sum of `p` exponentials a
 `2p` samples — so it resolves closely-spaced or heavily-damped modes that a Fourier method of the
 same length cannot. `prony_reconstruct` regenerates the samples from the fitted parameters.
 
+Prony roots a single recurrence fit, so it degrades under noise. `matrix_pencil` is the
+noise-robust SVD-based estimator for the same problem — the method of choice when the ring-down
+is measured, not synthetic:
+
+```python
+from quantforge import matrix_pencil
+
+# clean data: same modes as Prony recovers
+matrix_pencil([3 * 0.9 ** k + 2 * 0.5 ** k for k in range(30)], 2)[0]   # modes ~ 0.9, 0.5
+
+# a noisy damped sinusoid (true decay e^-0.05, frequency 0.7)
+import math, random
+random.seed(0)
+noisy = [math.exp(-0.05 * k) * math.cos(0.7 * k) + random.uniform(-0.02, 0.02)
+         for k in range(60)]
+m = matrix_pencil(noisy, 2)[0]
+abs(m[0]), abs(math.atan2(m[0].imag, m[0].real))   # (0.9507, 0.6992) ~ (e^-0.05, 0.7)
+```
+
+The matrix-pencil method (Hua & Sarkar) stacks the samples into a Hankel matrix, forms the
+shifted pair `(Y1, Y2)`, and truncates `Y1`'s pseudo-inverse to rank `p` with an SVD — which
+discards the noise subspace — then reads the modes off the eigenvalues of `Y1^+ Y2`. That SVD
+truncation is exactly why it beats Prony on measured data: on a noisy signal its frequency error
+is several times smaller. Use `prony` for clean or minimal-sample data, `matrix_pencil` when
+noise is present.
+
 Welch *averages away* time to get a cleaner spectrum; the short-time Fourier transform
 *keeps* it, taking an FFT of each overlapping windowed frame to show how the spectrum
 evolves. Its squared magnitude is the spectrogram — the standard time-frequency view of
