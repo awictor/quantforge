@@ -745,6 +745,12 @@ from .mcmc_diagnostics import (
     effective_sample_size,
 )
 from .adaptive_mcmc import adaptive_metropolis, slice_sample
+from .conjugate import (
+    beta_binomial_posterior,
+    gamma_poisson_posterior,
+    normal_normal_posterior,
+    hpd_interval,
+)
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1449,7 +1455,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "5.32.0"
+__version__ = "5.33.0"
 
 __all__ = [
     "OptionType",
@@ -2465,6 +2471,10 @@ __all__ = [
     "effective_sample_size",
     "adaptive_metropolis",
     "slice_sample",
+    "beta_binomial_posterior",
+    "gamma_poisson_posterior",
+    "normal_normal_posterior",
+    "hpd_interval",
     "Dual",
     "dual_derivative",
     "dual_gradient",

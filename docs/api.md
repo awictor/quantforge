@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.32.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.33.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -3415,6 +3415,42 @@ Auto-generated from `quantforge` v5.32.0 by `docs/gen_api.py` — do not edit by
 > Weights need not be normalized; they are normalized to sum to one first
 > (absolute values, for long-short books). Ranges from ``1/n`` (equal weight) to
 > ``1`` (a single holding).
+
+## conjugate
+
+### `beta_binomial_posterior(prior_alpha, prior_beta, successes, trials)`  _function_
+
+> Beta-Binomial conjugate update for a success probability ``p``.
+>
+> Prior ``p ~ Beta(prior_alpha, prior_beta)`` and ``successes`` out of ``trials`` Bernoulli
+> outcomes give posterior ``Beta(alpha + s, beta + (n - s))``. Returns the posterior ``alpha``,
+> ``beta``, ``mean`` and ``var``.
+
+### `gamma_poisson_posterior(prior_shape, prior_rate, total_count, n_obs)`  _function_
+
+> Gamma-Poisson conjugate update for a Poisson rate ``lambda``.
+>
+> Prior ``lambda ~ Gamma(shape, rate)`` (rate = inverse scale) and ``n_obs`` observations with
+> summed count ``total_count`` give posterior ``Gamma(shape + total_count, rate + n_obs)``.
+> Returns posterior ``shape``, ``rate``, ``mean`` and ``var``.
+
+### `hpd_interval(density, lo, hi, mass=0.95, n_grid=10000)`  _function_
+
+> Highest-posterior-density interval of a 1-D ``density`` over ``[lo, hi]``.
+>
+> Evaluates ``density`` on a uniform grid, then finds the shortest interval (by lowering a
+> horizontal threshold on the density until the enclosed probability reaches ``mass``). Returns
+> ``(low, high)``. The density need not be normalized. Suits any of the conjugate posteriors
+> (pass the corresponding pdf) or an arbitrary unimodal 1-D posterior.
+
+### `normal_normal_posterior(prior_mean, prior_var, data, data_var)`  _function_
+
+> Normal-Normal conjugate update for a mean ``mu`` with known observation variance.
+>
+> Prior ``mu ~ Normal(prior_mean, prior_var)`` and ``data`` (list) drawn with known variance
+> ``data_var`` give a Normal posterior. Precisions add: ``1/post_var = 1/prior_var + n/data_var``
+> and the posterior mean is the precision-weighted average of prior mean and sample mean.
+> Returns posterior ``mean`` and ``var`` (``var`` is the variance of ``mu``, not of the data).
 
 ## conjugate_gradient
 

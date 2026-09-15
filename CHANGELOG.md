@@ -15,6 +15,17 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.747.0] - 2026-09-14
+
+### Added
+- `beta_binomial_posterior`, `gamma_poisson_posterior`, `normal_normal_posterior`,
+  `hpd_interval`: closed-form conjugate Bayesian updating for a proportion (Beta-Binomial), a
+  rate (Gamma-Poisson), and a mean (Normal-Normal, known variance), each returning the posterior
+  (hyper)parameters plus mean/variance; `hpd_interval` finds the shortest interval carrying a
+  given posterior mass on a density grid. Cross-checked against the analytic posterior moments,
+  the Laplace rule of succession, the vague-prior -> MLE limit, and HPD intervals matching the
+  Normal ``mu +/- 1.96 sigma`` band and the correct enclosed mass for a Beta posterior.
+
 ## [1.746.0] - 2026-09-14
 
 ### Documentation
