@@ -7272,6 +7272,28 @@ orders of magnitude. `min`/`max` are tracked exactly, and two sketches built wit
 `alpha` merge exactly with `+`, so `(a + b).quantile(0.9)` on split halves matches the
 whole-stream estimate. Positive values only.
 
+`TDigest` handles *arbitrary* quantiles over an unbounded stream of *any-sign* values, and is
+especially sharp in the tails:
+
+```python
+from quantforge import TDigest
+
+td = TDigest(compression=200).add_all(samples)   # samples ~ N(0, 1), 100k of them
+td.quantile(0.5)      # ~0.003   (true 0)
+td.quantile(0.99)     # ~2.33    (true 2.326)
+td.quantile(0.999)    # ~3.09    (true 3.09)
+td.cdf(0.0)           # ~0.5
+```
+
+The t-digest (Dunning & Ertl) summarizes the stream by centroids whose sizes follow a scale
+function `k1(q)` that keeps clusters tiny near `q = 0` and `q = 1` — so `p99`/`p999` stay
+accurate while the bulk is compressed into few centroids. Unlike `DDSketch` it takes negative
+values and gives absolute (not relative) accuracy; unlike `P2Quantile` it answers any quantile
+after the fact. `merge` combines two digests exactly and order-independently, so it aggregates
+percentiles across shards. Choose `DDSketch` for relative error on positive data, `TDigest` for
+tail-accurate arbitrary quantiles, and `P2Quantile` when one preset quantile in O(1) memory is
+enough.
+
 When elements should be drawn *proportional to a weight* rather than uniformly,
 `weighted_reservoir_sample` selects `k` distinct items in the same single pass, and
 `weighted_sample_with_replacement` draws `k` independent weight-proportional items:

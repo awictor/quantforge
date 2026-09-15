@@ -15,6 +15,13 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.756.0] - 2026-09-14
+
+### Documentation
+- README: documented `TDigest` in the streaming-statistics section after `DDSketch` -- the
+  scale-function centroids, tail accuracy, exact merge, and how to choose among TDigest /
+  DDSketch / P2Quantile. All snippet values verified live.
+
 ## [1.755.0] - 2026-09-14
 
 ### Added
