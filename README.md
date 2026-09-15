@@ -1117,6 +1117,32 @@ giving the *shortest* interval of that mass (narrower than an equal-tailed one f
 posteriors). These are exact and instant; use the samplers above only when the model is not
 conjugate.
 
+To *compare* models — not just fit one — the quantity is the marginal likelihood (evidence),
+which integrates out the parameters and so penalizes complexity automatically.
+`laplace_log_evidence` approximates it: write the log-joint with `Var`, and it finds the
+posterior mode (Newton), takes the Hessian by autodiff, and returns the Gaussian (Laplace)
+integral. `bayes_factor` and `posterior_model_probabilities` turn evidences into a decision:
+
+```python
+from quantforge import (laplace_log_evidence, bayes_factor,
+                        posterior_model_probabilities)
+
+data = [4.8, 5.1, 5.2, 4.9, 5.0]
+def model(prior_mu):
+    return lambda th: (sum(-0.5 * (x - th[0]) ** 2 for x in data)
+                       - 0.5 * (th[0] - prior_mu) ** 2 / 4.0)   # log-likelihood + log-prior
+
+zA = laplace_log_evidence(model(5.0), [0.0])["log_evidence"]   # prior centred on the data
+zB = laplace_log_evidence(model(0.0), [0.0])["log_evidence"]   # prior far from the data
+bayes_factor(zA, zB)                        # 19.6 -> strong support for model A
+posterior_model_probabilities([zA, zB])     # [0.951, 0.049]
+```
+
+The Laplace approximation is exact when the log-joint is Gaussian (verified against the
+analytic evidence in 1-D and 2-D) and accurate for smooth, well-peaked posteriors otherwise.
+`posterior_model_probabilities` combines evidences with optional model priors using a
+log-sum-exp normalization, so it never overflows.
+
 ## Exotic options (closed form)
 
 Analytic prices for binaries, single barriers, and geometric Asians:

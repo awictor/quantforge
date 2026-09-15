@@ -15,6 +15,14 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.750.0] - 2026-09-14
+
+### Documentation
+- README: documented `laplace_log_evidence`, `bayes_factor`, and
+  `posterior_model_probabilities` in the Markov chain Monte Carlo section -- the Laplace
+  evidence, the model-comparison arithmetic, and the exactness for Gaussian log-joints. All
+  snippet values verified live.
+
 ## [1.749.0] - 2026-09-14
 
 ### Added
