@@ -778,6 +778,7 @@ from .dmd import dmd
 from .cur import cur, column_leverage_scores
 from .cp_decomp import cp_als, cp_reconstruct
 from .tucker import tucker_hosvd, tucker_reconstruct
+from .spectral_clustering import spectral_clustering, rbf_affinity
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1482,7 +1483,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "5.70.0"
+__version__ = "5.71.0"
 
 __all__ = [
     "OptionType",
@@ -2532,6 +2533,8 @@ __all__ = [
     "cp_reconstruct",
     "tucker_hosvd",
     "tucker_reconstruct",
+    "spectral_clustering",
+    "rbf_affinity",
     "Dual",
     "dual_derivative",
     "dual_gradient",

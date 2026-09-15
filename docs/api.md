@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.70.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.71.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## aaa
 
@@ -16373,6 +16373,20 @@ Auto-generated from `quantforge` v5.70.0 by `docs/gen_api.py` — do not edit by
 > spectral estimate than the raw periodogram. ``overlap`` is the fractional segment
 > overlap in ``[0, 1)``. Returns ``(freqs, power)`` with one-sided normalized
 > frequencies in ``[0, 0.5]``.
+
+## spectral_clustering
+
+### `rbf_affinity(X, gamma=1.0)`  _function_
+
+> RBF (Gaussian) affinity matrix ``W[i][j] = exp(-gamma ||x_i - x_j||^2)`` (diagonal 1).
+
+### `spectral_clustering(X, k, gamma=1.0, seed=1234567)`  _function_
+
+> Cluster points ``X`` into ``k`` groups by spectral clustering (Ng-Jordan-Weiss).
+>
+> Builds an RBF affinity with bandwidth ``gamma``, forms the symmetric normalized Laplacian,
+> embeds the points in its ``k`` smallest eigenvectors (row-normalized), and k-means-clusters
+> the embedding. Returns a dict with ``labels`` (cluster index per point) and ``embedding``.
 
 ## sphere
 

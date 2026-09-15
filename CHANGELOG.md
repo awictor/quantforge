@@ -15,6 +15,16 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.785.0] - 2026-09-14
+
+### Added
+- `spectral_clustering` and `rbf_affinity`: spectral clustering (Ng-Jordan-Weiss). Builds an RBF
+  similarity graph, forms the symmetric normalized Laplacian, embeds the points in its ``k``
+  smallest eigenvectors (row-normalized), and k-means-clusters the embedding -- so it separates
+  non-convex clusters (nested rings, moons) that plain k-means cannot. Cross-checked against
+  well-separated blobs, concentric rings (spectral separates them where k-means does not), a
+  three-blob case, and RBF affinity properties.
+
 ## [1.784.0] - 2026-09-14
 
 ### Documentation
