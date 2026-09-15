@@ -5879,6 +5879,27 @@ pca_scenario(component_index=0, n_sigma=2.0, variances=res["variances"],
              loadings=res["loadings"])
 ```
 
+PCA needs the coordinates; `classical_mds` recovers a coordinate embedding from *distances alone*
+— when all you have is a similarity/dissimilarity matrix (survey ratings, genetic distances,
+travel times):
+
+```python
+from quantforge import classical_mds, embedded_distances
+
+D = embedded_distances(points)        # or any n x n distance matrix you already have
+res = classical_mds(D, k=2)
+res["coords"]                          # 2-D embedding whose distances match D
+res["eigenvalues"]                     # [81.28, 50.28, 0.0] -- planar data: 3rd ~ 0
+```
+
+Classical (Torgerson) MDS squares the distances, *double-centers* them into a Gram matrix, and
+takes its top-`k` eigenvectors scaled by `sqrt(eigenvalue)` as the coordinates — the same
+eigen-machinery as PCA, applied to the centred inner-product matrix implied by the distances. The
+embedding reproduces the input distances up to rotation, reflection, and translation (verified to
+~1e-9), and the eigenvalue spectrum reveals the true dimensionality (a planar cloud leaves only
+two non-zero eigenvalues). `embedded_distances` computes the pairwise distances of any coordinate
+set, for building inputs or checking the fit.
+
 ## Market stress (turbulence / absorption ratio)
 
 Two Kritzman-Li systemic-risk gauges. `turbulence` is the Mahalanobis distance of a

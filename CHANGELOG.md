@@ -15,6 +15,13 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.788.0] - 2026-09-14
+
+### Documentation
+- README: documented `classical_mds` and `embedded_distances` in the PCA section -- embedding
+  from a distance matrix by double-centering, the shared eigen-machinery with PCA, and the
+  distance-recovery / dimensionality-from-spectrum properties. All snippet values verified live.
+
 ## [1.787.0] - 2026-09-14
 
 ### Added
