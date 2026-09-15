@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.94.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.95.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## aaa
 
@@ -803,6 +803,16 @@ Auto-generated from `quantforge` v5.94.0 by `docs/gen_api.py` — do not edit by
 > ``1/beta_noise + x' S x`` -- observation noise plus the posterior uncertainty in
 > the coefficients (so it widens where data is sparse). ``x_row`` excludes the
 > intercept if the model was fit with one.
+
+## bdf
+
+### `bdf2(f, y0, t0, t1, steps)`  _function_
+
+> Integrate ``y' = f(t, y)`` from ``t0`` to ``t1`` in ``steps`` BDF2 steps.
+>
+> ``f(t, y)`` returns the derivative (scalar or list); ``y0`` matches. Second order, A(alpha)-
+> stable. The first step uses backward Euler to seed the two-step history. Returns ``(ts, ys)``
+> with states as lists.
 
 ## benford
 

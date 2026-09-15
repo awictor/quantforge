@@ -15,6 +15,16 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.809.0] - 2026-09-14
+
+### Added
+- `bdf2`: the second-order backward-differentiation formula for stiff ODEs --
+  ``(3 y_{n+1} - 4 y_n + y_{n-1})/(2h) = f(t_{n+1}, y_{n+1})``, A(alpha)-stable and second order,
+  the workhorse multistep stiff method. First step bootstrapped with backward Euler; each step
+  solved by Newton with a finite-difference Jacobian. Cross-checked against exponential decay,
+  second-order convergence, higher accuracy than `backward_euler` at the same step count, stiff
+  stability, and a vector harmonic oscillator.
+
 ## [1.808.0] - 2026-09-14
 
 ### Documentation
