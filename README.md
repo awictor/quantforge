@@ -3842,6 +3842,31 @@ reflects *how far* probability mass moved, not just that it differs. A constant 
 the whole sample returns exactly that shift; `wasserstein1_sorted` is a faster path when
 the two samples are the same length.
 
+For distributions in *more than one dimension*, or with an arbitrary cost between locations,
+`sinkhorn` solves the full optimal-transport problem with entropic regularization. Give it two
+marginals and a cost matrix (`cost_matrix` builds `|x_i - y_j|^p` for scalar or vector points)
+and it returns the transport plan and its cost:
+
+```python
+from quantforge import sinkhorn, cost_matrix
+
+# split mass at {0, 1} must all move to the single target at 2
+C = cost_matrix([0.0, 1.0], [2.0], p=2)
+sinkhorn([0.5, 0.5], [1.0], C, eps=0.002)["cost"]      # 2.5 = 0.5*4 + 0.5*1
+
+# a general 3 -> 2 transport
+plan = sinkhorn([0.3, 0.5, 0.2], [0.4, 0.6],
+                [[1, 2], [3, 1], [2, 2]], eps=0.05)["plan"]
+# rows sum to [0.3, 0.5, 0.2], columns to [0.4, 0.6]
+```
+
+The Sinkhorn-Knopp iteration alternately rescales the plan's rows and columns to match the
+marginals; the entropy penalty `eps` makes it fast and differentiable, and `eps -> 0` recovers
+the exact (linear-program) transport cost. It runs in the log-domain, so it stays stable for
+small `eps` where the raw `exp(-C/eps)` kernel would underflow. On equal-weight 1-D samples its
+cost matches `wasserstein_distance`; it also handles vector-valued support and returns zero for
+identical distributions.
+
 ## Variance-ratio test
 
 The Lo-MacKinlay variance ratio tests the random-walk null: under it the variance

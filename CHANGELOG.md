@@ -15,6 +15,13 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.738.0] - 2026-09-14
+
+### Documentation
+- README: documented `sinkhorn` and `cost_matrix` in the Wasserstein-distance section -- the
+  entropic transport plan, the log-domain stability, and the relation to the 1-D Wasserstein
+  distance. All snippet values verified live.
+
 ## [1.737.0] - 2026-09-14
 
 ### Added
