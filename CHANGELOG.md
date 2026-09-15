@@ -15,6 +15,17 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.795.0] - 2026-09-14
+
+### Added
+- `gmres`: the GMRES Krylov solver for general (nonsymmetric) linear systems ``A x = b``. Builds
+  an orthonormal Krylov basis by Arnoldi and minimizes the residual over it via incremental
+  Givens-rotation QR of the Hessenberg matrix; restart-capable and matrix-free (matrix or matvec
+  callable). Complements `conjugate_gradient` (which needs symmetric positive-definite). Cross-
+  checked against `lu_solve` on nonsymmetric diagonally-dominant systems, monotone residual
+  decrease, the matvec-callable form, finite termination in ``<= n`` iterations, restart, and the
+  identity system.
+
 ## [1.794.0] - 2026-09-14
 
 ### Documentation

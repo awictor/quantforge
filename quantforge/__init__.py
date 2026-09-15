@@ -783,6 +783,7 @@ from .mds import classical_mds, embedded_distances
 from .isomap import isomap, knn_graph
 from .laplacian_eigenmaps import laplacian_eigenmaps, heat_knn_affinity
 from .lanczos import lanczos, lanczos_eigenvalues
+from .gmres import gmres
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1487,7 +1488,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "5.80.0"
+__version__ = "5.81.0"
 
 __all__ = [
     "OptionType",
@@ -2547,6 +2548,7 @@ __all__ = [
     "heat_knn_affinity",
     "lanczos",
     "lanczos_eigenvalues",
+    "gmres",
     "Dual",
     "dual_derivative",
     "dual_gradient",

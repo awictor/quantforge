@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.80.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.81.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## aaa
 
@@ -7338,6 +7338,17 @@ Auto-generated from `quantforge` v5.80.0 by `docs/gen_api.py` — do not edit by
 > are initialized at spread-out data quantiles (deterministic given ``seed``, which
 > only jitters the initial means). The log-likelihood is non-decreasing across
 > iterations. Requires at least ``k`` distinct points.
+
+## gmres
+
+### `gmres(A, b, x0=None, tol=1e-10, max_iter=None, restart=None)`  _function_
+
+> Solve ``A x = b`` by GMRES for a general non-singular operator ``A``.
+>
+> ``A`` is an ``n x n`` matrix or a callable ``v -> A@v``. ``restart`` sets the Krylov subspace
+> size before restarting (default: ``min(n, max_iter or n)``). Returns a dict with ``x`` (the
+> solution), ``residuals`` (the residual norm after each outer iteration), ``converged`` and
+> ``n_iter`` (total inner iterations).
 
 ## goertzel
 
