@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v6.04.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v6.05.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## aaa
 
@@ -16814,6 +16814,30 @@ Auto-generated from `quantforge` v6.04.0 by `docs/gen_api.py` — do not edit by
 ### `ssvi_vix(params: quantforge.ssvi.SSVIParams, t, S0, r, q=0.0, n_strikes=201, width=6.0)`  _function_
 
 > VIX-style index (``~= 100 * sigma``) of an SSVI slice at fitted expiry ``t``.
+
+## state_space
+
+### `dc_gain(A, B, C, D)`  _function_
+
+> Steady-state (DC) gain matrix ``C (I - A)^{-1} B + D`` -- the output for a unit step.
+>
+> Requires ``A`` stable (``I - A`` invertible). Returns the ``p x m`` gain.
+
+### `lti_impulse_response(A, B, C, D, n_steps, input_channel=0)`  _function_
+
+> Impulse response: outputs to a unit impulse on ``input_channel`` for ``n_steps`` samples.
+
+### `lti_simulate(A, B, C, D, u, x0=None)`  _function_
+
+> Simulate ``x_{k+1}=Ax+Bu, y_k=Cx+Du`` over an input sequence ``u``.
+>
+> ``A`` (n x n), ``B`` (n x m), ``C`` (p x n), ``D`` (p x m). ``u`` is a list of length-``m``
+> input vectors (or scalars for a single input). Returns the list of output vectors ``y_k`` (one
+> per input sample). ``x0`` defaults to zero.
+
+### `lti_step_response(A, B, C, D, n_steps, input_channel=0)`  _function_
+
+> Step response: outputs to a unit step on ``input_channel`` for ``n_steps`` samples.
 
 ## stern_brocot
 

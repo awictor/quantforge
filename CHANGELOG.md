@@ -15,6 +15,15 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.819.0] - 2026-09-15
+
+### Added
+- `lti_simulate`, `lti_step_response`, `lti_impulse_response`, `dc_gain`: discrete state-space
+  (LTI) simulation for ``x_{k+1}=Ax+Bu, y=Cx+Du``. Propagate an arbitrary input sequence, get the
+  step/impulse responses, and the steady-state gain ``C(I-A)^{-1}B + D``. Cross-checked against
+  the scalar first-order closed form, step convergence to the DC gain, the impulse-response Markov
+  parameters, direct feedthrough, linearity, and the impulse-sum-equals-step identity.
+
 ## [1.818.0] - 2026-09-15
 
 ### Documentation
