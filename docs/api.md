@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.96.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.97.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## aaa
 
@@ -10193,6 +10193,31 @@ Auto-generated from `quantforge` v5.96.0 by `docs/gen_api.py` — do not edit by
 > = smoother). ``iterations`` robustifying passes (Cleveland) down-weight outliers by
 > a bisquare of their residuals; ``iterations=1`` disables robustifying. Points need
 > not be sorted. Returns a list aligned to the input order.
+
+## lqr
+
+### `controllability_matrix(A, B)`  _function_
+
+> Controllability matrix ``[B, AB, A^2 B, ..., A^{n-1} B]`` (n x n*m).
+
+### `dare(A, B, Q, R, tol=1e-12, max_iter=1000)`  _function_
+
+> Stabilizing solution ``P`` of the discrete algebraic Riccati equation, by iteration.
+>
+> ``A`` (n x n), ``B`` (n x m), ``Q`` (n x n, >=0), ``R`` (m x m, >0). Returns the symmetric
+> ``P`` that the DARE fixed point converges to. Raises if it fails to converge.
+
+### `is_controllable(A, B, tol=1e-09)`  _function_
+
+> True if ``(A, B)`` is controllable (controllability matrix has full row rank ``n``).
+
+### `lqr(A, B, Q, R)`  _function_
+
+> Discrete LQR gain ``K`` and Riccati solution ``P`` for ``x_{k+1}=Ax+Bu``, cost ``x'Qx+u'Ru``.
+>
+> Returns a dict with ``K`` (m x n feedback gain; optimal control is ``u = -K x``) and ``P``
+> (the DARE solution). The closed-loop ``A - B K`` is stable when the pair ``(A, B)`` is
+> controllable.
 
 ## lsm
 

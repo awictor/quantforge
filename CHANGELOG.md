@@ -15,6 +15,17 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.811.0] - 2026-09-14
+
+### Added
+- `lqr`, `dare`, `controllability_matrix`, `is_controllable`: discrete linear-quadratic control.
+  `lqr` returns the optimal state-feedback gain ``K`` (control ``u = -K x``) and the Riccati
+  solution ``P`` for ``x_{k+1}=Ax+Bu`` with cost ``x'Qx + u'Ru``; `dare` solves the discrete
+  algebraic Riccati equation by fixed-point iteration; controllability is tested via the rank of
+  ``[B, AB, ..., A^{n-1}B]``. Cross-checked against the scalar closed form, a stable closed-loop
+  ``A - B K`` (eigenvalues inside the unit circle) for a double integrator, the DARE fixed-point
+  residual, and controllable/uncontrollable pairs.
+
 ## [1.810.0] - 2026-09-14
 
 ### Documentation
