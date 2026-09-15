@@ -800,6 +800,7 @@ from .reordering import (
     permute_vector,
     inverse_permutation,
 )
+from .stiff_ode import backward_euler, trapezoidal
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1504,7 +1505,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "5.92.0"
+__version__ = "5.93.0"
 
 __all__ = [
     "OptionType",
@@ -2577,6 +2578,8 @@ __all__ = [
     "apply_permutation",
     "permute_vector",
     "inverse_permutation",
+    "backward_euler",
+    "trapezoidal",
     "Dual",
     "dual_derivative",
     "dual_gradient",

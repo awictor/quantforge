@@ -15,6 +15,16 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.807.0] - 2026-09-14
+
+### Added
+- `backward_euler` and `trapezoidal`: implicit ODE integrators for stiff systems. Each step
+  solves the implicit update by Newton's method with a finite-difference Jacobian and `lu_solve`,
+  giving A-stability so the step size is set by accuracy rather than stability (unlike the
+  explicit RK/Adams methods). Scalar or vector state. Cross-checked against exponential decay, a
+  stiff ``y' = -1000(y - cos t) - sin t`` system stable at a step 25x the explicit limit, first-
+  and second-order convergence, and a vector harmonic oscillator.
+
 ## [1.806.0] - 2026-09-14
 
 ### Documentation

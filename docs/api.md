@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.92.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.93.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## aaa
 
@@ -16790,6 +16790,22 @@ Auto-generated from `quantforge` v5.92.0 by `docs/gen_api.py` — do not edit by
 > frame. Returns a list of frames, each a length-``frame_size`` complex spectrum.
 > ``frame_size`` must be a power of two (FFT constraint). Frames that run past the end
 > are zero-padded.
+
+## stiff_ode
+
+### `backward_euler(f, y0, t0, t1, steps)`  _function_
+
+> Integrate ``y' = f(t, y)`` from ``t0`` to ``t1`` in ``steps`` backward-Euler steps.
+>
+> ``f(t, y)`` returns the derivative (scalar or list); ``y0`` matches. A-stable, first order.
+> Returns ``(ts, ys)`` -- the time points and states (states are lists even for scalar input).
+
+### `trapezoidal(f, y0, t0, t1, steps)`  _function_
+
+> Integrate ``y' = f(t, y)`` by the implicit trapezoidal rule (A-stable, second order).
+>
+> ``y_{n+1} = y_n + h/2 (f(t_n, y_n) + f(t_{n+1}, y_{n+1}))``. Same interface as
+> :func:`backward_euler`.
 
 ## strategy
 
