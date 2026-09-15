@@ -5757,6 +5757,24 @@ k-means — recovers two non-convex concentric rings as distinct clusters. Tune 
 (the neighbourhood radius) to the data scale: too small labels everything noise, too
 large merges everything into one cluster.
 
+`spectral_clustering` also handles non-convex shapes, but through the graph *spectrum* rather
+than density — and unlike `dbscan` you tell it exactly how many clusters `k` you want:
+
+```python
+from quantforge import spectral_clustering
+
+# two concentric rings, indistinguishable to k-means (both centred at the origin)
+res = spectral_clustering(ring_points, k=2, gamma=0.5, seed=2)
+res["labels"]        # the two rings come out as separate clusters
+```
+
+It builds an RBF similarity graph, forms the symmetric normalized Laplacian
+`L = I - D^-1/2 W D^-1/2`, and embeds each point in the `k` smallest eigenvectors of `L` — a
+space where the manifold structure unfolds into compact blobs — then runs `kmeans` there. The
+`gamma` bandwidth sets the neighbourhood scale of the RBF affinity (like `dbscan`'s `eps`).
+Use `spectral_clustering` when you know `k` and the clusters are connected but curved; `dbscan`
+when the cluster count is unknown and you want noise flagged; `kmeans` for plain convex blobs.
+
 ## Hierarchical clustering
 
 Build a bottom-up cluster tree with single, complete, or average linkage, then cut

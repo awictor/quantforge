@@ -15,6 +15,14 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.786.0] - 2026-09-14
+
+### Documentation
+- README: documented `spectral_clustering` and `rbf_affinity` in the K-means clustering section
+  after `dbscan` -- the Laplacian-embedding approach to non-convex clusters, the `gamma`
+  bandwidth, and a decision guide across spectral / dbscan / kmeans. All snippet values verified
+  live.
+
 ## [1.785.0] - 2026-09-14
 
 ### Added
