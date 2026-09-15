@@ -1087,6 +1087,36 @@ density, steps out an interval, and shrinks toward acceptance — it self-adjust
 scale and, given a wide enough initial width, moves freely between separated modes. Reach for
 these when tuning `step` by hand is impractical.
 
+When the model is one of the standard conjugate pairs, no sampling is needed at all — the
+posterior is a closed-form distribution. `beta_binomial_posterior`, `gamma_poisson_posterior`,
+and `normal_normal_posterior` do the update exactly, and `hpd_interval` extracts a
+highest-density credible interval:
+
+```python
+from quantforge import (beta_binomial_posterior, gamma_poisson_posterior,
+                        normal_normal_posterior, hpd_interval)
+
+# a proportion: Beta(2,2) prior, 7 successes in 10 trials -> Beta(9,5)
+post = beta_binomial_posterior(2, 2, successes=7, trials=10)
+post["alpha"], post["beta"], post["mean"]     # (9, 5, 0.6429)
+
+# a rate: Gamma(2,1) prior, 15 events over 5 observations -> Gamma(17,6)
+gamma_poisson_posterior(2, 1, total_count=15, n_obs=5)["mean"]    # 2.8333
+
+# a mean (known variance): N(0,1) prior + four observations of 2.0
+normal_normal_posterior(0.0, 1.0, [2.0, 2.0, 2.0, 2.0], data_var=1.0)   # mean 1.6, var 0.2
+
+# 95% highest-density interval of the Beta(9,5) posterior
+hpd_interval(lambda x: x ** 8 * (1 - x) ** 4, 0.0, 1.0, mass=0.95)      # (0.401, 0.874)
+```
+
+The Beta-Binomial posterior mean under a uniform prior is Laplace's rule of succession
+`(s+1)/(n+2)`; the Normal-Normal update adds precisions (`1/var`) so a vague prior recovers the
+sample mean. `hpd_interval` lowers a threshold on the density until the enclosed mass is reached,
+giving the *shortest* interval of that mass (narrower than an equal-tailed one for skewed
+posteriors). These are exact and instant; use the samplers above only when the model is not
+conjugate.
+
 ## Exotic options (closed form)
 
 Analytic prices for binaries, single barriers, and geometric Asians:

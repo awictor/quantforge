@@ -15,6 +15,14 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.748.0] - 2026-09-14
+
+### Documentation
+- README: documented the conjugate posteriors (`beta_binomial_posterior`,
+  `gamma_poisson_posterior`, `normal_normal_posterior`) and `hpd_interval` in the Markov chain
+  Monte Carlo section -- the closed-form updates, Laplace's rule, precision addition, and the
+  shortest-interval HPD. All snippet values verified live.
+
 ## [1.747.0] - 2026-09-14
 
 ### Added
