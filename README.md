@@ -7421,6 +7421,27 @@ than RK4 when the derivative is expensive, at the same `O(h^4)` accuracy. Fixed 
 `n_steps`; scalar or vector `y0`. Verified against closed-form solutions and confirmed to
 converge at 4th order.
 
+All the methods above are *explicit* — on a *stiff* system (fast and slow time scales together)
+they must take vanishingly small steps to stay stable. `backward_euler` and `trapezoidal` are
+*implicit*, solving for the next state each step, so they are A-stable and step by accuracy:
+
+```python
+from quantforge import backward_euler, trapezoidal
+import math
+
+backward_euler(lambda t, y: -y, 1.0, 0, 2, 200)[1][-1][0]     # 0.1367 ~ e^-2
+
+# a stiff system where explicit RK would need h < 0.002; implicit is fine at h = 0.05
+stiff = lambda t, y: -1000 * (y - math.cos(t)) - math.sin(t)
+backward_euler(stiff, 0.0, 0, 3, 60)[1][-1][0]                # -0.99 ~ cos(3)
+```
+
+Each step solves the implicit update by Newton's method with a finite-difference Jacobian and
+`lu_solve`. `backward_euler` is first order and maximally damping; `trapezoidal` is second order
+and energy-neutral (it conserves oscillations). Both take scalar or vector `y0` and return the
+same `(ts, ys)` shape as `rk4`. Reach for these when an explicit solver is forced into tiny steps
+by stability rather than accuracy — the hallmark of a stiff problem.
+
 When the solution is pinned at *both* ends instead of given an initial slope,
 `shooting_bvp` solves the two-point boundary-value problem `y'' = f(t, y, y')`:
 
