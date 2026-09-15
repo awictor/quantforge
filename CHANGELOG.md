@@ -4,6 +4,13 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.728.0] - 2026-09-14
+
+### Documentation
+- README: documented `newton_min` in the optimization block after `lbfgs` -- the autodiff
+  gradient/Hessian, the Levenberg-damped Newton step, and when to prefer it over `lbfgs`. All
+  snippet values verified live.
+
 ## [1.727.0] - 2026-09-14
 
 ### Added

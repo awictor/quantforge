@@ -6251,6 +6251,28 @@ clears the history. Pass `grad=` to supply an analytic gradient — pairing `lbf
 `reverse_gradient` gives a fully hand-rolled gradient-descent stack — otherwise central
 differences are used. Use `bfgs` for a few tens of variables and `lbfgs` once `n` grows.
 
+`newton_min` goes one step further and uses the *second* derivative. The objective is written
+with `Var` arithmetic, so `newton_min` pulls the exact gradient and Hessian from reverse-mode
+autodiff and steps to the minimum of the local quadratic model — quadratic convergence near the
+optimum:
+
+```python
+from quantforge import newton_min
+
+newton_min(lambda v: (v[0] - 3) ** 2 + (v[1] + 1) ** 2, [0.0, 0.0])["x"]   # [3.0, -1.0], 2 iters
+newton_min(lambda v: (1 - v[0]) ** 2 + 100 * (v[1] - v[0] ** 2) ** 2,
+           [-1.2, 1.0])["x"]                                               # [1.0, 1.0], 22 iters
+newton_min(lambda v: v[0] ** 3 - 3 * v[0] + v[1] ** 2, [-0.1, 2.0])["x"]   # [1.0, 0.0]
+```
+
+Far from the optimum the raw Newton step can point uphill (indefinite Hessian), so it solves
+`(H + lambda I) p = -g` with Levenberg-style diagonal damping grown until the step is a descent
+direction — the third example starts near a near-indefinite region (`x^3 - 3x` has `f'' = 6x`,
+zero at the origin) and damping still steers it to the local minimum at `x = 1`. An Armijo line
+search keeps every step decreasing. `newton_min` needs no hand-coded derivatives at all: write
+the objective once with `Var` and it differentiates itself. Prefer it when the Hessian is small
+enough to solve directly and you want the fewest iterations; use `lbfgs` when `n` is large.
+
 `levenberg_marquardt` needs only the model function -- the residual Jacobian is
 taken numerically -- and converges from a poor starting guess, making it the
 general calibration engine (vol surface, curve, or any parametric fit).
