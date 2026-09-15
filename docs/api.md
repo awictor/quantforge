@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.14.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.15.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -6947,6 +6947,17 @@ Auto-generated from `quantforge` v5.14.0 by `docs/gen_api.py` — do not edit by
 > ``sum_i w_i x_i^m = m!`` (the moments of the ``e^{-x}`` density). Exact for
 > polynomials up to degree ``2n - 1``. Nodes are positive and returned in
 > increasing order.
+
+## gauss_newton
+
+### `gauss_newton(residual, p0, tol=1e-10, max_iter=200)`  _function_
+
+> Minimize ``sum residual(p)^2`` by Levenberg-Marquardt with an exact autodiff Jacobian.
+>
+> ``residual`` takes a length-``k`` list of :class:`quantforge.reverse_ad.Var` and returns a
+> list of ``m`` residual :class:`Var` (``m >= k``). Returns a dict with ``p`` (the fitted
+> parameters), ``cost`` (half the sum of squared residuals ``0.5 * ||r||^2``), ``n_iter``,
+> ``converged`` and ``grad_norm`` (norm of ``J^T r``).
 
 ## geo
 

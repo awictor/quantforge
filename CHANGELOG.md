@@ -4,6 +4,17 @@ All notable changes to QuantForge are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/), and the project adheres to
 [Semantic Versioning](https://semver.org/).
 
+## [1.729.0] - 2026-09-14
+
+### Added
+- `gauss_newton`: nonlinear least-squares by Levenberg-Marquardt with an *exact* residual
+  Jacobian from reverse-mode autodiff (`reverse_jacobian`). Solves the damped normal equations
+  ``(J^T J + lambda diag(J^T J)) delta = -J^T r``, growing ``lambda`` on rejected steps and
+  shrinking it on accepted ones. Unlike `levenberg_marquardt` (finite-difference Jacobian), the
+  residual function is written once with `Var` arithmetic. Cross-checked against a linear fit
+  (matches the closed-form OLS), exponential-decay and sinusoid fits (cost below 1e-10), and
+  the Rosenbrock function cast as two residuals converging to ``(1, 1)``.
+
 ## [1.728.0] - 2026-09-14
 
 ### Documentation
