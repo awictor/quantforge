@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.26.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.27.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -10559,6 +10559,34 @@ Auto-generated from `quantforge` v5.26.0 by `docs/gen_api.py` — do not edit by
 > smoothing bias, a narrower one reduces the bias (converging to the true
 > digital delta as ``eps_rel -> 0``) but the ``1/eps`` ramp raises the variance.
 > A single-pass, model-agnostic alternative to the likelihood-ratio estimator.
+
+## mcmc
+
+### `hamiltonian_monte_carlo(log_prob, x0, n_samples, step=0.1, n_leapfrog=20, seed=12345, burn_in=0)`  _function_
+
+> Hamiltonian Monte Carlo sampler using autodiff gradients of ``log_prob``.
+>
+> ``log_prob`` maps a length-``d`` list of :class:`quantforge.reverse_ad.Var` to a single
+> ``Var`` (the log target density up to a constant). Each iteration samples a Gaussian momentum,
+> runs ``n_leapfrog`` leapfrog steps of step size ``step`` on the Hamiltonian
+> ``H = -log_prob(x) + |p|^2 / 2``, and Metropolis-accepts on the total energy. Returns a dict
+> with ``samples`` and ``accept_rate``.
+
+### `metropolis_hastings(log_prob, x0, n_samples, step=0.5, seed=12345, burn_in=0, thin=1)`  _function_
+
+> Random-walk Metropolis sampler for a target ``log_prob``.
+>
+> ``log_prob`` maps a length-``d`` list of floats to the log target density (up to an additive
+> constant). Proposals are isotropic Gaussian with standard deviation ``step``. Returns a dict
+> with ``samples`` (list of accepted states after burn-in/thinning) and ``accept_rate``.
+
+### `sample_cov(samples)`  _function_
+
+> Component-wise covariance matrix of a list of sample vectors (population form).
+
+### `sample_mean(samples)`  _function_
+
+> Component-wise mean of a list of sample vectors.
 
 ## median_filter
 

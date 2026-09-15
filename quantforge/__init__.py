@@ -733,6 +733,12 @@ from .ukf import unscented_kalman_filter
 from .particle_filter import particle_filter, pcg_gaussian
 from .sinkhorn import sinkhorn, cost_matrix
 from .sliced_wasserstein import sliced_wasserstein
+from .mcmc import (
+    metropolis_hastings,
+    hamiltonian_monte_carlo,
+    sample_mean,
+    sample_cov,
+)
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1437,7 +1443,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "5.26.0"
+__version__ = "5.27.0"
 
 __all__ = [
     "OptionType",
@@ -2444,6 +2450,10 @@ __all__ = [
     "sinkhorn",
     "cost_matrix",
     "sliced_wasserstein",
+    "metropolis_hastings",
+    "hamiltonian_monte_carlo",
+    "sample_mean",
+    "sample_cov",
     "Dual",
     "dual_derivative",
     "dual_gradient",

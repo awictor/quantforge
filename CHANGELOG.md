@@ -15,6 +15,16 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.741.0] - 2026-09-14
+
+### Added
+- `metropolis_hastings`, `hamiltonian_monte_carlo`, `sample_mean`, `sample_cov`: MCMC samplers
+  for Bayesian inference. Random-walk Metropolis takes a plain ``log_prob(floats)``; Hamiltonian
+  Monte Carlo takes a ``log_prob(Var)`` and gets its gradient from reverse-mode autodiff, running
+  leapfrog dynamics for long low-rejection moves. Both use a seeded `PCG32` stream. Cross-checked
+  by recovering the mean and (co)variance of 1-D and correlated 2-D Gaussians, sane acceptance
+  rates, and seed reproducibility.
+
 ## [1.740.0] - 2026-09-14
 
 ### Documentation
