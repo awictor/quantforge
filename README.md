@@ -3272,6 +3272,34 @@ It uses a Joseph-form covariance update (numerically positive-definite) and redu
 linear `kalman_filter` exactly when `f` and `h` are linear — verified against it, plus a
 logistic-growth state model and the `h(x) = x^2` example above.
 
+`unscented_kalman_filter` handles the same nonlinear models without any derivatives. Instead of
+linearizing, it propagates a deterministic set of *sigma points* through the true `f` and `h`
+and recovers the transformed mean and covariance — accurate to second order even when the EKF's
+linearization would be poor. Here `f` and `h` are plain float functions:
+
+```python
+from quantforge import unscented_kalman_filter
+
+r, K = 0.3, 10.0
+ukf = unscented_kalman_filter(
+    observations,
+    lambda x: [x[0] + r * x[0] * (1 - x[0] / K)],   # nonlinear transition
+    lambda x: [x[0]],                                # observation
+    Q=[[1e-4]], R=[[0.1]], x0=[0.4], P0=[[1.0]])
+ukf["filtered_means"]        # tracks the logistic curve
+
+# same h(x) = x^2 measurement, no Jacobian needed
+unscented_kalman_filter(z_sq, lambda x: [x[0]], lambda x: [x[0] * x[0]],
+                        Q=[[1e-5]], R=[[0.25]], x0=[2.5], P0=[[1.0]])["filtered_means"][-1]
+# ~[3.0]
+```
+
+The spread of the sigma points is set by `alpha`, `beta`, `kappa` (van der Merwe's scaling;
+the defaults suit Gaussian noise), and the matrix square root comes from `cholesky`. With
+`alpha=1, beta=0` on a linear model it matches `kalman_filter` exactly. Prefer the EKF when you
+can express `f`/`h` with `Var` and want the exact linearization; prefer the UKF when the
+nonlinearity is strong or the functions are awkward to differentiate.
+
 ## Newey-West HAC variance
 
 The sample variance understates the variance of a mean when observations are

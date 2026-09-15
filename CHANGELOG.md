@@ -15,6 +15,13 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.734.0] - 2026-09-14
+
+### Documentation
+- README: documented `unscented_kalman_filter` in the Kalman-filter section after the EKF note
+  -- sigma-point propagation, the van der Merwe scaling, the linear-case match, and EKF-vs-UKF
+  guidance. All snippet values verified live.
+
 ## [1.733.0] - 2026-09-14
 
 ### Added
