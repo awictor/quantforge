@@ -3564,6 +3564,25 @@ Lyapunov's stability certificate, and the controllability Gramian's eigen-direct
 strongly each state mode can be driven. This is the machinery behind the LQR's Riccati solution,
 balanced model reduction, and stability margins.
 
+The LQR trades off a cost to pick the gain; `ackermann` lets you set the closed-loop dynamics
+*directly*, placing the poles wherever you want:
+
+```python
+from quantforge import ackermann
+
+A = [[1.0, 1.0], [0.0, 1.0]]      # double integrator
+B = [[0.0], [1.0]]
+K = ackermann(A, B, [0.3, 0.5])   # [[0.35, 1.2]] -- eig(A - B K) = {0.3, 0.5} exactly
+```
+
+Ackermann's formula gives the single-input feedback gain in closed form:
+`K = [0, ..., 0, 1] C^{-1} phi(A)`, where `C` is the controllability matrix and `phi` is the
+desired characteristic polynomial `prod (s - lambda_i)` evaluated at `A` (by Horner on the
+matrix). The closed-loop eigenvalues land exactly on the requested poles — which sets the
+transient response (settling speed, damping) precisely, and stabilizes an unstable plant by
+moving its poles inside the unit circle. Requires `(A, B)` controllable and a single input; reach
+for `lqr` instead when you would rather specify a cost than exact poles.
+
 ## Newey-West HAC variance
 
 The sample variance understates the variance of a mean when observations are

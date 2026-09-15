@@ -15,6 +15,13 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.816.0] - 2026-09-15
+
+### Documentation
+- README: documented `ackermann` in the LQR section after the Lyapunov note -- the closed-form
+  pole-placement gain, the exact eigenvalue assignment, and when to prefer it over LQR. All
+  snippet values verified live.
+
 ## [1.815.0] - 2026-09-15
 
 ### Added
