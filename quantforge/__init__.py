@@ -732,6 +732,7 @@ from .ekf import extended_kalman_filter
 from .ukf import unscented_kalman_filter
 from .particle_filter import particle_filter, pcg_gaussian
 from .sinkhorn import sinkhorn, cost_matrix
+from .sliced_wasserstein import sliced_wasserstein
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1436,7 +1437,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "5.24.0"
+__version__ = "5.25.0"
 
 __all__ = [
     "OptionType",
@@ -2442,6 +2443,7 @@ __all__ = [
     "pcg_gaussian",
     "sinkhorn",
     "cost_matrix",
+    "sliced_wasserstein",
     "Dual",
     "dual_derivative",
     "dual_gradient",

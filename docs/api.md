@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.24.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.25.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -15644,6 +15644,17 @@ Auto-generated from `quantforge` v5.24.0 by `docs/gen_api.py` — do not edit by
 ### `vega_neutral_quantity(book: quantforge.portfolio.Book, S, K, t, r, sigma, option_type=<OptionType.CALL: 'call'>, b=None, multiplier=1.0) -> float`  _function_
 
 > Units of a hedge option that zero the book's net vega.
+
+## sliced_wasserstein
+
+### `sliced_wasserstein(xs, ys, n_projections=200, p=2, seed=12345)`  _function_
+
+> Sliced ``p``-Wasserstein distance between two multivariate point clouds.
+>
+> ``xs`` and ``ys`` are lists of points (each a length-``d`` coordinate list; ``d = 1`` scalars
+> are also accepted as bare floats). Projects both onto ``n_projections`` random unit
+> directions, takes the 1-D ``p``-Wasserstein distance along each, and returns the ``p``-mean
+> ``(mean_l W_p(proj_l)^p)^{1/p}``. A seeded PCG32 stream makes the projections reproducible.
 
 ## sliding_window
 

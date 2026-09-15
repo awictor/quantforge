@@ -15,6 +15,16 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.739.0] - 2026-09-14
+
+### Added
+- `sliced_wasserstein`: the sliced ``p``-Wasserstein distance for multivariate point clouds --
+  projects both samples onto many random 1-D directions, takes the exact 1-D Wasserstein
+  distance along each (via `wasserstein_distance`), and averages, for ``O(L n log n)`` cost
+  versus Sinkhorn's quadratic. Seeded `PCG32` projections for reproducibility. Cross-checked
+  against the 1-D Wasserstein distance (exact reduction), the closed-form translation distance
+  ``||t|| / sqrt(d)``, zero for identical clouds, symmetry, and the triangle inequality.
+
 ## [1.738.0] - 2026-09-14
 
 ### Documentation
