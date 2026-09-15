@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.36.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.37.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -7028,6 +7028,32 @@ Auto-generated from `quantforge` v5.36.0 by `docs/gen_api.py` — do not edit by
 > list of ``m`` residual :class:`Var` (``m >= k``). Returns a dict with ``p`` (the fitted
 > parameters), ``cost`` (half the sum of squared residuals ``0.5 * ||r||^2``), ``n_iter``,
 > ``converged`` and ``grad_norm`` (norm of ``J^T r``).
+
+## gaussian_process
+
+### `gp_log_marginal_likelihood(X_train, y_train, kernel=None, length_scale=1.0, variance=1.0, noise=1e-06)`  _function_
+
+> Log marginal likelihood ``log p(y | X)`` of the GP -- the objective for hyperparameter tuning.
+>
+> ``= -1/2 y^T K^-1 y - sum log L_ii - n/2 log(2 pi)`` with ``K = kernel + noise I = L L^T``.
+> Larger is better; maximize over ``length_scale``/``variance``/``noise`` to fit the kernel.
+
+### `gp_predict(X_train, y_train, X_test, kernel=None, length_scale=1.0, variance=1.0, noise=1e-06)`  _function_
+
+> Posterior mean and variance of a GP at ``X_test`` given training data ``(X_train, y_train)``.
+>
+> ``kernel`` is a covariance function ``k(a, b, length_scale, variance)``; ``noise`` is the
+> observation-noise variance added to the diagonal (also regularizes the Cholesky). Returns a
+> dict with ``mean`` (list) and ``var`` (list) at each test point. The prior mean is zero, so
+> center ``y_train`` if it is not.
+
+### `matern32_kernel(a, b, length_scale=1.0, variance=1.0)`  _function_
+
+> Matern-3/2 covariance ``variance (1 + sqrt3 r/l) exp(-sqrt3 r/l)`` with ``r = ||a-b||``.
+
+### `rbf_kernel(a, b, length_scale=1.0, variance=1.0)`  _function_
+
+> Squared-exponential (RBF) covariance ``variance * exp(-||a-b||^2 / (2 length_scale^2))``.
 
 ## geo
 

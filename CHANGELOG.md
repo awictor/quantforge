@@ -15,6 +15,17 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.751.0] - 2026-09-14
+
+### Added
+- `gp_predict`, `gp_log_marginal_likelihood`, `rbf_kernel`, `matern32_kernel`: exact Gaussian
+  process regression. `gp_predict` returns the posterior mean and variance at test inputs via a
+  single Cholesky factorization of the noisy kernel matrix; `gp_log_marginal_likelihood` is the
+  evidence for tuning kernel hyperparameters. RBF and Matern-3/2 stationary kernels, scalar or
+  vector inputs. Cross-checked against exact interpolation (mean hits training points, variance
+  to 0), the prior-variance limit far from data, the brute-force marginal-likelihood formula,
+  length-scale selection by the marginal likelihood, and 2-D inputs.
+
 ## [1.750.0] - 2026-09-14
 
 ### Documentation
