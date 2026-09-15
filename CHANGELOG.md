@@ -15,6 +15,16 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.823.0] - 2026-09-15
+
+### Added
+- `tf_to_ss`, `tf_evaluate`, `tf_dcgain`, `tf_frequency_response`: transfer-function / state-space
+  conversion for discrete LTI systems. `tf_to_ss` builds the controllable canonical realization
+  ``(A, B, C, D)`` from numerator/denominator coefficients; `tf_evaluate` computes ``H(z)``,
+  `tf_dcgain` is ``H(1)``, and `tf_frequency_response` samples ``H(e^{jw})``. Cross-checked
+  against the state-space impulse response, DC-gain agreement, poles equalling the companion
+  matrix eigenvalues, and ``H(z) = C(zI-A)^{-1}B + D`` at complex points.
+
 ## [1.822.0] - 2026-09-15
 
 ### Documentation

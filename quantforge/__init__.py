@@ -817,6 +817,12 @@ from .state_space import (
     dc_gain,
 )
 from .balanced_reduction import hankel_singular_values, balanced_truncation
+from .transfer_function import (
+    tf_to_ss,
+    tf_evaluate,
+    tf_dcgain,
+    tf_frequency_response,
+)
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1521,7 +1527,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "6.08.0"
+__version__ = "6.09.0"
 
 __all__ = [
     "OptionType",
@@ -2614,6 +2620,10 @@ __all__ = [
     "dc_gain",
     "hankel_singular_values",
     "balanced_truncation",
+    "tf_to_ss",
+    "tf_evaluate",
+    "tf_dcgain",
+    "tf_frequency_response",
     "Dual",
     "dual_derivative",
     "dual_gradient",

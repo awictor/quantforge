@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v6.08.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v6.09.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## aaa
 
@@ -17998,6 +17998,29 @@ Auto-generated from `quantforge` v6.08.0 by `docs/gen_api.py` — do not edit by
 > ``(target_{t+1}, target_t, source_t)``. Directional: run it both ways to see
 > which series leads. Non-negative; near zero when the source carries no extra
 > information about the target's future. Aligned series of at least three points.
+
+## transfer_function
+
+### `tf_dcgain(num, den)`  _function_
+
+> DC gain ``H(1)`` -- the steady-state response to a unit step.
+
+### `tf_evaluate(num, den, z)`  _function_
+
+> Evaluate ``H(z) = num(z)/den(z)`` at complex (or real) ``z`` by Horner on each polynomial.
+
+### `tf_frequency_response(num, den, omegas)`  _function_
+
+> Frequency response ``H(e^{j omega})`` at each angular frequency in ``omegas`` (complex).
+
+### `tf_to_ss(num, den)`  _function_
+
+> State-space (controllable canonical form) of ``H(z) = num(z) / den(z)``.
+>
+> ``den`` is monic in descending powers ``[1, a1, ..., an]`` (length ``n+1``); ``num`` is the
+> numerator in descending powers, degree ``<= n``. Returns ``(A, B, C, D)`` with ``A`` (n x n)
+> the companion matrix, ``B`` (n x 1), ``C`` (1 x n), ``D`` (1 x 1). Realizes exactly the given
+> transfer function.
 
 ## triangulate
 
