@@ -15,6 +15,16 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.775.0] - 2026-09-14
+
+### Added
+- `nmf`: non-negative matrix factorization by Lee-Seung multiplicative updates. Factors a
+  non-negative ``V`` into non-negative ``W (m x k)`` and ``H (k x n)`` with ``V ~ W H``, giving
+  the additive, parts-based representations (topics, spectra, image parts) that a signed SVD
+  cannot. Seeded init for reproducibility. Cross-checked against recovery of a known non-negative
+  low-rank product (relative error <2%), factor non-negativity, monotone error decrease, the
+  ``k``-capacity tradeoff, and recovery of a block-structured matrix.
+
 ## [1.774.0] - 2026-09-14
 
 ### Documentation

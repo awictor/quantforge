@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.60.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.61.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## aaa
 
@@ -11993,6 +11993,16 @@ Auto-generated from `quantforge` v5.60.0 by `docs/gen_api.py` — do not edit by
 > Prices a call at each strike and inverts to a Black-Scholes implied vol,
 > returning ``(log_moneyness, vol)`` pairs sorted by strike on the forward
 > ``F = S e^{(r-q) t}``. ``beta < 0`` tilts the smile into a downward skew.
+
+## nmf
+
+### `nmf(V, k, iterations=300, seed=12345, tol=1e-09, eps=1e-12)`  _function_
+
+> Factor a non-negative matrix ``V`` as ``W H`` with ``W, H >= 0`` and inner dimension ``k``.
+>
+> ``V`` is a list of non-negative rows. Runs Lee-Seung multiplicative updates for up to
+> ``iterations`` (stopping early if the Frobenius error stalls within ``tol``). Returns a dict
+> with ``W`` (m x k), ``H`` (k x n), ``error`` (``||V - WH||_F``) and ``n_iter``.
 
 ## nnls
 
