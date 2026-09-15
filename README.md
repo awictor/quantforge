@@ -5962,6 +5962,28 @@ grows; a seeded initialization makes runs reproducible. Reach for `nmf` when int
 non-negative components matters and for `randomized_svd`/`pca` when you just want the dominant
 (possibly signed) subspace.
 
+Where SVD/PCA/NMF factor a *static* data matrix, `dmd` factors a *time series* of snapshots into
+dynamical modes — the growth rates and frequencies of a system, learned from data alone:
+
+```python
+from quantforge import dmd
+
+# snapshots of a linear system x_{t+1} = A x_t with A = [[0.9, 0.1], [0, 0.8]]
+res = dmd(snapshots)
+sorted(z.real for z in res["eigenvalues"])   # [0.8, 0.9] -- recovers eig(A)
+
+# a decaying rotation: |lambda| is the decay, arg(lambda)/dt the frequency
+res2 = dmd(rotating_snapshots)
+res2["growth_rates"][0], abs(res2["frequencies"][0])   # (0.95, 0.3)
+```
+
+Dynamic mode decomposition (Schmid; exact variant of Tu et al.) fits the best linear operator
+`X' ~ A X` between consecutive snapshots, SVD-reduces it to a small `Atilde`, and reads the
+discrete-time eigenvalues off `Atilde`. Each `|lambda_i|` is a mode's growth/decay per step and
+`arg(lambda_i)/dt` its frequency — so DMD recovers the spectrum of a dynamical system with no
+model, the way `prony`/`matrix_pencil` do for a scalar signal but for full vector-valued state.
+It is the linear-algebra core of Koopman analysis and reduced-order modelling.
+
 For a square system, LU with partial pivoting gives the solve and the determinant:
 
 ```python

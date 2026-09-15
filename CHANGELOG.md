@@ -15,6 +15,13 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.778.0] - 2026-09-14
+
+### Documentation
+- README: documented `dmd` in the Matrix utilities section after `nmf` -- the snapshot operator
+  fit, the growth-rate/frequency spectrum, and the contrast with static factorizations and scalar
+  spectral estimators. All snippet values verified live.
+
 ## [1.777.0] - 2026-09-14
 
 ### Added
