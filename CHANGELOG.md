@@ -15,6 +15,17 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.759.0] - 2026-09-14
+
+### Added
+- `GKQuantile`: the Greenwald-Khanna deterministic epsilon-approximate quantile summary. No
+  randomness -- a worst-case guarantee that any quantile query is within ``epsilon * n`` in rank,
+  using ``O((1/epsilon) log(epsilon n))`` space. Each tuple carries a value, the rank gap ``g``
+  and the rank uncertainty ``delta``; band-based compression keeps ``g + delta`` bounded.
+  Cross-checked against a 100k Gaussian sample (max rank error 0.00999 at ``epsilon = 0.01``),
+  sorted-input robustness, the space bound (~75 tuples), the uniform ``quantile(q) ~ q``, and the
+  ``epsilon`` size tradeoff.
+
 ## [1.758.0] - 2026-09-14
 
 ### Documentation

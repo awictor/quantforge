@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.44.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.45.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -7244,6 +7244,16 @@ Auto-generated from `quantforge` v5.44.0 by `docs/gen_api.py` — do not edit by
 > variable ``j`` appears in equation ``i``; ``rhs[i]`` is that equation's right-hand side
 > (0 or 1). ``n_vars`` is the number of variables. Returns a list of ``n_vars`` bits
 > (free variables set to 0), or ``None`` if the system is inconsistent.
+
+## gk_quantile
+
+### `GKQuantile(epsilon=0.01)`  _class_
+
+> Greenwald-Khanna epsilon-approximate quantile summary.
+>
+> ``epsilon`` is the maximum rank error as a fraction of ``n``. Feed values with
+> :meth:`add`/:meth:`add_all`, query with :meth:`quantile` / :meth:`rank`. Any answer is within
+> ``epsilon * n`` of the true rank.
 
 ## gmm
 
