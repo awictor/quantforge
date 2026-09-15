@@ -3300,6 +3300,37 @@ the defaults suit Gaussian noise), and the matrix square root comes from `choles
 can express `f`/`h` with `Var` and want the exact linearization; prefer the UKF when the
 nonlinearity is strong or the functions are awkward to differentiate.
 
+When the noise is *non-Gaussian* or the posterior is *multimodal* — regimes where every Kalman
+variant breaks down — `particle_filter` represents the state distribution by a weighted cloud of
+samples instead of a single mean and covariance. You supply three callbacks: an initial sampler,
+a transition sampler, and an observation log-likelihood. It propagates, reweights, and resamples
+the cloud, using a seeded `PCG32` stream so runs are reproducible (`pcg_gaussian` is a Box-Muller
+helper for the samplers):
+
+```python
+import math
+from quantforge import particle_filter, pcg_gaussian
+
+# local-level model: random walk observed through Gaussian noise
+q, r = 0.02, 0.5
+res = particle_filter(
+    observations,
+    transition=lambda x, rng: x + pcg_gaussian(rng, 0.0, math.sqrt(q)),
+    log_likelihood=lambda z, x: -0.5 * ((z - x) ** 2 / r + math.log(2 * math.pi * r)),
+    init_sampler=lambda rng: pcg_gaussian(rng, 0.0, 1.0),
+    n_particles=2000, seed=42)
+res["means"]          # weighted-mean state estimate each step
+res["ess"]            # effective sample size (low -> particle degeneracy)
+res["n_resample"]     # how many steps triggered resampling
+```
+
+This is the bootstrap filter (Gordon-Salmond-Smith 1993): the transition is the proposal, so
+weights update by the likelihood alone. Systematic (low-variance) resampling fires when the
+effective sample size drops below half the particle count. On a linear-Gaussian model its mean
+matches the Kalman filter to Monte-Carlo error; the states can be scalars or vectors (a
+position/velocity example tracks through noise). Use it as the fallback when the distribution
+simply is not Gaussian.
+
 ## Newey-West HAC variance
 
 The sample variance understates the variance of a mean when observations are

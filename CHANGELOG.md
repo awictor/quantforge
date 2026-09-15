@@ -15,6 +15,13 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.736.0] - 2026-09-14
+
+### Documentation
+- README: documented `particle_filter` and `pcg_gaussian` in the Kalman-filter section after
+  the UKF note -- the three callbacks, the bootstrap SIR recursion, systematic resampling, and
+  when to reach for it over the Kalman family. All snippet values verified live.
+
 ## [1.735.0] - 2026-09-14
 
 ### Added
