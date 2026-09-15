@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.30.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.31.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -140,6 +140,25 @@ Auto-generated from `quantforge` v5.30.0 by `docs/gen_api.py` — do not edit by
 ### `whole_life_insurance(one_year_survival, i)`  _function_
 
 > EPV of whole-life insurance: :func:`term_insurance` over the whole table.
+
+## adaptive_mcmc
+
+### `adaptive_metropolis(log_prob, x0, n_samples, seed=12345, burn_in=1000, init_scale=0.1, adapt_start=200, epsilon=1e-06)`  _function_
+
+> Haario adaptive-Metropolis sampler for a target ``log_prob`` (list of floats -> logp).
+>
+> The proposal is Gaussian with covariance ``(2.38^2 / d) * Cov(history) + epsilon I`` once at
+> least ``adapt_start`` samples have accumulated; before that it is isotropic with standard
+> deviation ``init_scale``. Returns a dict with ``samples`` (after ``burn_in``) and
+> ``accept_rate``.
+
+### `slice_sample(log_prob, x0, n_samples, w=1.0, seed=12345, burn_in=0, max_steps=50)`  _function_
+
+> Univariate slice sampler (Neal 2003) for a scalar target ``log_prob(x) -> logp``.
+>
+> Draws an auxiliary height under the density, steps out an interval of initial width ``w``
+> (up to ``max_steps`` expansions each side), then samples uniformly from the interval,
+> shrinking on rejection. No proposal scale to tune. Returns a list of ``n_samples`` scalars.
 
 ## agglomerative
 

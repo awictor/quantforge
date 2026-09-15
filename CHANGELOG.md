@@ -15,6 +15,17 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.745.0] - 2026-09-14
+
+### Added
+- `adaptive_metropolis` and `slice_sample`: tuning-free MCMC samplers. Adaptive Metropolis
+  (Haario et al. 2001) re-estimates the proposal covariance from the chain's own history
+  (``2.38^2/d`` times the running covariance, updated by an incremental Welford recursion so
+  adaptation is ``O(d^2)`` per step, not ``O(history)``); the univariate slice sampler (Neal
+  2003) samples under the density curve with stepping-out and shrinkage, no proposal scale at
+  all. Cross-checked against a correlated 2-D Gaussian (adaptive), a 1-D Gaussian, and a bimodal
+  target the slice sampler visits both modes of.
+
 ## [1.744.0] - 2026-09-14
 
 ### Documentation
