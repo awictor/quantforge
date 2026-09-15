@@ -5984,6 +5984,24 @@ discrete-time eigenvalues off `Atilde`. Each `|lambda_i|` is a mode's growth/dec
 model, the way `prony`/`matrix_pencil` do for a scalar signal but for full vector-valued state.
 It is the linear-algebra core of Koopman analysis and reduced-order modelling.
 
+`cur` factors a matrix into *actual* columns and rows of the data, keeping the factors
+interpretable where SVD's singular vectors are opaque:
+
+```python
+from quantforge import cur, column_leverage_scores
+
+res = cur(V, c=5, r=5, k=3, seed=2)   # V ~ C U R, C = 5 real columns, R = 5 real rows
+res["col_indices"], res["error"]      # ([0, 2, 4, 6, 7], ~0.0) at the true rank
+column_leverage_scores(A, k=3)        # per-column importance; sums to 1
+```
+
+CUR (Mahoney-Drineas) picks columns `C` and rows `R` by *leverage scores* — the squared norms of
+the rows of the top-`k` singular vectors, which measure how much each column/row drives the
+dominant subspace — then a small linking matrix `U = C^+ A R^+`. Because `C` and `R` are genuine
+columns and rows (actual assets, genes, documents), the decomposition is directly readable, and
+at the true rank it reconstructs `A` essentially exactly. Use `cur` when you need to *name* the
+components; `randomized_svd`/`nmf`/`dmd` when a mathematical basis or dynamics is enough.
+
 For a square system, LU with partial pivoting gives the solve and the determinant:
 
 ```python
