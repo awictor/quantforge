@@ -15,6 +15,13 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.746.0] - 2026-09-14
+
+### Documentation
+- README: documented `adaptive_metropolis` and `slice_sample` in the Markov chain Monte Carlo
+  section -- the Haario covariance adaptation, the tuning-free slice sampler, and when to use
+  them over the fixed-step samplers. All snippet values verified live.
+
 ## [1.745.0] - 2026-09-14
 
 ### Added

@@ -1063,6 +1063,30 @@ sequence truncation (`~1` for white noise, near `(1+phi)/(1-phi)` for an AR(1) c
 `effective_sample_size` divides `n` by it. Autocovariances are computed lazily and the sum stops
 as soon as it turns negative, so these stay fast even on very long chains.
 
+Both `metropolis_hastings` and `hamiltonian_monte_carlo` need a proposal scale or step size to be
+tuned. `adaptive_metropolis` and `slice_sample` remove that burden:
+
+```python
+from quantforge import adaptive_metropolis, slice_sample, sample_cov
+
+# strongly correlated 2-D target: adaptive Metropolis learns the shape from its own history
+am = adaptive_metropolis(logp2d, [0.0, 0.0], 30000, seed=1, burn_in=5000)
+sample_cov(am["samples"])[0][1]      # ~0.81   (true off-diagonal 0.8), accept ~0.36
+
+# univariate slice sampler: no proposal scale at all
+s = slice_sample(lambda x: -0.5 * ((x - 2.0) / 1.5) ** 2, x0=0.0, n_samples=20000, w=3.0, seed=2)
+sum(s) / len(s)                      # ~2.0   (target mean)
+```
+
+`adaptive_metropolis` (Haario et al. 2001) sets the proposal covariance to `2.38**2 / d` times
+the running covariance of the chain so far — the asymptotically optimal scaling — so it adapts to
+a target's correlation and differing marginal scales without manual tuning. The running
+covariance is updated by an incremental Welford recursion, keeping each step `O(d^2)` rather than
+re-scanning the whole history. `slice_sample` (Neal 2003) draws an auxiliary height under the
+density, steps out an interval, and shrinks toward acceptance — it self-adjusts to the local
+scale and, given a wide enough initial width, moves freely between separated modes. Reach for
+these when tuning `step` by hand is impractical.
+
 ## Exotic options (closed form)
 
 Analytic prices for binaries, single barriers, and geometric Asians:
