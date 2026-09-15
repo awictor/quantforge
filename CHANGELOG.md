@@ -15,6 +15,16 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.815.0] - 2026-09-15
+
+### Added
+- `ackermann`: single-input pole placement by Ackermann's formula. Given a controllable
+  ``(A, B)`` and ``n`` desired closed-loop eigenvalues, returns the feedback gain ``K`` that puts
+  the eigenvalues of ``A - B K`` exactly there -- ``K = [0..0 1] C^{-1} phi(A)`` with ``phi`` the
+  desired characteristic polynomial. Cross-checked against a double integrator, a scalar system,
+  a 3-state system (poles placed to 1e-5), and stabilizing an unstable system into the unit
+  circle.
+
 ## [1.814.0] - 2026-09-14
 
 ### Documentation

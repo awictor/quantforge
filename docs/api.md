@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v6.00.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v6.01.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## aaa
 
@@ -13329,6 +13329,16 @@ Auto-generated from `quantforge` v6.00.0 by `docs/gen_api.py` — do not edit by
 > if added), ``n_iter`` and the ``log_likelihood`` at convergence. Predicted rate for
 > a row is ``exp(x' beta)``. Uses Fisher-scoring IRLS: working response
 > ``z = eta + (y - mu)/mu`` with weights ``mu``.
+
+## pole_placement
+
+### `ackermann(A, B, desired_poles)`  _function_
+
+> Single-input pole-placement gain ``K`` via Ackermann's formula.
+>
+> ``A`` (n x n), ``B`` (n x 1); ``desired_poles`` a list of ``n`` target closed-loop
+> eigenvalues (real here). Returns the ``1 x n`` gain ``K`` such that ``A - B K`` has exactly
+> those eigenvalues. Requires ``(A, B)`` controllable.
 
 ## poly_features
 
