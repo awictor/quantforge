@@ -6022,6 +6022,25 @@ permutation of the `R` components), which is what makes its factors interpretabl
 chemometrics, neuroimaging, and multi-way data mining. `cp_reconstruct` rebuilds the tensor from
 the factors.
 
+`tucker_hosvd` is the other tensor generalization of the SVD: instead of a sum of rank-one terms
+it produces a small *core tensor* and an orthonormal factor matrix per mode:
+
+```python
+from quantforge import tucker_hosvd, tucker_reconstruct
+
+res = tucker_hosvd(X)                 # X ~ core x_1 U x_2 V x_3 W, full ranks
+Xhat = tucker_reconstruct(res["U"], res["V"], res["W"], res["core"])   # exact to ~1e-15
+
+res2 = tucker_hosvd(X, ranks=(2, 2, 2))   # truncate for a compressed approximation
+```
+
+The higher-order SVD takes `U`/`V`/`W` as the leading left singular vectors of the mode-1/2/3
+unfoldings (orthonormal columns) and the core as the tensor projected onto them — exactly `U S
+V^T` lifted to three modes. Full ranks reconstruct the tensor exactly; truncating the per-mode
+ranks gives multilinear-PCA compression that keeps the dominant energy. Use `tucker_hosvd` for an
+orthonormal subspace per mode and tensor compression; `cp_als` when you want a small number of
+interpretable, uniquely-determined rank-one components.
+
 For a square system, LU with partial pivoting gives the solve and the determinant:
 
 ```python

@@ -15,6 +15,13 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.784.0] - 2026-09-14
+
+### Documentation
+- README: documented `tucker_hosvd` and `tucker_reconstruct` in the Matrix utilities section
+  after `cp_als` -- the core-tensor / orthonormal-factor form, the HOSVD construction, and the
+  Tucker-vs-CP choice. All snippet values verified live.
+
 ## [1.783.0] - 2026-09-14
 
 ### Added
