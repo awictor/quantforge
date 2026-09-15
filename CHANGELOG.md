@@ -15,6 +15,17 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.763.0] - 2026-09-14
+
+### Added
+- `floater_hormann_weights` and `floater_hormann_interpolate`: Floater-Hormann barycentric
+  rational interpolation -- a blend of local degree-``d`` polynomials that interpolates every
+  node, has **no poles** on the real line, and is Runge-stable on equispaced nodes (``O(h^{d+1})``
+  accuracy). ``d = 0`` is the Berrut rational interpolant. Cross-checked against exact node
+  interpolation, exactness on low-degree polynomials, a controlled Runge-function error (0.003 vs
+  the polynomial's 60), pole-free evaluation, alternating Berrut weights, and accuracy improving
+  with ``d``.
+
 ## [1.762.0] - 2026-09-14
 
 ### Documentation

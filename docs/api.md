@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.48.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.49.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## acf
 
@@ -6499,6 +6499,23 @@ Auto-generated from `quantforge` v5.48.0 by `docs/gen_api.py` — do not edit by
 > (``a d / (b c)``, ``inf`` if a denominator is zero) and the ``p_value``. The
 > two-sided p-value sums the probabilities of every table (given the margins) no more
 > probable than the observed one.
+
+## floater_hormann
+
+### `floater_hormann_interpolate(xs, ys, x, d=3)`  _function_
+
+> Evaluate the Floater-Hormann rational interpolant through ``(xs, ys)`` at ``x``.
+>
+> Convenience wrapper: builds the weights for blending degree ``d`` and evaluates via the
+> barycentric formula. Interpolates the nodes exactly and never has a pole.
+
+### `floater_hormann_weights(xs, d=3)`  _function_
+
+> Floater-Hormann barycentric weights for nodes ``xs`` with blending degree ``d``.
+>
+> ``w_k = sum_{i in J_k} (-1)^i / prod_{j != k, j in [i, i+d]} (x_k - x_j)`` where ``J_k`` runs
+> over the local index windows containing ``k``. ``d = 0`` gives the Berrut (pole-free) rational
+> interpolant; larger ``d`` raises the approximation order. Requires ``0 <= d <= len(xs) - 1``.
 
 ## forecast_combine
 
