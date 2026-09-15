@@ -816,6 +816,7 @@ from .state_space import (
     lti_impulse_response,
     dc_gain,
 )
+from .balanced_reduction import hankel_singular_values, balanced_truncation
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1520,7 +1521,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "6.06.0"
+__version__ = "6.07.0"
 
 __all__ = [
     "OptionType",
@@ -2611,6 +2612,8 @@ __all__ = [
     "lti_step_response",
     "lti_impulse_response",
     "dc_gain",
+    "hankel_singular_values",
+    "balanced_truncation",
     "Dual",
     "dual_derivative",
     "dual_gradient",

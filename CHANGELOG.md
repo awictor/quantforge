@@ -15,6 +15,17 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.821.0] - 2026-09-15
+
+### Added
+- `hankel_singular_values` and `balanced_truncation`: balanced-truncation model-order reduction.
+  The Hankel singular values (``sqrt(eig(Wc Wo))`` from the two Gramians) measure each state's
+  input-output energy and are coordinate-invariant; `balanced_truncation` balances the
+  realization and keeps the ``r`` states with the largest HSVs, discarding weakly
+  controllable/observable modes. Cross-checked against descending HSVs, full-order preservation
+  of the step response and DC gain, a reduced model keeping the dominant dynamics, and HSV
+  invariance under a state similarity transform.
+
 ## [1.820.0] - 2026-09-15
 
 ### Documentation

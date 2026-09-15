@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v6.06.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v6.07.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## aaa
 
@@ -623,6 +623,22 @@ Auto-generated from `quantforge` v6.06.0 by `docs/gen_api.py` — do not edit by
 ### `bachelier_vega(F, K, t, r, sigma) -> float`  _function_
 
 > dPrice/dsigma_N (per unit of normal vol). Same for calls and puts.
+
+## balanced_reduction
+
+### `balanced_truncation(A, B, C, D, r)`  _function_
+
+> Reduce a stable discrete LTI ``(A, B, C, D)`` to order ``r`` by balanced truncation.
+>
+> Balances the realization (so ``Wc = Wo = diag(HSV)``) and keeps the ``r`` states with the
+> largest Hankel singular values. Returns the reduced ``(Ar, Br, Cr, Dr)``. ``D`` is unchanged.
+
+### `hankel_singular_values(A, B, C)`  _function_
+
+> Hankel singular values of a stable discrete system: ``sqrt(eig(Wc Wo))``, descending.
+>
+> They quantify each state's input-output energy and are invariant under state-coordinate
+> change; the smallest ones flag states that can be truncated with little effect.
 
 ## bareiss
 
