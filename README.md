@@ -6266,6 +6266,25 @@ summed), and use `.matvec` (or the `@` operator) as the operator for `gmres`, `b
 `lanczos`, or `lsqr` — which is how those matrix-free solvers scale to large sparse systems.
 `.transpose()` and `.to_dense()` round-trip the structure.
 
+A sparse matrix's *bandwidth* — the largest `|i - j|` over its nonzeros — depends on how its
+rows/columns are ordered, and a small bandwidth means a much cheaper banded factorization.
+`reverse_cuthill_mckee` finds a reordering that shrinks it:
+
+```python
+from quantforge import matrix_bandwidth, reverse_cuthill_mckee, apply_permutation
+
+perm = reverse_cuthill_mckee(A)                 # A: symmetric sparse structure
+B = apply_permutation(A, perm)                  # B[i][j] = A[perm[i]][perm[j]]
+matrix_bandwidth(A), matrix_bandwidth(B)        # (17, 1) on a badly-ordered path graph
+```
+
+RCM traverses the matrix's adjacency graph breadth-first from a low-degree node, visiting
+neighbours in increasing-degree order, then reverses the ordering. On a shuffled path graph it
+cuts the bandwidth from 17 to 1. To solve a reordered system, permute both `A` and the
+right-hand side (`permute_vector`), solve, then map the solution back with `inverse_permutation` —
+the answer matches the un-reordered solve exactly. Use it to precondition sparse direct solves or
+to compact a matrix before banding.
+
 A *tridiagonal* system — nonzero only on the diagonal and its two neighbours, as in cubic
 splines and implicit PDE steps — solves in `O(n)` rather than `O(n^3)` with the Thomas
 algorithm, and `solve_cyclic_tridiagonal` handles the periodic-boundary variant:
