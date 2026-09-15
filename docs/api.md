@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.58.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.59.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## aaa
 
@@ -13880,6 +13880,16 @@ Auto-generated from `quantforge` v5.58.0 by `docs/gen_api.py` — do not edit by
 ### `predict_random_forest(forest, X_query)`  _function_
 
 > Majority-vote prediction across the forest's trees.
+
+## randomized_svd
+
+### `randomized_svd(A, k, n_oversample=5, n_power=2, seed=12345)`  _function_
+
+> Rank-``k`` randomized SVD of matrix ``A`` (list of rows).
+>
+> ``n_oversample`` extra random columns improve accuracy (Halko et al. recommend ~5-10);
+> ``n_power`` power iterations sharpen the range estimate for slowly-decaying spectra. Returns
+> ``(U, s, V)`` with the leading ``k`` singular triplets, ``A ~ U diag(s) V^T``.
 
 ## range_accrual
 

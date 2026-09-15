@@ -15,6 +15,16 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.773.0] - 2026-09-14
+
+### Added
+- `randomized_svd`: the Halko-Martinsson-Tropp randomized SVD for fast rank-``k`` approximation.
+  Sketches the range of ``A`` with a seeded Gaussian projection, orthonormalizes it (with optional
+  power iterations for slowly-decaying spectra), and takes an exact SVD of the small projected
+  matrix. Returns the leading ``k`` singular triplets ``A ~ U diag(s) V^T``. Cross-checked against
+  exact reconstruction at the true rank (~1e-15), singular values matching the full SVD's top-``k``,
+  orthonormal factors, low-rank approximation of a full-rank matrix, and seed reproducibility.
+
 ## [1.772.0] - 2026-09-14
 
 ### Documentation
