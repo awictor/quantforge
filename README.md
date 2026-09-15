@@ -5942,6 +5942,26 @@ the true rank it reconstructs `A` to machine precision and its singular values m
 `svd`'s top-`k`; use it for large-scale PCA, compression, or any leading-subspace computation
 where the full `O(mn min(m,n))` SVD is overkill.
 
+When the data and the factors are inherently *non-negative* — pixel intensities, counts, spectra
+— `nmf` gives an additive, parts-based factorization the signed SVD cannot:
+
+```python
+from quantforge import nmf
+
+V = [[1, 1, 0, 0], [1, 1, 0, 0], [0, 0, 1, 1], [0, 0, 1, 1]]   # two disjoint blocks
+res = nmf(V, k=2, seed=3)
+res["error"]          # 0.0 -- the two blocks are recovered exactly as separate components
+```
+
+`nmf` factors a non-negative `V` into non-negative `W (m x k)` and `H (k x n)` with `V ~ W H` by
+the Lee-Seung multiplicative updates, which keep both factors non-negative at every step without
+any projection. Because nothing cancels, the columns of `W` are interpretable *parts* — topics in
+a document-term matrix, source spectra in a mixture, facial features in an image set — that add
+to reconstruct each sample. The reconstruction error decreases monotonically and drops as `k`
+grows; a seeded initialization makes runs reproducible. Reach for `nmf` when interpretability of
+non-negative components matters and for `randomized_svd`/`pca` when you just want the dominant
+(possibly signed) subspace.
+
 For a square system, LU with partial pivoting gives the solve and the determinant:
 
 ```python
