@@ -3544,6 +3544,26 @@ for the double integrator above both closed-loop eigenvalues sit at 0.42, inside
 LQR is the foundation of optimal regulator design and the control half of the LQG controller
 (LQR gain + Kalman estimator).
 
+Underneath the LQR sits the *Lyapunov equation* — the linear-algebra certificate of stability.
+`solve_discrete_lyapunov` and `solve_continuous_lyapunov` solve `A P A^T - P + Q = 0` and
+`A P + P A^T + Q = 0`, and `controllability_gramian` is the special case `Q = B B^T`:
+
+```python
+from quantforge import solve_discrete_lyapunov, controllability_gramian
+
+solve_discrete_lyapunov([[0.5, 0.1], [0.0, 0.4]], [[1.0, 0.0], [0.0, 1.0]])
+# [[1.3571, 0.0595], [0.0595, 1.1905]] -- symmetric, positive-definite (A is stable)
+
+controllability_gramian([[0.5, 0.1], [0.0, 0.4]], [[0.0], [1.0]])   # W = solution with Q = B B^T
+```
+
+Both equations are linear in `P`, so they vectorize via the Kronecker product into an
+`n² × n²` system solved with `lu_solve`, then symmetrized. For a stable `A` and `Q >= 0` the
+solution is the system Gramian, symmetric positive-(semi)definite — its very existence is
+Lyapunov's stability certificate, and the controllability Gramian's eigen-directions rank how
+strongly each state mode can be driven. This is the machinery behind the LQR's Riccati solution,
+balanced model reduction, and stability margins.
+
 ## Newey-West HAC variance
 
 The sample variance understates the variance of a mean when observations are

@@ -15,6 +15,14 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.814.0] - 2026-09-14
+
+### Documentation
+- README: documented `solve_discrete_lyapunov`, `solve_continuous_lyapunov`, and
+  `controllability_gramian` in the LQR section -- the Lyapunov stability certificate, the
+  Kronecker-vectorized solve, and the Gramian interpretation. All snippet values verified live.
+  Package version crosses 6.0.0.
+
 ## [1.813.0] - 2026-09-14
 
 ### Added
