@@ -1040,6 +1040,29 @@ summarizing the chain; verified by recovering the mean and covariance of 1-D and
 Gaussians. Use MH for a quick, derivative-free chain and HMC when the target is smooth and
 higher-dimensional.
 
+A chain is only trustworthy once it has *converged* and its samples are not too correlated.
+`gelman_rubin`, `integrated_autocorrelation_time`, and `effective_sample_size` are the standard
+checks:
+
+```python
+from quantforge import (gelman_rubin, integrated_autocorrelation_time,
+                        effective_sample_size)
+
+# run several independent chains, then compare them
+gelman_rubin([chain1, chain2, chain3, chain4])   # ~1.0 converged; >1.1 not yet
+
+integrated_autocorrelation_time(chain1)   # ~1 for independent draws, larger when sticky
+effective_sample_size(chain1)             # n / tau: how many independent draws it is worth
+```
+
+`gelman_rubin` (R-hat) compares the between-chain variance to the within-chain variance across
+independent runs — if they disagree the chains have not mixed, so it tends to `1` only at
+convergence (`~6.6` for four chains stuck at different means, `~1.0001` once they overlap).
+`integrated_autocorrelation_time` sums the autocorrelations with Geyer's initial-positive-
+sequence truncation (`~1` for white noise, near `(1+phi)/(1-phi)` for an AR(1) chain), and
+`effective_sample_size` divides `n` by it. Autocovariances are computed lazily and the sum stops
+as soon as it turns negative, so these stay fast even on very long chains.
+
 ## Exotic options (closed form)
 
 Analytic prices for binaries, single barriers, and geometric Asians:
