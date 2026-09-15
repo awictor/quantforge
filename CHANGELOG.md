@@ -15,6 +15,14 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.802.0] - 2026-09-14
+
+### Documentation
+- README: documented `jacobi_preconditioner`, `incomplete_cholesky`, `ic_apply`, and
+  `preconditioned_cg` in the iterative-solvers section after `lsqr` -- the conditioning rationale,
+  the two standard SPD preconditioners, and the 40-to-2 iteration reduction. All snippet values
+  verified live.
+
 ## [1.801.0] - 2026-09-14
 
 ### Added

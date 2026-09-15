@@ -6226,6 +6226,26 @@ It works through the Golub-Kahan bidiagonalization, needing only products with `
 converges to the minimum-`||A^T r||` least-squares solution. Use `lsqr` for large or
 ill-conditioned regression/inverse problems; the direct `pseudo_inverse` for small dense ones.
 
+An iterative solver's speed is set by the *conditioning* of `A`; a preconditioner `M ~ A` that is
+cheap to invert reshapes the spectrum and slashes the iteration count. `preconditioned_cg` runs
+CG with an `M^-1` apply, and `jacobi_preconditioner` / `incomplete_cholesky` build the two
+standard choices for SPD systems:
+
+```python
+from quantforge import incomplete_cholesky, ic_apply, preconditioned_cg
+
+L = incomplete_cholesky(A)                                  # IC(0) factor, A's sparsity pattern
+res = preconditioned_cg(A, b, apply_minv=lambda r: ic_apply(L, r))
+res["n_iter"]        # 2 -- vs 40 for unpreconditioned CG on the same ill-conditioned system
+```
+
+`jacobi_preconditioner` uses `M = diag(A)` (trivial, good for diagonally-dominant `A`);
+`incomplete_cholesky` computes IC(0) — a Cholesky factor kept to `A`'s nonzero pattern (no
+fill-in), the workhorse SPD preconditioner — and `ic_apply` applies it by forward/back
+substitution. On an ill-conditioned system the IC(0)-preconditioned CG above converges in 2
+iterations where plain CG takes 40. Pass any `apply_minv` callable to `preconditioned_cg` to use
+a custom preconditioner.
+
 A *tridiagonal* system — nonzero only on the diagonal and its two neighbours, as in cubic
 splines and implicit PDE steps — solves in `O(n)` rather than `O(n^3)` with the Thomas
 algorithm, and `solve_cyclic_tridiagonal` handles the periodic-boundary variant:
