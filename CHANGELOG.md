@@ -15,6 +15,16 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.769.0] - 2026-09-14
+
+### Added
+- `matrix_pencil`: the Hua-Sarkar matrix-pencil method for estimating exponential modes -- the
+  noise-robust, SVD-based counterpart to `prony`. Stacks the samples into a Hankel matrix,
+  truncates to rank ``p`` with an SVD (rejecting the noise subspace), and recovers the modes as
+  eigenvalues of the shifted-pencil matrix ``Y1^+ Y2``. Cross-checked against clean 2- and
+  3-exponential recovery, a damped sinusoid, and lower frequency error than Prony on a noisy
+  signal.
+
 ## [1.768.0] - 2026-09-14
 
 ### Documentation

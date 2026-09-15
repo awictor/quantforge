@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.54.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.55.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## aaa
 
@@ -10455,6 +10455,16 @@ Auto-generated from `quantforge` v5.54.0 by `docs/gen_api.py` — do not edit by
 > ``A`` is a square matrix. Returns ``exp(A)``; ``exp(0) = I``, ``exp`` of a
 > diagonal matrix is the diagonal of exponentials, and it satisfies the defining
 > series. Accurate across a wide norm range thanks to the scaling step.
+
+## matrix_pencil
+
+### `matrix_pencil(y, p, pencil=None)`  _function_
+
+> Estimate ``p`` exponential modes of the sample sequence ``y`` by the matrix-pencil method.
+>
+> ``pencil`` is the pencil parameter ``L`` (Hankel column count minus one); if ``None`` it
+> defaults to ``len(y) // 3``, near the noise-optimal choice. Requires ``p <= L <= len(y) - p``.
+> Returns ``(modes, amplitudes)`` with ``y_k ~ sum amplitudes[i] * modes[i]**k``; both complex.
 
 ## mbs
 

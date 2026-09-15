@@ -770,6 +770,7 @@ from .remez import remez
 from .floater_hormann import floater_hormann_weights, floater_hormann_interpolate
 from .aaa import aaa
 from .prony import prony, prony_reconstruct
+from .matrix_pencil import matrix_pencil
 from .dual import Dual, derivative as dual_derivative
 from .dual_calculus import dual_gradient, dual_newton
 from .hyperdual import HyperDual, derivatives as hyperdual_derivatives, second_derivative
@@ -1474,7 +1475,7 @@ try:  # pragma: no cover - trivial availability branch
 except ImportError:  # pragma: no cover
     HAS_NUMPY = False
 
-__version__ = "5.54.0"
+__version__ = "5.55.0"
 
 __all__ = [
     "OptionType",
@@ -2512,6 +2513,7 @@ __all__ = [
     "aaa",
     "prony",
     "prony_reconstruct",
+    "matrix_pencil",
     "Dual",
     "dual_derivative",
     "dual_gradient",
