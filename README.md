@@ -6383,6 +6383,27 @@ Chebyshev-Lobatto points and `chebyshev_barycentric_weights` their closed-form
 weights; interpolating a smooth function like `exp` on 25 Chebyshev nodes is accurate
 to machine precision, where 21 equispaced nodes on the Runge function are off by ~59.
 
+When you are *stuck* with equispaced nodes (sampled data, a fixed grid) and cannot choose
+Chebyshev points, `floater_hormann_interpolate` tames the Runge blow-up with a *rational*
+interpolant that has no poles:
+
+```python
+from quantforge import floater_hormann_interpolate
+
+runge = lambda x: 1 / (1 + 25 * x * x)
+xs = [-1 + 2 * i / 20 for i in range(21)]      # 21 equispaced nodes
+ys = [runge(x) for x in xs]
+floater_hormann_interpolate(xs, ys, 0.9, d=3)  # 0.047059  (true 0.047059)
+# max error over [-1, 1] ~ 0.0028 -- vs the equispaced polynomial's ~59
+```
+
+The Floater-Hormann interpolant blends local degree-`d` polynomials into a barycentric rational
+function: it passes through every node, has **no poles** anywhere on the real line, and
+approximates smooth functions on equispaced nodes to `O(h^(d+1))` — so it stays bounded where the
+plain polynomial diverges (0.0028 vs 59 on the Runge function above). `d = 0` is the Berrut
+interpolant; larger `d` raises the order. Reach for it when the nodes are fixed and equispaced;
+prefer Chebyshev-node polynomial interpolation when you control the sampling.
+
 The 1-D interpolators above have a 2-D cousin for lookup tables — vol surfaces, response
 grids, heightmaps — sampled on a rectilinear grid:
 

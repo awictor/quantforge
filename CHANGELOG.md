@@ -15,6 +15,14 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.764.0] - 2026-09-14
+
+### Documentation
+- README: documented `floater_hormann_interpolate` in the numerical-utilities interpolation
+  block after the barycentric/Chebyshev note -- the pole-free rational interpolant, the Runge
+  stability on equispaced nodes, and when to use it vs Chebyshev sampling. All snippet values
+  verified live.
+
 ## [1.763.0] - 2026-09-14
 
 ### Added
