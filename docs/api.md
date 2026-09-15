@@ -1,6 +1,6 @@
 # QuantForge API reference
 
-Auto-generated from `quantforge` v5.66.0 by `docs/gen_api.py` — do not edit by hand.
+Auto-generated from `quantforge` v5.67.0 by `docs/gen_api.py` — do not edit by hand.
 
 ## aaa
 
@@ -3891,6 +3891,19 @@ Auto-generated from `quantforge` v5.66.0 by `docs/gen_api.py` — do not edit by
 > over-count is at most about ``total_added / width`` with probability
 > ``1 - (1/2)^depth``. Add occurrences with :meth:`add` (optionally a count), query
 > with :meth:`estimate`.
+
+## cp_decomp
+
+### `cp_als(X, rank, iterations=200, seed=12345, tol=1e-10)`  _function_
+
+> CP/PARAFAC decomposition of a 3-way tensor ``X`` into ``rank`` rank-one terms by ALS.
+>
+> ``X`` is a nested list of shape ``(I, J, K)``. Returns a dict with factor matrices ``A``, ``B``,
+> ``C`` (each ``dim x rank``), the reconstruction ``error`` (Frobenius) and ``n_iter``.
+
+### `cp_reconstruct(A, B, C)`  _function_
+
+> Reconstruct the tensor ``X[i,j,k] = sum_r A[i,r] B[j,r] C[k,r]`` from CP factors.
 
 ## cppi
 

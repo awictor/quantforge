@@ -15,6 +15,16 @@ All notable changes to QuantForge are documented here. The format follows
   variance-reduction and RMSE-not-worse-than-filter guarantees, and the ``R -> 0`` limit where
   the filter follows the observations.
 
+## [1.781.0] - 2026-09-14
+
+### Added
+- `cp_als` and `cp_reconstruct`: CP/PARAFAC decomposition of a 3-way tensor into ``R`` rank-one
+  terms ``X[i,j,k] ~ sum_r A[i,r] B[j,r] C[k,r]`` by alternating least squares (Khatri-Rao product
+  + normal equations). The tensor analogue of the SVD, generically unique up to scaling and
+  permutation. Cross-checked against exact recovery of rank-2 and rank-3 synthetic tensors,
+  reconstruction matching, monotone error decrease, the rank-capacity tradeoff, and
+  reproducibility.
+
 ## [1.780.0] - 2026-09-14
 
 ### Documentation
